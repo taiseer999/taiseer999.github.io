@@ -2,7 +2,7 @@
   "name": "[COLOR red]Magneto[/COLOR] (AIOStreams)",
   "plugin": "script.module.magneto",
   "api_language": "en-US",
-  "priority": 90,
+  "priority": 18,
   "is_resolvable": "true",
   "assert": {
     "search_movie": ["imdb"],

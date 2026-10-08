@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- ABUKARIM TOOLS: PPI Arabic -->
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later
      Copyright (c) 2026 U3knOwn -->
 <window type="dialog">
@@ -64,7 +65,7 @@
                 <top>35</top>
                 <control type="label">
                     <label>[B]$ADDON[script.tinyppi 32079][/B]</label>
-                    <font>font32</font>
+                    <font>abk_ppi_ar32</font>
                     <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataHeaderColor)]</textcolor>
                     <aligny>top</aligny>
                 </control>
@@ -116,7 +117,7 @@
                         <width>1195</width>
                         <height>30</height>
                         <label>[B][UPPERCASE]$INFO[ListItem.Property(head)][/UPPERCASE][/B]$INFO[ListItem.Property(state), (,)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataTitleColor)]</textcolor>
                         <aligny>center</aligny>
                     </control>
@@ -133,7 +134,7 @@
                         <width>1195</width>
                         <height>30</height>
                         <label>$INFO[ListItem.Label]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataNameColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -144,7 +145,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Label2]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -161,7 +162,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(h0)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -172,7 +173,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(h1)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -183,7 +184,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(h2)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -194,7 +195,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(h3)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -205,7 +206,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(h4)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -216,7 +217,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(h5)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -227,7 +228,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(c0)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -238,7 +239,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(c1)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -249,7 +250,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(c2)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -260,7 +261,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(c3)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -271,7 +272,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(c4)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -282,7 +283,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(c5)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -298,7 +299,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch0)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -309,7 +310,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch1)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -320,7 +321,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch2)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -331,7 +332,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch3)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -342,7 +343,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch4)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -353,7 +354,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch5)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -364,7 +365,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch6)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -375,7 +376,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch7)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -386,7 +387,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch8)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -397,7 +398,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc0)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -408,7 +409,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc1)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -419,7 +420,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc2)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -430,7 +431,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc3)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -441,7 +442,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc4)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -452,7 +453,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc5)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -463,7 +464,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc6)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -474,7 +475,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc7)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -485,7 +486,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc8)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -504,7 +505,7 @@
                         <width>1195</width>
                         <height>30</height>
                         <label>[B][UPPERCASE]$INFO[ListItem.Property(head)][/UPPERCASE][/B]$INFO[ListItem.Property(state), (,)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataTitleColor)]</textcolor>
                         <aligny>center</aligny>
                     </control>
@@ -514,7 +515,7 @@
                         <width>1195</width>
                         <height>30</height>
                         <label>$INFO[ListItem.Label]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataNameColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -525,7 +526,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Label2]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -542,7 +543,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(h0)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -553,7 +554,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(h1)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -564,7 +565,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(h2)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -575,7 +576,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(h3)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -586,7 +587,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(h4)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -597,7 +598,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(h5)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -608,7 +609,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(c0)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -619,7 +620,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(c1)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -630,7 +631,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(c2)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -641,7 +642,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(c3)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -652,7 +653,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(c4)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -663,7 +664,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(c5)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -679,7 +680,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch0)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -690,7 +691,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch1)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -701,7 +702,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch2)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -712,7 +713,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch3)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -723,7 +724,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch4)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -734,7 +735,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch5)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -745,7 +746,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch6)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -756,7 +757,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch7)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -767,7 +768,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(ch8)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataColumnColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -778,7 +779,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc0)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -789,7 +790,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc1)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -800,7 +801,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc2)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -811,7 +812,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc3)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -822,7 +823,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc4)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -833,7 +834,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc5)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -844,7 +845,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc6)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -855,7 +856,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc7)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -866,7 +867,7 @@
                         <height>30</height>
                         <align>right</align>
                         <label>$INFO[ListItem.Property(cc8)]</label>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataValueColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -913,7 +914,7 @@
                 <height>30</height>
                 <align>center</align>
                 <label>$ADDON[script.tinyppi 32272]</label>
-                <font>font23_narrow</font>
+                <font>abk_ppi_ar21</font>
                 <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataHintColor)]</textcolor>
                 <aligny>top</aligny>
             </control>
@@ -925,7 +926,7 @@
                 <height>30</height>
                 <align>center</align>
                 <label>$ADDON[script.tinyppi 32273]</label>
-                <font>font23_narrow</font>
+                <font>abk_ppi_ar21</font>
                 <textcolor>$INFO[Window(10000).Property(TinyPPI.MetadataHintColor)]</textcolor>
                 <aligny>top</aligny>
             </control>

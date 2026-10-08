@@ -53,7 +53,18 @@ def check_api():
         except Exception as e:
             log_utils.error(f"Umbrella API Failed: {e}")
 
-    '''# ================= Seren =================
+    # ================= POV / The Coalition / Dradis / Genocide =================
+    patches = (
+        ("POV", var.chk_pov, var.path_pov_service, "POV"),
+        #("Dradis", var.chk_dradis, var.path_dradis_service, "Dradis"),
+        ("Genocide", var.chk_genocide, var.path_genocide_service, "Genocide"),
+    )
+
+    for name, check_path, service_path, addon_name in patches:
+        if name in current and exists(check_path):
+            patched, msg = control.startup_patch(service_path, addon_name=addon_name)
+        
+    # ================= Seren =================
     if "Seren" in current and exists(var.chk_seren):
         try:
             patched, msg = control.startup_patch(var.path_seren_service)
@@ -70,38 +81,13 @@ def check_api():
         except Exception as e:
             log_utils.error(f"Seren API Failed: {e}")
 
-    # ================= Fen =================
-    if "Fen" in current and exists(var.chk_fen):
+    # ================= luc_kodi =================
+    if "luc_kodi" in current and exists(var.chk_luc):
         try:
-            patched, msg = control.startup_patch(var.path_fen_service)
-            with open(var.path_fen, 'r') as f:
-                data = f.read()
-            new_data = None
-            if var.client_am in data:
-                pass
-            else:
-                new_data = data.replace(var.fen_client, var.client_am).replace(var.fen_secret, var.secret_am)
-            if new_data is not None:
-                with open(var.path_fen, 'w') as f:
-                    f.write(new_data)
+            patched, msg = control.startup_patch(var.path_luc_service, addon_name="luc_kodi")
         except Exception as e:
-            log_utils.error(f"Fen API Failed: {e}")'''
+            log_utils.error(f"luc_kodi API Failed: {e}")
 
-    # ================= POV / The Coalition / Dradis / Genocide / Homelander / Nightwing / Jokers Absolution =================
-    patches = (
-        ("POV", var.chk_pov, var.path_pov_service, "POV"),
-        #("The Coalition", var.chk_coal, var.path_coal_service, "The Coalition"),
-        #("Dradis", var.chk_dradis, var.path_dradis_service, "Dradis"),
-        ("Genocide", var.chk_genocide, var.path_genocide_service, "Genocide"),
-        ("Homelander", var.chk_home, var.path_home_service, "Homelander"),
-        ("Nightwing", var.chk_night, var.path_night_service, "Nightwing"),
-        ("Absolution", var.chk_absol, var.path_absol_service, "Jokers Absolution"),
-    )
-
-    for name, check_path, service_path, addon_name in patches:
-        if name in current and exists(check_path):
-            patched, msg = control.startup_patch(service_path, addon_name=addon_name)
-        
     # ================= Shadow =================
     if "Shadow" in current and exists(var.chk_shadow):
         try:
@@ -150,6 +136,17 @@ def check_api():
         except Exception as e:
             log_utils.error(f"The Chains API Failed: {e}")
 
+    # ================= Homelander / Nightwing / Jokers Absolution =================
+    patches = (
+        ("Homelander", var.chk_home, var.path_home_service, "Homelander"),
+        ("Nightwing", var.chk_night, var.path_night_service, "Nightwing"),
+        ("Absolution", var.chk_absol, var.path_absol_service, "Jokers Absolution"),
+    )
+
+    for name, check_path, service_path, addon_name in patches:
+        if name in current and exists(check_path):
+            patched, msg = control.startup_patch(service_path, addon_name=addon_name)
+        
     # ================= The Crew =================
     if "The Crew" in current and exists(var.chk_crew):
         try:

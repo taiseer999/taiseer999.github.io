@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- ABUKARIM TOOLS: PPI Arabic -->
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later
      Copyright (c) 2026 U3knOwn
 
@@ -77,7 +78,7 @@
                     <top>37</top>
                     <control type="label">
                         <label>[B]VS10[/B]</label>
-                        <font>font32</font>
+                        <font>abk_ppi_ar32</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.DialogHeaderColor)]</textcolor>
                         <aligny>top</aligny>
                     </control>
@@ -127,7 +128,7 @@
                         <height>80</height>
                         <label>[B][CAPITALIZE]$LOCALIZE[10116][/CAPITALIZE][/B]</label>
                         <align>center</align>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</textcolor>
                         <selectedcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</selectedcolor>
                         <focusedcolor>$INFO[Window(10000).Property(TinyPPI.DialogFocusTextColor)]</focusedcolor>
@@ -143,7 +144,7 @@
                         <height>80</height>
                         <label>[B]Original[/B]</label>
                         <align>center</align>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</textcolor>
                         <selectedcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</selectedcolor>
                         <focusedcolor>$INFO[Window(10000).Property(TinyPPI.DialogFocusTextColor)]</focusedcolor>
@@ -159,7 +160,7 @@
                         <height>80</height>
                         <label>[B]SDR → HDR10[/B]</label>
                         <align>center</align>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</textcolor>
                         <selectedcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</selectedcolor>
                         <focusedcolor>$INFO[Window(10000).Property(TinyPPI.DialogFocusTextColor)]</focusedcolor>
@@ -175,7 +176,7 @@
                         <height>80</height>
                         <label>[B]SDR → Dolby Vision[/B]</label>
                         <align>center</align>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</textcolor>
                         <selectedcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</selectedcolor>
                         <focusedcolor>$INFO[Window(10000).Property(TinyPPI.DialogFocusTextColor)]</focusedcolor>
@@ -196,7 +197,7 @@
                         <height>80</height>
                         <label>[B][CAPITALIZE]$LOCALIZE[10116][/CAPITALIZE][/B]</label>
                         <align>center</align>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</textcolor>
                         <selectedcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</selectedcolor>
                         <focusedcolor>$INFO[Window(10000).Property(TinyPPI.DialogFocusTextColor)]</focusedcolor>
@@ -212,7 +213,7 @@
                         <height>80</height>
                         <label>[B]HDR10 (Original)[/B]</label>
                         <align>center</align>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</textcolor>
                         <selectedcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</selectedcolor>
                         <focusedcolor>$INFO[Window(10000).Property(TinyPPI.DialogFocusTextColor)]</focusedcolor>
@@ -228,7 +229,7 @@
                         <height>80</height>
                         <label>[B]HDR10 → SDR[/B]</label>
                         <align>center</align>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</textcolor>
                         <selectedcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</selectedcolor>
                         <focusedcolor>$INFO[Window(10000).Property(TinyPPI.DialogFocusTextColor)]</focusedcolor>
@@ -244,7 +245,7 @@
                         <height>80</height>
                         <label>[B]HDR10 → Dolby Vision[/B]</label>
                         <align>center</align>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</textcolor>
                         <selectedcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</selectedcolor>
                         <focusedcolor>$INFO[Window(10000).Property(TinyPPI.DialogFocusTextColor)]</focusedcolor>
@@ -265,7 +266,7 @@
                         <height>80</height>
                         <label>[B][CAPITALIZE]$LOCALIZE[10116][/CAPITALIZE][/B]</label>
                         <align>center</align>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</textcolor>
                         <selectedcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</selectedcolor>
                         <focusedcolor>$INFO[Window(10000).Property(TinyPPI.DialogFocusTextColor)]</focusedcolor>
@@ -281,7 +282,7 @@
                         <height>80</height>
                         <label>[B]Dolby Vision (Original)[/B]</label>
                         <align>center</align>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</textcolor>
                         <selectedcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</selectedcolor>
                         <focusedcolor>$INFO[Window(10000).Property(TinyPPI.DialogFocusTextColor)]</focusedcolor>
@@ -297,7 +298,7 @@
                         <height>80</height>
                         <label>[B]Dolby Vision → SDR[/B]</label>
                         <align>center</align>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</textcolor>
                         <selectedcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</selectedcolor>
                         <focusedcolor>$INFO[Window(10000).Property(TinyPPI.DialogFocusTextColor)]</focusedcolor>
@@ -318,7 +319,7 @@
                         <height>80</height>
                         <label>[B][CAPITALIZE]$LOCALIZE[10116][/CAPITALIZE][/B]</label>
                         <align>center</align>
-                        <font>font23_narrow</font>
+                        <font>abk_ppi_ar21</font>
                         <textcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</textcolor>
                         <selectedcolor>$INFO[Window(10000).Property(TinyPPI.DialogTextColor)]</selectedcolor>
                         <focusedcolor>$INFO[Window(10000).Property(TinyPPI.DialogFocusTextColor)]</focusedcolor>

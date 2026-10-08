@@ -1,43 +1,18 @@
 # -*- coding: utf-8 -*-
 import xbmc, xbmcaddon
 import os
-import xbmcgui
 import requests
 import time
 from acctmgr.modules import control
 from acctmgr.modules import log_utils
-from acctmgr.modules.qr_utils import make_qr, remove_qr
+from acctmgr.modules.auth.base_auth import BaseDeviceAuth
 
 # Variables
-trakt_icon = control.joinPath(control.artPath(), 'trakt.png')
-trakt_bdr = control.joinPath(control.addonPath(), 'resources', 'images', 'white.png')
-trakt_bg = control.joinPath(control.addonPath(), 'resources', 'images', 'dialog_background.png')
+trakt_icon = control.joinPath(control.iconsPath(), 'trakt.png')
 
-class TraktAuthDialog(xbmcgui.WindowXMLDialog):
-	def __init__(self, *args, **kwargs):
-		self.user_code = kwargs.get('user_code')
-		self.bg_image = kwargs.get('bg_image')
-		self.qr_image = kwargs.get('qr_image')
-		self.bdr_image = kwargs.get('bdr_image')
-		self.is_active = True
-		super(TraktAuthDialog, self).__init__()
+class Trakt(BaseDeviceAuth):
+	provider_name = 'Trakt'
 
-	def onInit(self):
-		self.setProperty('user_code', str(self.user_code or ''))
-		self.setProperty('bg_image', str(self.bg_image or ''))
-		self.setProperty('qr_image', str(self.qr_image or ''))
-		self.setProperty('bdr_image', str(self.bdr_image or ''))
-
-	def onClick(self, controlId):
-		self.is_active = False
-		self.close()
-
-	def onAction(self, action):
-		if action.getId() in [10, 13, 92]:
-			self.is_active = False
-			self.close()
-
-class Trakt():
 	def __init__(self):
 		self.api_endpoint = 'https://api.trakt.tv/%s'
 		self.client_id = self.traktClientID()
@@ -114,71 +89,96 @@ class Trakt():
 			log_utils.error(f"Trakt call failed: {e}")
 
 	def get_device_code(self):
-		data = {'client_id': self.traktClientID()}
-		return self.call("oauth/device/code", data=data, with_auth=False, method='POST')
+                data = {'client_id': self.traktClientID()}
+                result = self.call("oauth/device/code", data=data, with_auth=False, method='POST')
+                if result:
+                        result['qr_data'] = f"{result['verification_url'].rstrip('/')}/{result['user_code']}"
+                return result
 
-	def get_device_token(self, device_codes, dialog):
+	def poll_token(self, device_data):
+		# Runs in the RepeatTimer thread
+		data = {
+			"code": device_data["device_code"],
+			"client_id": self.traktClientID(),
+			"client_secret": self.traktClientSecret()
+		}
+		headers = {
+			'Content-Type': 'application/json',
+			'trakt-api-version': '2',
+			'trakt-api-key': self.traktClientID()
+		}
 		try:
-			data = {
-				"code": device_codes["device_code"],
-				"client_id": self.traktClientID(),
-				"client_secret": self.traktClientSecret()
-			}
-			start = time.time()
-			expires_in = int(device_codes.get('expires_in', 600))
-			interval = max(int(device_codes.get('interval', 5)), 1)
+			response = requests.post(self.api_endpoint % "oauth/device/token",
+									 json=data, headers=headers, timeout=15.0)
+		except requests.exceptions.RequestException as e:
+			log_utils.log('Trakt poll request error: %s' % str(e), __name__, log_utils.LOGDEBUG)
+			return
 
-			time_passed = 0
-			while dialog.is_active and time_passed < expires_in:
-				try:
-					headers = {
-						'Content-Type': 'application/json',
-						'trakt-api-version': '2',
-						'trakt-api-key': self.traktClientID()
-					}
-					response = requests.post(
-						self.api_endpoint % "oauth/device/token",
-						json=data,
-						headers=headers,
-						timeout=15.0
-					)
+		code = response.status_code
 
-					if response.status_code == 200:
-						token_data = response.json()
-						if token_data and token_data.get("access_token") and token_data.get("refresh_token"):
-							return token_data
-						return None
+		if code == 200:
+			try:
+				token_data = response.json()
+			except ValueError:
+				log_utils.error('Trakt poll: 200 response was not valid JSON')
+				return
+			if token_data and token_data.get("access_token") and token_data.get("refresh_token"):
+				self.token_data = token_data
+			else:
+				self.abort_auth('Trakt returned an incomplete token response')
+			return
 
-					if response.status_code == 400:
-						try:
-							error_data = response.json() or {}
-						except Exception:
-							error_data = {}
+		if code == 400:  # authorization_pending (Trakt sends an empty body)
+			try:
+				error_code = (response.json() or {}).get('error', '')
+			except Exception:
+				error_code = ''
+			if error_code == 'slow_down':
+				self.increase_poll_interval(5)
+			elif error_code in ('authorization_declined', 'access_denied'):
+				self.abort_auth('Trakt authorization was declined')
+			elif error_code == 'expired_token':
+				self.abort_auth(self.msg_expired)
+			return
 
-						error_code = error_data.get('error', '')
-						if error_code == 'slow_down':
-							interval += 5
-						elif error_code in ('authorization_pending', 'authorization_declined', 'expired_token', 'access_denied'):
-							if error_code in ('authorization_declined', 'expired_token', 'access_denied'):
-								return None
+		if code == 429:  # polling too fast
+			self.increase_poll_interval(5)
+		elif code == 418:
+			self.abort_auth('Trakt authorization was declined')
+		elif code == 410:
+			self.abort_auth(self.msg_expired)
+		elif code in (404, 409):
+			self.abort_auth('Trakt device code is invalid or was already used')
+		else:
+			log_utils.log('Trakt poll unexpected HTTP %s: %s' % (code, response.text[:200]),
+						  __name__, log_utils.LOGDEBUG)
 
-						control.sleep(interval * 1000)
-					else:
-						try:
-							log_utils.log('Request Error: %s' % response.text, __name__, log_utils.LOGDEBUG)
-						except Exception:
-							pass
-						control.sleep(interval * 1000)
-
-				except requests.RequestException as e:
-					log_utils.log('Request Error: %s' % str(e), __name__, log_utils.LOGDEBUG)
-					control.sleep(interval * 1000)
-
-				time_passed = time.time() - start
-
-			return None
+	def save_account(self):
+		token = self.token_data
+		if not token or not token.get("access_token") or not token.get("refresh_token"):
+			return False
+		try:
+			try:
+				expires_in = max(int(token.get("expires_in", 86400)), 1)
+			except Exception:
+				expires_in = 86400
+			expires_at = int(time.time()) + expires_in
+			control.setSetting('trakt.expires', str(expires_at))
+			control.setSetting('trakt.expires_in', str(expires_in))
+			control.setSetting('trakt.token', token["access_token"])
+			control.setSetting('trakt.refresh', token["refresh_token"])
+			self.expires_at = str(expires_at)
+			self.token = token["access_token"]
+			control.sleep(1000)
+			try:
+				user = self.call("users/me", with_auth=True)
+				control.setSetting('trakt.username', str(user['username']))
+			except Exception as e:
+				log_utils.error(f"Error fetching user info: {e}")
+			return True
 		except Exception as e:
-			log_utils.error(f"Trakt device token flow failed: {e}")
+			log_utils.error(f"Trakt save_account failed: {e}")
+			return False
 
 	def refresh_token(self):
 		data = {
@@ -204,7 +204,6 @@ class Trakt():
 			response_text = ''
 
 		xbmc.log(f'AM Lite: Trakt refresh HTTP {code}', xbmc.LOGINFO)
-		xbmc.log(f'AM Lite: Trakt refresh response: {response_text[:500]}', xbmc.LOGINFO)
 
 		if not response_text.strip():
 			log_utils.error('Trakt refresh returned empty response body')
@@ -254,10 +253,15 @@ class Trakt():
 			log_utils.error(f"Trakt refresh failed: missing token data - {response_json}")
 			return False
 
-		traktExpires = int(time.time()) + 86400
+		try:
+			expires_in = max(int(response_json.get("expires_in", 86400)), 1)
+		except Exception:
+			expires_in = 86400
+		traktExpires = int(time.time()) + expires_in
 		control.setSetting('trakt.token', traktToken)
 		control.setSetting('trakt.refresh', traktRefresh)
 		control.setSetting('trakt.expires', str(traktExpires))
+		control.setSetting('trakt.expires_in', str(expires_in))
 		self.token = traktToken
 		self.expires_at = str(traktExpires or '')
 
@@ -265,54 +269,10 @@ class Trakt():
 
 	def auth(self):
 		try:
-			code = self.get_device_code()
-			if not code:
-				control.notification(message=40075, icon=trakt_icon)
-				return False
-
-			user_code = str(code.get('user_code', ''))
-			verification_url = str(code.get('verification_url', 'https://trakt.tv/activate'))
-			qr_path = make_qr('%s/%s' % (verification_url.rstrip('/'), user_code))
-			trakt_static_qr = control.joinPath(control.addonPath(), 'resources', 'images', 'trakt_qr.png')
-			qr_image = qr_path if qr_path else trakt_static_qr
-
-			dialog = TraktAuthDialog(
-				'trakt_auth.xml',
-				str(control.addonPath()),
-				'Default',
-				user_code=user_code,
-				bg_image=trakt_bg,
-				qr_image=qr_image,
-				bdr_image=trakt_bdr
-			)
-			dialog.show()
-
-			token = self.get_device_token(code, dialog)
-
-			dialog.close()
-			del dialog
-			remove_qr(qr_path)
-
-			if token and token.get("access_token") and token.get("refresh_token"):
-				expires_at = int(time.time()) + 86400
-				control.setSetting('trakt.expires', str(expires_at))
-				control.setSetting('trakt.token', token["access_token"])
-				control.setSetting('trakt.refresh', token["refresh_token"])
-				self.expires_at = str(expires_at)
-				self.token = token["access_token"]
-				control.sleep(1000)
-				try:
-					user = self.call("users/me", with_auth=True)
-					control.setSetting('trakt.username', str(user['username']))
-				except Exception as e:
-					log_utils.error(f"Error fetching user info: {e}")
-					pass
-				control.notification(title='AM Lite',message='Successfully Authorized!',icon=trakt_icon)
-				return True
-			control.notification(message=40075, icon=trakt_icon)
-			return False
+			return self.authenticate()
 		except Exception as e:
 			log_utils.error(f"Trakt auth failed: {e}")
+			return False
 
 	def revoke(self):
 		data = {"token": control.setting('trakt.token')}
@@ -323,9 +283,9 @@ class Trakt():
 			pass
 		control.setSetting('trakt.username', '')
 		control.setSetting('trakt.expires', '')
+		control.setSetting('trakt.expires_in', '')
 		control.setSetting('trakt.token', '')
 		control.setSetting('trakt.refresh', '')
-		control.dialog.ok(control.lang(32315), control.lang(32314))
 
 	def account_info(self):
 		response = self.call("users/me", with_auth=True)
@@ -378,7 +338,7 @@ class Trakt():
 			private = account_info['user']['private']
 			vip = account_info['user']['vip']
 			if vip:
-				vip = '%s Years' % str(account_info['user']['vip_years'])
+				vip = control.tr('%s Years' % str(account_info['user']['vip_years']))
 
 			total_given_ratings = stats['ratings']['total']
 
@@ -394,7 +354,7 @@ class Trakt():
 				movies_watched_minutes = ("{:0>8}".format(str(timedelta(minutes=movie_minutes)))).split(', ')
 
 			movies_watched_minutes = control.lang(40071) % (
-				movies_watched_minutes[0],
+				control.tr(movies_watched_minutes[0]),
 				movies_watched_minutes[1].split(':')[0],
 				movies_watched_minutes[1].split(':')[1]
 			)
@@ -413,7 +373,7 @@ class Trakt():
 				episodes_watched_minutes = ("{:0>8}".format(str(timedelta(minutes=episode_minutes)))).split(', ')
 
 			episodes_watched_minutes = control.lang(40071) % (
-				episodes_watched_minutes[0],
+				control.tr(episodes_watched_minutes[0]),
 				episodes_watched_minutes[1].split(':')[0],
 				episodes_watched_minutes[1].split(':')[1]
 			)

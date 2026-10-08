@@ -81,9 +81,8 @@ class Auth:
         except Exception as e:
             log_utils.error(f"Umbrella Easynews Failed: {e}")
 
-        # ========================= Fen / POV =========================
+        # ========================= POV =========================
         for addon_id, chk_addon, chk_settings, label, remake_settings in (
-            #("plugin.video.fen", var.chk_fen, var.chkset_fen, "Fen", None),
             ("plugin.video.pov", var.chk_pov, var.chkset_pov, "POV", control.remake_pov_settings),
         ):
             try:
@@ -131,6 +130,22 @@ class Auth:
                             addon.setSetting(k, v)
             except Exception as e:
                 log_utils.error(f"{name} Easynews Failed: {e}")
+
+        # ========================= luc_kodi =========================
+        try:
+            if exists(var.chk_luc) and exists(var.chkset_luc):
+                addon = xbmcaddon.Addon("plugin.video.luc_kodi")
+                chk_auth_user = addon.getSetting("easynews.username")
+                chk_auth_pass = addon.getSetting("easynews.password")
+                if chk_auth_user != master_user or chk_auth_pass != master_pass:
+                    for k, v in {
+                        "provider.easynews": "true",
+                        "easynews.username": your_username,
+                        "easynews.password": your_password,
+                    }.items():
+                        addon.setSetting(k, v)
+        except Exception as e:
+            log_utils.error(f"luc_kodi Easynews Failed: {e}")
 
         # ========================= The Crew =========================
         try:

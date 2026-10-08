@@ -1,47 +1,14 @@
 # -*- coding: utf-8 -*-
-import time
 import requests
-import xbmc
-import xbmcgui
 from requests.adapters import HTTPAdapter
 
 from acctmgr.modules import control
 from acctmgr.modules import log_utils
-from acctmgr.modules.qr_utils import make_qr, remove_qr
+from acctmgr.modules.auth.base_auth import BaseDeviceAuth
 
 
 # Variables
-OFFCLOUD_ICON = control.joinPath(control.artPath(), "offcloud.png")
-OFFCLOUD_BDR = control.joinPath(control.addonPath(), "resources", "images", "white.png")
-OFFCLOUD_BG = control.joinPath(control.addonPath(), "resources", "images", "dialog_background.png")
-OFFCLOUD_QR = control.joinPath(control.addonPath(), "resources", "images", "offcloud_qr.png")
-
-
-class OffcloudAuthDialog(xbmcgui.WindowXMLDialog):
-    def __init__(self, *args, **kwargs):
-        self.user_code = kwargs.get("user_code")
-        self.verify_url = kwargs.get("verify_url")
-        self.bg_image = kwargs.get("bg_image")
-        self.qr_image = kwargs.get("qr_image")
-        self.bdr_image = kwargs.get("bdr_image")
-        self.is_active = True
-        super(OffcloudAuthDialog, self).__init__()
-
-    def onInit(self):
-        self.setProperty("user_code", self.user_code)
-        self.setProperty("verify_url", self.verify_url)
-        self.setProperty("bg_image", self.bg_image)
-        self.setProperty("qr_image", self.qr_image)
-        self.setProperty("bdr_image", self.bdr_image)
-
-    def onClick(self, controlId):
-        self.is_active = False
-        self.close()
-
-    def onAction(self, action):
-        if action.getId() in [10, 13, 92]:
-            self.is_active = False
-            self.close()
+oc_icon = control.joinPath(control.iconsPath(), 'offcloud.png')
 
 BASE_HOST = "https://offcloud.com"
 API_BASE = f"{BASE_HOST}/api"
@@ -55,104 +22,85 @@ session = requests.Session()
 session.mount("https://offcloud.com", HTTPAdapter(max_retries=1, pool_maxsize=20))
 
 
-class Offcloud:
-    def auth(self):
-        # Already authorizedcheck
-        if control.setting("offcloud.token"):
-            control.notification(message="Offcloud is already authorized!",icon=OFFCLOUD_ICON)
-            return False
+class Offcloud(BaseDeviceAuth):
+	provider_name = 'Offcloud'
+	icon = oc_icon
 
-        # Request device code
-        try:
-            resp = session.post(OAUTH_DEVICE_CODE_URL, timeout=TIMEOUT)
-            resp.raise_for_status()
-            result = resp.json()
+	def auth(self):
+		# Already authorized check
+		if control.setting('offcloud.token'):
+			control.notification(message='Offcloud is already authorized!', icon=oc_icon)
+			return False
+		return self.authenticate()
 
-            device_code = result.get("device_code")
-            user_code = result.get("user_code")
-            verification_uri = result.get("verification_uri") or ACTIVATE_URL
-            interval = int(result.get("interval", 5))
-            expires_in = int(result.get("expires_in", 600))
+	def get_device_code(self):
+		# Request device code
+		resp = session.post(OAUTH_DEVICE_CODE_URL, timeout=TIMEOUT)
+		resp.raise_for_status()
+		result = resp.json()
 
-            if not device_code or not user_code:
-                raise Exception(f"Unexpected response: {result}")
+		device_code = result.get('device_code')
+		user_code = result.get('user_code')
+		verification_uri = result.get('verification_uri') or ACTIVATE_URL
+		if not device_code or not user_code:
+			raise ValueError('Offcloud device response missing device_code or user_code')
 
-        except Exception as e:
-            log_utils.error(f"Offcloud device code request failed: {e}")
-            control.notification(message="Offcloud authorization failed!",icon=OFFCLOUD_ICON)
-            return False
+		return {
+			'device_code': device_code,
+			'user_code': user_code,
+			'verification_url': verification_uri,
+			'qr_data': result.get('verification_uri_complete') or verification_uri,
+			'interval': result.get('interval', 5),
+			'expires_in': result.get('expires_in', 600),
+		}
 
-        # QR auth dialog: try dynamic QR, fall back to the bundled static QR
-        # (points at the fixed activate page) when qrcode/PIL are unavailable
-        qr_path = make_qr(verification_uri)
-        qr_image = qr_path if qr_path else OFFCLOUD_QR
-        dialog = OffcloudAuthDialog(
-            "offcloud_auth.xml",
-            str(control.addonPath()),
-            "Default",
-            user_code=user_code,
-            verify_url=verification_uri,
-            bg_image=OFFCLOUD_BG,
-            qr_image=qr_image,
-            bdr_image=OFFCLOUD_BDR
-        )
-        dialog.show()
+	def poll_token(self, device_data):
+		# Poll for access token
+		data = {
+			'device_code': device_data['device_code'],
+			'grant_type': 'urn:ietf:params:oauth:grant-type:device_code',
+		}
+		try:
+			resp = session.post(OAUTH_TOKEN_URL, json=data, timeout=TIMEOUT)
+			if resp.ok:
+				result = resp.json()
+				if result.get('access_token'):
+					self.token_data = result
+				return
 
-        # Poll for access token
-        data = {"device_code": device_code,"grant_type": "urn:ietf:params:oauth:grant-type:device_code",}
+			# Pending authorization is expected while the user enters the code.
+			if resp.status_code in (400, 403):
+				try:
+					error = resp.json().get('error', '')
+				except ValueError:
+					error = ''
+				if error in ('authorization_pending', 'pending', ''):
+					return
+				if error == 'slow_down':
+					self.increase_poll_interval()
+					return
+				if error in ('access_denied', 'expired_token', 'invalid_grant'):
+					self.abort_auth('Offcloud authorization failed: %s' % error)
+					return
+			log_utils.error('Offcloud token polling HTTP %s' % resp.status_code)
+		except requests.RequestException as e:
+			log_utils.error('Offcloud token polling failed: %s' % e)
 
-        token = None
-        start = time.monotonic()
-        end = start + expires_in
+	def save_account(self):
+		# Validate token
+		token = (self.token_data or {}).get('access_token')
+		if not token:
+			return False
+		try:
+			resp = session.get(f'{API_BASE}/account/info', params={'key': token}, timeout=TIMEOUT)
+			resp.raise_for_status()
+			info = resp.json()
+			username = info.get('username') or info.get('email') or str(info.get('user_id', 'Offcloud'))
+		except Exception as e:
+			log_utils.error('Offcloud token validation failed: %s' % e)
+			return False
 
-        try:
-            while time.monotonic() < end:
-
-                if not dialog.is_active or xbmc.Monitor().abortRequested():
-                    control.notification(message="Offcloud authorization cancelled!",icon=OFFCLOUD_ICON)
-                    return False
-
-                try:
-                    r = session.post(OAUTH_TOKEN_URL, json=data, timeout=TIMEOUT)
-                    if r.ok:
-                        j = r.json()
-                        token = j.get("access_token")
-                        if token:
-                            break
-                except Exception:
-                    pass
-
-                control.sleep(interval * 1000)
-
-        finally:
-            try:
-                if dialog.is_active:
-                    dialog.close()
-                del dialog
-            except Exception:
-                pass
-            remove_qr(qr_path)
-
-        if not token:
-            control.notification(message="Offcloud authorization timed out!",icon=OFFCLOUD_ICON)
-            return False
-
-        # Validate token
-        try:
-            r = session.get(f"{API_BASE}/account/info",params={"key": token},timeout=TIMEOUT)
-            r.raise_for_status()
-            info = r.json()
-
-            username = (info.get("username") or info.get("email") or str(info.get("user_id", "Offcloud")))
-
-        except Exception as e:
-            log_utils.error(f"Offcloud token validation failed: {e}")
-            control.notification(message="Offcloud authorization failed (token invalid).",icon=OFFCLOUD_ICON)
-            return False
-
-        # Save token & userid
-        control.setSetting("offcloud.token", token)
-        control.setSetting("offcloud.userid", str(username))
-
-        control.notification(title="AM Lite",message="Successfully Authorized!",icon=OFFCLOUD_ICON)
-        return True
+		# Save token & userid
+		control.setSetting('offcloud.token', token)
+		control.setSetting('offcloud.userid', str(username))
+		return True

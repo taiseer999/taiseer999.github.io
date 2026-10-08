@@ -32,8 +32,8 @@ class Auth:
             ("The Chains",    var.chk_chains, var.chains_ud,  var.chkset_chains,  var.chains),
             ("SALTS",         var.chk_salts,  var.salts_ud,   var.chkset_salts,   var.salts),
             ("Otaku",         var.chk_otaku,  var.otaku_ud,   var.chkset_otaku,   var.otaku),
-            ("Realizer",      var.chk_realx,  var.realx_ud,   var.chkset_realx,   var.realx),
             ("ResolveURL",    var.chk_rurl,   var.rurl_ud,    var.chkset_rurl,    var.rurl),
+            ("Realizer",      var.chk_realx,  var.realx_ud,   var.chkset_realx,   var.realx),
         ]
 
         for name, chk_addon, ud_path, chk_setting, base_path in addons:
@@ -106,9 +106,8 @@ class Auth:
         except Exception as e:
             log_utils.error(f"Umbrella Real-Debrid Failed: {e}")
 
-        # ========================= Fen / POV =========================
+        # ========================= POV =========================
         for addon_id, chk_addon, chk_settings, label, rd_user_key, remake_settings in (
-            #("plugin.video.fen", var.chk_fen, var.chkset_fen, "Fen", "rd.account_id", None),
             ("plugin.video.pov", var.chk_pov, var.chkset_pov, "POV", "rd.username", control.remake_pov_settings),
         ):
             try:
@@ -141,29 +140,6 @@ class Auth:
             except Exception as e:
                 log_utils.error(f"{label} Real-Debrid Failed: {e}")
 
-        # ========================= Seren =========================
-        try:
-            if exists(var.chk_seren) and exists(var.chkset_seren):
-                addon = xbmcaddon.Addon("plugin.video.seren")
-                chk_auth = addon.getSetting("rd.auth")
-                chk_auth_pm = addon.getSetting("premiumize.token")
-                chk_auth_ad = addon.getSetting("alldebrid.apikey")
-                if chk_auth != rd_master_token:
-                    for k, v in {
-                        "rd.username": your_rd_username,
-                        "rd.auth": your_rd_token,
-                        "rd.client_id": your_rd_client_id,
-                        "rd.refresh": your_rd_refresh,
-                        "rd.secret": your_rd_secret,
-                        "realdebrid.premiumstatus": "Premium",
-                        "realdebrid.enabled": "true",
-                        "premiumize.enabled": "true" if chk_auth_pm else "false",
-                        "alldebrid.enabled": "true" if chk_auth_ad else "false",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error("Seren Real-Debrid Failed")
-
         # =============== Dradis / Genocide ===============
         addons = [
             #("Dradis",   "plugin.video.dradis",   var.chk_dradis,   var.chkset_dradis),
@@ -187,6 +163,76 @@ class Auth:
                             addon.setSetting(k, v)
             except Exception as e:
                 log_utils.error(f"{name} Real-Debrid Failed: {e}")
+
+        # ================= Seren ===================
+        for name, plugin, chk_addon, chk_setting in (
+                ("Seren", "plugin.video.seren", var.chk_seren, var.chkset_seren),
+        ):
+                try:
+                        if exists(chk_addon) and exists(chk_setting):
+                                addon = xbmcaddon.Addon(plugin)
+                                chk_auth = addon.getSetting("rd.auth")
+                                chk_auth_pm = addon.getSetting("premiumize.token")
+                                chk_auth_ad = addon.getSetting("alldebrid.apikey")
+                                if chk_auth != rd_master_token:
+                                        for k, v in {
+                                                "rd.username": your_rd_username,
+                                                "rd.auth": your_rd_token,
+                                                "rd.client_id": your_rd_client_id,
+                                                "rd.refresh": your_rd_refresh,
+                                                "rd.secret": your_rd_secret,
+                                                "realdebrid.premiumstatus": "Premium",
+                                                "realdebrid.enabled": "true",
+                                                "premiumize.enabled": "true" if chk_auth_pm else "false",
+                                                "alldebrid.enabled": "true" if chk_auth_ad else "false",
+                                        }.items():
+                                                addon.setSetting(k, v)
+                except Exception as e:
+                        log_utils.error(f"{name} Real-Debrid Failed")
+
+        # ========================= luc_kodi =========================
+        try:
+            if exists(var.chk_luc) and exists(var.chkset_luc):
+                addon = xbmcaddon.Addon("plugin.video.luc_kodi")
+                chk_auth = addon.getSetting("realdebrid.token")
+                if chk_auth != rd_master_token:
+                    for k, v in {
+                        "realdebrid.enable": "true",
+                        "realdebrid.token": your_rd_token,
+                        "realdebrid.username": your_rd_username,
+                        "realdebrid.client_id": your_rd_client_id,
+                        "realdebrid.refresh": your_rd_refresh,
+                        "realdebrid.secret": your_rd_secret,
+                    }.items():
+                        addon.setSetting(k, v)
+        except Exception as e:
+            log_utils.error(f"luc_kodi Real-Debrid Failed: {e}")
+
+        # ================= Prism ===================
+        for name, plugin, chk_addon, chk_setting in (
+                ("Prism", "plugin.video.prism", var.chk_prism, var.chkset_prism),
+        ):
+                try:
+                        if exists(chk_addon) and exists(chk_setting):
+                                addon = xbmcaddon.Addon(plugin)
+                                chk_auth = addon.getSetting("rd.auth")
+                                chk_auth_pm = addon.getSetting("premiumize.token")
+                                chk_auth_ad = addon.getSetting("alldebrid.apikey")
+                                if chk_auth != rd_master_token:
+                                        for k, v in {
+                                                "rd.username": your_rd_username,
+                                                "rd.auth": your_rd_token,
+                                                "rd.client_id": your_rd_client_id,
+                                                "rd.refresh": your_rd_refresh,
+                                                "rd.secret": your_rd_secret,
+                                                "realdebrid.premiumstatus": "Premium",
+                                                "realdebrid.enabled": "true",
+                                                "premiumize.enabled": "true" if chk_auth_pm else "false",
+                                                "alldebrid.enabled": "true" if chk_auth_ad else "false",
+                                        }.items():
+                                                addon.setSetting(k, v)
+                except Exception as e:
+                        log_utils.error(f"{name} Real-Debrid Failed")
 
         # =============== Shadow / Ghost / The Chains ===============
         addons = [
@@ -251,6 +297,23 @@ class Auth:
         except Exception as e:
             log_utils.error(f"Otaku Real-Debrid Failed: {e}")
 
+        # ========================= ResolveURL =========================
+        try:
+            if exists(var.chk_rurl):
+                addon = xbmcaddon.Addon("script.module.resolveurl")
+                chk_auth = addon.getSetting("RealDebridResolver_token")
+                if chk_auth != rd_master_token:
+                    for k, v in {
+                        "RealDebridResolver_login": your_rd_username,
+                        "RealDebridResolver_token": your_rd_token,
+                        "RealDebridResolver_client_id": your_rd_client_id,
+                        "RealDebridResolver_refresh": your_rd_refresh,
+                        "RealDebridResolver_client_secret": your_rd_secret,
+                        "RealDebridResolver_cached_only": "true",
+                    }.items():
+                        addon.setSetting(k, v)
+        except Exception as e:
+            log_utils.error(f"ResolveURL Real-Debrid Failed: {e}")
         # ========================= Realizer =========================
         try:
             if exists(var.chk_realx):
@@ -273,27 +336,3 @@ class Auth:
         except Exception as e:
             log_utils.error(f"Realizer Real-Debrid Failed: {e}")
             
-        # ========================= ResolveURL =========================
-        try:
-            if exists(var.chk_rurl):
-                addon = xbmcaddon.Addon("script.module.resolveurl")
-                chk_auth = addon.getSetting("RealDebridResolver_token")
-                if chk_auth != rd_master_token:
-                    for k, v in {
-                        "RealDebridResolver_login": your_rd_username,
-                        "RealDebridResolver_token": your_rd_token,
-                        "RealDebridResolver_client_id": your_rd_client_id,
-                        "RealDebridResolver_refresh": your_rd_refresh,
-                        "RealDebridResolver_client_secret": your_rd_secret,
-                        "RealDebridResolver_cached_only": "true",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error(f"ResolveURL Real-Debrid Failed: {e}")
-
-        # ========================= Prism (Seren fork) =========================
-        from acctmgr.modules.sync import prism_sync
-        prism_sync.sync_rd(
-            your_rd_username, your_rd_token, your_rd_client_id,
-            your_rd_refresh, your_rd_secret, rd_master_token,
-        )

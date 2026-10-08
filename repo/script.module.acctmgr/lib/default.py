@@ -8,11 +8,11 @@ import shutil
 from acctmgr.modules import var
 from acctmgr.modules import control
 from acctmgr.modules import log_utils
-from acctmgr.modules.db import debrid_db, torbox_db, easydebrid_db, easynews_db, offcloud_db, ext_db, trakt_db, chk_auth_db
+from acctmgr.modules.db import debrid_db, torbox_db, easydebrid_db, easynews_db, offcloud_db, ext_db, trakt_db, mdblist_db, chk_auth_db
 
 #Variables
 joinPath = os.path.join
-dialog = xbmcgui.Dialog()
+dialog = control.dialog
 exists = xbmcvfs.exists
 execute = xbmc.executebuiltin
 translatePath = xbmcvfs.translatePath
@@ -126,24 +126,27 @@ elif action == 'traktAuth':										# Authorize service
 
 		from acctmgr.modules.sync import trakt_sync
 		trakt_sync.Auth().trakt_auth(mode="auth")						# Sync add-ons (Auth mode = Remake Settings & Clear Trakt Cache)
-		control.notification('AM Lite', 'Sync in progress, please wait!', icon=trakt_icon)
+		control.notification('Trakt', 'Sync in progress, please wait!', icon=trakt_icon)
 		xbmc.sleep(1500)
-		control.notification('AM Lite', 'Sync Complete!', icon=trakt_icon)
+		control.notification('Trakt', 'Sync Complete!', icon=trakt_icon)
 		xbmc.sleep(3000)
 		control.updates_off()                                                                   # Disable add-on auto-updates
-		dialog.notification('AM Lite', 'Force Closing Kodi!', amgr_icon, 3000)
+		dialog.notification('Trakt', 'Force Closing Kodi!', trakt_icon, 3000)
 		xbmc.sleep(3000)
 		os._exit(1)                                                                             # Force close Kodi
+	else:
+                control.openSettings()
+                raise SystemExit
                
 elif action == 'traktReSync':                                                                           # Re-sync Trakt with installed add-ons
         from acctmgr.modules.sync import trakt_sync
         trakt_sync.Auth().trakt_auth(mode="auth")                                                       # Sync add-ons (Auth mode = Remake Settings & Clear Trakt Cache)
-        control.notification('AM Lite', 'Sync in progress, please wait!', icon=trakt_icon)
+        control.notification('Trakt', 'Sync in progress, please wait!', icon=trakt_icon)
         xbmc.sleep(1500)
         
-        control.notification('AM Lite', 'Sync Complete!', icon=trakt_icon)
+        control.notification('Trakt', 'Sync Complete!', icon=trakt_icon)
         xbmc.sleep(3000)
-        dialog.notification('AM Lite', 'Force Closing Kodi!', amgr_icon, 3000)
+        dialog.notification('Trakt', 'Force Closing Kodi!', trakt_icon, 3000)
         xbmc.sleep(3000)
         os._exit(1)                                                                                     # Force close Kodi
 
@@ -156,14 +159,14 @@ elif action == 'traktEditSyncList':
             control.openSettings()
             raise SystemExit
 	xbmc.sleep(500)
-	control.notification('AM Lite', 'Sync in progress, please wait!', icon=trakt_icon)
+	control.notification('Trakt', 'Sync in progress, please wait!', icon=trakt_icon)
 	xbmc.sleep(2000)
 	from acctmgr.modules.sync import trakt_sync
 	trakt_sync.Auth().trakt_auth(mode="auth")                                                       # Sync add-ons (Auth mode = Remake Settings & Clear Trakt Cache)
 	xbmc.sleep(1000)
-	control.notification('AM Lite', 'Sync Complete!', icon=trakt_icon)
+	control.notification('Trakt', 'Sync Complete!', icon=trakt_icon)
 	xbmc.sleep(3000)
-	dialog.notification('AM Lite', 'Force Closing Kodi!', amgr_icon, 3000)
+	dialog.notification('Trakt', 'Force Closing Kodi!', trakt_icon, 3000)
 	xbmc.sleep(3000)
 	os._exit(1)                                                                                     # Force close Kodi
         
@@ -223,7 +226,7 @@ elif action == 'traktViewer':                                                   
 #MDBLIST
 elif action == 'mdblistAuth':                                                                           
         from acctmgr.modules.auth.mdblist import MDBListAuth
-        ok = MDBListAuth().authorize()
+        ok = MDBListAuth().auth()
         if not ok:                                                                                     
             raise SystemExit
         xbmc.sleep(1500)
@@ -238,12 +241,12 @@ elif action == 'mdblistAuth':
         control.openSettings()
 
 elif action == 'mdblistReSync':
-        control.notification('AM Lite', 'Sync in progress, please wait!', icon=mdb_icon)
+        control.notification('MDBList', 'Sync in progress, please wait!', icon=mdb_icon)
         xbmc.sleep(3000)
         from acctmgr.modules.sync import mdblist_sync
         control.function_monitor(mdblist_sync.Auth().mdblist_auth)
         xbmc.sleep(200)
-        control.notification('AM Lite', 'Sync Complete!', icon=mdb_icon)
+        control.notification('MDBList', 'Sync Complete!', icon=mdb_icon)
         xbmc.sleep(3000)
         control.openSettings()
 	
@@ -252,6 +255,20 @@ elif action == 'mdblistRevoke':
         xbmc.sleep(300)
         yes = dialog.yesno('AM Lite', 'Are you sure?', 'No', 'Yes')
         if yes:
+                if exists(var.chk_gears):
+                        chk_auth_gears = chk_auth_db.chk_auth(var.gears_settings_db, "mdblist.api_key")
+                        if chk_auth_gears not in ('empty_setting', '', None):
+                                mdblist_db.revoke_gears(var.gears_settings_db)
+                                xbmc.sleep(200)
+                                control.remake_gears_settings()
+                                xbmc.sleep(1000)
+                if exists(var.chk_red):
+                        chk_auth_red = chk_auth_db.chk_auth(var.red_settings_db, "mdblist.token")
+                        if chk_auth_red not in ('empty_setting', '', None):
+                                mdblist_db.revoke_redlight(var.red_settings_db)
+                                xbmc.sleep(200)
+                                control.remake_red_settings()
+                                xbmc.sleep(1000)
                 try:
                     json_query = xbmc.executeJSONRPC(
                         '{"jsonrpc":"2.0","method":"Settings.GetSettingValue","params":{"setting":"lookandfeel.skin"},"id":1}'
@@ -284,7 +301,7 @@ elif action == 'mdblistRevoke':
                     log_utils.error(f"Skin MDBList Revoke Failed: {e}")
                     
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_mdb")')
-                dialog.notification('AM Lite', 'All Add-ons Revoked!', mdb_icon, 3000)
+                dialog.notification('MDBList', 'All Add-ons Revoked!', mdb_icon, 3000)
                 xbmc.sleep(3000)
                 control.openSettings()
         else:
@@ -319,12 +336,12 @@ elif action == 'realdebridAuth':                                                
         control.openSettings()                                                                          # Open AM Lite settings
 
 elif action == 'realdebridReSync':                                                                      # Re-sync Real-Debrid with installed add-ons
-        control.notification('AM Lite', 'Sync in progress, please wait!', icon=rd_icon)
+        control.notification('Real-Debrid', 'Sync in progress, please wait!', icon=rd_icon)
         xbmc.sleep(3000)
         from acctmgr.modules.sync import debrid_rd
         control.function_monitor(debrid_rd.Auth().realdebrid_auth)                                      # Re-sync add-ons
         xbmc.sleep(200)
-        control.notification('AM Lite', 'Sync Complete!', icon=rd_icon)
+        control.notification('Real-Debrid', 'Sync Complete!', icon=rd_icon)
         xbmc.sleep(3000)
         control.openSettings()
                 
@@ -354,9 +371,8 @@ elif action == 'realdebridRevoke':                                              
                                 xbmc.sleep(200)
                                 control.remake_red_settings()                                           # Remake settings
                                 xbmc.sleep(1000)
-                from acctmgr.modules.sync import prism_sync; prism_sync.revoke_rd()
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_rd")')                   # Revoke all add-ons with a settings.xml
-                dialog.notification('AM Lite', 'All Add-ons Revoked!', rd_icon, 3000)
+                dialog.notification('Real-Debrid', 'All Add-ons Revoked!', rd_icon, 3000)
                 xbmc.sleep(3000)
                 control.openSettings()                                                                  # Open AM Lite settings               
         else:
@@ -392,12 +408,12 @@ elif action == 'premiumizeAuth':
         control.openSettings()
 
 elif action == 'premiumizeReSync':
-        control.notification('AM Lite', 'Sync in progress, please wait!', icon=pm_icon)
+        control.notification('Premiumize', 'Sync in progress, please wait!', icon=pm_icon)
         xbmc.sleep(3000)
         from acctmgr.modules.sync import debrid_pm
         control.function_monitor(debrid_pm.Auth().premiumize_auth)
         xbmc.sleep(200)
-        control.notification('AM Lite', 'Sync Complete!', icon=pm_icon)
+        control.notification('Premiumize', 'Sync Complete!', icon=pm_icon)
         xbmc.sleep(3000)
         control.openSettings()
 	
@@ -427,9 +443,8 @@ elif action == 'premiumizeRevoke':
                                 xbmc.sleep(200)
                                 control.remake_red_settings()                           
                                 xbmc.sleep(1000)
-                from acctmgr.modules.sync import prism_sync; prism_sync.revoke_pm()
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_pm")')
-                dialog.notification('AM Lite', 'All Add-ons Revoked!', pm_icon, 3000)
+                dialog.notification('Premiumize', 'All Add-ons Revoked!', pm_icon, 3000)
                 xbmc.sleep(3000)
                 control.openSettings()
         else:
@@ -465,12 +480,12 @@ elif action == 'alldebridAuth':
         control.openSettings()
 
 elif action == 'alldebridReSync':
-        control.notification('AM Lite', 'Sync in progress, please wait!', icon=rd_icon)
+        control.notification('All-Debrid', 'Sync in progress, please wait!', icon=ad_icon)
         xbmc.sleep(3000)
         from acctmgr.modules.sync import debrid_ad
         control.function_monitor(debrid_ad.Auth().alldebrid_auth)
         xbmc.sleep(200)
-        control.notification('AM Lite', 'Sync Complete!', icon=ad_icon)
+        control.notification('All-Debrid', 'Sync Complete!', icon=ad_icon)
         xbmc.sleep(3000)
         control.openSettings()
 
@@ -500,9 +515,8 @@ elif action == 'alldebridRevoke':
                                 xbmc.sleep(200)
                                 control.remake_red_settings()                           
                                 xbmc.sleep(1000)
-                from acctmgr.modules.sync import prism_sync; prism_sync.revoke_ad()
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_ad")')
-                dialog.notification('AM Lite', 'All Add-ons Revoked!', ad_icon, 3000)
+                dialog.notification('All-Debrid', 'All Add-ons Revoked!', ad_icon, 3000)
                 xbmc.sleep(3000)
                 control.openSettings()
         else:
@@ -532,12 +546,12 @@ elif action == 'easydebridAuth':
         control.openSettings()
 
 elif action == 'easydebridReSync':
-        control.notification('AM Lite', 'Sync in progress, please wait!', icon=easyd_icon)
+        control.notification('Easy Debrid', 'Sync in progress, please wait!', icon=easyd_icon)
         xbmc.sleep(3000)
         from acctmgr.modules.sync import easydebrid_sync
         control.function_monitor(easydebrid_sync.Auth().easydebrid_auth)
         xbmc.sleep(200)
-        control.notification('AM Lite', 'Sync Complete!', icon=easyd_icon)
+        control.notification('Easy Debrid', 'Sync Complete!', icon=easyd_icon)
         xbmc.sleep(3000)
         control.openSettings()
 
@@ -561,7 +575,7 @@ elif action == 'easydebridRevoke':
                                 control.remake_gears_settings()                           
                                 xbmc.sleep(1000)
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_ed")')
-                dialog.notification('AM Lite', 'All Add-ons Revoked!', easyd_icon, 3000)
+                dialog.notification('Easy Debrid', 'All Add-ons Revoked!', easyd_icon, 3000)
                 xbmc.sleep(3000)
                 control.openSettings()
         else:
@@ -573,6 +587,12 @@ elif action == 'easydebridViewer':
         execute('ActivateWindow(10001,"plugin://script.module.acctvwr/?mode=easydebrid",return)')
         
 #TORBOX
+elif action == 'torboxAcct':										# View account info
+	from acctmgr.modules.auth import torbox
+	result = torbox.Torbox().account_info_to_dialog()
+	if result == -1:
+		control.openSettings()
+
 elif action == 'torboxAuth':
         from acctmgr.modules.auth import torbox
         ok = torbox.Torbox().auth()
@@ -591,12 +611,12 @@ elif action == 'torboxAuth':
         control.openSettings()
 	
 elif action == 'torboxReSync':
-        control.notification('AM Lite', 'Sync in progress, please wait!', icon=torbox_icon)
+        control.notification('TorBox', 'Sync in progress, please wait!', icon=torbox_icon)
         xbmc.sleep(3000)
         from acctmgr.modules.sync import torbox_sync
         control.function_monitor(torbox_sync.Auth().torbox_auth)
         xbmc.sleep(200)
-        control.notification('AM Lite', 'Sync Complete!', icon=torbox_icon)
+        control.notification('TorBox', 'Sync Complete!', icon=torbox_icon)
         xbmc.sleep(3000)
         control.openSettings()
 
@@ -626,9 +646,8 @@ elif action == 'torboxRevoke':
                                 xbmc.sleep(200)
                                 control.remake_red_settings()                           
                                 xbmc.sleep(1000)
-                from acctmgr.modules.sync import prism_sync; prism_sync.revoke_tb()
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_tb")')
-                dialog.notification('AM Lite', 'All Add-ons Revoked!', torbox_icon, 3000)
+                dialog.notification('TorBox', 'All Add-ons Revoked!', torbox_icon, 3000)
                 xbmc.sleep(3000)
                 control.openSettings()
         else:
@@ -658,12 +677,12 @@ elif action == 'offcloudAuth':
         control.openSettings()
 
 elif action == 'offcloudReSync':
-        control.notification('AM Lite', 'Sync in progress, please wait!', icon=offcloud_icon)
+        control.notification('OffCloud', 'Sync in progress, please wait!', icon=offcloud_icon)
         xbmc.sleep(3000)
         from acctmgr.modules.sync import offcloud_sync
         control.function_monitor(offcloud_sync.Auth().offcloud_auth)
         xbmc.sleep(200)
-        control.notification('AM Lite', 'Sync Complete!', icon=offcloud_icon)
+        control.notification('OffCloud', 'Sync Complete!', icon=offcloud_icon)
         xbmc.sleep(3000)
         control.openSettings()
 
@@ -686,9 +705,8 @@ elif action == 'offcloudRevoke':
                                 xbmc.sleep(200)
                                 control.remake_gears_settings()                           
                                 xbmc.sleep(1000)
-                from acctmgr.modules.sync import prism_sync; prism_sync.revoke_oc()
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_oc")')
-                dialog.notification('AM Lite', 'All Add-ons Revoked!', offcloud_icon, 3000)
+                dialog.notification('OffCloud', 'All Add-ons Revoked!', offcloud_icon, 3000)
                 xbmc.sleep(3000)
                 control.openSettings()
         else:
@@ -718,12 +736,12 @@ elif action == 'easynewsAuth':
         control.openSettings()
 
 elif action == 'easynewsReSync':
-        control.notification('AM Lite', 'Sync in progress, please wait!', icon=easynews_icon)
+        control.notification('Easynews', 'Sync in progress, please wait!', icon=easynews_icon)
         xbmc.sleep(3000)
         from acctmgr.modules.sync import easynews_sync
         control.function_monitor(easynews_sync.Auth().easynews_auth)
         xbmc.sleep(200)
-        control.notification('AM Lite', 'Sync Complete!', icon=easynews_icon)
+        control.notification('Easynews', 'Sync Complete!', icon=easynews_icon)
         xbmc.sleep(3000)
         control.openSettings()
 
@@ -748,7 +766,7 @@ elif action == 'easynewsRevoke':
                         control.remake_red_settings()                           
                         xbmc.sleep(1000)
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_en")')
-                dialog.notification('AM Lite', 'All Add-ons Revoked!', easynews_icon, 3000)
+                dialog.notification('Easynews', 'All Add-ons Revoked!', easynews_icon, 3000)
                 xbmc.sleep(3000)
                 control.openSettings()
         else:
@@ -764,6 +782,7 @@ elif action == 'allRevoke':
         token_keys = (
                 'trakt.token',
                 'mdblist.apikey',
+                'mdblist.token',
                 'realdebrid.token',
                 'premiumize.token',
                 'alldebrid.token',
@@ -792,6 +811,12 @@ elif action == 'allRevoke':
         trakt_authed = bool(control.setting('trakt.token'))
         
         def revoke_all_for_addon(settings_db, addon_name=None):
+                if control.setting('mdblist.token') and addon_name == 'Red Light':
+                        mdblist_db.revoke_redlight(settings_db)
+
+                if control.setting('mdblist.apikey') and addon_name == 'The Gears':
+                        mdblist_db.revoke_gears(settings_db)
+
                 if trakt_authed and addon_name:
                         trakt_db.revoke_trakt(settings_db, addon_name)
 
@@ -863,9 +888,6 @@ elif action == 'allRevoke':
                 control.delete_synclist()
                 control.updates_on()
 
-        from acctmgr.modules.sync import prism_sync
-        for _rev in (prism_sync.revoke_rd, prism_sync.revoke_pm, prism_sync.revoke_ad, prism_sync.revoke_tb, prism_sync.revoke_oc):
-                _rev()
         execute('RunPlugin("plugin://script.module.acctvwr/?mode=wipeclean")')  # Trakt Client/Secret are NOT revoked for (POV, The Coalition, Dradis, Genocide)
 
 #EXTERNAL PROVIDERS
@@ -1184,7 +1206,8 @@ elif action == 'setPLAYER':
         if not xbmcvfs.exists(var.chk_tmdbh):
                 control.notification('AM Lite', 'TMdb Helper is NOT installed!', icon=amgr_icon)
                 raise SystemExit
-        control.install_tmdbh_players()
+        from acctmgr.modules.auth import tmdbh_players
+        tmdbh_players.install_tmdbh_players()
         xbmc.sleep(500)
         control.openSettings()
 
@@ -1193,7 +1216,8 @@ elif action == 'delPLAYER':
         if not xbmcvfs.exists(var.chk_tmdbh):
                 control.notification('AM Lite', 'TMdb Helper is NOT installed!', icon=amgr_icon)
                 raise SystemExit
-        control.delete_tmdbh_players()
+        from acctmgr.modules.auth import tmdbh_players
+        tmdbh_players.delete_tmdbh_players()
         xbmc.sleep(500)
         control.openSettings()
         

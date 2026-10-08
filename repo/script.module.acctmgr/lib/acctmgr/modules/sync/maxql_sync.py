@@ -118,11 +118,9 @@ class MaxQL:
             log_utils.error(f"Umbrella MaxQL Failed: {e}")
 
 
-        # ===================== Fen / POV / The Coalition =====================
+        # ===================== POV =====================
         for name, plugin, chk_addon, chk_setting, remake_settings in (
-            #("Fen", "plugin.video.fen", var.chk_fen, var.chkset_fen, None),
             ("POV", "plugin.video.pov", var.chk_pov, var.chkset_pov, control.remake_pov_settings),
-            #("The Coalition", "plugin.video.coalition", var.chk_coal, var.chkset_coal, control.remake_coal_settings),
         ):
             try:
                 if exists(chk_addon) and exists(chk_setting):
@@ -138,13 +136,6 @@ class MaxQL:
                 log_utils.error(f"{name} MaxQL Failed: {e}")
 
 
-        # ===================== Seren ======================
-        try:
-            if exists(var.chk_seren) and exists(var.chkset_seren):
-                xbmcaddon.Addon("plugin.video.seren").setSetting("general.maxResolution", num_quality)
-        except Exception as e:
-            log_utils.error(f"Seren MaxQL Failed: {e}")
-            
         # ===================== Dradis / Genocide =====================
         for name, plugin, chk_addon, chk_setting in (
             #("Dradis",   "plugin.video.dradis",   var.chk_dradis,   var.chkset_dradis),
@@ -157,6 +148,37 @@ class MaxQL:
                 log_utils.error(f"{name} MaxQL Failed: {e}")
 
 
+        # ================= Seren ===================
+        for name, plugin, chk_addon, chk_setting in (
+                ("Seren", "plugin.video.seren", var.chk_seren, var.chkset_seren),
+        ):
+                try:
+                        if exists(chk_addon) and exists(chk_setting):
+                                xbmcaddon.Addon(plugin).setSetting("general.maxResolution", num_quality)
+                except Exception as e:
+                        log_utils.error(f"{name} MaxQL Failed: {e}")
+            
+        # ===================== luc_kodi =====================
+        for name, plugin, chk_addon, chk_setting in (
+            ("luc_kodi", "plugin.video.luc_kodi", var.chk_luc, var.chkset_luc),
+        ):
+            try:
+                if exists(chk_addon) and exists(chk_setting):
+                    xbmcaddon.Addon(plugin).setSetting("hosts.quality", num_quality)
+            except Exception as e:
+                log_utils.error(f"{name} MaxQL Failed: {e}")
+
+
+        # ================= Prism ===================
+        for name, plugin, chk_addon, chk_setting in (
+                ("Prism", "plugin.video.prism", var.chk_prism, var.chkset_prism),
+        ):
+                try:
+                        if exists(chk_addon) and exists(chk_setting):
+                                xbmcaddon.Addon(plugin).setSetting("general.maxResolution", num_quality)
+                except Exception as e:
+                        log_utils.error(f"{name} MaxQL Failed: {e}")
+            
         # ===================== Shadow / Ghost =====================
         for name, plugin, chk_addon, chk_setting in (
             ("Shadow", "plugin.video.shadow", var.chk_shadow, var.chkset_shadow),
@@ -184,14 +206,6 @@ class MaxQL:
                 log_utils.error(f"{name} MaxQL Failed: {e}")
 
 
-        '''# ===================== Seren =====================
-        try:
-            if exists(var.chk_seren) and exists(var.chkset_seren):
-                xbmcaddon.Addon("plugin.video.seren").setSetting("general.maxResolution", num_quality)
-        except Exception as e:
-            log_utils.error("Seren MaxQL Failed")'''
-
-
         # ===================== The Crew =====================
         try:
             if exists(var.chk_crew) and exists(var.chkset_crew):
@@ -207,14 +221,6 @@ class MaxQL:
         except Exception as e:
             log_utils.error(f"SALTS MaxQL Failed: {e}")
 
-        # ===================== Otaku =====================
-        try:
-            if exists(var.chk_otaku) and exists(var.chkset_otaku):
-                xbmcaddon.Addon("plugin.video.otaku").setSetting("general.maxResolution", otaku_quality)
-        except Exception as e:
-            log_utils.error(f"Otaku MaxQL Failed: {e}")
-
-
         # ===================== Scrubs V2 =====================
         try:
             if exists(var.chk_scrubs) and exists(var.chkset_scrubs):
@@ -229,3 +235,11 @@ class MaxQL:
                 xbmcaddon.Addon("plugin.video.gratisred").setSetting("quality.max", num_quality)
         except Exception as e:
             log_utils.error(f"Gratis Red MaxQL Failed: {e}")
+        # ===================== Otaku =====================
+        try:
+            if exists(var.chk_otaku) and exists(var.chkset_otaku):
+                xbmcaddon.Addon("plugin.video.otaku").setSetting("general.maxResolution", otaku_quality)
+        except Exception as e:
+            log_utils.error(f"Otaku MaxQL Failed: {e}")
+
+

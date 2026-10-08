@@ -1,192 +1,176 @@
 # -*- coding: utf-8 -*-
-import xbmc
-import xbmcgui
 import requests
 from acctmgr.modules import control
 from acctmgr.modules import log_utils
-from acctmgr.modules.qr_utils import make_qr, remove_qr
+from acctmgr.modules.auth.base_auth import BaseDeviceAuth
 
-# Variables
-base_url_v4  = 'https://api.alldebrid.com/v4/'
-base_url_41  = 'https://api.alldebrid.com/v4.1/'
-user_agent = 'Account%20Manager%20for%20Kodi'
-ad_icon = control.joinPath(control.artPath(), 'alldebrid.png')
-ad_bdr = control.joinPath(control.addonPath(), 'resources', 'images', 'white.png')
-ad_bg = control.joinPath(control.addonPath(), 'resources', 'images', 'dialog_background.png')
+ad_icon = control.joinPath(control.iconsPath(), 'alldebrid.png')
+AGENT = 'AccountManager'
 
-class AllDebridAuthDialog(xbmcgui.WindowXMLDialog):
-	def __init__(self, *args, **kwargs):
-		self.user_code = kwargs.get('user_code')
-		self.bg_image = kwargs.get('bg_image')
-		self.qr_image = kwargs.get('qr_image')
-		self.bdr_image = kwargs.get('bdr_image')
-		self.is_active = True
-		super(AllDebridAuthDialog, self).__init__()
-
-	def onInit(self):
-		self.setProperty('user_code', str(self.user_code or ''))
-		self.setProperty('bg_image', str(self.bg_image or ''))
-		self.setProperty('qr_image', str(self.qr_image or ''))
-		self.setProperty('bdr_image', str(self.bdr_image or ''))
-
-	def onClick(self, controlId):
-		self.is_active = False
-		self.close()
-
-	def onAction(self, action):
-		if action.getId() in [10, 13, 92]:
-			self.is_active = False
-			self.close()
-
-class AllDebrid:
-	name = "AllDebrid"
+class AllDebrid(BaseDeviceAuth):
+	provider_name = "All-Debrid"
 
 	def __init__(self):
 		self.token = control.setting('alldebrid.token')
-		self.timeout = 15.0
-		self.pin = None
-		self.check_url = None
-		self.user_url = None
-
-	def _headers(self):
-		return {
-			"User-Agent": user_agent,
-			"Authorization": f"Bearer {self.token}" if self.token else ""
-		}
-
-	def _get(self, endpoint, params=None):
-		if not self.token:
-			return None
-
-		url = base_url_41 + endpoint
-		params = params or {}
-
-		try:
-			r = requests.get(
-				url,
-				headers=self._headers(),
-				params=params,
-				timeout=self.timeout
-			)
-			result = r.json()
-			if result.get("status") == "success":
-				return result.get("data")
-		except Exception as e:
-			log_utils.error(f"AllDebrid API GET failed: {e}")
-		return None
 
 	def auth(self):
-		import time
+		return self.authenticate()
 
-		self.token = ""
-		self.pin = None
-		self.check_url = None
-		self.user_url = None
-
-		# Request PIN
+	def get_device_code(self):
 		try:
-			r = requests.get(
-				base_url_v4 + "pin/get",
-				params={"agent": user_agent},
-				timeout=self.timeout
+			response = requests.get(
+				'https://api.alldebrid.com/v4.1/pin/get',
+				params={'agent': AGENT},
+				timeout=15
 			)
-			payload = r.json()
+			payload = response.json()
 		except Exception as e:
-			log_utils.error(f"AllDebrid pin/get request failed: {e}")
-			return False
+			log_utils.error(f"AllDebrid device code request failed: {e}")
+			return None
 
-		if payload.get("status") != "success":
-			return False
+		if payload.get('status') != 'success':
+			log_utils.error(f"AllDebrid device code request error: {payload}")
+			return None
 
-		data = payload.get("data", {})
-		self.pin = data.get("pin")
-		self.check_url = data.get("check_url")
-		self.user_url = data.get("user_url") or "https://alldebrid.com/pin/"
-
-		if not self.pin or not self.check_url:
-			return False
-
-		qr_path = make_qr(self.user_url)
-		ad_static_qr = control.joinPath(control.addonPath(), 'resources', 'images', 'alldebrid_qr.png')
-		qr_image = qr_path if qr_path else ad_static_qr
-
-		dialog = AllDebridAuthDialog(
-			'alldebrid_auth.xml',
-			str(control.addonPath()),
-			'Default',
-			user_code=self.pin,
-			bg_image=ad_bg,
-			qr_image=qr_image,
-			bdr_image=ad_bdr
-		)
-		dialog.show()
-
-		start = time.time()
-		timeout = data.get("expires_in", 300)
-
-		while not self.token and time.time() - start < timeout:
-			if not dialog.is_active:
-				dialog.close()
-				del dialog
-				remove_qr(qr_path)
-				control.notification(message='AllDebrid authorization cancelled!', icon=ad_icon)
-				return False
-			self.auth_loop()
-			control.sleep(5000)
-
-		dialog.close()
-		del dialog
-		remove_qr(qr_path)
-
-		if not self.token:
-			control.notification(message='AllDebrid Authorization Timed Out', icon=ad_icon)
-			return False
-
-		account = self.account_info()
-		if account and "user" in account:
-			control.setSetting(
-				"alldebrid.username",
-				str(account["user"].get("username", ""))
-			)
-
-		control.notification(title='AM Lite',message='Successfully Authorized!',icon=ad_icon)
-		return True
-
-	def auth_loop(self):
+		data = payload.get('data', {})
 		try:
-			r = requests.get(self.check_url, timeout=self.timeout)
-			result = r.json()
-		except Exception as e:
-			log_utils.error(f"AllDebrid pin/check request failed: {e}")
+			return {
+				'device_code': data['check'],
+				'user_code': data['pin'],
+				'verification_url': data.get('base_url', 'https://alldebrid.com/pin/'),
+				'expires_in': int(data.get('expires_in', 600)),
+				'interval': 5,
+				'qr_data': data.get('user_url')
+			}
+		except (KeyError, TypeError, ValueError) as e:
+			log_utils.error(f"AllDebrid device code response malformed: {e} - {str(data)[:200]}")
+			return None
+
+	def poll_token(self, device_data):
+		try:
+			response = requests.post(
+				'https://api.alldebrid.com/v4/pin/check',
+				params={'agent': AGENT},
+				data={
+					'check': device_data['device_code'],
+					'pin': device_data['user_code']
+				},
+				timeout=15
+			)
+		except requests.exceptions.RequestException as e:
+			log_utils.log(f"AllDebrid poll request error: {e}", __name__, log_utils.LOGDEBUG)
 			return
 
-		data = result.get("data", {}) if isinstance(result, dict) else {}
+		try:
+			payload = response.json()
+		except ValueError:
+			log_utils.log(f"AllDebrid poll: HTTP {response.status_code} not valid JSON", __name__, log_utils.LOGDEBUG)
+			return
 
-		api_key = data.get("apikey")
-		if api_key:
-			self.token = str(api_key)
-			control.setSetting("alldebrid.token", self.token)
-			xbmc.log("AM-LITE: AllDebrid token acquired", xbmc.LOGINFO)
+		status = payload.get('status')
+
+		if status == 'success':
+			data = payload.get('data', {})
+			if data.get('activated') is True:
+				apikey = data.get('apikey')
+				if apikey:
+					self.token_data = {'apikey': apikey}
+				else:
+					self.abort_auth('AllDebrid returned activated but missing apikey')
+			# If activated is false, just return. The RepeatTimer will poll again next tick.
+			return
+
+		if status == 'error':
+			error = payload.get('error', {})
+			error_code = error.get('code')
+			if error_code in ('PIN_EXPIRED', 'PIN_INVALID'):
+				self.abort_auth(f"AllDebrid PIN error: {error_code}")
+				return
+
+			log_utils.log(f"AllDebrid poll unexpected error: {error_code} - {error.get('message')}", __name__, log_utils.LOGDEBUG)
+			return
+
+		log_utils.log(f"AllDebrid poll unexpected response: {str(payload)[:200]}", __name__, log_utils.LOGDEBUG)
+
+	def save_account(self):
+		data = self.token_data
+		if not data or not data.get('apikey'):
+			return False
+
+		apikey = data['apikey']
+		try:
+			username = self._fetch_username(apikey)
+			control.setSetting('alldebrid.token', apikey)
+			control.setSetting('alldebrid.apikey', apikey) # Retained for backward compatibility
+			control.setSetting('alldebrid.username', username)
+			self.token = apikey
+			return True
+		except Exception as e:
+			log_utils.error(f"AllDebrid save_account failed: {e}")
+			return False
+
+	def _fetch_username(self, apikey):
+		try:
+			response = requests.get(
+				'https://api.alldebrid.com/v4/user',
+				params={'agent': AGENT},
+				headers={'Authorization': f'Bearer {apikey}'},
+				timeout=15
+			)
+			if response.status_code != 200:
+				return ''
+
+			payload = response.json()
+			if payload.get('status') == 'success':
+				user_data = payload.get('data', {}).get('user', {})
+				return (user_data.get('username') or '').strip()
+			return ''
+		except Exception as e:
+			log_utils.error(f"AllDebrid username fetch failed: {e}")
+			return ''
+
+	def refresh_token(self):
+		# AllDebrid uses a static API key, no refresh rotation needed.
+		# This safely returns True so generic refresh triggers don't fail.
+		token = control.setting('alldebrid.token')
+		if token:
+			self.token = token
+			return True
+		return False
 
 	def revoke(self):
-		control.setSetting("alldebrid.username", "")
-		control.setSetting("alldebrid.token", "")
-
-	def account_info(self):
-		return self._get("user")
+		# No remote revoke endpoint exists in the AD API docs. Standard local cleanup.
+		control.setSetting('alldebrid.token', '')
+		control.setSetting('alldebrid.apikey', '')
+		control.setSetting('alldebrid.username', '')
 
 	def account_info_to_dialog(self):
 		from datetime import datetime
+		if not self.token:
+			return
+
 		try:
-			data = self.account_info()
-			if not data or "user" not in data:
+			response = requests.get(
+				'https://api.alldebrid.com/v4/user',
+				params={'agent': AGENT},
+				headers={'Authorization': f'Bearer {self.token}'},
+				timeout=15
+			)
+			if response.status_code != 200:
 				return
 
-			user = data["user"]
+			payload = response.json()
+			if payload.get('status') != 'success':
+				return
+
+			user = payload.get('data', {}).get('user', {})
+			if not user:
+				return
+
 			username = user.get("username", "")
 			email = user.get("email", "")
 			status = "Premium" if user.get("isPremium") else "Not Active"
-			expires = datetime.fromtimestamp(user["premiumUntil"])
+			expires = datetime.fromtimestamp(user.get("premiumUntil", 0))
 			days_remaining = (expires - datetime.today()).days
 
 			items = [

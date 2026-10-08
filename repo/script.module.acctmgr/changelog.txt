@@ -1,17 +1,8 @@
-v1.1.5.5
-- Removed TMDb Helper from the Trakt sync selection dialog (trakt_select.py). Combined with 1.1.5.4 this removes both the option to pick TMDbHelper as a Trakt sync target and the token-write block that would have run afterwards.
+1.2.0.1 - Arabic localization: full Arabic UI (settings, dialogs, notifications, QR/device auth windows, MDBList/Trakt/TMDb Helper selection windows, phone-entry web page, help texts) plus Account Viewer 1.1.5.1. New Startup > Language option (Auto / Arabic / English). Fixed malformed strings.po entries (#40109/#40110).
 
-v1.1.5.4
-- Removed TMDbHelper Trakt authorization block from trakt_sync.py; acctmgr no longer writes Trakt tokens into plugin.video.themoviedb.helper (client-key patch, service startup patch, and trakt_token setting). The addon still appears in the general settings-copy loop and elsewhere unchanged, so other TMDbHelper-related syncs (MDBList, players, etc.) continue to work.
+1.2.0 - Added support for Prism, Luc_Kodi, and Fen Light+. Added Offcloud support for ResolveURL. Re-added Seren Trakt support. Updated device authorization flows to use QR code authentication [Special thanks to DevGeniusCode for his work on this!]. Updated Trakt authentication and token refresh handling for the newer 7-day access token lifetime. Expanded MDBList integration to support both OAuth/QR authorization and API key authentication. Replaced Kodi dialogs with custom XML-based dialogs. General code cleanup and minor bug fixes.
 
-v1.1.5.2
-- QR rendering fix for all auth dialogs: make_qr() now falls back to api.qrserver.com when script.module.qrcode/PIL are unavailable, and every provider (Real-Debrid, AllDebrid, Premiumize, Trakt, Offcloud) now bundles a static QR image as final fallback so the dialog never shows an empty square.
-
-v1.1.5.1
-- Re-added QR authorization (ported from 1.1.3.6) for Real-Debrid, AllDebrid, Premiumize, and Trakt on top of upstream 1.1.5 (upstream had reverted them to plain dialogs).
-- Converted Offcloud device-code auth to the QR dialog (same design as TorBox); bundled static offcloud_qr.png used when dynamic QR generation is unavailable on the device.
-- Removed the PIN box frame from the TorBox and MDBList auth dialogs.
-- Stripped stray __pycache__ artifacts from the upstream package.
+1.1.6 - Fixed TorBox and OffCloud startup sync failing due to incorrect token mapping.
 
 1.1.5 - Added OffCloud support. Removed External Scraper support. Added Easynews support for The Crew and Otaku. General cleanup and bug fixes.
 

@@ -3217,13 +3217,14 @@ v.3.3.7
             <icon>resources/images/icon.png</icon>
         </assets>
     </extension>
-</addon><addon id="script.module.acctmgr" version="1.1.5.6" name="[COLOR FF32D3FE][B]Account Manager[/B][/COLOR] [COLOR gold][B]Lite[/B][/COLOR]" provider-name="Zaxxon709،AK">
+</addon><addon id="script.module.acctmgr" version="1.2.0.1" name="[COLOR dodgerblue][B]Account Manager[/B][/COLOR] [COLOR white][B]Lite[/B][/COLOR]" provider-name="Zaxxon709">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.19.1" />
-            	<import addon="script.module.acctvwr" version="1.1.4" />
+		<import addon="script.module.acctvwr" version="1.1.5.1" />
+		<import addon="script.module.qrcode" />
 	</requires>
-	
+	<extension point="xbmc.service" library="lib/startup.py" start="startup" />
 	<extension point="xbmc.python.script" library="lib/default.py">
 		<provides>executable</provides>
 	</extension>
@@ -3231,7 +3232,9 @@ v.3.3.7
 	<extension point="xbmc.addon.metadata">
 		<reuselanguageinvoker>false</reuselanguageinvoker>
 		<summary lang="en">Account Manager Lite</summary>
-		<description>A utility designed to centralize the authorization of various third-party streaming services across multiple Kodi add-ons.</description>
+		<summary lang="ar">مدير الحسابات لايت</summary>
+		<description lang="en">A utility designed to centralize the authorization of various third-party streaming services across multiple Kodi add-ons.</description>
+		<description lang="ar">أداة لتوحيد تفويض خدمات البث الخارجية عبر عدة إضافات في Kodi، بحيث تُدخل بيانات حسابك مرة واحدة بدلاً من إدخالها في كل إضافة على حدة.</description>
 		<platform>all</platform>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
 		<disclaimer lang="en">The author is not responsible for the use of this addon. [CR]The author is in no way affiliated with Kodi, Team Kodi, or the XBMC Foundation.[CR]This is a Non-profit resource, organized solely for educational purposes which is protected under the Fair-Use doctrine of the Copyright Act, Specifically section 107, which does promote freedom of expression, by permitting the unlicensed use of copyright-protected works.</disclaimer>
@@ -3240,13 +3243,15 @@ v.3.3.7
 			<fanart>fanart.png</fanart>
 		</assets>
 	</extension>
-</addon><addon id="script.module.acctvwr" name="[COLOR FF32D3FE][B]Account[/B][/COLOR][COLOR gold] [B]Viewer[/B][/COLOR]" version="1.1.4" provider-name="Zaxxon709">
+</addon><addon id="script.module.acctvwr" name="[COLOR dodgerblue][B]Account[/B][/COLOR] [COLOR white][B]Viewer[/B][/COLOR]" version="1.1.5.1" provider-name="Zaxxon709">
     <extension point="xbmc.python.pluginsource" library="default.py">
     </extension>
     <extension point="xbmc.python.module" library="resources" />
     <extension point="xbmc.addon.metadata">
         <summary lang="en">Account Viewer - AM Lite Dependency</summary>
+        <summary lang="ar">عارض الحسابات - مكوّن تابع لـ AM Lite</summary>
         <description lang="en">A centralized viewer for your authorized accounts. Easily check debrid, Trakt and other connected services across supported add-ons.</description>
+        <description lang="ar">عارض موحّد لحساباتك المفوَّضة. تحقّق بسهولة من خدمات Debrid و Trakt وغيرها من الخدمات المرتبطة عبر الإضافات المدعومة.</description>
         <platform>all</platform>
         <reuselanguageinvoker>false</reuselanguageinvoker>
         <source>https://</source>
@@ -5092,7 +5097,7 @@ v1.0.1 (2019-08-06)
     <fanart>fanart.jpg</fanart>
   </assets>
 </extension>
-</addon><addon id="script.tinyppi" name="TinyPPI" version="2.15.1.1" provider-name="jamal2362">
+</addon><addon id="script.tinyppi" name="TinyPPI" version="2.15.1.1+abk.1" provider-name="jamal2362">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.sidedata" version="1.6.0" />
@@ -5116,7 +5121,11 @@ v1.0.1 (2019-08-06)
         <description lang="hu">Megnyit egy külön folyamatinformációs ablakot. Ez az ablak az aktuálisan lejátszott média kodek-, videó- és hangadatait jeleníti meg.</description>
         <description lang="zh">打开一个独立的进程信息窗口。此窗口显示当前播放媒体的编解码器、视频和音频详细信息。</description>
         
-        <news>v2.15.0
+        <news>v2.15.1.1+abk.1 (ABUKARIM pre-patched)
+- PPI Arabic: Arabic font, no ":" after labels; ABUKARIM codec/Dolby badges; runs on non-CoreELEC.
+- Nothing left for the ABUKARIM TOOLS patcher to change.
+
+v2.15.0
 - The colour palettes grow from 50 to 250 colours: grays and every hue from red to rose, each in a vivid and a soft family, light to dark.
 - The colour picker opens with the HEX tile, then the setting's default colour (marked "(Default)"), then the palette sorted by colour.
 - Stored colours keep their colour; older stored forms are rewritten on start-up.

@@ -12,5 +12,6 @@ def log(msg, level=xbmc.LOGDEBUG):
     xbmc.log('{0}: {1}'.format(CONFIG.ADDONTITLE, msg), level)
 
 def log_notify(title, message, times=2000, icon=CONFIG.ADDON_ICON, sound=False):
-    xbmcgui.Dialog().notification(title, message, icon, int(times), sound)
+    from resources.libs.common.i18n import tr
+    xbmcgui.Dialog().notification(tr(title), tr(message), icon, int(times), sound)
 

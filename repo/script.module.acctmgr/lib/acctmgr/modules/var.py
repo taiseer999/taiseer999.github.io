@@ -103,6 +103,8 @@ chk_red = addons + translatePath('plugin.video.redlight/')#----------------Fork 
 # Uniques
 chk_umb = addons + translatePath('plugin.video.umbrella/')#----------------Umbrella
 chk_seren = addons + translatePath('plugin.video.seren/')#-----------------Seren
+chk_prism = addons + translatePath('plugin.video.prism/')#-----------------Prism
+chk_luc = addons + translatePath('plugin.video.luc_kodi/')#----------------luc_kodi
 # Fen & Forks
 chk_fen = addons + translatePath('plugin.video.fen/')#---------------------Fen
 chk_pov = addons + translatePath('plugin.video.pov/')#---------------------Fork / POV
@@ -141,6 +143,8 @@ chk_nimbus = addons + translatePath('skin.nimbus/')#-----------------------Nimbu
 # Uniques
 umb_ud = addon_data + translatePath('plugin.video.umbrella/')
 seren_ud = addon_data + translatePath('plugin.video.seren/')
+prism_ud = addon_data + translatePath('plugin.video.prism/')
+luc_ud = addon_data + translatePath('plugin.video.luc_kodi/')
 # Fen & Forks
 fen_ud = addon_data + translatePath('plugin.video.fen/')
 pov_ud = addon_data + translatePath('plugin.video.pov/')
@@ -182,6 +186,8 @@ chkset_red = addon_data + translatePath('plugin.video.redlight/databases/setting
 # Uniques
 chkset_umb = addon_data + translatePath('plugin.video.umbrella/settings.xml')
 chkset_seren = addon_data + translatePath('plugin.video.seren/settings.xml')
+chkset_prism = addon_data + translatePath('plugin.video.prism/settings.xml')
+chkset_luc = addon_data + translatePath('plugin.video.luc_kodi/settings.xml')
 # Fen & Forks
 chkset_fen = addon_data + translatePath('plugin.video.fen/settings.xml')
 chkset_pov = addon_data + translatePath('plugin.video.pov/settings.xml')
@@ -251,6 +257,7 @@ path_red_service = addons + translatePath('plugin.video.redlight/resources/lib/s
 # Uniques
 path_umb_service = addons + translatePath('plugin.video.umbrella/service.py')
 path_seren_service = addons + translatePath('plugin.video.seren/service.py')
+path_luc_service = addons + translatePath('plugin.video.luc_kodi/service.py')
 # Fen & Forks
 path_fen_service = addons + translatePath('plugin.video.fen/resources/lib/service.py')
 path_pov_service = addons + translatePath('plugin.video.pov/resources/lib/service.py')
@@ -307,6 +314,9 @@ dradis_secret_obs = [113, 39, 39, 122, 116, 122, 32, 35, 33, 32, 36, 123, 39, 38
 seren_client_obs = [114, 33, 123, 35, 113, 114, 122, 115, 123, 39, 118, 35, 36, 116, 36, 36, 35, 36, 113, 32, 123, 119, 118, 33, 32, 39, 35, 39, 123, 32, 119, 118, 118, 123, 123, 114, 122, 122, 119, 115, 113, 122, 116, 113, 33, 114, 113, 33, 114, 112, 123, 115, 115, 38, 39, 114, 114, 35, 33, 112, 38, 39, 117, 123]
 seren_secret_obs = [32, 36, 114, 112, 118, 115, 117, 36, 112, 117, 32, 119, 115, 118, 33, 39, 39, 116, 35, 122, 38, 115, 113, 119, 36, 112, 38, 38, 33, 112, 116, 115, 35, 115, 119, 39, 39, 33, 36, 32, 116, 39, 38, 116, 112, 122, 123, 33, 113, 116, 112, 113, 123, 122, 112, 116, 38, 33, 38, 38, 115, 122, 118, 112]
 
+luc_client_obs = [32, 118, 112, 113, 118, 35, 119, 117, 114, 39, 112, 35, 36, 122, 122, 35, 114, 118, 112, 33, 122, 117, 113, 33, 116, 112, 123, 36, 33, 39, 33, 119, 39, 117, 117, 39, 118, 39, 122, 32, 119, 38, 123, 115, 117, 119, 117, 39, 122, 122, 114, 35, 119, 115, 36, 116, 116, 122, 122, 36, 38, 115, 118, 38]
+luc_secret_obs = [119, 115, 39, 118, 114, 39, 32, 32, 117, 35, 39, 39, 33, 112, 118, 33, 32, 119, 38, 122, 117, 113, 114, 122, 39, 113, 114, 113, 117, 112, 123, 112, 116, 118, 39, 36, 115, 123, 112, 32, 113, 116, 39, 115, 122, 122, 116, 112, 122, 112, 32, 39, 38, 38, 36, 122, 35, 114, 32, 113, 36, 116, 33, 115]
+
 fen_client_obs = [116, 118, 119, 32, 114, 36, 118, 116, 38, 36, 112, 123, 38, 112, 117, 39, 116, 113, 33, 118, 35, 122, 38, 119, 36, 36, 36, 115, 119, 122, 39, 38, 38, 114, 32, 39, 36, 114, 35, 116, 35, 119, 38, 113, 112, 36, 33, 115, 112, 33, 115, 32, 122, 112, 113, 122, 122, 32, 39, 113, 119, 115, 35, 36]
 fen_secret_obs = [118, 112, 112, 35, 112, 122, 112, 39, 36, 119, 36, 39, 118, 32, 119, 33, 118, 117, 32, 33, 116, 114, 118, 112, 119, 33, 114, 114, 123, 35, 33, 113, 114, 118, 117, 39, 32, 38, 115, 114, 35, 117, 36, 116, 35, 36, 117, 123, 114, 113, 114, 113, 122, 117, 119, 118, 115, 123, 36, 115, 122, 36, 123, 122]
 
@@ -351,6 +361,9 @@ dradis_secret = obfuscation.deobfuscate(dradis_secret_obs)
 
 seren_client = obfuscation.deobfuscate(seren_client_obs)
 seren_secret = obfuscation.deobfuscate(seren_secret_obs)
+
+luc_client = obfuscation.deobfuscate(luc_client_obs)
+luc_secret = obfuscation.deobfuscate(luc_secret_obs)
 
 fen_client = obfuscation.deobfuscate(fen_client_obs)
 fen_secret = obfuscation.deobfuscate(fen_secret_obs)

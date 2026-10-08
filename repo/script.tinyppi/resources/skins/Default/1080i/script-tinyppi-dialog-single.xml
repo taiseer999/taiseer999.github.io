@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- ABUKARIM TOOLS: PPI Arabic -->
 <!-- Generated file - do not edit by hand; see tools/gen_dialog_skins.py.
      The single button: one button, and left or right steps it to the next choice rather than moving to another button. -->
 <window type="dialog">
@@ -54,7 +55,7 @@
                     <top>18</top>
                     <width>640</width>
                     <height>44</height>
-                    <font>font32</font>
+                    <font>abk_ppi_ar32</font>
                     <textcolor>$INFO[Window(10000).Property(TinyPPI.DialogHeaderColor)]</textcolor>
                     <align>left</align>
                     <aligny>center</aligny>
@@ -101,7 +102,7 @@
                     <height>80</height>
                     <label></label>
                     <align>center</align>
-                    <font>font23_narrow</font>
+                    <font>abk_ppi_ar21</font>
                     <onup>1500</onup>
                     <ondown>1500</ondown>
                     <onleft>1500</onleft>

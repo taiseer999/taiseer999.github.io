@@ -42,6 +42,17 @@ _REQUIRED_FONTS = (
     {"name": "font32",        "filename": _FONT_FILE, "size": "32"},
 )
 
+# -- ABUKARIM pre-patch: PPI Arabic fonts --
+# The overlay XML ships already in the ABUKARIM TOOLS "PPI Arabic" state and
+# uses these two names. Registered here (Arabic-capable font bundled in this
+# add-on) so they exist on boxes without the patcher; on a Piers box the
+# patcher finds the names present and leaves Font.xml alone.
+_ABK_AR_FONT_FILE = "special://home/addons/script.tinyppi/resources/fonts/Noto-Regular.ttf"
+_REQUIRED_FONTS += (
+    {"name": "abk_ppi_ar21", "filename": _ABK_AR_FONT_FILE, "size": "21"},
+    {"name": "abk_ppi_ar32", "filename": _ABK_AR_FONT_FILE, "size": "32"},
+)
+
 # Home-window mark for Font.xml files checked and found complete: skin, add-on
 # version (an update may need new fonts), and each file's path and stamp.
 # Checking against it costs one stat per file instead of a skin walk and a

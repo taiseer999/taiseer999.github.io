@@ -100,9 +100,8 @@ class Auth:
         except Exception as e:
             log_utils.error(f"Umbrella All-Debrid Failed: {e}")
 
-        # ========================= Fen / POV =========================
+        # ========================= POV =========================
         for addon_id, chk_addon, chk_settings, label, remake_settings in (
-            #("plugin.video.fen", var.chk_fen, var.chkset_fen, "Fen", None),
             ("plugin.video.pov", var.chk_pov, var.chkset_pov, "POV", control.remake_pov_settings),
         ):
             try:
@@ -132,26 +131,6 @@ class Auth:
             except Exception as e:
                 log_utils.error(f"{label} All-Debrid Failed: {e}")
 
-        # ========================= Seren =========================
-        try:
-            if exists(var.chk_seren) and exists(var.chkset_seren):
-                addon = xbmcaddon.Addon("plugin.video.seren")
-                chk_auth = addon.getSetting("alldebrid.apikey")
-                chk_auth_rd = addon.getSetting("rd.auth")
-                chk_auth_pm = addon.getSetting("premiumize.token")
-                if chk_auth != ad_master_token:
-                    for k, v in {
-                        "alldebrid.username": your_ad_username,
-                        "alldebrid.apikey": your_ad_token,
-                        "alldebrid.premiumstatus": "Premium",
-                        "alldebrid.enabled": "true",
-                        "realdebrid.enabled": "true" if chk_auth_rd else "false",
-                        "premiumize.enabled": "true" if chk_auth_pm else "false",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception:
-            log_utils.error("Seren All-Debrid Failed")
-            
         # =============== Dradis / Genocide ===============
         addons = [
             #("Dradis",   "plugin.video.dradis",   var.chk_dradis,   var.chkset_dradis),
@@ -173,6 +152,67 @@ class Auth:
             except Exception as e:
                 log_utils.error(f"{name} All-Debrid Failed: {e}")
 
+        # ================= Seren ===================
+        for name, plugin, chk_addon, chk_setting in (
+                ("Seren", "plugin.video.seren", var.chk_seren, var.chkset_seren),
+        ):
+                try:
+                        if exists(chk_addon) and exists(chk_setting):
+                                addon = xbmcaddon.Addon(plugin)
+                                chk_auth = addon.getSetting("alldebrid.apikey")
+                                chk_auth_rd = addon.getSetting("rd.auth")
+                                chk_auth_pm = addon.getSetting("premiumize.token")
+                                if chk_auth != ad_master_token:
+                                        for k, v in {
+                                                "alldebrid.username": your_ad_username,
+                                                "alldebrid.apikey": your_ad_token,
+                                                "alldebrid.premiumstatus": "Premium",
+                                                "alldebrid.enabled": "true",
+                                                "realdebrid.enabled": "true" if chk_auth_rd else "false",
+                                                "premiumize.enabled": "true" if chk_auth_pm else "false",
+                                        }.items():
+                                                addon.setSetting(k, v)
+                except Exception:
+                        log_utils.error(f"{name} All-Debrid Failed")
+            
+        # ========================= luc_kodi =========================
+        try:
+            if exists(var.chk_luc) and exists(var.chkset_luc):
+                addon = xbmcaddon.Addon("plugin.video.luc_kodi")
+                chk_auth = addon.getSetting("alldebrid.token")
+                if chk_auth != ad_master_token:
+                    for k, v in {
+                        "alldebrid.enable": "true",
+                        "alldebrid.token": your_ad_token,
+                        "alldebrid.username": your_ad_username,
+                    }.items():
+                        addon.setSetting(k, v)
+        except Exception as e:
+            log_utils.error(f"luc_kodi All-Debrid Failed: {e}")
+
+        # ================= Prism ===================
+        for name, plugin, chk_addon, chk_setting in (
+                ("Prism", "plugin.video.prism", var.chk_prism, var.chkset_prism),
+        ):
+                try:
+                        if exists(chk_addon) and exists(chk_setting):
+                                addon = xbmcaddon.Addon(plugin)
+                                chk_auth = addon.getSetting("alldebrid.apikey")
+                                chk_auth_rd = addon.getSetting("rd.auth")
+                                chk_auth_pm = addon.getSetting("premiumize.token")
+                                if chk_auth != ad_master_token:
+                                        for k, v in {
+                                                "alldebrid.username": your_ad_username,
+                                                "alldebrid.apikey": your_ad_token,
+                                                "alldebrid.premiumstatus": "Premium",
+                                                "alldebrid.enabled": "true",
+                                                "realdebrid.enabled": "true" if chk_auth_rd else "false",
+                                                "premiumize.enabled": "true" if chk_auth_pm else "false",
+                                        }.items():
+                                                addon.setSetting(k, v)
+                except Exception:
+                        log_utils.error(f"{name} All-Debrid Failed")
+            
         # =============== Shadow / Ghost / The Chains ===============
         addons = [
             ("Shadow",     "plugin.video.shadow",    var.chk_shadow,  var.shadow_ud,  var.chkset_shadow,  var.shadow),
@@ -242,7 +282,3 @@ class Auth:
                         addon.setSetting(k, v)
         except Exception as e:
             log_utils.error(f"ResolveURL All-Debrid Failed: {e}")
-
-        # ========================= Prism (Seren fork) =========================
-        from acctmgr.modules.sync import prism_sync
-        prism_sync.sync_ad(your_ad_username, your_ad_token, ad_master_token)

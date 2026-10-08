@@ -11,6 +11,8 @@ import datetime
 import textwrap
 from acctmgr.modules import var
 from acctmgr.modules import log_utils
+from acctmgr.modules import i18n
+from acctmgr.modules.i18n import tr
 
 #Variables
 condVisibility = xbmc.getCondVisibility
@@ -19,9 +21,9 @@ monitor = xbmc.Monitor()
 translatePath = xbmcvfs.translatePath
 joinPath = os.path.join
 date = str(datetime.date.today())
-dialog = xbmcgui.Dialog()
+dialog = i18n.Dialog()
 window = xbmcgui.Window(10000)
-progressDialog = xbmcgui.DialogProgress()
+progressDialog = i18n.DialogProgress()
 existsPath = xbmcvfs.exists
 openFile = xbmcvfs.File
 makeFile = xbmcvfs.mkdir
@@ -300,8 +302,8 @@ def remake_pov_settings():
         'POV settings remake'
     )
 
-# FEN LIGHT TRAKT CACHE
-def remake_trakt_cache(plugin_id, name):  # Fen Light & The Gears
+# REMAKE TRAKT CACHE
+def remake_trakt_cache(plugin_id, name):
     main_conn = None
     trakt_conn = None
 
@@ -484,7 +486,7 @@ def remake_pov_trakt_cache():
 
 # INSTALL TMDB HELPER PLAYERS
 def install_tmdbh_players():
-	dialog = xbmcgui.Dialog()
+	dialog = i18n.Dialog()
 	amgr_icon = joinPath(iconsPath(), 'acctmgr.png')
 	src = xbmcvfs.translatePath('special://home/addons/script.module.acctmgr/resources/players/')
 	players_path = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.themoviedb.helper/players/')
@@ -504,7 +506,8 @@ def install_tmdbh_players():
 		('Umbrella', 'plugin.video.umbrella', 'umbrella.json'),
 		('POV', 'plugin.video.pov', 'pov.json'),
 		('Seren', 'plugin.video.seren', 'seren.json'),
-		('Prism', 'plugin.video.prism', 'prism.json'),
+        ('Prism', 'plugin.video.prism', 'prism.json'),
+        ('Luc_Kodi', 'plugin.video.luc_kodi', 'luc_kodi.json'),
 		('Genocide', 'plugin.video.genocide', 'genocide.json'),
 		('Shadow', 'plugin.video.shadow', 'shadow.json'),
 		('Ghost', 'plugin.video.ghost', 'ghost.json'),
@@ -570,7 +573,7 @@ def install_tmdbh_players():
 
 # DELETE TMDB HELPER PLAYERS
 def delete_tmdbh_players():
-	dialog = xbmcgui.Dialog()
+	dialog = i18n.Dialog()
 	amgr_icon = joinPath(iconsPath(), 'acctmgr.png')
 	players_path = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.themoviedb.helper/players/')
 	reconfigured_path = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.themoviedb.helper/reconfigured_players/')
@@ -587,6 +590,8 @@ def delete_tmdbh_players():
 		('Umbrella', 'umbrella.json'),
 		('POV', 'pov.json'),
 		('Seren', 'seren.json'),
+        ('Prism', 'prism.json'),
+        ('Luc_Kodi', 'luc_kodi.json'),
 		('Genocide', 'genocide.json'),
 		('Shadow', 'shadow.json'),
 		('Ghost', 'ghost.json'),
@@ -716,20 +721,15 @@ def apply_default_trakt_api_keys(): # Restore default API keys for python files 
     # Restore default keys in python files
     file_targets = (
         (var.chk_umb,           var.path_umb,     var.umb_client,            var.umb_secret,            "Umbrella",     var.client_am,            var.secret_am),
-        #(var.chk_seren,        var.path_seren,  var.seren_client,          var.seren_secret,          "Seren",        var.client_am,            var.secret_am),
-        #(var.chk_fen,          var.path_fen,    var.fen_client,            var.fen_secret,            "Fen",          var.client_am,            var.secret_am),
+        (var.chk_seren,         var.path_seren,   var.seren_client,          var.seren_secret,          "Seren",        var.client_am,            var.secret_am),
         (var.chk_shadow,        var.path_shadow,  var.shadow_client,         var.shadow_secret,         "Shadow",       var.client_am,            var.secret_am),
         (var.chk_ghost,         var.path_ghost,   var.ghost_client,          var.ghost_secret,          "Ghost",        var.client_am,            var.secret_am),
         (var.chk_chains,        var.path_chains,  var.thechains_client,      var.thechains_secret,      "The Chains",   var.client_am,            var.secret_am),
-        (var.chk_crew,          var.path_crew,    var.crew_client,           var.crew_secret,           "The Crew",     var.client_am_x,         var.secret_am_x),
+        (var.chk_crew,          var.path_crew,    var.crew_client,           var.crew_secret,           "The Crew",     var.client_am_x,          var.secret_am_x),
         (var.chk_salts,         var.path_salts,   var.salts_client,          var.salts_secret,          "SALTS",        var.client_am,            var.secret_am),
-        #(var.chk_orion,        var.path_orion,  var.orion_client,          var.orion_secret,          "Orion",        var.client_am,            var.secret_am),
-        #(var.chk_gen,          var.path_gen,    var.genesis_client,        var.genesis_secret,        "Genesis",      var.client_am,            var.secret_am),
-        #(var.chk_sync,         var.path_sync,   var.syncher_client,        var.syncher_secret,        "Syncher",      var.client_am,            var.secret_am),
         (var.chk_scrubs,        var.path_scrubs,  var.scrubs_client,         var.scrubs_secret,         "Scrubs V2",    var.client_am,            var.secret_am),
         (var.chk_redg,          var.path_redg,    var.redg_client,           var.redg_secret,           "Gratis Red",   var.client_am,            var.secret_am),
         (var.chk_tmdbh,         var.path_tmdbh,   var.tmdbh_client,          var.tmdbh_secret,          "TMDb Helper",  var.client_am,            var.secret_am),
-        #(var.chk_tkplay,       var.path_tkplay, var.tkplay_client,         var.tkplay_secret,         "Trakt Player", var.client_am,            var.secret_am),
         (var.chk_trakt,         var.path_trakt,   var.trakt_client_obs_str,  var.trakt_secret_obs_str,  "Trakt",        var.client_am_obs_str,    var.secret_am_obs_str),
     )
 
@@ -773,8 +773,8 @@ def apply_default_trakt_api_keys(): # Restore default API keys for python files 
 
     # Restore default keys in settings.xml only if AM Lite keys are currently applied
     settings_targets = (
+        ("plugin.video.luc_kodi",   var.chk_luc,       var.luc_client,    var.luc_secret,    "luc_kodi"),
         ("plugin.video.pov",        var.chk_pov,       var.pov_client,    var.pov_secret,    "POV"),
-        #("plugin.video.coalition",  var.chk_coal,      var.chains_client, var.chains_secret, "The Coalition"),
         #("plugin.video.dradis",     var.chk_dradis,    var.dradis_client, var.dradis_secret, "Dradis"),
         ("plugin.video.genocide",   var.chk_genocide,  var.chains_client, var.chains_secret, "Genocide"),
     )
@@ -1205,12 +1205,11 @@ def unpatch_all_services():
         
         # Uniques
         ("Umbrella", var.chk_umb, var.path_umb_service),
-        #("Seren", var.chk_seren, var.path_seren_service),
+        ("Seren", var.chk_seren, var.path_seren_service),
+        ("luc_kodi", var.chk_luc, var.path_luc_service),
         
         # Fen & Forks
-        #("Fen", var.chk_fen, var.path_fen_service),
         ("POV", var.chk_pov, var.path_pov_service),
-        #("The Coalition", var.chk_coal, var.path_coal_service),
         
         # Dradis & Forks
         #("Dradis", var.chk_dradis, var.path_dradis_service),
@@ -1228,9 +1227,7 @@ def unpatch_all_services():
         # Others
         ("The Crew", var.chk_crew, var.path_crew_service),
         ("SALTS", var.chk_salts, var.path_salts_service),
-        #("Genesis", var.chk_gen, var.path_gen_service),
         ("TMDbH", var.chk_tmdbh, var.path_tmdbh_service),
-        #("Trakt Player", var.chk_tkplay, var.path_tkplay_service),
         ("Trakt Add-on", var.chk_trakt, var.path_trakt_service),
     )
 

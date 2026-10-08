@@ -1,6 +1,7 @@
 import xbmc, xbmcaddon, xbmcvfs
 import json
 import os
+import xml.etree.ElementTree as ET
 from urllib.parse import quote_plus
 from urllib.request import urlretrieve
 
@@ -29,6 +30,17 @@ def get_active_skin():
         return json_query.get('result', {}).get('value', '')
     except Exception:
         return ''
+
+def get_fenlight_name(plugin, name):
+    if plugin != 'plugin.video.fenlight':
+        return name
+
+    try:
+        addon_xml = os.path.join(addons, plugin, 'addon.xml')
+        addon_name = ET.parse(addon_xml).getroot().get('name', '')
+        return 'Fen Light+' if '+' in addon_name else 'Fen Light'
+    except Exception:
+        return name
     
 def trakt_menu():
     for trakt in acct_vwr.ORDER:
@@ -40,6 +52,7 @@ def trakt_menu():
         else:
             if xbmc.getCondVisibility('System.HasAddon({0})'.format(acct_vwr.ADDONS[trakt]['plugin'])):
                 name = acct_vwr.ADDONS[trakt]['name']
+                name = get_fenlight_name(acct_vwr.ADDONS[trakt]['plugin'], name)
                 path = acct_vwr.ADDONS[trakt]['path']
                 auser = acct_vwr.addon_user_trakt(trakt)
                 icon = acct_vwr.ADDONS[trakt]['icon'] if os.path.exists(path) else CONFIG.ICON
@@ -53,7 +66,7 @@ def trakt_menu():
                 else:
                     directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': trakt}, icon=icon, description='Your Trakt Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
 
-                if name == 'Fen Light':
+                if acct_vwr.ADDONS[trakt]['plugin'] == 'plugin.video.fenlight':
                     directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
                 elif name == 'The Gears':
                     directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'The Gears'}, icon=icon, fanart=fanart, menu=menu)
@@ -108,6 +121,7 @@ def debrid_menu():
         else:
             if xbmc.getCondVisibility('System.HasAddon({0})'.format(acct_vwr.ADDONS[debrid]['plugin'])):
                 name = acct_vwr.ADDONS[debrid]['name']
+                name = get_fenlight_name(acct_vwr.ADDONS[debrid]['plugin'], name)
                 path = acct_vwr.ADDONS[debrid]['path']
                 auser = acct_vwr.addon_user_rd(debrid)
                 icon = acct_vwr.ADDONS[debrid]['icon'] if os.path.exists(path) else CONFIG.ICON
@@ -121,7 +135,7 @@ def debrid_menu():
                 else:
                     directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': debrid}, icon=icon, description='Your Real-Debrid Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
 
-                if name == 'Fen Light':
+                if acct_vwr.ADDONS[debrid]['plugin'] == 'plugin.video.fenlight':
                     directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
                 elif name == 'The Gears':
                     directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'The Gears'}, icon=icon, fanart=fanart, menu=menu)
@@ -142,6 +156,7 @@ def premiumize_menu():
         else:
             if xbmc.getCondVisibility('System.HasAddon({0})'.format(acct_vwr.ADDONS[debrid]['plugin'])):
                 name = acct_vwr.ADDONS[debrid]['name']
+                name = get_fenlight_name(acct_vwr.ADDONS[debrid]['plugin'], name)
                 path = acct_vwr.ADDONS[debrid]['path']
                 auser = acct_vwr.addon_user_pm(debrid)
                 icon = acct_vwr.ADDONS[debrid]['icon'] if os.path.exists(path) else CONFIG.ICON
@@ -155,7 +170,7 @@ def premiumize_menu():
                 else:
                     directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': debrid}, icon=icon, description='Your Premiumize Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
 
-                if name == 'Fen Light':
+                if acct_vwr.ADDONS[debrid]['plugin'] == 'plugin.video.fenlight':
                     directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
                 elif name == 'The Gears':
                     directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'The Gears'}, icon=icon, fanart=fanart, menu=menu)
@@ -176,6 +191,7 @@ def alldebrid_menu():
         else:
             if xbmc.getCondVisibility('System.HasAddon({0})'.format(acct_vwr.ADDONS[debrid]['plugin'])):
                 name = acct_vwr.ADDONS[debrid]['name']
+                name = get_fenlight_name(acct_vwr.ADDONS[debrid]['plugin'], name)
                 path = acct_vwr.ADDONS[debrid]['path']
                 auser = acct_vwr.addon_user_ad(debrid)
                 icon = acct_vwr.ADDONS[debrid]['icon'] if os.path.exists(path) else CONFIG.ICON
@@ -189,7 +205,7 @@ def alldebrid_menu():
                 else:
                     directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': debrid}, icon=icon, description='Your All-Debrid Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
 
-                if name == 'Fen Light':
+                if acct_vwr.ADDONS[debrid]['plugin'] == 'plugin.video.fenlight':
                     directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
                 elif name == 'The Gears':
                     directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'The Gears'}, icon=icon, fanart=fanart, menu=menu)
@@ -238,6 +254,7 @@ def torbox_menu():
         else:
             if xbmc.getCondVisibility('System.HasAddon({0})'.format(acct_vwr.ADDONS[tb]['plugin'])):
                 name = acct_vwr.ADDONS[tb]['name']
+                name = get_fenlight_name(acct_vwr.ADDONS[tb]['plugin'], name)
                 path = acct_vwr.ADDONS[tb]['path']
                 auser = acct_vwr.addon_user_tb(tb)
                 icon = acct_vwr.ADDONS[tb]['icon'] if os.path.exists(path) else CONFIG.ICON
@@ -249,7 +266,7 @@ def torbox_menu():
                     directory.add_file('{0} - [COLOR red]Not Authorized[/COLOR]'.format(name), {'name': tb}, icon=icon, description='Your TorBox Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
                 else:
                     directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': tb}, icon=icon, description='Your TorBox Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
-                if name == 'Fen Light':
+                if acct_vwr.ADDONS[tb]['plugin'] == 'plugin.video.fenlight':
                     directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
                 elif name == 'The Gears':
                     directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'The Gears'}, icon=icon, fanart=fanart, menu=menu)
@@ -281,7 +298,7 @@ def offcloud_menu():
                 else:
                     directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': oc}, icon=icon, description='Your Offcloud Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
                 if name == 'Red Light':
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_red', 'name': 'Red Light'}, icon=icon, fanart=fanart, menu=menu)
                 #elif name == 'The Gears':
                     #directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'The Gears'}, icon=icon, fanart=fanart, menu=menu)
                 else:
@@ -298,6 +315,7 @@ def easynews_menu():
         else:
             if xbmc.getCondVisibility('System.HasAddon({0})'.format(acct_vwr.ADDONS[easy]['plugin'])):
                 name = acct_vwr.ADDONS[easy]['name']
+                name = get_fenlight_name(acct_vwr.ADDONS[easy]['plugin'], name)
                 path = acct_vwr.ADDONS[easy]['path']
                 auser = acct_vwr.addon_user_en(easy)
                 icon = acct_vwr.ADDONS[easy]['icon'] if os.path.exists(path) else CONFIG.ICON
@@ -309,7 +327,7 @@ def easynews_menu():
                     directory.add_file('{0} - [COLOR red]Not Authorized[/COLOR]'.format(name), {'name': easy}, icon=icon, description='Your Easynews Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
                 else:
                     directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': easy}, icon=icon, description='Your Easynews Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
-                if name == 'Fen Light':
+                if acct_vwr.ADDONS[easy]['plugin'] == 'plugin.video.fenlight':
                     directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
                 elif name == 'The Gears':
                     directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'The Gears'}, icon=icon, fanart=fanart, menu=menu)

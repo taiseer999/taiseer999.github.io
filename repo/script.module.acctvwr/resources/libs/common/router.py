@@ -6,13 +6,14 @@ from urllib.parse import parse_qsl
 from resources.libs.common import logging
 from resources.libs.gui import menu
 from resources.libs import ext_db
+from resources.libs.common import i18n
 
 #Variables
 amgr = 'AM Lite'
 execute = xbmc.executebuiltin
 joinPath = os.path.join
 exists = xbmcvfs.exists
-dialog = xbmcgui.Dialog()
+dialog = i18n.Dialog()
 translatePath = xbmcvfs.translatePath
 acctmgr = xbmcaddon.Addon('script.module.acctmgr')
 addons = translatePath('special://home/addons/')
@@ -65,10 +66,11 @@ en_icon    = joinPath(icons_path, 'easynews.png')
 #AM Lite Service Settings
 ACCTMGR_AM = [
     # Trakt
-    'trakt.expires','trakt.refresh',
+    'trakt.expires', 'trakt.refresh',
     'trakt.token', 'trakt.username',
     # MDBList
-    'mdblist.username','mdblist.apikey',
+    'mdblist.token', 'mdblist.refresh', 'mdblist.expires', 'mdblist.client_id', 
+    'mdblist.auth_status', 'mdblist.username', 'mdblist.apikey',
     # Real-Debrid
     'realdebrid.token', 'realdebrid.username', 'realdebrid.secret',
     'realdebrid.refresh', 'realdebrid.client_id',
@@ -77,7 +79,7 @@ ACCTMGR_AM = [
     # All-Debrid
     'alldebrid.token', 'alldebrid.username', 'alldebrid.secret',
     # Torbox
-    'torbox.token', 'torbox.acct_id', 'torbox.auth_status', 'torbox.enabled',
+    'torbox.token', 'torbox.username', 'torbox.acct_id', 'torbox.auth_status', 'torbox.enabled',
     # EasyDebrid
     'easydebrid.token', 'easydebrid.enabled',
     # OffCloud
@@ -93,7 +95,8 @@ ACCTMGR_TK = [
 
 ACCTMGR_MDB = [
     # MDBList
-    'mdblist.username','mdblist.apikey',]
+    'mdblist.token', 'mdblist.refresh', 'mdblist.expires', 'mdblist.client_id',
+    'mdblist.auth_status', 'mdblist.username', 'mdblist.apikey',]
 
 ACCTMGR_RD = [
     # Real-Debrid
@@ -110,7 +113,7 @@ ACCTMGR_AD = [
 
 ACCTMGR_TB = [
     # Torbox
-    'torbox.token', 'torbox.acct_id', 'torbox.auth_status', 'torbox.enabled',]
+    'torbox.token', 'torbox.username', 'torbox.acct_id', 'torbox.auth_status', 'torbox.enabled',]
 
 ACCTMGR_ED = [
     # EasyDebrid
@@ -311,9 +314,9 @@ class Router:
             set_setting("api.service", "false")                                                     # Disable Trakt API service
             set_setting("sync.tk.service", "false")                                                 # Disable Trakt Auto-sync service
             clear_acctmgr_settings(ACCTMGR_TK)                                                      # Revoke AM Lite
-            dialog.notification('AM Lite', 'All Add-ons Revoked!', tk_icon, 3000)
+            dialog.notification('Trakt', 'All Add-ons Revoked!', tk_icon, 3000)
             xbmc.sleep(3000)
-            dialog.notification('AM Lite', 'Force Closing Kodi!', amgr_icon, 3000)
+            dialog.notification('Trakt', 'Force Closing Kodi!', tk_icon, 3000)
             xbmc.sleep(3000)
             os._exit(1)                                                                             # Force close Kodi
 
@@ -540,7 +543,7 @@ class Router:
                     acct_vwr.addon_it('wipeaddon', 'all', services=('mdb',), force=True)
                     xbmc.sleep(500)
                     set_setting("sync.mdb.service", "false")
-                    dialog.notification('AM Lite', 'MDBList Revoked!', mdb_icon, 3000)
+                    dialog.notification('MDBList', 'MDBList Revoked!', mdb_icon, 3000)
                     xbmc.sleep(1000)
             except Exception as e:
                 xbmc.log(f'{amgr}: Wipeclean MDBList failed: {e}', xbmc.LOGERROR)
@@ -552,7 +555,7 @@ class Router:
                     xbmc.sleep(500)
                     set_setting("sync.rd.service", "false")
                     jsonit.realizer_rvk()
-                    dialog.notification('AM Lite', 'Real-Debrid Revoked!', rd_icon, 3000)
+                    dialog.notification('Real-Debrid', 'Real-Debrid Revoked!', rd_icon, 3000)
                     xbmc.sleep(1000)
             except Exception as e:
                 xbmc.log(f'{amgr}: Wipeclean Real-Debrid failed: {e}', xbmc.LOGERROR)
@@ -563,7 +566,7 @@ class Router:
                     acct_vwr.addon_it('wipeaddon', 'all', services=('pm',), force=True)
                     xbmc.sleep(500)
                     set_setting("sync.pm.service", "false")
-                    dialog.notification('AM Lite', 'Premiumize Revoked!', pm_icon, 3000)
+                    dialog.notification('Premiumize', 'Premiumize Revoked!', pm_icon, 3000)
                     xbmc.sleep(1000)
             except Exception as e:
                 xbmc.log(f'{amgr}: Wipeclean Premiumize failed: {e}', xbmc.LOGERROR)
@@ -574,7 +577,7 @@ class Router:
                     acct_vwr.addon_it('wipeaddon', 'all', services=('ad',), force=True)
                     xbmc.sleep(500)
                     set_setting("sync.ad.service", "false")
-                    dialog.notification('AM Lite', 'All-Debrid Revoked!', ad_icon, 3000)
+                    dialog.notification('All-Debrid', 'All-Debrid Revoked!', ad_icon, 3000)
                     xbmc.sleep(1000)
             except Exception as e:
                 xbmc.log(f'{amgr}: Wipeclean All-Debrid failed: {e}', xbmc.LOGERROR)
@@ -589,7 +592,7 @@ class Router:
                         "easydebrid.enabled": "false"
                     }.items():
                         acctmgr.setSetting(k, v)
-                    dialog.notification('AM Lite', 'Easydebrid Revoked!', ed_icon, 3000)
+                    dialog.notification('EasyDebrid', 'Easydebrid Revoked!', ed_icon, 3000)
                     xbmc.sleep(1000)
             except Exception as e:
                 xbmc.log(f'{amgr}: Wipeclean EasyDebrid failed: {e}', xbmc.LOGERROR)
@@ -604,7 +607,7 @@ class Router:
                         "torbox.enabled": "false"
                     }.items():
                         acctmgr.setSetting(k, v)
-                    dialog.notification('AM Lite', 'Torbox Revoked!', tb_icon, 3000)
+                    dialog.notification('TorBox', 'Torbox Revoked!', tb_icon, 3000)
                     xbmc.sleep(1000)
             except Exception as e:
                 xbmc.log(f'{amgr}: Wipeclean TorBox failed: {e}', xbmc.LOGERROR)
@@ -619,7 +622,7 @@ class Router:
                         "offcloud.enabled": "false"
                     }.items():
                         acctmgr.setSetting(k, v)
-                    dialog.notification('AM Lite', 'Offcloud Revoked!', oc_icon, 3000)
+                    dialog.notification('OffCloud', 'Offcloud Revoked!', oc_icon, 3000)
                     xbmc.sleep(1000)
             except Exception as e:
                 xbmc.log(f'{amgr}: Wipeclean OffCloud failed: {e}', xbmc.LOGERROR)
@@ -635,7 +638,7 @@ class Router:
                         "easynews.enabled": "false"
                     }.items():
                         acctmgr.setSetting(k, v)
-                    dialog.notification('AM Lite', 'Easynews Revoked!', en_icon, 3000)
+                    dialog.notification('EasyNews', 'Easynews Revoked!', en_icon, 3000)
                     xbmc.sleep(1000)
             except Exception as e:
                 xbmc.log(f'{amgr}: Wipeclean Easynews failed: {e}', xbmc.LOGERROR)
@@ -647,9 +650,9 @@ class Router:
                 set_setting("sync.tk.service", "false")                                 # Disable Trakt Auto-sync service
                 xbmc.sleep(200)
                 clear_acctmgr_settings(ACCTMGR_AM)                                      # Revoke AM Lite
-                dialog.notification('AM Lite', 'Trakt Revoked!', tk_icon, 3000)
+                dialog.notification('Trakt', 'Trakt Revoked!', tk_icon, 3000)
                 xbmc.sleep(1500)
-                dialog.notification('AM Lite', 'Force Closing Kodi!', amgr_icon, 3000)
+                dialog.notification('Trakt', 'Force Closing Kodi!', tk_icon, 3000)
                 xbmc.sleep(3000)
                 os._exit(1) 
             else:

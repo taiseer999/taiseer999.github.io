@@ -20,6 +20,7 @@ class Auth:
         acctmgr = xbmcaddon.Addon("script.module.acctmgr")
         your_token = acctmgr.getSetting("torbox.token")
         your_acct_id = acctmgr.getSetting("torbox.acct_id")
+        your_username = acctmgr.getSetting("torbox.username")
         your_auth_status = acctmgr.getSetting("torbox.auth_status")
         your_expires = acctmgr.getSetting("torbox.auth_expires")
         master_token = your_token
@@ -123,6 +124,37 @@ class Auth:
             except Exception as e:
                 log_utils.error(f"{name} TorBox Failed: {e}")
 
+        # ========================= luc_kodi =========================
+        try:
+            if exists(var.chk_luc) and exists(var.chkset_luc):
+                addon = xbmcaddon.Addon("plugin.video.luc_kodi")
+                chk_auth = addon.getSetting("torbox.token")
+                if chk_auth != master_token:
+                    for k, v in {
+                        "torbox.enable": "true",
+                        "torbox.token": your_token,
+                        "torbox.username": your_acct_id,
+                    }.items():
+                        addon.setSetting(k, v)
+        except Exception as e:
+            log_utils.error(f"luc_kodi TorBox Failed: {e}")
+
+        # ========================= Prism =========================
+        try:
+            if exists(var.chk_prism) and exists(var.chkset_prism):
+                addon = xbmcaddon.Addon("plugin.video.prism")
+                chk_auth = addon.getSetting("tb.token")
+                if chk_auth != your_acct_id:
+                    for k, v in {
+                        "torbox.enabled": "true",
+                        "tb.token": your_token,
+                        "tb.username": your_username,
+                        "tb.premiumstatus": your_auth_status,
+                    }.items():
+                        addon.setSetting(k, v)
+        except Exception as e:
+            log_utils.error(f"Prism TorBox Failed: {e}")
+
         # =============== Shadow / Ghost / The Chains ===============
         addons = [
             ("Shadow",     "plugin.video.shadow",    var.chk_shadow,  var.shadow_ud,  var.chkset_shadow,  var.shadow),
@@ -185,11 +217,8 @@ class Auth:
                     for k, v in {
                         "TorBoxResolver_apikey": your_token,
                         "TorBoxResolver_enabled": "true",
+                        "TorBoxResolver_cached_only": "true",
                     }.items():
                         addon.setSetting(k, v)
         except Exception as e:
             log_utils.error(f"ResolveURL TorBox Failed: {e}")
-
-        # ========================= Prism (Seren fork) =========================
-        from acctmgr.modules.sync import prism_sync
-        prism_sync.sync_tb(your_acct_id, your_token, master_token)

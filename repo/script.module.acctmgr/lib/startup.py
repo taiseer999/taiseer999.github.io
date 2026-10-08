@@ -11,6 +11,11 @@ from acctmgr.modules import var
 from acctmgr.modules import control
 from acctmgr.modules import log_utils
 
+MONITOR = xbmc.Monitor()
+
+def abort_requested():
+	return MONITOR.abortRequested()
+
 def am_masters():  # AM Lite token variables
 	mdb_master_token = control.setting("mdblist.apikey")
 	rd_master_token = control.setting("realdebrid.token")
@@ -21,7 +26,7 @@ def am_masters():  # AM Lite token variables
 	en_master_user = control.setting("easynews.username")
 	en_master_pass = control.setting("easynews.password")
 
-	return mdb_master_token, rd_master_token, pm_master_token, ad_master_token, oc_master_token, tb_master_token, en_master_user, en_master_pass
+	return mdb_master_token, rd_master_token, pm_master_token, ad_master_token, tb_master_token, oc_master_token, en_master_user, en_master_pass
 
 def ScraperCheck(): # Check for installed scraper packages and update AML settings accordingly
 	for addon_id, setting_id in (
@@ -59,12 +64,12 @@ def am_trakt_startup_fail(): # Leave startup state as NOT ready when refresh/syn
 
 def startup_wait(timeout=30): # Wait until Kodi finishes loading addons/services
 	start = time.time()
-	monitor = xbmc.Monitor()
 
-	while not monitor.abortRequested():
+	while not abort_requested():
 		if time.time() - start > timeout:
 			break
-		xbmc.sleep(500)
+		if MONITOR.waitForAbort(0.5):
+			break
 
 def get_trakt_token(): # Read current AM Lite token
 	try:
@@ -105,6 +110,17 @@ def get_trakt_expires(): # Read trakt expires
 		control.setSetting('trakt.expires', str(expires))
 
 	return expires
+def get_trakt_refresh_window(): # Set Trakt refresh window based on token lifetime
+	try:
+		expires_in = int(float(control.setting('trakt.expires_in') or 0))
+	except Exception:
+		expires_in = 0
+
+	if expires_in > 86400:
+		return 86400 # Use 24hr refresh window for longer-lived tokens
+
+	return 4500 # Use 1.25hr refresh window for 24hr/legacy tokens
+
 
 def trakt_refresh(): # Refresh Trakt token if expired or near expiry
 	token = get_trakt_token()
@@ -114,8 +130,9 @@ def trakt_refresh(): # Refresh Trakt token if expired or near expiry
 
 	now = int(time.time())
 	expires = get_trakt_expires()
+	refresh_window = get_trakt_refresh_window()
 
-	if expires > 0 and now < (expires - 4500): # Skip refresh if token is still valid with more than 1.25hrs remaining
+	if expires > 0 and now < (expires - refresh_window): # Skip refresh if token is still valid outside refresh window
 		return 'valid'
 
 	xbmc.log('AM Lite: Trakt token expired or near expiry - refreshing', xbmc.LOGINFO)
@@ -127,7 +144,8 @@ def trakt_refresh(): # Refresh Trakt token if expired or near expiry
 		log_utils.error("Trakt token refresh FAILED")
 		return 'failed'
 
-	xbmc.sleep(1500) # Allow Kodi to flush updated settings
+	if MONITOR.waitForAbort(1.5): # Allow Kodi to flush updated settings
+		return 'failed'
 
 	new_token = get_trakt_token()
 	new_expires = get_trakt_expires()
@@ -161,19 +179,27 @@ def TraktStartup():
         
 	# Startup flow:
 	# 1. Force NOT ready
-	# 2. Wait for Kodi startup
-	# 3. Refresh if needed
+	# 2. Refresh immediately if needed
+	# 3. Wait for Kodi startup when token is valid
 	# 4. Sync only when safe
 	# 5. Mark READY only when safe
 
 	am_trakt_startup_begin()
-	startup_wait()
 
 	if not ensure_defaults(): # If Trakt NOT authed, end Trakt startup flow
 		am_trakt_startup_complete()
 		return
 
-	status = trakt_refresh()
+	now = int(time.time())
+	expires = get_trakt_expires()
+	refresh_window = get_trakt_refresh_window()
+	refresh_needed = expires <= 0 or now >= (expires - refresh_window)
+
+	if refresh_needed:
+		status = trakt_refresh()
+	else:
+		startup_wait()
+		status = trakt_refresh()
 
 	if status == 'failed':
 		xbmc.log('AM Lite: Startup refresh failed - leaving Trakt NOT READY', xbmc.LOGERROR)
@@ -198,7 +224,7 @@ def TraktStartup():
         
 def SyncManager():  # Auto-sync credentials with recently installed/supported addons
 
-	mdb_master_token, rd_master_token, pm_master_token, ad_master_token, tb_master_token, oc_master_user, en_master_user, en_master_pass = am_masters()
+	mdb_master_token, rd_master_token, pm_master_token, ad_master_token, tb_master_token, oc_master_token, en_master_user, en_master_pass = am_masters()
 
 	try:
 		if control.setting('sync.mdb.service')=='true' and mdb_master_token:
@@ -272,9 +298,8 @@ def run_addon_updates():  # Start add-on update check
 	xbmc.executebuiltin('UpdateAddonRepos()')  # Update repos/add-ons
 	
 def StartupManager():  # Compare and restore Trakt API keys / Run add-on updates
-	monitor = xbmc.Monitor()
 	start_time = time.time()
-	api_timeout = start_time + 180  # Run Startup Manager for 3 min
+	api_timeout = start_time + 300  # Run Startup Manager for 5 min
 	addon_updates_started = False
 	addon_updates_seen = False
 	addon_updates_finished = False
@@ -287,6 +312,7 @@ def StartupManager():  # Compare and restore Trakt API keys / Run add-on updates
                 var.path_red_service,
 		var.path_umb_service,
 		#var.path_seren_service,
+		var.path_luc_service,
 		#var.path_fen_service,
 		var.path_pov_service,
 		#var.path_coal_service,
@@ -303,7 +329,7 @@ def StartupManager():  # Compare and restore Trakt API keys / Run add-on updates
 		var.path_trakt_service,
 	]
 
-	while not monitor.abortRequested() and time.time() <= api_timeout:
+	while not abort_requested() and time.time() <= api_timeout:
 		if control.setting('api.service') == 'true' and get_trakt_token(): # Start API check
 			if control.setting('api.stop') == 'true':
 				control.setSetting('api.stop', 'false')
@@ -344,13 +370,20 @@ def StartupManager():  # Compare and restore Trakt API keys / Run add-on updates
 			if addon_updates_seen and quiet_cycles >= 6: # After count reaches 0 wait before exiting
 				addon_updates_finished = True
 
-		xbmc.sleep(500)  # Run every 500ms			
+		if MONITOR.waitForAbort(0.5):  # Run every 500ms
+			break
 				
 def AddonCheckUpdate(): # AM Lite Update Notification
+	if abort_requested():
+		return
+
 	if control.setting('check_for_update') == 'true':
 		xbmc.log('AM Lite: Addon checking available updates', xbmc.LOGINFO)
 		try:
 			repo_xml = requests.get('https://raw.githubusercontent.com/Zaxxon709/zaxxon/main/zips/script.module.acctmgr/addon.xml',timeout=10)
+
+			if abort_requested():
+				return
 
 			if repo_xml.status_code != 200:
 				return xbmc.log('AM Lite: Could not connect to remote repo XML: status code = %s' % repo_xml.status_code,xbmc.LOGINFO)
@@ -374,8 +407,12 @@ def AddonCheckUpdate(): # AM Lite Update Notification
 				return new > current
 
 			if check_version_numbers(local_version, repo_version):
-				while control.condVisibility('Library.IsScanningVideo'):
-					control.sleep(10000)
+				while control.condVisibility('Library.IsScanningVideo') and not abort_requested():
+					if MONITOR.waitForAbort(1):
+						return
+
+				if abort_requested():
+					return
 
 				xbmc.log('AM Lite: A newer version is available. Installed Version: v%s' % local_version,xbmc.LOGINFO)
 
@@ -386,10 +423,9 @@ def AddonCheckUpdate(): # AM Lite Update Notification
 			log_utils.error("Addon update check failed")
 
 def trakt_refresh_monitor(interval=300): # Trakt background monitor loop to refresh/sync Trakt when needed. Checks every 5 minutes
-	monitor = xbmc.Monitor()
 	xbmc.log('AM Lite: Starting Trakt refresh monitor loop', xbmc.LOGINFO)
 
-	while not monitor.abortRequested():
+	while not abort_requested():
 		try:
 			token = get_trakt_token()
 
@@ -404,15 +440,21 @@ def trakt_refresh_monitor(interval=300): # Trakt background monitor loop to refr
 		except Exception:
 			log_utils.error("AM Lite Trakt refresh monitor FAILED")
 
-		if monitor.waitForAbort(interval):
+		if MONITOR.waitForAbort(interval):
 			break
 
 	xbmc.log('AM Lite: Trakt refresh monitor loop stopped', xbmc.LOGINFO)
 
 # START SERVICES
-#ScraperCheck()
-TraktStartup()
-SyncManager()
-StartupManager()
-AddonCheckUpdate()
-trakt_refresh_monitor()
+#if not abort_requested():
+        #ScraperCheck()
+if not abort_requested():
+	TraktStartup()
+if not abort_requested():
+	SyncManager()
+if not abort_requested():
+	StartupManager()
+if not abort_requested():
+	AddonCheckUpdate()
+if not abort_requested():
+	trakt_refresh_monitor()

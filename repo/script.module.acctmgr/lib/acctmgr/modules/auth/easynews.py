@@ -4,23 +4,21 @@ import xbmcgui
 from acctmgr.modules import control
 
 joinPath = os.path.join
-easynews_icon = joinPath(control.iconsPath(), 'easynews.png')
+en_icon = joinPath(control.iconsPath(), 'easynews.png')
 
 class Easynews:
 	def auth(self):
-		username = xbmcgui.Dialog().input('Enter Easynews Username:')
+		username = control.dialog.input('Enter Easynews Username:')
 		if not username:
-			control.notification(message="Easynews authorization cancelled!", icon=easynews_icon)
+			control.notification(message="Easynews authorization cancelled!", icon=en_icon)
 			return False
 		else:
                         control.setSetting('easynews.username', username)
 
-		password = xbmcgui.Dialog().input('Enter Easynews Password:', option=xbmcgui.ALPHANUM_HIDE_INPUT)
+		password = control.dialog.input('Enter Easynews Password:', option=xbmcgui.ALPHANUM_HIDE_INPUT)
 		if not password:
-			control.notification(message="Easynews authorization cancelled!", icon=easynews_icon)
+			control.notification(message="Easynews authorization cancelled!", icon=en_icon)
 			return False
 		else:
                         control.setSetting('easynews.password', password)
-
-		control.notification(title='AM Lite',message='Successfully Authorized!',icon=easynews_icon)
 		return True

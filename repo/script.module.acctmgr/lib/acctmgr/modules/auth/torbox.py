@@ -1,166 +1,115 @@
 # -*- coding: utf-8 -*-
-import xbmc
-import xbmcgui
-import json
-import urllib.request
-import urllib.error
-import urllib.parse
-
+import requests
 from acctmgr.modules import control
 from acctmgr.modules import log_utils
+from acctmgr.modules.auth.base_auth import BaseDeviceAuth
 
-# TorBox API
+tb_icon = control.joinPath(control.iconsPath(), 'torbox.png')
+
 API_BASE = "https://api.torbox.app"
-USER_PATH = "/v1/api/user/me"
-DEVICE_START_PATH = "/v1/api/user/auth/device/start"
-DEVICE_TOKEN_PATH = "/v1/api/user/auth/device/token"
-DEVICE_URL = "https://torbox.app/oauth/device"
+DEVICE_START_URL = f"{API_BASE}/v1/api/user/auth/device/start"
+DEVICE_TOKEN_URL = f"{API_BASE}/v1/api/user/auth/device/token"
+USER_URL = f"{API_BASE}/v1/api/user/me"
 
-torbox_icon = control.joinPath(control.artPath(), "torbox.png")
-torbox_bdr = control.joinPath(control.addonPath(), "resources", "images", "white.png")
-torbox_qr = control.joinPath(control.addonPath(), "resources", "images", "torbox_qr.png")
-torbox_bg = control.joinPath(control.addonPath(), "resources", "images", "dialog_background.png")
+HEADERS = {
+	"User-Agent": "Kodi/21 acctmgr",
+	"Accept": "application/json"
+}
 
-class TorboxAuthDialog(xbmcgui.WindowXMLDialog):
-	def __init__(self, *args, **kwargs):
-		self.user_code = kwargs.get("user_code")
-		self.bg_image = kwargs.get("bg_image")
-		self.qr_image = kwargs.get("qr_image")
-		self.bdr_image = kwargs.get("bdr_image")
-		self.is_active = True
-		super(TorboxAuthDialog, self).__init__()
 
-	def onInit(self):
-		self.setProperty("user_code", self.user_code)
-		self.setProperty("bg_image", self.bg_image)
-		self.setProperty("qr_image", self.qr_image)
-		self.setProperty("bdr_image", self.bdr_image)
+class Torbox(BaseDeviceAuth):
+	provider_name = "TorBox"
 
-	def onClick(self, controlId):
-		self.is_active = False
-		self.close()
+	def __init__(self):
+		self.token = control.setting('torbox.token')
 
-	def onAction(self, action):
-		if action.getId() in [10, 13, 92]:
-			self.is_active = False
-			self.close()
-
-class Torbox:
 	def auth(self):
-		def _json_request(url, data=None, timeout=10):
-			headers = {
-				"User-Agent": "Kodi/21 acctmgr",
-				"Accept": "application/json"
+		return self.authenticate()
+
+	def get_device_code(self):
+		try:
+			response = requests.get(
+				DEVICE_START_URL,
+				params={'app': 'AccountManager'},
+				headers=HEADERS,
+				timeout=15
+			)
+			payload = response.json()
+		except Exception as e:
+			log_utils.error(f"TorBox device code request failed: {e}")
+			return None
+
+		if not payload.get('success'):
+			log_utils.error(f"TorBox device code request error: {payload}")
+			return None
+
+		data = payload.get('data', {})
+		try:
+			# Torbox API specs allow verification_url or friendly_verification_url
+			url = data.get('verification_url') or data.get('friendly_verification_url')
+			return {
+				'device_code': data['device_code'],
+				'user_code': data['code'],
+				'verification_url': url,
+				'expires_in': int(data.get('expires_in', 600)),
+				'interval': int(data.get('interval', 5)),
+				'qr_data': url
 			}
+		except (KeyError, TypeError, ValueError) as e:
+			log_utils.error(f"TorBox device code response malformed: {e} - {str(data)[:200]}")
+			return None
 
-			if data is not None:
-				data = json.dumps(data).encode("utf-8")
-				headers["Content-Type"] = "application/json"
-
-			req = urllib.request.Request(url, data=data, headers=headers)
-			response = urllib.request.urlopen(req, timeout=timeout)
-			return json.loads(response.read().decode("utf-8"))
-
-		def _first_value(payload, keys):
-			data = payload.get("data") if isinstance(payload, dict) else {}
-			for source in (data, payload):
-				if not isinstance(source, dict):
-					continue
-				for key in keys:
-					value = source.get(key)
-					if value:
-						return value
-			return ""
+	def poll_token(self, device_data):
+		try:
+			response = requests.post(
+				DEVICE_TOKEN_URL,
+				json={'device_code': device_data['device_code']},
+				headers=HEADERS,
+				timeout=15
+			)
+		except requests.exceptions.RequestException as e:
+			log_utils.log(f"TorBox poll request error: {e}", __name__, log_utils.LOGDEBUG)
+			return
 
 		try:
-			start_url = f"{API_BASE}{DEVICE_START_PATH}?{urllib.parse.urlencode({'app': 'Account Manager Lite'})}"
-			start_payload = _json_request(start_url)
+			payload = response.json()
+		except ValueError:
+			log_utils.log(f"TorBox poll: HTTP {response.status_code} not valid JSON", __name__, log_utils.LOGDEBUG)
+			return
 
-			device_code = _first_value(start_payload, ("device_code", "deviceCode", "device", "code"))
-			user_code = _first_value(start_payload, ("user_code", "userCode", "pin", "code"))
-			interval = int(_first_value(start_payload, ("interval",)) or 5)
+		# Wait for successful token assignment
+		if payload.get('success') is True:
+			data = payload.get('data', {})
+			access_token = data.get('access_token')
+			if access_token:
+				self.token_data = {'access_token': access_token}
+				return
 
-			if not device_code or not user_code:
-				log_utils.error(f"TorBox device auth invalid start response: {start_payload}")
-				control.notification(message="TorBox Authorization Failed",icon=torbox_icon)
-				return False
+		# TorBox returns DEVICE_CODE_NOT_USED while waiting for the user
+		# to complete device authorization. This is an expected pending state.
+		error = payload.get('error')
+		if error == 'DEVICE_CODE_NOT_USED':
+			return
 
-			dialog = TorboxAuthDialog(
-				"torbox_auth.xml",
-				str(control.addonPath()),
-				"Default",
-				user_code=user_code,
-                                bg_image=torbox_bg,
-				qr_image=torbox_qr,
-                                bdr_image=torbox_bdr
-			)
+		# If the token is genuinely expired, the BaseDeviceAuth loop handles the timeout
+		# automatically via expires_in. Log only genuinely unexpected responses.
+		log_utils.log(f"TorBox poll unexpected: HTTP {response.status_code} - {str(payload)[:200]}", __name__, log_utils.LOGDEBUG)
 
-			dialog.show()
+	def save_account(self):
+		data = self.token_data
+		if not data or not data.get('access_token'):
+			return False
 
-			api = ""
+		access_token = data['access_token']
+		try:
+			user_data = self._fetch_user_data(access_token)
 
-			for i in range(120):
-				if not dialog.is_active:
-					del dialog
-					control.notification(message="TorBox authorization cancelled!",icon=torbox_icon)
-					return False
+			acct_id = user_data.get('id', '')
+			email = user_data.get('email', '')
+			is_subscribed = user_data.get('is_subscribed')
+			plan = user_data.get('plan')
+			expires = user_data.get('premium_expires_at')
 
-				try:
-					token_payload = _json_request(
-						f"{API_BASE}{DEVICE_TOKEN_PATH}",
-						{"device_code": device_code},
-						timeout=3
-					)
-
-					api = _first_value(token_payload, ("token", "access_token", "api_key", "apiKey", "api_token", "apiToken"))
-
-					if api:
-						dialog.close()
-						del dialog
-						break
-
-				except urllib.error.HTTPError as e:
-					if e.code not in (400, 401, 403, 404):
-						try:
-							body = e.read().decode("utf-8", errors="ignore")
-							log_utils.error(f"TorBox device token HTTP {e.code}: {body}")
-						except Exception:
-							log_utils.error(f"TorBox device token HTTP {e.code}")
-				except Exception as e:
-					log_utils.error(f"TorBox device token check failed: {e}")
-
-				xbmc.sleep(interval * 1000)
-
-			if not api:
-				if dialog.is_active:
-					dialog.close()
-				del dialog
-				control.notification(message="TorBox Authorization Timed Out",icon=torbox_icon)
-				return False
-
-			api = api.strip().replace("\n", "").replace("\r", "")
-			if not api:
-				control.notification(message="TorBox authorization failed!",icon=torbox_icon)
-				return False
-
-			url = f"{API_BASE}{USER_PATH}"
-			req = urllib.request.Request(url)
-
-			req.add_header("Authorization", f"Bearer {api}")
-			req.add_header("User-Agent", "Kodi/21 acctmgr")
-			req.add_header("Accept", "application/json")
-
-			response = urllib.request.urlopen(req, timeout=10)
-			payload = json.loads(response.read().decode("utf-8"))
-
-			data = payload.get("data") or {}
-
-			acct_id = data.get("id") or ""
-			is_subscribed = data.get("is_subscribed")
-			plan = data.get("plan")
-			expires = data.get("premium_expires_at")
-
-			# Determine account status
 			if is_subscribed is True or expires:
 				auth_status = "Premium"
 			elif plan == 1:
@@ -168,42 +117,88 @@ class Torbox:
 			else:
 				auth_status = "Authorized"
 
-			# Set AML Settings
-			control.setSetting("torbox.token", api)
-			control.setSetting("torbox.acct_id", str(acct_id))
-			control.setSetting("torbox.auth_status", auth_status)
+			control.setSetting('torbox.token', access_token)
+			control.setSetting('torbox.acct_id', str(acct_id))
+			control.setSetting('torbox.auth_status', auth_status)
+			control.setSetting('torbox.username', email)
 
-			control.notification(title="AM Lite",message="Successfully Authorized!",icon=torbox_icon)
-
+			self.token = access_token
 			return True
-
-		except urllib.error.HTTPError as e:
-			if e.code == 401:
-				control.notification(message="TorBox Authorization Failed (Invalid API Key)",icon=torbox_icon)
-			elif e.code == 403:
-				control.notification(message="TorBox Authorization Failed (Forbidden)",icon=torbox_icon)
-			else:
-				control.notification(message=f"TorBox Authorization Failed (HTTP {e.code})",icon=torbox_icon)
-
-			try:
-				body = e.read().decode("utf-8", errors="ignore")
-				log_utils.error(f"TorBox auth HTTP {e.code}: {body}")
-			except Exception:
-				log_utils.error(f"TorBox auth HTTP {e.code}")
-
-			return False
-
 		except Exception as e:
-			log_utils.error(f"TorBox authorization failed: {e}")
-			control.notification(message="TorBox Authorization Failed",icon=torbox_icon)
+			log_utils.error(f"TorBox save_account failed: {e}")
 			return False
+
+	def _fetch_user_data(self, token):
+		try:
+			auth_headers = HEADERS.copy()
+			auth_headers['Authorization'] = f'Bearer {token}'
+
+			response = requests.get(
+				USER_URL,
+				headers=auth_headers,
+				timeout=15
+			)
+			if response.status_code == 200:
+				payload = response.json()
+				return payload.get('data', {})
+		except Exception as e:
+			log_utils.error(f"TorBox user data fetch failed: {e}")
+		return {}
+
+	def refresh_token(self):
+		token = control.setting('torbox.token')
+		if token:
+			self.token = token
+			return True
+		return False
 
 	def revoke(self):
-		if not control.okDialog("TorBox", "Revoke TorBox Authorization?"):
+		control.setSetting('torbox.token', '')
+		control.setSetting('torbox.acct_id', '')
+		control.setSetting('torbox.auth_status', '')
+		control.setSetting('torbox.username', '')
+
+	def account_info_to_dialog(self):
+		if not self.token:
 			return
 
-		control.setSetting("torbox.token", "")
-		control.setSetting("torbox.acct_id", "")
-		control.setSetting("torbox.auth_status", "")
+		try:
+			user_data = self._fetch_user_data(self.token)
+			if not user_data:
+				return
 
-		control.notification("TorBox Authorization Revoked",icon=torbox_icon)
+			email = user_data.get('email', 'Unknown')
+			acct_id = user_data.get('id', 'Unknown')
+			is_subscribed = user_data.get('is_subscribed')
+			plan = user_data.get('plan')
+			expires = user_data.get('premium_expires_at')
+
+			if is_subscribed is True or expires:
+				auth_status = "Premium"
+			elif plan == 1:
+				auth_status = "Basic"
+			else:
+				auth_status = "Authorized"
+
+			items = [
+				f"Email: {email}",
+				f"Account ID: {acct_id}",
+				f"Status: {auth_status}"
+			]
+
+			if expires:
+				# Format expiry date if available
+				from datetime import datetime
+				try:
+					if isinstance(expires, (int, float)):
+						expires_str = datetime.fromtimestamp(expires).strftime("%A, %B %d, %Y")
+					else:
+						expires_str = str(expires)
+					items.append(f"Expires: {expires_str}")
+				except Exception:
+					items.append(f"Expires: {expires}")
+
+			return control.selectDialog(items, 'TorBox')
+		except Exception as e:
+			log_utils.error(f"TorBox account_info_to_dialog failed: {e}")
+			return

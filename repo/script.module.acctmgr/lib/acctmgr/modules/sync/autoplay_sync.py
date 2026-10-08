@@ -92,10 +92,9 @@ class AutoPlay:
         except Exception as e:
             log_utils.error(f"Umbrella Autoplay Failed: {e}")
 
-        # ===================== POV / The Coalition =====================
+        # ===================== POV  =====================
         for name, plugin, chk_addon, chk_setting, remake_settings in (
             ("POV", "plugin.video.pov", var.chk_pov, var.chkset_pov, control.remake_pov_settings),
-            #("The Coalition", "plugin.video.coalition", var.chk_coal, var.chkset_coal, control.remake_coal_settings),
         ):
             try:
                 if exists(chk_addon) and exists(chk_setting):
@@ -110,20 +109,41 @@ class AutoPlay:
             except Exception as e:
                 log_utils.error(f"{name} Autoplay Failed: {e}")
 
-        # ===================== Seren ======================
+        # ================= Seren ===================
+        for name, plugin, chk_addon, chk_setting in (
+                ("Seren", "plugin.video.seren", var.chk_seren, var.chkset_seren),
+        ):
+                try:
+                        if exists(chk_addon) and exists(chk_setting):
+                                xbmcaddon.Addon(plugin).setSetting("general.playstyleMovie", otaku_playback)
+                                xbmcaddon.Addon(plugin).setSetting("general.playstyleEpisodes", otaku_playback)
+                except Exception as e:
+                        log_utils.error(f"{name} Autoplay Failed: {e}")
+            
+        # ===================== luc_kodi ======================
         try:
-            if exists(var.chk_seren) and exists(var.chkset_seren):
-                xbmcaddon.Addon("plugin.video.seren").setSetting("general.playstyleMovie", otaku_playback)
-                xbmcaddon.Addon("plugin.video.seren").setSetting("general.playstyleEpisodes", otaku_playback)
+            if exists(var.chk_luc) and exists(var.chkset_luc):
+                xbmcaddon.Addon("plugin.video.luc_kodi").setSetting("play.mode", umb_playback)
         except Exception as e:
-            log_utils.error(f"Seren Autoplay Failed: {e}")
+            log_utils.error(f"luc_kodi Autoplay Failed: {e}")
+
+        # ================= Prism ===================
+        for name, plugin, chk_addon, chk_setting in (
+                ("Prism", "plugin.video.prism", var.chk_prism, var.chkset_prism),
+        ):
+                try:
+                        if exists(chk_addon) and exists(chk_setting):
+                                xbmcaddon.Addon(plugin).setSetting("general.playstyleMovie", otaku_playback)
+                                xbmcaddon.Addon(plugin).setSetting("general.playstyleEpisodes", otaku_playback)
+                except Exception as e:
+                        log_utils.error(f"{name} Autoplay Failed: {e}")
             
         # =========== The Crew / Homelander / Nightwing / Jokers Absolution / Scrubs V2 / Gratis Red ===========
         for name, plugin, chk_addon, chk_setting in (
-            ("The Crew",          "plugin.video.thecrew", var.chk_crew,  var.chkset_crew),
             ("Homelander",        "plugin.video.homelander", var.chk_home,  var.chkset_home),
             ("Nightwing",         "plugin.video.nightwing",  var.chk_night, var.chkset_night),
             ("Absolution",        "plugin.video.absolution", var.chk_absol, var.chkset_absol),
+            ("The Crew",          "plugin.video.thecrew", var.chk_crew,  var.chkset_crew),
             ("Scrubs V2",         "plugin.video.scrubsv2", var.chk_scrubs,  var.chkset_scrubs),
             ("Gratis Red",        "plugin.video.gratisred", var.chk_redg,  var.chkset_redg),
         ):

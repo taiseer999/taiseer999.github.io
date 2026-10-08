@@ -154,7 +154,63 @@ class Auth:
         except Exception as e:
             log_utils.error(f"Umbrella Trakt Failed: {e}")
 
-        '''# ========================= Seren =========================
+        # ========================== POV ==========================
+        # ============ API Keys applied to settings.xml ===========
+        try:
+            if "POV" in current and exists(var.chk_pov) and exists(var.chkset_pov):
+                addon = xbmcaddon.Addon("plugin.video.pov")
+                chk_auth = addon.getSetting("trakt.token")
+                if refresh_sync(mode, chk_auth, master_token):
+                    patched, msg = control.startup_patch(var.path_pov_service)
+                    if not patched:
+                        log_utils.log(f"POV startup patch failed, msg={msg}", level=log_utils.LOGERROR)
+                    for k, v in {
+                        "trakt.client_id": var.client_am,
+                        "trakt.client_secret": var.secret_am,
+                        "trakt.token": your_token,
+                        "trakt_user": your_username,
+                        "trakt.refresh": your_refresh,
+                        "trakt.expires": your_expires,
+                        "trakt_indicators_active": "true",
+                        "watched_indicators": "1",
+                    }.items():
+                        addon.setSetting(k, v)
+                    #control.remake_pov_settings()
+                    xbmc.sleep(500)
+                    control.remake_pov_trakt_cache()
+        except Exception as e:
+            log_utils.error(f"POV Trakt Failed: {e}")
+            
+        # =================== Dradis / Genocide ===================
+        # ============ API Keys applied to settings.xml ===========
+        addons = [
+            #("Dradis",        "plugin.video.dradis",    var.chk_dradis, var.chkset_dradis, var.path_dradis_service),
+            ("Genocide",      "plugin.video.genocide",  var.chk_genocide, var.chkset_genocide, var.path_genocide_service),
+        ]
+        for name, plugin, chk_addon, chk_setting, path_service in addons:
+            try:
+                if name in current and exists(chk_addon) and exists(chk_setting):
+                    addon = xbmcaddon.Addon(plugin)
+                    chk_auth = addon.getSetting("trakt.token")
+                    if refresh_sync(mode, chk_auth, master_token):
+                        patched, msg = control.startup_patch(path_service)
+                        if not patched:
+                            log_utils.log(f"{name} startup patch failed, msg={msg}", level=log_utils.LOGERROR)
+                        expires = int(time.time() + (8 * 86400))
+                        for k, v in {
+                            "trakt.client_id": var.client_am,
+                            "trakt.client_secret": var.secret_am,
+                            "trakt.username": your_username,
+                            "trakt.token": your_token,
+                            "trakt.refresh": your_refresh,
+                            "trakt.expires": str(expires),
+                            "trakt.isauthed": "true",
+                        }.items():
+                            addon.setSetting(k, v)
+            except Exception as e:
+                log_utils.error(f"{name} Trakt Failed: {e}")
+
+        # ========================= Seren =========================
         try:
             if "Seren" in current and exists(var.chk_seren) and exists(var.chkset_seren):
                 addon = xbmcaddon.Addon("plugin.video.seren")
@@ -190,129 +246,27 @@ class Auth:
         except Exception as e:
             log_utils.error(f"Seren Trakt Failed: {e}")
 
-        # ========================= Fen =========================
-        try:
-            if "Fen" in current and exists(var.chk_fen) and exists(var.chkset_fen):
-                addon = xbmcaddon.Addon("plugin.video.fen")
-                chk_auth = addon.getSetting("trakt.token")
-                if refresh_sync(mode, chk_auth, master_token):
-                    with open(var.path_fen, "r") as f:
-                        data = f.read()
-
-                    patched_keys = False
-                    if var.fen_client in data or var.fen_secret in data:
-                        data = data.replace(var.fen_client, var.client_am).replace(var.fen_secret, var.secret_am)
-                        with open(var.path_fen, "w") as f:
-                            f.write(data)
-                        patched_keys = True
-                    elif var.client_am in data and var.secret_am in data:
-                        patched_keys = True
-
-                    if not patched_keys:
-                        log_utils.log("Fen Trakt keys NOT patched")
-
-                    patched, msg = control.startup_patch(var.path_fen_service)
-                    if not patched:
-                        log_utils.log(f"Fen startup patch failed, msg={msg}", level=log_utils.LOGERROR)
-
-                    for k, v in {
-                        "trakt.token": your_token,
-                        "trakt.user": your_username,
-                        "trakt.refresh": your_refresh,
-                        "trakt.expires": your_expires,
-                        "trakt.indicators_active": "true",
-                        "watched_indicators": "1",
-                    }.items():
-                        addon.setSetting(k, v)
-
-                    if authorize(mode):
-                        control.remake_fen_trakt_cache()
-        except Exception as e:
-            log_utils.error(f"Fen Trakt Failed: {e}")'''
-
-        # ========================== POV ==========================
+        # ========================= luc_kodi =========================
         # ============ API Keys applied to settings.xml ===========
         try:
-            if "POV" in current and exists(var.chk_pov) and exists(var.chkset_pov):
-                addon = xbmcaddon.Addon("plugin.video.pov")
+            if "Luc_Kodi" in current and exists(var.chk_luc) and exists(var.chkset_luc):
+                addon = xbmcaddon.Addon("plugin.video.luc_kodi")
                 chk_auth = addon.getSetting("trakt.token")
                 if refresh_sync(mode, chk_auth, master_token):
-                    patched, msg = control.startup_patch(var.path_pov_service)
+                    patched, msg = control.startup_patch(var.path_luc_service)
                     if not patched:
-                        log_utils.log(f"POV startup patch failed, msg={msg}", level=log_utils.LOGERROR)
+                        log_utils.log(f"luc_kodi startup patch failed, msg={msg}", level=log_utils.LOGERROR)
                     for k, v in {
+                        "trakt.username": your_username,
+                        "trakt.token": your_token,
+                        "trakt.refresh": your_refresh,
+                        "trakt.expires": your_expires,
                         "trakt.client_id": var.client_am,
                         "trakt.client_secret": var.secret_am,
-                        "trakt.token": your_token,
-                        "trakt_user": your_username,
-                        "trakt.refresh": your_refresh,
-                        "trakt.expires": your_expires,
-                        "trakt_indicators_active": "true",
-                        "watched_indicators": "1",
                     }.items():
                         addon.setSetting(k, v)
-                    #control.remake_pov_settings()
-                    xbmc.sleep(500)
-                    control.remake_pov_trakt_cache()
         except Exception as e:
-            log_utils.error(f"POV Trakt Failed: {e}")
-
-        '''# ===================== The Coalition =====================
-        # ============ API Keys applied to settings.xml ===========
-        try:
-            if "The Coalition" in current and exists(var.chk_coal) and exists(var.chkset_coal):
-                addon = xbmcaddon.Addon("plugin.video.coalition")
-                chk_auth = addon.getSetting("trakt.token")
-                if refresh_sync(mode, chk_auth, master_token):
-                    patched, msg = control.startup_patch(var.path_coal_service)
-                    if not patched:
-                        log_utils.log(f"The Coalition startup patch failed, msg={msg}", level=log_utils.LOGERROR)
-                    for k, v in {
-                        "trakt.client_id": var.client_am,
-                        "trakt.client_secret": var.secret_am,
-                        "trakt.token": your_token,
-                        "trakt_user": your_username,
-                        "trakt.refresh": your_refresh,
-                        "trakt.expires": your_expires,
-                        "trakt_indicators_active": "true",
-                        "watched_indicators": "1",
-                    }.items():
-                        addon.setSetting(k, v)
-                    if authorize(mode):
-                        #control.remake_coal_settings()
-                        xbmc.sleep(500)
-                        control.remake_coal_trakt_cache()
-        except Exception as e:
-            log_utils.error(f"The Coalition Trakt Failed: {e}")'''
-            
-        # =================== Dradis / Genocide ===================
-        # ============ API Keys applied to settings.xml ===========
-        addons = [
-            #("Dradis",        "plugin.video.dradis",    var.chk_dradis, var.chkset_dradis, var.path_dradis_service),
-            ("Genocide",      "plugin.video.genocide",  var.chk_genocide, var.chkset_genocide, var.path_genocide_service),
-        ]
-        for name, plugin, chk_addon, chk_setting, path_service in addons:
-            try:
-                if name in current and exists(chk_addon) and exists(chk_setting):
-                    addon = xbmcaddon.Addon(plugin)
-                    chk_auth = addon.getSetting("trakt.token")
-                    if refresh_sync(mode, chk_auth, master_token):
-                        patched, msg = control.startup_patch(path_service)
-                        if not patched:
-                            log_utils.log(f"{name} startup patch failed, msg={msg}", level=log_utils.LOGERROR)
-                        expires = int(time.time() + (8 * 86400))
-                        for k, v in {
-                            "trakt.client_id": var.client_am,
-                            "trakt.client_secret": var.secret_am,
-                            "trakt.username": your_username,
-                            "trakt.token": your_token,
-                            "trakt.refresh": your_refresh,
-                            "trakt.expires": str(expires),
-                            "trakt.isauthed": "true",
-                        }.items():
-                            addon.setSetting(k, v)
-            except Exception as e:
-                log_utils.error(f"{name} Trakt Failed: {e}")
+            log_utils.error(f"luc_kodi Trakt Failed: {e}")
 
         # ========================= Shadow / Ghost =========================
         # ==================================================================
@@ -547,6 +501,47 @@ class Auth:
                             addon.setSetting(k, v)
         except Exception as e:
             log_utils.error(f"Gratis Red Trakt Failed: {e}")
+
+        # ========================= TMDb Helper =========================
+        try:
+            if "TMDb Helper" in current and exists(var.chk_tmdbh):
+                addon = xbmcaddon.Addon("plugin.video.themoviedb.helper")
+                chk_auth = addon.getSetting("trakt_token")
+
+                if refresh_sync(mode, chk_auth, master_token):
+                    with open(var.path_tmdbh, "r") as f:
+                        data = f.read()
+
+                    patched_keys = False
+                    if var.tmdbh_client in data or var.tmdbh_secret in data:
+                        # Replace old keys
+                        data = data.replace(var.tmdbh_client, var.client_am).replace(var.tmdbh_secret, var.secret_am)
+                        with open(var.path_tmdbh, "w") as f:
+                            f.write(data)
+                        patched_keys = True
+                    elif var.client_am in data and var.secret_am in data:
+                        # Keys are already correct
+                        patched_keys = True
+
+                    if not patched_keys:
+                        log_utils.log("TMDbH Trakt keys NOT patched")
+
+                    patched, msg = control.startup_patch(var.path_tmdbh_service)
+                    if not patched:
+                        log_utils.log(f"TMDbH startup patch failed, msg={msg}", level=log_utils.LOGERROR)
+
+                    expires_int = int(float(your_expires or 0))
+                    tmdbh_data = (
+                        '{"access_token":"%s","token_type":"bearer",'
+                        '"expires_in":7776000,"refresh_token":"%s",'
+                        '"scope":"public","created_at":%s}'
+                        % (your_token, your_refresh, expires_int)
+                    )
+
+                    addon.setSettingString("trakt_token", tmdbh_data)
+                    addon.setSetting("startup_notifications", "false")
+        except Exception as e:
+            log_utils.error(f"TMDBh Trakt Failed: {e}")
 
         # ========================= Trakt Addon =========================
         try:

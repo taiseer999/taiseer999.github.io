@@ -25,7 +25,7 @@ class Auth:
         try:
             if exists(var.chk_red):
                 if not exists(var.chkset_red):
-                    control.remake_settings(var.red_id, var.red_name)
+                    control.remake_red_settings()
                     xbmc.sleep(500)
 
                 if exists(var.chkset_red):
@@ -35,7 +35,7 @@ class Auth:
                     if chk_auth != master_token:
                         offcloud_db.auth(settings_db)
                         xbmc.sleep(300)
-                        control.remake_settings(var.red_id, var.red_name)
+                        control.remake_red_settings()
         except Exception as e:
             log_utils.error("Red Light OffCloud Failed")
 
@@ -92,7 +92,36 @@ class Auth:
                             addon.setSetting(k, v)
             except Exception as e:
                 log_utils.error(f"{name} OffCloud Failed: {e}")
+                
+        # ========================= Prism =========================
+        try:
+            if exists(var.chk_prism) and exists(var.chkset_prism):
+                addon = xbmcaddon.Addon("plugin.video.prism")
+                chk_auth = addon.getSetting("oc.username")
+                if chk_auth != your_username:
+                    for k, v in {
+                        "offcloud.enabled": "true",
+                        "oc.token": your_token,
+                        "oc.username": your_username,
+                        "oc.premiumstatus": "Premium",
+                    }.items():
+                        addon.setSetting(k, v)
+        except Exception as e:
+            log_utils.error(f"Prism OffCloud Failed: {e}")
+            
+        # ========================= ResolveURL =========================
+        try:
+            if exists(var.chk_rurl):
+                addon = xbmcaddon.Addon("script.module.resolveurl")
+                chk_auth = addon.getSetting("OffCloudResolver_apikey")
+                if chk_auth != master_token:
+                    for k, v in {
+                        "OffCloudResolver_apikey": your_token,
+                        "OffCloudResolver_user": your_username,
+                        "OffCloudResolver_enabled": "true",
+                        "OffCloudResolver_cached_only": "true",
+                    }.items():
+                        addon.setSetting(k, v)
+        except Exception as e:
+            log_utils.error(f"ResolveURL TorBox Failed: {e}")
 
-        # ========================= Prism (Seren fork) =========================
-        from acctmgr.modules.sync import prism_sync
-        prism_sync.sync_oc(your_username, your_token, master_token)

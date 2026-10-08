@@ -1,7 +1,7 @@
 {
     "name"              : "[COLOR gold]IMDb Trailers[/COLOR]",
     "plugin"            : "plugin.video.imdb.trailers",
-    "priority"          : 100,
+    "priority"          : 19,
     "is_resolvable"     : "true",
     "search_movie"      : [
                             "plugin://plugin.video.imdb.trailers/?action=search_word&keyword={title_escaped}",

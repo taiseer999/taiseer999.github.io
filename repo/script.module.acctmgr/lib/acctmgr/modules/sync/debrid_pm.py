@@ -28,8 +28,8 @@ class Auth:
             ("The Chains",    var.chk_chains, var.chains_ud,  var.chkset_chains,  var.chains),
             ("SALTS",         var.chk_salts,  var.salts_ud,   var.chkset_salts,   var.salts),
             ("Otaku",         var.chk_otaku,  var.otaku_ud,   var.chkset_otaku,   var.otaku),
-            ("Realizer",      var.chk_realx,  var.realx_ud,   var.chkset_realx,   var.realx),
             ("ResolveURL",    var.chk_rurl,   var.rurl_ud,    var.chkset_rurl,    var.rurl),
+            ("Realizer",      var.chk_realx,  var.realx_ud,   var.chkset_realx,   var.realx),
         ]
 
         for name, chk_addon, ud_path, chk_setting, base_path in addons:
@@ -99,11 +99,9 @@ class Auth:
         except Exception as e:
             log_utils.error(f"Umbrella Premiumize Failed: {e}")
             
-        # ========================= Fen / POV / Coalition =========================
+        # ========================= POV  =========================
         for addon_id, chk_addon, chk_settings, label, remake_settings in (
-            #("plugin.video.fen",        var.chk_fen,  var.chkset_fen,  "Fen", None),
             ("plugin.video.pov",        var.chk_pov,  var.chkset_pov,  "POV", control.remake_pov_settings),
-            #("plugin.video.coalition",  var.chk_coal, var.chkset_coal, "Coalition", control.remake_coal_settings),
         ):
             try:
                 if exists(chk_addon) and exists(chk_settings):
@@ -131,26 +129,6 @@ class Auth:
             except Exception as e:
                 log_utils.error(f"{label} Premiumize Failed: {e}")
 
-        # ========================= Seren =========================
-        try:
-            if exists(var.chk_seren) and exists(var.chkset_seren):
-                addon = xbmcaddon.Addon("plugin.video.seren")
-                chk_auth = addon.getSetting("premiumize.token")
-                chk_auth_rd = addon.getSetting("rd.auth")
-                chk_auth_ad = addon.getSetting("alldebrid.apikey")
-                if chk_auth != pm_master_token:
-                    for k, v in {
-                        "premiumize.username": your_pm_username,
-                        "premiumize.token": your_pm_token,
-                        "premiumize.premiumstatus": "Premium",
-                        "premiumize.enabled": "true",
-                        "realdebrid.enabled": "true" if chk_auth_rd else "false",
-                        "alldebrid.enabled": "true" if chk_auth_ad else "false",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error("Seren Premiumize Failed")
-            
         # =============== Dradis / Genocide ===============
         addons = [
             #("Dradis",   "plugin.video.dradis",   var.chk_dradis,   var.chkset_dradis),
@@ -172,6 +150,67 @@ class Auth:
             except Exception as e:
                 log_utils.error(f"{name} Premiumize Failed: {e}")
 
+        # ================= Seren ===================
+        for name, plugin, chk_addon, chk_setting in (
+                ("Seren", "plugin.video.seren", var.chk_seren, var.chkset_seren),
+        ):
+                try:
+                        if exists(chk_addon) and exists(chk_setting):
+                                addon = xbmcaddon.Addon(plugin)
+                                chk_auth = addon.getSetting("premiumize.token")
+                                chk_auth_rd = addon.getSetting("rd.auth")
+                                chk_auth_ad = addon.getSetting("alldebrid.apikey")
+                                if chk_auth != pm_master_token:
+                                        for k, v in {
+                                                "premiumize.username": your_pm_username,
+                                                "premiumize.token": your_pm_token,
+                                                "premiumize.premiumstatus": "Premium",
+                                                "premiumize.enabled": "true",
+                                                "realdebrid.enabled": "true" if chk_auth_rd else "false",
+                                                "alldebrid.enabled": "true" if chk_auth_ad else "false",
+                                        }.items():
+                                                addon.setSetting(k, v)
+                except Exception as e:
+                        log_utils.error(f"{name} Premiumize Failed")
+            
+        # ========================= luc_kodi =========================
+        try:
+            if exists(var.chk_luc) and exists(var.chkset_luc):
+                addon = xbmcaddon.Addon("plugin.video.luc_kodi")
+                chk_auth = addon.getSetting("premiumize.token")
+                if chk_auth != pm_master_token:
+                    for k, v in {
+                        "premiumize.enable": "true",
+                        "premiumize.token": your_pm_token,
+                        "premiumize.username": your_pm_username,
+                    }.items():
+                        addon.setSetting(k, v)
+        except Exception as e:
+            log_utils.error(f"luc_kodi Premiumize Failed: {e}")
+
+        # ================= Prism ===================
+        for name, plugin, chk_addon, chk_setting in (
+                ("Prism", "plugin.video.prism", var.chk_prism, var.chkset_prism),
+        ):
+                try:
+                        if exists(chk_addon) and exists(chk_setting):
+                                addon = xbmcaddon.Addon(plugin)
+                                chk_auth = addon.getSetting("premiumize.token")
+                                chk_auth_rd = addon.getSetting("rd.auth")
+                                chk_auth_ad = addon.getSetting("alldebrid.apikey")
+                                if chk_auth != pm_master_token:
+                                        for k, v in {
+                                                "premiumize.username": your_pm_username,
+                                                "premiumize.token": your_pm_token,
+                                                "premiumize.premiumstatus": "Premium",
+                                                "premiumize.enabled": "true",
+                                                "realdebrid.enabled": "true" if chk_auth_rd else "false",
+                                                "alldebrid.enabled": "true" if chk_auth_ad else "false",
+                                        }.items():
+                                                addon.setSetting(k, v)
+                except Exception as e:
+                        log_utils.error(f"{name} Premiumize Failed")
+            
         # =============== Shadow / Ghost / The Chains ===============
         addons = [
             ("Shadow",     "plugin.video.shadow",    var.chk_shadow,  var.shadow_ud,  var.chkset_shadow,  var.shadow),
@@ -227,6 +266,19 @@ class Auth:
         except Exception as e:
             log_utils.error(f"Otaku Premiumize Failed: {e}")
 
+        # ========================= ResolveURL =========================
+        try:
+            if exists(var.chk_rurl):
+                addon = xbmcaddon.Addon("script.module.resolveurl")
+                chk_auth = addon.getSetting("PremiumizeMeResolver_token")
+                if chk_auth != pm_master_token:
+                    for k, v in {
+                        "PremiumizeMeResolver_token": your_pm_token,
+                        "PremiumizeMeResolver_cached_only": "true",
+                    }.items():
+                        addon.setSetting(k, v)
+        except Exception as e:
+            log_utils.error(f"ResolveURL Premiumize Failed: {e}")
         # ========================= Premiumizer =========================
         try:
             if exists(var.chk_premx):
@@ -242,20 +294,3 @@ class Auth:
         except Exception as e:
             log_utils.error(f"Premiumizer Auth Failed: {e}")
 
-        # ========================= ResolveURL =========================
-        try:
-            if exists(var.chk_rurl):
-                addon = xbmcaddon.Addon("script.module.resolveurl")
-                chk_auth = addon.getSetting("PremiumizeMeResolver_token")
-                if chk_auth != pm_master_token:
-                    for k, v in {
-                        "PremiumizeMeResolver_token": your_pm_token,
-                        "PremiumizeMeResolver_cached_only": "true",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error(f"ResolveURL Premiumize Failed: {e}")
-
-        # ========================= Prism (Seren fork) =========================
-        from acctmgr.modules.sync import prism_sync
-        prism_sync.sync_pm(your_pm_username, your_pm_token, pm_master_token)

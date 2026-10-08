@@ -23,13 +23,13 @@ chkset_realx_json = translatePath('special://profile/addon_data/plugin.video.rea
 ORDER = ['fenlt',
          'gears',
          'redlt',
-         #'fen',
          'umb',
          'pov',
          #'dradis',
          'genocide',
-         #'coal',    # Premiumize Only
          'seren',
+         'luc',
+         'prism',
          'shadow',
          'ghost',
          'chains',
@@ -94,6 +94,9 @@ ADDONS = {
         #TK
         'default_tk'  : 'trakt.token',
         'data_tk'     : [],
+        #MDB
+        'default_mdb' : 'mdblist.api_key',
+        'data_mdb'    : [],
         #RD
         'default_rd'  : 'rd.token',
         'data_rd'     : [],
@@ -128,6 +131,9 @@ ADDONS = {
         #TK
         'default_tk'  : 'trakt.token',
         'data_tk'     : [],
+        #MDB
+        'default_mdb' : 'mdblist.token',
+        'data_mdb'    : [],
         #RD
         'default_rd'  : 'rd.token',
         'data_rd'     : [],
@@ -163,8 +169,8 @@ ADDONS = {
         'default_tk'  : 'trakt.user.token',
         'data_tk'     : ['trakt.user.token', 'trakt.user.name', 'trakt.token.expires', 'trakt.authed.clientid', 'trakt.refreshtoken', 'trakt.isauthed', 'indicators', 'trakt.scrobble', 'resume.source'],
         #MDB
-        'default_mdb'  : 'mdblist.api',
-        'data_mdb'     : ['mdblist.api'],
+        'default_mdb'  : 'mdblist.token',
+        'data_mdb'     : ['mdblist.token', 'mdblist.refresh.token'],
         #RD
         'default_rd'  : 'realdebridtoken',
         'data_rd'     : ['realdebridusername', 'realdebridtoken', 'realdebrid.clientid', 'realdebridsecret', 'realdebridrefresh', 'realdebrid.enable'],
@@ -201,7 +207,7 @@ ADDONS = {
         'data_tk'     : ['trakt.refresh', 'trakt.expires', 'trakt.token', 'trakt_user', 'trakt_indicators_active', 'watched_indicators'], # Trakt Client/Secret NOT required here for revoke due to default API keys being stored in the settings.xml
         #MDB
         'default_mdb'  : 'mdblist.token',
-        'data_mdb'     : ['mdblist.token', 'mdblist_user', 'watched_indicators', 'mdbl_indicators_active'],
+        'data_mdb'     : ['mdblist.token', 'mdblist_user', 'mdblist.refresh', 'mdblist.expires', 'mdbl_indicators_active', 'watched_indicators'],
         #RD
         'default_rd'  : 'rd.token',
         'data_rd'     : ['rd.username', 'rd.token', 'rd.client_id', 'rd.refresh', 'rd.secret', 'rd.enabled'],
@@ -225,6 +231,37 @@ ADDONS = {
         'data_en'     : ['easynews_password', 'easynews_user', 'provider.easynews'],
     },
 
+    #LUC_KODI
+    'luc': {
+        'name'        : 'luc_kodi',
+        'plugin'      : 'plugin.video.luc_kodi',
+        'path'        : os.path.join(CONFIG.ADDONS, 'plugin.video.luc_kodi'),
+        'icon'        : os.path.join(CONFIG.ADDONS, 'plugin.video.luc_kodi', 'icon.png'),
+        'fanart'      : os.path.join(CONFIG.ADDONS, 'plugin.video.luc_kodi', 'fanart.jpg'),
+        'settings'    : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.luc_kodi', 'settings.xml'),
+        #TK
+        'default_tk'  : 'trakt.token',
+        'data_tk'     : ['trakt.username', 'trakt.token', 'trakt.refresh', 'trakt.expires', 'trakt.client_id', 'trakt.client_secret'],
+        #MDB
+        'default_mdb' : 'mdblist.token',
+        'data_mdb'    : ['mdblist.token', 'mdblist.username', 'mdblist.refresh'],
+        #RD
+        'default_rd'  : 'realdebrid.token',
+        'data_rd'     : ['realdebrid.enable', 'realdebrid.token', 'realdebrid.username', 'realdebrid.client_id', 'realdebrid.refresh', 'realdebrid.secret'],
+        #PM
+        'default_pm'  : 'premiumize.token',
+        'data_pm'     : ['premiumize.enable', 'premiumize.token', 'premiumize.username'],
+        #AD
+        'default_ad'  : 'alldebrid.token',
+        'data_ad'     : ['alldebrid.enable', 'alldebrid.token', 'alldebrid.username'],
+        #TB
+        'default_tb'  : 'torbox.token',
+        'data_tb'     : ['torbox.enable', 'torbox.token', 'torbox.username'],
+        #EN
+        'default_en'  : 'easynews.password',
+        'data_en'     : ['easynews.username', 'easynews.password', 'provider.easynews'],
+    },
+
     #SEREN
     'seren': {
         'name'        : 'Seren',
@@ -233,6 +270,9 @@ ADDONS = {
         'icon'        : os.path.join(CONFIG.ADDONS, 'plugin.video.seren/resources/images', 'ico-seren-3.png'),
         'fanart'      : os.path.join(CONFIG.ADDONS, 'plugin.video.seren/resources/images', 'fanart-seren-3.png'),
         'settings'    : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.seren', 'settings.xml'),
+        #TK
+        'default_tk'  : 'trakt.auth',
+        'data_tk'     : ['trakt.auth', 'trakt.refresh', 'trakt.username', 'trakt.expires'],
         #RD
         'default_rd'  : 'rd.auth',
         'data_rd'     : ['rd.auth', 'rd.client_id', 'rd.refresh', 'rd.secret', 'rd.username', 'realdebrid.enabled', 'realdebrid.premiumstatus'],
@@ -243,7 +283,32 @@ ADDONS = {
         'default_ad'  : 'alldebrid.apikey',
         'data_ad'     : ['alldebrid.enabled', 'alldebrid.username', 'alldebrid.apikey', 'alldebrid.premiumstatus'],
     },
-    
+
+    #PRISM
+    'prism': {
+        'name'        : 'Prism',
+        'plugin'      : 'plugin.video.prism',
+        'path'        : os.path.join(CONFIG.ADDONS, 'plugin.video.prism'),
+        'icon'        : os.path.join(CONFIG.ADDONS, 'plugin.video.prism/resources/images', 'ico-prism-4.png'),
+        'fanart'      : os.path.join(CONFIG.ADDONS, 'plugin.video.prism/resources/images', 'fanart-prism-4.png'),
+        'settings'    : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.prism', 'settings.xml'),
+        #RD
+        'default_rd'  : 'rd.auth',
+        'data_rd'     : ['rd.auth', 'rd.client_id', 'rd.refresh', 'rd.secret', 'rd.username', 'realdebrid.enabled', 'realdebrid.premiumstatus'],
+        #PM
+        'default_pm'  : 'premiumize.token',
+        'data_pm'     : ['premiumize.enabled', 'premiumize.username', 'premiumize.token', 'premiumize.premiumstatus'],
+        #AD
+        'default_ad'  : 'alldebrid.apikey',
+        'data_ad'     : ['torbox.enabled', 'alldebrid.username', 'alldebrid.apikey', 'alldebrid.premiumstatus'],
+        #TB
+        'default_tb'  : 'tb.token',
+        'data_tb'     : ['tb.token', 'tb.username', 'torbox.enabled', 'tb.premiumstatus'],
+        #OC
+        'default_oc'  : 'oc.token',
+        'data_oc'     : ['oc.token', 'oc.username', 'offcloud.enabled', 'oc.premiumstatus'],
+    },
+
     #GENOCIDE
     'genocide': {
         'name'        : 'Genocide',
@@ -451,6 +516,9 @@ ADDONS = {
         #TK
         'default_tk'  : 'trakt.token',
         'data_tk'     : ['trakt.refresh', 'trakt.token', 'trakt.user', 'trakt.authed'],
+        #MDB
+        'default_mdb' : 'mdblist.token',
+        'data_mdb'    : ['mdblist.token', 'mdblist.user', 'mdblist.refresh', 'indicators.alt.name', 'indicators.alt', 'bookmarks.source'],
     },
 
     #OTAKU
@@ -513,7 +581,10 @@ ADDONS = {
         'data_ad'     : ['AllDebridResolver_token', 'AllDebridResolver_cached_only'],
         #TB
         'default_tb'  : 'TorBoxResolver_apikey',
-        'data_tb'     : ['TorBoxResolver_apikey'],
+        'data_tb'     : ['TorBoxResolver_apikey', 'TorBoxResolver_cached_only', 'TorBoxResolver_enabled'],
+        #OC
+        'default_oc'  : 'OffCloudResolver_apikey',
+        'data_oc'     : ['OffCloudResolver_apikey', 'OffCloudResolver_user', 'OffCloudResolver_cached_only', 'OffCloudResolver_enabled'],
     },
 
     #TMDb HELPER
@@ -711,7 +782,7 @@ def load_am_lite_tokens(): # Load AM Lite tokens for all services
             service_keys = {
                 'tk': ['trakt.token'],
                 'rd': ['realdebrid.token'],
-                'mdb': ['mdblist.apikey'],
+                'mdb': ['mdblist.token', 'mdblist.apikey'],
                 'pm': ['premiumize.token'],
                 'ad': ['alldebrid.token'],
                 'ed': ['easydebrid.token'],
@@ -805,8 +876,11 @@ def _addon_user_service(addon_id, service, token_dict):
     if not default_key:
         return False
 
-    acctmgr_info = ADDONS.get('acctmgr', {})
-    am_key = acctmgr_info.get(f'default_{service}')
+    if service == 'mdb':
+        am_key = 'mdblist.apikey' if 'api_key' in default_key or 'apikey' in default_key else 'mdblist.token'
+    else:
+        acctmgr_info = ADDONS.get('acctmgr', {})
+        am_key = acctmgr_info.get(f'default_{service}')
     if not am_key:
         return False
 
@@ -916,72 +990,7 @@ def wipe_addons(do, who, service):
     except Exception as e:
         xbmc.log(f"{amgr}: wipe_addons failed [{who}/{service}] - {e}", xbmc.LOGERROR)
 
-'''#FEN
-'fen': {
-    'name'        : 'Fen',
-    'plugin'      : 'plugin.video.fen',
-    'path'        : os.path.join(CONFIG.ADDONS, 'plugin.video.fen'),
-    'icon'        : os.path.join(CONFIG.ADDONS, 'plugin.video.fen/resources/media/', 'fen_icon.png'),
-    'fanart'      : os.path.join(CONFIG.ADDONS, 'plugin.video.fen/resources/media/', 'fen_fanart.png'),
-    'settings'    : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.fen', 'settings.xml'),
-    #TK
-    'default_tk'  : 'trakt.token',
-    'data_tk'     : ['trakt.refresh', 'trakt.expires', 'trakt.token', 'trakt.user', 'trakt.indicators_active', 'watched_indicators'],
-    #RD
-    'default_rd'  : 'rd.token',
-    'data_rd'     : ['rd.client_id', 'rd.refresh', 'rd.secret', 'rd.token', 'rd.account_id', 'rd.enabled'],
-    #PM
-    'default_pm'  : 'pm.token',
-    'data_pm'     : ['pm.token', 'pm.account_id', 'pm.enabled'],
-    #AD
-    'default_ad'  : 'ad.token',
-    'data_ad'     : ['ad.token', 'ad.enabled', 'ad.account_id'],
-    #EN
-    'default_en'  : 'easynews_password',
-    'data_en'     : ['easynews_password', 'easynews_user', 'provider.easynews'],
-},
-
-#THE COALITION
-'coal': {
-    'name'        : 'The Coalition',
-    'plugin'      : 'plugin.video.coalition',
-    'path'        : os.path.join(CONFIG.ADDONS, 'plugin.video.coalition'),
-    'icon'        : os.path.join(CONFIG.ADDONS, 'plugin.video.coalition', 'icon.png'),
-    'fanart'      : os.path.join(CONFIG.ADDONS, 'plugin.video.coalition', 'fanart.png'),
-    'settings'    : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.coalition', 'settings.xml'),
-    #TK
-    'default_tk'  : 'trakt.token',
-    'data_tk'     : ['trakt.refresh', 'trakt.expires', 'trakt.token', 'trakt_user', 'trakt_indicators_active', 'watched_indicators'], # Trakt Client/Secret NOT required here for revoke due to default API keys being stored in the settings.xml
-    #MDB
-    'default_mdb'  : 'mdblist.token',
-    'data_mdb'     : ['mdblist.token'],
-    #PM
-    'default_pm'  : 'pm.token',
-    'data_pm'     : ['pm.account_id', 'pm.token', 'pm.enabled'],
-},
-    
-#SEREN
-'seren': {
-    'name'        : 'Seren',
-    'plugin'      : 'plugin.video.seren',
-    'path'        : os.path.join(CONFIG.ADDONS, 'plugin.video.seren'),
-    'icon'        : os.path.join(CONFIG.ADDONS, 'plugin.video.seren/resources/images', 'ico-seren-3.png'),
-    'fanart'      : os.path.join(CONFIG.ADDONS, 'plugin.video.seren/resources/images', 'fanart-seren-3.png'),
-    'settings'    : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.seren', 'settings.xml'),
-    #TK
-    'default_tk'  : 'trakt.auth',
-    'data_tk'     : ['trakt.auth', 'trakt.refresh', 'trakt.username', 'trakt.expires'],
-    #RD
-    'default_rd'  : 'rd.auth',
-    'data_rd'     : ['rd.auth', 'rd.client_id', 'rd.refresh', 'rd.secret', 'rd.username', 'realdebrid.enabled', 'realdebrid.premiumstatus'],
-    #PM
-    'default_pm'  : 'premiumize.token',
-    'data_pm'     : ['premiumize.enabled', 'premiumize.username', 'premiumize.token', 'premiumize.premiumstatus'],
-    #AD
-    'default_ad'  : 'alldebrid.apikey',
-    'data_ad'     : ['alldebrid.enabled', 'alldebrid.username', 'alldebrid.apikey', 'alldebrid.premiumstatus'],
-},
-
+'''
 #DRADIS
 'dradis': {
     'name'        : 'Dradis',
