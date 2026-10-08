@@ -22,7 +22,7 @@ ID ranges:
   30400-30429  add-on portal
   30430-30459  AF3 auto-trailers
   30530-30599  3.2: profiles, tuning, remote access, log share, bootstrap
-  30630-30649  Widgets Layout / ترتيب الودجتس (Light / Moderate / Full)
+  30630-30649  Widgets Layout / ترتيب الودجات (Light / Moderate / Full)
 """
 
 STRINGS = {
@@ -54,7 +54,7 @@ STRINGS = {
 
     # ---- first-run / service (30050-30099) ----
     30050: ("Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, opens the Add-on Portal, asks for the widgets layout, applies patches, then opens the Skin Installer.",
-            "تشغيل الإعداد لأول مرة الآن؟[CR][CR]سيتم تثبيت الملفات الثنائية، وعرض استعادة نسخة احتياطية، وفتح بوابة الإضافات، واختيار ترتيب الودجتس، وتطبيق الترقيعات، ثم فتح مثبت الواجهات."),
+            "تشغيل الإعداد لأول مرة الآن؟[CR][CR]سيتم تثبيت الملفات الثنائية، وعرض استعادة نسخة احتياطية، وفتح بوابة الإضافات، واختيار ترتيب الودجات، وتطبيق الترقيعات، ثم فتح مثبت الواجهات."),
     30051: ("Run setup",                       "\u062a\u0634\u063a\u064a\u0644 \u0627\u0644\u0625\u0639\u062f\u0627\u062f"),
     30052: ("Cancel",                          "\u0625\u0644\u063a\u0627\u0621"),
     30053: ("Apply Patches failed \u2014 run it from ABUKARIM TOOLS",
@@ -346,34 +346,37 @@ STRINGS = {
     30624: ('Pass', 'الجولة'),
     30625: ('Press BACK or OK to exit', 'اضغط رجوع أو OK للخروج'),
     30626: ('CPU Benchmark failed:[CR]%s', 'فشل اختبار أداء المعالج:[CR]%s'),
-    # ---- 3.2.43~beta6/7: Widgets Layout (ترتيب الودجتس) (30630-30649) ----
+    # ---- Widgets Layout / ترتيب الودجات (30630-30649), Modern Standard Arabic ----
     # This feature always shows the ARABIC column (af3_shortcuts.AR); the
     # English is used for the menu label on an English UI and in logs.
-    30630: ('Widgets Layout', 'ترتيب الودجتس'),
+    30630: ('Widgets Layout', 'ترتيب الودجات'),
     30631: ('Light', 'خفيف'),
     30632: ('Keep your current layout[CR]exactly as it is',
-            'يبقى ترتيبك الحالي[CR]زي ما هو بدون تغيير'),
+            'يبقى ترتيبك الحالي[CR]كما هو دون أي تغيير'),
     30633: ('Moderate', 'متوسط'),
     30634: ('ABUKARIM Wizard layout[CR](No Wipe - Option 1)',
-            'ترتيب معالج أبوكريم[CR](بدون مسح - خيار 1)'),
+            'ترتيب معالج أبوكريم[CR](دون مسح - الخيار الأول)'),
     30635: ('Full', 'كامل'),
     30636: ('ABUKARIM Wizard layout[CR](No Wipe - Option 2)',
-            'ترتيب معالج أبوكريم[CR](بدون مسح - خيار 2)'),
-    30637: ('Downloading the widgets layout...', 'جارٍ تنزيل ترتيب الودجتس...'),
-    30638: ('Widgets layout applied: %s', 'تم تطبيق ترتيب الودجتس: %s'),
+            'ترتيب معالج أبوكريم[CR](دون مسح - الخيار الثاني)'),
+    30637: ('Downloading the widgets layout...', 'جارٍ تنزيل ترتيب الودجات...'),
+    30638: ('Widgets layout applied: %s', 'تم تطبيق ترتيب الودجات: %s'),
     30639: ('Could not get the widgets layout - your current one was kept.',
-            'ما قدرنا نجيب ترتيب الودجتس - تم الإبقاء على الترتيب الحالي.'),
+            'تعذّر الحصول على ترتيب الودجات، وتم الإبقاء على الترتيب الحالي.'),
     30640: ('The download has no widgets layout in it - your current one was kept.',
-            'الملف ما فيه ترتيب ودجتس - تم الإبقاء على الترتيب الحالي.'),
+            'لا يحتوي الملف على ترتيب للودجات، وتم الإبقاء على الترتيب الحالي.'),
     30641: ('Choose how the Arctic Fuse 3 home menus and widgets are arranged',
-            'اختر كيف بدك تترتب قوائم وودجتس الصفحة الرئيسية في Arctic Fuse 3'),
+            'اختر طريقة ترتيب قوائم الصفحة الرئيسية وودجاتها في Arctic Fuse 3'),
     30642: ('Arrows to move  •  OK to choose  •  Back = Light (no change)',
-            'الأسهم للتنقل  •  OK للاختيار  •  رجوع = خفيف (بدون تغيير)'),
+            'الأسهم للتنقل  •  OK للاختيار  •  رجوع = خفيف (دون تغيير)'),
     30643: ('Arrows to move  •  OK to choose  •  Back to cancel',
             'الأسهم للتنقل  •  OK للاختيار  •  رجوع للإلغاء'),
     30644: ('Current', 'الحالي'),
-    30645: ('Nothing is downloaded or changed - the default layout', 'ما راح يتنزل أو يتغير أي شي - الترتيب الافتراضي'),
-    30646: ('Your current layout is backed up first', 'ترتيبك الحالي ينحفظ نسخة احتياطية أول'),
-    30647: ('Your current layout is backed up first', 'ترتيبك الحالي ينحفظ نسخة احتياطية أول'),
-    30648: ('Widgets layout left as it is', 'ترتيب الودجتس بقي زي ما هو'),
+    30645: ('Nothing is downloaded or changed - the default layout',
+            'لن يتم تنزيل أو تغيير أي شيء - الترتيب الافتراضي'),
+    30646: ('Your current layout is backed up first',
+            'يتم حفظ ترتيبك الحالي في نسخة احتياطية أولاً'),
+    30647: ('Your current layout is backed up first',
+            'يتم حفظ ترتيبك الحالي في نسخة احتياطية أولاً'),
+    30648: ('Widgets layout left as it is', 'بقي ترتيب الودجات كما هو'),
 }

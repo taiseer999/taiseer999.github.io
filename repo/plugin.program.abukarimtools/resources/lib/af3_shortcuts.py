@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-af3_shortcuts.py - "Widgets Layout" (ترتيب الودجتس): which AF3 menus and
+af3_shortcuts.py - "Widgets Layout" (ترتيب الودجات): which AF3 menus and
 widgets the box keeps. Shown in the Installation Wizard right after the
 Add-on Portal, and from Setup & Install in the menu.
 

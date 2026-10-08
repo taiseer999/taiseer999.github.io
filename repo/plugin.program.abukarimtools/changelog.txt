@@ -1,11 +1,16 @@
+v3.2.45
+- Widgets Layout renamed ترتيب الودجات; all its Arabic texts (window, notes,
+  hints, progress and messages, strings 30630-30648) rewritten in Modern
+  Standard Arabic instead of dialect.
+
 v3.2.44
-- Release of the 3.2.43~beta6-beta8 work: Widgets Layout (ترتيب الودجتس) -
+- Release of the 3.2.43~beta6-beta8 work: Widgets Layout (ترتيب الودجات) -
   Installation Wizard step + Setup & Install entry with icon, Arabic card
   window (خفيف / متوسط / كامل), ABUKARIM Wizard No Wipe Option 1/2 as the
   source, backup of the current layout, real AF3 rebuild (skin_rebuild).
 
 v3.2.43~beta8 (TEST BUILD)
-- FIX: Widgets Layout (ترتيب الودجتس) - Moderate/Full wrote the new
+- FIX: Widgets Layout (ترتيب الودجات) - Moderate/Full wrote the new
   script.skinvariables nodes (log: "45 file(s) written") but AF3's home did
   not change. AF3's build call is keyed on Skin.String(Shortcuts.RebuildDateTime)
   and script.skinvariables does not hash the node files, so the queued
@@ -19,14 +24,14 @@ v3.2.43~beta8 (TEST BUILD)
   remote_patches (json_edit on a node) - both use skin_rebuild now.
 
 v3.2.43~beta7 (TEST BUILD)
-- AF3 shortcuts step renamed "Widgets Layout" / "ترتيب الودجتس" and made Arabic:
+- AF3 shortcuts step renamed "Widgets Layout" / "ترتيب الودجات" and made Arabic:
   * all its texts (window, download progress, messages) are always Arabic,
     also during setup (which runs Kodi in English) - af3_shortcuts.AR().
   * new window resources/skins/Default/1080i/af3_shortcuts.xml (id 13003) in
     the Skin Selection style: three neon cards خفيف / متوسط / كامل with
     their own icons (af3sc_light/moderate/full.png), a short note under the
     cards and a "الحالي" badge on the last applied choice.
-  * new menu entry Setup & Install -> ترتيب الودجتس (mode af3_shortcuts,
+  * new menu entry Setup & Install -> ترتيب الودجات (mode af3_shortcuts,
     icon af3_shortcuts.png). From the menu Back cancels; خفيف changes nothing.
   * strings 30630-30648 reworded / added.
 

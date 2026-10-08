@@ -263,7 +263,7 @@ def _step_addon_portal():
 
 
 def _step_af3_shortcuts(monitor):
-    """Widgets Layout / ترتيب الودجتس: Light / Moderate / Full."""
+    """Widgets Layout / ترتيب الودجات: Light / Moderate / Full."""
     try:
         from resources.lib import af3_shortcuts
         af3_shortcuts.run_step(wait_clear=lambda: _wait_no_modal(monitor),

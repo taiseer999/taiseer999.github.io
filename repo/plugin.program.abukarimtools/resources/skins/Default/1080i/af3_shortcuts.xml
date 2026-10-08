@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- ABUKARIM TOOLS - Widgets Layout (ترتيب الودجتس), 3.2.43~beta7.
+<!-- ABUKARIM TOOLS - Widgets Layout (ترتيب الودجات), 3.2.43~beta7.
      Same visual language as Skin Selection / Add-on Portal: dark glass, neon
      blue -> orange cards. Python contract: list 100 (Label, Label2, Art(icon),
      Property(current)), title 9001, subtitle 9003, hint 9002, footer 9004
