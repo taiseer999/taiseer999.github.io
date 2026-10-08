@@ -366,10 +366,8 @@ def _after_json_change(target):
     skin = norm.split(marker, 1)[1].split('/', 1)[0]
     if skin != xbmc.getSkinDir():
         return
-    xbmc.executebuiltin('RunScript(script.skinvariables,run_executebuiltin='
-                        'special://skin/shortcuts/skinvariables-build-templates.json,'
-                        'use_rules)')
-    _log('skinvariables rebuild queued for %s' % skin)
+    from resources.lib import skin_rebuild      # 3.2.43~beta8: see skin_rebuild
+    skin_rebuild.force(skin)
 
 
 # ---------------------------------------------------------------------------

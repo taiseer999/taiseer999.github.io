@@ -200,10 +200,10 @@ def _rebuild_current(changed_skins):
         return False
     tpl = xbmcvfs.translatePath('special://skin/shortcuts/skinvariables-build-templates.json')
     if os.path.isfile(tpl):
-        xbmc.executebuiltin('RunScript(script.skinvariables,run_executebuiltin='
-                            'special://skin/shortcuts/skinvariables-build-templates.json,'
-                            'use_rules)')
-        _log('skinvariables rebuild queued for %s' % skin)
+        # 3.2.43~beta8: bump Shortcuts.RebuildDateTime first, else the build
+        # sees "up to date" (node files are not in its hash) and does nothing.
+        from resources.lib import skin_rebuild
+        skin_rebuild.force(skin)
         return True
     # skinshortcuts: drop the hash so the menu is regenerated on next load
     for f in os.listdir(SS_DIR) if os.path.isdir(SS_DIR) else []:

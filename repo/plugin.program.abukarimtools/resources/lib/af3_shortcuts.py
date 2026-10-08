@@ -78,6 +78,7 @@ _SV_RE = re.compile(r'(?:^|/)addon_data/script\.skinvariables/(.+)$')
 # the shortcuts the user just picked. Process-local on purpose: the whole
 # setup runs in one plugin invocation.
 _SESSION_LOCK = False
+_LAST_SKINS = []     # nodes/<skin> folders the last replace wrote
 
 
 def _log(msg, level=xbmc.LOGINFO):
@@ -279,10 +280,13 @@ def _replace_from_zip(zip_path):
         _log('previous skinvariables saved to %s' % bk)
     os.makedirs(SV_DIR, exist_ok=True)
     # nodes/<skin>/ folders carried by the zip are replaced as a whole
+    global _LAST_SKINS
+    _LAST_SKINS = []
     nodes = os.path.join(stage, 'nodes')
     if os.path.isdir(nodes):
         for skin in os.listdir(nodes):
             if os.path.isdir(os.path.join(nodes, skin)):
+                _LAST_SKINS.append(skin)
                 shutil.rmtree(os.path.join(SV_DIR, 'nodes', skin),
                               ignore_errors=True)
     written = 0
@@ -297,20 +301,18 @@ def _replace_from_zip(zip_path):
     return written
 
 
-def _after_replace():
-    """Hide items for add-ons that are not installed, rebuild if AF3 is on."""
+def _after_replace(skins):
+    """Hide items for missing add-ons, then make every skin whose nodes were
+    replaced really rebuild (skin_rebuild: the node files are not part of
+    skinvariables' change check, so a plain rebuild call did nothing)."""
     try:
         from resources.lib import menu_reconcile
         menu_reconcile.run(rebuild=False)
     except Exception as e:
         _log('menu reconcile failed: %s' % e, xbmc.LOGWARNING)
-    if xbmc.getSkinDir() == AF3_ID:
-        xbmc.executebuiltin('RunScript(script.skinvariables,run_executebuiltin='
-                            'special://skin/shortcuts/skinvariables-build-templates.json,'
-                            'use_rules)')
-        _log('skinvariables rebuild queued (AF3 active)')
-    # otherwise AF3 rebuilds by itself when it loads: skinvariables hashes the
-    # node contents and regenerates when they differ.
+    from resources.lib import skin_rebuild
+    for skin in sorted(set(skins) | {AF3_ID}):
+        skin_rebuild.force(skin)
 
 
 def _save_state(mode, ok):
@@ -362,7 +364,7 @@ def apply(mode):
         return False
     _log('%s: %d file(s) written to script.skinvariables' % (mode, n))
     _SESSION_LOCK = True
-    _after_replace()
+    _after_replace(_LAST_SKINS)
     _save_state(mode, True)
     xbmcgui.Dialog().notification(AR(30630), AR(30638) % label,
                                   xbmcgui.NOTIFICATION_INFO, 4000)

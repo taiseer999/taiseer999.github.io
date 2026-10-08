@@ -1,3 +1,23 @@
+v3.2.44
+- Release of the 3.2.43~beta6-beta8 work: Widgets Layout (ترتيب الودجتس) -
+  Installation Wizard step + Setup & Install entry with icon, Arabic card
+  window (خفيف / متوسط / كامل), ABUKARIM Wizard No Wipe Option 1/2 as the
+  source, backup of the current layout, real AF3 rebuild (skin_rebuild).
+
+v3.2.43~beta8 (TEST BUILD)
+- FIX: Widgets Layout (ترتيب الودجتس) - Moderate/Full wrote the new
+  script.skinvariables nodes (log: "45 file(s) written") but AF3's home did
+  not change. AF3's build call is keyed on Skin.String(Shortcuts.RebuildDateTime)
+  and script.skinvariables does not hash the node files, so the queued
+  rebuild saw "up to date" and silently did nothing.
+  New resources/lib/skin_rebuild.force(skin): active skin -> bump
+  Shortcuts.RebuildDateTime, then run the build (it regenerates + reloads);
+  other skin -> edit addon_data/<skin>/settings.xml (new stamp, generator
+  hashes emptied) so it rebuilds on its next load (first-run case: AF3 is
+  installed after this step).
+- Same latent bug fixed in menu_reconcile (hidden/restored items) and
+  remote_patches (json_edit on a node) - both use skin_rebuild now.
+
 v3.2.43~beta7 (TEST BUILD)
 - AF3 shortcuts step renamed "Widgets Layout" / "ترتيب الودجتس" and made Arabic:
   * all its texts (window, download progress, messages) are always Arabic,
