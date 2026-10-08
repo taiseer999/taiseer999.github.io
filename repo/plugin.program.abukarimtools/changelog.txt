@@ -1,3 +1,34 @@
+v3.2.43~beta7 (TEST BUILD)
+- AF3 shortcuts step renamed "Widgets Layout" / "ترتيب الودجتس" and made Arabic:
+  * all its texts (window, download progress, messages) are always Arabic,
+    also during setup (which runs Kodi in English) - af3_shortcuts.AR().
+  * new window resources/skins/Default/1080i/af3_shortcuts.xml (id 13003) in
+    the Skin Selection style: three neon cards خفيف / متوسط / كامل with
+    their own icons (af3sc_light/moderate/full.png), a short note under the
+    cards and a "الحالي" badge on the last applied choice.
+  * new menu entry Setup & Install -> ترتيب الودجتس (mode af3_shortcuts,
+    icon af3_shortcuts.png). From the menu Back cancels; خفيف changes nothing.
+  * strings 30630-30648 reworded / added.
+
+v3.2.43~beta6 (TEST BUILD)
+- Installation Wizard: new step right after the Add-on Portal - AF3 Shortcuts
+  (resources/lib/af3_shortcuts.py, strings 30630-30640):
+  * Light    - userdata/addon_data/script.skinvariables left as it is.
+  * Moderate - replaced from ABUKARIM Wizard "No Wipe" Option 1 (the "gui"
+               zip of the wizard's installed build = its Patch GUI entry).
+  * Full     - replaced from ABUKARIM Wizard "No Wipe" Option 2 (the "gui"
+               zip of the "test" build).
+  * the build file is read from the installed wizard's uservar.py (default:
+    taiseer999.github.io Builds.txt); only the addon_data/script.skinvariables
+    part of the zip is extracted, nothing else.
+  * every nodes/<skin>/ folder in the zip replaces the box's folder; loose
+    files are overwritten; other skins' menus are left alone. The old copy is
+    zipped to addon_data/plugin.program.abukarimtools/af3_shortcuts_backup/
+    (3 kept). Items for add-ons that are not installed are hidden.
+  * Back = Light. A popup closed instantly is shown again.
+  * a skin profile applied later in the same setup no longer overwrites the
+    chosen shortcuts (skin_profiles skips its skinvariables part).
+
 v3.2.43~beta3 (TEST BUILD)
 - NEW (Maintenance): CPU Benchmark - port of script.pystone.benchmark 1.1.8
   (Lunatixz, GPLv3); pystone vendored at resources/lib/modules/pystone.py,

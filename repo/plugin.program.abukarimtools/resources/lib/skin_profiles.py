@@ -188,6 +188,19 @@ def apply_from_bytes(skin_id, payload, source='', ask=True):
         return False
     members = [i for i in zf.infolist() if not i.is_dir()]
     allowed = [i for i in members if _allowed(i.filename, skin_id)]
+    # 3.2.43~beta6: the user picked Moderate/Full AF3 shortcuts earlier in
+    # this setup - the profile must not put other menus over them.
+    try:
+        from resources.lib import af3_shortcuts
+        if af3_shortcuts.session_locked():
+            kept = [i for i in allowed if not i.filename.replace('\\', '/')
+                    .startswith('addon_data/script.skinvariables/')]
+            if len(kept) != len(allowed):
+                _log('profile %s: skinvariables part skipped (AF3 shortcuts '
+                     'chosen in setup)' % skin_id)
+            allowed = kept
+    except Exception:
+        pass
     rejected = [i.filename for i in members if i not in allowed]
     if rejected:
         _log('profile %s: ignored %d member(s) outside the skin scope: %s'

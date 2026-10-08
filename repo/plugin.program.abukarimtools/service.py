@@ -26,6 +26,9 @@ on the first Kodi start after a fresh build install. The service then:
          - Restore -> backup_manager.py restore flow
     5. Opens the Add-on Portal (resources/lib/addon_portal.py) so the user
        can tick the video add-ons they want (Back = skip).
+    5b. Asks which AF3 shortcuts to use (resources/lib/af3_shortcuts.py):
+        Light = keep addon_data/script.skinvariables, Moderate / Full =
+        replace it from ABUKARIM Wizard No Wipe Option 1 / Option 2.
     6. Applies patches (so freshly installed add-ons get patched too).
     7. Opens the Skin Installer last (resources/lib/skin_installer.py).
 """
@@ -256,6 +259,19 @@ def _step_addon_portal():
         _log('Add-on Portal failed:\n%s' % traceback.format_exc(), xbmc.LOGERROR)
         xbmcgui.Dialog().notification(ADDON_NAME, T(30060),
                                       xbmcgui.NOTIFICATION_ERROR, 6000)
+        return False
+
+
+def _step_af3_shortcuts(monitor):
+    """Widgets Layout / ترتيب الودجتس: Light / Moderate / Full."""
+    try:
+        from resources.lib import af3_shortcuts
+        af3_shortcuts.run_step(wait_clear=lambda: _wait_no_modal(monitor),
+                               settle=lambda s: _settle(monitor, s))
+        return True
+    except Exception:
+        _log('AF3 shortcuts step failed:\n%s' % traceback.format_exc(),
+             xbmc.LOGERROR)
         return False
 
 
@@ -535,6 +551,10 @@ def _run_steps(monitor):
     _log('Step 3 — Preset + Add-on Portal.')
     _wait_no_modal(monitor)
     _step_addon_portal()
+
+    _log('Step 3b — Widgets Layout (Light / Moderate / Full).')
+    _wait_no_modal(monitor)
+    _step_af3_shortcuts(monitor)
 
     _log('Step 4 — Apply Patches.')
     _wait_no_modal(monitor)

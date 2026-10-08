@@ -93,8 +93,8 @@ msgid "ABUKARIM Wizard is not installed or is disabled. Install it now?"
 msgstr "معالج أبوكريم غير مثبّت أو معطّل. هل تريد تثبيته الآن؟"
 
 msgctxt "#30050"
-msgid "Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, opens the Add-on Portal, applies patches, then opens the Skin Installer."
-msgstr "تشغيل الإعداد لأول مرة الآن؟[CR][CR]سيتم تثبيت الملفات الثنائية، وعرض استعادة نسخة احتياطية، وفتح بوابة الإضافات، وتطبيق الترقيعات، ثم فتح مثبت الواجهات."
+msgid "Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, opens the Add-on Portal, asks for the widgets layout, applies patches, then opens the Skin Installer."
+msgstr "تشغيل الإعداد لأول مرة الآن؟[CR][CR]سيتم تثبيت الملفات الثنائية، وعرض استعادة نسخة احتياطية، وفتح بوابة الإضافات، واختيار ترتيب الودجتس، وتطبيق الترقيعات، ثم فتح مثبت الواجهات."
 
 msgctxt "#30051"
 msgid "Run setup"
@@ -899,4 +899,80 @@ msgstr "اضغط رجوع أو OK للخروج"
 msgctxt "#30626"
 msgid "CPU Benchmark failed:[CR]%s"
 msgstr "فشل اختبار أداء المعالج:[CR]%s"
+
+msgctxt "#30630"
+msgid "Widgets Layout"
+msgstr "ترتيب الودجتس"
+
+msgctxt "#30631"
+msgid "Light"
+msgstr "خفيف"
+
+msgctxt "#30632"
+msgid "Keep your current layout[CR]exactly as it is"
+msgstr "يبقى ترتيبك الحالي[CR]زي ما هو بدون تغيير"
+
+msgctxt "#30633"
+msgid "Moderate"
+msgstr "متوسط"
+
+msgctxt "#30634"
+msgid "ABUKARIM Wizard layout[CR](No Wipe - Option 1)"
+msgstr "ترتيب معالج أبوكريم[CR](بدون مسح - خيار 1)"
+
+msgctxt "#30635"
+msgid "Full"
+msgstr "كامل"
+
+msgctxt "#30636"
+msgid "ABUKARIM Wizard layout[CR](No Wipe - Option 2)"
+msgstr "ترتيب معالج أبوكريم[CR](بدون مسح - خيار 2)"
+
+msgctxt "#30637"
+msgid "Downloading the widgets layout..."
+msgstr "جارٍ تنزيل ترتيب الودجتس..."
+
+msgctxt "#30638"
+msgid "Widgets layout applied: %s"
+msgstr "تم تطبيق ترتيب الودجتس: %s"
+
+msgctxt "#30639"
+msgid "Could not get the widgets layout - your current one was kept."
+msgstr "ما قدرنا نجيب ترتيب الودجتس - تم الإبقاء على الترتيب الحالي."
+
+msgctxt "#30640"
+msgid "The download has no widgets layout in it - your current one was kept."
+msgstr "الملف ما فيه ترتيب ودجتس - تم الإبقاء على الترتيب الحالي."
+
+msgctxt "#30641"
+msgid "Choose how the Arctic Fuse 3 home menus and widgets are arranged"
+msgstr "اختر كيف بدك تترتب قوائم وودجتس الصفحة الرئيسية في Arctic Fuse 3"
+
+msgctxt "#30642"
+msgid "Arrows to move  •  OK to choose  •  Back = Light (no change)"
+msgstr "الأسهم للتنقل  •  OK للاختيار  •  رجوع = خفيف (بدون تغيير)"
+
+msgctxt "#30643"
+msgid "Arrows to move  •  OK to choose  •  Back to cancel"
+msgstr "الأسهم للتنقل  •  OK للاختيار  •  رجوع للإلغاء"
+
+msgctxt "#30644"
+msgid "Current"
+msgstr "الحالي"
+
+msgctxt "#30645"
+msgid "Nothing is downloaded or changed - the default layout"
+msgstr "ما راح يتنزل أو يتغير أي شي - الترتيب الافتراضي"
+
+msgctxt "#30646"
+msgid "Your current layout is backed up first"
+msgstr "ترتيبك الحالي ينحفظ نسخة احتياطية أول"
+
+msgctxt "#30647"
+msgid "Your current layout is backed up first"
+msgstr "ترتيبك الحالي ينحفظ نسخة احتياطية أول"
+
+msgctxt "#30648"
+msgid "Widgets layout left as it is"
+msgstr "ترتيب الودجتس بقي زي ما هو"
 

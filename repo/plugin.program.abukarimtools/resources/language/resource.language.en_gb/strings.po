@@ -93,7 +93,7 @@ msgid "ABUKARIM Wizard is not installed or is disabled. Install it now?"
 msgstr ""
 
 msgctxt "#30050"
-msgid "Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, opens the Add-on Portal, applies patches, then opens the Skin Installer."
+msgid "Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, opens the Add-on Portal, asks for the widgets layout, applies patches, then opens the Skin Installer."
 msgstr ""
 
 msgctxt "#30051"
@@ -898,5 +898,81 @@ msgstr ""
 
 msgctxt "#30626"
 msgid "CPU Benchmark failed:[CR]%s"
+msgstr ""
+
+msgctxt "#30630"
+msgid "Widgets Layout"
+msgstr ""
+
+msgctxt "#30631"
+msgid "Light"
+msgstr ""
+
+msgctxt "#30632"
+msgid "Keep your current layout[CR]exactly as it is"
+msgstr ""
+
+msgctxt "#30633"
+msgid "Moderate"
+msgstr ""
+
+msgctxt "#30634"
+msgid "ABUKARIM Wizard layout[CR](No Wipe - Option 1)"
+msgstr ""
+
+msgctxt "#30635"
+msgid "Full"
+msgstr ""
+
+msgctxt "#30636"
+msgid "ABUKARIM Wizard layout[CR](No Wipe - Option 2)"
+msgstr ""
+
+msgctxt "#30637"
+msgid "Downloading the widgets layout..."
+msgstr ""
+
+msgctxt "#30638"
+msgid "Widgets layout applied: %s"
+msgstr ""
+
+msgctxt "#30639"
+msgid "Could not get the widgets layout - your current one was kept."
+msgstr ""
+
+msgctxt "#30640"
+msgid "The download has no widgets layout in it - your current one was kept."
+msgstr ""
+
+msgctxt "#30641"
+msgid "Choose how the Arctic Fuse 3 home menus and widgets are arranged"
+msgstr ""
+
+msgctxt "#30642"
+msgid "Arrows to move  •  OK to choose  •  Back = Light (no change)"
+msgstr ""
+
+msgctxt "#30643"
+msgid "Arrows to move  •  OK to choose  •  Back to cancel"
+msgstr ""
+
+msgctxt "#30644"
+msgid "Current"
+msgstr ""
+
+msgctxt "#30645"
+msgid "Nothing is downloaded or changed - the default layout"
+msgstr ""
+
+msgctxt "#30646"
+msgid "Your current layout is backed up first"
+msgstr ""
+
+msgctxt "#30647"
+msgid "Your current layout is backed up first"
+msgstr ""
+
+msgctxt "#30648"
+msgid "Widgets layout left as it is"
 msgstr ""
 
