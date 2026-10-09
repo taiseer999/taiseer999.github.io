@@ -617,3 +617,7 @@ msgstr "العربية"
 msgctxt "#33064"
 msgid "English"
 msgstr "English"
+
+msgctxt "#40198"
+msgid "[COLOR FFA0C12C]-- Simkl --[/COLOR]"
+msgstr "[COLOR FFA0C12C]-- Simkl --[/COLOR]"

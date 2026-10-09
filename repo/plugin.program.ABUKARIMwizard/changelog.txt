@@ -6,6 +6,7 @@ v3.9.34
 - Account Manager data is kept by "Save Trakt & Debrid Data".
 - All menu icons resized to match icon.png.
 - Each Debrid/Trakt/MDBList service uses its original brand logo and colours.
+- Simkl added (authorize, account info, re-sync, view, revoke) - needs Account Manager 1.2.0.2+.
 
 v3.9.33
 - Arabic: the forced-backup dialogs and the Buy Me a Coffee text are now in

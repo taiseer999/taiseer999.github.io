@@ -305,6 +305,35 @@ def offcloud_menu():
                     directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_oc', 'name': oc}, icon=icon, fanart=fanart, menu=menu)
                 directory.add_separator()
 
+def simkl_menu():
+    for oc in acct_vwr.ORDER:
+        # Filter only addons that support Simkl
+        if not acct_vwr.ADDONS[oc].get('default_sk'):
+            continue
+        if not xbmc.getCondVisibility('System.HasAddon({0})'.format(acct_vwr.ADDONS[oc]['plugin'])):
+            pass
+        else:
+            if xbmc.getCondVisibility('System.HasAddon({0})'.format(acct_vwr.ADDONS[oc]['plugin'])):
+                name = acct_vwr.ADDONS[oc]['name']
+                path = acct_vwr.ADDONS[oc]['path']
+                auser = acct_vwr.addon_user_sk(oc)
+                icon = acct_vwr.ADDONS[oc]['icon'] if os.path.exists(path) else CONFIG.ICON
+                fanart = acct_vwr.ADDONS[oc]['fanart'] if os.path.exists(path) else CONFIG.ADDON_FANART
+                menu = create_addon_data_menu('Simkl', oc)
+                menu.append((CONFIG.THEME1.format('{0} Settings'.format(name)), 'RunPlugin(plugin://{0}/?mode=opensettings&name={1}&url=sk)'.format(CONFIG.ADDON_ID, oc)))
+
+                if not auser:
+                    directory.add_file('{0} - [COLOR red]Not Authorized[/COLOR]'.format(name), {'name': oc}, icon=icon, description='Your Simkl Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
+                else:
+                    directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': oc}, icon=icon, description='Your Simkl Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
+                if name == 'Red Light':
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_red', 'name': 'Red Light'}, icon=icon, fanart=fanart, menu=menu)
+                #elif name == 'The Gears':
+                    #directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'The Gears'}, icon=icon, fanart=fanart, menu=menu)
+                else:
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_sk', 'name': oc}, icon=icon, fanart=fanart, menu=menu)
+                directory.add_separator()
+
 def easynews_menu():
     for easy in acct_vwr.ORDER:
         # Filter only addons that support Easynews

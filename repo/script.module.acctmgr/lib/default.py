@@ -29,6 +29,7 @@ torbox_icon	 = joinPath(control.iconsPath(), 'torbox.png')
 easyd_icon	 = joinPath(control.iconsPath(), 'easydebrid.png')
 offcloud_icon    = joinPath(control.iconsPath(), 'offcloud.png')
 easynews_icon    = joinPath(control.iconsPath(), 'easynews.png')
+simkl_icon       = joinPath(control.iconsPath(), 'simkl.png')
 uhd_icon         = joinPath(control.iconsPath(), '4k.png')
 fullhd_icon      = joinPath(control.iconsPath(), '1080p.png')
 hd_icon          = joinPath(control.iconsPath(), '720p.png')
@@ -777,6 +778,59 @@ elif action == 'easynewsViewer':
         xbmc.sleep(300)
         execute('ActivateWindow(10001,"plugin://script.module.acctvwr/?mode=easynews",return)')
              
+#SIMKL
+elif action == 'simklAcct':                                                                              # View account info
+        from acctmgr.modules.auth import simkl
+        result = simkl.Simkl().account_info_to_dialog()
+        if result == -1:
+                control.openSettings()
+
+elif action == 'simklAuth':                                                                              # Authorize service (QR / PIN)
+        from acctmgr.modules.auth import simkl
+        ok = simkl.Simkl().auth()
+        if not ok:
+                control.openSettings()
+                raise SystemExit
+        xbmc.sleep(1500)
+        control.notification('Simkl', 'Sync in progress, please wait!', icon=simkl_icon)
+
+        from acctmgr.modules.sync import simkl_sync
+        simkl_sync.Auth().simkl_auth()                                                                  # Sync all supported add-ons
+        xbmc.sleep(200)
+        control.setSetting('sync.sk.service', 'true')                                                   # Enable sync startup service
+        control.notification('Simkl', 'Sync Complete!', icon=simkl_icon)
+        xbmc.sleep(3000)
+        control.openSettings()
+
+elif action == 'simklReSync':                                                                            # Re-sync Simkl with installed add-ons
+        control.notification('Simkl', 'Sync in progress, please wait!', icon=simkl_icon)
+        xbmc.sleep(3000)
+        from acctmgr.modules.sync import simkl_sync
+        control.function_monitor(simkl_sync.Auth().simkl_auth)
+        xbmc.sleep(200)
+        control.notification('Simkl', 'Sync Complete!', icon=simkl_icon)
+        xbmc.sleep(3000)
+        control.openSettings()
+
+elif action == 'simklRevoke':                                                                            # Revoke add-ons
+        control.closeAll()
+        xbmc.sleep(300)
+        yes = dialog.yesno('AM Lite', 'Are you sure?', 'No', 'Yes')
+        if yes:
+                from acctmgr.modules.sync import simkl_sync
+                simkl_sync.revoke_all()                                                                 # Clear Simkl in Otaku / Umbrella
+                execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_sk")')                   # Clear AM Lite Simkl data
+                dialog.notification('Simkl', 'All Add-ons Revoked!', simkl_icon, 3000)
+                xbmc.sleep(3000)
+                control.openSettings()
+        else:
+                control.openSettings()
+
+elif action == 'simklViewer':                                                                            # View authorizations
+        control.closeAll()
+        xbmc.sleep(300)
+        execute('ActivateWindow(10001,"plugin://script.module.acctvwr/?mode=simkl",return)')
+
 #REVOKE ALL SERVICES
 elif action == 'allRevoke':
         token_keys = (
@@ -790,7 +844,8 @@ elif action == 'allRevoke':
                 'easydebrid.token',
                 'offcloud.token',
                 'easynews.username',
-                'easynews.password'
+                'easynews.password',
+                'simkl.token'
         )
 
         has_any_auth = any((control.setting(k) or '') != '' for k in token_keys)
@@ -887,6 +942,10 @@ elif action == 'allRevoke':
                 control.apply_default_trakt_api_keys() # Apply default API keys to all add-ons
                 control.delete_synclist()
                 control.updates_on()
+
+        if control.setting('simkl.token'):
+                from acctmgr.modules.sync import simkl_sync
+                simkl_sync.revoke_all()                                                                 # Clear Simkl in Otaku / Umbrella
 
         execute('RunPlugin("plugin://script.module.acctvwr/?mode=wipeclean")')  # Trakt Client/Secret are NOT revoked for (POV, The Coalition, Dradis, Genocide)
 
@@ -1257,6 +1316,10 @@ elif action == 'ShowSupported_Ext_Scrapers':
 elif action == 'ShowSupported_Ext_Addons':
 	from acctmgr.modules import changelog
 	changelog.get_supported_ext_addons()
+
+elif action == 'ShowSupported_Simkl':
+	from acctmgr.modules import changelog
+	changelog.get_supported_simkl()
 
 elif action == 'ShowSupported_MaxQL':
 	from acctmgr.modules import changelog

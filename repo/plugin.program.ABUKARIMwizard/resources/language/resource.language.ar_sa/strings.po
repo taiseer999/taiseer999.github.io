@@ -1222,8 +1222,8 @@ msgid "Debrid & Trakt - Account Manager"
 msgstr "الديبريد و Trakt - مدير الحسابات"
 
 msgctxt "#30401"
-msgid "Authorize Debrid, Trakt and MDBList once in Account Manager (AM) - AM syncs the account to every supported add-on."
-msgstr "فعّل حسابات الديبريد و Trakt و MDBList مرة واحدة عبر مدير الحسابات (AM)، وهو يتولى مزامنتها مع جميع الإضافات المدعومة."
+msgid "Authorize Debrid, Trakt, Simkl and MDBList once in Account Manager (AM) - AM syncs the account to every supported add-on."
+msgstr "فعّل حسابات الديبريد و Trakt و Simkl و MDBList مرة واحدة عبر مدير الحسابات (AM)، وهو يتولى مزامنتها مع جميع الإضافات المدعومة."
 
 msgctxt "#30402"
 msgid "Account Manager is not installed"
@@ -1302,8 +1302,8 @@ msgid "Revoke All Services"
 msgstr "إلغاء تفعيل جميع الخدمات"
 
 msgctxt "#30421"
-msgid "Remove every Debrid, Trakt and MDBList account from Account Manager and all add-ons."
-msgstr "حذف جميع حسابات الديبريد و Trakt و MDBList من مدير الحسابات ومن جميع الإضافات."
+msgid "Remove every Debrid, Trakt, Simkl and MDBList account from Account Manager and all add-ons."
+msgstr "حذف جميع حسابات الديبريد و Trakt و Simkl و MDBList من مدير الحسابات ومن جميع الإضافات."
 
 msgctxt "#30422"
 msgid "Account Manager Settings"

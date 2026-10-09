@@ -192,6 +192,9 @@ ADDONS = {
         #EN
         'default_en'  : 'easynews.password',
         'data_en'     : ['easynews.password', 'easynews.user', 'easynews.enable'],
+        #SK
+        'default_sk'  : 'simkltoken',
+        'data_sk'     : ['simkltoken', 'simklusername', 'simkljoindate'],
     },
 
     #POV
@@ -547,6 +550,9 @@ ADDONS = {
         #EN
         'default_en'  : 'easynews.password',
         'data_en'     : ['easynews.password', 'easynews.user', 'easynews.enabled'],
+        #SK
+        'default_sk'  : 'simkl.token',
+        'data_sk'     : ['simkl.token', 'simkl.username', 'simkl.userid', 'simkl.enabled'],
     },
 
     #EASYNEWS VIDEO
@@ -703,6 +709,9 @@ ADDONS = {
         #EN
         'default_en'  : 'easynews.password',
         'data_en'     : [],
+        #SK
+        'default_sk'  : 'simkl.token',
+        'data_sk'     : [],
     },
 }
             
@@ -771,7 +780,7 @@ def chk_sql_auth(db, key, return_value=False): # Check if a setting exists. If T
       
 def load_am_lite_tokens(): # Load AM Lite tokens for all services
     path = xbmcvfs.translatePath('special://profile/addon_data/script.module.acctmgr/settings.xml')
-    tokens = { 'tk': {}, 'rd': {}, 'mdb': {}, 'pm': {}, 'ad': {}, 'ed': {}, 'tb': {}, 'oc': {}, 'en': {} }
+    tokens = { 'tk': {}, 'rd': {}, 'mdb': {}, 'pm': {}, 'ad': {}, 'ed': {}, 'tb': {}, 'oc': {}, 'en': {}, 'sk': {} }
 
     if os.path.exists(path):
         try:
@@ -789,6 +798,7 @@ def load_am_lite_tokens(): # Load AM Lite tokens for all services
                 'tb': ['torbox.token'],
                 'oc': ['offcloud.token'],
                 'en': ['easynews.password'],
+                'sk': ['simkl.token'],
             }
 
             for setting in root.findall('setting'):
@@ -815,6 +825,7 @@ ED_TOKENS  = {}
 TB_TOKENS  = {}
 OC_TOKENS  = {}
 EN_TOKENS  = {}
+SK_TOKENS  = {}
 
 SERVICE_MAP = {
     'tk':  TK_TOKENS,
@@ -826,6 +837,7 @@ SERVICE_MAP = {
     'tb':  TB_TOKENS,
     'oc':  OC_TOKENS,
     'en':  EN_TOKENS,
+    'sk':  SK_TOKENS,
 }
 
 # Populate tokens for each add-on and service using default keys
@@ -918,8 +930,11 @@ def addon_user_oc(addon_id):
 def addon_user_en(addon_id):
     return _addon_user_service(addon_id, 'en', EN_TOKENS)
 
+def addon_user_sk(addon_id):
+    return _addon_user_service(addon_id, 'sk', SK_TOKENS)
+
 # Revoke Handler
-def addon_it(do, who='all', services=('tk','mdb','rd','pm','ad','ed','tb','oc','en'), force=True):
+def addon_it(do, who='all', services=('tk','mdb','rd','pm','ad','ed','tb','oc','en','sk'), force=True):
     #do: 'wipeaddon'
     #who: addon key or 'all'
     #Force: ignore token match and wipe all

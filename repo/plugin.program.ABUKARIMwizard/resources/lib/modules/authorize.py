@@ -43,6 +43,7 @@ SERVICES = [
     ('offcloud',   'OffCloud',    ('offcloud.userid', 'offcloud.token'),       False, 'Offcloud'),
     ('easynews',   'Easynews',    ('easynews.username',),                      False, 'Easynews'),
     ('trakt',      'Trakt',       ('trakt.username', 'trakt.token'),           True,  'Trakt'),
+    ('simkl',      'Simkl',       ('simkl.username', 'simkl.token'),           True,  'Simkl'),
     ('mdblist',    'MDBList',     ('mdblist.username', 'mdblist.apikey'),      False, 'MDBList'),
 ]
 _BY_KEY = {s[0]: s for s in SERVICES}
@@ -64,6 +65,18 @@ def _am_icon(key):
     # Bundled service logos in their original brand colours (resources/media/icons/svc_*.png)
     path = os.path.join(addon_path, 'resources', 'media', 'icons', f'svc_{key}.png')
     return path if os.path.isfile(path) else DEBRID_ICON
+
+
+# Services added to AM after its first release: shown only when the installed AM ships them.
+_NEEDS_MODULE = {'simkl': 'simkl.py'}
+
+
+def _am_supports(key):
+    mod = _NEEDS_MODULE.get(key)
+    if not mod:
+        return True
+    path = xbmcvfs.translatePath(f'special://home/addons/{AM_ID}/lib/acctmgr/modules/auth/{mod}')
+    return os.path.isfile(path)
 
 
 def _run(action):
@@ -102,6 +115,8 @@ def authorize_menu():
         return
 
     for key, label, _ids, _acct, _sup in SERVICES:
+        if not _am_supports(key):
+            continue
         icon = _am_icon(key)
         state = _status(am, key)
         if state:

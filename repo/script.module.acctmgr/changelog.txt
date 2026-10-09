@@ -1,3 +1,5 @@
+1.2.0.2 - Added Simkl support (QR / PIN authorization). The account is synced to Otaku and Umbrella; includes Account Info, Re-sync, View Authorizations, Revoke, Revoke All, startup sync service and a Supported Add-ons list. Account Viewer 1.1.5.2.
+
 1.2.0.1 - Arabic localization: full Arabic UI (settings, dialogs, notifications, QR/device auth windows, MDBList/Trakt/TMDb Helper selection windows, phone-entry web page, help texts) plus Account Viewer 1.1.5.1. New Startup > Language option (Auto / Arabic / English). Fixed malformed strings.po entries (#40109/#40110).
 
 1.2.0 - Added support for Prism, Luc_Kodi, and Fen Light+. Added Offcloud support for ResolveURL. Re-added Seren Trakt support. Updated device authorization flows to use QR code authentication [Special thanks to DevGeniusCode for his work on this!]. Updated Trakt authentication and token refresh handling for the newer 7-day access token lifetime. Expanded MDBList integration to support both OAuth/QR authorization and API key authentication. Replaced Kodi dialogs with custom XML-based dialogs. General code cleanup and minor bug fixes.

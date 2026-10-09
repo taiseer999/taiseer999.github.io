@@ -61,6 +61,7 @@ tb_icon    = joinPath(icons_path, 'torbox.png')
 ed_icon    = joinPath(icons_path, 'easydebrid.png')
 oc_icon    = joinPath(icons_path, 'offcloud.png')
 en_icon    = joinPath(icons_path, 'easynews.png')
+sk_icon    = joinPath(icons_path, 'simkl.png')
 
 
 #AM Lite Service Settings
@@ -85,7 +86,9 @@ ACCTMGR_AM = [
     # OffCloud
     'offcloud.token', 'offcloud.userid', 'offcloud.enabled',
     # Easynews
-    'easynews.password', 'easynews.username', 'easynews.enabled',]
+    'easynews.password', 'easynews.username', 'easynews.enabled',
+    # Simkl
+    'simkl.token', 'simkl.username', 'simkl.userid', 'simkl.joindate',]
 
 #AM Lite Individual Service Settings
 ACCTMGR_TK = [
@@ -126,6 +129,10 @@ ACCTMGR_OC = [
 ACCTMGR_EN= [
     # Easynews
     'easynews.password', 'easynews.username', 'easynews.enabled',]
+
+ACCTMGR_SK = [
+    # Simkl
+    'simkl.token', 'simkl.username', 'simkl.userid', 'simkl.joindate',]
 
 #HELPERS
 def get_setting(key):
@@ -241,6 +248,10 @@ class Router:
             menu.easynews_menu()
             self._finish(handle)
 
+        elif mode == 'simkl':
+            menu.simkl_menu()
+            self._finish(handle)
+
         elif mode == 'extscrapers':
             menu.ext_menu()
             self._finish(handle)
@@ -282,6 +293,11 @@ class Router:
             xbmc.executebuiltin('Container.Refresh()')
 
         elif mode == 'opensettings_oc':
+            from resources.libs import acct_vwr
+            acct_vwr.open_settings(name)
+            xbmc.executebuiltin('Container.Refresh()')
+
+        elif mode == 'opensettings_sk':
             from resources.libs import acct_vwr
             acct_vwr.open_settings(name)
             xbmc.executebuiltin('Container.Refresh()')
@@ -368,6 +384,12 @@ class Router:
             acct_vwr.addon_it('wipeaddon', 'all', services=('en',), force=True)
             set_setting("sync.en.service", "false")
             clear_acctmgr_settings(ACCTMGR_EN)
+
+        #SIMKL REVOKE
+        elif mode == 'clear_sk':
+            acct_vwr.addon_it('wipeaddon', 'all', services=('sk',), force=True)
+            set_setting("sync.sk.service", "false")
+            clear_acctmgr_settings(ACCTMGR_SK)
 
         #EXTERNAL PROVIDERS - CHANGE SCRAPER PACKAGE
         elif mode == 'fenlt_scrapers':  # Fen Light
@@ -642,6 +664,17 @@ class Router:
                     xbmc.sleep(1000)
             except Exception as e:
                 xbmc.log(f'{amgr}: Wipeclean Easynews failed: {e}', xbmc.LOGERROR)
+
+            #Revoke Simkl
+            try:
+                if get_setting("simkl.token") not in (None, ""):
+                    acct_vwr.addon_it('wipeaddon', 'all', services=('sk',), force=True)
+                    xbmc.sleep(500)
+                    acctmgr.setSetting("sync.sk.service", "false")
+                    dialog.notification('Simkl', 'Simkl Revoked!', sk_icon, 3000)
+                    xbmc.sleep(1000)
+            except Exception as e:
+                xbmc.log(f'{amgr}: Wipeclean Simkl failed: {e}', xbmc.LOGERROR)
 
             #Revoke Trakt
             if get_setting("trakt.token"):                                              # Check if Trakt is authorized

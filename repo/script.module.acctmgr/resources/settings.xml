@@ -63,6 +63,15 @@
 		<setting id="easynews.username" type="text" label="32318" enable="false" default="" visible="!eq(-2,)" />
 		<setting id="easynews.password" type="text" label="32344" enable="false" default="" visible="!eq(-2,)" />
 		<setting type="action" label="32319" option="close" action="RunScript(script.module.acctmgr, action=easynewsAuth)" visible="eq(-4,) | eq(-3,)" />
+
+		<setting type="lsep" label="Simkl" />
+		<setting id="simkl.token" type="text" visible="false" label="" default="" />
+		<setting id="simkl.userid" type="text" visible="false" label="" default="" />
+		<setting id="simkl.joindate" type="text" visible="false" label="" default="" />
+		<setting id="simkl.client_id" type="text" visible="false" label="" default="" />
+		<setting type="action" label="32319" option="close" action="RunScript(script.module.acctmgr, action=simklAuth)" visible="eq(-4,)" />
+		<setting id="simkl.username" type="text" default="" label="32318" enable="false" visible="!eq(-5,)" />
+		<setting type="action" label="32316" option="close" action="RunScript(script.module.acctmgr, action=simklAcct)" visible="!eq(-6,)" />
 	</category>
 	<category label="33001">
 		<setting type="lsep" label="40087" />
@@ -116,6 +125,12 @@
 		<setting type="action" label="33016" option="close" action="RunScript(script.module.acctmgr, action=easynewsViewer)" visible="!eq(-1,)" />
 		<setting type="action" label="33017" option="close" action="RunScript(script.module.acctmgr, action=easynewsReSync)"  visible="!eq(-2,)" />
 		<setting type="action" label="32317" option="close" action="RunScript(script.module.acctmgr, action=easynewsRevoke)"  visible="!eq(-3,)" />
+
+		<setting type="lsep" label="Simkl" />
+		<setting id="simkl.token" label="" type="text" default="" visible="false" enable="false" />
+		<setting type="action" label="33016" option="close" action="RunScript(script.module.acctmgr, action=simklViewer)" visible="!eq(-1,)" />
+		<setting type="action" label="33017" option="close" action="RunScript(script.module.acctmgr, action=simklReSync)"  visible="!eq(-2,)" />
+		<setting type="action" label="32317" option="close" action="RunScript(script.module.acctmgr, action=simklRevoke)"  visible="!eq(-3,)" />
 	</category>
 	<category label="33002">
 		<!-- Set Max Resolution -->
@@ -151,6 +166,7 @@
       		<setting id="sync.tb.service"  type="bool" label="TorBox" visible="true" default="false"/>
 		<setting id="sync.oc.service"  type="bool" label="OffCloud" visible="true" default="false"/>
       		<setting id="sync.en.service"  type="bool" label="Easynews" visible="true" default="false"/>
+		<setting id="sync.sk.service"  type="bool" label="Simkl" visible="true" default="false"/>
 	</category>
 	<category label="33004">
 		<setting type="lsep" label="33040" />
@@ -169,6 +185,7 @@
 		<setting label="40196" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Torbox)" />
 		<setting label="40100" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Offcloud)" />
 		<setting label="40101" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Easynews)" />
+		<setting label="40198" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Simkl)" />
 		<setting label="40102" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_MaxQL)" />
 		<setting label="40103" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Autoplay)" />
 		<setting type="lsep" label="40076" />

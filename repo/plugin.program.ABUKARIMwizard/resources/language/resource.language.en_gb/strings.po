@@ -1192,7 +1192,7 @@ msgid "Debrid & Trakt - Account Manager"
 msgstr ""
 
 msgctxt "#30401"
-msgid "Authorize Debrid, Trakt and MDBList once in Account Manager (AM) - AM syncs the account to every supported add-on."
+msgid "Authorize Debrid, Trakt, Simkl and MDBList once in Account Manager (AM) - AM syncs the account to every supported add-on."
 msgstr ""
 
 msgctxt "#30402"
@@ -1272,7 +1272,7 @@ msgid "Revoke All Services"
 msgstr ""
 
 msgctxt "#30421"
-msgid "Remove every Debrid, Trakt and MDBList account from Account Manager and all add-ons."
+msgid "Remove every Debrid, Trakt, Simkl and MDBList account from Account Manager and all add-ons."
 msgstr ""
 
 msgctxt "#30422"
