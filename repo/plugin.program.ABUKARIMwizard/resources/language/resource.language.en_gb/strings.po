@@ -1166,3 +1166,23 @@ msgstr ""
 msgctxt "#30993"
 msgid "Press OK or BACK to close"
 msgstr ""
+
+msgctxt "#30380"
+msgid "ABUKARIM TOOLS is required to back up your setup before a build is installed.[CR]Install ABUKARIM TOOLS first, then try again."
+msgstr ""
+
+msgctxt "#30381"
+msgid "Before the build is installed, ABUKARIM TOOLS will back up your setup.[CR]Choose where to save the backup."
+msgstr ""
+
+msgctxt "#30382"
+msgid "The backup was not completed. The build cannot be installed without a backup."
+msgstr ""
+
+msgctxt "#30383"
+msgid "Cancel install"
+msgstr ""
+
+msgctxt "#30384"
+msgid "Retry backup"
+msgstr ""

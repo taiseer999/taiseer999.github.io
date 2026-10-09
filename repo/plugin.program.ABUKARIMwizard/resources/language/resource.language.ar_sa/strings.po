@@ -1191,8 +1191,28 @@ msgstr "اشترِ لي قهوة"
 
 msgctxt "#30992"
 msgid "Enjoying the Piers build and ABUKARIM add-ons?[CR]Scan the code with your phone to support the work."
-msgstr "عاجبك بيلد Piers وإضافات ABUKARIM؟[CR]امسح الكود بجوالك لدعم الشغل."
+msgstr "هل أعجبك بيلد Piers وإضافات ABUKARIM؟[CR]امسح الرمز بهاتفك لدعم هذا العمل."
 
 msgctxt "#30993"
 msgid "Press OK or BACK to close"
 msgstr "اضغط OK أو رجوع للإغلاق"
+
+msgctxt "#30380"
+msgid "ABUKARIM TOOLS is required to back up your setup before a build is installed.[CR]Install ABUKARIM TOOLS first, then try again."
+msgstr "يلزم وجود ABUKARIM TOOLS لإنشاء نسخة احتياطية قبل تثبيت البيلد.[CR]يُرجى تثبيت ABUKARIM TOOLS أولاً ثم المحاولة مجدداً."
+
+msgctxt "#30381"
+msgid "Before the build is installed, ABUKARIM TOOLS will back up your setup.[CR]Choose where to save the backup."
+msgstr "قبل تثبيت البيلد، ستُنشئ ABUKARIM TOOLS نسخة احتياطية من إعداداتك.[CR]اختر المكان الذي تريد حفظ النسخة فيه."
+
+msgctxt "#30382"
+msgid "The backup was not completed. The build cannot be installed without a backup."
+msgstr "لم تكتمل النسخة الاحتياطية. لا يمكن تثبيت البيلد دون نسخة احتياطية."
+
+msgctxt "#30383"
+msgid "Cancel install"
+msgstr "إلغاء التثبيت"
+
+msgctxt "#30384"
+msgid "Retry backup"
+msgstr "إعادة النسخ الاحتياطي"

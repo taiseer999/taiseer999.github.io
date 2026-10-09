@@ -1,3 +1,14 @@
+v3.9.33
+- Arabic: the forced-backup dialogs and the Buy Me a Coffee text are now in
+  Modern Standard Arabic (Fusha) instead of dialect.
+
+v3.9.32
+- Build install: an ABUKARIM TOOLS backup is now mandatory before a build is
+  installed (fresh install, Build Update menu and startup update). The normal
+  ABUKARIM TOOLS backup runs (choose a folder); the install only continues once
+  a new backup zip exists. Cancelled/failed backup -> Retry backup or Cancel
+  install. ABUKARIM TOOLS missing -> install blocked; disabled -> auto-enabled.
+
 v3.9.30
 - Icons and fanart recolored from blue to mint green (#3DDC97).
 
