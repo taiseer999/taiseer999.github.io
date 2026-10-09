@@ -79,6 +79,11 @@
         "setting": "savedata",
         "path": "data_path"
     },
+    "script.module.acctmgr": {
+        "name": "Account Manager",
+        "setting": "savedata",
+        "path": "data_path"
+    },
     "script.module.resolveurl": {
         "name": "ResolveURL",
         "setting": "savedata",

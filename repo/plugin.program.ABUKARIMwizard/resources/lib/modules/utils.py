@@ -26,6 +26,7 @@ _ICON_BY_MODE = {
     '225': 'refresh', '226': 'update', '227': 'clear_cache', '231': 'alert', '232': 'alert',
     '240': 'webserver', '242': 'addons_auto', '243': 'refresh', '244': 'profile',
     '250': 'sources', '251': 'remote_refresh', '252': 'advanced', '253': 'info',
+    '40': 'advanced', '41': 'binary_install',
 }
 _SWITCH_MODES = {'217', '230', '241'}          # rows that show ON / OFF
 

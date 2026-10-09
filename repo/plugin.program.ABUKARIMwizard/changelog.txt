@@ -1,3 +1,12 @@
+v3.9.34
+- Debrid section rebuilt on Account Manager (script.module.acctmgr): Real-Debrid,
+  Premiumize, AllDebrid, TorBox, Easy Debrid, OffCloud, Easynews, Trakt, MDBList.
+  Live status, Authorize (QR), Account Info, Re-sync, View Authorized, Revoke,
+  Supported Add-ons, Revoke All, AM Settings. Install Account Manager if missing.
+- Account Manager data is kept by "Save Trakt & Debrid Data".
+- All menu icons resized to match icon.png.
+- Each Debrid/Trakt/MDBList service uses its original brand logo and colours.
+
 v3.9.33
 - Arabic: the forced-backup dialogs and the Buy Me a Coffee text are now in
   Modern Standard Arabic (Fusha) instead of dialect.

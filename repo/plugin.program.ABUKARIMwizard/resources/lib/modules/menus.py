@@ -7,7 +7,7 @@ import xbmcplugin
 from .utils import add_dir
 from uservar import buildfile, videos_url, changelog_dir
 from .parser import XmlParser, TextParser, get_page
-from .addonvar import (addon_name, setting, addon_icon, addon_fanart, local_string, authorize, kodi_ver,
+from .addonvar import (addon_name, setting, addon_icon, addon_fanart, local_string, kodi_ver,
                        build_ver, build_date, kodi_versions, sys_arch, os_name, code_name, UPDATE_VERSION,
                        CURRENT_BUILD, BUILD_VERSION, NUM_BUILDS, GUI_URL, THEME_URL, OPTION2_URL, resources)
 from .colors import colors
@@ -48,7 +48,7 @@ def main_menu():
     
     add_dir(COLOR2(local_string(30011)), '', 5, addon_icon, addon_fanart, COLOR2(local_string(30002)), isFolder=True)  # Maintenance Menu
     
-    add_dir(COLOR2(local_string(30026)),'',10,addon_icon,addon_fanart,COLOR2(local_string(30026)))  # Authorize Debrid Services
+    add_dir(COLOR2(local_string(30026)),'',10,addon_icon,addon_fanart,COLOR2(local_string(30401)))  # Debrid & Trakt (Account Manager)
 
     if changelog_dir not in ['', 'http://', 'http://CHANGEME/'] and CURRENT_BUILD not in ['No Build Installed', 'No Build']:
         add_dir(COLOR2(f'View Build Changelog'), '', 101, addon_icon, addon_fanart, COLOR2(local_string(30109)), isFolder=False)  # View Build Changelog
@@ -161,14 +161,3 @@ def restore_gui_skin():
     add_dir(COLOR2('Restore Build Default GUI Settings'),'',20,addon_icon,addon_fanart,COLOR2('Restore GUI Settings'), isFolder=False)  
     add_dir(COLOR2('Restore Build Default Skin Settings'),'',21, addon_icon,addon_fanart, COLOR2('Restore Skin Settings'), isFolder=False)
 
-
-def authorize_menu():  ### deprecated use authorize.py methods
-    xbmcplugin.setPluginCategory(HANDLE, local_string(30027))  # Authorize Services
-    response = get_page(authorize)
-    builds = json.loads(response)['items']
-    for build in builds:
-        name = (build.get('name', 'Unknown'))
-        url = (build.get('url', ''))
-        icon = (build.get('icon', addon_icon))
-        fanart = (build.get('fanart', addon_fanart))
-        add_dir(name,url,2,icon,fanart,name,name2=name,version='' ,isFolder=False)

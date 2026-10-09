@@ -91,6 +91,7 @@ def save_backup_restore(_type: str) -> None:
             settings_db = item + '/databases/settings.db'   # Addon settings.db
             realizer = item + '/rdauth.json'                # Realizer debrid data
             youtube = item + '/api_keys.json'               # Youtube API Keys
+            am_trakt = item + '/trakt_sync_list.json'       # Account Manager Trakt sync list
             if path == 'user_path':
                 path = user_path
             elif path == 'data_path':
@@ -104,6 +105,7 @@ def save_backup_restore(_type: str) -> None:
                             (path, settings_db),            # Backup Fen Light & Forks
                             (path, realizer),               # Backup Realizer data
                             (path, youtube),                # Backup Youtube data
+                            (path, am_trakt),               # Backup AM Trakt sync list
                         ]
                         for p, val in tasks:                # Run Tasks
                             backup(p, val)         

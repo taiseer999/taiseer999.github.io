@@ -7,7 +7,7 @@ from .params import Params
 from .play_video import play_video
 from uservar import notify_url, changelog_dir
 from .menus import main_menu, build_menu, submenu_maintenance, backup_restore, restore_gui_skin
-from .authorize import authorize_menu, authorize_submenu
+from .authorize import authorize_menu, authorize_submenu, open_am_settings, install_am
 from .build_install import build_install, patch_gui, patch_gui_no_wipe
 from .maintenance import fresh_start, clear_packages, clear_thumbnails, advanced_settings
 from .whitelist import get_whitelist
@@ -81,6 +81,12 @@ def router(paramstring):
     elif mode == 10:
         authorize_menu()
     
+    elif mode == 40:
+        open_am_settings()
+
+    elif mode == 41:
+        install_am()
+
     elif mode == 11:
         get_whitelist()
     

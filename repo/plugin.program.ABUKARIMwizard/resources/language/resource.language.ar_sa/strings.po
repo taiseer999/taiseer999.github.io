@@ -131,8 +131,8 @@ msgid "Advanced Settings K20"
 msgstr "الإعدادات المتقدمة K20"
 
 msgctxt "#30026"
-msgid "Authorize Debrid and Trakt"
-msgstr "تفعيل خدمات الديبريد و Trakt"
+msgid "Debrid & Trakt (Account Manager)"
+msgstr "الديبريد و Trakt (مدير الحسابات)"
 
 msgctxt "#30027"
 msgid "Authorize Services"
@@ -1216,3 +1216,123 @@ msgstr "إلغاء التثبيت"
 msgctxt "#30384"
 msgid "Retry backup"
 msgstr "إعادة النسخ الاحتياطي"
+
+msgctxt "#30400"
+msgid "Debrid & Trakt - Account Manager"
+msgstr "الديبريد و Trakt - مدير الحسابات"
+
+msgctxt "#30401"
+msgid "Authorize Debrid, Trakt and MDBList once in Account Manager (AM) - AM syncs the account to every supported add-on."
+msgstr "فعّل حسابات الديبريد و Trakt و MDBList مرة واحدة عبر مدير الحسابات (AM)، وهو يتولى مزامنتها مع جميع الإضافات المدعومة."
+
+msgctxt "#30402"
+msgid "Account Manager is not installed"
+msgstr "مدير الحسابات غير مثبّت"
+
+msgctxt "#30403"
+msgid "This section needs Account Manager (script.module.acctmgr). Install it to authorize your services."
+msgstr "يتطلب هذا القسم وجود مدير الحسابات (script.module.acctmgr). ثبّته لتتمكن من تفعيل خدماتك."
+
+msgctxt "#30404"
+msgid "Install Account Manager"
+msgstr "تثبيت مدير الحسابات"
+
+msgctxt "#30405"
+msgid "Authorized"
+msgstr "مُفعّل"
+
+msgctxt "#30406"
+msgid "{0} is authorized in Account Manager: {1}"
+msgstr "{0} مُفعّل في مدير الحسابات: {1}"
+
+msgctxt "#30407"
+msgid "Not authorized"
+msgstr "غير مُفعّل"
+
+msgctxt "#30408"
+msgid "{0} is not authorized yet. Open it to authorize through Account Manager."
+msgstr "لم يُفعَّل {0} بعد. افتحه لتفعيله عبر مدير الحسابات."
+
+msgctxt "#30409"
+msgid "Shows a QR code / device code. After you approve it, AM syncs the account to all supported add-ons."
+msgstr "يعرض رمز QR أو رمز الجهاز، وبعد موافقتك يزامن مدير الحسابات الحساب مع جميع الإضافات المدعومة."
+
+msgctxt "#30410"
+msgid "Account Info"
+msgstr "معلومات الحساب"
+
+msgctxt "#30411"
+msgid "Show account details and expiry date."
+msgstr "عرض تفاصيل الحساب وتاريخ انتهاء الاشتراك."
+
+msgctxt "#30412"
+msgid "Re-sync Add-ons"
+msgstr "إعادة المزامنة مع الإضافات"
+
+msgctxt "#30413"
+msgid "Push the saved account again to every supported add-on (use after installing a new add-on)."
+msgstr "إعادة نقل الحساب المحفوظ إلى جميع الإضافات المدعومة (استخدمه بعد تثبيت إضافة جديدة)."
+
+msgctxt "#30414"
+msgid "View Authorized Add-ons"
+msgstr "عرض الإضافات المُفعّلة"
+
+msgctxt "#30415"
+msgid "List every add-on that currently holds this account."
+msgstr "عرض جميع الإضافات التي تحمل هذا الحساب حالياً."
+
+msgctxt "#30416"
+msgid "Revoke"
+msgstr "إلغاء التفعيل"
+
+msgctxt "#30417"
+msgid "Remove this account from Account Manager and from all add-ons."
+msgstr "حذف هذا الحساب من مدير الحسابات ومن جميع الإضافات."
+
+msgctxt "#30418"
+msgid "Edit Trakt Sync List"
+msgstr "تعديل قائمة مزامنة Trakt"
+
+msgctxt "#30419"
+msgid "Trakt sync re-applies the account to the selected add-ons and then force-closes Kodi."
+msgstr "تعيد مزامنة Trakt تطبيق الحساب على الإضافات المختارة، ثم تُغلق Kodi إغلاقاً إجبارياً."
+
+msgctxt "#30420"
+msgid "Revoke All Services"
+msgstr "إلغاء تفعيل جميع الخدمات"
+
+msgctxt "#30421"
+msgid "Remove every Debrid, Trakt and MDBList account from Account Manager and all add-ons."
+msgstr "حذف جميع حسابات الديبريد و Trakt و MDBList من مدير الحسابات ومن جميع الإضافات."
+
+msgctxt "#30422"
+msgid "Account Manager Settings"
+msgstr "إعدادات مدير الحسابات"
+
+msgctxt "#30423"
+msgid "Open the full Account Manager settings (scrapers, quality, TMDb Helper players, logs)."
+msgstr "فتح إعدادات مدير الحسابات كاملة (المزوّدات، الجودة، مشغلات TMDb Helper، السجلات)."
+
+msgctxt "#30424"
+msgid "Authorize {0}"
+msgstr "تفعيل {0}"
+
+msgctxt "#30425"
+msgid "Choose the add-ons to sync, scan the QR code, then Kodi force-closes to apply Trakt."
+msgstr "اختر الإضافات المراد مزامنتها، ثم امسح رمز QR، وبعدها يُغلق Kodi إغلاقاً إجبارياً لتطبيق Trakt."
+
+msgctxt "#30426"
+msgid "Supported Add-ons"
+msgstr "الإضافات المدعومة"
+
+msgctxt "#30427"
+msgid "Show the add-ons Account Manager can sync for this service."
+msgstr "عرض الإضافات التي يستطيع مدير الحسابات مزامنتها لهذه الخدمة."
+
+msgctxt "#30428"
+msgid "Account Manager installed"
+msgstr "تم تثبيت مدير الحسابات"
+
+msgctxt "#30429"
+msgid "Account Manager could not be installed.[CR]Make sure the Piers repository is installed, then try again."
+msgstr "تعذّر تثبيت مدير الحسابات.[CR]تأكد من تثبيت مستودع Piers ثم أعد المحاولة."
