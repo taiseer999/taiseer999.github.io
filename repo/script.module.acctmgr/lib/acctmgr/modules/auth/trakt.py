@@ -338,7 +338,7 @@ class Trakt(BaseDeviceAuth):
 			private = account_info['user']['private']
 			vip = account_info['user']['vip']
 			if vip:
-				vip = control.tr('%s Years' % str(account_info['user']['vip_years']))
+				vip = '%s Years' % str(account_info['user']['vip_years'])
 
 			total_given_ratings = stats['ratings']['total']
 
@@ -354,7 +354,7 @@ class Trakt(BaseDeviceAuth):
 				movies_watched_minutes = ("{:0>8}".format(str(timedelta(minutes=movie_minutes)))).split(', ')
 
 			movies_watched_minutes = control.lang(40071) % (
-				control.tr(movies_watched_minutes[0]),
+				movies_watched_minutes[0],
 				movies_watched_minutes[1].split(':')[0],
 				movies_watched_minutes[1].split(':')[1]
 			)
@@ -373,7 +373,7 @@ class Trakt(BaseDeviceAuth):
 				episodes_watched_minutes = ("{:0>8}".format(str(timedelta(minutes=episode_minutes)))).split(', ')
 
 			episodes_watched_minutes = control.lang(40071) % (
-				control.tr(episodes_watched_minutes[0]),
+				episodes_watched_minutes[0],
 				episodes_watched_minutes[1].split(':')[0],
 				episodes_watched_minutes[1].split(':')[1]
 			)

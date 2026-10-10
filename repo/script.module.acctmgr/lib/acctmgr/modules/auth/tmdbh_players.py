@@ -49,13 +49,12 @@ class TMDbPlayerDialog(xbmcgui.WindowXMLDialog):
 		super().__init__(*args, **kwargs)
 
 	def onInit(self):
-		self.getControl(self.HEADER_ID).setLabel(control.tr(self.heading))
-		self.getControl(self.DONE_ID).setLabel(control.tr(self.action_label))
-		control.i18n.apply_window_labels(self, ('Cancel',))
+		self.getControl(self.HEADER_ID).setLabel(self.heading)
+		self.getControl(self.DONE_ID).setLabel(self.action_label)
 		list_control = self.getControl(self.LIST_ID)
 		list_control.reset()
 
-		items = [xbmcgui.ListItem(label=control.tr(self.all_label))]
+		items = [xbmcgui.ListItem(label=self.all_label)]
 		items.extend(xbmcgui.ListItem(label=player['label']) for player in self.players)
 
 		for item in items:
@@ -237,10 +236,10 @@ def delete_tmdbh_players():
 	selected_players, all_selected = selection
 
 	if all_selected:
-		if not control.dialog.yesno('AM Lite', 'Uninstall all TMDb Helper players?'):
+		if not xbmcgui.Dialog().yesno('AM Lite', 'Uninstall all TMDb Helper players?'):
 			return False
 	else:
-		if not control.dialog.yesno('AM Lite', 'Uninstall %s selected player(s)?' % len(selected_players)):
+		if not xbmcgui.Dialog().yesno('AM Lite', 'Uninstall %s selected player(s)?' % len(selected_players)):
 			return False
 
 	deleted = 0

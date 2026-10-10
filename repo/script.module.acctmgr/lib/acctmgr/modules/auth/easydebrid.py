@@ -15,7 +15,7 @@ ACCOUNT_INFO = "/user/details"
 class Easydebrid:
 	def auth(self):
 		# ask user for key
-		api = control.dialog.input('Enter EasyDebrid API Key:')
+		api = xbmcgui.Dialog().input('Enter EasyDebrid API Key:')
 		if not api:
 			control.notification(message="EasyDebrid authorization cancelled!", icon=easyd_icon)
 			return False

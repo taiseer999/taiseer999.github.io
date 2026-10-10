@@ -9,7 +9,7 @@ from acctmgr.modules import log_utils
 
 # Variables
 joinPath = os.path.join
-dialog = control.dialog
+dialog = xbmcgui.Dialog()
 trakt_icon = joinPath(control.iconsPath(), 'trakt.png')
 
 
@@ -34,7 +34,6 @@ class TraktSelectDialog(xbmcgui.WindowXMLDialog):
 		self.warned_count = False
 
 	def onInit(self):
-		control.i18n.apply_window_labels(self, ('AM Lite - Choose add-ons to sync with Trakt', 'Done', 'Cancel'))
 		self._refresh_list()
 		self.setFocusId(self.LIST_ID)
 

@@ -96,7 +96,7 @@
                     <height>30</height>
                     <font>font12</font>
                     <textcolor>99FFFFFF</textcolor>
-                    <label>$INFO[Window.Property(am.l.0)]</label>
+                    <label>Scan QR code or visit this URL:</label>
                 </control>
 
                 <!-- URL Highlight Box & Verification URL (ID 102) -->
@@ -126,7 +126,7 @@
                     <height>30</height>
                     <font>font12</font>
                     <textcolor>99FFFFFF</textcolor>
-                    <label>$INFO[Window.Property(am.l.1)]</label>
+                    <label>Enter the authorization code:</label>
                 </control>
 
                 <!-- User Code Card Background & Code Display (ID 103) -->
@@ -178,7 +178,7 @@
                 <top>585</top>
                 <width>230</width>
                 <height>55</height>
-                <label>$INFO[Window.Property(am.l.2)]</label>
+                <label>Cancel</label>
                 <font>font13</font>
                 <textcolor>FFFFFFFF</textcolor>
                 <focusedcolor>FF0F172A</focusedcolor>

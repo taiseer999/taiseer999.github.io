@@ -135,7 +135,7 @@
 			<top>855</top>
 			<width>220</width>
 			<height>60</height>
-			<label>$INFO[Window.Property(am.l.0)]</label>
+			<label>Cancel</label>
 			<font>font13</font>
 			<textcolor>FFFFFFFF</textcolor>
 			<focusedcolor>FF0F172A</focusedcolor>

@@ -426,11 +426,11 @@ msgstr ""
 
 msgctxt "#40109"
 msgid "[COLOR FFA0C12C]-- View Readme --[/COLOR]"
-msgstr ""
+msgstr """
 
 msgctxt "#40110"
 msgid "[COLOR FFA0C12C]-- View Help --[/COLOR]"
-msgstr ""
+msgstr """
 
 msgctxt "#40112"
 msgid "Total Watched = [B]%s[/B]"
@@ -456,179 +456,9 @@ msgctxt "#40118"
 msgid "[COLOR FFA0C12C] -- Help --[/COLOR]"
 msgstr ""
 
-# Added: settings labels / language selector
-msgctxt "#33000"
-msgid "Accounts"
-msgstr ""
 
-msgctxt "#33001"
-msgid "Manage"
-msgstr ""
 
-msgctxt "#33002"
-msgid "Tools"
-msgstr ""
 
-msgctxt "#33003"
-msgid "Startup"
-msgstr ""
 
-msgctxt "#33004"
-msgid "Logs"
-msgstr ""
 
-msgctxt "#33005"
-msgid "Info"
-msgstr ""
 
-msgctxt "#33010"
-msgid "Edit Sync List"
-msgstr ""
-
-msgctxt "#33011"
-msgid "Account ID"
-msgstr ""
-
-msgctxt "#33012"
-msgid "Account Tier"
-msgstr ""
-
-msgctxt "#33013"
-msgid "Offcloud User ID"
-msgstr ""
-
-msgctxt "#33014"
-msgid "Offcloud API Key"
-msgstr ""
-
-msgctxt "#33015"
-msgid "Run Revoke All Now"
-msgstr ""
-
-msgctxt "#33016"
-msgid "View Authorizations"
-msgstr ""
-
-msgctxt "#33017"
-msgid "Sync Add-ons"
-msgstr ""
-
-msgctxt "#33020"
-msgid "Set Max Resolution"
-msgstr ""
-
-msgctxt "#33021"
-msgid "Set 4K Max"
-msgstr ""
-
-msgctxt "#33022"
-msgid "Set 1080P Max"
-msgstr ""
-
-msgctxt "#33023"
-msgid "Set SD-720P Max"
-msgstr ""
-
-msgctxt "#33024"
-msgid "Set Source Select/Autoplay"
-msgstr ""
-
-msgctxt "#33025"
-msgid "Set Source Select"
-msgstr ""
-
-msgctxt "#33026"
-msgid "Set Autoplay"
-msgstr ""
-
-msgctxt "#33027"
-msgid "Manage TMDb Helper Players"
-msgstr ""
-
-msgctxt "#33028"
-msgid "Add Players"
-msgstr ""
-
-msgctxt "#33029"
-msgid "Remove Players"
-msgstr ""
-
-msgctxt "#33030"
-msgid "Update Notifications"
-msgstr ""
-
-msgctxt "#33031"
-msgid "Enable Update Notification"
-msgstr ""
-
-msgctxt "#33032"
-msgid "Trakt API Service"
-msgstr ""
-
-msgctxt "#33033"
-msgid "Sync Authorization(s) with Supported Add-ons"
-msgstr ""
-
-msgctxt "#33040"
-msgid "Error Logging"
-msgstr ""
-
-msgctxt "#33041"
-msgid "Enable Logging"
-msgstr ""
-
-msgctxt "#33042"
-msgid "Enable Reverse Logging - (New entries written to top of log)"
-msgstr ""
-
-msgctxt "#33043"
-msgid "Log Output Location"
-msgstr ""
-
-msgctxt "#33044"
-msgid "Kodi log"
-msgstr ""
-
-msgctxt "#33045"
-msgid "AM Lite log"
-msgstr ""
-
-msgctxt "#33046"
-msgid "View Log"
-msgstr ""
-
-msgctxt "#33047"
-msgid "Clear Log"
-msgstr ""
-
-msgctxt "#33048"
-msgid "Upload Log"
-msgstr ""
-
-msgctxt "#33050"
-msgid "View Supported Add-ons & Scrapers"
-msgstr ""
-
-msgctxt "#33060"
-msgid "Language"
-msgstr ""
-
-msgctxt "#33061"
-msgid "Interface language"
-msgstr ""
-
-msgctxt "#33062"
-msgid "Auto (Kodi language)"
-msgstr ""
-
-msgctxt "#33063"
-msgid "Arabic"
-msgstr ""
-
-msgctxt "#33064"
-msgid "English"
-msgstr ""
-
-msgctxt "#40198"
-msgid "[COLOR FFA0C12C]-- Simkl --[/COLOR]"
-msgstr ""

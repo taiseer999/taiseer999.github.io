@@ -2,8 +2,6 @@
 """XML-backed dialog for device authorization."""
 import xbmcgui
 
-from acctmgr.modules.i18n import tr, apply_window_labels
-
 # Control IDs - must match resources/skins/Default/1080i/acctmgr_device_auth.xml
 CTRL_TITLE = 100
 CTRL_QR = 101
@@ -55,7 +53,6 @@ class DeviceAuthWindow(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         self._ready = True
-        apply_window_labels(self, ('Scan QR code or visit this URL:', 'Enter the authorization code:', 'Cancel'))
         self._apply_details()
         self._apply_progress()
 
@@ -72,7 +69,7 @@ class DeviceAuthWindow(xbmcgui.WindowXMLDialog):
             self.close()
 
     def _apply_details(self):
-        self._safe(CTRL_TITLE, lambda c: c.setLabel(tr(self._title)))
+        self._safe(CTRL_TITLE, lambda c: c.setLabel(self._title))
         self._safe(CTRL_URL, lambda c: c.setLabel(self._verification_url))
         self._safe(CTRL_CODE, lambda c: c.setLabel(self._user_code))
         if self._qr_path:
@@ -82,7 +79,7 @@ class DeviceAuthWindow(xbmcgui.WindowXMLDialog):
             
     def _apply_progress(self):
         self._safe(CTRL_PROGRESS, lambda c: c.setPercent(float(self._percent)))
-        self._safe(CTRL_TIME, lambda c: c.setLabel(tr(self._time_text)))
+        self._safe(CTRL_TIME, lambda c: c.setLabel(self._time_text))
 
     def _safe(self, control_id, fn):
         """Safely invoke control callback, ignoring skin control mismatches."""

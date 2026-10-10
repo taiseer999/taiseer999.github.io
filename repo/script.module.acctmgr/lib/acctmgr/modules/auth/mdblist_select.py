@@ -3,8 +3,6 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 
-from acctmgr.modules.i18n import tr, apply_window_labels
-
 
 ADDON_ID = 'script.module.acctmgr'
 API_KEY_XML = 'acctmgr_mdblist_select.xml'
@@ -28,10 +26,9 @@ class MDBListSelectDialog(xbmcgui.WindowXMLDialog):
 			'Enter on my phone (scan QR code)',
 			'Enter manually (keyboard/remote)',
 		)
-		apply_window_labels(self, ('AM Lite - MDBList API Key', 'Choose how you would like to enter your MDBList API key:', 'Cancel'))
 		control = self.getControl(LIST_ID)
 		control.reset()
-		control.addItems([xbmcgui.ListItem(label=tr(label)) for label in options])
+		control.addItems([xbmcgui.ListItem(label=label) for label in options])
 		self.setFocusId(LIST_ID)
 
 	def onClick(self, control_id):
@@ -62,15 +59,14 @@ class MDBListSetupDialog(xbmcgui.WindowXMLDialog):
 		self.result = False
 
 	def onInit(self):
-		qr_names = '[CR]'.join(t['label'] for t in self.oauth_targets) or tr('None')
-		key_names = '[CR]'.join(t['label'] for t in self.key_targets) or tr('None')
+		qr_names = '[CR]'.join(t['label'] for t in self.oauth_targets) or 'None'
+		key_names = '[CR]'.join(t['label'] for t in self.key_targets) or 'None'
 		qr_count = len(self.oauth_targets)
 		key_count = len(self.key_targets)
-		self.getControl(QR_COUNT_ID).setLabel(tr('Detected {0} add-on(s) requiring QR Code authorization.'.format(qr_count)))
+		self.getControl(QR_COUNT_ID).setLabel('Detected {0} add-on(s) requiring QR Code authorization.'.format(qr_count))
 		self.getControl(QR_LIST_ID).setLabel(qr_names)
-		self.getControl(API_COUNT_ID).setLabel(tr('Detected {0} add-on(s) requiring API Key authorization.'.format(key_count)))
+		self.getControl(API_COUNT_ID).setLabel('Detected {0} add-on(s) requiring API Key authorization.'.format(key_count))
 		self.getControl(API_LIST_ID).setLabel(key_names)
-		apply_window_labels(self, ('AM Lite - MDBList Authorization', 'QR Code Authorization', 'API Key Authorization', 'Continue', 'Cancel'))
 		self.setFocusId(CONTINUE_ID)
 
 	def onClick(self, control_id):

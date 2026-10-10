@@ -89,18 +89,6 @@ def get_supported_offcloud():
 	windows.run()
 	del windows
 
-def get_supported_simkl():
-	acctmgr_path = addonPath()
-	acctmgr_version = addonVersion()
-	changelogfile = joinPath(supported_path, 'supported_simkl.txt')
-	r = open(changelogfile, 'r', encoding='utf-8', errors='ignore')
-	text = r.read()
-	r.close()
-	heading = '[B]AM Lite - Supported Add-ons[/B]'
-	windows = TextViewerXML('textviewer.xml', acctmgr_path, heading=heading, text=text)
-	windows.run()
-	del windows
-
 def get_supported_easynews():
 	acctmgr_path = addonPath()
 	acctmgr_version = addonVersion()

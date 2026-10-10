@@ -11,11 +11,9 @@ from urllib.parse import parse_qs
 import xbmc
 
 from acctmgr.modules import log_utils
-from acctmgr.modules.i18n import tr, is_arabic
 from acctmgr.modules.auth.base_auth import BaseDeviceAuth
 
 MAX_ATTEMPTS = 8
-e_ = html.escape
 MAX_BODY = 4096
 EXPIRES_IN = 300
 
@@ -33,7 +31,7 @@ def local_ip():
 
 
 _PAGE = """<!doctype html>
-<html lang="%(lang)s" dir="%(dir)s"><head><meta charset="utf-8">
+<html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <title>%(title)s</title>
@@ -52,9 +50,7 @@ _PAGE = """<!doctype html>
 
 
 def _render(title, body):
-    rtl = is_arabic()
-    return (_PAGE % {'title': html.escape(tr(title)), 'body': body,
-                     'lang': 'ar' if rtl else 'en', 'dir': 'rtl' if rtl else 'ltr'}).encode('utf-8')
+    return (_PAGE % {'title': html.escape(title), 'body': body}).encode('utf-8')
 
 
 class _Handler(BaseHTTPRequestHandler):
@@ -80,12 +76,12 @@ class _Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         if not self._route_ok():
-            return self._send(404, _render('Not found', '<div class="msg err">%s</div>' % html.escape(tr('Not found'))))
+            return self._send(404, _render('Not found', '<div class="msg err">Not found</div>'))
         self._send(200, self.server.form_page())
 
     def do_POST(self):
         if not self._route_ok():
-            return self._send(404, _render('Not found', '<div class="msg err">%s</div>' % html.escape(tr('Not found'))))
+            return self._send(404, _render('Not found', '<div class="msg err">Not found</div>'))
         try:
             length = int(self.headers.get('Content-Length') or 0)
         except ValueError:
@@ -120,34 +116,33 @@ class _Server(ThreadingHTTPServer):
         e = html.escape
         parts = []
         if error:
-            parts.append('<div class="msg err">%s</div>' % e(tr(error)))
+            parts.append('<div class="msg err">%s</div>' % e(error))
         parts.append(
             '<form method="post" autocomplete="off">'
+            '<label>Code shown on your TV</label>'
+            '<input name="pin" inputmode="numeric" pattern="[0-9]*" maxlength="8" required autofocus>'
             '<label>%s</label>'
-            '<input name="pin" inputmode="numeric" pattern="[0-9]*" maxlength="8" required autofocus dir="ltr">'
-            '<label>%s</label>'
-            '<input name="value" autocapitalize="off" autocorrect="off" spellcheck="false" required dir="ltr">'
-            '<button type="submit">%s</button></form>'
-            % (e(tr('Code shown on your TV')), e(tr(self.field_label)), e(tr('Send to Kodi'))))
+            '<input name="value" autocapitalize="off" autocorrect="off" spellcheck="false" required>'
+            '<button type="submit">Send to Kodi</button></form>' % e(self.field_label))
         if self.help_url:
-            parts.append('<p class="hint">%s <a href="%s" target="_blank" rel="noopener noreferrer" dir="ltr">%s</a></p>'
-                         % (e(tr('Need it?')), e(self.help_url, quote=True), e(self.help_url)))
+            parts.append('<p class="hint">Need it? <a href="%s" target="_blank" rel="noopener noreferrer">%s</a></p>'
+                         % (e(self.help_url, quote=True), e(self.help_url)))
         return _render(self.title, ''.join(parts))
 
     def _fail(self, message):
         self.attempts += 1
         if self.attempts >= MAX_ATTEMPTS:
             self.locked = True
-            return 429, _render(self.title, '<div class="msg err">%s</div>'
-                                % e_(tr('Too many attempts. Please restart the setup on your TV.')))
+            return 429, _render(self.title, '<div class="msg err">Too many attempts. '
+                                            'Please restart the setup on your TV.</div>')
         return 200, self.form_page(message)
 
     def submit(self, pin, value):
         with self._lock:
             if self.result is not None:
-                return 200, _render(self.title, '<div class="msg ok">%s</div>' % e_(tr('Already received. You can close this page.')))
+                return 200, _render(self.title, '<div class="msg ok">Already received. You can close this page.</div>')
             if self.locked:
-                return 429, _render(self.title, '<div class="msg err">%s</div>' % e_(tr('Locked. Restart the setup on your TV.')))
+                return 429, _render(self.title, '<div class="msg err">Locked. Restart the setup on your TV.</div>')
             if not hmac.compare_digest(pin.encode('utf-8'), self.pin.encode('utf-8')):
                 return self._fail('Wrong code. Check the number shown on your TV.')
             if not value:
@@ -161,11 +156,11 @@ class _Server(ThreadingHTTPServer):
 
         with self._lock:
             if self.result is not None:
-                return 200, _render(self.title, '<div class="msg ok">%s</div>' % e_(tr('Already received.')))
+                return 200, _render(self.title, '<div class="msg ok">Already received.</div>')
             if ok:
                 self.result = dict(extra or {}, value=value)
-                return 200, _render(self.title, '<div class="msg ok">%s</div>'
-                                % e_(tr('Saved! Look at your TV - you can close this page.')))
+                return 200, _render(self.title, '<div class="msg ok">Saved! Look at your TV - '
+                                                'you can close this page.</div>')
             return self._fail(message or 'That value was rejected.')
 
 

@@ -216,20 +216,10 @@ class Auth:
                 addon = xbmcaddon.Addon("plugin.video.seren")
                 chk_auth = addon.getSetting("trakt.auth")
                 if refresh_sync(mode, chk_auth, master_token):
-                    with open(var.path_seren, "r") as f:
-                        data = f.read()
-
-                    patched_keys = False
-                    if var.seren_client in data or var.seren_secret in data:
-                        data = data.replace(var.seren_client, var.client_am).replace(var.seren_secret, var.secret_am)
-                        with open(var.path_seren, "w") as f:
-                            f.write(data)
-                        patched_keys = True
-                    elif var.client_am in data and var.secret_am in data:
-                        patched_keys = True
-
+                    patched_keys, key_msg = control.patch_seren_trakt_keys()
                     if not patched_keys:
-                        log_utils.log("Seren Trakt keys NOT patched")
+                        log_utils.log(key_msg, level=log_utils.LOGERROR)
+                        raise RuntimeError(key_msg)
 
                     patched, msg = control.startup_patch(var.path_seren_service)
                     if not patched:

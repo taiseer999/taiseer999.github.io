@@ -239,7 +239,6 @@ redg = xmls + translatePath('plugin.video.gratisred/settings.xml')
 crew = xmls + translatePath('plugin.video.thecrew/settings.xml')
 salts = xmls + translatePath('plugin.video.salts/settings.xml')
 otaku = xmls + translatePath('plugin.video.otaku/settings.xml')
-umb = xmls + translatePath('plugin.video.umbrella/settings.xml')
 easyv = xmls + translatePath('plugin.video.easynewsx/settings.xml')
 tmdbh = xmls + translatePath('plugin.video.themoviedb.helper/settings.xml')
 trakt = xmls + translatePath('script.trakt/settings.xml')
@@ -315,6 +314,10 @@ dradis_secret_obs = [113, 39, 39, 122, 116, 122, 32, 35, 33, 32, 36, 123, 39, 38
 seren_client_obs = [114, 33, 123, 35, 113, 114, 122, 115, 123, 39, 118, 35, 36, 116, 36, 36, 35, 36, 113, 32, 123, 119, 118, 33, 32, 39, 35, 39, 123, 32, 119, 118, 118, 123, 123, 114, 122, 122, 119, 115, 113, 122, 116, 113, 33, 114, 113, 33, 114, 112, 123, 115, 115, 38, 39, 114, 114, 35, 33, 112, 38, 39, 117, 123]
 seren_secret_obs = [32, 36, 114, 112, 118, 115, 117, 36, 112, 117, 32, 119, 115, 118, 33, 39, 39, 116, 35, 122, 38, 115, 113, 119, 36, 112, 38, 38, 33, 112, 116, 115, 35, 115, 119, 39, 39, 33, 36, 32, 116, 39, 38, 116, 112, 122, 123, 33, 113, 116, 112, 113, 123, 122, 112, 116, 38, 33, 38, 38, 115, 122, 118, 112]
 
+# Alternate Seren fork Trakt API credentials
+seren_fork_client_obs = [112, 116, 118, 36, 122, 39, 33, 38, 115, 118, 33, 122, 117, 123, 39, 113, 117, 112, 119, 118, 122, 33, 116, 115, 119, 118, 119, 36, 115, 38, 112, 117, 36, 36, 119, 116, 36, 33, 33, 36, 33, 114, 118, 113, 33, 118, 36, 35, 112, 35, 118, 123, 113, 118, 116, 38, 36, 118, 32, 116, 39, 113, 116, 36]
+seren_fork_secret_obs = [118, 113, 119, 123, 115, 117, 32, 117, 118, 122, 38, 114, 116, 119, 39, 112, 116, 117, 122, 116, 36, 119, 36, 123, 35, 36, 112, 114, 38, 115, 112, 117, 123, 112, 116, 123, 39, 32, 112, 119, 35, 35, 115, 116, 38, 119, 115, 36, 118, 35, 36, 115, 118, 39, 39, 113, 115, 115, 38, 114, 112, 118, 117, 33]
+
 luc_client_obs = [32, 118, 112, 113, 118, 35, 119, 117, 114, 39, 112, 35, 36, 122, 122, 35, 114, 118, 112, 33, 122, 117, 113, 33, 116, 112, 123, 36, 33, 39, 33, 119, 39, 117, 117, 39, 118, 39, 122, 32, 119, 38, 123, 115, 117, 119, 117, 39, 122, 122, 114, 35, 119, 115, 36, 116, 116, 122, 122, 36, 38, 115, 118, 38]
 luc_secret_obs = [119, 115, 39, 118, 114, 39, 32, 32, 117, 35, 39, 39, 33, 112, 118, 33, 32, 119, 38, 122, 117, 113, 114, 122, 39, 113, 114, 113, 117, 112, 123, 112, 116, 118, 39, 36, 115, 123, 112, 32, 113, 116, 39, 115, 122, 122, 116, 112, 122, 112, 32, 39, 38, 38, 36, 122, 35, 114, 32, 113, 36, 116, 33, 115]
 
@@ -362,6 +365,10 @@ dradis_secret = obfuscation.deobfuscate(dradis_secret_obs)
 
 seren_client = obfuscation.deobfuscate(seren_client_obs)
 seren_secret = obfuscation.deobfuscate(seren_secret_obs)
+
+# Alternate Seren fork Trakt API credentials
+seren_fork_client = obfuscation.deobfuscate(seren_fork_client_obs)
+seren_fork_secret = obfuscation.deobfuscate(seren_fork_secret_obs)
 
 luc_client = obfuscation.deobfuscate(luc_client_obs)
 luc_secret = obfuscation.deobfuscate(luc_secret_obs)

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from acctmgr.windows.base import BaseDialog
-from acctmgr.modules.i18n import tr
 
 class TextViewerXML(BaseDialog):
 	def __init__(self, *args, **kwargs):
@@ -23,4 +22,4 @@ class TextViewerXML(BaseDialog):
 
 	def set_properties(self):
 		self.setProperty('acctmgr.text', self.text)
-		self.setProperty('acctmgr.heading', tr(self.heading))
+		self.setProperty('acctmgr.heading', self.heading)

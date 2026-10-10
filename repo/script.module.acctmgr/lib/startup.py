@@ -275,13 +275,6 @@ def SyncManager():  # Auto-sync credentials with recently installed/supported ad
 	except Exception:
 		log_utils.error("Startup OffCloud Startup Sync FAILED")
 
-	try:
-		if control.setting('sync.sk.service')=='true' and control.setting('simkl.token'):
-			from acctmgr.modules.sync import simkl_sync
-			simkl_sync.Auth().simkl_auth()
-	except Exception:
-		log_utils.error("Startup Simkl Startup Sync FAILED")
-
 	try:	
 		if control.setting('sync.en.service')=='true' and en_master_user and en_master_pass:
 			from acctmgr.modules.sync import easynews_sync

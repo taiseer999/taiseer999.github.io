@@ -43,7 +43,7 @@
 			<textcolor>FFFFFFFF</textcolor>
 			<align>right</align>
 			<aligny>center</aligny>
-			<label>$INFO[Window.Property(am.l.0)]</label>
+			<label>AM Lite - Choose add-ons to sync with Trakt</label>
 		</control>
 
 		<control type="list" id="100">
@@ -116,7 +116,7 @@
 			<top>855</top>
 			<width>220</width>
 			<height>60</height>
-			<label>$INFO[Window.Property(am.l.1)]</label>
+			<label>Done</label>
 			<font>font13</font>
 			<textcolor>FFFFFFFF</textcolor>
 			<focusedcolor>FF0F172A</focusedcolor>
@@ -135,7 +135,7 @@
 			<top>855</top>
 			<width>220</width>
 			<height>60</height>
-			<label>$INFO[Window.Property(am.l.2)]</label>
+			<label>Cancel</label>
 			<font>font13</font>
 			<textcolor>FFFFFFFF</textcolor>
 			<focusedcolor>FF0F172A</focusedcolor>

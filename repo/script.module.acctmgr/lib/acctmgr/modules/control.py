@@ -11,8 +11,6 @@ import datetime
 import textwrap
 from acctmgr.modules import var
 from acctmgr.modules import log_utils
-from acctmgr.modules import i18n
-from acctmgr.modules.i18n import tr
 
 #Variables
 condVisibility = xbmc.getCondVisibility
@@ -21,9 +19,9 @@ monitor = xbmc.Monitor()
 translatePath = xbmcvfs.translatePath
 joinPath = os.path.join
 date = str(datetime.date.today())
-dialog = i18n.Dialog()
+dialog = xbmcgui.Dialog()
 window = xbmcgui.Window(10000)
-progressDialog = i18n.DialogProgress()
+progressDialog = xbmcgui.DialogProgress()
 existsPath = xbmcvfs.exists
 openFile = xbmcvfs.File
 makeFile = xbmcvfs.mkdir
@@ -486,7 +484,7 @@ def remake_pov_trakt_cache():
 
 # INSTALL TMDB HELPER PLAYERS
 def install_tmdbh_players():
-	dialog = i18n.Dialog()
+	dialog = xbmcgui.Dialog()
 	amgr_icon = joinPath(iconsPath(), 'acctmgr.png')
 	src = xbmcvfs.translatePath('special://home/addons/script.module.acctmgr/resources/players/')
 	players_path = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.themoviedb.helper/players/')
@@ -573,7 +571,7 @@ def install_tmdbh_players():
 
 # DELETE TMDB HELPER PLAYERS
 def delete_tmdbh_players():
-	dialog = i18n.Dialog()
+	dialog = xbmcgui.Dialog()
 	amgr_icon = joinPath(iconsPath(), 'acctmgr.png')
 	players_path = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.themoviedb.helper/players/')
 	reconfigured_path = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.themoviedb.helper/reconfigured_players/')
@@ -715,13 +713,69 @@ def apply_default_trakt_api_keys_db(): # Restore default API keys for settings.d
 
     return results
 
+# Seren: detect either known key pair; restore by installed add-on version.
+def patch_seren_trakt_keys(restore=False):
+	try:
+		_seren = xbmcaddon.Addon('plugin.video.seren')
+		version = _seren.getAddonInfo('version')
+		# Which original key pair to put back on restore: the one recorded when
+		# the keys were patched; otherwise official Seren (3.0.1 or provider
+		# Nixgates, e.g. 3.0.62) vs the Diggz fork.
+		_origin_file = os.path.join(var.acctmgr_datapath, 'seren_keys_origin.txt')
+		origin = ''
+		try:
+			with open(_origin_file, 'r', encoding='utf-8') as f:
+				origin = f.read().strip()
+		except Exception:
+			pass
+		if origin not in ('official', 'fork'):
+			official = version == '3.0.1' or 'nixgates' in (_seren.getAddonInfo('author') or '').lower()
+			origin = 'official' if official else 'fork'
+		client, secret = ((var.seren_client, var.seren_secret) if origin == 'official'
+			else (var.seren_fork_client, var.seren_fork_secret))
+		with open(var.path_seren, 'r', encoding='utf-8') as f:
+			data = f.read()
+		if restore:
+			if var.client_am not in data and var.secret_am not in data:
+				return True, 'Seren keys already restored'
+			if var.client_am not in data or var.secret_am not in data:
+				return False, 'Seren AM Lite key pair incomplete'
+			new_data = data.replace(var.client_am, client).replace(var.secret_am, secret)
+		else:
+			if var.client_am in data and var.secret_am in data:
+				return True, 'Seren already patched'
+			if var.client_am in data or var.secret_am in data:
+				return False, 'Seren AM Lite key pair incomplete'
+			pairs = ((var.seren_client, var.seren_secret), (var.seren_fork_client, var.seren_fork_secret))
+			matches = [(c, s) for c, s in pairs if c in data and s in data]
+			if len(matches) != 1:
+				return False, 'Seren key pair unknown or ambiguous'
+			c, s = matches[0]
+			try:
+				os.makedirs(var.acctmgr_datapath, exist_ok=True)
+				with open(_origin_file, 'w', encoding='utf-8') as f:
+					f.write('official' if c == var.seren_client else 'fork')
+			except Exception:
+				pass
+			new_data = data.replace(c, var.client_am).replace(s, var.secret_am)
+		if new_data != data:
+			with open(var.path_seren, 'w', encoding='utf-8') as f:
+				f.write(new_data)
+		return True, 'Seren Trakt keys ' + ('restored' if restore else 'patched')
+	except Exception as e:
+		return False, 'Seren key operation failed: ' + str(e)
+
 def apply_default_trakt_api_keys(): # Restore default API keys for python files and settings.xml
     results = []
+
+    if xbmcvfs.exists(var.chk_seren):
+        ok, msg = patch_seren_trakt_keys(restore=True)
+        results.append(('Seren', ok, msg))
+        xbmc.log('AM Lite: ' + msg, xbmc.LOGINFO if ok else xbmc.LOGERROR)
 
     # Restore default keys in python files
     file_targets = (
         (var.chk_umb,           var.path_umb,     var.umb_client,            var.umb_secret,            "Umbrella",     var.client_am,            var.secret_am),
-        (var.chk_seren,         var.path_seren,   var.seren_client,          var.seren_secret,          "Seren",        var.client_am,            var.secret_am),
         (var.chk_shadow,        var.path_shadow,  var.shadow_client,         var.shadow_secret,         "Shadow",       var.client_am,            var.secret_am),
         (var.chk_ghost,         var.path_ghost,   var.ghost_client,          var.ghost_secret,          "Ghost",        var.client_am,            var.secret_am),
         (var.chk_chains,        var.path_chains,  var.thechains_client,      var.thechains_secret,      "The Chains",   var.client_am,            var.secret_am),

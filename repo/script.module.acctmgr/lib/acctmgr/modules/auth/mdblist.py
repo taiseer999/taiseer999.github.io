@@ -268,7 +268,7 @@ class MDBListAuth(BaseDeviceAuth):
         return False
 
     def _prompt_keyboard(self):
-        keyboard = xbmc.Keyboard("", control.tr("MDBList API Key (tip: type with the Kodi phone remote app)"))
+        keyboard = xbmc.Keyboard("", "MDBList API Key (tip: type with the Kodi phone remote app)")
         keyboard.doModal()
         if not keyboard.isConfirmed():
             return None

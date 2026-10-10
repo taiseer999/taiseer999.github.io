@@ -68,16 +68,9 @@ def check_api():
     if "Seren" in current and exists(var.chk_seren):
         try:
             patched, msg = control.startup_patch(var.path_seren_service)
-            with open(var.path_seren,'r') as f:
-                data = f.read()
-            new_data = None
-            if var.client_am in data:
-                pass
-            else:
-                new_data = data.replace(var.seren_client, var.client_am).replace(var.seren_secret, var.secret_am)
-            if new_data is not None:
-                with open(var.path_seren, 'w') as f:
-                    f.write(new_data)
+            ok, msg = control.patch_seren_trakt_keys()
+            if not ok:
+                log_utils.log(msg, level=log_utils.LOGERROR)
         except Exception as e:
             log_utils.error(f"Seren API Failed: {e}")
 
