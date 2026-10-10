@@ -1,3 +1,5 @@
+1.2.0c - Added Dex Hub (plugin.video.dexhub) support: Trakt (sync list, token + AM API keys, revoke) and MDBList API key.
+
 1.2.0b - Seren: "Restore default API keys" now puts back the key pair that was actually replaced (official Seren e.g. 3.0.62 no longer receives the Diggz fork keys).
 
 1.2.0a - Fix Seren Trakt authorization to support both official and Diggz forked version.

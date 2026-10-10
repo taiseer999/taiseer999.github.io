@@ -210,6 +210,7 @@ elif action == 'traktRevoke':                                                   
                                 xbmc.sleep(200)
                                 control.remake_red_settings()                                           # Remake settings
                                 xbmc.sleep(1000)
+                control.revoke_dexhub_trakt()                                                           # Revoke Dex Hub (JSON token + AM API keys)
                 control.unpatch_all_services()                                                          # Unpatch services
                 control.apply_default_trakt_api_keys()                                                  # Apply default API Keys to all add-ons
                 control.delete_synclist()                                                               # Delete Trakt Sync List
@@ -882,6 +883,7 @@ elif action == 'allRevoke':
                         revoke_all_for_addon(settings_db, addon_name)
                         xbmc.sleep(200)
 
+        control.revoke_dexhub_trakt() # Dex Hub keeps its Trakt token in JSON
         if control.setting('trakt.token'):
                 control.unpatch_all_services()
                 control.apply_default_trakt_api_keys() # Apply default API keys to all add-ons

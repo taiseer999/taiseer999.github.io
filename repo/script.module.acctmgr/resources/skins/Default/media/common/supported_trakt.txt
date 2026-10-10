@@ -19,3 +19,4 @@
 18. Gratis Red
 19. TMDb Helper
 20. Trakt Add-on
+21. Dex Hub

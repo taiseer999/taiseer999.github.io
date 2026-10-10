@@ -1317,3 +1317,40 @@ def unpatch_all_services():
             results.append((name, path, False, str(e)))
 
     return results
+
+
+# DEX HUB (plugin.video.dexhub) - Trakt token stored as JSON in addon_data
+def dexhub_trakt_token():
+    try:
+        with open(var.path_dexhub_trakt_token, "r", encoding="utf-8") as f:
+            return (json.load(f) or {}).get("access_token", "") or ""
+    except Exception:
+        return ""
+
+def write_dexhub_trakt_token(data):
+    path = var.path_dexhub_trakt_token
+    folder = os.path.dirname(path)
+    if not os.path.isdir(folder):
+        os.makedirs(folder, exist_ok=True)
+    tmp = path + ".tmp.am"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2)
+    os.replace(tmp, path)
+
+def revoke_dexhub_trakt():
+    try:
+        if not xbmcvfs.exists(var.chk_dexhub):
+            return
+        for p in (var.path_dexhub_trakt_token, var.path_dexhub_trakt_token + ".bak"):
+            try:
+                if os.path.exists(p):
+                    os.remove(p)
+            except Exception as e:
+                xbmc.log(f"AM Lite: Dex Hub token delete failed [{p}]: {e}", xbmc.LOGINFO)
+        addon = xbmcaddon.Addon("plugin.video.dexhub")
+        if addon.getSetting("trakt_client_id") == str(var.client_am):
+            addon.setSetting("trakt_client_id", "")
+            addon.setSetting("trakt_client_secret", "")
+        xbmc.log("AM Lite: Dex Hub Trakt revoked", xbmc.LOGINFO)
+    except Exception as e:
+        xbmc.log(f"AM Lite: Dex Hub Trakt revoke failed: {e}", xbmc.LOGINFO)

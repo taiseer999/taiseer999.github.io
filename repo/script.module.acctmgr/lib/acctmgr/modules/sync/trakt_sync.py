@@ -571,3 +571,35 @@ class Auth:
                     addon.setSetting("authorization", trakt_data)
         except Exception as e:
             log_utils.error(f"Trakt Addon Trakt Failed: {e}")
+
+        # ========================= Dex Hub =========================
+        # Token lives in addon_data/plugin.video.dexhub/trakt_token.json and
+        # the API keys in settings.xml (trakt_client_id / trakt_client_secret).
+        # No refresh_token is written: Dex Hub only refreshes when one is
+        # present, so AM stays the single refresher and re-syncs on startup.
+        try:
+            if "Dex Hub" in current and exists(var.chk_dexhub):
+                chk_auth = control.dexhub_trakt_token()
+                if refresh_sync(mode, chk_auth, master_token) and your_token:
+                    addon = xbmcaddon.Addon("plugin.video.dexhub")
+                    now = int(time.time())
+                    try:
+                        expires_in = max(int(float(your_expires or 0)) - now, 3600)
+                    except Exception:
+                        expires_in = 86400
+                    control.write_dexhub_trakt_token({
+                        "access_token": your_token,
+                        "token_type": "bearer",
+                        "expires_in": expires_in,
+                        "scope": "public",
+                        "created_at": now,
+                        "acctmgr": True,
+                    })
+                    for k, v in {
+                        "trakt_client_id": var.client_am,
+                        "trakt_client_secret": var.secret_am,
+                        "enable_trakt": "true",
+                    }.items():
+                        addon.setSetting(k, v)
+        except Exception as e:
+            log_utils.error(f"Dex Hub Trakt Failed: {e}")

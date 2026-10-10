@@ -8,3 +8,4 @@
 7. TMDb Helper
 8. FENtastic Skin
 9. Nimbus Skin
+10. Dex Hub

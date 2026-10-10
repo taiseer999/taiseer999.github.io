@@ -44,6 +44,7 @@ ORDER = ['fenlt',
          'easyv',
          'rurl',
          'tmdbhelper',
+         'dexhub',
          'trakt',
          'premx',   # Premiumize Only
          'realx',   # Real-Debrid Only
@@ -594,6 +595,23 @@ ADDONS = {
     },
 
     #TMDb HELPER
+    #DEX HUB - Trakt token lives in trakt_token.json, API keys + MDBList in settings.xml
+    'dexhub': {
+        'name'        : 'Dex Hub',
+        'plugin'      : 'plugin.video.dexhub',
+        'path'        : os.path.join(CONFIG.ADDONS, 'plugin.video.dexhub'),
+        'icon'        : os.path.join(CONFIG.ADDONS, 'plugin.video.dexhub', 'resources', 'media', 'icon.png'),
+        'fanart'      : os.path.join(CONFIG.ADDONS, 'plugin.video.dexhub', 'resources', 'media', 'fanart.jpg'),
+        'settings'    : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.dexhub', 'settings.xml'),
+        'tk_json'     : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.dexhub', 'trakt_token.json'),
+        #TK ('trakt_token' is filled from tk_json below)
+        'default_tk'  : 'trakt_token',
+        'data_tk'     : ['trakt_client_id', 'trakt_client_secret'],
+        #MDB
+        'default_mdb' : 'mdblist_api_key',
+        'data_mdb'    : ['mdblist_api_key'],
+    },
+
     'tmdbhelper': {
         'name'        : 'TMDb Helper',
         'plugin'      : 'plugin.video.themoviedb.helper',
@@ -865,6 +883,14 @@ for addon_id, info in ADDONS.items():
         with open(settings_path) as f:
             kv = json.load(f)
 
+    # Add-ons that keep the Trakt token in a separate JSON file (Dex Hub)
+    if info.get('tk_json'):
+        try:
+            with open(info['tk_json'], encoding='utf-8') as f:
+                kv[info.get('default_tk')] = (json.load(f) or {}).get('access_token', '') or ''
+        except Exception:
+            kv[info.get('default_tk')] = ''
+
     # Only store default key per service
     for service, dict_ref in SERVICE_MAP.items():
         default_key = info.get(f'default_{service}')
@@ -974,6 +1000,15 @@ def wipe_addons(do, who, service):
     if not settings:
         xbmc.log(f"{amgr}: wipe_addons skipped [{who}] - no settings path", xbmc.LOGINFO)
         return
+
+    # Trakt token kept in its own JSON file (Dex Hub): delete it and its .bak
+    if service == 'tk' and info.get('tk_json'):
+        for p in (info['tk_json'], info['tk_json'] + '.bak'):
+            try:
+                if os.path.exists(p):
+                    os.remove(p)
+            except Exception as e:
+                xbmc.log(f"{amgr}: wipe_addons token delete failed [{who}] - {e}", xbmc.LOGERROR)
 
     try:
         if settings.endswith('.json'):

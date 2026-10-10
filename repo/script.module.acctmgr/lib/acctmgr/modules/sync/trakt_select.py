@@ -152,6 +152,7 @@ class tk_list():
 		# Others
 		add_if(var.chk_tmdbh,       'TMDb Helper')
 		add_if(var.chk_trakt,       'Trakt Addon')
+		add_if(var.chk_dexhub,      'Dex Hub')
 
 		if not menu:
 			control.notification('AM Lite', 'No supported add-ons found!', icon=trakt_icon)

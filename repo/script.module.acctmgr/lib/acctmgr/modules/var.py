@@ -128,6 +128,7 @@ chk_crew = addons + translatePath('plugin.video.thecrew/')#----------------The C
 chk_salts = addons + translatePath('plugin.video.salts/')#-----------------SALTS
 chk_otaku = addons + translatePath('plugin.video.otaku/')#-----------------Otaku
 chk_tmdbh = addons + translatePath('plugin.video.themoviedb.helper/')#-----TMDb Helper
+chk_dexhub = addons + translatePath('plugin.video.dexhub/')#---------------Dex Hub
 chk_easyv = addons + translatePath('plugin.video.easynewsx/')#-------------Easynews Video
 chk_trakt = addons + translatePath('script.trakt/')#-----------------------Trakt
 # Debrid Only
@@ -169,6 +170,7 @@ crew_ud = addon_data + translatePath('plugin.video.thecrew/')
 salts_ud = addon_data + translatePath('plugin.video.salts/')
 otaku_ud = addon_data + translatePath('plugin.video.otaku/')
 tmdbh_ud = addon_data + translatePath('plugin.video.themoviedb.helper/')
+dexhub_ud = addon_data + translatePath('plugin.video.dexhub/')
 easyv_ud = addon_data + translatePath('plugin.video.easynewsx/')
 trakt_ud = addon_data + translatePath('script.trakt/')
 # Debrid Only
@@ -211,6 +213,9 @@ chkset_crew = addon_data + translatePath('plugin.video.thecrew/settings.xml')
 chkset_salts = addon_data + translatePath('plugin.video.salts/settings.xml')
 chkset_otaku = addon_data + translatePath('plugin.video.otaku/settings.xml')
 chkset_tmdbh = addon_data + translatePath('plugin.video.themoviedb.helper/settings.xml')
+chkset_dexhub = addon_data + translatePath('plugin.video.dexhub/settings.xml')
+# Dex Hub keeps its Trakt token in a JSON file (not settings.xml)
+path_dexhub_trakt_token = addon_data + translatePath('plugin.video.dexhub/trakt_token.json')
 chkset_easyv = addon_data + translatePath('plugin.video.easynewsx/settings.xml')
 chkset_trakt = addon_data + translatePath('script.trakt/settings.xml')
 # Debrid Only

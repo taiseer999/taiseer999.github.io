@@ -45,6 +45,7 @@ def get_targets():
 		("plugin.video.luc_kodi",          "luc_kodi",  var.chk_luc,   var.chkset_luc,   "mdblist.token",  {"refresh_key": "mdblist.refresh", "user_key": "mdblist.username"}),
 		("plugin.video.gratisred",         "Gratis Red", var.chk_redg,  var.chkset_redg,  "mdblist.token",  {"refresh_key": "mdblist.refresh", "user_key": "mdblist.user", "extra": {"indicators.alt.name": "MDBList", "indicators.alt": "3", "bookmarks.source": "3"}}),
 		("plugin.video.themoviedb.helper", "TMDbH",     var.chk_tmdbh,  var.chkset_tmdbh, "mdblist_apikey", {}),
+		("plugin.video.dexhub",            "Dex Hub",   var.chk_dexhub, var.chkset_dexhub, "mdblist_api_key", {}),
 	]
 
 	skins = [
