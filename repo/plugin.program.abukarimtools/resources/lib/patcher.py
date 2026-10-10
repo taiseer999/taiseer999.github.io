@@ -1924,6 +1924,8 @@ _SKIN_RELOAD_MARKER = os.path.join(
     ADDON_DATA, 'plugin.program.abukarimtools', 'skin_reload.pending')
 _FIRST_RUN_LOCK_FILE = os.path.join(
     ADDON_DATA, 'plugin.program.abukarimtools', 'first_run.lock')
+_SV_DEFER_PROP = 'abk.skin_reload.sv_wait_since'   # Home window: shared by service + plugin
+_SV_MAX_DEFER  = 300                                # s: never wait longer than this
 
 
 def _is_active_skin(addon_id):
@@ -1966,7 +1968,37 @@ def reload_skin_if_pending():
                                   'Window.IsActive(busydialog) | '
                                   'Window.IsActive(busydialognocancel)'):
             return False
+        # 3.2.47: never reload under a running script.skinvariables build -
+        # its own ReloadSkin() comes at the end; ours would cut it short.
+        from resources.lib import skin_rebuild
+        home = xbmcgui.Window(10000)
+        reason = skin_rebuild.busy()
+        if reason:
+            since = home.getProperty(_SV_DEFER_PROP)
+            if not since:
+                home.setProperty(_SV_DEFER_PROP, str(time.time()))
+                _log('Skin reload waits for script.skinvariables (%s).' % reason)
+                return False
+            if time.time() - float(since) < _SV_MAX_DEFER:
+                return False
+            _log('script.skinvariables still busy after %ds (%s) - reloading anyway.'
+                 % (_SV_MAX_DEFER, reason), xbmc.LOGWARNING)
+        waited = home.getProperty(_SV_DEFER_PROP) and not reason
+        home.clearProperty(_SV_DEFER_PROP)
+        # skinvariables wrote its files AFTER our patch => it has just reloaded
+        # the skin itself, patched files included. A second reload adds nothing.
+        try:
+            marked = os.path.getmtime(_SKIN_RELOAD_MARKER)
+        except OSError:
+            marked = 0
+        if marked and skin_rebuild.last_generated_write() > marked:
+            os.remove(_SKIN_RELOAD_MARKER)
+            _log('script.skinvariables already reloaded the skin after the patch '
+                 '- no extra reload.')
+            return False
         os.remove(_SKIN_RELOAD_MARKER)
+        if waited:
+            _log('script.skinvariables finished - reloading skin now.')
         _log('Patched files in the active skin changed - reloading skin.')
         xbmc.executebuiltin('ReloadSkin()')
         return True

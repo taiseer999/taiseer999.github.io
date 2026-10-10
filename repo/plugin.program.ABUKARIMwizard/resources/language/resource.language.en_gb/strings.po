@@ -124,7 +124,7 @@ msgid "Advanced Settings K20"
 msgstr ""
 
 msgctxt "#30026"
-msgid "Debrid & Trakt (Account Manager)"
+msgid "Accounts - Account Authorization"
 msgstr ""
 
 msgctxt "#30027"
@@ -1188,7 +1188,7 @@ msgid "Retry backup"
 msgstr ""
 
 msgctxt "#30400"
-msgid "Debrid & Trakt - Account Manager"
+msgid "Accounts - Account Authorization"
 msgstr ""
 
 msgctxt "#30401"

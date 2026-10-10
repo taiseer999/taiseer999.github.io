@@ -131,8 +131,8 @@ msgid "Advanced Settings K20"
 msgstr "الإعدادات المتقدمة K20"
 
 msgctxt "#30026"
-msgid "Debrid & Trakt (Account Manager)"
-msgstr "الديبريد و Trakt (مدير الحسابات)"
+msgid "Accounts - Account Authorization"
+msgstr "الحسابات - مصادقة الحسابات"
 
 msgctxt "#30027"
 msgid "Authorize Services"
@@ -1218,8 +1218,8 @@ msgid "Retry backup"
 msgstr "إعادة النسخ الاحتياطي"
 
 msgctxt "#30400"
-msgid "Debrid & Trakt - Account Manager"
-msgstr "الديبريد و Trakt - مدير الحسابات"
+msgid "Accounts - Account Authorization"
+msgstr "الحسابات - مصادقة الحسابات"
 
 msgctxt "#30401"
 msgid "Authorize Debrid, Trakt, Simkl and MDBList once in Account Manager (AM) - AM syncs the account to every supported add-on."

@@ -1,3 +1,13 @@
+v3.2.47
+- Patcher: the automatic ReloadSkin() now waits for script.skinvariables.
+  While a skinvariables build is running (a build we started < 30 s ago, its
+  progress window, or generated script-skinvariables-*.xml files written in
+  the last 10 s) the reload is held; the watchdog retries every 15 s.
+  If skinvariables wrote its files after the patch, it already reloaded the
+  skin itself (patched files included) - no second reload. Cap: 5 minutes,
+  then the reload goes ahead (still never during playback/modal dialogs).
+- skin_rebuild.force() records when it starts a build (skinvariables_build.started).
+
 v3.2.45
 - Widgets Layout renamed ترتيب الودجات; all its Arabic texts (window, notes,
   hints, progress and messages, strings 30630-30648) rewritten in Modern

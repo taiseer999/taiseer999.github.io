@@ -29,7 +29,7 @@ try:
 except (IndexError, ValueError):
     HANDLE = -1
 
-DEBRID_ICON = os.path.join(addon_path, 'resources', 'media', 'icons', 'debrid.png')
+DEBRID_ICON = os.path.join(addon_path, 'resources', 'media', 'icons', 'accounts.png')
 
 # key -> display name, AM action prefix, settings that prove authorization
 # (first non-empty one is shown as the account name), has "Acct" action,

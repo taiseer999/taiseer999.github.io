@@ -78,12 +78,79 @@ def _mark_settings_file(skin_id, stamp):
     return True
 
 
+# ---------------------------------------------------------------------------
+# skinvariables activity (3.2.47) - lets the patcher hold its ReloadSkin() until
+# a skinvariables build has finished. skinvariables sets no "busy" property; the
+# only evidence is: a build we started, its progress window, and the
+# script-skinvariables-*.xml files it writes into the skin right before it
+# calls ReloadSkin() itself.
+# ---------------------------------------------------------------------------
+BUILD_MARKER = os.path.join(ADDON_DATA, 'plugin.program.abukarimtools',
+                            'skinvariables_build.started')
+SV_START_GRACE = 30     # s: a build we started counts as running until it writes
+SV_QUIET       = 10     # s: generated files must be still this long = finished
+
+
+def _note_build_started():
+    try:
+        os.makedirs(os.path.dirname(BUILD_MARKER), exist_ok=True)
+        with open(BUILD_MARKER, 'w') as f:
+            f.write(str(time.time()))
+    except Exception as e:
+        _log('could not note build start: %s' % e, xbmc.LOGWARNING)
+
+
+def last_generated_write():
+    """mtime of the newest script-skinvariables-*.xml in the active skin (0 if none)."""
+    newest = 0.0
+    try:
+        root = xbmcvfs.translatePath('special://skin/')
+        for d in os.listdir(root):
+            full = os.path.join(root, d)
+            if not os.path.isdir(full):
+                continue
+            for f in os.listdir(full):
+                if f.startswith('script-skinvariables') and f.endswith('.xml'):
+                    try:
+                        newest = max(newest, os.path.getmtime(os.path.join(full, f)))
+                    except OSError:
+                        pass
+    except Exception:
+        pass
+    return newest
+
+
+def busy():
+    """Return a reason string while skinvariables is (probably) still building,
+    else ''. Never raises."""
+    try:
+        now = time.time()
+        last = last_generated_write()
+        if last and now - last < SV_QUIET:
+            return 'skin files written %ds ago' % int(now - last)
+        if xbmc.getCondVisibility('Window.IsActive(progressdialog) | '
+                                  'Window.IsActive(extendedprogressdialog)'):
+            return 'progress window open'
+        if os.path.exists(BUILD_MARKER):
+            started = os.path.getmtime(BUILD_MARKER)
+            if last >= started:
+                os.remove(BUILD_MARKER)          # the build we started finished
+            elif now - started < SV_START_GRACE:
+                return 'build started %ds ago' % int(now - started)
+            else:
+                os.remove(BUILD_MARKER)          # nothing to rebuild (hash equal)
+    except Exception as e:
+        _log('busy check failed: %s' % e, xbmc.LOGWARNING)
+    return ''
+
+
 def force(skin_id):
     """Rebuild skin_id's skinvariables menus now (active) or on next load."""
     stamp = _stamp()
     if skin_id == xbmc.getSkinDir():
         if not _templates_exist(skin_id):
             return False
+        _note_build_started()
         xbmc.executebuiltin('Skin.SetString(%s,%s)' % (STAMP_ID, stamp))
         xbmc.executebuiltin('RunScript(script.skinvariables,run_executebuiltin='
                             'special://skin/shortcuts/skinvariables-build-templates.json,'

@@ -12,7 +12,7 @@ from .addonvar import addon_name, addon_version
 _ICON_BY_MODE = {
     '300': 'support',
     '1': 'builds', '32': 'update_alert', '33': 'patcher', '35': 'patcher', '5': 'maintenance',
-    '10': 'debrid', '101': 'changelog', '100': 'bell', '30': 'video', '9': 'hw_tuning',
+    '10': 'accounts', '101': 'changelog', '100': 'bell', '30': 'video', '9': 'hw_tuning',
     '6': 'binary_install', '7': 'icons_toggle', '4': 'fresh', '8': 'advanced', '29': 'advanced',
     '31': 'advanced', '11': 'menu_reconcile', '12': 'backup', '19': 'cat_profiles',
     '18': 'power', '245': 'power', '28': 'speedtest', '26': 'log_share',
