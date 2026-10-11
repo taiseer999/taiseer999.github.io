@@ -1,3 +1,15 @@
+v3.2.55
+- FIX: Kodi still froze at random when TMDbHelper started a Fenlight film
+  (GUI thread and Fenlight's thread deadlocked while Fenlight was starting,
+  before its sources window). The cause is the plugin-inside-plugin resolve
+  (TMDbHelper resolving to a plugin://plugin.video.fenlight/ URL). The
+  pinned direct.fenlight.select.json now uses
+  executebuiltin://RunPlugin("plugin://plugin.video.fenlight/..."): TMDbHelper
+  closes its handle with its dummy.mp4, then Fenlight runs as a normal plugin
+  exactly like opening it directly. No pending resolve, so no popup at stop.
+- The Fenlight resolve handoff stays as a guard for any other caller that
+  resolves Fenlight with a live handle.
+
 v3.2.54
 - FIX (3.2.53): the Fenlight resolve handoff never ran. It kept its "already
   resolved" set on the FenLightPlayer class, and Kodi's xbmc.Player

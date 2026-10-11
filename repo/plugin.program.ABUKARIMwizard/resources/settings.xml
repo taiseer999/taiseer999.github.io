@@ -12,6 +12,7 @@
 		<setting id="firstrunNotify" type="bool" label="First Run" visible="false"/>
 		<setting id="notifyversion" type="text" label="Notify Version: " visible="false" default="0"/>
 		<setting id="notifiedupdate" type="text" label="Notified Update: " visible="false" default=""/>
+		<setting id="ignoredupdate" type="text" label="Ignored Update: " visible="false" default=""/>
 		<setting id="autoclearpackages" type="enum" label="30057" default="1" values="Disabled|Every startup|10 packages|20 packages" />
 		<setting id="autoclean" type="bool" label="30215" default="false"/>
 		<setting id="autocleanfreq" type="enum" subsetting="true" label="30216" values="Every startup|Daily|3 Days|Weekly|Monthly" default="3" visible="eq(-1,true)"/>

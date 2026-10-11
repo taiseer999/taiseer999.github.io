@@ -12,6 +12,23 @@ from .addons_enable import enable_addons
 from .save_data import backup_gui_skin
 from . import  notify
 
+
+def _vtuple(v):
+    """'2.10' -> (2, 10). Numeric compare so 2.10 > 2.9 (plain string compare gets this wrong)."""
+    parts = []
+    for p in str(v or '').strip().split('.'):
+        num = ''.join(ch for ch in p if ch.isdigit())
+        parts.append(int(num) if num else 0)
+    while parts and parts[-1] == 0:
+        parts.pop()
+    return tuple(parts)
+
+
+def is_newer(remote, local):
+    if not remote:
+        return False
+    return _vtuple(remote) > _vtuple(local)
+
 class Startup:
     def check_updates(self):
            if CURRENT_BUILD == 'No Build Installed':
@@ -27,10 +44,13 @@ class Startup:
                elif nobuild == 0:
                    setting_set('buildname', 'No Build')
                return
-           if UPDATE_VERSION is None:
-               pass
-           else:
-               if UPDATE_VERSION > CURRENT_VERSION and setting('update_passed') != 'true':
+           if not UPDATE_VERSION:
+               return
+           # "Ignore" applies to one version only: a newer build re-enables the popup.
+           if setting('update_passed') == 'true' and is_newer(UPDATE_VERSION, setting('ignoredupdate') or CURRENT_VERSION):
+               setting_set('update_passed', 'false')
+           if True:
+               if is_newer(UPDATE_VERSION, CURRENT_VERSION) and setting('update_passed') != 'true':
                    update_available = xbmcgui.Dialog().yesnocustom(
                        addon_name,
                        f'{local_string(30047)} {CURRENT_BUILD} {local_string(30048)}\n{local_string(30049)} {CURRENT_VERSION}\n{local_string(30050)} {UPDATE_VERSION}\n{local_string(30051)}',
@@ -52,6 +72,7 @@ class Startup:
                            setting_set('update_passed', 'false')
                        else:
                            setting_set('update_passed', 'true')
+                           setting_set('ignoredupdate', str(UPDATE_VERSION))
                        
                    elif update_available == 2:
                        if changelog_dir in ('', 'http://', 'http://CHANGEME/'):
@@ -61,7 +82,7 @@ class Startup:
                            message = notify.get_changelog()
                            notify.notification_clog(message)
                        
-               elif UPDATE_VERSION == CURRENT_VERSION and setting('update_passed') == 'true':
+               elif _vtuple(UPDATE_VERSION) == _vtuple(CURRENT_VERSION) and setting('update_passed') == 'true':
                    setting_set('update_passed', 'false')
                    
     def save_menu(self):
@@ -162,7 +183,7 @@ class Startup:
 
         # Pop the notification whenever a new build update is available,
         # once per new build version.
-        update_available = bool(UPDATE_VERSION) and UPDATE_VERSION > CURRENT_VERSION
+        update_available = is_newer(UPDATE_VERSION, CURRENT_VERSION)
         update_not_announced = update_available and setting('notifiedupdate') != str(UPDATE_VERSION)
 
         if setting('firstrunNotify') != 'true' or notify_version > current_notify or update_not_announced:

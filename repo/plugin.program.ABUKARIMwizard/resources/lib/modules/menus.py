@@ -27,7 +27,9 @@ def main_menu():
     add_dir(COLOR1(f'<><> [B]Welcome to {addon_name}[/B] <><>'), '', '', addon_icon, addon_fanart, COLOR1(f'Welcome to {addon_name}'), isFolder=False)
 
     if setting('showinstalledbuild') == 'true':
-        if UPDATE_VERSION > BUILD_VERSION:
+        def _vt(v):
+            return tuple(int(''.join(c for c in x if c.isdigit()) or 0) for x in str(v or '0').split('.'))
+        if UPDATE_VERSION and _vt(UPDATE_VERSION) > _vt(BUILD_VERSION):
             add_dir(COLOR3(f'[B]Update Available!!![/B]   [{CURRENT_BUILD} v{UPDATE_VERSION}]'), '', 32, addon_icon, addon_fanart, COLOR2(local_string(30110)), isFolder=False)  # Build Update Available
             
         elif CURRENT_BUILD not in ['No Build Installed', 'No Build']:

@@ -1,3 +1,8 @@
+v3.9.42
+- Fixed: the build update popup never appeared. The startup service was commented out in addon.xml, so check_updates() never ran at boot.
+- Build versions compared numerically (2.10 > 2.9) in the popup, notify check and Main Menu "Update Available" row.
+- "Ignore" now skips only the ignored version; a newer build pops again.
+
 v3.9.41
 - Renamed to "AB Wizard". Icon without the ABUKARIM text and a larger emblem;
   clearlogo, banner and fanart updated with a short description line.

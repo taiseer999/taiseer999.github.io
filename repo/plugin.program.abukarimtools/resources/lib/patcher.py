@@ -99,6 +99,9 @@ DIALOG      = xbmcgui.Dialog()
 _REDLIGHT_VOLCHECKER_OLD_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAwJSA9PSAtNjBkYiwgMTAwJSA9PSAwZGINCgl0cnk6DQoJCWlmIGdldF9wcm9wZXJ0eSgncmVkbGlnaHQucGxheWJhY2sudm9sdW1lY2hlY2tfZW5hYmxlZCcpID09ICdmYWxzZScgb3IgZ2V0X3Zpc2liaWxpdHkoJ1BsYXllci5NdXRlZCcpOiByZXR1cm4NCgkJZnJvbSBtb2R1bGVzLnV0aWxzIGltcG9ydCBzdHJpbmdfYWxwaGFudW1fdG9fbnVtDQoJCW1heF92b2x1bWUgPSBtaW4oaW50KGdldF9wcm9wZXJ0eSgncmVkbGlnaHQucGxheWJhY2sudm9sdW1lY2hlY2tfcGVyY2VudCcpIG9yICc1MCcpLCAxMDApDQoJCWlmIGludCgxMDAgLSAoZmxvYXQoc3RyaW5nX2FscGhhbnVtX3RvX251bShnZXRfaW5mb2xhYmVsKCdQbGF5ZXIuVm9sdW1lJykuc3BsaXQoJy4nKVswXSkpLzYwKSoxMDApID4gbWF4X3ZvbHVtZTogZXhlY3V0ZV9idWlsdGluKCdTZXRWb2x1bWUoJWQpJyAlIG1heF92b2x1bWUpDQoJZXhjZXB0OiBwYXNzDQo='
 _REDLIGHT_VOLCHECKER_NEW_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAtLSBSZWRMaWdodCB2b2x1bWUgYXV0by1kcm9wIGRpc2FibGVkIChieSBBQlVLQVJJTSBUT09MUykgLS0NCglyZXR1cm4NCg=='
 
+# ── TMDbHelper Fenlight player (3.2.55) ──
+_FENLIGHT_PLAYER_JSON = '{\n    "name": "Fenlight",\n    "plugin": "plugin.video.fenlight",\n    "priority": 40,\n    "is_resolvable": false,\n    "play_movie": "executebuiltin://RunPlugin(\\"plugin://plugin.video.fenlight/?mode=playback.media&media_type=movie&query={name}&year={year}&poster={poster}&title={title}&tmdb_id={id}&autoplay=false\\")",\n    "play_episode": "executebuiltin://RunPlugin(\\"plugin://plugin.video.fenlight/?mode=playback.media&media_type=episode&query={showname}&year={year}&season={season}&episode={episode}&ep_name={title}&tmdb_id={tmdb}&premiered={firstaired}&autoplay=false\\")"\n}\n'
+
 # ── Fenlight resolve handoff block (3.2.54, v2) ──
 # The "already resolved" set lives in the player module's globals: Kodi's
 # xbmc.Player subclasses do not accept class attributes.
@@ -272,10 +275,13 @@ PATCHES = [
         'fallback_repl': lambda _m: _FENLIGHT_HANDOFF_V2,
         'description': 'Fenlight player.py - answer the TMDbHelper resolve with setResolvedUrl (no freeze, no "Playback failed" at stop)',
     },
-    # ── TMDbHelper – pin the Fenlight player JSON (3.2.53) ──
-    # is_resolvable must be true (pairs with the handoff above); the shipped
-    # file had false + is_folder, the freeze path. Content-compared inject, so
-    # the watchdog rewrites it only if something reverts it.
+    # ── TMDbHelper – pin the Fenlight player JSON (3.2.55) ──
+    # executebuiltin://RunPlugin(...): TMDbHelper first closes its own handle
+    # with dummy.mp4, then runs Fenlight as a plain plugin (handle -1), the same
+    # way as opening Fenlight directly. No plugin-inside-plugin resolve: the
+    # resolvable variant (3.2.53) still deadlocked the GUI thread at random
+    # while Fenlight started; the xbmc.Player() variant froze at sources.
+    # Content-compared inject: rewritten only if something reverts it.
     {
         'addon_id': 'plugin.video.themoviedb.helper',
         'base': 'addon_data',
@@ -284,16 +290,8 @@ PATCHES = [
         'inject_file': True,
         'old': '',
         'new': '',
-        'inject_content': (
-            '{\n'
-            '    "name": "Fenlight",\n'
-            '    "plugin": "plugin.video.fenlight",\n'
-            '    "priority": 40,\n'
-            '    "is_resolvable": true,\n'
-            '    "play_movie": "plugin://plugin.video.fenlight/?mode=playback.media&media_type=movie&query={name}&year={year}&poster={poster}&title={title}&tmdb_id={id}&autoplay=false",\n'
-            '    "play_episode": "plugin://plugin.video.fenlight/?mode=playback.media&media_type=episode&query={showname}&year={year}&season={season}&episode={episode}&ep_name={title}&tmdb_id={tmdb}&premiered={firstaired}&autoplay=false"\n'
-            '}\n'),
-        'description': 'TMDbHelper players/direct.fenlight.select.json - resolvable Fenlight player',
+        'inject_content': _FENLIGHT_PLAYER_JSON,
+        'description': 'TMDbHelper players/direct.fenlight.select.json - Fenlight via dummy + RunPlugin (no nested resolve)',
     },
 
     # ── a4kSubtitles – decode Arabic (and other) subtitles as UTF-8 first ──
