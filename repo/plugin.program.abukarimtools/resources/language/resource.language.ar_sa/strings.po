@@ -662,7 +662,11 @@ msgstr "مصدر التريلرات"
 
 msgctxt "#30453"
 msgid "NewPipe (plugin.video.newpipe) is not installed or is disabled - trailers come from IMDb until it is."
-msgstr "إضافة NewPipe (plugin.video.newpipe) مش مثبّتة أو موقفة - التريلرات رح تيجي من IMDb لحد ما تتثبّت."
+msgstr "إضافة NewPipe (plugin.video.newpipe) غير مثبّتة أو معطّلة - ستأتي التريلرات من IMDb إلى أن تُثبَّت."
+
+msgctxt "#30454"
+msgid "Inside the artwork (smooth)"
+msgstr "داخل صورة الخلفية (سلس)"
 
 msgctxt "#30530"
 msgid "Replace the current settings and menus of %s with the Piers profile?[CR](Your current files are backed up first.)"

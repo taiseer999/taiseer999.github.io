@@ -1,6 +1,25 @@
 # -*- coding: utf-8 -*-
 """AF3 auto-trailers: the background engine (ABUKARIM TOOLS).
 
+3.2.48 - ARTWORK mode (the new default), Dex Hub's way of showing a trailer:
+  * the trailer plays WINDOWED inside AF3's own artwork frame (the skin's
+    'FlixArt' video frame, see the Includes_Background.xml patch) and never
+    goes full screen, so there is no black frame, no OSD, no PPI badges and
+    no refresh-rate switch;
+  * the artwork stays on screen while the stream opens; only once the
+    trailer's clock is moving (plus a short settle) the engine sets
+    Window(Home).Property(abk.trailer.visible) and the skin fades the video in
+    over 600 ms;
+  * Kodi's busy spinner, which opens with every playback start, is cancelled
+    as soon as it shows (it only closes the spinner - the trailer keeps
+    loading) and AF3's busy loader is hidden meanwhile
+    (abk.trailer.opening), so the remote never stalls;
+  * moving to another title PARKS the trailer (hidden + paused) instead of
+    stopping it: the next title's trailer takes the open player over, and
+    coming back to the same title carries on where it paused. Kodi closes a
+    player on its interface thread, which made browsing stutter; a parked
+    trailer is only closed once the keys rest.
+
 3.2.35 - FULL SCREEN mode (the default): the trailer is opened windowed as
 before, and the moment its first frames are on screen the engine switches
 Kodi to the full-screen video window, so there is no black frame and no
@@ -54,6 +73,14 @@ from resources.lib.af3_trailers import config, imdb, newpipe
 
 HOME_ID = 10000
 PROP = 'abk.trailer'
+# 3.2.48 artwork mode (Dex Hub style), read by the Includes_Background.xml patch
+ART_PROP = 'abk.trailer.art'          # this trailer belongs in the artwork frame
+VISIBLE_PROP = 'abk.trailer.visible'  # its frames are rolling: fade it in
+OPENING_PROP = 'abk.trailer.opening'  # it is opening: AF3's busy loader stays hidden
+REVEAL_SETTLE = 0.25    # seconds after the clock moves before the fade-in starts
+OPENING_LINGER = 0.8    # the busy loader stays hidden this long after the reveal
+PARK_CLOSE_LATEST = 12.0  # a parked trailer is closed by then even while keys move
+_BUSY_IDS = (10138, 10160)            # busydialog, busydialognocancel
 ENGINE_PROP = 'abukarimtools.trailers.engine'
 SKIN_ID = 'skin.arctic.fuse.3'
 TMDBH_ID = 'plugin.video.themoviedb.helper'
@@ -158,10 +185,28 @@ def restore_after_crash():
             os.remove(MARKER)
         except Exception:
             pass
+    _clear_props()
+
+
+def _clear_props():
     try:
-        xbmcgui.Window(HOME_ID).clearProperty(PROP)
+        home = xbmcgui.Window(HOME_ID)
+        for name in (PROP, ART_PROP, VISIBLE_PROP, OPENING_PROP):
+            home.clearProperty(name)
     except Exception:
         pass
+
+
+def _busy_dialog_up():
+    """Kodi's busy spinner is the top dialog (by id: no GUI-lock condition)."""
+    try:
+        return (xbmcgui.getCurrentWindowDialogId() & 0xffff) in _BUSY_IDS
+    except Exception:
+        return False
+
+
+def _base(url):
+    return str(url or '').split('|', 1)[0].split('?', 1)[0]
 
 
 # ------------------------------------------------------------- TMDb -> IMDb
@@ -250,6 +295,24 @@ class Engine(object):
         self.quiet_until = time.monotonic() + COOLDOWN_AFTER_PLAYBACK   # boot settle
         self.released_at = 0.0         # when our own trailer was let go
         self._quiet_logged = False
+        # 3.2.48 artwork mode
+        self.art_mode = False          # this trailer plays in AF3's artwork frame
+        self.shown_at = 0.0            # when its clock started moving
+        self.revealed = False          # abk.trailer.visible is set
+        self.opening_until = 0.0       # when abk.trailer.opening is cleared
+        self.token = 0                 # bumped by every start/stop (busy guard)
+        # 3.2.49: the file of the parked trailer a new one is replacing (only
+        # while it opens). 3.2.48 remembered every recent trailer instead, and
+        # NewPipe resolves a title to the SAME local address each time, so a
+        # title played earlier was taken for "an old trailer" and its own new
+        # trailer was let go as real playback (never went full screen).
+        self.replacing = ''
+        self.parked_at = 0.0
+        self.park_until = 0.0
+        self.via_plugin = False
+        self.orphan = None
+        self.source = None
+        self._label = ''
 
     # ------------------------------------------------------------- helpers
     def _resolver(self, quality):
@@ -275,19 +338,35 @@ class Engine(object):
         # a plugin trailer (NewPipe) plays under its RESOLVED path: the first
         # file that shows up while ours is opening is ours (nothing else was
         # playing when it started - _start is only reached without media)
-        if getattr(self, 'via_plugin', False) and self.url.startswith('plugin://'):
-            if self.state == 'starting':
+        if self.via_plugin and self.url.startswith('plugin://'):
+            # never adopt the parked trailer this one is replacing
+            if self.state == 'starting' and not self._stale(current):
                 _log('trailer resolved by NewPipe: %s' % current[:120])
                 self.url = current
                 return True
             return False
         return current.split('?', 1)[0] == self.url.split('?', 1)[0]
 
+    def _stale(self, current):
+        """``current`` is the parked trailer this one is replacing (still in
+        the player for a moment while the new one opens), not ours now."""
+        if not current or not self.replacing or self.state != 'starting':
+            return False
+        if self.url and not self.url.startswith('plugin://') and _base(current) == _base(self.url):
+            return False
+        return _base(current) == _base(self.replacing)
+
     @staticmethod
-    def _eligible(fullscreen=False):
+    def _eligible(show='artwork'):
+        """``show``: 'artwork' | 'fullscreen' need no AF3 background video
+        ('artwork' plays in the artwork frame); 'background' does."""
         if xbmc.getSkinDir() != SKIN_ID:
             return False
-        return _cond('[%s] + ![%s]' % (_PAGES, _BLOCKERS_FS if fullscreen else _BLOCKERS))
+        if show is True:
+            show = 'fullscreen'
+        elif show is False:
+            show = 'background'
+        return _cond('[%s] + ![%s]' % (_PAGES, _BLOCKERS if show == 'background' else _BLOCKERS_FS))
 
     @staticmethod
     def _focused():
@@ -426,11 +505,30 @@ class Engine(object):
         url = stream.get('url')
         if not url:
             return False
-        self.fs_mode = bool(cfg.get('fullscreen', True))
+        replacing = self.state == 'parked'
+        show = cfg.get('show', 'fullscreen' if cfg.get('fullscreen', True) else 'background')
+        self.fs_mode = show == 'fullscreen'
+        self.art_mode = show == 'artwork'
         self.fs_asked = 0.0
         self.fs_seen = False
         if not cfg.get('sound') and not self.fs_mode:
             self._silence()
+        elif replacing:
+            self._restore_volume()      # the parked one was silent, this one is heard
+        self.token += 1
+        self.revealed = False
+        self.shown_at = 0.0
+        self.opening_until = 0.0
+        # the parked trailer's file, as Kodi plays it (a NewPipe trailer plays
+        # under its resolved address, which self.url already holds)
+        self.replacing = (self._playing_file() or self.url) if replacing else ''
+        if self.art_mode:
+            self.home.setProperty(ART_PROP, '1')
+            self.home.setProperty(OPENING_PROP, '1')
+        else:
+            self.home.clearProperty(ART_PROP)
+            self.home.clearProperty(OPENING_PROP)
+        self.home.clearProperty(VISIBLE_PROP)
         li = xbmcgui.ListItem(label=item['label'] or 'Trailer', path=url)
         self.via_plugin = url.startswith('plugin://')
         if self.via_plugin:
@@ -457,14 +555,116 @@ class Engine(object):
         self.state = 'starting'
         self.started = time.monotonic()
         try:
+            # a parked trailer is simply replaced: Kodi switches the open
+            # player's file (no stop/close on its interface thread)
             self.player.play(url, li, windowed=True)
         except Exception as exc:
             _log('play failed: %s' % type(exc).__name__, xbmc.LOGWARNING)
+            if replacing:
+                self._stop()            # the parked trailer must not stay paused
+            else:
+                self._release()
+            return False
+        if not self.fs_mode:
+            self._start_busy_guard(self.token)
+        height = stream.get('height')
+        _log('trailer start: %s (%s) - %s, %s%s' % (item['label'], item['key'],
+             {'fullscreen': 'full screen', 'artwork': 'in the artwork'}.get(show, 'behind the page'),
+             ('%sp' % height) if isinstance(height, int) else (height or '?'),
+             ' (replaces the parked one)' if replacing else ''))
+        return True
+
+    # ------------------------------------------------- 3.2.48 artwork mode
+    def _start_busy_guard(self, token):
+        """Kodi opens its modal busy spinner with every playback start and
+        keeps it until the first frame: it swallows the remote and draws a
+        spinner over the page. Close it as soon as it shows - only the
+        spinner goes, the trailer keeps loading (Dex Hub does the same).
+        A NewPipe trailer is left alone while NewPipe still resolves it
+        (Back there would cancel the resolve)."""
+        def guard():
+            deadline = time.monotonic() + (START_TIMEOUT_NEWPIPE if self.via_plugin else START_TIMEOUT)
+            while time.monotonic() < deadline and not self.monitor.abortRequested():
+                if token != self.token or self.state != 'starting':
+                    return
+                if _busy_dialog_up() and (not self.via_plugin or self._playing_file()):
+                    xbmc.executebuiltin('Action(Back,busydialog)')
+                    time.sleep(0.12)
+                else:
+                    time.sleep(0.05)
+        # not a daemon (Python 3.14 teardown); it ends within START_TIMEOUT
+        threading.Thread(target=guard, name='AbukarimTools-trailer-busyguard').start()
+
+    def _shown(self, now):
+        """The trailer's clock moves: it is playing (revealed a moment later)."""
+        self.state = 'playing'
+        self.shown_at = now
+        self.revealed = False
+
+    def _reveal_tick(self, now):
+        if not self.art_mode or self.state != 'playing':
+            return
+        if not self.revealed and self.shown_at and now - self.shown_at >= REVEAL_SETTLE:
+            self.revealed = True
+            self.home.setProperty(VISIBLE_PROP, '1')
+            self.opening_until = now + OPENING_LINGER
+            _log('trailer on screen %.1f s after it started: %s' % (now - self.started, self.key))
+        if self.opening_until and now >= self.opening_until:
+            self.opening_until = 0.0
+            self.home.clearProperty(OPENING_PROP)
+
+    def _park(self, now, cfg):
+        """Another title has the focus: hide and pause the trailer instead of
+        closing the player; the next trailer takes the player over."""
+        self.token += 1
+        self.state = 'parked'
+        self.parked_at = now
+        self.park_until = now + max(3.0, float(cfg.get('delay', 3)) + 3.0)
+        self.revealed = False
+        self.shown_at = 0.0
+        self.home.clearProperty(VISIBLE_PROP)
+        self.home.clearProperty(OPENING_PROP)
+        _rpc('Player.PlayPause', {'playerid': 1, 'play': False})
+        _log('trailer parked: %s' % self.key)
+
+    def _resume(self, now):
+        """Back on the parked title: carry on from where it paused."""
+        self.token += 1
+        _rpc('Player.PlayPause', {'playerid': 1, 'play': True})
+        self.state = 'playing'
+        self.shown_at = now
+        self.revealed = False
+        _log('parked trailer resumed: %s' % self.key)
+
+    def _tick_parked(self, now, eligible):
+        """Parked bookkeeping. True = the tick is done; False = go on and
+        look for the next title (it may take the player over)."""
+        current = self._playing_file()
+        if not current:
+            _log('parked trailer was closed elsewhere: %s' % self.key)
             self._release()
             return False
-        _log('trailer start: %s (%s) - %s, %sp' % (item['label'], item['key'],
-             'full screen' if self.fs_mode else 'behind the page', stream.get('height') or '?'))
-        return True
+        if not self._ours(current):
+            _log('real playback replaced the parked trailer')
+            self._release()
+            return True
+        if not eligible or _cond(_OPEN_BLOCKERS):
+            _log('parked trailer closed (%s): %s'
+                 % ('page left' if not eligible else 'dialog open', self.key))
+            self._stop()
+            return True
+        if now >= self.park_until:
+            try:
+                keys_rest = xbmc.getGlobalIdleTime() >= 1
+            except Exception:
+                keys_rest = True
+            # Kodi closes a player on its interface thread: never in the
+            # middle of a quick run through the titles
+            if keys_rest or now - self.parked_at > PARK_CLOSE_LATEST:
+                _log('parked trailer closed: %s' % self.key)
+                self._stop()
+                return True
+        return False
 
     def _go_fullscreen(self):
         """Our trailer is rendering: switch to the full-screen video window."""
@@ -478,18 +678,21 @@ class Engine(object):
 
     def _release(self):
         """Forget the trailer without touching the player."""
+        self.token += 1
         self.state = 'idle'
         self.released_at = time.monotonic()
+        self.replacing = ''
         self.url = ''
         self.key = ''
         self.via_plugin = False
         self.fs_mode = False
         self.fs_asked = 0.0
         self.fs_seen = False
-        try:
-            self.home.clearProperty(PROP)
-        except Exception:
-            pass
+        self.art_mode = False
+        self.revealed = False
+        self.shown_at = 0.0
+        self.opening_until = 0.0
+        _clear_props()
         self._restore_volume()
 
     def _stop(self):
@@ -501,11 +704,13 @@ class Engine(object):
                    and time.monotonic() < deadline and not self.monitor.abortRequested()):
                 time.sleep(0.05)
             current = self._playing_file()
-            if not current and getattr(self, 'via_plugin', False):
+            if self.via_plugin and self.state == 'starting' and (not current or self._stale(current)):
                 # NewPipe may still be resolving: if its stream opens later,
                 # tick() stops it (matched by title + YouTube/local proxy URL)
                 self.orphan = (self._label, time.monotonic() + START_TIMEOUT_NEWPIPE)
-            if current and self._ours(current):
+            # 3.2.48: a parked trailer still in the player (the new one never
+            # opened) is ours too
+            if current and (self._ours(current) or self._stale(current)):
                 self.player.stop()
                 deadline = time.monotonic() + 3.0
                 while self.player.isPlaying() and time.monotonic() < deadline:
@@ -525,11 +730,11 @@ class Engine(object):
         self._kill_orphan(now)
         # 3.2.36: log every settings change (the show mode too)
         snapshot = tuple(sorted(cfg.items()))
+        show = cfg.get('show', 'fullscreen' if cfg.get('fullscreen', True) else 'background')
         if snapshot != self._was_enabled:
             self._was_enabled = snapshot
             _log('auto trailers %s (source=%s, show=%s, sound=%s, delay=%ss, quality=%sp, skin=%s)'
-                 % ('ON' if cfg.get('enabled') else 'off', cfg.get('source', 'imdb'),
-                    'full screen' if cfg.get('fullscreen', True) else 'behind the page',
+                 % ('ON' if cfg.get('enabled') else 'off', cfg.get('source', 'imdb'), show,
                     cfg.get('sound'), cfg.get('delay'), cfg.get('quality'), xbmc.getSkinDir()))
         if not cfg.get('enabled'):
             if self.state != 'idle':
@@ -542,12 +747,21 @@ class Engine(object):
             if handled is not None:
                 return handled
 
-        eligible = self._eligible(cfg.get('fullscreen', True))
+        eligible = self._eligible(show)
         item = self._focused() if eligible else None
         key = item['key'] if item else ''
+        parked = False
 
-        if self.state != 'idle':
+        if self.state == 'parked':
+            if self._tick_parked(now, eligible):
+                return True
+            parked = self.state == 'parked'
+        elif self.state != 'idle':
             current = self._playing_file()
+            if current and self.state == 'starting' and self._stale(current):
+                current = ''            # the parked trailer this one replaces
+            elif current and self.replacing:
+                self.replacing = ''     # the new trailer is in the player now
             if current and not self._ours(current):
                 # real playback took over the player: let go, never stop it
                 _log('real playback replaced the trailer')
@@ -562,7 +776,13 @@ class Engine(object):
             if key and key != self.key:
                 # another title is focused: this trailer is done
                 self.miss_since = None
-                self._stop()
+                if self.art_mode and self.state == 'playing':
+                    # 3.2.48: hidden + paused; the next trailer takes the
+                    # open player over (no close on Kodi's interface thread)
+                    self._park(now, cfg)
+                    parked = True
+                else:
+                    self._stop()
             elif not key:
                 # 3.1.20: no title readable right now. While Kodi opens the
                 # stream its busy dialog is modal, so ListItem.* reads the dialog
@@ -587,8 +807,8 @@ class Engine(object):
                     if self.fs_mode and played > FS_FIRST_FRAME:
                         self._go_fullscreen()
                     if played > 0.3:
-                        self.state = 'playing'
-                elif now - self.started > (START_TIMEOUT_NEWPIPE if getattr(self, 'via_plugin', False)
+                        self._shown(now)
+                elif now - self.started > (START_TIMEOUT_NEWPIPE if self.via_plugin
                                            else START_TIMEOUT):
                     _log('trailer did not open in time: %s' % self.key)
                     try:
@@ -602,11 +822,13 @@ class Engine(object):
                 # ended by itself (or stopped elsewhere): not again for this title
                 self.done_key = self.key
                 self._release()
-            if self.state != 'idle':
+            self._reveal_tick(now)
+            if self.state not in ('idle', 'parked'):
                 return True
 
         # ---- idle: first make sure nothing else has been playing/resolving
-        if self._recent_activity(now):
+        # (a parked trailer is our own: it is not "activity")
+        if not parked and self._recent_activity(now):
             if item:
                 if key != self.cand_key:   # the delay runs during the cooldown
                     self.cand_key = key
@@ -616,10 +838,10 @@ class Engine(object):
                 self.cand_key = ''
             return eligible
 
-        # ---- idle: find a title to preview
+        # ---- idle / parked: find a title to preview
         if not item:
             self.cand_key = ''
-            return eligible
+            return eligible or parked
         if key != self.cand_key:
             self._focus_logs += 1
             if self._focus_logs <= 500:
@@ -630,6 +852,11 @@ class Engine(object):
         if key == self.done_key:
             return True
         waited = now - self.cand_since
+        if parked and key == self.key:
+            # back on the parked title: it carries on where it paused
+            if waited >= float(cfg.get('delay', 3)) and not _cond(_OPEN_BLOCKERS):
+                self._resume(now)
+            return True
         if waited >= PREFETCH_AFTER:
             job = self._lookup(item, cfg.get('quality', 720), cfg.get('source', 'imdb'))
         else:
@@ -642,10 +869,17 @@ class Engine(object):
         if not stream:
             self.done_key = key          # no trailer for this title
             return True
-        if _cond('Player.HasMedia') or _cond(_OPEN_BLOCKERS):
-            return True                  # something else plays, or a dialog is open
-        if not self._playlist_clean():
-            return True                  # cleared a leftover playlist; start next tick
+        if _cond(_OPEN_BLOCKERS):
+            return True                  # a dialog is open
+        if not parked:
+            if _cond('Player.HasMedia'):
+                return True              # something else plays
+            if not self._playlist_clean():
+                return True              # cleared a leftover playlist; start next tick
+        elif show != 'artwork':
+            # the show mode changed while one was parked: close it first
+            self._stop()
+            return True
         if not self._start(item, stream, cfg):
             self.done_key = key
         return True
@@ -776,17 +1010,16 @@ class Engine(object):
                     if time.monotonic() - self._last_error > 60:
                         self._last_error = time.monotonic()
                         _log('tick failed:\n%s' % traceback.format_exc(), xbmc.LOGWARNING)
-                # 0.1 s while a trailer opens: it goes full screen right after
-                # its first frames
-                wait = 0.1 if self.state == 'starting' else (0.2 if busy else 1.0)
+                # 0.1 s while a trailer opens (it goes full screen, or fades in,
+                # right after its first frames) and while one is parked
+                fast = (self.state in ('starting', 'parked')
+                        or (self.art_mode and (not self.revealed or self.opening_until)))
+                wait = 0.1 if fast else (0.2 if busy else 1.0)
                 if self.monitor.waitForAbort(wait):
                     break
         finally:
             # Kodi is closing: it stops the player itself; only give the volume back
-            try:
-                self.home.clearProperty(PROP)
-            except Exception:
-                pass
+            _clear_props()
             self._restore_volume()
             if self.resolver is not None:
                 self.resolver.flush()

@@ -664,6 +664,10 @@ msgctxt "#30453"
 msgid "NewPipe (plugin.video.newpipe) is not installed or is disabled - trailers come from IMDb until it is."
 msgstr ""
 
+msgctxt "#30454"
+msgid "Inside the artwork (smooth)"
+msgstr ""
+
 msgctxt "#30530"
 msgid "Replace the current settings and menus of %s with the Piers profile?[CR](Your current files are backed up first.)"
 msgstr ""

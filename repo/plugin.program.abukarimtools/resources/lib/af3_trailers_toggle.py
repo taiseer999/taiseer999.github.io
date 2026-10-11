@@ -71,6 +71,11 @@ def _qlabel(value):
     return '4K (2160p)' if value >= 2160 else '%dp' % value
 
 
+def _show_label(value):
+    """3.2.48: artwork (Dex Hub style, smooth) / behind the page / full screen."""
+    return {'artwork': T(30454), 'fullscreen': T(30446)}.get(value, T(30447))
+
+
 def _slabel(value):
     return T(30450) if value == 'newpipe' else T(30451)
 
@@ -92,7 +97,7 @@ def _set_enabled(cfg, on):
         msg = T(30438)
         if xbmc.getSkinDir() != SKIN_ID:
             msg = T(30441)
-        elif (not cfg.get('fullscreen', True)
+        elif (cfg.get('show') == 'background'
               and xbmc.getCondVisibility('Skin.HasSetting(Background.DisableVideo)')):
             DIALOG.ok(ADDON_NAME, T(30442))
     else:
@@ -144,8 +149,8 @@ def _run():
             toggle_ui.item((T(30432) % '').rstrip(': '), cfg['sound']),
             xbmcgui.ListItem(T(30433) % cfg['delay'], offscreen=True),
             xbmcgui.ListItem(T(30434) % _qlabel(cfg['quality']), offscreen=True),
-            # 3.2.35: full screen (default) or behind the page
-            xbmcgui.ListItem(T(30445) % (T(30446) if cfg.get('fullscreen', True) else T(30447)),
+            # 3.2.48: in the artwork (default) / behind the page / full screen
+            xbmcgui.ListItem(T(30445) % _show_label(cfg.get('show', 'artwork')),
                              offscreen=True),
             # 3.2.43~beta1 TEST: where trailers come from
             xbmcgui.ListItem(T(30449) % _slabel(cfg.get('source', 'newpipe')), offscreen=True),
@@ -184,10 +189,15 @@ def _run():
         elif choice == 4:
             # 3.2.36: a picker, not a flip - opening the row to look at it
             # used to switch full screen off
-            cfg['fullscreen'] = _pick(T(30448), [True, False], cfg.get('fullscreen', True),
-                                      lambda v: T(30446) if v else T(30447))
-            config.save(cfg)
-            _log('trailers show: %s' % ('full screen' if cfg['fullscreen'] else 'behind the page'))
+            cfg['show'] = _pick(T(30448), list(config.SHOWS), cfg.get('show', 'artwork'),
+                                _show_label)
+            cfg = config.save(cfg)
+            _log('trailers show: %s' % cfg['show'])
+            if cfg['show'] == 'artwork':
+                _apply_skin_patch()     # the artwork frame needs the skin patch
+            elif (cfg['show'] == 'background' and xbmc.getSkinDir() == SKIN_ID
+                  and xbmc.getCondVisibility('Skin.HasSetting(Background.DisableVideo)')):
+                DIALOG.ok(ADDON_NAME, T(30442))
         elif choice == 5:
             cfg['source'] = _pick(T(30452), list(config.SOURCES), cfg.get('source', 'newpipe'),
                                   _slabel)
@@ -197,6 +207,6 @@ def _run():
                     'System.HasAddon(plugin.video.newpipe) + '
                     'System.AddonIsEnabled(plugin.video.newpipe)')):
                 DIALOG.ok(ADDON_NAME, T(30453))
-            if (not cfg['fullscreen'] and xbmc.getSkinDir() == SKIN_ID
+            if (cfg.get('show') == 'background' and xbmc.getSkinDir() == SKIN_ID
                     and xbmc.getCondVisibility('Skin.HasSetting(Background.DisableVideo)')):
                 DIALOG.ok(ADDON_NAME, T(30442))

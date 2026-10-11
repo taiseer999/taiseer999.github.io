@@ -903,6 +903,66 @@ PATCHES = [
                           '!Skin.HasSetting(abk.nobusywaves)</visible>'),
         'description': 'AF3 busy loader - waves can be switched off (Toggles)',
     },
+
+    # ── AF3 auto-trailers, ARTWORK mode (3.2.48) - Dex Hub's way ──
+    # The trailer plays inside the skin's own artwork frame (its 'FlixArt'
+    # video frame), not behind the whole page and not full screen. The
+    # engine sets Window(Home).Property(abk.trailer.art) for such a trailer
+    # and abk.trailer.visible only once its frames are rolling; the frame then
+    # fades in over 600 ms, so the artwork never gives way to a black frame.
+    # Any other video (and a trailer in the other two modes) uses the skin's
+    # background video exactly as before: with no trailer the properties are
+    # empty and AF3 behaves as unpatched. The anchor is the same AF3 text Dex
+    # Hub's own trailer patch (af3patch.py) edits; a skin Dex Hub already
+    # patched is handled by the regex fallback.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Background.xml'),
+        'toggle': 'af3_trailers',
+        'feature': 'af3_trailers',
+        'not_found_ok': True,
+        'old': ('            <include condition="![$PARAM[video_background]]">Background_Video_Offscreen</include>\n'
+                '            <include condition="$PARAM[video_background]">Background_Video</include>\n'),
+        'new': ('            <!-- ABUKARIM: trailer in the artwork -->\n'
+                '            <control type="group">\n'
+                '                <visible>String.IsEmpty(Window(Home).Property(abk.trailer.art))</visible>\n'
+                '                <include condition="![$PARAM[video_background]]">Background_Video_Offscreen</include>\n'
+                '                <include condition="$PARAM[video_background]">Background_Video</include>\n'
+                '            </control>\n'
+                '            <control type="group">\n'
+                '                <visible>!String.IsEmpty(Window(Home).Property(abk.trailer.art)) + '
+                '!String.IsEmpty(Window(Home).Property(abk.trailer.visible)) + Player.HasVideo</visible>\n'
+                '                <animation effect="fade" start="0" end="100" time="600" tween="sine" easing="out">Visible</animation>\n'
+                '                <include>Background_Video_FlixArt</include>\n'
+                '            </control>\n'),
+        'already_patched_check': '<!-- ABUKARIM: trailer in the artwork -->',
+        # Dex Hub's trailer patch is in: its two groups learn ours too
+        'fallback_pattern': (r'<visible>!\$EXP\[DexHub_Trailer\]</visible>(\s*'
+                             r'<include condition="!\[\$PARAM\[video_background\]\]">Background_Video_Offscreen</include>'
+                             r'\s*<include condition="\$PARAM\[video_background\]">Background_Video</include>'
+                             r'\s*</control>\s*<control type="group">\s*)'
+                             r'<visible>\$EXP\[DexHub_Trailer\]</visible>'),
+        'fallback_repl': ('<visible>!$EXP[DexHub_Trailer] + String.IsEmpty(Window(Home).Property(abk.trailer.art))</visible>'
+                          '<!-- ABUKARIM: trailer in the artwork -->\\1'
+                          '<visible>$EXP[DexHub_Trailer] | [!String.IsEmpty(Window(Home).Property(abk.trailer.art)) + '
+                          '!String.IsEmpty(Window(Home).Property(abk.trailer.visible)) + Player.HasVideo]</visible>'),
+        'description': 'AF3 Includes_Background.xml - auto-trailer fades in inside the artwork frame',
+    },
+    {   # 3.2.48: while an artwork trailer opens, AF3's busy loader (waves)
+        # stays hidden - the engine closes Kodi's spinner at once, the
+        # loader behind it would still flash over the artwork. Builds on the
+        # busy-waves entry just above (its text is the anchor).
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Background.xml'),
+        'toggle': 'af3_trailers',
+        'feature': 'af3_trailers',
+        'not_found_ok': True,
+        'old': '!Skin.HasSetting(abk.nobusywaves)</visible>',
+        'new': ('!Skin.HasSetting(abk.nobusywaves) + '
+                'String.IsEmpty(Window(Home).Property(abk.trailer.opening))</visible>'),
+        'already_patched_check': 'Window(Home).Property(abk.trailer.opening)',
+        'description': 'AF3 busy loader - hidden while an auto-trailer opens',
+    },
     # ── TMDbHelper: dead-player guard (by ABUKARIM TOOLS) ──
     # onAVChange / onAVStarted call get_playingitem() while the player is
     # tearing down; getPlayingFile() then raises RuntimeError ("Kodi is not

@@ -1,3 +1,36 @@
+v3.2.49
+- FIX (3.2.48 regression): Full screen trailers did not expand. The engine
+  remembered every recent trailer address so it would not mistake a parked
+  trailer for the new one; NewPipe resolves a title to the same local address
+  every time (127.0.0.1:<port>/yt/<id>.mpd), so a title already played this
+  session was taken for "an old trailer", its new trailer was let go as real
+  playback ("real playback replaced the trailer") and never went full screen
+  (it also paused trailers 30 s). Now only the one parked trailer being
+  replaced, and only while the new one opens, counts as old.
+- Log: the reason a parked trailer is closed (page left / dialog open /
+  closed elsewhere); quality shows "YouTube" instead of "YouTubep".
+
+v3.2.48
+- AF3 Auto Trailers: new show mode "Inside the artwork" (داخل صورة الخلفية),
+  the default, ported from Dex Hub's trailer director + AF3 trailer patch:
+  * windowed inside AF3's own artwork frame (Background_Video_FlixArt), never
+    full screen - no black frame, no OSD/PPI badges, no refresh-rate switch;
+  * the artwork stays until the trailer's clock moves (+0.25 s settle), then
+    Window(Home).Property(abk.trailer.visible) fades the frame in over 600 ms;
+  * Kodi's busy spinner is closed as soon as it opens (the trailer keeps
+    loading; NewPipe is left alone until its stream is resolved) and AF3's
+    busy loader is hidden meanwhile (abk.trailer.opening);
+  * moving to another title PARKS the trailer (hidden + paused through
+    JSON-RPC) instead of stopping it; the next trailer replaces the file in
+    the open player, coming back resumes it, and a parked trailer is closed
+    only once the keys rest (Kodi closes a player on its GUI thread).
+- Patcher: two feature-gated Includes_Background.xml entries (artwork frame,
+  busy loader). Inert unless an artwork trailer is playing; a skin already
+  patched by Dex Hub is handled too.
+- Settings: 'show' is artwork | background | fullscreen; files from before
+  3.2.48 move to artwork once (show_v 2).
+- Arabic string 30453 rewritten in Modern Standard Arabic.
+
 v3.2.47
 - Patcher: the automatic ReloadSkin() now waits for script.skinvariables.
   While a skinvariables build is running (a build we started < 30 s ago, its
