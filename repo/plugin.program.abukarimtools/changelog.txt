@@ -1,3 +1,19 @@
+v3.2.53
+- FIX: Kodi froze when a film was played from TMDbHelper with the Fenlight
+  player (freeze right at Fenlight's sources window). The shipped
+  direct.fenlight.select.json had is_resolvable=false + is_folder, so
+  TMDbHelper played the Fenlight link with xbmc.Player() - a nested plugin
+  resolve on the GUI thread that deadlocked under Python 3.14.
+- FIX: With the player made resolvable, stopping a Fenlight film opened
+  "Playback failed": Fenlight plays the link itself and never answered the
+  resolve handle, so it failed when Fenlight's script exited. New patch on
+  Fenlight player.py hands the link back with setResolvedUrl when it was
+  called with a live handle (once per handle); Fenlight's own menus are
+  unchanged.
+- New toggle "Fenlight: TMDbHelper Playback Fix" (on by default) covers both
+  entries; the player JSON is pinned in addon_data/.../players/.
+- Restart Kodi once after the patch (Fenlight reuses its Python invoker).
+
 v3.2.52
 - New AF3 Auto Trailers show mode "Trailer button only" (عند الضغط على زر
   المقطع الدعائي فقط), a fourth choice in "How trailers are shown" - picking

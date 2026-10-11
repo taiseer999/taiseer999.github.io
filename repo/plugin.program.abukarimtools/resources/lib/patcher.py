@@ -222,6 +222,66 @@ PATCHES = [
                           "\t# -- Fenlight volume auto-drop disabled (by ABUKARIM TOOLS) --\r\n"
                           "\treturn"),
     },
+    # ── Fenlight – resolve handoff for TMDbHelper (3.2.53) ──
+    # TMDbHelper's Fenlight player resolves plugin://plugin.video.fenlight/?mode=
+    # playback.media, so Kodi waits on a resolve handle. Fenlight never answers
+    # it: it plays the debrid link itself with xbmc.Player().play(), so the
+    # handle stays pending for the whole film and fails when the script exits
+    # ("ResolvePath(): ... is not playable" -> "Playback failed" dialog at stop).
+    # With is_resolvable=false the old player JSON played it via xbmc.Player()
+    # instead, which froze Kodi at sources_results (nested plugin resolve on the
+    # GUI thread + Python 3.14 GIL). Fix: when Fenlight runs with a live handle
+    # (sys.argv[1] >= 0) it hands the link back with setResolvedUrl, once per
+    # handle; Fenlight's own menus (handle -1) still use self.play(). The
+    # monitor loop is unchanged - it watches whatever the player is playing.
+    {
+        'addon_id': 'plugin.video.fenlight',
+        'rel_path': os.path.join('resources', 'lib', 'modules', 'player.py'),
+        'toggle': 'fenlight_tmdbh',
+        'old': ("\t\tlisting = self.make_listing()\r\n"
+                "\t\tself.play(self.url)\r\n"),
+        'new': ("\t\tlisting = self.make_listing()\r\n"
+                "\t\t# -- Fenlight resolve handoff (by ABUKARIM TOOLS) --\r\n"
+                "\t\t_abk_handed = False\r\n"
+                "\t\ttry:\r\n"
+                "\t\t\timport sys as _abk_sys, xbmcplugin as _abk_xp\r\n"
+                "\t\t\t_abk_h = int(_abk_sys.argv[1]) if len(_abk_sys.argv) > 1 else -1\r\n"
+                "\t\t\t_abk_done = FenLightPlayer.__dict__.get('_abk_resolved')\r\n"
+                "\t\t\tif _abk_done is None:\r\n"
+                "\t\t\t\t_abk_done = set()\r\n"
+                "\t\t\t\tFenLightPlayer._abk_resolved = _abk_done\r\n"
+                "\t\t\tif _abk_h >= 0 and _abk_h not in _abk_done:\r\n"
+                "\t\t\t\t_abk_done.add(_abk_h)\r\n"
+                "\t\t\t\t_abk_xp.setResolvedUrl(_abk_h, True, listing)\r\n"
+                "\t\t\t\t_abk_handed = True\r\n"
+                "\t\texcept Exception: _abk_handed = False\r\n"
+                "\t\tif not _abk_handed: self.play(self.url)\r\n"),
+        'already_patched_check': '# -- Fenlight resolve handoff (by ABUKARIM TOOLS) --',
+        'description': 'Fenlight player.py - answer the TMDbHelper resolve with setResolvedUrl (no freeze, no "Playback failed" at stop)',
+    },
+    # ── TMDbHelper – pin the Fenlight player JSON (3.2.53) ──
+    # is_resolvable must be true (pairs with the handoff above); the shipped
+    # file had false + is_folder, the freeze path. Content-compared inject, so
+    # the watchdog rewrites it only if something reverts it.
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'base': 'addon_data',
+        'rel_path': os.path.join('players', 'direct.fenlight.select.json'),
+        'toggle': 'fenlight_tmdbh',
+        'inject_file': True,
+        'old': '',
+        'new': '',
+        'inject_content': (
+            '{\n'
+            '    "name": "Fenlight",\n'
+            '    "plugin": "plugin.video.fenlight",\n'
+            '    "priority": 40,\n'
+            '    "is_resolvable": true,\n'
+            '    "play_movie": "plugin://plugin.video.fenlight/?mode=playback.media&media_type=movie&query={name}&year={year}&poster={poster}&title={title}&tmdb_id={id}&autoplay=false",\n'
+            '    "play_episode": "plugin://plugin.video.fenlight/?mode=playback.media&media_type=episode&query={showname}&year={year}&season={season}&episode={episode}&ep_name={title}&tmdb_id={tmdb}&premiered={firstaired}&autoplay=false"\n'
+            '}\n'),
+        'description': 'TMDbHelper players/direct.fenlight.select.json - resolvable Fenlight player',
+    },
 
     # ── a4kSubtitles – decode Arabic (and other) subtitles as UTF-8 first ──
     # Fixes OpenSubtitles.com Arabic subs showing as mojibake in a4kSubtitles
@@ -1396,6 +1456,7 @@ TOGGLE_GROUPS = [
     ('af3_highlight',    'AF3: Highlight Genre & Widget Titles'),
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
     ('fenlight_volume',  'Fenlight: Kill Volume Auto-Drop'),
+    ('fenlight_tmdbh',   'Fenlight: TMDbHelper Playback Fix'),
     ('a4ksubs_utf8',     'a4kSubtitles: UTF-8 Subtitles Fix'),
     ('a4ksubs_quiet',    'a4kSubtitles: Hide Account/API-Key Nags'),
 ]
