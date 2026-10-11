@@ -1,3 +1,18 @@
+v3.2.52
+- New AF3 Auto Trailers show mode "Trailer button only" (عند الضغط على زر
+  المقطع الدعائي فقط), a fourth choice in "How trailers are shown" - picking
+  it turns the other three off. In this mode nothing plays by itself while
+  browsing; the AF3 Trailer buttons (info page Trailer button, context menu
+  Trailer entry, trailer list, the trailer dialog's Repeat) play through the
+  Auto Trailers source instead of TMDbHelper's plugin.video.youtube link:
+  NewPipe / IMDb in the order of the "Source" setting (IMDb at its quality),
+  the original link last. In the other modes, or with Auto Trailers off, the
+  buttons behave exactly as before.
+- AF3's trailer dialog (1123) runs trailer_play.py (two always-on AF3 patch
+  entries: Custom_1123_Dialog_Trailer.xml, Dialog_DialogTrailer.xml); the
+  script itself decides by the mode, so switching modes needs no re-patch or
+  skin reload.
+
 v3.2.51
 - Renamed to "AB Tools". Icon without the ABUKARIM text and a larger emblem;
   clearlogo, banner and fanart updated with a short description line.

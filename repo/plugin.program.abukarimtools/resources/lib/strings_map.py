@@ -380,4 +380,6 @@ STRINGS = {
     30647: ('Your current layout is backed up first',
             'يتم حفظ ترتيبك الحالي في نسخة احتياطية أولاً'),
     30648: ('Widgets layout left as it is', 'بقي ترتيب الودجات كما هو'),
+    30649: ('No trailer found for this title', 'لم يُعثر على مقطع دعائي لهذا العنوان'),
+    30650: ('Trailer button only', 'عند الضغط على زر المقطع الدعائي فقط'),
 }

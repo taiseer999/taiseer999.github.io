@@ -736,7 +736,9 @@ class Engine(object):
             _log('auto trailers %s (source=%s, show=%s, sound=%s, delay=%ss, quality=%sp, skin=%s)'
                  % ('ON' if cfg.get('enabled') else 'off', cfg.get('source', 'imdb'), show,
                     cfg.get('sound'), cfg.get('delay'), cfg.get('quality'), xbmc.getSkinDir()))
-        if not cfg.get('enabled'):
+        # 3.2.52: 'buttons' mode - nothing plays by itself; AF3's Trailer
+        # buttons play through trailer_play.py instead
+        if not cfg.get('enabled') or show == 'buttons':
             if self.state != 'idle':
                 self._stop()
             self.cand_key = ''

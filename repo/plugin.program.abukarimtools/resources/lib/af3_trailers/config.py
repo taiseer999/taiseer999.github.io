@@ -22,7 +22,9 @@ SOURCES = ('newpipe', 'imdb')   # 3.2.43~beta1 TEST: NewPipe (YouTube) or IMDb
 # artwork frame, faded in once it plays, parked between titles) - the default;
 # 'background' = behind the whole page (AF3's background video);
 # 'fullscreen' = grows to Kodi's full-screen video window.
-SHOWS = ('artwork', 'background', 'fullscreen')
+# 3.2.52: 'buttons' = no auto-play at all; only AF3's Trailer buttons play,
+# through the trailer source (trailer_play.py). Picking it turns the others off.
+SHOWS = ('artwork', 'background', 'fullscreen', 'buttons')
 # A file written before 3.2.48 moves to 'artwork' once: 3.2.37 had put
 # everyone on full screen without asking, so that value was never a choice.
 SHOW_V = 2

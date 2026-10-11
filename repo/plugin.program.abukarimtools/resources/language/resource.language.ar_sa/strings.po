@@ -980,3 +980,11 @@ msgctxt "#30648"
 msgid "Widgets layout left as it is"
 msgstr "بقي ترتيب الودجات كما هو"
 
+
+msgctxt "#30649"
+msgid "No trailer found for this title"
+msgstr "لم يُعثر على مقطع دعائي لهذا العنوان"
+
+msgctxt "#30650"
+msgid "Trailer button only"
+msgstr "عند الضغط على زر المقطع الدعائي فقط"

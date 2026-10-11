@@ -980,3 +980,11 @@ msgctxt "#30648"
 msgid "Widgets layout left as it is"
 msgstr ""
 
+
+msgctxt "#30649"
+msgid "No trailer found for this title"
+msgstr ""
+
+msgctxt "#30650"
+msgid "Trailer button only"
+msgstr ""

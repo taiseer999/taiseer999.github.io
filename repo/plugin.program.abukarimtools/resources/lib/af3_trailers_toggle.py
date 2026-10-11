@@ -73,7 +73,8 @@ def _qlabel(value):
 
 def _show_label(value):
     """3.2.48: artwork (Dex Hub style, smooth) / behind the page / full screen."""
-    return {'artwork': T(30454), 'fullscreen': T(30446)}.get(value, T(30447))
+    return {'artwork': T(30454), 'fullscreen': T(30446),
+            'buttons': T(30650)}.get(value, T(30447))
 
 
 def _slabel(value):

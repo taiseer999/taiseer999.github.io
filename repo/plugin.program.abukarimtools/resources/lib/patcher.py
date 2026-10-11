@@ -841,6 +841,40 @@ PATCHES = [
         'description': 'AF3 Includes_Furniture.xml - trailers count as background, not playback',
     },
 
+    # ── AF3: Trailer buttons through the auto-trailer sources (3.2.52) ──
+    # The info page's Trailer button, the context menu's Trailer entry and the
+    # trailer lists all open AF3's trailer dialog (1123), which PlayMedia()'d
+    # TMDbHelper's plugin.video.youtube link - dead without a working YouTube
+    # add-on. The dialog now runs trailer_play.py: NewPipe / IMDb in the order
+    # set in Toggles, the original link last. Always on (it does not depend on
+    # the auto-trailers switch).
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Custom_1123_Dialog_Trailer.xml'),
+        'not_found_ok': True,
+        'old': '">PlayMedia($ESCINFO[Window(Home).Property(PlayTrailer)],False,1)</onload>',
+        'new': ('">RunScript(special://home/addons/plugin.program.abukarimtools/trailer_play.py)</onload>'
+                '  <!-- ABUKARIM: trailer button -->'),
+        'already_patched_check': '<!-- ABUKARIM: trailer button -->',
+        'fallback_pattern': r'">\s*PlayMedia\(\$ESCINFO\[Window\(Home\)\.Property\(PlayTrailer\)\][^<]*\)\s*</onload>',
+        'fallback_repl': ('">RunScript(special://home/addons/plugin.program.abukarimtools/trailer_play.py)</onload>'
+                          '  <!-- ABUKARIM: trailer button -->'),
+        'description': 'AF3 trailer dialog - play through NewPipe/IMDb (auto-trailer sources)',
+    },
+    {   # the dialog's Repeat button replays the same way
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Dialog_DialogTrailer.xml'),
+        'not_found_ok': True,
+        'old': '<onclick>PlayMedia($ESCINFO[Window(Home).Property(PlayTrailer)],False,1)</onclick>',
+        'new': ('<onclick>RunScript(special://home/addons/plugin.program.abukarimtools/trailer_play.py)</onclick>'
+                '<!-- ABUKARIM: trailer button -->'),
+        'already_patched_check': '<!-- ABUKARIM: trailer button -->',
+        'fallback_pattern': r'<onclick>\s*PlayMedia\(\$ESCINFO\[Window\(Home\)\.Property\(PlayTrailer\)\][^<]*\)\s*</onclick>',
+        'fallback_repl': ('<onclick>RunScript(special://home/addons/plugin.program.abukarimtools/trailer_play.py)</onclick>'
+                          '<!-- ABUKARIM: trailer button -->'),
+        'description': 'AF3 trailer dialog - Repeat plays through NewPipe/IMDb',
+    },
+
     {   # AF3 auto-trailers (3.1.17): Kodi does not always start the
         # ABUKARIM TOOLS service, so Home also starts the trailer engine by
         # itself (trailers.py) whenever it is not running yet. The condition is
