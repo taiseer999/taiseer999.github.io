@@ -1,3 +1,14 @@
+v3.2.56
+- FIX: after every AF3 update the skin was reloaded twice. The watchdog's
+  skin-only run (ids=skin.arctic.fuse.3) skipped the TinyPPI reconcile, which
+  registers the PPI Arabic fonts in the active skin's Font.xml - and a skin
+  update wipes Font.xml. The next full sweep then wrote them ("3 written")
+  and reloaded the skin again. The reconcile now also runs when the active
+  skin is in scope, so both land in the same run and one reload.
+- Note: right after an AB Tools update the running service keeps the old
+  patch list until Kodi restarts (it shows the restart prompt) - patches new
+  in that version are written by the next full sweep, as designed.
+
 v3.2.55
 - FIX: Kodi still froze at random when TMDbHelper started a Fenlight film
   (GUI thread and Fenlight's thread deadlocked while Fenlight was starting,

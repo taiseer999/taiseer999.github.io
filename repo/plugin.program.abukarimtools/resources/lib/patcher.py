@@ -2193,8 +2193,13 @@ def apply_set(group=None, addon_ids=None):
 
     # Reconcile the TinyPPI Arabic language folder to match the tinyppi_arabic
     # toggle STATE (handles both enable and disable; see _reconcile_tinyppi_arabic).
-    # Only when TinyPPI is in scope for this run.
-    if not addon_ids or 'script.tinyppi' in set(addon_ids):
+    # When TinyPPI is in scope, or the ACTIVE skin is (3.2.56): the PPI Arabic
+    # fonts live in the active skin's Font.xml, which every skin update wipes.
+    # A skin-only watchdog run used to leave them out, so the next full sweep
+    # wrote them and reloaded the skin a second time.
+    _scope = set(addon_ids or ())
+    if (not addon_ids or 'script.tinyppi' in _scope
+            or any(_is_active_skin(a) for a in _scope)):
         for ok, msg in _reconcile_tinyppi():
             _log(msg)
             results.append((ok, msg))
