@@ -99,6 +99,27 @@ DIALOG      = xbmcgui.Dialog()
 _REDLIGHT_VOLCHECKER_OLD_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAwJSA9PSAtNjBkYiwgMTAwJSA9PSAwZGINCgl0cnk6DQoJCWlmIGdldF9wcm9wZXJ0eSgncmVkbGlnaHQucGxheWJhY2sudm9sdW1lY2hlY2tfZW5hYmxlZCcpID09ICdmYWxzZScgb3IgZ2V0X3Zpc2liaWxpdHkoJ1BsYXllci5NdXRlZCcpOiByZXR1cm4NCgkJZnJvbSBtb2R1bGVzLnV0aWxzIGltcG9ydCBzdHJpbmdfYWxwaGFudW1fdG9fbnVtDQoJCW1heF92b2x1bWUgPSBtaW4oaW50KGdldF9wcm9wZXJ0eSgncmVkbGlnaHQucGxheWJhY2sudm9sdW1lY2hlY2tfcGVyY2VudCcpIG9yICc1MCcpLCAxMDApDQoJCWlmIGludCgxMDAgLSAoZmxvYXQoc3RyaW5nX2FscGhhbnVtX3RvX251bShnZXRfaW5mb2xhYmVsKCdQbGF5ZXIuVm9sdW1lJykuc3BsaXQoJy4nKVswXSkpLzYwKSoxMDApID4gbWF4X3ZvbHVtZTogZXhlY3V0ZV9idWlsdGluKCdTZXRWb2x1bWUoJWQpJyAlIG1heF92b2x1bWUpDQoJZXhjZXB0OiBwYXNzDQo='
 _REDLIGHT_VOLCHECKER_NEW_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAtLSBSZWRMaWdodCB2b2x1bWUgYXV0by1kcm9wIGRpc2FibGVkIChieSBBQlVLQVJJTSBUT09MUykgLS0NCglyZXR1cm4NCg=='
 
+# ── Fenlight resolve handoff block (3.2.54, v2) ──
+# The "already resolved" set lives in the player module's globals: Kodi's
+# xbmc.Player subclasses do not accept class attributes.
+_FENLIGHT_HANDOFF_V2 = (
+    "\t\t# -- Fenlight resolve handoff v2 (by ABUKARIM TOOLS) --\r\n"
+    "\t\t_abk_handed = False\r\n"
+    "\t\ttry:\r\n"
+    "\t\t\timport sys as _abk_sys, xbmcplugin as _abk_xp\r\n"
+    "\t\t\t_abk_h = int(_abk_sys.argv[1]) if len(_abk_sys.argv) > 1 else -1\r\n"
+    "\t\t\t_abk_done = globals().setdefault('_ABK_RESOLVED', set())\r\n"
+    "\t\t\tif _abk_h >= 0 and _abk_h not in _abk_done:\r\n"
+    "\t\t\t\t_abk_done.add(_abk_h)\r\n"
+    "\t\t\t\t_abk_xp.setResolvedUrl(_abk_h, True, listing)\r\n"
+    "\t\t\t\t_abk_handed = True\r\n"
+    "\t\texcept Exception as _abk_e:\r\n"
+    "\t\t\t_abk_handed = False\r\n"
+    "\t\t\ttry: __import__('xbmc').log('[AbukarimTools] Fenlight handoff failed: %r' % (_abk_e,), 2)\r\n"
+    "\t\t\texcept Exception: pass\r\n"
+    "\t\tif not _abk_handed: self.play(self.url)\r\n"
+)
+
 # ── Fenlight volume auto-drop kill (by ABUKARIM TOOLS) ──
 # Fenlight ships the same volume_checker() as RedLight: it runs on every playback
 # start and clamps Kodi's player volume to fenlight.playback.volumecheck_percent
@@ -240,23 +261,15 @@ PATCHES = [
         'toggle': 'fenlight_tmdbh',
         'old': ("\t\tlisting = self.make_listing()\r\n"
                 "\t\tself.play(self.url)\r\n"),
-        'new': ("\t\tlisting = self.make_listing()\r\n"
-                "\t\t# -- Fenlight resolve handoff (by ABUKARIM TOOLS) --\r\n"
-                "\t\t_abk_handed = False\r\n"
-                "\t\ttry:\r\n"
-                "\t\t\timport sys as _abk_sys, xbmcplugin as _abk_xp\r\n"
-                "\t\t\t_abk_h = int(_abk_sys.argv[1]) if len(_abk_sys.argv) > 1 else -1\r\n"
-                "\t\t\t_abk_done = FenLightPlayer.__dict__.get('_abk_resolved')\r\n"
-                "\t\t\tif _abk_done is None:\r\n"
-                "\t\t\t\t_abk_done = set()\r\n"
-                "\t\t\t\tFenLightPlayer._abk_resolved = _abk_done\r\n"
-                "\t\t\tif _abk_h >= 0 and _abk_h not in _abk_done:\r\n"
-                "\t\t\t\t_abk_done.add(_abk_h)\r\n"
-                "\t\t\t\t_abk_xp.setResolvedUrl(_abk_h, True, listing)\r\n"
-                "\t\t\t\t_abk_handed = True\r\n"
-                "\t\texcept Exception: _abk_handed = False\r\n"
-                "\t\tif not _abk_handed: self.play(self.url)\r\n"),
-        'already_patched_check': '# -- Fenlight resolve handoff (by ABUKARIM TOOLS) --',
+        'new': "\t\tlisting = self.make_listing()\r\n" + _FENLIGHT_HANDOFF_V2,
+        'already_patched_check': '# -- Fenlight resolve handoff v2 (by ABUKARIM TOOLS) --',
+        # 3.2.54: upgrade a v1 block in place (v1 stored its "already
+        # resolved" set on the FenLightPlayer class; xbmc.Player subclasses
+        # refuse class attributes -> AttributeError -> silent fallback to
+        # self.play(), so v1 never handed anything over).
+        'fallback_pattern': (r'\t\t# -- Fenlight resolve handoff \(by ABUKARIM TOOLS\) --\r?\n'
+                             r'[\s\S]*?self\.play\(self\.url\)[^\r\n]*\r?\n'),
+        'fallback_repl': lambda _m: _FENLIGHT_HANDOFF_V2,
         'description': 'Fenlight player.py - answer the TMDbHelper resolve with setResolvedUrl (no freeze, no "Playback failed" at stop)',
     },
     # ── TMDbHelper – pin the Fenlight player JSON (3.2.53) ──

@@ -1,3 +1,12 @@
+v3.2.54
+- FIX (3.2.53): the Fenlight resolve handoff never ran. It kept its "already
+  resolved" set on the FenLightPlayer class, and Kodi's xbmc.Player
+  subclasses refuse class attributes (AttributeError), so it fell back to
+  self.play() silently and the resolve still failed at stop (popup / freeze).
+  The set now lives in the module globals; a failure is logged as a warning.
+  Boxes that already carry the 3.2.53 block are upgraded in place.
+- Restart Kodi once after the patch.
+
 v3.2.53
 - FIX: Kodi froze when a film was played from TMDbHelper with the Fenlight
   player (freeze right at Fenlight's sources window). The shipped
