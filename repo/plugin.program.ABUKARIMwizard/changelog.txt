@@ -1,3 +1,7 @@
+v3.9.40
+- New add-on artwork matching NewPipe: clearlogo, banner and fanart with the
+  emblem on the right.
+
 v3.9.37
 - Debrid & Trakt menu renamed to "Accounts - Account Authorization"
   (الحسابات - مصادقة الحسابات) with a new Accounts icon.
