@@ -1017,7 +1017,7 @@ msgid "Nothing is downloaded or changed"
 msgstr ""
 
 msgctxt "#30667"
-msgid "The home page and the ABUKARIM lists stay as they are"
+msgid "Your lists are added as widgets - the home page and the ABUKARIM lists stay as they are"
 msgstr ""
 
 msgctxt "#30668"

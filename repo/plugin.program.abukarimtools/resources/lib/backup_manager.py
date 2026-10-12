@@ -1,4 +1,5 @@
 import os
+import re
 import shutil
 import zipfile
 
@@ -161,6 +162,40 @@ class BackupManager:
 
     # -------------------------------------------------------------- Restore --
 
+    @staticmethod
+    def _push_active_skin_settings(data):
+        """3.2.64: the Installation Wizard now applies the skin FIRST, so a
+        restore can carry settings for the skin that is already running.
+        Kodi keeps the active skin's settings in memory and writes them back
+        on the next change or exit, which would silently undo the restored
+        file - so the restored values are also pushed into Kodi itself."""
+        text = data.decode('utf-8', 'replace')
+        n = 0
+        for m in re.finditer(r'<setting\s+([^>]*?)(?:/>|>(.*?)</setting>)',
+                             text, re.S):
+            attrs = dict(re.findall(r'(\w+)="([^"]*)"', m.group(1)))
+            sid = attrs.get('id')
+            if not sid or sid.startswith('script-skinvariables-generator'):
+                continue                      # build hashes: let it rebuild
+            val = (m.group(2) or '').strip()
+            val = (val.replace('&lt;', '<').replace('&gt;', '>')
+                      .replace('&quot;', '"').replace('&apos;', "'")
+                      .replace('&amp;', '&'))
+            if attrs.get('type') == 'bool':
+                if val.lower() == 'true':
+                    xbmc.executebuiltin('Skin.SetBool(%s)' % sid)
+                else:
+                    xbmc.executebuiltin('Skin.Reset(%s)' % sid)
+            else:
+                if val:
+                    xbmc.executebuiltin('Skin.SetString(%s,"%s")'
+                                        % (sid, val.replace('"', '\\"')))
+                else:
+                    xbmc.executebuiltin('Skin.Reset(%s)' % sid)
+            n += 1
+        _log('Active skin settings pushed into Kodi: %d' % n)
+        return n
+
     def _do_restore(self, dialog, include_skin):
         zip_path = dialog.browse(
             1, T(30225), 'files', '*.zip', False, False,
@@ -248,6 +283,14 @@ class BackupManager:
                             _log('Could not stage oe_settings.xml: %s' % e,
                                  xbmc.LOGWARNING)
                         continue
+
+                    # the running skin's own settings: also push into Kodi
+                    if norm_member == 'addon_data/%s/settings.xml' % xbmc.getSkinDir():
+                        try:
+                            self._push_active_skin_settings(zf.read(member))
+                        except Exception as e:
+                            _log('Could not push active skin settings: %s' % e,
+                                 xbmc.LOGWARNING)
 
                     dest     = os.path.join(self.userdata_path,
                                             *norm_member.split('/'))

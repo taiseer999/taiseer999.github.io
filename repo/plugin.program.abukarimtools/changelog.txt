@@ -1,3 +1,55 @@
+v3.2.64
+- Installation Wizard order (user request - Arabic must render correctly):
+    Step 0  Skin Installer (was Step 5, last)
+            -> if a skin other than Estuary is active: UI language Arabic now
+               (skin reload awaited), so every later dialog is Arabic in the
+               Arabic-capable skin; Estuary kept -> setup stays English
+    1 Binary Installer / 1b bootstrap / 1c tuning / 2 Restore / 3 Add-on
+    Portal / 3b Widgets Layout / 3c Trakt Lists / 4 Patches / 4b web server
+- Restore with the skin already running: Kodi keeps the ACTIVE skin's
+  settings in memory and writes them back on the next change / exit, which
+  would undo a restored addon_data/<active skin>/settings.xml. The restore
+  now also pushes those values into Kodi (Skin.SetBool / Skin.Reset /
+  Skin.SetString; skinvariables generator hashes skipped so menus rebuild).
+- Side effects of the new order (all intended): the restore's
+  rebuild_shortcuts now runs with AF3 active (the 07:28 "Unable to load
+  skinvariables-build-templates.json" under Estuary is gone); AF3 patches are
+  applied during setup instead of at the next boot sweep.
+
+v3.2.63
+- Trakt Lists: picks are WIDGET rows now (user's choice), appended to
+  1101widgets / 1102widgets / 1103widgets (Korean movies + series) in the
+  hub's own widget style, path = trakt_userlist + &widget=true&reload=
+  $INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]; liked lists first.
+  Build widget rows untouched and first.
+- Sub-menus are no longer changed. ensure() (boot / end of setup) migrates
+  3.2.57-3.2.62 boxes: removes the two sub-menu groups and the Korean
+  sub-menu entries, un-hides hidden build lists, and turns the saved picks
+  into widgets (build Korean lists excluded - they stay in the sub-menu and
+  are no longer offered in the picker). Verified on the user's own node
+  files (Mac, 07:44 upload): sub-menus come back to the build exactly.
+- Korean detection: "K Dramas" (with a space) is Korean now, and liked lists
+  are always classified by their items (country), never by name alone.
+
+v3.2.62
+- FIX (log 2026-10-12 07:31:57): the picked Trakt lists never appeared.
+  Trakt Lists itself worked (130 lists, picks 22/6/20/10, hubs 1101/1102/1103
+  written), but script.skinvariables then failed to build AF3's menus:
+  ExpatError "not well-formed (invalid token): line 5248, column 36". Its
+  template code escapes only "&" (escape_ampersands) before minidom parses
+  the result, so a list name containing " < > or a control character breaks
+  the whole build and AF3 keeps the old menus.
+- Every list name is now cleaned before it is shown or written:
+  " ' < > { } $ \ -> look-alike characters, control characters removed,
+  whitespace collapsed (_clean).
+- ensure() (boot + end of setup) also re-applies when one of OUR items still
+  carries an unsafe label - boxes on 3.2.61 are repaired and AF3 rebuilt at
+  the next start, no need to pick again.
+- Seen in the same log, not from Trakt Lists: the restore step runs
+  rebuild_shortcuts while Estuary is active ("Unable to load
+  special://skin/shortcuts/skinvariables-build-templates.json", 07:28:18) -
+  harmless, AF3 builds when it is applied.
+
 v3.2.61
 - Trakt Lists: Custom REQUIRES the Trakt link (TMDb Helper, its QR).
     * no token -> "Custom needs your Trakt account linked" (30669, yes/no);

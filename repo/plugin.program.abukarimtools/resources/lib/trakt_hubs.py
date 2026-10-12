@@ -11,19 +11,20 @@ dialogs fall back to the Arabic arial.ttf the add-on installs.
     Original  the hubs stay exactly as the build ships them
     Custom    the user's Trakt likes + the best Trakt lists they tick
 
-What Custom touches (and nothing else):
+What Custom touches (and nothing else) - since 3.2.63 the picks are WIDGET
+rows, appended to the hub widgets files in the hub's own widget style:
 
-    hub 1101 (Movies)   two groups appended to its sub-menu:
-    hub 1102 (TV)       "قوائم أعجبتني" (liked lists) and
-                        "الأفضل في تراكت" (best lists)
-    hub 1103 (Korean)   its Movies / Series sub-menus: the build's own
-                        third-party Korean lists are offered pre-ticked;
-                        unticked ones are hidden (disabled + tagged), the
-                        new picks are appended.
+    1101widgets (Movies)   picked movie lists (liked first)
+    1102widgets (TV)       picked TV lists
+    1103widgets (Korean)   picked Korean movie + series lists
 
-Never touched: the Home page (homesubmenu / homewidgets), every hub's
-widgets, and the ABUKARIM lists on Trakt (user taiseer999) - they are not
-even offered in the picker.
+The hub sub-menus (1101/1102/1103submenu) are not changed any more; what
+3.2.57-3.2.62 added there (two groups, Korean sub-menu entries, hidden build
+lists) is removed / restored automatically. The build's own Korean lists
+stay in the Korean sub-menu and are not offered in the picker.
+
+Never touched: the Home page (homesubmenu / homewidgets) and the ABUKARIM
+lists on Trakt (user taiseer999) - they are not even offered in the picker.
 
 Everything this module adds carries a guid starting with "guid-abkt";
 everything it hides carries "abk_trakt": "off". Original removes / restores
@@ -90,6 +91,11 @@ STATE_FILE = os.path.join(PROFILE, 'trakt_hubs.json')
 HUB_MOVIES = 'skinvariables-shortcut-1101submenu.json'
 HUB_TV = 'skinvariables-shortcut-1102submenu.json'
 HUB_KOREAN = 'skinvariables-shortcut-1103submenu.json'
+W_MOVIES = 'skinvariables-shortcut-1101widgets.json'
+W_TV = 'skinvariables-shortcut-1102widgets.json'
+W_KOREAN = 'skinvariables-shortcut-1103widgets.json'
+WIDGET_SUFFIX = ('&widget=true&reload=$INFO[Window(Home).Property('
+                 'TMDbHelper.Widgets.Reload)]')
 
 # picker categories: key, heading string id
 CATS = (('movies', 30673), ('tv', 30674), ('kr_movies', 30675), ('kr_tv', 30676))
@@ -100,7 +106,7 @@ OFF_TAG = 'abk_trakt'
 ICON_LIST = 'special://skin/extras/icons/playlist.png'
 ICON_KOREAN = 'special://skin/extras/icons/kdramaw.png'
 
-_KR_WORDS = re.compile(r'korea|k-?drama|kdrama|k-?movie|hallyu|한국|كوري', re.I)
+_KR_WORDS = re.compile(r'korea|\bk[- ]?dramas?\b|\bk[- ]?movies?\b|hallyu|한국|كوري', re.I)
 _SESSION = {'applied': False}
 _LAST = {'r429': 0, 'likes_limited': False, 'unauthorized': False}
 NOLINK = 'nolink'              # _custom(): Trakt not linked -> Original            # 429s of the last fetch (for the message)
@@ -322,12 +328,32 @@ def _norm(raw, source, liked=False):
     except Exception:
         likes = 0
     return {
-        'name': (lst.get('name') or slug).strip(),
+        'name': _clean(lst.get('name') or slug) or slug,
         'user': user, 'uname': uname, 'slug': slug,
         'likes': likes, 'count': count, 'liked': bool(liked),
         'desc': (lst.get('description') or '')[:300],
         'src': source,
     }
+
+
+# 3.2.62: script.skinvariables escapes only "&" when it builds the AF3 menus;
+# a Trakt list name with " < > (or a control character) broke the whole build
+# (log 2026-10-12 07:31:57: ExpatError not well-formed, line 5248) and AF3
+# kept its old menus. Names are made XML/format-safe before they are written.
+_UNSAFE = {'"': '”', "'": '’', '<': '‹', '>': '›',
+           '{': '(', '}': ')', '$': '＄', '\\': '/'}
+_CTRL = re.compile('[\x00-\x08\x0b\x0c\x0e-\x1f\x7f\ufffe\uffff]')
+
+
+def _clean(text):
+    text = _CTRL.sub('', str(text or ''))
+    for a, b in _UNSAFE.items():
+        text = text.replace(a, b)
+    return re.sub(r'\s+', ' ', text).strip()
+
+
+def _is_unsafe(text):
+    return _clean(text) != str(text or '').strip() or bool(_CTRL.search(str(text or '')))
 
 
 def _key(c):
@@ -483,7 +509,9 @@ def fetch(progress=None):
     need = []
     for c in todo:
         hit = cache.get(_key(c))
-        cat = hit[0] if hit else _guess(c)
+        # 3.2.63: liked lists are always checked by their items (country
+        # decides Korean) - a name alone cannot tell a Korean list apart
+        cat = hit[0] if hit else (None if c['liked'] else _guess(c))
         if cat in cats:
             cats[cat].append(c)
         elif hit and hit[0] == '-':
@@ -578,7 +606,7 @@ def _path(c):
 
 
 def _item(c, hub, icon):
-    return {'label': c['name'], 'path': _path(c), 'icon': icon,
+    return {'label': _clean(c['name']) or c['slug'], 'path': _path(c), 'icon': icon,
             'target': 'videos', 'guid': _guid(hub, c['user'], c['slug'])}
 
 
@@ -684,43 +712,47 @@ def korean_defaults():
     return out
 
 
-def _apply_hub_split(data, hub, liked, best):
-    _strip(data)
-    if liked:
-        data.append(_group(30677, hub, [_item(c, hub, ICON_LIST) for c in liked]))
-    if best:
-        data.append(_group(30678, hub, [_item(c, hub, ICON_LIST) for c in best]))
-    return data
+def _widget_style(data):
+    """The hub's own widget style (first real widget), so new rows match."""
+    for it in data:
+        if isinstance(it, dict) and not _ours(it) and it.get('widget_style') \
+                and str(it.get('path', '')).startswith('plugin://'):
+            return str(it['widget_style'])
+    return 'Flyer'
 
 
-def _apply_korean(data, picks_m, picks_t):
+def _widget(c, hub, style):
+    return {'label': _clean(c['name']) or c['slug'],
+            'icon': ICON_KOREAN if hub == '1103' else ICON_LIST,
+            'path': _path(c) + WIDGET_SUFFIX,
+            'target': 'videos',
+            'guid': _guid('w', hub, c['user'], c['slug']),
+            'widget_style': style}
+
+
+def _apply_widgets(data, hub, picks):
+    """Hub widgets file: our old rows out, the picks in (liked first)."""
     _strip(data)
-    mg, tg = _korean_groups(data)
-    for g, picks in ((mg, picks_m), (tg, picks_t)):
-        keep = {_key(c) for c in picks}
-        present = set()
-        for it in g['submenu']:
-            k = _item_key(it) if isinstance(it, dict) else None
-            if not k or k.split('/', 1)[0].lower() in FIXED_USERS:
-                continue
-            if k in keep:
-                present.add(k)
-            elif not str(it.get('disabled') or '').lower() == 'true':
-                it['disabled'] = 'True'
-                it[OFF_TAG] = 'off'
-        for c in picks:
-            if _key(c) not in present:
-                g['submenu'].append(_item(c, '1103', ICON_KOREAN))
-                present.add(_key(c))
+    style = _widget_style(data)
+    seen = set()
+    for c in sorted(picks, key=lambda c: not c.get('liked')):
+        if c.get('src') == 'build' or _key(c) in seen:
+            continue                      # build lists stay in the sub-menu
+        seen.add(_key(c))
+        data.append(_widget(c, hub, style))
     return data
 
 
 def _apply_files(mode, picks, only=None):
     """Write the hub files. only = set of file names to touch (None = all).
-    Returns the list of files written."""
+    3.2.63: the picks are WIDGET rows (hub widgets files); the sub-menu files
+    are only cleaned of what 3.2.57-3.2.62 put there. Returns files written."""
     written = []
-    jobs = ((HUB_MOVIES, 'movies'), (HUB_TV, 'tv'), (HUB_KOREAN, 'korean'))
-    for name, kind in jobs:
+    jobs = ((HUB_MOVIES, None), (HUB_TV, None), (HUB_KOREAN, None),
+            (W_MOVIES, ('1101', ('movies',))),
+            (W_TV, ('1102', ('tv',))),
+            (W_KOREAN, ('1103', ('kr_movies', 'kr_tv'))))
+    for name, widget in jobs:
         if only is not None and name not in only:
             continue
         path = _hub(name)
@@ -736,20 +768,30 @@ def _apply_files(mode, picks, only=None):
         except Exception as e:
             _log('%s unreadable: %s' % (name, e), xbmc.LOGWARNING)
             continue
-        if mode == CUSTOM:
-            if kind == 'korean':
-                data = _apply_korean(data, picks.get('kr_movies') or [],
-                                     picks.get('kr_tv') or [])
-            else:
-                sel = picks.get(kind) or []
-                data = _apply_hub_split(data, kind,
-                                        [c for c in sel if c.get('liked')],
-                                        [c for c in sel if not c.get('liked')])
+        if mode == CUSTOM and widget:
+            hub, cats = widget
+            sel = [c for cat in cats for c in (picks.get(cat) or [])]
+            data = _apply_widgets(data, hub, sel)
         else:
             data = _strip(data)
         if _write(path, data, before):
             written.append(name)
     return written
+
+
+def _has_unsafe_label(path):
+    """One of OUR items carries a label skinvariables cannot build (3.2.61)."""
+    data = _read(path) or []
+    stack = list(data)
+    while stack:
+        it = stack.pop()
+        if not isinstance(it, dict):
+            continue
+        if _ours(it) and _is_unsafe(it.get('label')):
+            return True
+        if isinstance(it.get('submenu'), list):
+            stack.extend(it['submenu'])
+    return False
 
 
 def _has_marker(path):
@@ -815,14 +857,22 @@ def ensure(rebuild=True):
     if st.get('mode') != CUSTOM or not isinstance(st.get('picks'), dict):
         return []
     picks = st['picks']
+    for lst in picks.values():
+        for c in lst if isinstance(lst, list) else []:
+            if isinstance(c, dict) and c.get('name'):
+                c['name'] = _clean(c['name']) or c.get('slug') or ''
     need = set()
-    for name, cats in ((HUB_MOVIES, ('movies',)), (HUB_TV, ('tv',)),
-                       (HUB_KOREAN, ('kr_movies', 'kr_tv'))):
-        if not any(picks.get(c) for c in cats):
+    for name, cats in ((W_MOVIES, ('movies',)), (W_TV, ('tv',)),
+                       (W_KOREAN, ('kr_movies', 'kr_tv'))):
+        if not any(c.get('src') != 'build' for cat in cats for c in (picks.get(cat) or [])):
             continue
         p = _hub(name)
-        if os.path.isfile(p) and not _has_marker(p):
+        if os.path.isfile(p) and (not _has_marker(p) or _has_unsafe_label(p)):
             need.add(name)
+    for name in (HUB_MOVIES, HUB_TV, HUB_KOREAN):
+        p = _hub(name)
+        if os.path.isfile(p) and _has_marker(p):
+            need.add(name)                # 3.2.57-3.2.62 sub-menu entries
     if not need:
         return []
     written = _apply_files(CUSTOM, picks, only=need)
@@ -1048,10 +1098,13 @@ def _custom():
     if _LAST.get('likes_limited'):
         xbmcgui.Dialog().notification(AR(30660), AR(30690),
                                       xbmcgui.NOTIFICATION_WARNING, 6000)
-    # the build's own Korean lists first (pre-ticked), then Trakt's
-    for cat, defaults in korean_defaults().items():
-        have = {_key(c) for c in defaults}
-        cats[cat] = defaults + [c for c in cats.get(cat, []) if _key(c) not in have]
+    # 3.2.63: the picks become widget rows; the build's own Korean lists
+    # stay in the Korean sub-menu and are not offered again
+    have = set()
+    for defaults in korean_defaults().values():
+        have |= {_key(c) for c in defaults}
+    for cat in ('kr_movies', 'kr_tv'):
+        cats[cat] = [c for c in cats.get(cat, []) if _key(c) not in have]
     if not any(cats.values()):
         xbmcgui.Dialog().ok(AR(30660), AR(30685))
         return False

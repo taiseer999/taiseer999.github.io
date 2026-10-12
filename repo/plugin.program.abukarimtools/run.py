@@ -2,8 +2,9 @@
 """
 run.py — Manually trigger the ABUKARIM TOOLS first-run sequence.
 
-This runs the SAME steps the service runs on first boot (Binary Installer ->
-Restore popup -> Add-on Portal -> Patches -> Skin Installer), but on demand — it does NOT wait for the
+This runs the SAME steps the service runs on first boot (3.2.64: Skin
+Installer first -> Binary Installer -> Restore popup -> Add-on Portal ->
+Widgets Layout -> Trakt Lists -> Patches), but on demand — it does NOT wait for the
 home screen or any wizard. Use it whenever you want to (re)run setup without
 rebooting.
 

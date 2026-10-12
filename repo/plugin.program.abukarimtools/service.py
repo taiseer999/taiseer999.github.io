@@ -29,6 +29,8 @@ on the first Kodi start after a fresh build install. The service then:
     5b. Asks which AF3 shortcuts to use (resources/lib/af3_shortcuts.py):
         Light = keep addon_data/script.skinvariables, Moderate / Full =
         replace it from ABUKARIM Wizard No Wipe Option 1 / Option 2.
+    (3.2.64: the Skin Installer runs FIRST, before step 1, and setup then
+    continues in Arabic in that skin.)
     5c. Trakt Lists (resources/lib/trakt_hubs.py): Original = hubs as
         shipped, Custom = the user's Trakt likes + picked best lists in the
         AF3 Movies / TV / Korean hubs (Home page untouched).
@@ -569,6 +571,25 @@ def _run_steps(monitor):
     _wait_skin_settle(monitor)
     _wait_no_modal(monitor)
 
+    # 3.2.64: the skin comes FIRST, so every later step (restore, Add-on
+    # Portal, Widgets Layout, Trakt Lists, patches) is shown in the
+    # Arabic-capable skin, in Arabic. Estuary has no Arabic glyphs.
+    _log('Step 0 — Skin Installer (first).')
+    _step_skin_installer()
+    _wait_skin_settle(monitor)
+    _wait_no_modal(monitor)
+    if xbmc.getSkinDir() != 'skin.estuary':
+        try:
+            from resources.lib import set_language
+            if set_language.force_arabic():
+                _wait_skin_settle(monitor)     # the language switch reloads the skin
+        except Exception:
+            _log('Switch to Arabic after the skin crashed (ignored):\n%s'
+                 % traceback.format_exc(), xbmc.LOGERROR)
+        _wait_no_modal(monitor)
+    else:
+        _log('Skin Installer left Estuary active - setup stays in English.')
+
     _log('Step 1 — Binary Installer.')
     _step_binary_installer(monitor)
     # The binary installer ends with UpdateLocalAddons; Kodi's add-on rescan
@@ -615,10 +636,6 @@ def _run_steps(monitor):
     _wait_no_modal(monitor)
     _step_guarded('webserver', lambda: __import__(
         'resources.lib.webserver_secure', fromlist=['first_run']).first_run())
-
-    _log('Step 5 — Skin Installer (last).')
-    _wait_no_modal(monitor)
-    _step_skin_installer()
 
     # 3.2.57: a skin profile applied by the Skin Installer can replace the
     # AF3 hub menus - put the Custom Trakt lists back (no-op otherwise).

@@ -1017,8 +1017,8 @@ msgid "Nothing is downloaded or changed"
 msgstr "لن يتم تنزيل أو تغيير أي شيء"
 
 msgctxt "#30667"
-msgid "The home page and the ABUKARIM lists stay as they are"
-msgstr "تبقى الصفحة الرئيسية وقوائم أبوكريم كما هي"
+msgid "Your lists are added as widgets - the home page and the ABUKARIM lists stay as they are"
+msgstr "تُضاف قوائمك ودجات في الأقسام، وتبقى الصفحة الرئيسية وقوائم أبوكريم كما هي"
 
 msgctxt "#30668"
 msgid "Arrows to move  •  OK to choose  •  Back = Original"
