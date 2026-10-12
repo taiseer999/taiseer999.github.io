@@ -23,6 +23,7 @@ ID ranges:
   30430-30459  AF3 auto-trailers
   30530-30599  3.2: profiles, tuning, remote access, log share, bootstrap
   30630-30649  Widgets Layout / ترتيب الودجات (Light / Moderate / Full)
+  30660-30691  Trakt Lists / قوائم تراكت (Original / Custom)
 """
 
 STRINGS = {
@@ -382,4 +383,51 @@ STRINGS = {
     30648: ('Widgets layout left as it is', 'بقي ترتيب الودجات كما هو'),
     30649: ('No trailer found for this title', 'لم يُعثر على مقطع دعائي لهذا العنوان'),
     30650: ('Trailer button only', 'عند الضغط على زر المقطع الدعائي فقط'),
+    # ---- Trakt Lists / قوائم تراكت (30660-30689), Modern Standard Arabic ----
+    # Always shown in ARABIC (trakt_hubs.AR), like Widgets Layout.
+    30660: ('Trakt Lists', 'قوائم تراكت'),
+    30661: ('Original', 'الأصلي'),
+    30662: ('The ABUKARIM build lists[CR]exactly as they are',
+            'قوائم بيلد أبوكريم[CR]كما هي دون أي تغيير'),
+    30663: ('Custom', 'مخصّص'),
+    30664: ('Your Trakt likes + the best[CR]Trakt lists you choose',
+            'القوائم التي أعجبتك في تراكت[CR]وأفضل قوائم تراكت التي تختارها'),
+    30665: ('Choose the Trakt lists of the Movies, TV Shows and Korean sections',
+            'اختر قوائم تراكت لأقسام الأفلام والمسلسلات والكوري'),
+    30666: ('Nothing is downloaded or changed',
+            'لن يتم تنزيل أو تغيير أي شيء'),
+    30667: ('The home page and the ABUKARIM lists stay as they are',
+            'تبقى الصفحة الرئيسية وقوائم أبوكريم كما هي'),
+    30668: ('Arrows to move  •  OK to choose  •  Back = Original',
+            'الأسهم للتنقل  •  OK للاختيار  •  رجوع = الأصلي'),
+    30669: ('Custom needs your Trakt account linked to TMDb Helper. Link it now?[CR]Without the link the original lists are used.',
+            'يتطلب خيار «مخصّص» ربط حسابك في تراكت بإضافة TMDb Helper. هل تريد الربط الآن؟[CR]من دون الربط تُطبَّق القوائم الأصلية.'),
+    30670: ('Fetching the lists from Trakt...', 'جارٍ جلب القوائم من تراكت...'),
+    30671: ('Sorting the lists (%d / %d)...', 'جارٍ فرز القوائم (%d من %d)...'),
+    30672: ('Could not reach Trakt - your current lists were kept.',
+            'تعذّر الاتصال بتراكت، وتم الإبقاء على القوائم الحالية.'),
+    30673: ('Movie lists', 'قوائم الأفلام'),
+    30674: ('TV show lists', 'قوائم المسلسلات'),
+    30675: ('Korean movie lists', 'قوائم الأفلام الكورية'),
+    30676: ('Korean series lists', 'قوائم المسلسلات الكورية'),
+    30677: ('Lists I Liked', 'قوائم أعجبتني'),
+    30678: ('Best on Trakt', 'الأفضل في تراكت'),
+    30679: ('by %s  •  %d likes  •  %d items', 'بواسطة %s  •  %d إعجاب  •  %d عنصر'),
+    30680: ('Liked', 'أعجبتني'),
+    30681: ('Trakt lists: %s', 'قوائم تراكت: %s'),
+    30682: ('Trakt lists left as they are', 'بقيت قوائم تراكت كما هي'),
+    30683: ('TMDb Helper is not installed - your current lists were kept.',
+            'إضافة TMDb Helper غير مثبّتة، وتم الإبقاء على القوائم الحالية.'),
+    30684: ('Waiting for the Trakt link...', 'بانتظار ربط حساب تراكت...'),
+    30685: ('No lists were found on Trakt - your current lists were kept.',
+            'لم يُعثر على قوائم في تراكت، وتم الإبقاء على القوائم الحالية.'),
+    30686: ('Movies', 'أفلام'),
+    30687: ('Series', 'مسلسلات'),
+    30688: ('Already in the build', 'موجودة في البيلد'),
+    30689: ('Trakt is busy right now (too many requests). Try again in a few minutes - your current lists were kept.',
+            'خادم تراكت مشغول الآن بسبب كثرة الطلبات. حاول مرة أخرى بعد بضع دقائق، وتم الإبقاء على القوائم الحالية.'),
+    30690: ('Your liked lists are not available right now (Trakt limit) - showing the best Trakt lists only.',
+            'القوائم التي أعجبتك غير متاحة الآن بسبب حدّ تراكت، وتُعرض أفضل قوائم تراكت فقط.'),
+    30691: ('Trakt is not linked - the original lists were applied.',
+            'لم يتم ربط حساب تراكت، وطُبّقت القوائم الأصلية.'),
 }

@@ -38,6 +38,7 @@ ICONS  = {
     'cpu_benchmark':  ADDON_PATH + 'resources/icons/cpu_benchmark.png',
     'addon_portal':   ADDON_PATH + 'resources/icons/addon_portal.png',
     'af3_shortcuts':  ADDON_PATH + 'resources/icons/af3_shortcuts.png',
+    'trakt_hubs':     ADDON_PATH + 'resources/icons/trakt_hubs.png',
     # 3.2
     'bootstrap':      ADDON_PATH + 'resources/icons/bootstrap.png',
     'hw_tuning':      ADDON_PATH + 'resources/icons/hw_tuning.png',
@@ -67,6 +68,7 @@ CATEGORIES = [
         ('skin_install',   30003),
         ('addon_portal',   30021),
         ('af3_shortcuts',  30630),
+        ('trakt_hubs',     30660),
         ('binary_install', 30004),
         ('bootstrap',      30590),
         ('hw_tuning',      30591),
@@ -114,7 +116,9 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 # 3.2.43~beta3: CPU Benchmark (its own text window)
                 'cpu_benchmark',
                 # 3.2.43~beta7: Widgets Layout (its own window)
-                'af3_shortcuts'}
+                'af3_shortcuts',
+                # 3.2.57: Trakt Lists (its own window)
+                'trakt_hubs'}
 
 
 def _add_folder(label, cat_key, icon_key):
@@ -397,6 +401,9 @@ def router():
     elif mode == 'af3_shortcuts':
         from resources.lib import af3_shortcuts
         af3_shortcuts.run_menu()
+    elif mode == 'trakt_hubs':
+        from resources.lib import trakt_hubs
+        trakt_hubs.run_menu()
 
     elif mode == 'addon_portal':
         _end_directory()

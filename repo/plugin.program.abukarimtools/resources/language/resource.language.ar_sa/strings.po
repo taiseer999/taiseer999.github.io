@@ -980,7 +980,6 @@ msgctxt "#30648"
 msgid "Widgets layout left as it is"
 msgstr "بقي ترتيب الودجات كما هو"
 
-
 msgctxt "#30649"
 msgid "No trailer found for this title"
 msgstr "لم يُعثر على مقطع دعائي لهذا العنوان"
@@ -988,3 +987,132 @@ msgstr "لم يُعثر على مقطع دعائي لهذا العنوان"
 msgctxt "#30650"
 msgid "Trailer button only"
 msgstr "عند الضغط على زر المقطع الدعائي فقط"
+
+msgctxt "#30660"
+msgid "Trakt Lists"
+msgstr "قوائم تراكت"
+
+msgctxt "#30661"
+msgid "Original"
+msgstr "الأصلي"
+
+msgctxt "#30662"
+msgid "The ABUKARIM build lists[CR]exactly as they are"
+msgstr "قوائم بيلد أبوكريم[CR]كما هي دون أي تغيير"
+
+msgctxt "#30663"
+msgid "Custom"
+msgstr "مخصّص"
+
+msgctxt "#30664"
+msgid "Your Trakt likes + the best[CR]Trakt lists you choose"
+msgstr "القوائم التي أعجبتك في تراكت[CR]وأفضل قوائم تراكت التي تختارها"
+
+msgctxt "#30665"
+msgid "Choose the Trakt lists of the Movies, TV Shows and Korean sections"
+msgstr "اختر قوائم تراكت لأقسام الأفلام والمسلسلات والكوري"
+
+msgctxt "#30666"
+msgid "Nothing is downloaded or changed"
+msgstr "لن يتم تنزيل أو تغيير أي شيء"
+
+msgctxt "#30667"
+msgid "The home page and the ABUKARIM lists stay as they are"
+msgstr "تبقى الصفحة الرئيسية وقوائم أبوكريم كما هي"
+
+msgctxt "#30668"
+msgid "Arrows to move  •  OK to choose  •  Back = Original"
+msgstr "الأسهم للتنقل  •  OK للاختيار  •  رجوع = الأصلي"
+
+msgctxt "#30669"
+msgid "Custom needs your Trakt account linked to TMDb Helper. Link it now?[CR]Without the link the original lists are used."
+msgstr "يتطلب خيار «مخصّص» ربط حسابك في تراكت بإضافة TMDb Helper. هل تريد الربط الآن؟[CR]من دون الربط تُطبَّق القوائم الأصلية."
+
+msgctxt "#30670"
+msgid "Fetching the lists from Trakt..."
+msgstr "جارٍ جلب القوائم من تراكت..."
+
+msgctxt "#30671"
+msgid "Sorting the lists (%d / %d)..."
+msgstr "جارٍ فرز القوائم (%d من %d)..."
+
+msgctxt "#30672"
+msgid "Could not reach Trakt - your current lists were kept."
+msgstr "تعذّر الاتصال بتراكت، وتم الإبقاء على القوائم الحالية."
+
+msgctxt "#30673"
+msgid "Movie lists"
+msgstr "قوائم الأفلام"
+
+msgctxt "#30674"
+msgid "TV show lists"
+msgstr "قوائم المسلسلات"
+
+msgctxt "#30675"
+msgid "Korean movie lists"
+msgstr "قوائم الأفلام الكورية"
+
+msgctxt "#30676"
+msgid "Korean series lists"
+msgstr "قوائم المسلسلات الكورية"
+
+msgctxt "#30677"
+msgid "Lists I Liked"
+msgstr "قوائم أعجبتني"
+
+msgctxt "#30678"
+msgid "Best on Trakt"
+msgstr "الأفضل في تراكت"
+
+msgctxt "#30679"
+msgid "by %s  •  %d likes  •  %d items"
+msgstr "بواسطة %s  •  %d إعجاب  •  %d عنصر"
+
+msgctxt "#30680"
+msgid "Liked"
+msgstr "أعجبتني"
+
+msgctxt "#30681"
+msgid "Trakt lists: %s"
+msgstr "قوائم تراكت: %s"
+
+msgctxt "#30682"
+msgid "Trakt lists left as they are"
+msgstr "بقيت قوائم تراكت كما هي"
+
+msgctxt "#30683"
+msgid "TMDb Helper is not installed - your current lists were kept."
+msgstr "إضافة TMDb Helper غير مثبّتة، وتم الإبقاء على القوائم الحالية."
+
+msgctxt "#30684"
+msgid "Waiting for the Trakt link..."
+msgstr "بانتظار ربط حساب تراكت..."
+
+msgctxt "#30685"
+msgid "No lists were found on Trakt - your current lists were kept."
+msgstr "لم يُعثر على قوائم في تراكت، وتم الإبقاء على القوائم الحالية."
+
+msgctxt "#30686"
+msgid "Movies"
+msgstr "أفلام"
+
+msgctxt "#30687"
+msgid "Series"
+msgstr "مسلسلات"
+
+msgctxt "#30688"
+msgid "Already in the build"
+msgstr "موجودة في البيلد"
+
+msgctxt "#30689"
+msgid "Trakt is busy right now (too many requests). Try again in a few minutes - your current lists were kept."
+msgstr "خادم تراكت مشغول الآن بسبب كثرة الطلبات. حاول مرة أخرى بعد بضع دقائق، وتم الإبقاء على القوائم الحالية."
+
+msgctxt "#30690"
+msgid "Your liked lists are not available right now (Trakt limit) - showing the best Trakt lists only."
+msgstr "القوائم التي أعجبتك غير متاحة الآن بسبب حدّ تراكت، وتُعرض أفضل قوائم تراكت فقط."
+
+msgctxt "#30691"
+msgid "Trakt is not linked - the original lists were applied."
+msgstr "لم يتم ربط حساب تراكت، وطُبّقت القوائم الأصلية."
+

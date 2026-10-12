@@ -980,7 +980,6 @@ msgctxt "#30648"
 msgid "Widgets layout left as it is"
 msgstr ""
 
-
 msgctxt "#30649"
 msgid "No trailer found for this title"
 msgstr ""
@@ -988,3 +987,132 @@ msgstr ""
 msgctxt "#30650"
 msgid "Trailer button only"
 msgstr ""
+
+msgctxt "#30660"
+msgid "Trakt Lists"
+msgstr ""
+
+msgctxt "#30661"
+msgid "Original"
+msgstr ""
+
+msgctxt "#30662"
+msgid "The ABUKARIM build lists[CR]exactly as they are"
+msgstr ""
+
+msgctxt "#30663"
+msgid "Custom"
+msgstr ""
+
+msgctxt "#30664"
+msgid "Your Trakt likes + the best[CR]Trakt lists you choose"
+msgstr ""
+
+msgctxt "#30665"
+msgid "Choose the Trakt lists of the Movies, TV Shows and Korean sections"
+msgstr ""
+
+msgctxt "#30666"
+msgid "Nothing is downloaded or changed"
+msgstr ""
+
+msgctxt "#30667"
+msgid "The home page and the ABUKARIM lists stay as they are"
+msgstr ""
+
+msgctxt "#30668"
+msgid "Arrows to move  •  OK to choose  •  Back = Original"
+msgstr ""
+
+msgctxt "#30669"
+msgid "Custom needs your Trakt account linked to TMDb Helper. Link it now?[CR]Without the link the original lists are used."
+msgstr ""
+
+msgctxt "#30670"
+msgid "Fetching the lists from Trakt..."
+msgstr ""
+
+msgctxt "#30671"
+msgid "Sorting the lists (%d / %d)..."
+msgstr ""
+
+msgctxt "#30672"
+msgid "Could not reach Trakt - your current lists were kept."
+msgstr ""
+
+msgctxt "#30673"
+msgid "Movie lists"
+msgstr ""
+
+msgctxt "#30674"
+msgid "TV show lists"
+msgstr ""
+
+msgctxt "#30675"
+msgid "Korean movie lists"
+msgstr ""
+
+msgctxt "#30676"
+msgid "Korean series lists"
+msgstr ""
+
+msgctxt "#30677"
+msgid "Lists I Liked"
+msgstr ""
+
+msgctxt "#30678"
+msgid "Best on Trakt"
+msgstr ""
+
+msgctxt "#30679"
+msgid "by %s  •  %d likes  •  %d items"
+msgstr ""
+
+msgctxt "#30680"
+msgid "Liked"
+msgstr ""
+
+msgctxt "#30681"
+msgid "Trakt lists: %s"
+msgstr ""
+
+msgctxt "#30682"
+msgid "Trakt lists left as they are"
+msgstr ""
+
+msgctxt "#30683"
+msgid "TMDb Helper is not installed - your current lists were kept."
+msgstr ""
+
+msgctxt "#30684"
+msgid "Waiting for the Trakt link..."
+msgstr ""
+
+msgctxt "#30685"
+msgid "No lists were found on Trakt - your current lists were kept."
+msgstr ""
+
+msgctxt "#30686"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30687"
+msgid "Series"
+msgstr ""
+
+msgctxt "#30688"
+msgid "Already in the build"
+msgstr ""
+
+msgctxt "#30689"
+msgid "Trakt is busy right now (too many requests). Try again in a few minutes - your current lists were kept."
+msgstr ""
+
+msgctxt "#30690"
+msgid "Your liked lists are not available right now (Trakt limit) - showing the best Trakt lists only."
+msgstr ""
+
+msgctxt "#30691"
+msgid "Trakt is not linked - the original lists were applied."
+msgstr ""
+

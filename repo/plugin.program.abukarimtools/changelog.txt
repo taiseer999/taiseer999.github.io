@@ -1,3 +1,81 @@
+v3.2.61
+- Trakt Lists: Custom REQUIRES the Trakt link (TMDb Helper, its QR).
+    * no token -> "Custom needs your Trakt account linked" (30669, yes/no);
+      No / closed without a token -> Original is applied (30691 notice),
+      no Trakt request is made.
+    * a stored token that Trakt refuses (401/403 on users/likes/lists) ->
+      the same link prompt once (a NEW token is required), then the fetch
+      is retried; declined -> Original.
+    * a rate limit on the likes still continues with the public lists
+      (3.2.60), since the account IS linked.
+- Original / Custom on failure: a busy/offline Trakt keeps the current hubs
+  (3.2.58); only "not linked" switches to Original.
+
+v3.2.60
+- 3.2.59 verified on the Mac (log 06:38): Trakt step stopped after 1 call,
+  hubs untouched, "Trakt is busy" shown, patcher waited (Step 4 at 06:38:36,
+  patch run 06:38:54).
+- That 429 was on users/likes/lists - the user's ACCOUNT (Retry-After 524 s),
+  while Fen Light also got 429 on sync/last_activities. A rate limit on the
+  likes no longer stops the run: public lists (popular / trending / Korean
+  search, client-id bucket) are still fetched and offered, with a notice
+  (30690). A block on the public calls still stops at once.
+
+v3.2.59
+- FIX (log 2026-10-12 06:28 / 06:31, Mac): in the Installation Wizard the
+  patcher started 1 s after Trakt Lists. The Korean pickers were torn down
+  0.2 s after the progress window closed (multiselect -> None -> "keep the
+  pre-ticked"), so the step ended at once. Now:
+    * Trakt Lists waits for the progress window to be really gone before each
+      picker, and re-opens a picker closed in under 1.5 s (up to 5 times).
+    * run_step() waits for the AF3 rebuild it started (skin_rebuild.busy +
+      busy/progress dialogs, max 120 s) before returning.
+    * service Step 4 waits for no dialog AND for any script.skinvariables
+      build (_wait_skin_build, max 120 s) + 2 s settle before the patcher.
+- Trakt's Cloudflare blocked this Mac ("Access denied | api.trakt.tv used
+  Cloudflare", HTTP 429 without Retry-After) - which is why every list check
+  failed and Movies / TV were empty. A Cloudflare page, a Retry-After over
+  20 s or 3 429s in a row now stop the run at the first hit ("Trakt is busy"),
+  instead of retrying ~100 lists into the block.
+- Log: each picker's result (n of m), "instantly closed" retries, step end.
+
+v3.2.58
+- FIX (log 2026-10-12 06:20, Mac): Trakt Lists asked to link Trakt although
+  TMDb Helper was linked. TMDb Helper's startup check got HTTP 429 from Trakt
+  and logged "[session token expired]" - the stored token itself was valid.
+  The token is now read from TMDb Helper's session property
+  (TMDbHelper.TraktUserToken) first, then its setting; only the token's own
+  expiry counts. The log states which (valid/expired/missing, window/setting).
+- Trakt is rate-limiting TMDb Helper's shared client id, so Trakt Lists is
+  now gentle: list names decide movies/TV/Korean when unambiguous, at most 60
+  item checks per run (liked lists first), 2 at a time, results cached 30
+  days in trakt_hubs.json, one shared back-off; a Retry-After over 20 s stops
+  the run with a "Trakt is busy" message (30689).
+- A failed / offline / rate-limited Custom run no longer resets the hubs to
+  Original - an earlier Custom setup stays exactly as it was.
+- More log lines: link yes/no, token state, calls, 429s, timing.
+
+v3.2.57
+- NEW: Trakt Lists (قوائم تراكت) - resources/lib/trakt_hubs.py, window
+  trakt_hubs.xml, entry in Setup & Install and Installation Wizard step 3c
+  (right after Widgets Layout). Two cards:
+    Original  the AF3 hubs exactly as the build ships them
+    Custom    the user's Trakt likes + the best Trakt lists they tick
+- Custom only touches the AF3 hub sub-menus 1101 (Movies), 1102 (TV) and
+  1103 (Korean). Movies/TV get two groups appended: "قوائم أعجبتني" and
+  "الأفضل في تراكت". Korean: the build's own lists are offered pre-ticked,
+  unticked ones are hidden (disabled + abk_trakt tag), new picks appended.
+  Home page, all widget files and the ABUKARIM lists (taiseer999) are never
+  touched or offered.
+- Lists come from Trakt through TMDb Helper's client id: users/likes/lists
+  (needs TMDb Helper's Trakt link - offered with its QR), lists/popular,
+  lists/trending and search/list for Korean. Each candidate's first 30 items
+  decide movies vs TV and Korean (country kr / language ko).
+- Original is a clean undo (removes every guid-abkt item, re-enables every
+  abk_trakt item). Picks are saved in trakt_hubs.json; at boot and at the end
+  of setup they are put back - without network - only into a hub file that
+  lost all of them (restore, Widgets Layout, skin profile, wizard Patch GUI).
+
 v3.2.56
 - FIX: after every AF3 update the skin was reloaded twice. The watchdog's
   skin-only run (ids=skin.arctic.fuse.3) skipped the TinyPPI reconcile, which

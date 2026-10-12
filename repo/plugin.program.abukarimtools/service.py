@@ -29,6 +29,9 @@ on the first Kodi start after a fresh build install. The service then:
     5b. Asks which AF3 shortcuts to use (resources/lib/af3_shortcuts.py):
         Light = keep addon_data/script.skinvariables, Moderate / Full =
         replace it from ABUKARIM Wizard No Wipe Option 1 / Option 2.
+    5c. Trakt Lists (resources/lib/trakt_hubs.py): Original = hubs as
+        shipped, Custom = the user's Trakt likes + picked best lists in the
+        AF3 Movies / TV / Korean hubs (Home page untouched).
     6. Applies patches (so freshly installed add-ons get patched too).
     7. Opens the Skin Installer last (resources/lib/skin_installer.py).
 """
@@ -275,6 +278,19 @@ def _step_af3_shortcuts(monitor):
         return False
 
 
+def _step_trakt_hubs(monitor):
+    """Trakt Lists / قوائم تراكت: Original / Custom (Movies, TV, Korean hubs)."""
+    try:
+        from resources.lib import trakt_hubs
+        trakt_hubs.run_step(wait_clear=lambda: _wait_no_modal(monitor),
+                            settle=lambda s: _settle(monitor, s))
+        return True
+    except Exception:
+        _log('Trakt Lists step failed:\n%s' % traceback.format_exc(),
+             xbmc.LOGERROR)
+        return False
+
+
 def _step_skin_installer():
     try:
         from resources.lib import skin_installer
@@ -326,6 +342,31 @@ def _wait_no_modal(monitor, timeout=600, stable=2):
             return False
         waited += 1
     return not monitor.abortRequested()
+
+
+def _wait_skin_build(monitor, timeout=120):
+    """Wait while script.skinvariables is (re)building the active skin."""
+    try:
+        from resources.lib import skin_rebuild
+    except Exception:
+        return True
+    waited = 0
+    logged = False
+    while waited < timeout and not monitor.abortRequested():
+        reason = skin_rebuild.busy()
+        if not reason:
+            if logged:
+                _log('Skin build finished - continuing.')
+            return True
+        if not logged:
+            _log('Waiting for the skin build to finish (%s)…' % reason)
+            logged = True
+        if monitor.waitForAbort(1):
+            return False
+        waited += 1
+    _log('Skin build still busy after %ds - continuing.' % timeout,
+         xbmc.LOGWARNING)
+    return False
 
 
 def _step_binary_installer(monitor):
@@ -556,7 +597,17 @@ def _run_steps(monitor):
     _wait_no_modal(monitor)
     _step_af3_shortcuts(monitor)
 
+    _log('Step 3c — Trakt Lists (Original / Custom).')
+    _wait_no_modal(monitor)
+    _step_trakt_hubs(monitor)
+
     _log('Step 4 — Apply Patches.')
+    # 3.2.59: the patcher waits - until no dialog is up and any AF3 menu
+    # rebuild started by Widgets Layout / Trakt Lists has finished (it was
+    # starting 1 s after the Trakt step, log 2026-10-12 06:31:11).
+    _wait_no_modal(monitor)
+    _wait_skin_build(monitor)
+    _settle(monitor, 2)
     _wait_no_modal(monitor)
     _step_patcher(monitor)
 
@@ -568,6 +619,11 @@ def _run_steps(monitor):
     _log('Step 5 — Skin Installer (last).')
     _wait_no_modal(monitor)
     _step_skin_installer()
+
+    # 3.2.57: a skin profile applied by the Skin Installer can replace the
+    # AF3 hub menus - put the Custom Trakt lists back (no-op otherwise).
+    _step_guarded('trakt_hubs_ensure', lambda: __import__(
+        'resources.lib.trakt_hubs', fromlist=['ensure']).ensure())
 
     _log('First-run sequence finished.')
 
@@ -1094,6 +1150,16 @@ def main():
         _relink_after_rebuild(monitor)
     except Exception:
         _log('Post-rebuild repo linking crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
+    # 3.2.57: Custom Trakt lists - re-apply the saved picks to an AF3 hub
+    # file that was replaced wholesale (restore, Widgets Layout, wizard
+    # Patch GUI). No network; a hub edited by hand is left alone. Fenced.
+    try:
+        from resources.lib import trakt_hubs
+        trakt_hubs.ensure()
+    except Exception:
+        _log('Trakt Lists check crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
     # 3.2: hide menu items / widgets whose add-on is missing (and bring back
