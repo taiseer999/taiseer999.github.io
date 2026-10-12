@@ -393,6 +393,13 @@ def router():
         service.run_now(remove_flag=True, force=True)
         return
 
+    if mode == 'subtitle_cycler':
+        # 3.2.67: AF3 OSD Subtitle Cycler button when script.subtitle.cycler
+        # is missing/disabled - install it from repository.taiseer, then run it.
+        from resources.lib import subtitle_tools
+        subtitle_tools.osd_cycler()
+        return
+
     if mode == 'skin_install':
         _end_directory()
         from resources.lib import skin_installer

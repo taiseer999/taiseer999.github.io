@@ -149,6 +149,47 @@ _A4KSUBS_DECODE_NEW_B64 = 'ICAgICAgICAgICAgaWYgbm90IGVuY29kaW5nOgogICAgICAgICAgI
 
 
 
+# ── AF3: Subtitle Buttons - OSD XML (inserted after the Subtitles button) ──
+_AF3_SUBTOOLS_ANCHOR = (
+    '                            <param name="groupid">6107</param>\n'
+    '                            <param name="itemgap">osd_itemgap</param>\n'
+    '                            <param name="iconoffset_condition">[VideoPlayer.SubtitlesEnabled + '
+    '!String.IsEmpty(VideoPlayer.SubtitlesLanguage)]</param>\n'
+    '                        </include>'
+)
+_AF3_SUBTOOLS_XML = (
+    '\n\n\n'
+    '                        <!-- ABUKARIM: AF3 subtitle buttons -->\n'
+    '                        <!-- DexSubtitles AutoSync: sync the playing subtitle (autosync.py) -->\n'
+    '                        <control type="button" id="6010">\n'
+    '                            <include>Defs_OSD_Button</include>\n'
+    '                            <visible>System.AddonIsEnabled(service.subtitles.dexworld)</visible>\n'
+    '                            <onclick>CancelAlarm(osd_timeout,true)</onclick>\n'
+    '                            <onclick>RunScript(special://home/addons/service.subtitles.dexworld/abk_osd_sync.py)</onclick>\n'
+    '                        </control>\n'
+    '                        <include content="OSD_Button_Icon_Overlay" condition="System.AddonIsEnabled(service.subtitles.dexworld)">\n'
+    '                            <param name="icon">special://skin/extras/icons/dexsync.png</param>\n'
+    '                            <param name="id">6010</param>\n'
+    '                            <param name="groupid">6110</param>\n'
+    '                            <param name="itemgap">osd_itemgap</param>\n'
+    '                        </include>\n'
+    '\n\n'
+    '                        <!-- Subtitle Cycler: next subtitle from every subtitle add-on -->\n'
+    '                        <control type="button" id="6011">\n'
+    '                            <include>Defs_OSD_Button</include>\n'
+    '                            <onclick>CancelAlarm(osd_timeout,true)</onclick>\n'
+    '                            <onclick condition="System.AddonIsEnabled(script.subtitle.cycler)">RunScript(script.subtitle.cycler)</onclick>\n'
+    '                            <onclick condition="!System.AddonIsEnabled(script.subtitle.cycler)">RunPlugin(plugin://plugin.program.abukarimtools/?mode=subtitle_cycler)</onclick>\n'
+    '                        </control>\n'
+    '                        <include content="OSD_Button_Icon_Overlay">\n'
+    '                            <param name="icon">special://skin/extras/icons/subcycler.png</param>\n'
+    '                            <param name="id">6011</param>\n'
+    '                            <param name="groupid">6111</param>\n'
+    '                            <param name="itemgap">osd_itemgap</param>\n'
+    '                        </include>\n'
+    '                        <!-- /ABUKARIM: AF3 subtitle buttons -->'
+)
+
 PATCHES = [
     # ── TMDbHelper Trakt QR Auth (by ABUKARIM TOOLS) ──
     {
@@ -1169,6 +1210,60 @@ PATCHES = [
         'toggle': 'a4ksubs_quiet',
         'description': 'a4kSubtitles logger.py - debug chatter only when Kodi debug logging is on',
     },
+    # ── AF3: Subtitle Buttons (3.2.67, toggle 'af3_subtools') ──
+    # Two OSD buttons right after the Subtitles button (6007) in the AF3 player
+    # bar: DexSubtitles AutoSync (dexsync.png) and Subtitle Cycler
+    # (subcycler.png). Icons are shipped into extras/icons; the DexSubtitles
+    # launcher is shipped INTO service.subtitles.dexworld so it runs with that
+    # add-on's context and its own autosync.py. The cycler button runs
+    # script.subtitle.cycler, or - when it is missing/disabled - RunPlugin
+    # mode=subtitle_cycler, which installs it from repository.taiseer first
+    # (subtitle_tools.py). All not_found_ok: a missing skin/add-on is a skip.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('extras', 'icons', 'dexsync.png'),
+        'toggle': 'af3_subtools',
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_subtools', 'dexsync.png'),
+        'description': 'AF3 Subtitle Buttons - DexSubtitles icon',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('extras', 'icons', 'subcycler.png'),
+        'toggle': 'af3_subtools',
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_subtools', 'subcycler.png'),
+        'description': 'AF3 Subtitle Buttons - Subtitle Cycler icon',
+    },
+    {
+        'addon_id': 'service.subtitles.dexworld',
+        'rel_path': 'abk_osd_sync.py',
+        'toggle': 'af3_subtools',
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_subtools', 'abk_osd_sync.py'),
+        'description': 'AF3 Subtitle Buttons - DexSubtitles OSD AutoSync launcher',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'toggle': 'af3_subtools',
+        'not_found_ok': True,
+        'old': _AF3_SUBTOOLS_ANCHOR,
+        'new': _AF3_SUBTOOLS_ANCHOR + _AF3_SUBTOOLS_XML,
+        'already_patched_check': '<!-- ABUKARIM: AF3 subtitle buttons -->',
+        'fallback_pattern': r'(<param name="groupid">6107</param>[\s\S]*?</include>)',
+        'fallback_repl': r'\1' + _AF3_SUBTOOLS_XML,   # XML has no backslashes
+        'description': 'AF3 Subtitle Buttons - OSD buttons after Subtitles',
+    },
 ]
 
 
@@ -1469,7 +1564,7 @@ TOGGLE_GROUPS = [
     ('fenlight_volume',  'Fenlight: Kill Volume Auto-Drop'),
     ('fenlight_tmdbh',   'Fenlight: TMDbHelper Playback Fix'),
     ('a4ksubs_utf8',     'a4kSubtitles: UTF-8 Subtitles Fix'),
-    ('a4ksubs_quiet',    'a4kSubtitles: Hide Account/API-Key Nags'),
+    ('a4ksubs_quiet',    'a4kSubtitles: Hide Account/API-Key Nags'),    ('af3_subtools',     'AF3: Subtitle Buttons (DexSubtitles Sync & Cycler)'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
 

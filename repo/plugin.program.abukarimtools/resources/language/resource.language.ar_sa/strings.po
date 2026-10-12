@@ -1152,3 +1152,15 @@ msgctxt "#30700"
 msgid "One widget with every list you liked on Trakt - lists you like later appear in it by themselves"
 msgstr "ودجة واحدة تضم كل القوائم التي أعجبتك في تراكت، وتظهر فيها القوائم التي تعجبك لاحقًا تلقائيًا"
 
+msgctxt "#30701"
+msgid "Installing Subtitle Cycler..."
+msgstr "جارٍ تثبيت Subtitle Cycler…"
+
+msgctxt "#30702"
+msgid "Subtitle Cycler could not be installed"
+msgstr "تعذّر تثبيت Subtitle Cycler"
+
+msgctxt "#30703"
+msgid "Subtitle Cycler installed"
+msgstr "تم تثبيت Subtitle Cycler"
+

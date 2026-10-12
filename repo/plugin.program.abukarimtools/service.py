@@ -1203,6 +1203,17 @@ def main():
         _log('Remote config refresh crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
+    # 3.2.67: AF3 Subtitle Buttons - make sure script.subtitle.cycler is
+    # installed (repository.taiseer) so its OSD button works. Background
+    # thread, delayed, waits out first-run and playback. Fenced.
+    try:
+        from resources.lib import subtitle_tools
+        if subtitle_tools.toggle_on():
+            subtitle_tools.start_boot_ensure(monitor)
+    except Exception:
+        _log('Subtitle Cycler check failed to start (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
     # From here the service stays alive for the rest of the Kodi session and
     # watches the patch targets: a Kodi add-on update replaces the add-on
     # folder wholesale, which silently wipes every patch we applied to it.

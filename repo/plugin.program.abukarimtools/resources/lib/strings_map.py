@@ -24,6 +24,7 @@ ID ranges:
   30530-30599  3.2: profiles, tuning, remote access, log share, bootstrap
   30630-30649  Widgets Layout / ترتيب الودجات (Light / Moderate / Full)
   30660-30700  Trakt Lists / قوائم تراكت (Original / Custom)
+  30701-30703  AF3 Subtitle Buttons (Subtitle Cycler install)
 """
 
 STRINGS = {
@@ -444,4 +445,7 @@ STRINGS = {
     30696: ('All the lists I liked', 'كل القوائم التي أعجبتني'),
     30700: ('One widget with every list you liked on Trakt - lists you like later appear in it by themselves',
             'ودجة واحدة تضم كل القوائم التي أعجبتك في تراكت، وتظهر فيها القوائم التي تعجبك لاحقًا تلقائيًا'),
+    30701: ('Installing Subtitle Cycler...', 'جارٍ تثبيت Subtitle Cycler…'),
+    30702: ('Subtitle Cycler could not be installed', 'تعذّر تثبيت Subtitle Cycler'),
+    30703: ('Subtitle Cycler installed', 'تم تثبيت Subtitle Cycler'),
 }
