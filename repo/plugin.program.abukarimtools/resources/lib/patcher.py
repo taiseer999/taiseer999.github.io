@@ -190,6 +190,40 @@ _AF3_SUBTOOLS_XML = (
     '                        <!-- /ABUKARIM: AF3 subtitle buttons -->'
 )
 
+# ── AF3: Subtitle Buttons - matching slots in the OSD popup windows ──
+# AF3's stream/info popups (1143/1145/1146/1147/1148/1159) redraw the OSD bar
+# from OSD_CustomDialog_GroupList: a right-aligned row of fixed slots 5..9.
+# The two new buttons sit between slots 7 and 8 in VideoOSD, so without two
+# matching slots here the popup's focused Audio/Subtitle button is drawn two
+# slots too far right - a duplicate icon over DexSync/Cycler. Same visibility
+# as the real buttons; focusing one closes the popup and moves to the real one.
+_AF3_SUBTOOLS_POPUP_ANCHOR = (
+    '                <include content="OSD_CustomDialog_FakeButton" condition="![$PARAM[button_8]]">'
+)
+_AF3_SUBTOOLS_POPUP_XML = (
+    '                <!-- ABUKARIM: AF3 subtitle buttons (popup slots) -->\n'
+    '                <control type="button" id="6010">\n'
+    '                    <width>80</width>\n'
+    '                    <texturefocus />\n'
+    '                    <texturenofocus />\n'
+    '                    <font />\n'
+    '                    <label />\n'
+    '                    <visible>System.AddonIsEnabled(service.subtitles.dexworld)</visible>\n'
+    '                    <onfocus>Close</onfocus>\n'
+    '                    <onfocus>SetFocus(6010)</onfocus>\n'
+    '                </control>\n'
+    '                <control type="button" id="6011">\n'
+    '                    <width>80</width>\n'
+    '                    <texturefocus />\n'
+    '                    <texturenofocus />\n'
+    '                    <font />\n'
+    '                    <label />\n'
+    '                    <onfocus>Close</onfocus>\n'
+    '                    <onfocus>SetFocus(6011)</onfocus>\n'
+    '                </control>\n'
+    '                <!-- /ABUKARIM: AF3 subtitle buttons (popup slots) -->\n\n'
+)
+
 PATCHES = [
     # ── TMDbHelper Trakt QR Auth (by ABUKARIM TOOLS) ──
     {
@@ -1263,6 +1297,17 @@ PATCHES = [
         'fallback_pattern': r'(<param name="groupid">6107</param>[\s\S]*?</include>)',
         'fallback_repl': r'\1' + _AF3_SUBTOOLS_XML,   # XML has no backslashes
         'description': 'AF3 Subtitle Buttons - OSD buttons after Subtitles',
+    },    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'toggle': 'af3_subtools',
+        'not_found_ok': True,
+        'old': _AF3_SUBTOOLS_POPUP_ANCHOR,
+        'new': _AF3_SUBTOOLS_POPUP_XML + _AF3_SUBTOOLS_POPUP_ANCHOR,
+        'already_patched_check': '<!-- ABUKARIM: AF3 subtitle buttons (popup slots) -->',
+        'fallback_pattern': r'([ \t]*<include content="OSD_CustomDialog_FakeButton" condition="!\[\$PARAM\[button_8\]\]">)',
+        'fallback_repl': _AF3_SUBTOOLS_POPUP_XML.replace('\\', '\\\\') + r'\1',
+        'description': 'AF3 Subtitle Buttons - matching slots in OSD popups (no duplicate icons)',
     },
 ]
 
