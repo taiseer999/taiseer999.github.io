@@ -94,6 +94,11 @@ HUB_KOREAN = 'skinvariables-shortcut-1103submenu.json'
 W_MOVIES = 'skinvariables-shortcut-1101widgets.json'
 W_TV = 'skinvariables-shortcut-1102widgets.json'
 W_KOREAN = 'skinvariables-shortcut-1103widgets.json'
+# 3.2.66: style of OUR rows by content - movies "Flyer" (منشور), series
+# "Landscape" (صورة افقية); AF3 widgets_include_row.xml names
+STYLE_BY_CAT = {'movies': 'Flyer', 'kr_movies': 'Flyer',
+                'tv': 'Landscape', 'kr_tv': 'Landscape'}
+STYLE_VERSION = 2
 LIKED_FOLDER = 'likedfolder'   # picker entry: TMDb Helper's live liked-lists folder
 KEEP, ADD, REPLACE = 'keep', 'add', 'replace'    # existing hub widgets
 WIDGET_SUFFIX = ('&widget=true&reload=$INFO[Window(Home).Property('
@@ -729,15 +734,6 @@ def korean_defaults():
     return out
 
 
-def _widget_style(data):
-    """The hub's own widget style (first real widget), so new rows match."""
-    for it in data:
-        if isinstance(it, dict) and not _ours(it) and it.get('widget_style') \
-                and str(it.get('path', '')).startswith('plugin://'):
-            return str(it['widget_style'])
-    return 'Flyer'
-
-
 def _widget(c, hub, style):
     if c.get('src') == LIKED_FOLDER:
         path = 'plugin://%s/?info=trakt_likedlists' % TMDBH + WIDGET_SUFFIX
@@ -754,11 +750,11 @@ def _widget(c, hub, style):
 
 
 def _apply_widgets(data, hub, picks, mode=ADD):
+    """picks: [(candidate, category)]."""
     """Hub widgets file: our old rows out, the picks in (liked first).
     mode REPLACE also hides the hub's own widgets (disabled + abk_trakt tag,
     so Original brings them back); ADD keeps them in front."""
     _strip(data)
-    style = _widget_style(data)
     if mode == REPLACE and picks:
         for it in data:
             if isinstance(it, dict) and str(it.get('disabled') or '').lower() != 'true':
@@ -767,11 +763,11 @@ def _apply_widgets(data, hub, picks, mode=ADD):
                 it[OFF_TAG] = 'off:%s' % it['disabled'] if 'disabled' in it else 'off'
                 it['disabled'] = 'True'
     seen = set()
-    for c in sorted(picks, key=lambda c: not c.get('liked')):
+    for c, cat in sorted(picks, key=lambda p: not p[0].get('liked')):
         if c.get('src') == 'build' or _key(c) in seen:
             continue                      # build lists stay in the sub-menu
         seen.add(_key(c))
-        data.append(_widget(c, hub, style))
+        data.append(_widget(c, hub, STYLE_BY_CAT.get(cat, 'Flyer')))
     return data
 
 
@@ -802,7 +798,7 @@ def _apply_files(mode, picks, only=None, wmode=ADD):
             continue
         if mode == CUSTOM and widget:
             hub, cats = widget
-            sel = [c for cat in cats for c in (picks.get(cat) or [])]
+            sel = [(c, cat) for cat in cats for c in (picks.get(cat) or [])]
             data = _apply_widgets(data, hub, sel, wmode)
         else:
             data = _strip(data)
@@ -905,10 +901,15 @@ def ensure(rebuild=True):
         p = _hub(name)
         if os.path.isfile(p) and _has_marker(p):
             need.add(name)                # 3.2.57-3.2.62 sub-menu entries
+    if st.get('style_v') != STYLE_VERSION:
+        need |= {n for n in (W_MOVIES, W_TV, W_KOREAN) if os.path.isfile(_hub(n))}
     if not need:
         return []
     written = _apply_files(CUSTOM, picks, only=need,
                            wmode=st.get('wmode') or ADD)
+    if st.get('style_v') != STYLE_VERSION:
+        st['style_v'] = STYLE_VERSION
+        _save_state(st)
     if written:
         _log('custom Trakt lists re-applied to %s' % ', '.join(written))
         if rebuild:
@@ -1183,7 +1184,7 @@ def _custom():
     _log('picks: %s' % ', '.join('%s=%d' % (k, len(v)) for k, v in picks.items()))
     written = _apply_files(CUSTOM, picks, wmode=wmode)
     _save_state({'mode': CUSTOM, 'time': int(time.time()), 'picks': picks,
-                 'wmode': wmode,
+                 'wmode': wmode, 'style_v': STYLE_VERSION,
                  'liked_ok': res.get('liked_ok'),
                  'class_cache': res.get('cache') or {}})
     _log('custom applied, files written: %s' % (', '.join(written) or 'none'))

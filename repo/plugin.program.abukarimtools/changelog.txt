@@ -1,3 +1,11 @@
+v3.2.66
+- Trakt Lists widget rows get a style by content instead of copying the
+  hub's first widget: movies / kr_movies -> "Flyer" (AF3 Arabic "منشور"),
+  tv / kr_tv -> "Landscape" ("صورة افقية"); the liked-lists folder follows
+  its hub (Movies Flyer, TV Landscape). Build widgets untouched.
+- state "style_v": ensure() restyles rows written by 3.2.63-3.2.65 once at
+  the next start / end of setup, then is a no-op again.
+
 v3.2.65
 - Trakt Lists, Custom: new question BEFORE fetching (30692) about the hubs'
   current widgets: Add (keep them, picks after), Replace (hide them -
