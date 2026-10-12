@@ -1116,3 +1116,39 @@ msgctxt "#30691"
 msgid "Trakt is not linked - the original lists were applied."
 msgstr "لم يتم ربط حساب تراكت، وطُبّقت القوائم الأصلية."
 
+msgctxt "#30692"
+msgid "What should happen to the current widgets of the Movies, TV Shows and Korean sections?"
+msgstr "ماذا تريد أن نفعل بالودجات الحالية في أقسام الأفلام والمسلسلات والكوري؟"
+
+msgctxt "#30693"
+msgid "Add to them"
+msgstr "الإضافة عليها"
+
+msgctxt "#30694"
+msgid "The current widgets stay, the lists you pick are added after them"
+msgstr "تبقى الودجات الحالية، وتُضاف القوائم التي تختارها بعدها"
+
+msgctxt "#30695"
+msgid "Replace them"
+msgstr "استبدالها"
+
+msgctxt "#30696"
+msgid "All the lists I liked"
+msgstr "كل القوائم التي أعجبتني"
+
+msgctxt "#30697"
+msgid "The current widgets are hidden and the lists you pick take their place (Original brings them back)"
+msgstr "تُخفى الودجات الحالية وتحلّ القوائم التي تختارها مكانها، ويعيدها خيار «الأصلي»"
+
+msgctxt "#30698"
+msgid "Keep them as they are"
+msgstr "إبقاؤها كما هي"
+
+msgctxt "#30699"
+msgid "Nothing is added or changed in the sections"
+msgstr "لا يُضاف شيء ولا يتغيّر شيء في الأقسام"
+
+msgctxt "#30700"
+msgid "One widget with every list you liked on Trakt - lists you like later appear in it by themselves"
+msgstr "ودجة واحدة تضم كل القوائم التي أعجبتك في تراكت، وتظهر فيها القوائم التي تعجبك لاحقًا تلقائيًا"
+

@@ -94,6 +94,8 @@ HUB_KOREAN = 'skinvariables-shortcut-1103submenu.json'
 W_MOVIES = 'skinvariables-shortcut-1101widgets.json'
 W_TV = 'skinvariables-shortcut-1102widgets.json'
 W_KOREAN = 'skinvariables-shortcut-1103widgets.json'
+LIKED_FOLDER = 'likedfolder'   # picker entry: TMDb Helper's live liked-lists folder
+KEEP, ADD, REPLACE = 'keep', 'add', 'replace'    # existing hub widgets
 WIDGET_SUFFIX = ('&widget=true&reload=$INFO[Window(Home).Property('
                  'TMDbHelper.Widgets.Reload)]')
 
@@ -514,14 +516,15 @@ def fetch(progress=None):
         cat = hit[0] if hit else (None if c['liked'] else _guess(c))
         if cat in cats:
             cats[cat].append(c)
-        elif hit and hit[0] == '-':
+        elif hit and hit[0] == '-' and not c['liked']:
             continue                              # known empty / unusable
         else:
             need.append(c)
     # liked first, then the most liked - within the call budget
     need.sort(key=lambda c: (not c['liked'], -c['likes']))
-    skipped = max(0, len(need) - CLASSIFY_BUDGET)
-    need = need[:CLASSIFY_BUDGET]
+    budget = max(CLASSIFY_BUDGET, sum(1 for c in need if c['liked']))
+    skipped = max(0, len(need) - budget)
+    need = need[:budget]
     _log('classify: %d by name/cache, %d via Trakt, %d over budget'
          % (len(todo) - len(need) - skipped, len(need), skipped))
 
@@ -551,6 +554,17 @@ def fetch(progress=None):
     except _RateLimited:
         _log('Trakt rate limit while sorting - %d of %d sorted, the rest left out'
              % (done, len(need)), xbmc.LOGWARNING)
+    # 3.2.65: every liked list is offered - one Trakt could not sort (rate
+    # limit, empty first page, HTTP 400 on official lists) goes by its name,
+    # else to Movies, instead of disappearing
+    placed = {_key(c) for v in cats.values() for c in v}
+    lost = 0
+    for c in todo:
+        if c['liked'] and _key(c) not in placed:
+            cats[_guess(c) or 'movies'].append(c)
+            lost += 1
+    if lost:
+        _log('%d liked list(s) placed by name (Trakt could not sort them)' % lost)
     for k in cats:
         liked = sorted((c for c in cats[k] if c['liked']), key=lambda c: c['name'].lower())
         best = sorted((c for c in cats[k] if not c['liked']), key=lambda c: -c['likes'])
@@ -640,9 +654,12 @@ def _strip(data):
                 continue
             if isinstance(it, dict):
                 if it.get(OFF_TAG):
-                    it.pop(OFF_TAG, None)
+                    tag = str(it.pop(OFF_TAG, None))
                     if not it.get('abk_hidden'):          # menu_reconcile's own hide
-                        it.pop('disabled', None)
+                        if tag.startswith('off:'):
+                            it['disabled'] = tag[4:]
+                        else:
+                            it.pop('disabled', None)
                 if isinstance(it.get('submenu'), list):
                     it['submenu'] = walk(it['submenu'])
             out.append(it)
@@ -722,18 +739,33 @@ def _widget_style(data):
 
 
 def _widget(c, hub, style):
-    return {'label': _clean(c['name']) or c['slug'],
+    if c.get('src') == LIKED_FOLDER:
+        path = 'plugin://%s/?info=trakt_likedlists' % TMDBH + WIDGET_SUFFIX
+        label = AR(30696)
+    else:
+        path = _path(c) + WIDGET_SUFFIX
+        label = _clean(c['name']) or c['slug']
+    return {'label': label,
             'icon': ICON_KOREAN if hub == '1103' else ICON_LIST,
-            'path': _path(c) + WIDGET_SUFFIX,
+            'path': path,
             'target': 'videos',
             'guid': _guid('w', hub, c['user'], c['slug']),
             'widget_style': style}
 
 
-def _apply_widgets(data, hub, picks):
-    """Hub widgets file: our old rows out, the picks in (liked first)."""
+def _apply_widgets(data, hub, picks, mode=ADD):
+    """Hub widgets file: our old rows out, the picks in (liked first).
+    mode REPLACE also hides the hub's own widgets (disabled + abk_trakt tag,
+    so Original brings them back); ADD keeps them in front."""
     _strip(data)
     style = _widget_style(data)
+    if mode == REPLACE and picks:
+        for it in data:
+            if isinstance(it, dict) and str(it.get('disabled') or '').lower() != 'true':
+                # remember an existing (empty) "disabled" so Original restores
+                # the file exactly: 'off' = key was absent, 'off:<v>' = was <v>
+                it[OFF_TAG] = 'off:%s' % it['disabled'] if 'disabled' in it else 'off'
+                it['disabled'] = 'True'
     seen = set()
     for c in sorted(picks, key=lambda c: not c.get('liked')):
         if c.get('src') == 'build' or _key(c) in seen:
@@ -743,7 +775,7 @@ def _apply_widgets(data, hub, picks):
     return data
 
 
-def _apply_files(mode, picks, only=None):
+def _apply_files(mode, picks, only=None, wmode=ADD):
     """Write the hub files. only = set of file names to touch (None = all).
     3.2.63: the picks are WIDGET rows (hub widgets files); the sub-menu files
     are only cleaned of what 3.2.57-3.2.62 put there. Returns files written."""
@@ -771,7 +803,7 @@ def _apply_files(mode, picks, only=None):
         if mode == CUSTOM and widget:
             hub, cats = widget
             sel = [c for cat in cats for c in (picks.get(cat) or [])]
-            data = _apply_widgets(data, hub, sel)
+            data = _apply_widgets(data, hub, sel, wmode)
         else:
             data = _strip(data)
         if _write(path, data, before):
@@ -875,7 +907,8 @@ def ensure(rebuild=True):
             need.add(name)                # 3.2.57-3.2.62 sub-menu entries
     if not need:
         return []
-    written = _apply_files(CUSTOM, picks, only=need)
+    written = _apply_files(CUSTOM, picks, only=need,
+                           wmode=st.get('wmode') or ADD)
     if written:
         _log('custom Trakt lists re-applied to %s' % ', '.join(written))
         if rebuild:
@@ -1004,6 +1037,8 @@ def _link_trakt(force=False):
 def _label2(c):
     if c.get('src') == 'build':
         return AR(30688)
+    if c.get('src') == LIKED_FOLDER:
+        return AR(30700)
     s = AR(30679) % (c.get('uname') or c['user'], c.get('likes', 0), c.get('count', 0))
     if c.get('liked'):
         s = '[COLOR FFFF7A1A]%s[/COLOR]  •  %s' % (AR(30680), s)
@@ -1031,6 +1066,29 @@ def _settle_dialogs(max_s=6):
     xbmc.sleep(300)
 
 
+def _ask_widget_mode():
+    """What happens to the hub's current widgets: add / replace / keep.
+    Back (or a picker torn down 5 times) = keep - nothing changes."""
+    icon = os.path.join(_addon_path(), 'resources', 'icons', 'traktsc_custom.png')
+    opts = ((ADD, 30693, 30694), (REPLACE, 30695, 30697), (KEEP, 30698, 30699))
+    items = []
+    for _m, lab, desc in opts:
+        li = xbmcgui.ListItem(AR(lab), AR(desc))
+        li.setArt({'icon': icon, 'thumb': icon})
+        items.append(li)
+    idx = -1
+    for attempt in range(1, 6):
+        _settle_dialogs()
+        started = time.time()
+        idx = xbmcgui.Dialog().select(AR(30692), items, useDetails=True)
+        if idx >= 0 or time.time() - started > 1.5:
+            break
+        _log('widget-mode question closed instantly (attempt %d)' % attempt)
+    mode = opts[idx][0] if idx >= 0 else KEEP
+    _log('current hub widgets: %s' % mode)
+    return mode
+
+
 def _pick(heading_id, cands):
     if not cands:
         _log('picker %s: nothing to offer' % AR(heading_id))
@@ -1041,7 +1099,7 @@ def _pick(heading_id, cands):
         li = xbmcgui.ListItem(c['name'], _label2(c))
         li.setArt({'icon': icon, 'thumb': icon})
         items.append(li)
-        if c.get('liked') or c.get('src') == 'build':
+        if c.get('liked') or c.get('src') in ('build', LIKED_FOLDER):
             pre.append(i)
     sel = None
     for attempt in range(1, 6):
@@ -1074,6 +1132,9 @@ def _custom():
     _log('TMDb Helper Trakt token %s' % state)
     if not tok and not _link_trakt():
         return NOLINK
+    wmode = _ask_widget_mode()
+    if wmode == KEEP:
+        return KEEP
     res = None
     for attempt in (1, 2):
         dp = xbmcgui.DialogProgress()
@@ -1108,12 +1169,21 @@ def _custom():
     if not any(cats.values()):
         xbmcgui.Dialog().ok(AR(30660), AR(30685))
         return False
+    if res.get('liked_ok'):
+        # 3.2.65: one live row with ALL liked lists (TMDb Helper reads them
+        # from Trakt each time - lists liked later show up by themselves)
+        folder = {'name': AR(30696), 'user': 'me', 'slug': '__likedlists__',
+                  'uname': 'Trakt', 'likes': 0, 'count': 0, 'liked': True,
+                  'src': LIKED_FOLDER, 'desc': ''}
+        for cat in ('movies', 'tv'):
+            cats[cat] = [dict(folder)] + (cats.get(cat) or [])
     picks = {}
     for cat, heading in CATS:
         picks[cat] = [_slim(c) for c in _pick(heading, cats.get(cat) or [])]
     _log('picks: %s' % ', '.join('%s=%d' % (k, len(v)) for k, v in picks.items()))
-    written = _apply_files(CUSTOM, picks)
+    written = _apply_files(CUSTOM, picks, wmode=wmode)
     _save_state({'mode': CUSTOM, 'time': int(time.time()), 'picks': picks,
+                 'wmode': wmode,
                  'liked_ok': res.get('liked_ok'),
                  'class_cache': res.get('cache') or {}})
     _log('custom applied, files written: %s' % (', '.join(written) or 'none'))
@@ -1127,6 +1197,11 @@ def apply(mode):
     """Apply a choice. Returns True when the box ends up as requested."""
     if mode == CUSTOM:
         res = _custom()
+        if res == KEEP:
+            _log('hub widgets kept as they are - nothing changed')
+            xbmcgui.Dialog().notification(AR(30660), AR(30682),
+                                          xbmcgui.NOTIFICATION_INFO, 3000)
+            return True
         if res is True:
             xbmcgui.Dialog().notification(AR(30660), AR(30681) % AR(30663),
                                           xbmcgui.NOTIFICATION_INFO, 4000)

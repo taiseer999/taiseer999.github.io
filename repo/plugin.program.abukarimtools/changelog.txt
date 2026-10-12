@@ -1,3 +1,18 @@
+v3.2.65
+- Trakt Lists, Custom: new question BEFORE fetching (30692) about the hubs'
+  current widgets: Add (keep them, picks after), Replace (hide them -
+  disabled + abk_trakt "off" / "off:<old value>" - picks take their place,
+  Original restores the files exactly), Keep (nothing changes, no Trakt
+  request). Back = Keep. Saved as "wmode"; ensure() re-applies it.
+  Replace only touches a hub that gets at least one pick.
+- Liked lists:
+    * new picker entry "All the lists I liked" (first, pre-ticked) in
+      Movies and TV -> widget path info=trakt_likedlists: TMDb Helper reads
+      the likes live, so lists liked later appear by themselves.
+    * every liked list is always offered: never cut by the call budget, and
+      one Trakt cannot sort (rate limit, empty first page, HTTP 400 on
+      official lists, cached "unusable") goes by its name, else Movies.
+
 v3.2.64
 - Installation Wizard order (user request - Arabic must render correctly):
     Step 0  Skin Installer (was Step 5, last)

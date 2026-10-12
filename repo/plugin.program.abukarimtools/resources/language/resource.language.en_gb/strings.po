@@ -1116,3 +1116,39 @@ msgctxt "#30691"
 msgid "Trakt is not linked - the original lists were applied."
 msgstr ""
 
+msgctxt "#30692"
+msgid "What should happen to the current widgets of the Movies, TV Shows and Korean sections?"
+msgstr ""
+
+msgctxt "#30693"
+msgid "Add to them"
+msgstr ""
+
+msgctxt "#30694"
+msgid "The current widgets stay, the lists you pick are added after them"
+msgstr ""
+
+msgctxt "#30695"
+msgid "Replace them"
+msgstr ""
+
+msgctxt "#30696"
+msgid "All the lists I liked"
+msgstr ""
+
+msgctxt "#30697"
+msgid "The current widgets are hidden and the lists you pick take their place (Original brings them back)"
+msgstr ""
+
+msgctxt "#30698"
+msgid "Keep them as they are"
+msgstr ""
+
+msgctxt "#30699"
+msgid "Nothing is added or changed in the sections"
+msgstr ""
+
+msgctxt "#30700"
+msgid "One widget with every list you liked on Trakt - lists you like later appear in it by themselves"
+msgstr ""
+

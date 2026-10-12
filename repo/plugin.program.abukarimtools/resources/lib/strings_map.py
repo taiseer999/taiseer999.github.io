@@ -23,7 +23,7 @@ ID ranges:
   30430-30459  AF3 auto-trailers
   30530-30599  3.2: profiles, tuning, remote access, log share, bootstrap
   30630-30649  Widgets Layout / ترتيب الودجات (Light / Moderate / Full)
-  30660-30691  Trakt Lists / قوائم تراكت (Original / Custom)
+  30660-30700  Trakt Lists / قوائم تراكت (Original / Custom)
 """
 
 STRINGS = {
@@ -430,4 +430,18 @@ STRINGS = {
             'القوائم التي أعجبتك غير متاحة الآن بسبب حدّ تراكت، وتُعرض أفضل قوائم تراكت فقط.'),
     30691: ('Trakt is not linked - the original lists were applied.',
             'لم يتم ربط حساب تراكت، وطُبّقت القوائم الأصلية.'),
+    30692: ('What should happen to the current widgets of the Movies, TV Shows and Korean sections?',
+            'ماذا تريد أن نفعل بالودجات الحالية في أقسام الأفلام والمسلسلات والكوري؟'),
+    30693: ('Add to them', 'الإضافة عليها'),
+    30694: ('The current widgets stay, the lists you pick are added after them',
+            'تبقى الودجات الحالية، وتُضاف القوائم التي تختارها بعدها'),
+    30695: ('Replace them', 'استبدالها'),
+    30697: ('The current widgets are hidden and the lists you pick take their place (Original brings them back)',
+            'تُخفى الودجات الحالية وتحلّ القوائم التي تختارها مكانها، ويعيدها خيار «الأصلي»'),
+    30698: ('Keep them as they are', 'إبقاؤها كما هي'),
+    30699: ('Nothing is added or changed in the sections',
+            'لا يُضاف شيء ولا يتغيّر شيء في الأقسام'),
+    30696: ('All the lists I liked', 'كل القوائم التي أعجبتني'),
+    30700: ('One widget with every list you liked on Trakt - lists you like later appear in it by themselves',
+            'ودجة واحدة تضم كل القوائم التي أعجبتك في تراكت، وتظهر فيها القوائم التي تعجبك لاحقًا تلقائيًا'),
 }
