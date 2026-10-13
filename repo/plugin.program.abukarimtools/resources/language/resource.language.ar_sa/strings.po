@@ -1133,8 +1133,8 @@ msgid "Replace them"
 msgstr "استبدالها"
 
 msgctxt "#30696"
-msgid "All the lists I liked"
-msgstr "كل القوائم التي أعجبتني"
+msgid "All the lists I liked (select all)"
+msgstr "كل القوائم التي أعجبتني (تحديد الكل)"
 
 msgctxt "#30697"
 msgid "The current widgets are hidden and the lists you pick take their place (Original brings them back)"
@@ -1149,18 +1149,26 @@ msgid "Nothing is added or changed in the sections"
 msgstr "لا يُضاف شيء ولا يتغيّر شيء في الأقسام"
 
 msgctxt "#30700"
-msgid "One widget with every list you liked on Trakt - lists you like later appear in it by themselves"
-msgstr "ودجة واحدة تضم كل القوائم التي أعجبتك في تراكت، وتظهر فيها القوائم التي تعجبك لاحقًا تلقائيًا"
+msgid "Tick to add all %d of your liked lists here at once"
+msgstr "حدّدها لإضافة كل القوائم التي أعجبتك هنا دفعة واحدة (%d قائمة)"
 
 msgctxt "#30701"
-msgid "Installing Subtitle Cycler..."
-msgstr "جارٍ تثبيت Subtitle Cycler…"
+msgid "MDBList  •  by %s  •  %d likes  •  %d items"
+msgstr "MDBList  •  بواسطة %s  •  %d إعجاب  •  %d عنصر"
 
 msgctxt "#30702"
-msgid "Subtitle Cycler could not be installed"
-msgstr "تعذّر تثبيت Subtitle Cycler"
+msgid "My list"
+msgstr "قائمتي"
 
 msgctxt "#30703"
-msgid "Subtitle Cycler installed"
-msgstr "تم تثبيت Subtitle Cycler"
+msgid "MDBList lists appear once MDBList is authorised in TMDb Helper (MDbList API key). Open its settings now?"
+msgstr "تظهر قوائم MDBList بعد توثيق MDBList في إضافة TMDb Helper (مفتاح MDbList API). هل تريد فتح إعداداتها الآن؟"
+
+msgctxt "#30704"
+msgid "Skip"
+msgstr "تخطّي"
+
+msgctxt "#30705"
+msgid "Open MDBList settings"
+msgstr "فتح إعدادات MDBList"
 

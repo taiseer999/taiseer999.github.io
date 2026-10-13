@@ -98,7 +98,7 @@ W_KOREAN = 'skinvariables-shortcut-1103widgets.json'
 # "Landscape" (صورة افقية); AF3 widgets_include_row.xml names
 STYLE_BY_CAT = {'movies': 'Flyer', 'kr_movies': 'Flyer',
                 'tv': 'Landscape', 'kr_tv': 'Landscape'}
-STYLE_VERSION = 2
+STYLE_VERSION = 3              # 3: 3.2.67 drops the live liked-lists row
 LIKED_FOLDER = 'likedfolder'   # picker entry: TMDb Helper's live liked-lists folder
 KEEP, ADD, REPLACE = 'keep', 'add', 'replace'    # existing hub widgets
 WIDGET_SUFFIX = ('&widget=true&reload=$INFO[Window(Home).Property('
@@ -115,7 +115,8 @@ ICON_KOREAN = 'special://skin/extras/icons/kdramaw.png'
 
 _KR_WORDS = re.compile(r'korea|\bk[- ]?dramas?\b|\bk[- ]?movies?\b|hallyu|한국|كوري', re.I)
 _SESSION = {'applied': False}
-_LAST = {'r429': 0, 'likes_limited': False, 'unauthorized': False}
+_LAST = {'r429': 0, 'likes_limited': False, 'unauthorized': False,
+         'mdb_nokey': False}
 NOLINK = 'nolink'              # _custom(): Trakt not linked -> Original            # 429s of the last fetch (for the message)
 
 
@@ -364,6 +365,8 @@ def _is_unsafe(text):
 
 
 def _key(c):
+    if c.get('prov') == 'mdblist':
+        return 'mdb/%s' % c.get('mid')
     return '%s/%s' % (c['user'], c['slug'])
 
 
@@ -412,6 +415,94 @@ def _classify(trakt, c):
                                  _KR_WORDS.search(c['name'] + ' ' + c['desc']))
     kind = 'movies' if movies >= shows else 'tv'
     return ('kr_' + kind) if korean else kind
+
+
+MDBLIST_API = 'https://api.mdblist.com/'
+
+
+def _mdblist_key():
+    try:
+        return (xbmcaddon.Addon(TMDBH).getSetting('mdblist_apikey') or '').strip()
+    except Exception:
+        return ''
+
+
+def _mdb_get(path, key, **params):
+    params['apikey'] = key
+    url = MDBLIST_API + path + '?' + urllib.parse.urlencode(params)
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': UA})
+        with urllib.request.urlopen(req, timeout=15) as r:
+            data = json.loads(r.read().decode('utf-8') or 'null')
+    except urllib.error.HTTPError as e:
+        _log('MDBList %s -> HTTP %s' % (path, e.code), xbmc.LOGWARNING)
+        return []
+    except Exception as e:
+        _log('MDBList %s failed: %s' % (path, e), xbmc.LOGWARNING)
+        return []
+    if isinstance(data, dict):                    # some endpoints wrap the list
+        for k in ('lists', 'results', 'items'):
+            if isinstance(data.get(k), list):
+                return data[k]
+        return []
+    return data if isinstance(data, list) else []
+
+
+def _mdb_norm(raw, src, mine=False):
+    if not isinstance(raw, dict) or not raw.get('id'):
+        return None
+    if raw.get('private') in (True, 'true', 1) and not mine:
+        return None
+    name = _clean(raw.get('name') or raw.get('slug') or '')
+    if not name:
+        return None
+    def _int(*ks):
+        for k in ks:
+            try:
+                if raw.get(k) is not None:
+                    return int(raw.get(k))
+            except Exception:
+                pass
+        return 0
+    return {'name': name, 'prov': 'mdblist', 'mid': str(raw['id']),
+            'user': str(raw.get('user_name') or 'mdblist'),
+            'uname': str(raw.get('user_name') or 'MDBList'),
+            'slug': str(raw.get('slug') or raw['id']),
+            'likes': _int('likes'), 'count': _int('items', 'item_count'),
+            'liked': False, 'mine': bool(mine), 'src': src,
+            'desc': (raw.get('description') or '')[:300],
+            'mediatype': str(raw.get('mediatype') or raw.get('type') or '').lower()}
+
+
+def fetch_mdblist():
+    """MDBList lists through TMDb Helper's own API key: top lists, the
+    user's own lists and a Korean search. {cat: [candidate]} - empty when
+    TMDb Helper has no MDBList key."""
+    key = _mdblist_key()
+    cats = {k: [] for k, _ in CATS}
+    _LAST['mdb_nokey'] = not key
+    if not key:
+        _log('MDBList: no API key in TMDb Helper - skipped')
+        return cats, False
+    found = {}
+    for path, params, src, mine in (('lists/user', {}, 'mdb_mine', True),
+                                     ('lists/top', {'limit': 50}, 'mdb_top', False),
+                                     ('lists/search', {'query': 'korean'}, 'mdb_top', False)):
+        for raw in _mdb_get(path, key, **params):
+            c = _mdb_norm(raw, src, mine)
+            if c and (mine or c['count'] >= 5) and _key(c) not in found:
+                found[_key(c)] = c
+    for c in found.values():
+        mt = c.pop('mediatype', '')
+        kind = 'movies' if mt == 'movie' else 'tv' if mt in ('show', 'tv') else None
+        text = c['name'] + ' ' + c['desc']
+        kind = kind or (_guess(c) or 'movies').replace('kr_', '')
+        cats[('kr_' + kind) if _KR_WORDS.search(text) else kind].append(c)
+    for k in cats:
+        cats[k].sort(key=lambda c: (not c.get('mine'), -c['likes']))
+        cats[k] = cats[k][:BEST_PER_CAT]
+    _log('MDBList: %s' % ', '.join('%s=%d' % (k, len(v)) for k, v in cats.items()))
+    return cats, True
 
 
 CACHE_DAYS = 30
@@ -577,6 +668,14 @@ def fetch(progress=None):
     _log('fetch done in %.1fs: %s, %d calls, %d x 429'
          % (time.time() - t0, ', '.join('%s=%d' % (k, len(v)) for k, v in cats.items()),
             trakt.calls, trakt.r429))
+    try:
+        if progress:
+            progress.update(99, 'MDBList...')
+        mcats, _ok = fetch_mdblist()
+        for k, v in mcats.items():
+            cats[k] = cats.get(k, []) + v
+    except Exception as e:
+        _log('MDBList skipped: %s' % e, xbmc.LOGWARNING)
     return {'cats': cats, 'liked_ok': liked_ok, 'cache': cache}
 
 
@@ -618,6 +717,12 @@ def _ours(item):
 
 def _path(c):
     q = urllib.parse.quote
+    if c.get('prov') == 'mdblist':
+        # TMDb Helper route; it uses its own mdblist_apikey setting
+        return ('plugin://%s/?info=mdblist_userlist&list_id=%s&list_name=%s'
+                '&plugin_category=%s&tmdb_type=both'
+                % (TMDBH, q(str(c['mid']), safe=''), q(c['name'], safe=''),
+                   q(c['name'], safe='')))
     return ('plugin://%s/?info=trakt_userlist&list_name=%s&list_slug=%s'
             '&plugin_category=%s&tmdb_type=both&user_slug=%s'
             % (TMDBH, q(c['name'], safe=''), q(c['slug'], safe=''),
@@ -735,17 +840,11 @@ def korean_defaults():
 
 
 def _widget(c, hub, style):
-    if c.get('src') == LIKED_FOLDER:
-        path = 'plugin://%s/?info=trakt_likedlists' % TMDBH + WIDGET_SUFFIX
-        label = AR(30696)
-    else:
-        path = _path(c) + WIDGET_SUFFIX
-        label = _clean(c['name']) or c['slug']
-    return {'label': label,
+    return {'label': _clean(c['name']) or c['slug'],
             'icon': ICON_KOREAN if hub == '1103' else ICON_LIST,
-            'path': path,
+            'path': _path(c) + WIDGET_SUFFIX,
             'target': 'videos',
-            'guid': _guid('w', hub, c['user'], c['slug']),
+            'guid': _guid('w', hub, *_key(c).split('/', 1)),
             'widget_style': style}
 
 
@@ -764,8 +863,9 @@ def _apply_widgets(data, hub, picks, mode=ADD):
                 it['disabled'] = 'True'
     seen = set()
     for c, cat in sorted(picks, key=lambda p: not p[0].get('liked')):
-        if c.get('src') == 'build' or _key(c) in seen:
-            continue                      # build lists stay in the sub-menu
+        if c.get('src') in ('build', LIKED_FOLDER) or _key(c) in seen:
+            continue                      # build lists stay in the sub-menu;
+                                          # 3.2.65's live folder row is gone
         seen.add(_key(c))
         data.append(_widget(c, hub, STYLE_BY_CAT.get(cat, 'Flyer')))
     return data
@@ -1038,12 +1138,30 @@ def _link_trakt(force=False):
 def _label2(c):
     if c.get('src') == 'build':
         return AR(30688)
-    if c.get('src') == LIKED_FOLDER:
-        return AR(30700)
+    if c.get('prov') == 'mdblist':
+        s = AR(30701) % (c.get('uname') or 'MDBList', c.get('likes', 0), c.get('count', 0))
+        return ('[COLOR FFFF7A1A]%s[/COLOR]  •  %s' % (AR(30702), s)) if c.get('mine') else s
     s = AR(30679) % (c.get('uname') or c['user'], c.get('likes', 0), c.get('count', 0))
     if c.get('liked'):
         s = '[COLOR FFFF7A1A]%s[/COLOR]  •  %s' % (AR(30680), s)
     return s
+
+
+NOPREVIEW_PROP = 'abk.nopreview'
+
+
+class _no_preview(object):
+    """While set, the patched AF3 DialogSelect hides its artwork "Preview"
+    (معاينة) button (patcher entry 'AF3 - no Preview in ABUKARIM pickers');
+    every other select dialog in the skin keeps it."""
+
+    def __enter__(self):
+        xbmcgui.Window(10000).setProperty(NOPREVIEW_PROP, '1')
+        return self
+
+    def __exit__(self, *exc):
+        xbmcgui.Window(10000).clearProperty(NOPREVIEW_PROP)
+        return False
 
 
 def _settle_dialogs(max_s=6):
@@ -1067,12 +1185,46 @@ def _settle_dialogs(max_s=6):
     xbmc.sleep(300)
 
 
+TMDBH_API_CATEGORY = 3      # TMDb Helper settings: general, widgets, library, API keys
+
+
+def _offer_mdblist():
+    """No MDBList key in TMDb Helper -> a button that opens TMDb Helper's
+    settings on its API keys page (MDbList API key). Returns True when a
+    key is there afterwards."""
+    if _mdblist_key():
+        return True
+    if not xbmcgui.Dialog().yesno(AR(30660), AR(30703), nolabel=AR(30704),
+                                  yeslabel=AR(30705)):
+        _log('MDBList: user skipped the authorisation')
+        return False
+    _log('MDBList: opening TMDb Helper settings (API keys)')
+    xbmc.executebuiltin('Addon.OpenSettings(%s)' % TMDBH)
+    mon = xbmc.Monitor()
+    for _ in range(40):                       # wait for the settings window
+        if xbmc.getCondVisibility('Window.IsActive(addonsettings)'):
+            break
+        if mon.waitForAbort(0.25):
+            return False
+    xbmc.sleep(300)
+    # category buttons are -200 + index (Kodi GUIDialogSettingsBase)
+    xbmc.executebuiltin('SetFocus(%d)' % (-200 + TMDBH_API_CATEGORY))
+    started = time.time()
+    while xbmc.getCondVisibility('Window.IsActive(addonsettings)'):
+        if mon.waitForAbort(0.5) or time.time() - started > 900:
+            break
+    xbmc.sleep(500)
+    ok = bool(_mdblist_key())
+    _log('MDBList key after the settings: %s' % ('set' if ok else 'still missing'))
+    return ok
+
+
 def _ask_widget_mode():
     """What happens to the hub's current widgets: add / replace / keep.
     Back (or a picker torn down 5 times) = keep - nothing changes."""
-    icon = os.path.join(_addon_path(), 'resources', 'icons', 'traktsc_custom.png')
     opts = ((ADD, 30693, 30694), (REPLACE, 30695, 30697), (KEEP, 30698, 30699))
     items = []
+    icon = os.path.join(_addon_path(), 'resources', 'icons', 'traktsc_custom.png')
     for _m, lab, desc in opts:
         li = xbmcgui.ListItem(AR(lab), AR(desc))
         li.setArt({'icon': icon, 'thumb': icon})
@@ -1081,7 +1233,8 @@ def _ask_widget_mode():
     for attempt in range(1, 6):
         _settle_dialogs()
         started = time.time()
-        idx = xbmcgui.Dialog().select(AR(30692), items, useDetails=True)
+        with _no_preview():
+            idx = xbmcgui.Dialog().select(AR(30692), items, useDetails=True)
         if idx >= 0 or time.time() - started > 1.5:
             break
         _log('widget-mode question closed instantly (attempt %d)' % attempt)
@@ -1095,32 +1248,49 @@ def _pick(heading_id, cands):
         _log('picker %s: nothing to offer' % AR(heading_id))
         return []
     icon = os.path.join(_addon_path(), 'resources', 'icons', 'traktsc_custom.png')
+    # 3.2.67: nothing is pre-ticked. When the category has liked lists, the
+    # first row selects ALL of them at once (the rest are picked one by one).
+    liked = [c for c in cands if c.get('liked')]
+    rows = ([None] if liked else []) + list(cands)
     items, pre = [], []
-    for i, c in enumerate(cands):
-        li = xbmcgui.ListItem(c['name'], _label2(c))
+    for c in rows:
+        if c is None:
+            li = xbmcgui.ListItem('[B]%s[/B]' % AR(30696), AR(30700) % len(liked))
+        else:
+            li = xbmcgui.ListItem(c['name'], _label2(c))
         li.setArt({'icon': icon, 'thumb': icon})
         items.append(li)
-        if c.get('liked') or c.get('src') in ('build', LIKED_FOLDER):
-            pre.append(i)
     sel = None
     for attempt in range(1, 6):
         _settle_dialogs()
         started = time.time()
-        sel = xbmcgui.Dialog().multiselect(AR(heading_id), items, preselect=pre,
-                                           useDetails=True)
+        with _no_preview():
+            sel = xbmcgui.Dialog().multiselect(AR(heading_id), items,
+                                               preselect=pre, useDetails=True)
         if sel is not None or time.time() - started > 1.5:
             break
         _log('picker %s closed instantly (attempt %d) - showing it again'
              % (AR(heading_id), attempt))
-    if sel is None:                       # Back = keep the pre-ticked ones
-        sel = pre
-    _log('picker %s: %d of %d' % (AR(heading_id), len(sel), len(cands)))
-    return [cands[i] for i in sel]
+    if sel is None:                       # Back = nothing from this list
+        sel = []
+    out, seen = [], set()
+    if liked and 0 in sel:
+        for c in liked:
+            out.append(c)
+            seen.add(_key(c))
+    for i in sel:
+        c = rows[i]
+        if c is not None and _key(c) not in seen:
+            out.append(c)
+            seen.add(_key(c))
+    _log('picker %s: %d of %d%s' % (AR(heading_id), len(out), len(cands),
+                                     ' (all liked)' if liked and 0 in sel else ''))
+    return out
 
 
 def _slim(c):
     return {k: c.get(k) for k in ('name', 'user', 'uname', 'slug', 'likes',
-                                  'count', 'liked', 'src')}
+                                  'count', 'liked', 'src', 'prov', 'mid')}
 
 
 def _custom():
@@ -1136,6 +1306,7 @@ def _custom():
     wmode = _ask_widget_mode()
     if wmode == KEEP:
         return KEEP
+    _offer_mdblist()
     res = None
     for attempt in (1, 2):
         dp = xbmcgui.DialogProgress()
@@ -1170,14 +1341,6 @@ def _custom():
     if not any(cats.values()):
         xbmcgui.Dialog().ok(AR(30660), AR(30685))
         return False
-    if res.get('liked_ok'):
-        # 3.2.65: one live row with ALL liked lists (TMDb Helper reads them
-        # from Trakt each time - lists liked later show up by themselves)
-        folder = {'name': AR(30696), 'user': 'me', 'slug': '__likedlists__',
-                  'uname': 'Trakt', 'likes': 0, 'count': 0, 'liked': True,
-                  'src': LIKED_FOLDER, 'desc': ''}
-        for cat in ('movies', 'tv'):
-            cats[cat] = [dict(folder)] + (cats.get(cat) or [])
     picks = {}
     for cat, heading in CATS:
         picks[cat] = [_slim(c) for c in _pick(heading, cats.get(cat) or [])]

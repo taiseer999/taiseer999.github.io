@@ -23,8 +23,7 @@ ID ranges:
   30430-30459  AF3 auto-trailers
   30530-30599  3.2: profiles, tuning, remote access, log share, bootstrap
   30630-30649  Widgets Layout / ترتيب الودجات (Light / Moderate / Full)
-  30660-30700  Trakt Lists / قوائم تراكت (Original / Custom)
-  30701-30703  AF3 Subtitle Buttons (Subtitle Cycler install)
+  30660-30705  Trakt Lists / قوائم تراكت (Original / Custom)
 """
 
 STRINGS = {
@@ -431,6 +430,11 @@ STRINGS = {
             'القوائم التي أعجبتك غير متاحة الآن بسبب حدّ تراكت، وتُعرض أفضل قوائم تراكت فقط.'),
     30691: ('Trakt is not linked - the original lists were applied.',
             'لم يتم ربط حساب تراكت، وطُبّقت القوائم الأصلية.'),
+    30701: ('MDBList  •  by %s  •  %d likes  •  %d items', 'MDBList  •  بواسطة %s  •  %d إعجاب  •  %d عنصر'),
+    30702: ('My list', 'قائمتي'),
+    30703: ('MDBList lists appear once MDBList is authorised in TMDb Helper (MDbList API key). Open its settings now?', 'تظهر قوائم MDBList بعد توثيق MDBList في إضافة TMDb Helper (مفتاح MDbList API). هل تريد فتح إعداداتها الآن؟'),
+    30704: ('Skip', 'تخطّي'),
+    30705: ('Open MDBList settings', 'فتح إعدادات MDBList'),
     30692: ('What should happen to the current widgets of the Movies, TV Shows and Korean sections?',
             'ماذا تريد أن نفعل بالودجات الحالية في أقسام الأفلام والمسلسلات والكوري؟'),
     30693: ('Add to them', 'الإضافة عليها'),
@@ -442,10 +446,6 @@ STRINGS = {
     30698: ('Keep them as they are', 'إبقاؤها كما هي'),
     30699: ('Nothing is added or changed in the sections',
             'لا يُضاف شيء ولا يتغيّر شيء في الأقسام'),
-    30696: ('All the lists I liked', 'كل القوائم التي أعجبتني'),
-    30700: ('One widget with every list you liked on Trakt - lists you like later appear in it by themselves',
-            'ودجة واحدة تضم كل القوائم التي أعجبتك في تراكت، وتظهر فيها القوائم التي تعجبك لاحقًا تلقائيًا'),
-    30701: ('Installing Subtitle Cycler...', 'جارٍ تثبيت Subtitle Cycler…'),
-    30702: ('Subtitle Cycler could not be installed', 'تعذّر تثبيت Subtitle Cycler'),
-    30703: ('Subtitle Cycler installed', 'تم تثبيت Subtitle Cycler'),
+    30696: ('All the lists I liked (select all)', 'كل القوائم التي أعجبتني (تحديد الكل)'),
+    30700: ('Tick to add all %d of your liked lists here at once', 'حدّدها لإضافة كل القوائم التي أعجبتك هنا دفعة واحدة (%d قائمة)'),
 }

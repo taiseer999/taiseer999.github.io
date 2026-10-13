@@ -1133,7 +1133,7 @@ msgid "Replace them"
 msgstr ""
 
 msgctxt "#30696"
-msgid "All the lists I liked"
+msgid "All the lists I liked (select all)"
 msgstr ""
 
 msgctxt "#30697"
@@ -1149,18 +1149,26 @@ msgid "Nothing is added or changed in the sections"
 msgstr ""
 
 msgctxt "#30700"
-msgid "One widget with every list you liked on Trakt - lists you like later appear in it by themselves"
+msgid "Tick to add all %d of your liked lists here at once"
 msgstr ""
 
 msgctxt "#30701"
-msgid "Installing Subtitle Cycler..."
+msgid "MDBList  •  by %s  •  %d likes  •  %d items"
 msgstr ""
 
 msgctxt "#30702"
-msgid "Subtitle Cycler could not be installed"
+msgid "My list"
 msgstr ""
 
 msgctxt "#30703"
-msgid "Subtitle Cycler installed"
+msgid "MDBList lists appear once MDBList is authorised in TMDb Helper (MDbList API key). Open its settings now?"
+msgstr ""
+
+msgctxt "#30704"
+msgid "Skip"
+msgstr ""
+
+msgctxt "#30705"
+msgid "Open MDBList settings"
 msgstr ""
 

@@ -1,3 +1,53 @@
+v3.2.70
+- Reverted the 3.2.69 one-line pickers (user: "not nice"): pickers and the
+  widget-mode question are detailed select lists again (icon + second line).
+- The AF3 "Preview" (معاينة) button is hidden ONLY in these dialogs: new
+  always-on patcher entry on skin.arctic.fuse.3 1080i/Dialog_DialogSelect.xml
+  adds "+ String.IsEmpty(Window(Home).Property(abk.nopreview))" to button
+  9004's visible condition (exact block + regex fallback scoped to id 9004;
+  not_found_ok; verified on AF3 source: 1 match, XML valid). trakt_hubs sets
+  the property only while its own select dialogs are open (context manager),
+  so every other select dialog in the skin keeps Preview.
+
+v3.2.69
+- MDBList not authorised -> yes/no before fetching (30703) with buttons
+  "تخطّي" / "فتح إعدادات MDBList": Addon.OpenSettings(TMDb Helper), then
+  SetFocus(-197) = category button 3 ("API keys"; Kodi GUIDialogSettingsBase
+  numbers category buttons -200 + index; TMDb Helper order general, widgets,
+  library, api keys). Waits for the settings window to close (max 15 min),
+  re-reads mdblist_apikey and, when set, fetches MDBList in the same run.
+  Replaces the 3.2.68 notice.
+- Pickers + widget-mode question are plain one-line select lists now
+  (useDetails off): AF3 adds its artwork "Preview" (معاينة) button to every
+  detailed select list. The details (owner, likes, items, "أعجبتني" /
+  "قائمتي", MDBList) follow the name on the same line in a muted colour.
+
+v3.2.68
+- Trakt Lists: when TMDb Helper has no MDBList key, a notice (30703) says
+  MDBList lists appear once MDBList is authorised in TMDb Helper.
+- Verified against the user's TMDb Helper 6.17.9 zip: mdblist_userlist /
+  list_id route, mdblist_apikey setting and api.mdblist.com base are exactly
+  what 3.2.67 uses (only ABUKARIM patches differ from upstream).
+- Note: the "Preview" (معاينة) button in the pickers is Arctic Fuse 3's own
+  DialogSelect_ArtworkPreview (shown for every detailed select list) - not
+  part of this add-on.
+
+v3.2.67
+- MDBList (user request): fetch_mdblist() reads TMDb Helper's own
+  mdblist_apikey and asks api.mdblist.com for lists/user (the user's own,
+  shown as "قائمتي"), lists/top and lists/search?query=korean. Type from the
+  list's mediatype (movie / show), Korean by name; up to 25 per category;
+  merged after the Trakt lists. Widget path = TMDb Helper
+  info=mdblist_userlist&list_id=<id>. No key -> skipped quietly. NOT tested
+  against the live API (api.mdblist.com unreachable from the build host) -
+  field names handled defensively (items/item_count, mediatype/type, wrapped
+  lists).
+- Pickers: nothing is pre-ticked (Back = nothing from that list). When a
+  category has liked Trakt lists, row 1 "All the lists I liked (select all)"
+  adds every one of them; other rows are picked one by one.
+- The 3.2.65 live liked-lists row (info=trakt_likedlists) is replaced by the
+  select-all row; STYLE_VERSION 3 makes ensure() drop it from boxes once.
+
 v3.2.66
 - Trakt Lists widget rows get a style by content instead of copying the
   hub's first widget: movies / kr_movies -> "Flyer" (AF3 Arabic "منشور"),
