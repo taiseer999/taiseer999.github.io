@@ -1172,3 +1172,15 @@ msgctxt "#30705"
 msgid "Open MDBList settings"
 msgstr ""
 
+msgctxt "#30706"
+msgid "Installing Subtitle Cycler..."
+msgstr ""
+
+msgctxt "#30707"
+msgid "Subtitle Cycler could not be installed"
+msgstr ""
+
+msgctxt "#30708"
+msgid "Subtitle Cycler installed"
+msgstr ""
+
