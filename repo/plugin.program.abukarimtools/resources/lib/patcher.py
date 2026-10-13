@@ -1215,6 +1215,52 @@ PATCHES = [
         'toggle': 'tmdbh_stability',
         'description': 'TMDbHelper player.py \u2013 dead-player guard (getPlayingFile RuntimeError)',
     },
+    # ── TMDbHelper: thread cap + invoker reuse (3.3.3) ──
+    # 2026-10-13 OOM kill on the AM9 (4 GB, no swap): kodi.bin reached 2.08 GB
+    # anon-rss opening AF3's Korean hub after TraktHubs added 7 widgets. Stock
+    # max_threads default is 0 = UNLIMITED in jurialmunkey.ParallelThread, so
+    # every widget spawns one thread per item, and reuselanguageinvoker=false
+    # builds a fresh Python interpreter for every plugin:// call. Cap the pool
+    # at 3 and keep the interpreter warm. Takes effect after a Kodi restart.
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': 'addon.xml',
+        'toggle': 'tmdbh_stability',
+        'old': '<reuselanguageinvoker>false</reuselanguageinvoker>',
+        'new': '<reuselanguageinvoker>true</reuselanguageinvoker>',
+        'already_patched_check': '<reuselanguageinvoker>true</reuselanguageinvoker>',
+        'fallback_pattern': r'<reuselanguageinvoker>\s*false\s*</reuselanguageinvoker>',
+        'fallback_repl': '<reuselanguageinvoker>true</reuselanguageinvoker>',
+        'not_found_ok': True,
+        'description': 'TMDbHelper addon.xml – reuselanguageinvoker=true',
+    },
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'settings.xml'),
+        'toggle': 'tmdbh_stability',
+        'old': '',
+        'new': '',
+        'already_patched_check': '<!-- ABK max_threads=3 -->',
+        'fallback_pattern': (r'(<setting id="max_threads"[^>]*>'
+                             r'(?:(?!</setting>)[\s\S])*?<default>)\s*\d+\s*(</default>)'),
+        'fallback_repl': r'<!-- ABK max_threads=3 -->\g<1>3\g<2>',
+        'not_found_ok': True,
+        'description': 'TMDbHelper settings.xml – max_threads default 3 (was 0 = unlimited)',
+    },
+    {   # A value saved in userdata beats the default: force it to 3 too.
+        # default="true" rows follow the new default, but rewriting them is harmless.
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'base': 'addon_data',
+        'rel_path': 'settings.xml',
+        'toggle': 'tmdbh_stability',
+        'old': '',
+        'new': '',
+        'already_patched_check': '<setting id="max_threads">3</setting>',
+        'fallback_pattern': r'<setting id="max_threads"(?: default="true")?\s*>\s*\d*\s*</setting>|<setting id="max_threads"(?: default="true")?\s*/>',
+        'fallback_repl': '<setting id="max_threads">3</setting>',
+        'not_found_ok': True,
+        'description': 'TMDbHelper userdata settings.xml – max_threads=3',
+    },
     # ── Last Played: capture engine for TMDbHelper / Fen Light playback (3.2.11) ──
     # Stock 6.4.0 never recorded TMDbHelper -> player add-on playback on Kodi 21/22:
     # the dummy.mp4 splash fired the stop callback with empty data, the real stream
