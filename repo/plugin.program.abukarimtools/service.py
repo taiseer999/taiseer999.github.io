@@ -267,6 +267,34 @@ def _step_addon_portal():
         return False
 
 
+def _step_phone(monitor):
+    """3.3.7: offer to finish the setup from the phone (QR + local page).
+    Returns the set of sections done there; the TV steps for those are
+    skipped. Back / On the TV / any failure = empty set (TV flow as before)."""
+    try:
+        yes = False
+        for attempt in range(1, 4):
+            _wait_no_modal(monitor)
+            started = time.time()
+            yes = xbmcgui.Dialog().yesno(T(30730), T(30734),
+                                         yeslabel=T(30735), nolabel=T(30736))
+            if yes or time.time() - started > 1.5:
+                break
+            _log('Phone question dismissed instantly (attempt %d)' % attempt)
+            _settle(monitor, 2)
+        if not yes:
+            _log('Setup continues on the TV.')
+            return set()
+        from resources.lib import phone_setup
+        done = phone_setup.run(first_run=True)
+        _settle(monitor, 2)
+        return done
+    except Exception:
+        _log('Phone setup failed (TV flow continues):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+        return set()
+
+
 def _step_af3_shortcuts(monitor):
     """Widgets Layout / ترتيب الودجات: Light / Moderate / Full."""
     try:
@@ -607,20 +635,37 @@ def _run_steps(monitor):
     _step_guarded('hw_tuning', lambda: __import__(
         'resources.lib.hw_tuning', fromlist=['auto']).auto())
 
-    _log('Step 2 — Restore popup.')
-    _final_choice(monitor)
+    _log('Step 1d — Setup from the phone (optional).')
+    phone = _step_phone(monitor)
+    if phone:
+        _log('Done from the phone: %s' % ', '.join(sorted(phone)))
 
-    _log('Step 3 — Preset + Add-on Portal.')
-    _wait_no_modal(monitor)
-    _step_addon_portal()
+    if 'restore' in phone:
+        _log('Step 2 — Restore: done from the phone.')
+    else:
+        _log('Step 2 — Restore popup.')
+        _final_choice(monitor)
 
-    _log('Step 3b — Widgets Layout (Light / Moderate / Full).')
-    _wait_no_modal(monitor)
-    _step_af3_shortcuts(monitor)
+    if 'addons' in phone:
+        _log('Step 3 — Add-on Portal: done from the phone.')
+    else:
+        _log('Step 3 — Preset + Add-on Portal.')
+        _wait_no_modal(monitor)
+        _step_addon_portal()
 
-    _log('Step 3c — Trakt Lists (Original / Custom).')
-    _wait_no_modal(monitor)
-    _step_trakt_hubs(monitor)
+    if 'layout' in phone:
+        _log('Step 3b — Widgets Layout: done from the phone.')
+    else:
+        _log('Step 3b — Widgets Layout (Light / Moderate / Full).')
+        _wait_no_modal(monitor)
+        _step_af3_shortcuts(monitor)
+
+    if 'lists' in phone or 'anime' in phone:
+        _log('Step 3c — My Lists: done from the phone.')
+    else:
+        _log('Step 3c — My Lists (Original / Trakt / Anime).')
+        _wait_no_modal(monitor)
+        _step_trakt_hubs(monitor)
 
     _log('Step 4 — Apply Patches.')
     # 3.2.59: the patcher waits - until no dialog is up and any AF3 menu

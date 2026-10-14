@@ -39,6 +39,7 @@ ICONS  = {
     'addon_portal':   ADDON_PATH + 'resources/icons/addon_portal.png',
     'af3_shortcuts':  ADDON_PATH + 'resources/icons/af3_shortcuts.png',
     'trakt_hubs':     ADDON_PATH + 'resources/icons/trakt_hubs.png',
+    'phone_setup':    ADDON_PATH + 'resources/icons/phone_setup.png',
     # 3.2
     'bootstrap':      ADDON_PATH + 'resources/icons/bootstrap.png',
     'hw_tuning':      ADDON_PATH + 'resources/icons/hw_tuning.png',
@@ -64,6 +65,7 @@ ICONS  = {
 CATEGORIES = [
     ('setup',  30014, 'cat_setup', [
         ('first_run',      30001),
+        ('phone_setup',    30730),
         ('backup',         30002),
         ('skin_install',   30003),
         ('addon_portal',   30021),
@@ -118,7 +120,9 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 # 3.2.43~beta7: Widgets Layout (its own window)
                 'af3_shortcuts',
                 # 3.2.57: Trakt Lists (its own window)
-                'trakt_hubs'}
+                'trakt_hubs',
+                # 3.3.7: setup from the phone (QR window + local server)
+                'phone_setup'}
 
 
 def _add_folder(label, cat_key, icon_key):
@@ -411,6 +415,10 @@ def router():
     elif mode == 'trakt_hubs':
         from resources.lib import trakt_hubs
         trakt_hubs.run_menu()
+
+    elif mode == 'phone_setup':
+        from resources.lib import phone_setup
+        phone_setup.run()
 
     elif mode == 'addon_portal':
         _end_directory()

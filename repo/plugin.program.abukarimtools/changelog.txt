@@ -1,3 +1,140 @@
+v3.4.1
+- kodi.log 2026-10-14 10:17:48 (3.4.0, phone restore of a 3.3.x backup):
+  "add-on reinstall failed: _job_restore.<locals>.job.<locals>.<lambda>()
+  missing 1 required positional argument: 'arc'" - reinstall_missing()
+  called the restore progress callback as (pct, msg) while restore
+  callbacks are (i, total, name). Nothing was installed. Now
+  progress(96, 100, 'add-ons'), fenced. (The 3.4.0 test restored without a
+  callback, so it never ran that line - the new test uses the phone's.)
+- Pre-3.4.0 backups (no abk_manifest.json): their guisettings said
+  lookandfeel.skin = skin.estuary (default) although the box's AF3 settings
+  are in the zip. When the backup skin is Estuary/empty and exactly one
+  other installed skin has addon_data in the zip, switch to that one.
+- reinstall_missing(): add-ons that ship with Kodi (special://xbmc/addons,
+  e.g. skin.estuary) are never queued for install - they are not in the
+  user addons folder, so 3.4.0 treated them as missing.
+- Verified: the user's case (3.3.x backup, guisettings Estuary, addon_data
+  of seren / fenlight / AF3 / Estuary / a module, phone callback) -> repos
+  ok, fenlight + seren from repository.taiseer, AF3 from
+  repository.taiseerKODI22, Estuary and the module skipped, switched to AF3,
+  no reinstall error. 3.4.0 manifest test and phone tests unchanged.
+
+v3.4.0
+- User report: "why does the restore not bring back the (video) add-ons and
+  the skin". A backup held userdata only (addon_data, guisettings, keymaps),
+  so on a box without those add-ons only their settings came back and the
+  skin switch had nothing to switch to.
+- Backup (TV and phone): new abk_manifest.json - every installed add-on in
+  special://home/addons except libraries (script.module.*, resource.*,
+  metadata.*, inputstream.*, ... and xbmc.python.module) and AB Tools
+  itself: {id, name, version, kind skin|repo|addon, origin} (origin from
+  Addons33.db via origin_fix.snapshot_origins), plus the active skin, plus
+  the repository add-ons themselves as addons/repository.*/... (files
+  > 2 MB skipped).
+- Restore: the manifest and addons/ are not written into userdata;
+  repositories missing on the box are extracted to special://home/addons,
+  then UpdateLocalAddons, enable + pin origin, UpdateAddonRepos, wait for
+  the listings; then reinstall_missing() installs every add-on/skin the
+  box lacks from its own origin with addon_portal._install_selection
+  (deps, enable, origin pin); no origin -> the repo whose cached listing
+  carries it (origin_fix._repo_candidates/_pick_repo), else Kodi's
+  InstallAddon (30 s). Backups from before 3.4.0 (no manifest): the
+  plugin.video.* / plugin.program.* / skin.* whose addon_data is in the zip.
+  Then the skin switch (guisettings lookandfeel.skin, else manifest skin).
+- Result {installed, failed} shown on the phone ("ثُبِّتت N من الإضافات",
+  failures named). Same path for the TV restore and the Installation
+  Wizard restore step.
+- Verified (mocked Kodi): manifest lists Seren / AF3 / both repos with
+  origins (module + AB Tools left out), repo files in the zip; after
+  removing them, restore put both repos back, installed Seren from
+  repository.taiseer and AF3 from repository.taiseerKODI22, switched to AF3,
+  nothing leaked into userdata; an old backup reinstalled fenlight via the
+  DB repo lookup. Phone tests unchanged.
+
+v3.3.9
+- kodi.log 2026-10-14 10:00 (3.3.8 on the Mac): the phone restore worked -
+  "guisettings.xml ... applied live", "Kodi settings applied live from the
+  backup: 1", "skin.estuary has no skinvariables build template - no
+  rebuild", job ok, RestartApp from the phone at 10:00:51. No skin switch
+  because the backup itself was taken on Estuary (its lookandfeel.skin is
+  the active skin), so restoring it onto the same box changes nothing
+  visible - expected.
+- phone_setup: socketserver printed "Exception occurred during processing
+  of request ... ConnectionResetError" (09:54:06, 10:00:46) and the plugin
+  waited on handler threads after the QR screen closed: the phone's idle
+  keep-alive sockets. Now every reply sends "Connection: close" and closes,
+  handler sockets time out after 20 s, threads are daemons, and a
+  reset / broken pipe / timeout is one debug line (_Server.handle_error).
+  Verified: connection closed after the reply, Finish -> stopped in 0.5 s
+  with an idle connection open, no traceback on a reset.
+- backup_manager._after_restore(): the menu-rebuild check is fenced - a
+  finished restore is never reported as failed because of it.
+
+v3.3.8
+- kodi.log 2026-10-14 09:53 (Mac): a phone restore "did nothing" although it
+  ran (Restore completed, 120 skin settings pushed). Causes: guisettings.xml
+  could not be staged (/storage/.guisettings_pending.xml - /storage exists
+  only on *ELEC), Estuary was the active skin so the restored Arctic Fuse 3
+  menus / settings were invisible, the skinvariables rebuild crashed ("Unable
+  to load special://skin/shortcuts/skinvariables-build-templates.json") and
+  nothing on the TV or phone said what happened. A second tap restored again
+  after the server had stopped.
+- backup_manager._after_restore() (TV and phone restore): non-*ELEC ->
+  apply_guisettings_live() pushes the backup's non-default Kodi settings via
+  JSON-RPC Settings.SetSettingValue (typed from Settings.GetSettings; skin,
+  audio/video output, network, services, system, debug left out; only
+  changed values). *ELEC keeps the staging + autostart.sh path. Then, when
+  the backup's lookandfeel.skin is installed and not active, switch to it
+  (skin_switcher._swap_skin, confirm auto-answered) so the restored menus
+  and skin settings show. Rebuild only when the skin has
+  shortcuts/skinvariables-build-templates.json (also after a TV backup).
+  TV restore offers a restart (30737).
+- restore_backup() returns (files, cancelled, after); phone job result now
+  {files, settings, skin, restart}; TV notification 30738.
+- phone_setup: no new job once Finish / BACK / idle stopped the session
+  (S.stopped) - the late second restore in the log is refused (409).
+- Phone page: the picked file name and size show at once, the restore
+  result says what was restored (files, Kodi settings, skin) with a restart
+  button in place, and every message scrolls into view.
+- Verified (mocked Kodi, desktop, Estuary active, backup from AF3): 2 Kodi
+  settings set live (audio device skipped, default rows skipped), skin
+  switched to AF3, TV notification, no rebuild on a skin without the
+  template, upload after Finish -> 409.
+
+v3.3.7
+- New resources/lib/phone_setup.py + resources/phone/index.html: "Setup
+  from your phone" (الإعداد من الجوال), suggested by the Dex Hub developer.
+  The TV shows a QR (abk_qr.xml, non-modal) with http://<box-ip>:<port>/?t=
+  <random token>; a ThreadingHTTPServer on 8091-8099 serves an Arabic (MSA)
+  mobile page. Everything reuses the TV code, only the questions move:
+    backup   backup_manager.write_backup() -> download to the phone
+    restore  upload a zip (<= 2 GB, must be a zip) -> restore_backup()
+    add-ons  Add-on Portal catalog, addon_portal._install_selection()
+    layout   af3_shortcuts.apply(light|moderate|full)
+    lists    Original, or Trakt: trakt_hubs.phone_fetch() / phone_apply()
+             (add / replace); "link Trakt" runs TMDb Helper's QR on the TV
+    anime    trakt_hubs.phone_anime() (Otaku installed when missing)
+    patches  toggles saved + patcher.apply_set()
+    reboot / finish
+  Safety: token on every request (403 otherwise, hmac compare), one job at
+  a time (409), server up only while the QR is shown - BACK on the TV,
+  Finish on the phone or 30 min idle stops it (a running job finishes).
+  Progress dialogs of the reused tools still show on the TV.
+- backup_manager: the restore loop moved into _restore_members() (TV restore
+  unchanged), plus headless write_backup() / restore_backup().
+- First run: new Step 1d after the skin + device tuning - "Continue the
+  setup from your phone?" (من الجوال / على التلفاز). Sections finished on
+  the phone skip their TV step (restore, portal, layout, lists); the rest
+  of the sequence (patches, password, ...) runs as before.
+- Menu: Setup & Install -> الإعداد من الجوال (icon phone_setup.png).
+- Strings 30730-30736 (EN + AR Fusha).
+- Verified with mocked Kodi + real HTTP: bad token 403, page, info, backup
+  + download (zip contents checked), restore upload (file restored), junk
+  upload 400, add-ons (unknown ids ignored), layout, Trakt fetch + apply
+  (hub widgets written), anime (Otaku installed, home rows), patches
+  (toggles saved), busy 409, finish -> TV QR closed and server stopped.
+  Page rendered in Chromium at phone size, no JS errors.
+
 v3.3.6
 - remote_config: patches.json / portal.json / presets.json / config.json now
   come ONLY from the taiseer999.github.io repo (branch main, folder

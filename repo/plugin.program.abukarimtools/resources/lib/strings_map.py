@@ -474,4 +474,18 @@ STRINGS = {
     30725: ('Anime: Top 100', 'أنمي: أفضل 100'),
     30726: ('Anime: Genres & Tags', 'أنمي: التصنيفات والوسوم'),
     30727: ('Needs your anime account linked in Otaku', 'يتطلب ربط حساب الأنمي في Otaku'),
+    # ---- Setup from your phone (3.3.7) ----
+    30730: ('Setup from your phone', 'الإعداد من الجوال'),
+    30731: ('Scan the code with your phone and finish the setup there: backup and restore, add-ons, widgets, lists and patches - no FTP needed.[CR]The phone must be on the same network as this box. Or open: %s',
+            'امسح الرمز بجوالك وأكمل الإعداد منه: النسخ الاحتياطي والاستعادة، والإضافات، والودجات، والقوائم، والترقيعات، دون الحاجة إلى FTP.[CR]يجب أن يكون الجوال على شبكة الجهاز نفسها، أو افتح: %s'),
+    30732: ('BACK = finish', 'رجوع = إنهاء'),
+    30733: ('The phone setup could not start (no free network port).',
+            'تعذّر تشغيل الإعداد من الجوال (لا يوجد منفذ شبكة متاح).'),
+    30734: ('Continue the setup from your phone?[CR]Backup and restore, add-ons, widgets and lists - all from the phone, no FTP needed.',
+            'هل تريد إكمال الإعداد من جوالك؟[CR]النسخ الاحتياطي والاستعادة والإضافات والودجات والقوائم كلها من الجوال، دون الحاجة إلى FTP.'),
+    30735: ('From the phone', 'من الجوال'),
+    30736: ('On the TV', 'على التلفاز'),
+    30737: ('Restore finished. Restart now so every setting takes effect?',
+            'اكتملت الاستعادة. هل تريد إعادة التشغيل الآن ليُطبَّق كل إعداد؟'),
+    30738: ('Restored from the phone - restart to finish', 'تمت الاستعادة من الجوال، أعد التشغيل لإكمالها'),
 }

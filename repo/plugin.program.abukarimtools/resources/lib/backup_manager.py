@@ -120,6 +120,7 @@ class BackupManager:
                 return
 
             with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+                _write_addon_manifest(zf)            # 3.4.0: add-ons + skin
                 for i, (abs_path, arc_name) in enumerate(file_list):
                     if pbar.iscanceled():
                         break
@@ -145,7 +146,9 @@ class BackupManager:
                 _log('Backup written to: %s' % zip_path)
                 dialog.ok(ADDON_NAME, T(30223) % (total, zip_path))
                 if (SKIN_ADDONS[0] in include_skin
-                        and SKIN_ADDONS[1] in include_skin):
+                        and SKIN_ADDONS[1] in include_skin
+                        and xbmcvfs.exists('special://skin/shortcuts/'
+                                           'skinvariables-build-templates.json')):
                     _log('Both skin addons included – triggering rebuild_shortcuts.')
                     xbmc.executebuiltin(
                         'AlarmClock(rebuild_shortcuts,'
@@ -196,6 +199,141 @@ class BackupManager:
         _log('Active skin settings pushed into Kodi: %d' % n)
         return n
 
+    def _restore_members(self, zf, include_skin, progress=None):
+        """3.3.7: the restore loop on its own, shared by the TV restore and
+        the phone setup (phone_setup.py). progress(i, total, name) returning
+        False cancels. Returns (members, cancelled)."""
+        members = zf.namelist()
+        total = len(members)
+        self._guisettings = None
+        self._manifest = None
+        self._repos_added = []
+        self._zip_addon_data = set()
+        for i, member in enumerate(members):
+            if progress and progress(i, total, member) is False:
+                return total, True
+            # Skip pure directory entries
+            if member.endswith('/'):
+                continue
+
+            # Normalise separators so Windows-created zips work on Linux
+            norm_member = member.replace('\\', '/').lstrip('/')
+
+            # 3.4.0: the add-on manifest and the repository add-ons
+            if norm_member == MANIFEST_NAME:
+                try:
+                    import json as _json
+                    self._manifest = _json.loads(zf.read(member).decode('utf-8'))
+                except Exception as e:
+                    _log('manifest unreadable: %s' % e, xbmc.LOGWARNING)
+                continue
+            if norm_member.startswith('addons/'):
+                parts = norm_member.split('/')
+                if (len(parts) >= 3 and parts[1].startswith('repository.')
+                        and '..' not in parts
+                        and not os.path.isfile(os.path.join(ADDONS_HOME, parts[1], 'addon.xml'))
+                        or (len(parts) >= 3 and parts[1] in self._repos_added)):
+                    try:
+                        dest = os.path.join(ADDONS_HOME, *parts[1:])
+                        os.makedirs(os.path.dirname(dest), exist_ok=True)
+                        with open(dest, 'wb') as fh:
+                            fh.write(zf.read(member))
+                        if parts[1] not in self._repos_added:
+                            self._repos_added.append(parts[1])
+                    except Exception as e:
+                        _log('repository %s not restored: %s' % (parts[1], e),
+                             xbmc.LOGWARNING)
+                continue
+            _p = norm_member.split('/')
+            if len(_p) >= 3 and _p[0] == 'addon_data':
+                self._zip_addon_data.add(_p[1])
+
+            # Skip skin addon data unless the user opted in
+            member_parts = norm_member.split('/')
+            if (len(member_parts) >= 2
+                    and member_parts[0] == 'addon_data'
+                    and member_parts[1] in SKIN_ADDONS
+                    and member_parts[1] not in include_skin):
+                continue
+
+            # Skip always-excluded addons (e.g. the ABUKARIM wizard's
+            # first-run state) even if an older backup still contains
+            # them, so machine-specific setup data isn't carried over.
+            if (len(member_parts) >= 2
+                    and member_parts[0] == 'addon_data'
+                    and member_parts[1] in EXCLUDED_ADDONS):
+                continue
+
+            # Skip machine-/build-specific first-run lifecycle files
+            # but keep the rest of the addon's data (e.g. patch
+            # toggles). Restoring these re-imports another box's setup
+            # state and makes first-run re-fire on the next boot after
+            # a restore.
+            if (len(member_parts) >= 3
+                    and member_parts[0] == 'addon_data'
+                    and member_parts[1] in SKIP_FILES
+                    and member_parts[-1] in SKIP_FILES[member_parts[1]]):
+                _log('Skipping first-run state file: %s' % norm_member)
+                continue
+
+            # guisettings.xml must be staged — writing it while Kodi
+            # is running has no effect because Kodi overwrites it on exit.
+            if norm_member == 'guisettings.xml':
+                try:
+                    data = zf.read(member)
+                    self._guisettings = data          # 3.3.8: skin + live apply
+                    if not _can_stage():
+                        _log('guisettings.xml: no /storage (not CoreELEC) - '
+                             'applied live after the restore')
+                        continue
+                    with open(GUISETTINGS_STAGING, 'wb') as fh:
+                        fh.write(data)
+                    self._inject_autostart_restore()
+                    _log('guisettings.xml staged at %s' % GUISETTINGS_STAGING)
+                except Exception as e:
+                    _log('Could not stage guisettings.xml: %s' % e,
+                         xbmc.LOGWARNING)
+                continue
+
+            # Same reasoning as guisettings.xml above — CoreELEC's own
+            # settings service re-syncs this file's values back over
+            # guisettings.xml during the session, so it needs the same
+            # stage-and-restore-on-boot treatment or the fix doesn't stick.
+            if norm_member == OE_SETTINGS_MEMBER:
+                try:
+                    data = zf.read(member)
+                    with open(OE_SETTINGS_STAGING, 'wb') as fh:
+                        fh.write(data)
+                    self._inject_autostart_restore()
+                    _log('oe_settings.xml staged at %s' % OE_SETTINGS_STAGING)
+                except Exception as e:
+                    _log('Could not stage oe_settings.xml: %s' % e,
+                         xbmc.LOGWARNING)
+                continue
+
+            # the running skin's own settings: also push into Kodi
+            if norm_member == 'addon_data/%s/settings.xml' % xbmc.getSkinDir():
+                try:
+                    self._push_active_skin_settings(zf.read(member))
+                except Exception as e:
+                    _log('Could not push active skin settings: %s' % e,
+                         xbmc.LOGWARNING)
+
+            dest     = os.path.join(self.userdata_path,
+                                    *norm_member.split('/'))
+            dest_dir = os.path.dirname(dest)
+
+            try:
+                os.makedirs(dest_dir, exist_ok=True)
+                data = zf.read(member)
+                with open(dest, 'wb') as fh:
+                    fh.write(data)
+            except Exception as e:
+                _log('Could not restore %s: %s' % (member, e),
+                     xbmc.LOGWARNING)
+
+        return total, False
+
     def _do_restore(self, dialog, include_skin):
         zip_path = dialog.browse(
             1, T(30225), 'files', '*.zip', False, False,
@@ -212,98 +350,13 @@ class BackupManager:
 
         try:
             with zipfile.ZipFile(zip_path, 'r') as zf:
-                members = zf.namelist()
-                total   = len(members)
-
-                for i, member in enumerate(members):
+                def _prog(i, n, name):
                     if pbar.iscanceled():
-                        break
-
-                    # Skip pure directory entries
-                    if member.endswith('/'):
-                        continue
-
-                    # Normalise separators so Windows-created zips work on Linux
-                    norm_member = member.replace('\\', '/').lstrip('/')
-
-                    # Skip skin addon data unless the user opted in
-                    member_parts = norm_member.split('/')
-                    if (len(member_parts) >= 2
-                            and member_parts[0] == 'addon_data'
-                            and member_parts[1] in SKIN_ADDONS
-                            and member_parts[1] not in include_skin):
-                        continue
-
-                    # Skip always-excluded addons (e.g. the ABUKARIM wizard's
-                    # first-run state) even if an older backup still contains
-                    # them, so machine-specific setup data isn't carried over.
-                    if (len(member_parts) >= 2
-                            and member_parts[0] == 'addon_data'
-                            and member_parts[1] in EXCLUDED_ADDONS):
-                        continue
-
-                    # Skip machine-/build-specific first-run lifecycle files
-                    # but keep the rest of the addon's data (e.g. patch
-                    # toggles). Restoring these re-imports another box's setup
-                    # state and makes first-run re-fire on the next boot after
-                    # a restore.
-                    if (len(member_parts) >= 3
-                            and member_parts[0] == 'addon_data'
-                            and member_parts[1] in SKIP_FILES
-                            and member_parts[-1] in SKIP_FILES[member_parts[1]]):
-                        _log('Skipping first-run state file: %s' % norm_member)
-                        continue
-
-                    # guisettings.xml must be staged — writing it while Kodi
-                    # is running has no effect because Kodi overwrites it on exit.
-                    if norm_member == 'guisettings.xml':
-                        try:
-                            data = zf.read(member)
-                            with open(GUISETTINGS_STAGING, 'wb') as fh:
-                                fh.write(data)
-                            self._inject_autostart_restore()
-                            _log('guisettings.xml staged at %s' % GUISETTINGS_STAGING)
-                        except Exception as e:
-                            _log('Could not stage guisettings.xml: %s' % e,
-                                 xbmc.LOGWARNING)
-                        continue
-
-                    # Same reasoning as guisettings.xml above — CoreELEC's own
-                    # settings service re-syncs this file's values back over
-                    # guisettings.xml during the session, so it needs the same
-                    # stage-and-restore-on-boot treatment or the fix doesn't stick.
-                    if norm_member == OE_SETTINGS_MEMBER:
-                        try:
-                            data = zf.read(member)
-                            with open(OE_SETTINGS_STAGING, 'wb') as fh:
-                                fh.write(data)
-                            self._inject_autostart_restore()
-                            _log('oe_settings.xml staged at %s' % OE_SETTINGS_STAGING)
-                        except Exception as e:
-                            _log('Could not stage oe_settings.xml: %s' % e,
-                                 xbmc.LOGWARNING)
-                        continue
-
-                    # the running skin's own settings: also push into Kodi
-                    if norm_member == 'addon_data/%s/settings.xml' % xbmc.getSkinDir():
-                        try:
-                            self._push_active_skin_settings(zf.read(member))
-                        except Exception as e:
-                            _log('Could not push active skin settings: %s' % e,
-                                 xbmc.LOGWARNING)
-
-                    dest     = os.path.join(self.userdata_path,
-                                            *norm_member.split('/'))
-                    dest_dir = os.path.dirname(dest)
-
-                    try:
-                        os.makedirs(dest_dir, exist_ok=True)
-                        data = zf.read(member)
-                        with open(dest, 'wb') as fh:
-                            fh.write(data)
-                    except Exception as e:
-                        _log('Could not restore %s: %s' % (member, e),
-                             xbmc.LOGWARNING)
+                        return False
+                    pbar.update(int((i + 1) / max(n, 1) * 100),
+                                'Restoring… (%d / %d)\n%s' % (i + 1, n, name))
+                    return True
+                total, _cancel = self._restore_members(zf, include_skin, _prog)
 
             pbar.close()
 
@@ -311,15 +364,11 @@ class BackupManager:
                 dialog.ok(ADDON_NAME, T(30227))
             else:
                 _log('Restore completed from: %s' % zip_path)
+                after = _after_restore(self._guisettings, self)
                 dialog.ok(ADDON_NAME, T(30228) % total)
-                if (SKIN_ADDONS[0] in include_skin
-                        and SKIN_ADDONS[1] in include_skin):
-                    _log('Both skin addons restored – running rebuild_shortcuts.')
-                    xbmc.executebuiltin(
-                        'RunScript(script.skinvariables,'
-                        'run_executebuiltin=special://skin/shortcuts/'
-                        'skinvariables-build-templates.json,use_rules)'
-                    )
+                if after.get('restart'):
+                    if dialog.yesno(ADDON_NAME, T(30737)):
+                        _restart_kodi()
 
         except Exception as e:
             pbar.close()
@@ -481,3 +530,361 @@ class BackupManager:
 
         _log('Collected %d files for backup.' % len(collected))
         return collected
+
+
+# ─── headless API (3.3.7: phone setup) ───────────────────────────────────────
+
+def write_backup(zip_path, progress=None):
+    """Full backup (menus and widgets included, like the TV backup) into
+    zip_path without any dialog. progress(i, total, name) -> False cancels.
+    Returns the number of files written (0 = nothing / cancelled)."""
+    bm = BackupManager()
+    files = bm._collect_files(set(SKIN_ADDONS))
+    total = len(files)
+    if not total:
+        return 0
+    n = 0
+    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+        _write_addon_manifest(zf)                    # 3.4.0: add-ons + skin
+        for i, (abs_path, arc_name) in enumerate(files):
+            if progress and progress(i, total, arc_name) is False:
+                break
+            try:
+                with open(abs_path, 'rb') as f:
+                    zf.writestr(arc_name, f.read())
+                n += 1
+            except Exception as e:
+                _log('Could not add %s: %s' % (abs_path, e), xbmc.LOGWARNING)
+        else:
+            _log('Backup written to: %s (%d files)' % (zip_path, n))
+            return n
+    try:
+        os.remove(zip_path)
+    except OSError:
+        pass
+    return 0
+
+
+def restore_backup(zip_path, progress=None):
+    """Restore zip_path (a backup made by this add-on) without any dialog.
+    Returns (files in the zip, cancelled). Raises on a broken zip."""
+    bm = BackupManager()
+    with zipfile.ZipFile(zip_path, 'r') as zf:
+        total, cancelled = bm._restore_members(zf, set(SKIN_ADDONS), progress)
+    after = {}
+    if not cancelled:
+        _log('Restore completed from: %s' % zip_path)
+        after = _after_restore(bm._guisettings, bm, progress)
+    return total, cancelled, after
+
+
+# ─── add-ons and skin in the backup (3.4.0) ──────────────────────────────────
+# A backup used to hold userdata only, so a restore onto a fresh box brought
+# back the SETTINGS of the video add-ons and the skin but not the add-ons
+# themselves (user report 2026-10-14). Now every backup carries
+# abk_manifest.json - each installed add-on/skin with its version and the
+# repository it updates from - plus the repository add-ons themselves
+# (addons/repository.*/..., a few KB each). A restore puts missing
+# repositories back, then installs every missing add-on from its own
+# repository with the Add-on Portal installer, then switches the skin.
+
+ADDONS_HOME = xbmcvfs.translatePath('special://home/addons/')
+MANIFEST_NAME = 'abk_manifest.json'
+_NO_MANIFEST = ('script.module.', 'resource.', 'xbmc.', 'kodi.', 'metadata.',
+                'inputstream.', 'audioencoder.', 'audiodecoder.', 'imagedecoder.',
+                'peripheral.', 'game.', 'vfs.', 'visualization.', 'screensaver.')
+_NO_MANIFEST_IDS = {'plugin.program.abukarimtools'}
+_REPO_MAX_FILE = 2 * 1024 * 1024
+
+
+def _addon_xml(addon_dir):
+    import xml.etree.ElementTree as ET
+    try:
+        return ET.parse(os.path.join(addon_dir, 'addon.xml')).getroot()
+    except Exception:
+        return None
+
+
+def scan_addons():
+    """Installed (non-system, non-library) add-ons: [{id, name, version,
+    kind: skin|repo|addon, origin}]."""
+    try:
+        from resources.lib import origin_fix
+        origins = origin_fix.snapshot_origins()
+    except Exception:
+        origins = {}
+    out = []
+    try:
+        names = sorted(os.listdir(ADDONS_HOME))
+    except OSError:
+        return out
+    for d in names:
+        if d in ('packages', 'temp') or d.startswith(_NO_MANIFEST) or d in _NO_MANIFEST_IDS:
+            continue
+        root = _addon_xml(os.path.join(ADDONS_HOME, d))
+        if root is None or root.get('id') != d:
+            continue
+        points = {e.get('point') for e in root.findall('extension')}
+        if 'xbmc.python.module' in points:
+            continue
+        kind = ('skin' if 'xbmc.gui.skin' in points else
+                'repo' if 'xbmc.addon.repository' in points else 'addon')
+        out.append({'id': d, 'name': root.get('name') or d,
+                    'version': root.get('version') or '', 'kind': kind,
+                    'origin': origins.get(d, '')})
+    return out
+
+
+def _write_addon_manifest(zf):
+    """abk_manifest.json + the repository add-ons, into an open ZipFile."""
+    import json as _json
+    try:
+        addons = scan_addons()
+        manifest = {'version': 1, 'skin': xbmc.getSkinDir(), 'addons': addons}
+        zf.writestr(MANIFEST_NAME, _json.dumps(manifest, ensure_ascii=False, indent=1))
+        n = 0
+        for a in addons:
+            if a['kind'] != 'repo':
+                continue
+            base = os.path.join(ADDONS_HOME, a['id'])
+            for root, _dirs, files in os.walk(base):
+                for fname in files:
+                    fp = os.path.join(root, fname)
+                    try:
+                        if os.path.getsize(fp) > _REPO_MAX_FILE:
+                            continue
+                        rel = os.path.relpath(fp, ADDONS_HOME).replace('\\', '/')
+                        with open(fp, 'rb') as f:
+                            zf.writestr('addons/' + rel, f.read())
+                        n += 1
+                    except Exception:
+                        pass
+        _log('manifest: %d add-on(s), skin %s, %d repository file(s)'
+             % (len(addons), manifest['skin'], n))
+    except Exception as e:
+        _log('manifest not written: %s' % e, xbmc.LOGWARNING)
+
+
+def _db_repo_for(addon_id):
+    """Repository whose cached listing carries addon_id (old backups)."""
+    try:
+        from resources.lib import origin_fix
+        db = origin_fix._find_addons_db()
+        if not db:
+            return ''
+        conn = origin_fix._connect(db)
+        try:
+            return origin_fix._pick_repo(origin_fix._repo_candidates(conn.cursor(), addon_id)) or ''
+        finally:
+            conn.close()
+    except Exception:
+        return ''
+
+
+def reinstall_missing(manifest, repos_added, zip_addon_data, progress=None):
+    """Install what the backup had and this box lacks. Returns
+    (installed count, [failed names])."""
+    from resources.lib import addon_portal as ap
+    if manifest and isinstance(manifest.get('addons'), list):
+        wanted = [a for a in manifest['addons']
+                  if isinstance(a, dict) and a.get('id') and a.get('kind') != 'repo']
+    else:
+        # backups from before 3.4.0: the add-ons whose settings are in the zip
+        wanted = [{'id': i, 'name': i, 'origin': ''} for i in sorted(zip_addon_data)
+                  if i.startswith(('plugin.video.', 'plugin.program.', 'skin.'))
+                  and i not in _NO_MANIFEST_IDS]
+    system = xbmcvfs.translatePath('special://xbmc/addons/')
+    missing = [a for a in wanted if not ap._is_local(a['id'])
+               and not os.path.isdir(os.path.join(system, a['id']))     # Kodi's own (Estuary)
+               and a['id'] != 'skin.estuary']
+    if not missing and not repos_added:
+        return 0, []
+    if repos_added:
+        _log('repositories restored from the backup: %s' % ', '.join(repos_added))
+        xbmc.executebuiltin('UpdateLocalAddons')
+        xbmc.sleep(3000)
+        for rid in repos_added:
+            ap._enable(rid)
+            ap._force_origin(rid, rid)
+        xbmc.executebuiltin('UpdateAddonRepos')
+        ap._wait_repo_listings(repos_added)
+    if not missing:
+        return 0, []
+    if progress:
+        try:                                   # restore-style: (i, total, name)
+            progress(96, 100, 'add-ons')
+        except Exception:
+            pass
+    entries, kodi_only = [], []
+    for a in missing:
+        rid = a.get('origin') or _db_repo_for(a['id'])
+        if rid and not rid.startswith('b6a50484'):           # not ORIGIN_SYSTEM
+            entries.append((a['id'], a.get('name') or a['id'], rid))
+        else:
+            kodi_only.append(a)
+    _log('restore: installing %d missing add-on(s): %s'
+         % (len(missing), ', '.join(a['id'] for a in missing)))
+    installed, failed = 0, []
+    if entries:
+        for name, ok, _note in ap._install_selection(entries):
+            if ok:
+                installed += 1
+            else:
+                failed.append(name)
+    for a in kodi_only:
+        if ap._kodi_install(a['id'], timeout_ms=30000):
+            ap._enable(a['id'])
+            installed += 1
+        else:
+            failed.append(a.get('name') or a['id'])
+    _log('restore: %d add-on(s) installed, %d failed%s'
+         % (installed, len(failed), (' (%s)' % ', '.join(failed)) if failed else ''))
+    return installed, failed
+
+
+# ─── after a restore (3.3.8) ─────────────────────────────────────────────────
+# kodi.log 2026-10-14 09:53: a phone restore on the Mac "did nothing" -
+# guisettings.xml could not be staged (/storage only exists on *ELEC), the
+# box was on Estuary so the restored Arctic Fuse 3 menus / settings were not
+# visible, and the skinvariables rebuild crashed on a skin without
+# shortcuts/skinvariables-build-templates.json.
+
+# never applied live: hardware / network / the skin itself (switched apart)
+_LIVE_SKIP = ('lookandfeel.skin', 'audiooutput.', 'videoscreen.', 'network.',
+              'services.webserver', 'services.esallinterfaces', 'services.zeroconf',
+              'services.airplay', 'services.upnp', 'debug.', 'system.',
+              'coreelec.', 'smb.', 'videoplayer.hqscalers', 'locale.timezone')
+
+
+def _can_stage():
+    return os.path.isdir('/storage')
+
+
+def _rpc(method, params=None):
+    import json
+    req = {'jsonrpc': '2.0', 'id': 1, 'method': method, 'params': params or {}}
+    try:
+        return json.loads(xbmc.executeJSONRPC(json.dumps(req)))
+    except Exception:
+        return {}
+
+
+def _gs_values(data):
+    """{id: text} of the NON-default settings in a guisettings.xml."""
+    text = data.decode('utf-8', 'replace') if isinstance(data, bytes) else data
+    out = {}
+    for m in re.finditer(r'<setting\s+([^>]*?)(?:/>|>(.*?)</setting>)', text, re.S):
+        attrs = dict(re.findall(r'(\w+)="([^"]*)"', m.group(1)))
+        if not attrs.get('id') or attrs.get('default') == 'true':
+            continue
+        val = (m.group(2) or '')
+        val = (val.replace('&lt;', '<').replace('&gt;', '>').replace('&quot;', '"')
+                  .replace('&apos;', "'").replace('&amp;', '&'))
+        out[attrs['id']] = val
+    return out
+
+
+def apply_guisettings_live(data):
+    """Desktop / non-*ELEC: push the backup's Kodi settings through JSON-RPC
+    (Kodi would overwrite a written guisettings.xml on exit). Only settings
+    whose type is known and whose value differs; hardware, network and the
+    skin are left out. Returns the number applied."""
+    want = _gs_values(data)
+    cur = (_rpc('Settings.GetSettings', {'level': 'expert'}).get('result') or {}).get('settings') or []
+    types = {c.get('id'): (c.get('type'), c.get('value')) for c in cur if isinstance(c, dict)}
+    n = 0
+    for sid, raw in want.items():
+        if sid.startswith(_LIVE_SKIP) or sid not in types:
+            continue
+        typ, now = types[sid]
+        try:
+            if typ == 'boolean':
+                val = raw.strip().lower() == 'true'
+            elif typ == 'integer':
+                val = int(raw)
+            elif typ == 'number':
+                val = float(raw)
+            elif typ == 'string':
+                val = raw
+            else:
+                continue
+        except ValueError:
+            continue
+        if val == now:
+            continue
+        res = _rpc('Settings.SetSettingValue', {'setting': sid, 'value': val})
+        if res.get('result') is True:
+            n += 1
+    _log('Kodi settings applied live from the backup: %d' % n)
+    return n
+
+
+def _backup_skin(data):
+    m = re.search(r'<setting id="lookandfeel\.skin"[^>]*>([^<]+)</setting>',
+                  data.decode('utf-8', 'replace') if isinstance(data, bytes) else data)
+    return m.group(1).strip() if m else ''
+
+
+def _rebuild_shortcuts():
+    tpl = 'special://skin/shortcuts/skinvariables-build-templates.json'
+    if not xbmcvfs.exists(tpl):
+        _log('%s has no skinvariables build template - no rebuild' % xbmc.getSkinDir())
+        return False
+    xbmc.executebuiltin('RunScript(script.skinvariables,run_executebuiltin=%s,use_rules)' % tpl)
+    return True
+
+
+def _after_restore(guisettings, bm=None, progress=None):
+    """Make a restore visible now: missing add-ons + skin reinstalled from
+    their repositories (3.4.0), Kodi settings live (non-*ELEC), back to the
+    skin the backup was made on, menus rebuilt.
+    Returns {'settings', 'skin', 'installed', 'failed', 'restart'}."""
+    out = {'settings': 0, 'skin': '', 'installed': 0, 'failed': [], 'restart': True}
+    if bm is not None:
+        try:
+            out['installed'], out['failed'] = reinstall_missing(
+                getattr(bm, '_manifest', None), getattr(bm, '_repos_added', []),
+                getattr(bm, '_zip_addon_data', set()), progress)
+        except Exception as e:
+            _log('add-on reinstall failed: %s' % e, xbmc.LOGWARNING)
+    if guisettings and not _can_stage():
+        try:
+            out['settings'] = apply_guisettings_live(guisettings)
+        except Exception as e:
+            _log('live settings failed: %s' % e, xbmc.LOGWARNING)
+    manifest = getattr(bm, '_manifest', None) if bm is not None else None
+    skin = (_backup_skin(guisettings) if guisettings else '') or \
+        ((manifest or {}).get('skin') if isinstance(manifest, dict) else '') or ''
+    if skin in ('', 'skin.estuary') and not isinstance(manifest, dict) and bm is not None:
+        # backups from before 3.4.0 (kodi.log 2026-10-14 10:17): guisettings
+        # said Estuary although the box's own skin settings are in the zip -
+        # when exactly one other installed skin has settings there, use it.
+        skins = sorted(i for i in getattr(bm, '_zip_addon_data', set())
+                       if i.startswith('skin.') and i != 'skin.estuary'
+                       and xbmc.getCondVisibility('System.HasAddon(%s)' % i))
+        if len(skins) == 1:
+            _log('old backup: guisettings says %s, using %s (its settings are in the zip)'
+                 % (skin or 'nothing', skins[0]))
+            skin = skins[0]
+    if (skin and skin != xbmc.getSkinDir()
+            and xbmc.getCondVisibility('System.HasAddon(%s)' % skin)):
+        try:
+            from resources.lib import skin_switcher
+            _log('switching to the backup skin: %s' % skin)
+            skin_switcher._swap_skin(skin)
+            out['skin'] = skin
+            xbmc.sleep(1500)
+        except Exception as e:
+            _log('skin switch failed: %s' % e, xbmc.LOGWARNING)
+    try:
+        _rebuild_shortcuts()
+    except Exception as e:                      # never fail a finished restore
+        _log('menu rebuild skipped: %s' % e, xbmc.LOGWARNING)
+    return out
+
+
+def _restart_kodi():
+    if _can_stage():
+        xbmc.executebuiltin('Reboot')
+    else:
+        xbmc.executebuiltin('RestartApp')

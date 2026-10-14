@@ -1551,6 +1551,96 @@ def run_anime():
 
 
 
+def _plain(text):
+    return re.sub(r'\[/?(?:COLOR[^\]]*|B|I)\]', '', text or '')
+
+
+def phone_fetch():
+    """3.3.7 phone setup: the Trakt candidates without any dialog.
+    Returns {'ok': True, 'cats': {cat: [{'key','name','info','liked'}]}} or
+    {'ok': False, 'error': 'tmdbh'|'nolink'|'busy'|'offline'|'empty'}.
+    The full candidates are kept for phone_apply()."""
+    if not _tmdbh_installed():
+        return {'ok': False, 'error': 'tmdbh'}
+    if not _token():
+        return {'ok': False, 'error': 'nolink'}
+    res = fetch(None)
+    if res is None:
+        if _LAST.get('unauthorized'):
+            return {'ok': False, 'error': 'nolink'}
+        return {'ok': False, 'error': 'busy' if _LAST.get('r429') else 'offline'}
+    cats = res['cats']
+    have = set()
+    for defaults in korean_defaults().values():
+        have |= {_key(c) for c in defaults}
+    for cat in ('kr_movies', 'kr_tv'):
+        cats[cat] = [c for c in cats.get(cat, []) if _key(c) not in have]
+    if not any(cats.values()):
+        return {'ok': False, 'error': 'empty'}
+    _SESSION['phone_cands'] = {k: {_key(c): c for c in v} for k, v in cats.items()}
+    _SESSION['phone_cache'] = res.get('cache') or {}
+    _SESSION['phone_liked_ok'] = res.get('liked_ok')
+    out = {}
+    for cat, heading in CATS:
+        out[cat] = {'title': AR(heading),
+                    'items': [{'key': _key(c), 'name': c['name'],
+                               'by': c.get('uname') or c.get('user') or '',
+                               'likes': int(c.get('likes') or 0),
+                               'count': int(c.get('count') or 0),
+                               'src': 'MDBList' if c.get('prov') == 'mdblist' else '',
+                               'mine': bool(c.get('mine')),
+                               'liked': bool(c.get('liked'))}
+                              for c in cats.get(cat) or []]}
+    return {'ok': True, 'cats': out}
+
+
+def phone_apply(keys_by_cat, wmode=ADD):
+    """Write the phone's Trakt picks (keys from phone_fetch). True / False."""
+    cands = _SESSION.get('phone_cands')
+    if not cands:
+        return False
+    if wmode not in (ADD, REPLACE):
+        wmode = ADD
+    picks = {}
+    for cat, _h in CATS:
+        pool = cands.get(cat) or {}
+        picks[cat] = [_slim(pool[k]) for k in (keys_by_cat.get(cat) or []) if k in pool]
+    written = _apply_files(CUSTOM, picks, wmode=wmode)
+    _save_state({'mode': CUSTOM, 'time': int(time.time()), 'picks': picks,
+                 'wmode': wmode, 'style_v': STYLE_VERSION,
+                 'liked_ok': _SESSION.get('phone_liked_ok'),
+                 'class_cache': _SESSION.get('phone_cache') or {}})
+    _log('phone: custom applied (%s), files written: %s'
+         % (', '.join('%s=%d' % (k, len(v)) for k, v in picks.items()),
+            ', '.join(written) or 'none'))
+    if written:
+        _rebuild()
+    return True
+
+
+def phone_original():
+    written = _apply_files(ORIGINAL, {})
+    _save_state({'mode': ORIGINAL, 'time': int(time.time()),
+                 'class_cache': _load_state().get('class_cache') or {}})
+    if written:
+        _rebuild()
+    return True
+
+
+def phone_anime(routes):
+    """Anime rows on the home page from the phone (Otaku must be there)."""
+    routes = [r for r in routes if r in _ANIME_BY_ROUTE]
+    written = _apply_anime(routes)
+    st = _load_state()
+    st['anime'] = routes
+    if st.get('mode') not in MODES:
+        st['mode'] = ORIGINAL
+    _save_state(st)
+    if written:
+        _rebuild()
+    return True
+
+
 def apply(mode):
     """Apply a choice. Returns True when the box ends up as requested."""
     if mode == ANIME:

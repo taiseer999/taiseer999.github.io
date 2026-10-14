@@ -1260,3 +1260,39 @@ msgctxt "#30727"
 msgid "Needs your anime account linked in Otaku"
 msgstr ""
 
+msgctxt "#30730"
+msgid "Setup from your phone"
+msgstr ""
+
+msgctxt "#30731"
+msgid "Scan the code with your phone and finish the setup there: backup and restore, add-ons, widgets, lists and patches - no FTP needed.[CR]The phone must be on the same network as this box. Or open: %s"
+msgstr ""
+
+msgctxt "#30732"
+msgid "BACK = finish"
+msgstr ""
+
+msgctxt "#30733"
+msgid "The phone setup could not start (no free network port)."
+msgstr ""
+
+msgctxt "#30734"
+msgid "Continue the setup from your phone?[CR]Backup and restore, add-ons, widgets and lists - all from the phone, no FTP needed."
+msgstr ""
+
+msgctxt "#30735"
+msgid "From the phone"
+msgstr ""
+
+msgctxt "#30736"
+msgid "On the TV"
+msgstr ""
+
+msgctxt "#30737"
+msgid "Restore finished. Restart now so every setting takes effect?"
+msgstr ""
+
+msgctxt "#30738"
+msgid "Restored from the phone - restart to finish"
+msgstr ""
+
