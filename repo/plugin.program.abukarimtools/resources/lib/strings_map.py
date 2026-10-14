@@ -23,7 +23,7 @@ ID ranges:
   30430-30459  AF3 auto-trailers
   30530-30599  3.2: profiles, tuning, remote access, log share, bootstrap
   30630-30649  Widgets Layout / ترتيب الودجات (Light / Moderate / Full)
-  30660-30705  Trakt Lists / قوائم تراكت (Original / Custom)
+  30660-30705  My Lists / قوائمي (Original / Trakt / Anime); Anime 30709-30727
   30706-30708  AF3 Subtitle Buttons (Subtitle Cycler install)
 """
 
@@ -384,25 +384,25 @@ STRINGS = {
     30648: ('Widgets layout left as it is', 'بقي ترتيب الودجات كما هو'),
     30649: ('No trailer found for this title', 'لم يُعثر على مقطع دعائي لهذا العنوان'),
     30650: ('Trailer button only', 'عند الضغط على زر المقطع الدعائي فقط'),
-    # ---- Trakt Lists / قوائم تراكت (30660-30689), Modern Standard Arabic ----
+    # ---- My Lists / قوائمي (was Trakt Lists; 30660-30705, Anime 30709-30727), Modern Standard Arabic ----
     # Always shown in ARABIC (trakt_hubs.AR), like Widgets Layout.
-    30660: ('Trakt Lists', 'قوائم تراكت'),
+    30660: ('My Lists', 'قوائمي'),
     30661: ('Original', 'الأصلي'),
     30662: ('The ABUKARIM build lists[CR]exactly as they are',
             'قوائم بيلد أبوكريم[CR]كما هي دون أي تغيير'),
-    30663: ('Custom', 'مخصّص'),
+    30663: ('Trakt', 'تراكت'),
     30664: ('Your Trakt likes + the best[CR]Trakt lists you choose',
             'القوائم التي أعجبتك في تراكت[CR]وأفضل قوائم تراكت التي تختارها'),
-    30665: ('Choose the Trakt lists of the Movies, TV Shows and Korean sections',
-            'اختر قوائم تراكت لأقسام الأفلام والمسلسلات والكوري'),
+    30665: ('Trakt lists for the Movies, TV Shows and Korean sections - anime lists for the home page',
+            'قوائم تراكت لأقسام الأفلام والمسلسلات والكوري، وقوائم الأنمي للصفحة الرئيسية'),
     30666: ('Nothing is downloaded or changed',
             'لن يتم تنزيل أو تغيير أي شيء'),
     30667: ('Your lists are added as widgets - the home page and the ABUKARIM lists stay as they are',
             'تُضاف قوائمك ودجات في الأقسام، وتبقى الصفحة الرئيسية وقوائم أبوكريم كما هي'),
     30668: ('Arrows to move  •  OK to choose  •  Back = Original',
             'الأسهم للتنقل  •  OK للاختيار  •  رجوع = الأصلي'),
-    30669: ('Custom needs your Trakt account linked to TMDb Helper. Link it now?[CR]Without the link the original lists are used.',
-            'يتطلب خيار «مخصّص» ربط حسابك في تراكت بإضافة TMDb Helper. هل تريد الربط الآن؟[CR]من دون الربط تُطبَّق القوائم الأصلية.'),
+    30669: ('Trakt needs your Trakt account linked to TMDb Helper. Link it now?[CR]Without the link the original lists are used.',
+            'يتطلب خيار «تراكت» ربط حسابك في تراكت بإضافة TMDb Helper. هل تريد الربط الآن؟[CR]من دون الربط تُطبَّق القوائم الأصلية.'),
     30670: ('Fetching the lists from Trakt...', 'جارٍ جلب القوائم من تراكت...'),
     30671: ('Sorting the lists (%d / %d)...', 'جارٍ فرز القوائم (%d من %d)...'),
     30672: ('Could not reach Trakt - your current lists were kept.',
@@ -415,8 +415,8 @@ STRINGS = {
     30678: ('Best on Trakt', 'الأفضل في تراكت'),
     30679: ('by %s  •  %d likes  •  %d items', 'بواسطة %s  •  %d إعجاب  •  %d عنصر'),
     30680: ('Liked', 'أعجبتني'),
-    30681: ('Trakt lists: %s', 'قوائم تراكت: %s'),
-    30682: ('Trakt lists left as they are', 'بقيت قوائم تراكت كما هي'),
+    30681: ('My Lists: %s', 'قوائمي: %s'),
+    30682: ('My Lists left as they are', 'بقيت قوائمي كما هي'),
     30683: ('TMDb Helper is not installed - your current lists were kept.',
             'إضافة TMDb Helper غير مثبّتة، وتم الإبقاء على القوائم الحالية.'),
     30684: ('Waiting for the Trakt link...', 'بانتظار ربط حساب تراكت...'),
@@ -452,4 +452,26 @@ STRINGS = {
     30706: ('Installing Subtitle Cycler...', 'جارٍ تثبيت Subtitle Cycler…'),
     30707: ('Subtitle Cycler could not be installed', 'تعذّر تثبيت Subtitle Cycler'),
     30708: ('Subtitle Cycler installed', 'تم تثبيت Subtitle Cycler'),
+    # ---- My Lists: Anime (3.3.6; replaces Simkl) - Otaku lists on the home page ----
+    30709: ('Anime', 'أنمي'),
+    30710: ('Otaku anime lists[CR]on the home page', 'قوائم الأنمي من إضافة Otaku[CR]في الصفحة الرئيسية'),
+    30711: ('The lists you pick are added as widgets on the home page - the sections stay as they are',
+            'تُضاف القوائم التي تختارها ودجات في الصفحة الرئيسية، وتبقى الأقسام كما هي'),
+    30712: ('Anime lists for the home page', 'قوائم الأنمي للصفحة الرئيسية'),
+    30713: ('Anime needs the Otaku add-on. Install it now?', 'يتطلب خيار «أنمي» إضافة Otaku. هل تريد تثبيتها الآن؟'),
+    30714: ('Otaku could not be installed - the home page was left as it is.',
+            'تعذّر تثبيت Otaku، وبقيت الصفحة الرئيسية كما هي.'),
+    30715: ('Anime: %d lists added to the home page', 'أنمي: أُضيفت %d من القوائم إلى الصفحة الرئيسية'),
+    30716: ('Anime lists removed from the home page', 'أُزيلت قوائم الأنمي من الصفحة الرئيسية'),
+    30717: ('Home page left as it is', 'بقيت الصفحة الرئيسية كما هي'),
+    30718: ('Installing Otaku...', 'جارٍ تثبيت Otaku...'),
+    30719: ('Anime: Next Up', 'أنمي: الحلقة التالية'),
+    30720: ('Anime: Airing Last Season', 'أنمي: عُرض الموسم الماضي'),
+    30721: ('Anime: Airing This Season', 'أنمي: يُعرض هذا الموسم'),
+    30722: ('Anime: Airing Next Season', 'أنمي: يُعرض الموسم القادم'),
+    30723: ('Anime: Trending', 'أنمي: الأكثر رواجًا'),
+    30724: ('Anime: Popular', 'أنمي: الأكثر شعبية'),
+    30725: ('Anime: Top 100', 'أنمي: أفضل 100'),
+    30726: ('Anime: Genres & Tags', 'أنمي: التصنيفات والوسوم'),
+    30727: ('Needs your anime account linked in Otaku', 'يتطلب ربط حساب الأنمي في Otaku'),
 }

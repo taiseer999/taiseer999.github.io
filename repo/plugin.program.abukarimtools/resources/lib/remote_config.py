@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-remote_config.py - data that used to be hardcoded, served from the Piers repo.
+remote_config.py - data that used to be hardcoded, served from the taiseer999.github.io repo.
 
-Files live in the GitHub Pages repo under abukarim/ :
+Files live in the taiseer999.github.io repo (branch main) under abukarim/
+(3.3.6: until then the URL pointed at taiseer999Piers.github.io/master/
+abukarim/, a folder that never existed - every box logged "missing" for all
+four files and ran on the built-in defaults; only taiseer999.github.io is
+used now):
 
     abukarim/patches.json   extra / replacement patches + kill switches
     abukarim/portal.json    Add-on Portal catalog (ids, names, repos, icons)
@@ -30,8 +34,10 @@ import urllib.request
 import xbmc
 import xbmcvfs
 
-BASE_URL = ('https://raw.githubusercontent.com/taiseer999/'
-            'taiseer999Piers.github.io/master/abukarim/')
+# First URL that answers wins; a 404 on one tries the next.
+BASE_URLS = ('https://raw.githubusercontent.com/taiseer999/'
+             'taiseer999.github.io/main/abukarim/',)
+BASE_URL = BASE_URLS[0]
 
 FILES = ('patches.json', 'portal.json', 'presets.json', 'config.json')
 SUPPORTED_SCHEMA = 1
@@ -70,10 +76,17 @@ def age(name):
 
 
 def _fetch(name, timeout):
-    url = BASE_URL + name + '?t=%d' % int(time.time() // 300)   # bust CDN cache every 5 min
-    req = urllib.request.Request(url, headers={'User-Agent': 'AbukarimTools'})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        raw = r.read()
+    raw = None
+    for i, base in enumerate(BASE_URLS):
+        url = base + name + '?t=%d' % int(time.time() // 300)   # bust CDN cache every 5 min
+        req = urllib.request.Request(url, headers={'User-Agent': 'AbukarimTools'})
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                raw = r.read()
+            break
+        except urllib.error.HTTPError as e:
+            if e.code != 404 or i == len(BASE_URLS) - 1:
+                raise
     data = json.loads(raw.decode('utf-8'))
     if not isinstance(data, dict):
         raise ValueError('not a JSON object')

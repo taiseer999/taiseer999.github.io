@@ -989,8 +989,8 @@ msgid "Trailer button only"
 msgstr "عند الضغط على زر المقطع الدعائي فقط"
 
 msgctxt "#30660"
-msgid "Trakt Lists"
-msgstr "قوائم تراكت"
+msgid "My Lists"
+msgstr "قوائمي"
 
 msgctxt "#30661"
 msgid "Original"
@@ -1001,16 +1001,16 @@ msgid "The ABUKARIM build lists[CR]exactly as they are"
 msgstr "قوائم بيلد أبوكريم[CR]كما هي دون أي تغيير"
 
 msgctxt "#30663"
-msgid "Custom"
-msgstr "مخصّص"
+msgid "Trakt"
+msgstr "تراكت"
 
 msgctxt "#30664"
 msgid "Your Trakt likes + the best[CR]Trakt lists you choose"
 msgstr "القوائم التي أعجبتك في تراكت[CR]وأفضل قوائم تراكت التي تختارها"
 
 msgctxt "#30665"
-msgid "Choose the Trakt lists of the Movies, TV Shows and Korean sections"
-msgstr "اختر قوائم تراكت لأقسام الأفلام والمسلسلات والكوري"
+msgid "Trakt lists for the Movies, TV Shows and Korean sections - anime lists for the home page"
+msgstr "قوائم تراكت لأقسام الأفلام والمسلسلات والكوري، وقوائم الأنمي للصفحة الرئيسية"
 
 msgctxt "#30666"
 msgid "Nothing is downloaded or changed"
@@ -1025,8 +1025,8 @@ msgid "Arrows to move  •  OK to choose  •  Back = Original"
 msgstr "الأسهم للتنقل  •  OK للاختيار  •  رجوع = الأصلي"
 
 msgctxt "#30669"
-msgid "Custom needs your Trakt account linked to TMDb Helper. Link it now?[CR]Without the link the original lists are used."
-msgstr "يتطلب خيار «مخصّص» ربط حسابك في تراكت بإضافة TMDb Helper. هل تريد الربط الآن؟[CR]من دون الربط تُطبَّق القوائم الأصلية."
+msgid "Trakt needs your Trakt account linked to TMDb Helper. Link it now?[CR]Without the link the original lists are used."
+msgstr "يتطلب خيار «تراكت» ربط حسابك في تراكت بإضافة TMDb Helper. هل تريد الربط الآن؟[CR]من دون الربط تُطبَّق القوائم الأصلية."
 
 msgctxt "#30670"
 msgid "Fetching the lists from Trakt..."
@@ -1073,12 +1073,12 @@ msgid "Liked"
 msgstr "أعجبتني"
 
 msgctxt "#30681"
-msgid "Trakt lists: %s"
-msgstr "قوائم تراكت: %s"
+msgid "My Lists: %s"
+msgstr "قوائمي: %s"
 
 msgctxt "#30682"
-msgid "Trakt lists left as they are"
-msgstr "بقيت قوائم تراكت كما هي"
+msgid "My Lists left as they are"
+msgstr "بقيت قوائمي كما هي"
 
 msgctxt "#30683"
 msgid "TMDb Helper is not installed - your current lists were kept."
@@ -1183,4 +1183,80 @@ msgstr "تعذّر تثبيت Subtitle Cycler"
 msgctxt "#30708"
 msgid "Subtitle Cycler installed"
 msgstr "تم تثبيت Subtitle Cycler"
+
+msgctxt "#30709"
+msgid "Anime"
+msgstr "أنمي"
+
+msgctxt "#30710"
+msgid "Otaku anime lists[CR]on the home page"
+msgstr "قوائم الأنمي من إضافة Otaku[CR]في الصفحة الرئيسية"
+
+msgctxt "#30711"
+msgid "The lists you pick are added as widgets on the home page - the sections stay as they are"
+msgstr "تُضاف القوائم التي تختارها ودجات في الصفحة الرئيسية، وتبقى الأقسام كما هي"
+
+msgctxt "#30712"
+msgid "Anime lists for the home page"
+msgstr "قوائم الأنمي للصفحة الرئيسية"
+
+msgctxt "#30713"
+msgid "Anime needs the Otaku add-on. Install it now?"
+msgstr "يتطلب خيار «أنمي» إضافة Otaku. هل تريد تثبيتها الآن؟"
+
+msgctxt "#30714"
+msgid "Otaku could not be installed - the home page was left as it is."
+msgstr "تعذّر تثبيت Otaku، وبقيت الصفحة الرئيسية كما هي."
+
+msgctxt "#30715"
+msgid "Anime: %d lists added to the home page"
+msgstr "أنمي: أُضيفت %d من القوائم إلى الصفحة الرئيسية"
+
+msgctxt "#30716"
+msgid "Anime lists removed from the home page"
+msgstr "أُزيلت قوائم الأنمي من الصفحة الرئيسية"
+
+msgctxt "#30717"
+msgid "Home page left as it is"
+msgstr "بقيت الصفحة الرئيسية كما هي"
+
+msgctxt "#30718"
+msgid "Installing Otaku..."
+msgstr "جارٍ تثبيت Otaku..."
+
+msgctxt "#30719"
+msgid "Anime: Next Up"
+msgstr "أنمي: الحلقة التالية"
+
+msgctxt "#30720"
+msgid "Anime: Airing Last Season"
+msgstr "أنمي: عُرض الموسم الماضي"
+
+msgctxt "#30721"
+msgid "Anime: Airing This Season"
+msgstr "أنمي: يُعرض هذا الموسم"
+
+msgctxt "#30722"
+msgid "Anime: Airing Next Season"
+msgstr "أنمي: يُعرض الموسم القادم"
+
+msgctxt "#30723"
+msgid "Anime: Trending"
+msgstr "أنمي: الأكثر رواجًا"
+
+msgctxt "#30724"
+msgid "Anime: Popular"
+msgstr "أنمي: الأكثر شعبية"
+
+msgctxt "#30725"
+msgid "Anime: Top 100"
+msgstr "أنمي: أفضل 100"
+
+msgctxt "#30726"
+msgid "Anime: Genres & Tags"
+msgstr "أنمي: التصنيفات والوسوم"
+
+msgctxt "#30727"
+msgid "Needs your anime account linked in Otaku"
+msgstr "يتطلب ربط حساب الأنمي في Otaku"
 

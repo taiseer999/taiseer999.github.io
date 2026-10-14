@@ -621,7 +621,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="3.3.4" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="3.3.6" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -652,7 +652,7 @@ updated YouTube addon URL
     <description lang="en_GB">ABUKARIM TOOLS is an all-in-one utility for managing your Kodi setup. It bundles a Skin Installer and Skin Switcher, full backup and restore of your userdata, and quick access to the ABUKARIM Wizard and its maintenance tools (Total Clean and old thumbnail cleanup). A built-in patcher keeps popular add-ons (Seren, Prism, TinyPPI, Arctic Fuse 3, TMDbHelper, RedLight and more) working correctly on CoreELEC and Kodi, and re-applies its fixes automatically after those add-ons update. Also includes handy maintenance tools such as a speed test, a CPU benchmark and an add-on database rebuild.</description>
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، ووصولاً سريعاً إلى معالج أبوكريم وأدوات الصيانة فيه (التنظيف الشامل وحذف الصور المصغّرة القديمة). كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة واختبار أداء المعالج وإعادة بناء قاعدة بيانات الإضافات.</description>
-    <news>v3.3.4 - FIX: the background service was switched off again, so patches were not re-applied at boot and the TMDb Helper thread cap only worked after opening ABUKARIM TOOLS - it is back on. "Keep Python warm" is now its own patch toggle (TMDbHelper: Keep Python Warm); turning it off really undoes it. TMDb Helper threads are set to 3 only when they are unlimited (0) - a value you chose yourself is kept. Shorter release notes; the full history is in changelog.txt. v3.3.3 - TMDbHelper: Stability caps TMDb Helper at 3 threads (was unlimited). Fixes Kodi being killed for running out of memory when opening hubs with many widgets. Restart Kodi after patching. v3.3.2 - New patch toggle "AF3: Subtitle Buttons": DexSubtitles AutoSync and Subtitle Cycler buttons after Subtitles in the Arctic Fuse 3 player bar.</news>
+    <news>v3.3.6 - قوائمي: Simkl removed; the third choice is now أنمي (Anime): tick the Otaku lists you want (Next Up, Airing last/this/next season, Trending, Popular, Top 100, Genres &amp; Tags) and they are added as widgets on the HOME page - the sections are not touched (Otaku is installed for you if missing). FIX: online fixes and the Add-on Portal list now come from the taiseer999.github.io repository (they never reached any box before). FIX: 13 Skin Variables Arabic messages showed in English (POParser errors) - corrected in Modern Standard Arabic. v3.3.5 - قوائم تراكت renamed قوائمي (My Lists). v3.3.4 - FIX: the background service was switched off again - it is back on. New toggle TMDbHelper: Keep Python Warm.</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>

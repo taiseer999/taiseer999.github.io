@@ -1386,6 +1386,56 @@ PATCHES = [
 ]
 
 
+# ── script.skinvariables: broken Arabic strings.po (3.3.6) ──
+# kodi.log 2026-10-14 05:44:18: 13 x "POParser: missing msgstr line in entry"
+# while loading resource.language.ar_sa. script.skinvariables 2.2.8 (taiseer999
+# .github.io repo/zips) has the Arabic text on a SECOND msgid line instead of msgstr, so
+# Kodi drops those entries and shows English. Each entry rewrites one string
+# as a proper msgstr in Modern Standard Arabic (the old text also had English
+# "to" / "as" and typos). Always-on bug fix (no toggle); idempotent through
+# the msgstr sentinel; skips cleanly once upstream ships a fixed file.
+_SKINVARS_AR_FIX = (
+    # id, Arabic (po-escaped: \n stays a literal backslash-n)
+    ('32018', r'تمت إضافة\n[B]{}[/B]\nإلى\n[B]{}[/B]'),
+    ('32025', r'أُضيف\n[B]{}[/B]\nبوصفه\n[B]{}[/B]'),
+    ('32028', r'تم استيراد\n[B]{}[/B]\nإلى\n[B]{}[/B]'),
+    ('32034', 'أدخل اسم تسمية المعلومات أو الخاصية المخصّصة لـ[LOWERCASE]{}[/LOWERCASE]'),
+    ('32035', 'أدخل القيمة المخصّصة لـ[LOWERCASE]{}[/LOWERCASE] للمطابقة'),
+    ('32036', 'أقل من <'),
+    ('32037', 'أقل من أو يساوي <='),
+    ('32038', 'يساوي =='),
+    ('32039', 'لا يساوي !='),
+    ('32040', 'أكبر من أو يساوي >='),
+    ('32041', 'أكبر من >'),
+    ('32043', '[COLOR=red][B]تحذير[/B][/COLOR]: لا يمكن التراجع عن هذا الإجراء.'),
+    ('32084', '[B][COLOR=red]تحذير[/COLOR][/B]: ستُضيف هذه القائمة {item_count} '
+              'عنصرًا جديدًا (مع تخطّي {skip_count} من العناصر المضافة سابقًا). '
+              'لا يمكن التراجع عن هذا الإجراء.'),
+)
+
+
+def _skinvars_ar_entry(sid, ar):
+    # sentinel: the msgctxt line is NOT in it (it never changes); the msgstr
+    # up to the first escape is unique per entry and contains no backslash,
+    # so it is a plain substring of both the output and fallback_repl.
+    head = ar.split('\\')[0]
+    sentinel = 'msgstr "%s%s' % (head, '"' if head == ar else '')
+    return {
+        'addon_id': 'script.skinvariables',
+        'rel_path': os.path.join('resources', 'language', 'resource.language.ar_sa', 'strings.po'),
+        'old': '',
+        'new': '',
+        'already_patched_check': sentinel,
+        'fallback_pattern': (r'msgctxt "#%s"\r?\nmsgid ("[^\r\n]*")\r?\nmsg(?:id|str) "[^\r\n]*"' % sid),
+        'fallback_repl': 'msgctxt "#%s"\nmsgid \\g<1>\nmsgstr "%s"' % (sid, ar.replace('\\', '\\\\')),
+        'not_found_ok': True,
+        'description': 'skinvariables ar_sa strings.po #%s - msgstr in MSA' % sid,
+    }
+
+
+PATCHES += [_skinvars_ar_entry(_sid, _ar) for _sid, _ar in _SKINVARS_AR_FIX]
+
+
 
 def _restart_addon(addon_id):
     """Disable + re-enable an add-on so a patched xbmc.service reloads now."""

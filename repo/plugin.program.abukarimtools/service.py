@@ -1191,7 +1191,7 @@ def main():
              % traceback.format_exc(), xbmc.LOGERROR)
 
     # 3.2: pull patches.json / portal.json / presets.json / config.json from
-    # the Piers repo (at most every 6 h, short timeouts). Everything that uses
+    # the taiseer999.github.io repo (at most every 6 h, short timeouts). Everything that uses
     # them reads the cache only, so an offline boot just keeps the old copy.
     try:
         if not monitor.waitForAbort(5):

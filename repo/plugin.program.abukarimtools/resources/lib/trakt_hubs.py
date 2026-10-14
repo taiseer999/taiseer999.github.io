@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-trakt_hubs.py - "Trakt Lists" (قوائم تراكت): which Trakt lists the Arctic
-Fuse 3 Movies / TV Shows / Korean hubs carry. Shown in the Installation
+trakt_hubs.py - "My Lists" (قوائمي; "Trakt Lists" before 3.3.5): which Trakt
+lists the Arctic Fuse 3 Movies / TV Shows / Korean hubs carry, and (3.3.6)
+which Otaku anime lists the HOME page carries. Shown in the Installation
 Wizard right after Widgets Layout, and from Setup & Install in the menu.
 
 All its texts are ARABIC (Modern Standard Arabic) on purpose, like
@@ -9,7 +10,12 @@ af3_shortcuts: the window uses the add-on's Arabic-capable fonts and Kodi's
 dialogs fall back to the Arabic arial.ttf the add-on installs.
 
     Original  the hubs stay exactly as the build ships them
-    Custom    the user's Trakt likes + the best Trakt lists they tick
+    Custom    (card "Trakt") the user's Trakt likes + the best Trakt lists
+    Anime     (3.3.6, replaces the 3.3.5 Simkl card) Otaku lists the user
+              ticks become widget rows on the HOME page (homewidgets) - see
+              ANIME_ENTRIES. Independent of the hub choice: the Movies / TV
+              / Korean hubs are not touched by it, and Original / Trakt do
+              not touch the anime rows.
 
 What Custom touches (and nothing else) - since 3.2.63 the picks are WIDGET
 rows, appended to the hub widgets files in the hub's own widget style:
@@ -69,8 +75,9 @@ def AR(sid):
     return pair[1] or pair[0]
 
 
-ORIGINAL, CUSTOM = 'original', 'custom'
-MODES = (ORIGINAL, CUSTOM)
+ORIGINAL, CUSTOM, ANIME = 'original', 'custom', 'anime'
+MODES = (ORIGINAL, CUSTOM, ANIME)      # order = cards in the window
+LIST_MODES = (CUSTOM,)                   # hub modes that write widget rows
 
 TMDBH = 'plugin.video.themoviedb.helper'
 AF3_ID = 'skin.arctic.fuse.3'
@@ -138,6 +145,12 @@ def _load_state():
 
 
 def _save_state(st):
+    # 3.3.6: the hub flows write a fresh dict - keep the anime picks (home
+    # page) unless this save sets them itself.
+    if 'anime' not in st:
+        old = _load_state().get('anime')
+        if isinstance(old, list):
+            st = dict(st, anime=old)
     try:
         os.makedirs(PROFILE, exist_ok=True)
         tmp = STATE_FILE + '.part'
@@ -715,7 +728,7 @@ def _ours(item):
     return isinstance(item, dict) and str(item.get('guid') or '').startswith(GUID_PREFIX)
 
 
-def _path(c):
+def _path(c, cat='movies'):
     q = urllib.parse.quote
     if c.get('prov') == 'mdblist':
         # TMDb Helper route; it uses its own mdblist_apikey setting
@@ -839,10 +852,10 @@ def korean_defaults():
     return out
 
 
-def _widget(c, hub, style):
+def _widget(c, hub, style, cat='movies'):
     return {'label': _clean(c['name']) or c['slug'],
             'icon': ICON_KOREAN if hub == '1103' else ICON_LIST,
-            'path': _path(c) + WIDGET_SUFFIX,
+            'path': _path(c, cat) + WIDGET_SUFFIX,
             'target': 'videos',
             'guid': _guid('w', hub, *_key(c).split('/', 1)),
             'widget_style': style}
@@ -867,7 +880,7 @@ def _apply_widgets(data, hub, picks, mode=ADD):
             continue                      # build lists stay in the sub-menu;
                                           # 3.2.65's live folder row is gone
         seen.add(_key(c))
-        data.append(_widget(c, hub, STYLE_BY_CAT.get(cat, 'Flyer')))
+        data.append(_widget(c, hub, STYLE_BY_CAT.get(cat, 'Flyer'), cat))
     return data
 
 
@@ -896,7 +909,7 @@ def _apply_files(mode, picks, only=None, wmode=ADD):
         except Exception as e:
             _log('%s unreadable: %s' % (name, e), xbmc.LOGWARNING)
             continue
-        if mode == CUSTOM and widget:
+        if mode in LIST_MODES and widget:
             hub, cats = widget
             sel = [(c, cat) for cat in cats for c in (picks.get(cat) or [])]
             data = _apply_widgets(data, hub, sel, wmode)
@@ -979,10 +992,37 @@ def _rebuild():
 
 
 def ensure(rebuild=True):
-    """Boot / end of setup: put saved Custom picks back into a hub file that
-    lost them wholesale. No network. Returns files written."""
+    """Boot / end of setup: put saved picks back into a hub or home file
+    that lost them wholesale. No network. Returns files written."""
+    written = _ensure_hubs() + _ensure_anime()
+    if written:
+        _log('picks re-applied to %s' % ', '.join(written))
+        if rebuild:
+            _rebuild()
+    return written
+
+
+def _ensure_hubs():
     st = _load_state()
-    if st.get('mode') != CUSTOM or not isinstance(st.get('picks'), dict):
+    if st.get('mode') == 'simkl':
+        # 3.3.6: Simkl was removed - its rows pointed at a route that no
+        # longer exists. Hubs back to the build's lists, Simkl files gone.
+        written = _apply_files(ORIGINAL, {})
+        _save_state({'mode': ORIGINAL, 'time': int(time.time()),
+                     'class_cache': st.get('class_cache') or {}})
+        for name in ('simkl_token.json', 'simkl_token.lock'):
+            try:
+                os.remove(os.path.join(PROFILE, name))
+            except OSError:
+                pass
+        try:
+            import shutil
+            shutil.rmtree(os.path.join(PROFILE, 'simkl_cache'), ignore_errors=True)
+        except Exception:
+            pass
+        _log('Simkl (removed in 3.3.6) cleaned up: %s' % (', '.join(written) or 'no hub rows'))
+        return written
+    if st.get('mode') not in LIST_MODES or not isinstance(st.get('picks'), dict):
         return []
     picks = st['picks']
     for lst in picks.values():
@@ -1005,15 +1045,11 @@ def ensure(rebuild=True):
         need |= {n for n in (W_MOVIES, W_TV, W_KOREAN) if os.path.isfile(_hub(n))}
     if not need:
         return []
-    written = _apply_files(CUSTOM, picks, only=need,
+    written = _apply_files(st['mode'], picks, only=need,
                            wmode=st.get('wmode') or ADD)
     if st.get('style_v') != STYLE_VERSION:
         st['style_v'] = STYLE_VERSION
         _save_state(st)
-    if written:
-        _log('custom Trakt lists re-applied to %s' % ', '.join(written))
-        if rebuild:
-            _rebuild()
     return written
 
 
@@ -1029,6 +1065,7 @@ def _addon_path():
 _CARDS = (  # mode, label, description, note, icon
     (ORIGINAL, 30661, 30662, 30666, 'traktsc_original.png'),
     (CUSTOM,   30663, 30664, 30667, 'traktsc_custom.png'),
+    (ANIME,    30709, 30710, 30711, 'traktsc_anime.png'),
 )
 
 
@@ -1052,7 +1089,7 @@ class _Window(xbmcgui.WindowXMLDialog):
                 ic = os.path.join(base, 'resources', 'icons', icon)
                 li.setArt({'icon': ic, 'thumb': ic})
                 li.setProperty('note', AR(note))
-                if mode == cur:
+                if mode == cur or (mode == ANIME and anime_picks()):
                     li.setProperty('current', 'true')
                     li.setProperty('current_label', AR(30644))
                 panel.addItem(li)
@@ -1243,7 +1280,7 @@ def _ask_widget_mode():
     return mode
 
 
-def _pick(heading_id, cands):
+def _pick(heading_id, cands, all_ids=(30696, 30700)):
     if not cands:
         _log('picker %s: nothing to offer' % AR(heading_id))
         return []
@@ -1255,7 +1292,7 @@ def _pick(heading_id, cands):
     items, pre = [], []
     for c in rows:
         if c is None:
-            li = xbmcgui.ListItem('[B]%s[/B]' % AR(30696), AR(30700) % len(liked))
+            li = xbmcgui.ListItem('[B]%s[/B]' % AR(all_ids[0]), AR(all_ids[1]) % len(liked))
         else:
             li = xbmcgui.ListItem(c['name'], _label2(c))
         li.setArt({'icon': icon, 'thumb': icon})
@@ -1290,7 +1327,7 @@ def _pick(heading_id, cands):
 
 def _slim(c):
     return {k: c.get(k) for k in ('name', 'user', 'uname', 'slug', 'likes',
-                                  'count', 'liked', 'src', 'prov', 'mid')}
+                                  'count', 'liked', 'src', 'prov', 'mid', 'mine')}
 
 
 def _custom():
@@ -1357,8 +1394,167 @@ def _custom():
     return True
 
 
+# ---------------------------------------------------------------------------
+# Anime (3.3.6): Otaku lists as widget rows on the HOME page
+# ---------------------------------------------------------------------------
+
+OTAKU = 'plugin.video.otaku'
+OTAKU_REPO = 'repository.otaku'
+W_HOME = 'skinvariables-shortcut-homewidgets.json'
+ANIME_PREFIX = 'guid-abkn'          # not GUID_PREFIX: the hub code never strips these
+_OTAKU_ICONS = 'special://home/addons/context.otaku/resources/images/icons/colouredv2/'
+
+# route, label id, icon (context.otaku colouredv2), widget style.
+# From the user's Otaku favourites list (2026-10-14). Left out: OpenWizard
+# (not anime) and airing_calendar - that route opens a full-screen window
+# (Anichart doModal), so as a widget it would pop up every time Home loads.
+# trending / popular / genres are Otaku sub-menus (category tiles).
+ANIME_ENTRIES = (
+    ('next_up',            30719, 'next_up.png',      'Landscape'),
+    ('airing_last_season', 30720, 'airing_anime.png', 'Flyer'),
+    ('airing_this_season', 30721, 'airing_anime.png', 'Flyer'),
+    ('airing_next_season', 30722, 'airing_anime.png', 'Flyer'),
+    ('trending',           30723, 'trending.png',     'Landscape'),
+    ('popular',            30724, 'popular.png',      'Landscape'),
+    ('top_100',            30725, 'top_100_anime.png', 'Flyer'),
+    ('genres',             30726, 'genres_&_tags.png', 'Landscape'),
+)
+_ANIME_BY_ROUTE = {e[0]: e for e in ANIME_ENTRIES}
+
+
+def anime_picks():
+    st = _load_state()
+    picks = st.get('anime')
+    return [r for r in picks if r in _ANIME_BY_ROUTE] if isinstance(picks, list) else []
+
+
+def _otaku_installed():
+    return os.path.isfile(os.path.join(
+        xbmcvfs.translatePath('special://home/addons/'), OTAKU, 'addon.xml'))
+
+
+def _anime_ours(item):
+    return isinstance(item, dict) and str(item.get('guid') or '').startswith(ANIME_PREFIX)
+
+
+def _anime_widget(route):
+    _r, lab, icon, style = _ANIME_BY_ROUTE[route]
+    return {'label': AR(lab), 'icon': _OTAKU_ICONS + icon,
+            'path': 'plugin://%s/%s' % (OTAKU, route), 'target': 'videos',
+            'guid': '%s-%s' % (ANIME_PREFIX, route), 'widget_style': style}
+
+
+def _apply_anime(routes):
+    """Home widgets file: our anime rows out, the picks appended (in the
+    ANIME_ENTRIES order). Everything else on the home page stays. Returns
+    True when the file was written."""
+    path = _hub(W_HOME)
+    if not os.path.isfile(path):
+        _log('%s not found - anime rows not written' % W_HOME, xbmc.LOGWARNING)
+        return False
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            before = f.read()
+        data = json.loads(before)
+        if not isinstance(data, list):
+            return False
+    except Exception as e:
+        _log('%s unreadable: %s' % (W_HOME, e), xbmc.LOGWARNING)
+        return False
+    data = [it for it in data if not _anime_ours(it)]
+    want = set(routes)
+    data += [_anime_widget(e[0]) for e in ANIME_ENTRIES if e[0] in want]
+    return _write(path, data, before)
+
+
+def _ensure_anime():
+    """Boot: anime picks saved but the home file lost them (restore, Widgets
+    Layout, Patch GUI replaced it wholesale) -> append them again."""
+    routes = anime_picks()
+    path = _hub(W_HOME)
+    if not routes or not os.path.isfile(path):
+        return []
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            if ANIME_PREFIX in f.read():
+                return []
+    except Exception:
+        return []
+    return [W_HOME] if _apply_anime(routes) else []
+
+
+def _install_otaku():
+    try:
+        from resources.lib import addon_portal
+        res = addon_portal._install_selection([(OTAKU, 'Otaku', OTAKU_REPO)])
+        _log('Otaku install: %s' % res)
+    except Exception as e:
+        _log('Otaku install failed: %s' % e, xbmc.LOGWARNING)
+    _settle_dialogs()
+    return _otaku_installed()
+
+
+def _pick_anime():
+    """Multiselect of ANIME_ENTRIES, current picks ticked. None = Back."""
+    cur = set(anime_picks())
+    items, pre = [], []
+    for i, (route, lab, icon, _st) in enumerate(ANIME_ENTRIES):
+        li = xbmcgui.ListItem(AR(lab), AR(30727) if route == 'next_up' else '')
+        ic = xbmcvfs.translatePath(_OTAKU_ICONS + icon)
+        li.setArt({'icon': ic, 'thumb': ic})
+        items.append(li)
+        if route in cur:
+            pre.append(i)
+    sel = None
+    for attempt in range(1, 6):
+        _settle_dialogs()
+        started = time.time()
+        with _no_preview():
+            sel = xbmcgui.Dialog().multiselect(AR(30712), items, preselect=pre,
+                                               useDetails=True)
+        if sel is not None or time.time() - started > 1.5:
+            break
+        _log('anime picker closed instantly (attempt %d)' % attempt)
+    if sel is None:
+        return None
+    return [ANIME_ENTRIES[i][0] for i in sel]
+
+
+def run_anime():
+    """Card "Anime": pick Otaku lists -> widget rows on the home page.
+    The hubs are not touched. True when the home page ends up as picked."""
+    if not _otaku_installed():
+        if not xbmcgui.Dialog().yesno(AR(30660), AR(30713)):
+            return False
+        if not _install_otaku():
+            xbmcgui.Dialog().ok(AR(30660), AR(30714))
+            return False
+    routes = _pick_anime()
+    if routes is None:
+        _log('anime: Back - home page left as it is')
+        xbmcgui.Dialog().notification(AR(30660), AR(30717),
+                                      xbmcgui.NOTIFICATION_INFO, 3000)
+        return False
+    written = _apply_anime(routes)
+    st = _load_state()
+    st['anime'] = routes
+    if st.get('mode') not in MODES:
+        st['mode'] = ORIGINAL
+    _save_state(st)
+    _log('anime on home: %s (file %s)' % (', '.join(routes) or 'none',
+                                          'written' if written else 'unchanged'))
+    if written:
+        _rebuild()
+    msg = (AR(30715) % len(routes)) if routes else AR(30716)
+    xbmcgui.Dialog().notification(AR(30660), msg, xbmcgui.NOTIFICATION_INFO, 4000)
+    return True
+
+
+
 def apply(mode):
     """Apply a choice. Returns True when the box ends up as requested."""
+    if mode == ANIME:
+        return run_anime()
     if mode == CUSTOM:
         res = _custom()
         if res == KEEP:
@@ -1408,7 +1604,7 @@ def run_step(wait_clear=None, settle=None):
 
 
 def run_menu():
-    """Setup & Install -> Trakt Lists."""
+    """Setup & Install -> My Lists (قوائمي)."""
     mode = choose(from_menu=True)
     _log('menu choice: %s' % mode)
     if mode is None:

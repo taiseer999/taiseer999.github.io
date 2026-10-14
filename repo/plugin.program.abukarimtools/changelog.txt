@@ -1,3 +1,85 @@
+v3.3.6
+- remote_config: patches.json / portal.json / presets.json / config.json now
+  come ONLY from the taiseer999.github.io repo (branch main, folder
+  abukarim/). The old URL, taiseer999Piers.github.io/master/abukarim/, never
+  existed - kodi.log 2026-10-14 05:44:28 "refresh: {... all 'missing'}", so
+  no box ever got a remote file. Until abukarim/ is published there the
+  built-in defaults apply, exactly as before (a 404 = 'missing').
+- addon_portal._catalog(): the remote portal.json now MERGES over the
+  built-in CATALOG (same id overrides, new ids appended, "remove": [ids],
+  "replace": true for the old full replace), so a stale portal.json can
+  never shrink the Add-on Portal again.
+- New always-on patcher entries (13): script.skinvariables
+  resources/language/resource.language.ar_sa/strings.po - kodi.log
+  05:44:18 "POParser: missing msgstr line in entry" x13. skinvariables
+  2.2.8 on taiseer999.github.io (repo/ source and repo/zips) has the Arabic
+  on a second msgid line, so Kodi dropped #32018 #32025 #32028
+  #32034-#32041 #32043 #32084 and showed English. Each entry rewrites its
+  msgstr in Modern Standard Arabic (the old text also had English "to"/"as"
+  and typos); regex per id, sentinel = the new msgstr head, so it applies
+  once and skips after. Verified on the repo's real file: 13 written, then
+  0; the result parses (polib) where the original does not. Takes effect
+  after a Kodi restart; script.skinvariables is now watched.
+- My Lists: the Simkl card (3.3.5) is REMOVED - simkl_lists.py, the
+  mode=simkl_list route, traktsc_simkl.png and its strings are gone. A box
+  that used it is cleaned at the next ensure(): hubs back to the build's
+  lists, mode Original, simkl_token.json / simkl_cache deleted.
+- New third card "Anime" (أنمي, mode 'anime', traktsc_anime.png), from the
+  user's Otaku favourites list: a multiselect of 8 Otaku routes - next_up,
+  airing_last/this/next_season, trending, popular, top_100, genres - with
+  context.otaku's colouredv2 icons. The picks are widget rows appended to
+  the HOME page (skinvariables-shortcut-homewidgets.json, guid prefix
+  guid-abkn, path plugin://plugin.video.otaku/<route>; Flyer for title
+  lists, Landscape for next_up and the sub-menus). Independent of the hub
+  choice: Movies / TV / Korean are not touched, and Original / Trakt keep
+  the anime rows (_save_state carries 'anime' over). Current picks are
+  pre-ticked; Back = no change; nothing ticked = anime rows removed.
+  ensure() re-adds them when the home file was replaced wholesale.
+  Left out on purpose: OpenWizard (not anime) and airing_calendar (opens a
+  full-screen Anichart window - as a widget it would pop on every Home
+  load). Otaku missing -> offered, installed through the Add-on Portal
+  installer from repository.otaku (mirror zip on taiseer999.github.io).
+- Strings 30709-30727 now the Anime texts (EN + AR Fusha); 30665 reworded.
+
+v3.3.5
+- "Trakt Lists" renamed "My Lists" (قوائمي): 30660/30681/30682/30665; the
+  Custom card is now "Trakt" (تراكت, 30663/30669). trakt_hubs.xml shows
+  three cards (list 100 at 210/1500 like af3_shortcuts).
+- New third card "Simkl" (mode 'simkl', icon traktsc_simkl.png) - new
+  module resources/lib/simkl_lists.py:
+  * auth = Simkl AUTH V2 device flow (POST /oauth2/device, poll
+    /oauth2/token every 5 s, max 15 min) in the add-on's QR window
+    (abk_qr.xml, non-modal, BACK cancels). Token in addon_data
+    simkl_token.json; refreshed silently (refresh_token, 180 days rolling)
+    with a lock file so parallel widgets do not race the rotation.
+  * app key: NOT hard-coded - read from the Piers repo
+    abukarim/config.json "simkl_client_id" (64 hex, an AUTH V2 app from
+    simkl.com/settings/developer), else SIMKL_CLIENT_ID, else Account
+    Manager's simkl module. None -> 30715 and nothing changes.
+  * GET /users/settings -> account id + type; "free" stops with 30717
+    (Simkl serves custom lists to apps only for PRO / VIP; a 200
+    {"error":"premium_only"} is handled the same way).
+  * candidates: /lists/user/{id}?followed=true (own = "قائمتي", followed =
+    "أتابعها", both count as liked -> "select all" row 30723/30724) +
+    official lists of user 5 sorted by likes and popularity (>= 5 items,
+    25 per section). Section from media_type, Korean by name.
+  * widget rows: plugin://plugin.program.abukarimtools/?mode=simkl_list&
+    list_id=..&cat=.. (+ the TMDb Helper reload suffix), same styles as
+    Trakt (Flyer / Landscape). default.py routes simkl_list first, no menu
+    chores. The directory reads GET /lists/{id} (100 titles, cached 1 h,
+    stale copy used when offline), matches IMDb -> TMDb with TMDb Helper's
+    API key (/find, cached for good in simkl_cache/tmdb_map.json) and
+    points each title at TMDb Helper: movies info=play (playable),
+    series info=seasons; no IMDb id -> info=details&query=title&year.
+- ensure() / Original handle Simkl like Custom (LIST_MODES): a hub file
+  replaced wholesale gets the Simkl rows back at boot, Original removes
+  them. Not linked / free / offline leaves the hubs exactly as they are.
+- 16 new strings 30709-30724 (EN + AR Fusha); .po regenerated (310).
+- NOT tested against the live Simkl API (api.simkl.com is not reachable
+  from the build host): verified end to end against a local fake Simkl /
+  TMDb server with mocked Kodi (auth, pickers, widget rows, directory,
+  ensure, Original, free and premium_only accounts).
+
 v3.3.4
 - addon.xml: the xbmc.service extension was commented out again (same
   regression as v1.9.1 / v2.3 / 3.1.0.27 / 3.1.7) - re-enabled. Without it

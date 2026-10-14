@@ -108,7 +108,13 @@ def _remote_portal():
 
 
 def _catalog():
-    """CATALOG, or the list published in abukarim/portal.json.
+    """The built-in CATALOG, merged with abukarim/portal.json.
+
+    3.3.6: the remote list no longer REPLACES the catalog. It used to, so the
+    day the remote URL was fixed a stale portal.json (old Last Played, no
+    TinyPPI) would have shrunk every box's portal. Now a remote entry
+    overrides the built-in one with the same id or is appended; "remove":
+    [ids] drops built-ins; "replace": true restores the old full replace.
 
     portal.json: {"schema": 1,
                   "addons": [{"id": .., "name": .., "repo": .., "icon": ..,
@@ -118,21 +124,25 @@ def _catalog():
     A broken or empty list falls back to the built-in CATALOG.
     """
     data = _remote_portal()
-    out = []
+    remote = []
     for e in data.get('addons') or []:
         try:
             if e['id'] and e['repo']:
-                out.append((e['id'], e.get('name') or e['id'], e['repo'],
-                            e.get('icon', '')))
+                remote.append((e['id'], e.get('name') or e['id'], e['repo'],
+                               e.get('icon', '')))
                 if isinstance(e.get('note'), str) and e['note']:
                     NOTES[e['id']] = e['note']
         except Exception:
             continue
-    if out:
-        names = data.get('repo_names') or {}
-        REPO_NAMES.update({k: v for k, v in names.items() if isinstance(v, str)})
-        return out
-    return list(CATALOG)
+    names = data.get('repo_names') or {}
+    REPO_NAMES.update({k: v for k, v in names.items() if isinstance(v, str)})
+    if remote and data.get('replace') is True:
+        return remote
+    drop = set(x for x in (data.get('remove') or []) if isinstance(x, str))
+    by_id = {r[0]: r for r in remote}
+    out = [by_id.pop(c[0], c) for c in CATALOG if c[0] not in drop]
+    out += [r for r in remote if r[0] in by_id and r[0] not in drop]
+    return out
 
 
 def _note(addon_id):
