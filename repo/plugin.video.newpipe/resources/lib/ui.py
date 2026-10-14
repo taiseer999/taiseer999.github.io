@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-"""Runtime UI translations for NewPipe.
+"""Runtime UI translations for NewPipe MOD.
 
 Kodi loads ``strings.po`` according to its own global interface language. This
 helper also lets the add-on follow its *Content language* selection, so the
-NewPipe menu can change language without changing the rest of Kodi.
+NewPipe MOD menu can change language without changing the rest of Kodi.
 """
 from __future__ import absolute_import
 
@@ -18,7 +18,6 @@ _LANGUAGE_FOLDERS = {
     'pt-br': 'resource.language.pt_br',
     'pt-pt': 'resource.language.pt_pt',
     'en': 'resource.language.en_gb',
-    'el': 'resource.language.el_gr',
     'es': 'resource.language.es_es',
     'fr': 'resource.language.fr_fr',
     'de': 'resource.language.de_de',

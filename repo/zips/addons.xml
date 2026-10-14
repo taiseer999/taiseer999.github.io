@@ -733,16 +733,9 @@ updated YouTube addon URL
         <news>INFO: For latest changes see Changelog within Tools of add-on.</news>
     </extension>
 
-</addon><addon id="plugin.video.newpipe" name="NewPipe" version="1.1.1" provider-name="Twilight0">
+</addon><addon id="plugin.video.newpipe" name="NewPipe MOD" version="1.4.56" provider-name="Twilight0 | MOD: @TrainAgain2">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
-        <import addon="script.module.tulip" version="4.1.5" />
-        <import addon="script.module.urldispatcher" version="1.1.0" />
-        <import addon="script.module.scrapetube" version="2.8.4" />
-        <import addon="script.module.unicache" version="1.0.0" />
-        <import addon="script.module.resolveurl" version="5.1.210" />
-        <import addon="script.module.resolveurl.pluginsgr" version="0.2.5" />
-        <import addon="script.module.qrcode" version="6.1.0" />
     </requires>
     <extension point="xbmc.python.pluginsource" library="main.py">
         <provides>video audio</provides>
@@ -750,25 +743,12 @@ updated YouTube addon URL
     <extension point="xbmc.service" library="resources/service.py" start="login" />
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
-        <summary lang="en">NewPipe: privacy-first YouTube client</summary>
-        <description lang="en">Browse and watch YouTube without an account or the official API. Search, channels, playlists and local subscriptions; everything (subscriptions, history) stays on your device. Playback is resolved locally via PluginsGR.</description>
-        <disclaimer lang="en">This addon does not host or distribute any content; it only browses publicly available YouTube pages. No account, no tracking, no data leaves your device except the page requests needed to list and play videos.</disclaimer>
+        <summary lang="en">NewPipe MOD — Original creator: Twilight0 | MOD: @TrainAgain2</summary>
+        <description lang="en">NewPipe MOD. Original creator and upstream: Twilight0 (https://github.com/Twilight0/plugin.video.newpipe). MOD: @TrainAgain2. This is a self-contained ZIP: no external Kodi repository or script.module add-on is required. Browse and watch YouTube without an account. Search, channels, playlists and local subscriptions stay on your device. Random Music uses a rotating, de-duplicated music-discovery mix rather than the Trending source. Optionally, sign in through the NewPipe MOD YouTube TV activation flow at yt.be/activate; a compact high-contrast QR stays fixed above the activation code and its live expiry countdown, while authorization checks and subscription synchronization happen automatically. Playback uses the bundled native engine to obtain one direct progressive audio/video stream, without a local proxy or plugin.video.youtube.</description>
+        <disclaimer lang="en">This addon does not host or distribute any content; it only browses publicly available YouTube pages. Optional account linking stores its session token only in the local Kodi add-on profile.</disclaimer>
         <language>en</language>
         <license>GPL-3.0-only</license>
         <source>https://github.com/Twilight0/plugin.video.newpipe</source>
-        <news>[B]1.1.0[/B]
-- Pagination control (Off/show-all, 10/25/50, default off); playlists hard-capped at 300
-- Watch Later list, per-item history removal, subscription channels/feed views, saved playlists, account history
-- YouTube TV device-link login (QR + manual code), personal/brand account switching, My channel entry for own uploads, background sync service, disconnect
-- Content country/language settings with localized categories, trailer language/version, quality caps, fast start
-- Random music folder with native Kodi queue, trailers browser, live category setting
-- Interface language override incl. full Greek translation, 13 shipped UI languages
-- Arctic Fuse landscape artwork, stable per-video thumbnails
-- HLS streams pin inputstream.adaptive chooser to the configured resolution family
-- Faster listings (subscriptions resolved once per folder); English-first defaults throughout
-
-[B]1.0.0[/B]
-- Initial release: search, channels (videos/shorts/live/playlists), playlists, local subscriptions with feed, local watch/search history, audio-only mode</news>
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>

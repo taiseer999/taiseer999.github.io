@@ -4,12 +4,18 @@
 # SPDX-License-Identifier: GPL-3.0-only
 # See LICENSES/GPL-3.0-only for more information.
 # All routes registered on urldispatcher; main.py only dispatches.
+import os
 import re
+import threading
+import time
 import unicodedata
+from random import Random, SystemRandom
 from urllib.parse import parse_qs, urlencode, urlparse
 
 import xbmc
+import xbmcaddon
 import xbmcgui
+import xbmcvfs
 
 from scrapetube import get_search
 from tulip import directory, kodi
@@ -30,6 +36,10 @@ _STATE_PREFIX = 'np:'
 # YouTube hqdefault is 480x360 (4:3), which leaves vertical black bars in
 # landscape cards. mqdefault is 320x180 (16:9) and exists reliably for videos.
 _THUMBNAIL_URL = 'https://i.ytimg.com/vi/{0}/mqdefault.jpg'
+# Fanart is used as a full-screen background by Arctic Fuse. maxresdefault is
+# YouTube's native 1280x720 frame when it is supplied by the upload, while the
+# 320x180 thumbnail above remains the reliable compact-card image.
+_FANART_URL = 'https://i.ytimg.com/vi/{0}/maxresdefault.jpg'
 # The visible labels are translated by ui.py; the query term itself is converted
 # at request time by localization.py according to the content language.
 TRENDING_CATEGORIES = [
@@ -69,10 +79,23 @@ _TRAILER_SEARCH_SUFFIXES = {
     'es': 'tráiler oficial película español',
     'ro': 'trailer oficial film română',
 }
+_RANDOM_MUSIC_DISCOVERY_QUERIES = (
+    'official music video',
+    'new song official video',
+    'live acoustic music session',
+    'independent artist music video',
+    'electronic music official video',
+    'music performance official',
+)
+_RANDOM_MUSIC_REJECTED_TITLE_PARTS = (
+    'playlist', ' mix ', ' megamix', '1 hour', '2 hour', '3 hour',
+    'relaxing music', 'study music', 'lofi', 'ambient',
+)
+_SHORTS_MAX_SECONDS = 180
 
 
 def _text(value, fallback=''):
-    """Resolve numeric labels through the selected NewPipe UI language."""
+    """Resolve numeric labels through the selected NewPipe MOD UI language."""
     if isinstance(value, int):
         return ui.text(value, fallback)
     return value or fallback
@@ -101,6 +124,10 @@ def _build(items, **kwargs):
     # to choose the landscape-card layout.
     if kwargs.get('content') == 'videos' and 'mediatype' not in kwargs:
         kwargs['mediatype'] = 'video'
+    # Kodi otherwise writes plugin folders to its own disc cache, defeating the
+    # fresh public YouTube request even when the add-on's FunctionCache is not
+    # used. Every NewPipe navigation view is therefore non-persistent.
+    kwargs.setdefault('cacheToDisc', False)
     directory.builder([_item(i) for i in items if i], **kwargs)
 
 
@@ -112,7 +139,7 @@ def _setting(key, default=''):
         return default
 
 
-def _limit(default_key='feed_per_channel', fallback=5):
+def _limit(default_key='results_per_page', fallback=25):
     try:
         return max(1, int(_setting(default_key, fallback)))
     except (TypeError, ValueError):
@@ -163,6 +190,11 @@ def _icon(name):
         return ''
 
 
+def _account_icon(name, fallback='subscriptions'):
+    """Return a dedicated modern YouTube account icon with a safe fallback."""
+    return _icon('youtube_{0}_3d'.format(name)) or _icon(fallback)
+
+
 def _artwork(image):
     """Make list cards use item artwork and deliberately clear fanart."""
     if not image:
@@ -177,7 +209,7 @@ def _artwork(image):
     }
 
 
-def _video_artwork(image):
+def _video_artwork(image, fanart=''):
     """Expose a YouTube frame as landscape art, never as a poster.
 
     Arctic Fuse selects landscape video art only when thumb differs from (or
@@ -190,7 +222,7 @@ def _video_artwork(image):
         'thumb': image,
         'landscape': image,
         'banner': image,
-        'fanart': image,
+        'fanart': fanart or image,
     }
 
 
@@ -208,9 +240,22 @@ def _video_id(url):
 
 def _video_thumbnail(item):
     """Always prefer YouTube's stable per-video thumbnail endpoint."""
+    # Shorts supply their own portrait frame thumbnail.  Do not replace it
+    # with hqdefault.jpg, which is a landscape crop and hides the actual reel.
+    if item.get('is_short') and item.get('image'):
+        return item.get('image')
     video_id = _video_id(item.get('url', ''))
     if video_id:
         return _THUMBNAIL_URL.format(video_id)
+    return item.get('image', '')
+
+
+def _video_fanart(item):
+    """Return the high-resolution YouTube backdrop for a video card."""
+
+    video_id = _video_id(item.get('url', ''))
+    if video_id:
+        return _FANART_URL.format(video_id)
     return item.get('image', '')
 
 
@@ -319,22 +364,11 @@ def _save_music_pool(source, predicate):
 
 
 def _build_paged(fetch, item_builder, action, route_params=None, page=1, content='videos',
-                 music_filter=None, hard_cap=None):
-    """Build one page of results, loading one extra item to detect a next page.
-
-    With pagination disabled (the original behavior) the whole fetched window
-    is shown at once and no Next-page row is appended. ``hard_cap`` bounds
-    the total items ever fetched (used for very long playlists).
-    """
+                 music_filter=None):
+    """Build one page of results, loading one extra item to detect a next page."""
     page = _page_number(page)
-    per_page = _pagination()
-    paginate = per_page > 0
-    # Pagination off means "show everything" (the original behavior): fetch
-    # unbounded, except where a hard cap applies (very long playlists).
-    requested = page * per_page + 1 if paginate else None
-    if hard_cap:
-        requested = min(requested if requested is not None else hard_cap,
-                        hard_cap + 1)
+    per_page = _limit()
+    requested = page * per_page + 1
     try:
         source = list(fetch(requested) or [])
     except Exception as exc:
@@ -344,38 +378,15 @@ def _build_paged(fetch, item_builder, action, route_params=None, page=1, content
     if music_filter and _random_music_enabled():
         _save_music_pool(source, music_filter)
 
-    xbmc.log('[NewPipe] page={0} per_page={1} requested={2} received={3}'.format(
+    xbmc.log('[NewPipePagina] pagina={0} setare={1} cerut={2} primit={3}'.format(
         page, per_page, requested, len(source)), xbmc.LOGINFO)
 
     start = (page - 1) * per_page
     end = start + per_page
-    if not paginate:
-        start, end = 0, len(source)
     items = [item_builder(entry) for entry in source[start:end]]
-    has_more = len(source) > end
-    if hard_cap and end >= hard_cap:
-        has_more = False
-    if paginate and has_more:
+    if len(source) > end:
         items.append(_next_page(action, page, **(route_params or {})))
     _build(items, content=content)
-
-
-def _paginate_enabled():
-    return _pagination() > 0
-
-
-def _pagination():
-    """Page size from the combined pagination setting; 0 means show all."""
-    raw = str(_setting('pagination', '0')).strip().lower()
-    if raw in ('', '0', 'off', 'false', 'none'):
-        return 0
-    try:
-        return max(1, int(raw))
-    except (TypeError, ValueError):
-        return 0
-
-
-_PLAYLIST_HARD_CAP = 300
 
 
 def _channel_cm(channel_url, channel_title=''):
@@ -387,16 +398,7 @@ def _channel_cm(channel_url, channel_title=''):
     }]
 
 
-def _known_subs():
-    """Subscription urls, loaded once per listing instead of per video."""
-    try:
-        return {s.get('url') for s in storage.get_subscriptions() if s.get('url')}
-    except Exception:
-        return set()
-
-
-def _video_item(item, channel_url='', channel_title='', profile='default', music_random=False,
-               known_subs=None):
+def _video_item(item, channel_url='', channel_title='', profile='default', music_random=False):
     video_id = _video_id(item.get('url', ''))
     title = item.get('title') or _text(30186, 'Unknown')
     if item.get('is_live'):
@@ -415,18 +417,14 @@ def _video_item(item, channel_url='', channel_title='', profile='default', music
             },
         })
     if channel_url:
-        # Subscriptions are loaded once per listing by the caller (known_subs);
-        # reading the file per video made big channels crawl.
-        if known_subs is None:
-            known = any(s.get('url') == channel_url for s in storage.get_subscriptions())
-        else:
-            known = channel_url in known_subs
+        known = any(s.get('url') == channel_url for s in storage.get_subscriptions())
         cm.append({
             'title': 30015 if known else 30013,
             'query': {'action': 'unsubscribe' if known else 'subscribe',
                       'url': channel_url, 'title': channel_title or ''},
         })
     image = _video_thumbnail(item)
+    fanart = _video_fanart(item)
     entry = {
         'title': title,
         # A dedicated action, instead of a nested query flag, is necessary on
@@ -438,8 +436,8 @@ def _video_item(item, channel_url='', channel_title='', profile='default', music
         # Video cards are landscape artwork. No poster is sent: forcing a
         # 16:9 YouTube image into poster is what creates black side bars in
         # Arctic Fuse's wide-card view.
-        'artwork': _video_artwork(image),
-        'fanart': image,
+        'artwork': _video_artwork(image, fanart),
+        'fanart': fanart,
         'duration': item.get('duration') or 0,
         # Music cards remain normal playable video cards. The radio session is
         # armed by its route and the first stream is resolved through this same
@@ -448,8 +446,8 @@ def _video_item(item, channel_url='', channel_title='', profile='default', music
         'isPlayable': 'True',
         'cm': cm,
     }
-    if profile == 'trailer':
-        entry['query'] = _state(profile='trailer')
+    if profile != 'default':
+        entry['query'] = _state(profile=profile)
     return entry
 
 
@@ -479,11 +477,13 @@ def root():
          'isFolder': 'True', 'isPlayable': 'False'},
         {'title': 30025, 'action': 'trending', 'icon': _icon('trending'), 'image': _icon('trending'),
          'isFolder': 'True', 'isPlayable': 'False'},
-        {'title': 30191, 'action': 'random_music', 'icon': _icon('trending'), 'image': _icon('trending'),
+        {'title': 30017, 'action': 'shorts', 'icon': _icon('shorts'), 'image': _icon('shorts'),
+         'isFolder': 'True', 'isPlayable': 'False'},
+        {'title': 30191, 'action': 'random_music', 'icon': _icon('music'), 'image': _icon('music'),
          'isFolder': 'True', 'isPlayable': 'False'},
         {'title': 30018, 'action': 'live', 'icon': _icon('live'), 'image': _icon('live'),
          'isFolder': 'True', 'isPlayable': 'False'},
-        {'title': 30051, 'action': 'trailers', 'icon': _icon('trending'), 'image': _icon('trending'),
+        {'title': 30051, 'action': 'trailers', 'icon': _icon('trailers'), 'image': _icon('trailers'),
          'isFolder': 'True', 'isPlayable': 'False'},
         {'title': 30084, 'action': 'subscriptions', 'icon': _icon('subscriptions'),
          'image': _icon('subscriptions'), 'isFolder': 'True', 'isPlayable': 'False'},
@@ -549,10 +549,9 @@ def trending(query=None, page=1):
         query = _LEGACY_TRENDING_QUERIES.get(query, query)
     music_context = str(query).strip().lower() == 'music' and _random_music_enabled()
     query = localization.category_query(query)
-    known_subs = _known_subs()
     _build_paged(
-        lambda limit: yt.trending_videos(query, limit=limit),
-        lambda entry: _video_item(*entry, music_random=music_context, known_subs=known_subs),
+        lambda limit: yt.fresh_trending_videos(query, limit=limit),
+        lambda entry: _video_item(*entry, music_random=music_context),
         'trending',
         {'query': query},
         page=page,
@@ -562,16 +561,12 @@ def trending(query=None, page=1):
 
 @urldispatcher.register('random_music', kwargs=['page'])
 def random_music(page=1):
-    """Dedicated music folder whose cards launch a native Kodi shuffle queue."""
+    """Show a rotating discovery mix, deliberately independent of Trending."""
     page = _page_number(page)
-    per_page = _pagination()
-    paginate = per_page > 0
-    # Keep a sufficiently large local source pool even when the user displays
-    # only 25 cards. The playlist itself still begins with the selected card.
-    requested = max(page * per_page + 1, 60) if paginate else 60
-    query = localization.category_query('music')
+    per_page = _limit()
+    requested = max(page * per_page + 1, 60)
     try:
-        source = list(yt.trending_videos(query, limit=requested) or [])
+        source = _random_music_discovery_results(requested)
     except Exception as exc:
         log('NewPipe random music failed: {0}'.format(exc))
         source = []
@@ -583,21 +578,105 @@ def random_music(page=1):
     ])
     start = (page - 1) * per_page
     end = start + per_page
-    if not paginate:
-        start, end = 0, len(source)
-    known_subs = _known_subs()
-    items = [_video_item(*entry, music_random=True, known_subs=known_subs)
-             for entry in source[start:end]]
-    if paginate and len(source) > end:
+    items = [_video_item(*entry, music_random=True) for entry in source[start:end]]
+    if len(source) > end:
         items.append(_next_page('random_music', page))
     _build(items, content='videos')
 
 
+def _normalised_music_title(item):
+    """Return a comparison key that prevents duplicate songs in one pool."""
+    title = str((item or {}).get('title') or '')
+    title = unicodedata.normalize('NFKD', title).encode('ascii', 'ignore').decode('ascii')
+    title = re.sub(r'[^a-z0-9]+', ' ', title.lower())
+    return ' '.join(title.split())
+
+
+def _random_music_discovery_results(requested):
+    """Build a fresh discovery pool from ordinary music search.
+
+    Trending uses a separate endpoint and regional category query. This source
+    combines official videos and live sessions, rejects long compilation/spam
+    results, then removes duplicate IDs and matching titles before shuffling.
+    """
+    requested = max(1, int(requested or 1))
+    batch_size = max(25, (requested + 2) // 3)
+    randomizer = SystemRandom()
+    seed = randomizer.randrange(0, 2 ** 63)
+    offset = randomizer.randrange(len(_RANDOM_MUSIC_DISCOVERY_QUERIES))
+    query_count = min(
+        len(_RANDOM_MUSIC_DISCOVERY_QUERIES),
+        max(3, (requested + batch_size - 1) // batch_size))
+    source = []
+    seen_ids = set()
+    seen_titles = set()
+
+    for index in range(query_count):
+        query = _RANDOM_MUSIC_DISCOVERY_QUERIES[
+            (offset + index) % len(_RANDOM_MUSIC_DISCOVERY_QUERIES)]
+        for entry in yt.fresh_search_videos(query, limit=batch_size, sort='upload_date') or []:
+            if not entry or not isinstance(entry[0], dict):
+                continue
+            item = entry[0]
+            video_id = _video_id(item.get('url', ''))
+            title_key = _normalised_music_title(item)
+            rejected = any(
+                part in (' ' + title_key + ' ')
+                for part in _RANDOM_MUSIC_REJECTED_TITLE_PARTS)
+            if (not video_id or not title_key or video_id in seen_ids or
+                    title_key in seen_titles or rejected):
+                continue
+            seen_ids.add(video_id)
+            seen_titles.add(title_key)
+            source.append(entry)
+
+    # Each opening receives an independent shuffled mix.  The search calls
+    # above are also deliberately uncached, so newly uploaded tracks can
+    # appear without waiting for a timed rotation.
+    Random(seed).shuffle(source)
+    return source
+
+
 def _live_results(query, limit):
-    items = [entry for entry in yt.live_videos(query, limit=limit * 3) if entry[0].get('is_live')]
+    items = [entry for entry in yt.fresh_live_videos(query, limit=limit * 3) if entry[0].get('is_live')]
     if not items:
-        return yt.live_videos(query + ' live', limit=limit)
+        return yt.fresh_live_videos(query + ' live', limit=limit)
     return items
+
+
+def _shorts_results(limit):
+    """Return genuine reel items from the public YouTube Shorts surface."""
+    candidates = yt.fresh_shorts_videos(limit=limit) or []
+    result = []
+    seen = set()
+    for entry in candidates:
+        item = _entry_video(entry)
+        video_id = _video_id(item.get('url', ''))
+        try:
+            duration = int(item.get('duration') or 0)
+        except (TypeError, ValueError):
+            duration = 0
+        # The source is exclusively reelWatchEndpoint content. Preserve the
+        # defensive length cap in case YouTube injects a non-Short card later.
+        if (not video_id or video_id in seen or item.get('is_live') or
+                duration > _SHORTS_MAX_SECONDS):
+            continue
+        seen.add(video_id)
+        result.append(entry)
+        if len(result) >= limit:
+            break
+    return result
+
+
+@urldispatcher.register('shorts', kwargs=['page'])
+def shorts(page=1):
+    """Browse short-form YouTube clips from the new main-menu section."""
+    _build_paged(
+        _shorts_results,
+        lambda entry: _video_item(*entry),
+        'shorts',
+        page=page,
+    )
 
 
 @urldispatcher.register('live', kwargs=['query', 'page'])
@@ -608,10 +687,9 @@ def live(query=None, page=1):
     else:
         query = _LEGACY_LIVE_QUERIES.get(query, query)
     query = localization.category_query(query, live=True)
-    known_subs = _known_subs()
     _build_paged(
         lambda limit: _live_results(query, limit),
-        lambda entry: _video_item(*entry, known_subs=known_subs),
+        lambda entry: _video_item(*entry),
         'live',
         {'query': query},
         page=page,
@@ -622,10 +700,9 @@ def live(query=None, page=1):
 def trailers(page=1):
     """List trailers in the configured language without a selection dialog."""
     query = _trailer_query()
-    known_subs = _known_subs()
     _build_paged(
-        lambda limit: yt.trailer_videos(query, limit=limit),
-        lambda entry: _video_item(*entry, profile='trailer', known_subs=known_subs),
+        lambda limit: yt.fresh_trailer_videos(query, limit=limit),
+        lambda entry: _video_item(*entry, profile='trailer'),
         'trailers',
         page=page,
     )
@@ -697,10 +774,9 @@ def search_results(url, kind=None, page=1):
         _list_playlist_results(url, page=page)
     elif kind == 'trailer':
         trailer_query = _trailer_search_query(url)
-        known_subs = _known_subs()
         _build_paged(
-            lambda limit: yt.trailer_videos(trailer_query, limit=limit),
-            lambda entry: _video_item(*entry, profile='trailer', known_subs=known_subs),
+            lambda limit: yt.fresh_trailer_videos(trailer_query, limit=limit),
+            lambda entry: _video_item(*entry, profile='trailer'),
             'search_results',
             {'url': url, 'kind': 'trailer'},
             page=page,
@@ -728,11 +804,9 @@ def search_results(url, kind=None, page=1):
                 return False
             return music_search['active'] or _is_music_video(item, search_hint=url)
 
-        known_subs = _known_subs()
         _build_paged(
             fetch_search,
-            lambda entry: _video_item(*entry, music_random=is_music_result(entry),
-                                      known_subs=known_subs),
+            lambda entry: _video_item(*entry, music_random=is_music_result(entry)),
             'search_results',
             {'url': url, 'kind': 'video'},
             page=page,
@@ -774,11 +848,7 @@ def channel(url, title=''):
         _route_folder(30017, 'channel_videos', _icon('search'), url=url, tab='shorts'),
         _route_folder(30018, 'channel_videos', _icon('live'), url=url, tab='streams'),
         _route_folder(30012, 'channel_playlists', _icon('bookmarks'), url=url),
-        # The row-level toggle needs its own top-level url: _item() strips
-        # dict-type 'query' payloads from rows, so without this the action
-        # dispatches without url and subscribe() blows up (TypeError).
-        dict(toggle, action='unsubscribe' if known else 'subscribe', url=url,
-             isFolder='False', isPlayable='False'),
+        dict(toggle, action='unsubscribe' if known else 'subscribe', isFolder='False', isPlayable='False'),
     ])
 
 
@@ -792,13 +862,11 @@ def channel_videos(url, tab='videos', page=1, query=None):
     def is_music_result(entry):
         return _random_music_enabled() and _is_music_video(_entry_video(entry))
 
-    known_subs = _known_subs()
     _build_paged(
         lambda limit: yt.channel_videos(url, tab=tab, limit=limit),
         lambda video: _video_item(video, channel_url=url,
                                   channel_title=known.get('title') if known else '',
-                                  music_random=is_music_result(video),
-                                  known_subs=known_subs),
+                                  music_random=is_music_result(video)),
         'channel_videos',
         {'url': url, 'tab': tab},
         page=page,
@@ -829,7 +897,6 @@ def playlist(url, page=1):
         {'url': url},
         page=page,
         music_filter=is_music_result,
-        hard_cap=_PLAYLIST_HARD_CAP,
     )
 
 
@@ -874,40 +941,32 @@ def subscriptions():
     account = youtube_sync.status()
     # Match the account hub of plugin.video.youtube: account folders first,
     # then connection controls. Every folder reads a locally saved snapshot;
-    # the only network call is the explicit Sync action.
+    # the background service synchronizes automatically after QR approval.
     controls = [
         _route_folder(30085, 'subscription_feed', _icon('feed')),
         _route_folder(30083, 'subscription_channels', _icon('subscriptions')),
-        _route_folder(30063, 'my_videos', _icon('subscriptions')),
         _route_folder(30086, 'watch_later', _icon('bookmarks')),
         _route_folder(30087, 'saved_playlists', _icon('bookmarks')),
         _route_folder(30004, 'account_history', _icon('history')),
     ]
     if account.get('pending'):
         controls.append({
-            'title': 30064, 'action': 'youtube_connect', 'image': _icon('subscriptions'),
-            'artwork': _artwork(_icon('subscriptions')), 'isFolder': 'True', 'isPlayable': 'False',
+            'title': 30064, 'action': 'youtube_connect', 'image': _account_icon('wait'),
+            'artwork': _artwork(_account_icon('wait')), 'isFolder': 'True', 'isPlayable': 'False',
         })
     elif not account.get('connected'):
         controls.append({
-            'title': 30060, 'action': 'youtube_connect', 'image': _icon('subscriptions'),
-            'artwork': _artwork(_icon('subscriptions')), 'isFolder': 'True', 'isPlayable': 'False',
+            'title': 30060, 'action': 'youtube_connect', 'image': _account_icon('connect'),
+            'artwork': _artwork(_account_icon('connect')), 'isFolder': 'True', 'isPlayable': 'False',
         })
     else:
-        # A linked account can exist before an earlier catalogue import
-        # succeeds. Keep a visible retry action instead of forcing a new QR.
+        # Linking and importing run in the service immediately after browser
+        # approval. The account hub intentionally has no manual confirmation
+        # or sync button.
         controls.extend([
             {
-                'title': 30061, 'action': 'youtube_sync_now', 'image': _icon('subscriptions'),
-                'artwork': _artwork(_icon('subscriptions')), 'isFolder': 'False', 'isPlayable': 'False',
-            },
-            {
-                'title': 30113, 'action': 'youtube_switch_account', 'image': _icon('subscriptions'),
-                'artwork': _artwork(_icon('subscriptions')), 'isFolder': 'False', 'isPlayable': 'False',
-            },
-            {
-                'title': 30062, 'action': 'youtube_disconnect', 'image': _icon('history'),
-                'artwork': _artwork(_icon('history')), 'isFolder': 'False', 'isPlayable': 'False',
+                'title': 30062, 'action': 'youtube_disconnect', 'image': _account_icon('cancel', 'history'),
+                'artwork': _artwork(_account_icon('cancel', 'history')), 'isFolder': 'False', 'isPlayable': 'False',
             },
         ])
     _build(controls, content='files')
@@ -925,7 +984,7 @@ def _subscription_channel_item(sub):
 
 @urldispatcher.register('subscription_channels', kwargs=['page'])
 def subscription_channels(page=1):
-    """List the imported/local channel cards in their own NewPipe-style folder."""
+    """List the imported/local channel cards in their own NewPipe MOD-style folder."""
     _build_paged(
         lambda limit: storage.get_subscriptions(),
         _subscription_channel_item,
@@ -935,31 +994,11 @@ def subscription_channels(page=1):
     )
 
 
-@urldispatcher.register('my_videos', kwargs=['page'])
-def my_videos(page=1):
-    """Open your own channel uploads (one folder per linked identity)."""
-    own = storage.get_youtube_library('own_channels')
-    if not own:
-        kodi.infoDialog(_text(30060, 'Connect YouTube account'))
-        return
-    if len(own) == 1:
-        channel(own[0].get('url'), own[0].get('title') or '')
-        return
-    _build_paged(
-        lambda limit: own,
-        _subscription_channel_item,
-        'my_videos',
-        page=page,
-        content='videos',
-    )
-
-
-def _account_video_item(entry, remove_watch_later=False, known_subs=None):
+def _account_video_item(entry, remove_watch_later=False, profile='default'):
     item = _video_item(
         entry,
         entry.get('channel_url', ''),
-        entry.get('channel_title', ''),
-        known_subs=known_subs,
+        entry.get('channel_title', ''), profile=profile,
     )
     if remove_watch_later:
         item['cm'] = [menu for menu in item.get('cm', [])
@@ -980,10 +1019,9 @@ def subscription_feed(page=1):
         # Existing manual channel subscriptions still work without a TV login.
         feed(page)
         return
-    known_subs = _known_subs()
     _build_paged(
         lambda limit: source,
-        lambda entry: _account_video_item(entry, known_subs=known_subs),
+        lambda entry: _account_video_item(entry, profile='subscription'),
         'subscription_feed',
         page=page,
     )
@@ -1004,11 +1042,9 @@ def watch_later(page=1):
     """Account Watch Later snapshot plus the private local fallback list."""
     source = _unique_videos(
         storage.get_youtube_library('watch_later'), storage.get_watch_later())
-    known_subs = _known_subs()
     _build_paged(
         lambda limit: source,
-        lambda entry: _account_video_item(entry, remove_watch_later=True,
-                                          known_subs=known_subs),
+        lambda entry: _account_video_item(entry, remove_watch_later=True),
         'watch_later',
         page=page,
     )
@@ -1057,17 +1093,14 @@ def account_history(page=1):
     if not source:
         history(page)
         return
-    known_subs = _known_subs()
-    _build_paged(lambda limit: source,
-                 lambda entry: _account_video_item(entry, known_subs=known_subs),
-                 'account_history', page=page)
+    _build_paged(lambda limit: source, _account_video_item, 'account_history', page=page)
 
 
 @urldispatcher.register('youtube_connect')
 def youtube_connect():
     existing = youtube_sync.status()
     if existing.get('pending'):
-        youtube_login_menu()
+        _open_youtube_activation_panel()
         return
     elif existing.get('connected'):
         kodi.infoDialog(_text(30079, 'YouTube account is already connected'))
@@ -1079,12 +1112,12 @@ def youtube_connect():
             kodi.text_viewer(_text(30060, 'Connect YouTube account'),
                              '{0}\n\n{1}'.format(_text(30067, 'Connection setup failed'), exc))
             return
-    youtube_login_menu()
+    _open_youtube_activation_panel()
 
 
 @urldispatcher.register('youtube_new_code')
 def youtube_new_code():
-    """Discard an old device code and open a freshly generated login submenu."""
+    """Discard an old device code and open the refreshed QR panel."""
     youtube_sync.cancel_device_link()
     try:
         youtube_sync.start_device_link()
@@ -1093,12 +1126,105 @@ def youtube_new_code():
                          '{0}\n\n{1}'.format(
                              _text(30067, 'Connection setup failed'), exc))
         return
-    youtube_login_menu()
+    _open_youtube_activation_panel()
 
 
 @urldispatcher.register('youtube_login_menu')
 def youtube_login_menu():
-    """Open the activation controls as a NewPipe submenu, not a popup."""
+    """Keep compatibility with old URLs while opening the QR panel."""
+    _open_youtube_activation_panel()
+
+
+def _format_activation_time(pending):
+    """Show the true YouTube code lifetime as a compact MM:SS countdown."""
+    try:
+        seconds = max(0, int(pending.get('expires_at', 0)) - int(time.time()))
+    except (AttributeError, TypeError, ValueError):
+        seconds = 0
+    return '{0:02d}:{1:02d}'.format(seconds // 60, seconds % 60)
+
+
+class _YouTubeActivationDialog(xbmcgui.WindowXMLDialog):
+    """Skin-backed panel with a deterministic background/QR/control order."""
+
+    _CLOSE_ACTIONS = (9, 10, 51, 92, 216)
+    _SELECT_ACTIONS = (7,)
+
+    def __init__(self, *args, **kwargs):
+        self._active = True
+        self._pending = kwargs.pop('pending', {}) or {}
+        self._qr_path = kwargs.pop('qr_path', '') or ''
+        self._fanart_path = kwargs.pop('fanart_path', '') or ''
+        super(_YouTubeActivationDialog, self).__init__(*args, **kwargs)
+
+    def onInit(self):
+        """Controls exist only here; set all dynamic artwork after creation."""
+        self._set_pending(self._pending, self._qr_path)
+        try:
+            self.getControl(100).setImage(self._fanart_path)
+            self.getControl(105).setLabel(_text(
+                30208, 'Scan the QR with your phone, or open yt.be/activate and enter the code shown below.'))
+            self.getControl(106).setLabel(_text(
+                30198, 'YouTube authorization is checked automatically. Sync starts as soon as access is approved.'))
+            self.getControl(107).setLabel(_text(30210, 'OK: new code   •   Back: close'))
+        except Exception as exc:
+            log('NewPipe QR panel failed to initialize: {0}'.format(exc))
+        worker = threading.Thread(target=self._watch_expiry, name='NewPipeYouTubeQR')
+        worker.daemon = True
+        worker.start()
+
+    def _set_pending(self, pending, qr_path):
+        self._pending = pending or {}
+        self._qr_path = qr_path or self._qr_path
+        try:
+            self.getControl(101).setImage(self._qr_path)
+            self.getControl(102).setLabel(_text(30202, 'Code: {0}').format(''))
+            self.getControl(103).setLabel(str(self._pending.get('user_code', '')))
+            self.getControl(104).setLabel(_text(30203, 'Expires in: {0}').format(
+                _format_activation_time(self._pending)))
+        except Exception:
+            # Controls only exist after onInit and may be gone when the
+            # background service accepts the YouTube authorization.
+            pass
+
+    def _refresh_code(self):
+        try:
+            youtube_sync.cancel_device_link()
+            pending = youtube_sync.start_device_link()
+            qr_path = qr_login.create(pending.get('qr_url', ''))
+            self._set_pending(pending, qr_path)
+        except Exception as exc:
+            kodi.infoDialog(_text(30209, 'Connection setup failed: {0}').format(exc))
+
+    def _watch_expiry(self):
+        """Update the code lifetime while keeping the QR, time and code fixed."""
+        while self._active:
+            try:
+                current = youtube_sync.pending_device_link()
+                if not current:
+                    self._active = False
+                    self.close()
+                    return
+                self._set_pending(current, self._qr_path)
+            except Exception:
+                pass
+            xbmc.sleep(1000)
+
+    def onAction(self, action):
+        action_id = action.getId()
+        if action_id in self._SELECT_ACTIONS:
+            self._refresh_code()
+        elif action_id in self._CLOSE_ACTIONS:
+            self._active = False
+            self.close()
+
+    def show(self):
+        self.doModal()
+        self._active = False
+
+
+def _open_youtube_activation_panel():
+    """Open one compact panel instead of a directory whose preview changes."""
     pending = youtube_sync.pending_device_link()
     if not pending:
         youtube_connect()
@@ -1117,55 +1243,36 @@ def youtube_login_menu():
                              _text(30068, 'After authorization, NewPipe synchronizes automatically.')))
         return
 
-    _build([
-        {
-            'title': _text(30091, 'Step 1 — Scan QR code'), 'action': 'youtube_show_qr', 'url': qr_path,
-            'image': qr_path, 'artwork': _artwork(qr_path), 'fanart': '',
-            'isFolder': 'False', 'isPlayable': 'False',
-        },
-        {
-            'title': _text(30092, 'Step 2 — Use manual code: {0}').format(
-                pending.get('user_code', '')),
-            'action': 'youtube_show_code', 'image': _icon('subscriptions'),
-            'artwork': _artwork(_icon('subscriptions')), 'isFolder': 'False', 'isPlayable': 'False',
-        },
-        {
-            'title': _text(30094, 'Generate new code'), 'action': 'youtube_new_code',
-            'image': _icon('history'), 'artwork': _artwork(_icon('history')),
-            'isFolder': 'False', 'isPlayable': 'False',
-        },
-        {
-            'title': _text(30093, 'Step 3 — Confirm connection'), 'action': 'youtube_sync_now',
-            'image': _icon('subscriptions'), 'artwork': _artwork(_icon('subscriptions')),
-            'isFolder': 'False', 'isPlayable': 'False',
-        },
-        {
-            'title': _text(30095, 'Cancel connection'), 'action': 'youtube_cancel_login',
-            'image': _icon('history'), 'artwork': _artwork(_icon('history')),
-            'isFolder': 'False', 'isPlayable': 'False',
-        },
-    ], content='files')
+    try:
+        addon_path = xbmcvfs.translatePath(
+            xbmcaddon.Addon('plugin.video.newpipe').getAddonInfo('path'))
+        dialog = _YouTubeActivationDialog(
+            'newpipe_youtube_activation.xml', addon_path, 'Default', '1080i',
+            pending=pending, qr_path=qr_path,
+            fanart_path=os.path.join(addon_path, 'fanart.jpg'))
+    except Exception as exc:
+        log('NewPipe QR XML panel failed to load: {0}'.format(exc))
+        kodi.text_viewer(_text(30060, 'Connect YouTube account'),
+                         '{0}\n\n{1}\n\n{2}\n[B]{3}[/B]'.format(
+                             _text(30065, 'Open this address in a browser:'),
+                             pending.get('verification_url', 'https://yt.be/activate'),
+                             _text(30066, 'Enter this code:'),
+                             pending.get('user_code', '')))
+        return
+    dialog.show()
+    del dialog
 
 
 @urldispatcher.register('youtube_show_qr', kwargs=['url'])
-def youtube_show_qr(url=''):
-    """Use Kodi's native aspect-ratio-aware picture viewer for the QR."""
-    if url:
-        safe_url = url.replace('"', '')
-        log('NewPipe abrindo QR: {0}'.format(safe_url))
-        xbmc.executebuiltin('ShowPicture({0})'.format(safe_url))
+def youtube_show_qr(url):
+    """Keep an old QR action compatible with the fixed activation panel."""
+    _open_youtube_activation_panel()
 
 
 @urldispatcher.register('youtube_show_code')
 def youtube_show_code():
-    pending = youtube_sync.pending_device_link()
-    if not pending:
-        kodi.infoDialog(_text(30180, 'Activation code expired. Start again.'))
-        return
-    kodi.text_viewer(_text(30181, 'Sign in to YouTube'),
-                     _text(30182, 'Open: {0}\n\nEnter the code:\n[B]{1}[/B]\n\nAfter authorizing, return to this submenu and choose “Step 3 — Confirm connection”.').format(
-                         pending.get('verification_url', 'https://yt.be/activate'),
-                         pending.get('user_code', '')))
+    """Keep an old code action compatible with the fixed activation panel."""
+    _open_youtube_activation_panel()
 
 
 @urldispatcher.register('youtube_cancel_login')
@@ -1182,7 +1289,7 @@ def youtube_sync_now():
             xbmc.executebuiltin(
                 'Container.Update(plugin://plugin.video.newpipe/?action=subscriptions,replace)')
         except Exception as exc:
-            log('NewPipe could not open the sync menu: {0}'.format(exc))
+            log('NewPipe não abriu o menu de sincronização: {0}'.format(exc))
 
     def refresh_library():
         # DialogProgress is not available in some Android Kodi builds. Use the
@@ -1190,10 +1297,10 @@ def youtube_sync_now():
         # not block the request and works with the installed Estuary skin.
         try:
             xbmcgui.Dialog().notification(
-                'NewPipe',
+                'NewPipe MOD',
                 _text(30184, 'Synchronizing YouTube subscriptions…'), time=10000)
         except Exception as exc:
-            log('NewPipe did not show the sync notice: {0}'.format(exc))
+            log('NewPipe não mostrou aviso de sincronização: {0}'.format(exc))
         summary = youtube_sync.sync_library()
         message = _text(30183, '{0} channels, {1} videos').format(
             summary.get('channels', 0), summary.get('videos', 0))
@@ -1202,9 +1309,6 @@ def youtube_sync_now():
     result = youtube_sync.poll_pending_once()
     if result.get('state') == 'authorized':
         try:
-            # Fresh links land on the personal identity; offer brand choice
-            # before the first sync so the catalogue matches the account.
-            _choose_identity()
             refresh_library()
             open_account_menu()
             return
@@ -1227,78 +1331,6 @@ def youtube_sync_now():
     kodi.refresh()
 
 
-def _identity_options(identities):
-    options, current = [], -1
-    for index, entry in enumerate(identities):
-        text = entry['label']
-        if entry.get('detail'):
-            text = '{0} ({1})'.format(text, entry['detail'])
-        if entry.get('is_current'):
-            text = '● ' + text
-            current = index
-        options.append(text)
-    return options, current
-
-
-def _choose_identity():
-    """Offer the account picker when several identities exist. Never blocks."""
-    try:
-        identities = youtube_sync.list_identities()
-    except Exception:
-        return False
-    if len(identities) < 2:
-        return False
-    if any(e.get('is_current') and e.get('page_id') for e in identities):
-        return True
-    options, current = _identity_options(identities)
-    choice = kodi.selectDialog(
-        options, heading=_text(30114, 'Select YouTube account'),
-        preselect=current if current >= 0 else 0)
-    if choice < 0 or choice >= len(identities):
-        return False
-    try:
-        label = youtube_sync.select_identity(identities[choice]['page_id'])
-    except Exception as exc:
-        log('NewPipe account switch failed: {0}'.format(exc))
-        return False
-    kodi.infoDialog(_text(30116, 'Switched to {0}').format(label))
-    return True
-
-
-@urldispatcher.register('youtube_switch_account')
-def youtube_switch_account():
-    try:
-        identities = youtube_sync.list_identities()
-    except Exception as exc:
-        kodi.infoDialog(_text(30070, 'YouTube sync failed: {0}').format(exc))
-        return
-    if len(identities) < 2:
-        kodi.infoDialog(_text(30115, 'Only one YouTube account found'))
-        return
-    options, current = _identity_options(identities)
-    choice = kodi.selectDialog(
-        options, heading=_text(30114, 'Select YouTube account'),
-        preselect=current if current >= 0 else 0)
-    if choice < 0 or choice >= len(identities):
-        return
-    try:
-        label = youtube_sync.select_identity(identities[choice]['page_id'])
-        # Drop the previous identity's imported channels first: the merge in
-        # sync_library() only adds, so without this the old account's
-        # subscriptions would linger beside the new one. Manually added
-        # channels are demoted to local, never deleted.
-        storage.clear_youtube_subscriptions()
-        summary = youtube_sync.sync_library()
-        message = _text(30183, '{0} channels, {1} videos').format(
-            summary.get('channels', 0), summary.get('videos', 0))
-        kodi.infoDialog('{0}: {1}'.format(
-            _text(30116, 'Switched to {0}').format(label), message))
-    except Exception as exc:
-        kodi.infoDialog(_text(30070, 'YouTube sync failed: {0}').format(exc))
-        return
-    kodi.refresh()
-
-
 @urldispatcher.register('youtube_disconnect')
 def youtube_disconnect():
     if kodi.yesnoDialog(_text(30072, 'Disconnect from YouTube? Local subscriptions remain.')):
@@ -1307,9 +1339,9 @@ def youtube_disconnect():
         kodi.refresh()
 
 
-def _feed_item(entry, known_subs=None):
+def _feed_item(entry):
     video, channel_url, channel_title = entry
-    item = _video_item(video, channel_url, channel_title, known_subs=known_subs)
+    item = _video_item(video, channel_url, channel_title)
     item['title'] = '{0} - {1}'.format(channel_title, item['title'])
     return item
 
@@ -1318,17 +1350,13 @@ def _feed_item(entry, known_subs=None):
 def feed(page=1):
     per_channel = _limit(default_key='feed_per_channel', fallback=5)
     items = []
-    subscriptions = storage.get_subscriptions()
-    known_subs = {s.get('url') for s in subscriptions if s.get('url')}
-    for subscription in subscriptions:
+    for subscription in storage.get_subscriptions():
         try:
             videos = yt.channel_videos(subscription.get('url'), limit=per_channel)[:per_channel]
             items.extend((video, subscription.get('url'), subscription.get('title') or '') for video in videos)
         except Exception as exc:
             log('NewPipe feed error for {0}: {1}'.format(subscription.get('url'), exc))
-    _build_paged(lambda limit: items,
-                 lambda entry: _feed_item(entry, known_subs=known_subs),
-                 'feed', page=page)
+    _build_paged(lambda limit: items, _feed_item, 'feed', page=page)
 
 
 def _history_item(entry):
@@ -1359,15 +1387,8 @@ def _clear_history_item():
 
 @urldispatcher.register('history', kwargs=['page'])
 def history(page=1):
-    source = storage.get_history()
-    if not _paginate_enabled():
-        items = [_history_item(entry) for entry in source]
-        if source:
-            items.append(_clear_history_item())
-        _build(items, content='videos')
-        return
     page = _page_number(page)
-    per_page = _pagination()
+    per_page = _limit()
     source = storage.get_history()
     start = (page - 1) * per_page
     end = start + per_page
@@ -1427,11 +1448,11 @@ def random_music_play(url, title='', image='', profile='default'):
                 # plugin route finishes. Calling Player.play here is what
                 # previously reopened the source card and returned Kodi to
                 # the search/folder window between tracks.
-                log('NewPipe Random music: playlist prepared with {0} tracks'.format(queued))
+                log('NewPipe Random music: playlist preparada com {0} faixas'.format(queued))
                 return
-            log('NewPipe Random music: pool too small; single playback')
+            log('NewPipe Random music: pool insuficiente; reprodução individual')
         except Exception as exc:
-            log('NewPipe Random music: playlist did not start: {0}'.format(exc))
+            log('NewPipe Random music: não iniciou playlist: {0}'.format(exc))
     # The setting remains an explicit opt-out: a card in the folder can still
     # be watched normally without creating any playlist.
     music_radio.cancel()

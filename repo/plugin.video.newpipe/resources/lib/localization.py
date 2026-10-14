@@ -11,8 +11,8 @@ from tulip import kodi
 import scrapetube.scrapetube as _scrapetube
 
 
-_DEFAULT_LANGUAGE = 'en'
-_DEFAULT_COUNTRY = 'US'
+_DEFAULT_LANGUAGE = 'pt'
+_DEFAULT_COUNTRY = 'BR'
 _LANGUAGE_RE = re.compile(r'^[a-z]{2,3}(?:-[A-Z]{2})?$')
 # YouTube silently answers with a truncated first page (no usable continuation
 # token) when ``gl`` is not a real country, so accept only ISO 3166-1 alpha-2.
@@ -83,14 +83,11 @@ _CATEGORY_TERMS = {
     'ko': {'music': '음악', 'gaming': '게임', 'news': '뉴스',
            'movies': '영화', 'live': '라이브', 'sports': '스포츠',
            'podcasts': '팟캐스트'},
-    'el': {'music': 'Μουσική', 'gaming': 'Παιχνίδια', 'news': 'Ειδήσεις',
-           'movies': 'Ταινίες', 'live': 'Ζωντανά', 'sports': 'Αθλητικά',
-           'podcasts': 'Podcast'},
 }
 _LIVE_SUFFIX = {
     'pt': 'ao vivo', 'en': 'live', 'es': 'en vivo', 'fr': 'en direct',
     'de': 'live', 'it': 'dal vivo', 'nl': 'live', 'ro': 'live',
-    'tr': 'canlı', 'ja': 'ライブ', 'ko': '라이브', 'el': 'ζωντανά',
+    'tr': 'canlı', 'ja': 'ライブ', 'ko': '라이브',
 }
 
 

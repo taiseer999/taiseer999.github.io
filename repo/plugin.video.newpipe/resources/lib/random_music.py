@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Persistent native Kodi playlist state for NewPipe Random music.
+"""Persistent native Kodi playlist state for NewPipe MOD Random music.
 
 The clicked plugin card must finish before Kodi receives a new playlist.  A
 short service-owned launch delay prevents Android from treating that original
@@ -131,7 +131,7 @@ def next_after(position=None):
 
 
 def _ordered_tracks(video_id, pool, size=_PLAYLIST_SIZE):
-    """Put the selected track first, then create a no-immediate-repeat shuffle."""
+    """Put the selected track first, then create a true no-repeat shuffle."""
     current = str(video_id or '').strip()
     normalised = []
     seen = set()
@@ -149,17 +149,9 @@ def _ordered_tracks(video_id, pool, size=_PLAYLIST_SIZE):
 
     chooser = random.SystemRandom()
     tracks = [selected]
-    previous = selected['video_id']
-    remaining = [item for item in normalised if item['video_id'] != previous]
-    while remaining and len(tracks) < size:
-        chooser.shuffle(remaining)
-        for item in remaining:
-            if item['video_id'] != previous:
-                tracks.append(item)
-                previous = item['video_id']
-                if len(tracks) >= size:
-                    break
-        remaining = [item for item in normalised if item['video_id'] != previous]
+    remaining = [item for item in normalised if item['video_id'] != selected['video_id']]
+    chooser.shuffle(remaining)
+    tracks.extend(remaining[:max(0, size - 1)])
     return tracks
 
 

@@ -22,7 +22,6 @@
 								<option label="30109">tr</option>
 								<option label="30110">ja</option>
 								<option label="30111">ko</option>
-								<option label="30112">el</option>
 							</options>
 						</constraints>
 						<control type="list" format="string"/>
@@ -97,7 +96,6 @@
 							<option label="30109">tr</option>
 							<option label="30110">ja</option>
 							<option label="30111">ko</option>
-							<option label="30112">el</option>
 						</options>
 					</constraints>
 					<control type="list" format="string"/>
@@ -152,7 +150,7 @@
 				</setting>
 				<setting id="trailer_max_height" type="string" label="30054" help="30055">
 					<level>0</level>
-					<default>1080</default>
+					<default>2160</default>
 					<constraints>
 						<options>
 							<option label="30187">720</option>
@@ -163,18 +161,15 @@
 					</constraints>
 					<control type="list" format="string"/>
 				</setting>
-				<setting id="pagination" type="string" label="30021">
+				<setting id="results_per_page" type="integer" label="30021">
 					<level>0</level>
-					<default>0</default>
+					<default>25</default>
 					<constraints>
-						<options>
-							<option label="30118">0</option>
-							<option label="30119">10</option>
-							<option label="30167">25</option>
-							<option label="30168">50</option>
-						</options>
+						<minimum>5</minimum>
+						<maximum>50</maximum>
+						<step>5</step>
 					</constraints>
-					<control type="list" format="string"/>
+					<control type="spinner" format="integer"/>
 				</setting>
 				<setting id="feed_per_channel" type="integer" label="30022">
 					<level>0</level>
@@ -191,15 +186,17 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="direct_max_height" type="string" label="30037" help="30038">
-					<level>0</level>
-					<default>720</default>
-					<constraints>
+					<setting id="direct_max_height" type="string" label="30037" help="30038">
+						<level>0</level>
+						<default>1080</default>
+						<constraints>
 						<options>
 							<option label="30175">360</option>
 							<option label="30176">480</option>
 							<option label="30177">720</option>
 							<option label="30178">1080</option>
+							<option label="30189">1440</option>
+							<option label="30190">2160</option>
 						</options>
 					</constraints>
 					<control type="list" format="string"/>

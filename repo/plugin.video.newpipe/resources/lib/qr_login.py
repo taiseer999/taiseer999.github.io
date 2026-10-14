@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-"""Professional, high-contrast QR artwork for the NewPipe login submenu.
+"""High-contrast, large QR artwork for the NewPipe MOD login submenu.
 
-The image is deliberately a QR card only: all activation instructions remain
-native Kodi labels in the submenu. This preserves the exact short-lived code,
-keeps it easy to scan, and avoids opening a separate dialog.
+The QR remains deliberately free of a logo or text overlay. Short-lived
+activation codes must scan reliably from a TV screen, so the professional card
+design is kept entirely outside the QR quiet zone.
 """
 from __future__ import absolute_import
 
@@ -19,13 +19,13 @@ import qrcode
 
 # Restrained, high-contrast card palette. The red accent remains outside the
 # QR quiet zone, so scanners see the standard black modules on white.
-_CARD_DARK = (15, 23, 42)
-_CARD_ACCENT = (230, 33, 23)
+_CARD_DARK = (8, 15, 28)
+_CARD_ACCENT = (235, 43, 35)
 _CARD_WHITE = (255, 255, 255)
-_QR_DARK = (8, 12, 20)
-_BORDER = 20
-_ACCENT = 5
-_PADDING = 28
+_QR_DARK = (5, 10, 18)
+_BORDER = 28
+_ACCENT = 6
+_PADDING = 40
 
 
 def _profile_file(filename):
@@ -65,11 +65,11 @@ def _write_rgb_png(path, width, height, row_builder):
         handle.write(data)
 
 
-def _write_qr_png(value, path, module_size=12):
-    """Write a framed QR card while preserving a large white quiet zone."""
+def _write_qr_png(value, path, module_size=16):
+    """Write a high-definition QR card with a generous white quiet zone."""
     encoder = qrcode.QRCode(
         version=None,
-        error_correction=qrcode.constants.ERROR_CORRECT_Q,
+        error_correction=qrcode.constants.ERROR_CORRECT_H,
         box_size=1,
         border=4,
     )

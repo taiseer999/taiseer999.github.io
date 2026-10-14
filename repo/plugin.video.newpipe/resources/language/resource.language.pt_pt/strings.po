@@ -1,9 +1,9 @@
-# Addon Name: NewPipe
+# Addon Name: NewPipe MOD
 # Addon id: plugin.video.newpipe
-# Addon Provider: Twilight0
+# Original Provider: Twilight0 | MOD: @TrainAgain2
 msgid ""
 msgstr ""
-"Project-Id-Version: NewPipe\n"
+"Project-Id-Version: NewPipe MOD\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pt_PT\n"
@@ -293,8 +293,8 @@ msgid "YouTube TV login method"
 msgstr "Método de início de sessão do YouTube TV"
 
 msgctxt "#30075"
-msgid "Uses the current public YouTube TV client data, following NewPipe's activation flow."
-msgstr "Utiliza os dados do cliente público atual do YouTube TV, seguindo o fluxo de ativação do NewPipe."
+msgid "Uses the current public YouTube TV client data, following NewPipe MOD's activation flow."
+msgstr "Utiliza os dados do cliente público atual do YouTube TV, seguindo o fluxo de ativação do NewPipe MOD."
 
 msgctxt "#30076"
 msgid "Creates a YouTube TV activation code and QR. Authorize it with your Google account on another device."
@@ -381,8 +381,8 @@ msgid "Interface language"
 msgstr "Idioma da interface"
 
 msgctxt "#30097"
-msgid "Choose the language used by NewPipe menus and messages. Settings labels follow Kodi interface language."
-msgstr "Escolha o idioma usado pelos menus e mensagens do NewPipe. As etiquetas das definições seguem o idioma da interface do Kodi."
+msgid "Choose the language used by NewPipe MOD menus and messages. Settings labels follow Kodi interface language."
+msgstr "Escolha o idioma usado pelos menus e mensagens do NewPipe MOD. As etiquetas das definições seguem o idioma da interface do Kodi."
 
 msgctxt "#30098"
 msgid "Same as content language"
@@ -440,9 +440,6 @@ msgctxt "#30111"
 msgid "Korean (ko)"
 msgstr "Coreano (ko)"
 
-msgctxt "#30112"
-msgid "Greek (el)"
-msgstr "Grego (el)"
 msgctxt "#30120"
 msgid "Brazil (BR)"
 msgstr "Brasil (BR)"
@@ -726,3 +723,51 @@ msgstr ""
 msgctxt "#30196"
 msgid "A seguir: {0}"
 msgstr ""
+
+msgctxt "#30197"
+msgid "Automatic confirmation active — {0}s"
+msgstr "Confirmação automática ativa — {0}s"
+
+msgctxt "#30198"
+msgid "YouTube authorization is checked automatically. Sync starts as soon as access is approved."
+msgstr "A autorização do YouTube é verificada automaticamente. A sincronização começa assim que o acesso for aprovado."
+
+msgctxt "#30199"
+msgid "Automatic checking is active. {0}s remain in the initial wait; syncing starts immediately after approval."
+msgstr "A verificação automática está ativa. Faltam {0}s na espera inicial; a sincronização começa imediatamente após a aprovação."
+
+msgctxt "#30200"
+msgid "YouTube synchronized automatically: {0} channels, {1} videos"
+msgstr "YouTube sincronizado automaticamente: {0} canais, {1} vídeos"
+
+msgctxt "#30201"
+msgid "Open: {0}\n\nEnter the code:\n[B]{1}[/B]\n\nAfter authorization, subscription synchronization begins automatically."
+msgstr "Abra: {0}\n\nIntroduza o código:\n[B]{1}[/B]\n\nApós a autorização, a sincronização das inscrições começa automaticamente."
+
+msgctxt "#30202"
+msgid "Code: {0}"
+msgstr "Código: {0}"
+
+msgctxt "#30203"
+msgid "Expires in: {0}"
+msgstr "Expira em: {0}"
+
+msgctxt "#30206"
+msgid "Close"
+msgstr "Fechar"
+
+msgctxt "#30207"
+msgid "Connect YouTube"
+msgstr "Ligar ao YouTube"
+
+msgctxt "#30208"
+msgid "Scan the QR with your phone, or open yt.be/activate and enter the code shown below."
+msgstr "Digitalize o QR com o telemóvel ou abra yt.be/activate e introduza o código mostrado abaixo."
+
+msgctxt "#30209"
+msgid "Connection setup failed: {0}"
+msgstr "Falha na configuração da ligação: {0}"
+
+msgctxt "#30210"
+msgid "OK: new code   •   Back: close"
+msgstr "OK: novo código   •   Voltar: fechar"

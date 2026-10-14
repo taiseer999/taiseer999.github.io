@@ -37,6 +37,7 @@ _GRANT_TYPE_DEVICE = 'http://oauth.net/grant_type/device/1.0'
 _FLOW = 'newpipe_mod_youtube_tv_v2'
 _PROVIDER_FLOW = 'youtube_tv_public_client_v1'
 _TIMEOUT = 20
+_DEVICE_CODE_LIFETIME_SECONDS = 60
 _PROVIDER_CACHE_SECONDS = 10 * 60 * 60
 _STALE_PROVIDER_SECONDS = 30 * 24 * 60 * 60
 _TV_CLIENT_NAME = 'TVHTML5'
@@ -250,7 +251,7 @@ def _clear_legacy_session():
 
 
 def _valid_token(token):
-    """Accept a complete local YouTube TV session, including legacy state."""
+    """Accept a complete local YouTube TV session, including pre-MOD state."""
     return bool(
         isinstance(token, dict) and
         token.get('refresh_token') and
@@ -328,13 +329,17 @@ def start_device_link():
         raise YouTubeSyncError('YouTube did not return a usable TV activation code')
 
     now = int(time.time())
+    # YouTube TV currently supplies a much longer server-side lifetime (often
+    # 30 minutes). NewPipe MOD deliberately keeps this local QR/code active for
+    # one minute, as requested, then clears it and requires a fresh code.
+    provider_lifetime = max(1, int(payload.get('expires_in', 1800)))
     pending = {
         'flow': _FLOW,
         'device_code': device_code,
         'user_code': str(user_code),
         'verification_url': _MANUAL_ACTIVATE_URL,
         'qr_url': _qr_url(user_code),
-        'expires_at': now + int(payload.get('expires_in', 1800)),
+        'expires_at': now + min(_DEVICE_CODE_LIFETIME_SECONDS, provider_lifetime),
         'interval': max(1, int(payload.get('interval', 5))),
         'next_poll_at': now,
         'client_id': provider['client_id'],
@@ -467,7 +472,7 @@ def _browse_id(value):
     if value.get('channelId'):
         return str(value['channelId'])
     candidates = (
-        # NewPipe's authenticated TV response uses this exact tab shape.
+        # NewPipe MOD's authenticated TV response uses this exact tab shape.
         _nested_value(value, 'endpoint', 'browseEndpoint'),
         _nested_value(value, 'navigationEndpoint', 'browseEndpoint'),
         _nested_value(value, 'onSelectCommand', 'browseEndpoint'),
@@ -486,7 +491,7 @@ def _channel_id_from_tv_params(value):
     Current TVHTML5 does not place the subscribed channel's ``UC…`` ID in
     ``browseId``.  Each tab instead uses ``FEsubscriptions`` and carries the
     actual channel identifier in the URL-safe/base64 ``params`` value.  This
-    is the tab format used by NewPipe's ``ChannelListMediaGroup``.  Looking
+    is the tab format used by NewPipe MOD's ``ChannelListMediaGroup``.  Looking
     only at ``browseId`` therefore turns a valid account response into an
     empty list of channels.
     """
@@ -540,7 +545,7 @@ def _walk_dicts(value):
 def _youtube_tv_channels(payload):
     """Normalize channel cards and subscription tabs from the TV feed.
 
-    NewPipe reads the ``tvSecondaryNavRenderer`` tabs returned by
+    NewPipe MOD reads the ``tvSecondaryNavRenderer`` tabs returned by
     ``FEsubscriptions``: the first one is All subscriptions and every later
     tab is a subscribed channel. Modern YouTube TV can also return ordinary
     channel cards, so accept both response layouts.
@@ -581,7 +586,7 @@ def _youtube_tv_channels(payload):
             renderers.append(parent['tileRenderer'])
         for renderer in renderers:
             add_channel(renderer)
-        # NewPipe's subscribed-channel menu is built from these tab shapes.
+        # NewPipe MOD's subscribed-channel menu is built from these tab shapes.
         for key in ('tabRenderer', 'expandableTabRenderer', 'guideEntryRenderer'):
             renderer = parent.get(key)
             if isinstance(renderer, dict):
@@ -780,7 +785,7 @@ def _youtube_tv_videos(payload):
                                 if channel_id.startswith('UC') else ''),
             }
         # Modern authenticated TVHTML5 responses use tileRenderer instead of
-        # gridVideoRenderer.  NewPipe handles this separately; accepting it
+        # gridVideoRenderer.  NewPipe MOD handles this separately; accepting it
         # here is essential for current subscription feeds.
         tile = parent.get('tileRenderer')
         if isinstance(tile, dict):
@@ -795,26 +800,6 @@ def _playlist_id(renderer):
         return ''
     return (renderer.get('playlistId') or renderer.get('playlist_id') or
             _nested_value(renderer, 'navigationEndpoint', 'watchEndpoint').get('playlistId') or '')
-
-
-def _tile_playlist(tile):
-    """Normalize a TV tileRenderer playlist card (TILE_CONTENT_TYPE_PLAYLIST)."""
-    if not isinstance(tile, dict):
-        return None
-    if tile.get('contentType') != 'TILE_CONTENT_TYPE_PLAYLIST':
-        return None
-    browse_id = _nested_value(
-        tile, 'onSelectCommand', 'browseEndpoint').get('browseId') or ''
-    if not browse_id.startswith('VL') or len(browse_id) <= 2:
-        return None
-    metadata = _nested_value(tile, 'metadata', 'tileMetadataRenderer')
-    title = _text_value(metadata.get('title')) or browse_id[2:]
-    thumbs = (_nested_value(tile, 'header', 'tileHeaderRenderer')
-              .get('thumbnail', {}).get('thumbnails') or [])
-    image = ''
-    if thumbs and isinstance(thumbs[-1], dict):
-        image = thumbs[-1].get('url') or ''
-    return {'title': title, 'url': browse_id[2:], 'image': image}
 
 
 def _youtube_tv_playlists(payload):
@@ -833,16 +818,11 @@ def _youtube_tv_playlists(payload):
                 'url': str(playlist_id),
                 'image': _thumbnail_url(renderer),
             }
-        tile = parent.get('tileRenderer')
-        if isinstance(tile, dict):
-            parsed = _tile_playlist(tile)
-            if parsed and parsed['url'] not in found:
-                found[parsed['url']] = parsed
     return list(found.values())
 
 
 def _tv_browse_context(browse_id='FEsubscriptions', params='', extra=None):
-    """Build the same TVHTML5 browse envelope as NewPipe's AppClient.TV.
+    """Build the same TVHTML5 browse envelope as NewPipe MOD's AppClient.TV.
 
     The prior version returned before applying ``params`` and omitted Cobalt's
     browser identity.  Those differences are harmless for a public search but
@@ -907,7 +887,7 @@ def _account_items(payload):
 
 
 def _page_id_from_account(account):
-    """Extract NewPipe's selected-account page id without saving account PII."""
+    """Extract NewPipe MOD's selected-account page id without saving account PII."""
     try:
         tokens = account['serviceEndpoint']['selectActiveIdentityEndpoint']['supportedTokens']
     except (KeyError, TypeError):
@@ -920,7 +900,7 @@ def _page_id_from_account(account):
 
 
 def _youtube_tv_headers(access_token, version, visitor_data, page_id=''):
-    """Return the authenticated headers applied by NewPipe's HTTP client."""
+    """Return the authenticated headers applied by NewPipe MOD's HTTP client."""
     headers = {
         'Authorization': 'Bearer {0}'.format(access_token),
         'Referer': _TV_HOME_URL,
@@ -929,7 +909,7 @@ def _youtube_tv_headers(access_token, version, visitor_data, page_id=''):
     }
     if visitor_data:
         headers['X-Goog-Visitor-Id'] = visitor_data
-    # NewPipe attaches this after selecting the current personal/brand account.
+    # NewPipe MOD attaches this after selecting the current personal/brand account.
     if page_id:
         headers['X-Goog-Pageid'] = page_id
     return headers
@@ -954,15 +934,12 @@ def _youtube_tv_request(access_token, url, browse_id='', params='', extra=None,
 
 
 def _update_account_identity(access_token):
-    """Resolve the selected YouTube/brand account exactly like NewPipe.
+    """Resolve the selected YouTube/brand account exactly like NewPipe MOD.
 
-    OAuth approval alone provides a token, while NewPipe immediately calls
+    OAuth approval alone provides a token, while NewPipe MOD immediately calls
     ``account/accounts_list`` and then includes ``X-Goog-Pageid`` on library
     requests.  Omitting that selected identity is why an approved session can
     look like an empty anonymous account in Kodi.
-
-    An explicitly chosen identity (account picker) always wins: without this
-    guard every sync would reset a brand choice back to the personal account.
     """
     payload = _youtube_tv_request(
         access_token,
@@ -974,100 +951,25 @@ def _update_account_identity(access_token):
         }},
     )
     accounts = _account_items(payload)
-    live_page_ids = {_page_id_from_account(a) or '' for a in accounts}
-    # Own channels are public identifiers (same as subscriptions.json):
-    # keep title/url so the addon can open your uploads offline. Runs on
-    # every sync, independent of which identity is currently selected.
-    own = []
-    for account in accounts:
-        handle = _text_value(account.get('channelHandle'))
-        if not handle.startswith('@'):
-            continue
-        own.append({
-            'title': _text_value(account.get('accountName')) or handle,
-            'url': 'https://www.youtube.com/' + handle,
-        })
-    storage.set_youtube_library('own_channels', own)
-    token = storage.get_youtube_oauth_token()
-    stored = (token.get('page_id') or '') if token else ''
-    if stored and stored in live_page_ids:
-        return stored
     selected = next((item for item in accounts if item.get('isSelected')), None)
     selected = selected or (accounts[0] if accounts else {})
     page_id = _page_id_from_account(selected)
+    token = storage.get_youtube_oauth_token()
     if token:
         # Do not persist name, email or avatar; the page ID is only the opaque
         # context token the TV API requires for the chosen account.
         token['page_id'] = page_id
         token['account_ready'] = bool(accounts)
         storage.set_youtube_oauth_token(token)
-    _log('selected TV account: {0} identit(ies), PageId={1}'.format(
-        len(accounts), 'yes' if page_id else 'no'))
+    _log('conta TV selecionada: {0} identidade(s), PageId={1}'.format(
+        len(accounts), 'sim' if page_id else 'não'))
     return page_id
-
-
-def list_identities():
-    """List switchable YouTube identities (personal + brand accounts).
-
-    Returns ``[{'label', 'detail', 'page_id', 'is_current'}]``. The default
-    (personal) identity carries no page token, so its ``page_id`` is ``''``.
-    Reads live on every call; persists nothing (no account PII is stored).
-    """
-    token = storage.get_youtube_oauth_token()
-    if not _valid_token(token):
-        return []
-    payload = _youtube_tv_request(
-        _access_token(),
-        'https://www.youtube.com/youtubei/v1/account/accounts_list',
-        extra={'accountReadMask': {
-            'returnOwner': True,
-            'returnBrandAccounts': True,
-            'returnPersonaAccounts': False,
-        }},
-    )
-    current = (storage.get_youtube_oauth_token().get('page_id') or '')
-    identities = []
-    for position, account in enumerate(_account_items(payload), 1):
-        name = _text_value(account.get('accountName'))
-        handle = _text_value(account.get('channelHandle'))
-        page_id = _page_id_from_account(account) or ''
-        if not name:
-            # Brand/guest identities occasionally omit the display name;
-            # never show a bare placeholder in the picker.
-            name = handle or 'Account {0}'.format(position)
-        identities.append({
-            'label': name,
-            'detail': handle if handle and handle != name else '',
-            'page_id': page_id,
-            'is_current': page_id == current,
-        })
-    return identities
-
-
-def select_identity(page_id):
-    """Persist the chosen identity after validating it against the live list.
-
-    Returns the account label. ``''`` selects the default (personal) identity.
-    Raises :class:`YouTubeSyncError` when disconnected or unknown.
-    """
-    page_id = page_id or ''
-    token = storage.get_youtube_oauth_token()
-    if not _valid_token(token):
-        raise YouTubeSyncError('YouTube account is not connected')
-    identities = list_identities()
-    match = next((e for e in identities if e['page_id'] == page_id), None)
-    if match is None:
-        raise YouTubeSyncError('Unknown YouTube account')
-    token['page_id'] = page_id
-    token['account_ready'] = True
-    storage.set_youtube_oauth_token(token)
-    return match['label']
 
 
 def _youtube_tv_browse(access_token, browse_id, params=''):
     """Load an authenticated YouTube TV browse screen without Data API v3.
 
-    The request shape and endpoint are the ones used by NewPipe's TV browse
+    The request shape and endpoint are the ones used by NewPipe MOD's TV browse
     client. It deliberately never calls youtube.googleapis.com/youtube/v3.
     """
     page_id = storage.get_youtube_oauth_token().get('page_id') or ''
@@ -1092,17 +994,17 @@ def sync_library():
     add-on profile and are replaced only by this explicit action.
     """
     access_token = _access_token()
-    # NewPipe performs this identity selection directly after device linking.
+    # NewPipe MOD performs this identity selection directly after device linking.
     # It is also required for accounts that were linked by earlier NewPipe
     # packages, which did not keep a page-id token.
     _update_account_identity(access_token)
     subscriptions = _youtube_tv_subscription_feed(access_token)
     channels = _prepare_channel_profiles(_youtube_tv_channels(subscriptions))
     feed = _youtube_tv_videos(subscriptions)
-    _log('TV sync: {0} channels, {1} videos, tiles={2}, promo={3}'.format(
+    _log('sincronização TV: {0} canais, {1} vídeos, tiles={2}, promoção={3}'.format(
         len(channels), len(feed),
-        'yes' if _contains_renderer(subscriptions, 'tileRenderer') else 'no',
-        'yes' if _contains_renderer(subscriptions, 'genericPromoRenderer') else 'no'))
+        'sim' if _contains_renderer(subscriptions, 'tileRenderer') else 'não',
+        'sim' if _contains_renderer(subscriptions, 'genericPromoRenderer') else 'não'))
     # Do not claim success when YouTube returned its anonymous sign-in surface.
     # A truly empty subscribed feed may still have an account card, while this
     # promotion-only layout is the documented signed-out TV response.
@@ -1113,7 +1015,7 @@ def sync_library():
     storage.set_youtube_library('subscription_feed', feed)
     storage.set_youtube_library('subscribed_channels', channels)
 
-    # These are the same YouTube TV browse IDs used by NewPipe. A failure in
+    # These are the same YouTube TV browse IDs used by NewPipe MOD. A failure in
     # an optional account section must not discard a successfully read feed.
     optional = (
         ('watch_later', 'FEmy_youtube', 'cAc=', _youtube_tv_videos),
@@ -1140,7 +1042,7 @@ def sync_library():
 
 
 def sync_subscriptions():
-    """Import subscribed channels via the NewPipe-compatible TV browse feed."""
+    """Import subscribed channels via the NewPipe MOD-compatible TV browse feed."""
     return sync_library().get('channels', 0)
 
 
@@ -1151,7 +1053,7 @@ def disconnect():
     storage.clear_youtube_library()
     storage.clear_youtube_auth_provider()
     removed = storage.clear_youtube_subscriptions()
-    _log('account disconnected: {0} imported channels removed'.format(removed))
+    _log('conta desconectada: {0} canais importados removidos'.format(removed))
     return {'removed_channels': removed}
 
 

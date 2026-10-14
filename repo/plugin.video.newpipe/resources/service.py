@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Background helper for progressive playback and account-link completion.
-
-This service does not use plugin.video.youtube. It only chooses Portuguese,
-then English, when Kodi exposes multiple tracks on a direct Googlevideo stream.
-"""
+"""Background helper for progressive playback and account-link completion."""
 
 from __future__ import absolute_import
 
@@ -26,18 +22,51 @@ if _LIBRARY_PATH not in sys.path:
     sys.path.insert(0, _LIBRARY_PATH)
 
 from resources.lib import random_music
+from resources.lib import storage
 from resources.lib import ui
 from resources.lib import youtube_sync
 
 
-_AUDIO_PREFERENCE = (
-    ('eng', 'en', 'ingl', 'english'),
-    ('por', 'pt', 'portugu', 'brazil', 'brasil'),
-)
-
 _ACCOUNT_MENU_URL = 'plugin://plugin.video.newpipe/?action=subscriptions'
 _NEXT_MUSIC_PREVIEW_SECONDS = 15
 _NEXT_MUSIC_PREVIEW_DURATION = 5500
+_ORIGINAL_AUDIO_REQUEST_STATE = 'force_original_audio'
+
+
+def _synchronize_authorized_account():
+    """Import subscriptions immediately after YouTube approves the QR link.
+
+    The service owns this work so the person never has to return to the
+    activation menu or select a manual confirmation action. Any later refresh
+    remains possible through reconnecting the account.
+    """
+    try:
+        xbmcgui.Dialog().notification(
+            'NewPipe MOD',
+            ui.text(30184, 'Synchronizing YouTube subscriptions…'),
+            time=8000)
+    except Exception:
+        pass
+    try:
+        summary = youtube_sync.sync_library()
+    except Exception as exc:
+        message = ui.text(30070, 'YouTube sync failed: {0}').format(exc)
+        xbmc.log('[NewPipe YouTube] sincronização automática falhou: {0}'.format(exc),
+                 xbmc.LOGWARNING)
+        try:
+            xbmcgui.Dialog().notification('NewPipe MOD', message, time=8000)
+        except Exception:
+            pass
+        return False
+    message = ui.text(
+        30200, 'YouTube synchronized automatically: {0} channels, {1} videos').format(
+            summary.get('channels', 0), summary.get('videos', 0))
+    try:
+        xbmcgui.Dialog().notification('NewPipe MOD', message, time=8000)
+    except Exception:
+        pass
+    _open_account_menu()
+    return True
 
 
 def _open_account_menu():
@@ -45,9 +74,9 @@ def _open_account_menu():
     try:
         xbmc.executebuiltin('Container.Update({0},replace)'.format(
             _ACCOUNT_MENU_URL))
-        xbmc.log('[NewPipe YouTube] sync menu opened', xbmc.LOGINFO)
+        xbmc.log('[NewPipe YouTube] menu de sincronização aberto', xbmc.LOGINFO)
     except Exception as exc:
-        xbmc.log('[NewPipe YouTube] could not open the account menu: {0}'.format(exc),
+        xbmc.log('[NewPipe YouTube] não foi possível abrir o menu da conta: {0}'.format(exc),
                  xbmc.LOGWARNING)
 
 
@@ -61,35 +90,63 @@ def _rpc(method, params):
         return None
 
 
-def _select_audio_track():
+def _force_subscription_original_audio():
+    """Select Kodi's actual ``original`` stream for one subscription video.
+
+    Googlevideo HLS keeps every language in one master playlist, meaning that
+    InputStream Adaptive, not the plugin resolver, selects its initial audio.
+    Earlier versions of this service overrode that choice and always chose a
+    Portuguese/English dubbed track. Only a short-lived subscription marker is
+    now honoured, and only a stream explicitly labelled ``original`` is set.
+    """
+    state = storage.get_local_state(_ORIGINAL_AUDIO_REQUEST_STATE)
+    if not state or state.get('applied'):
+        return False
+    try:
+        if int(state.get('expires', 0)) <= int(time.time()):
+            storage.set_local_state(_ORIGINAL_AUDIO_REQUEST_STATE, {})
+            return False
+    except (TypeError, ValueError):
+        storage.set_local_state(_ORIGINAL_AUDIO_REQUEST_STATE, {})
+        return False
+    try:
+        playing_file = xbmc.Player().getPlayingFile() or ''
+    except Exception:
+        playing_file = ''
+    if 'googlevideo' not in playing_file.lower():
+        return False
+
     data = _rpc('Player.GetProperties', {
         'playerid': 1,
         'properties': ['audiostreams', 'currentaudiostream'],
     })
     if not data:
-        return
+        return False
 
     tracks = data.get('audiostreams') or []
     if not tracks:
-        return
+        return False
     current = data.get('currentaudiostream') or {}
     current_index = current.get('index', -1)
-
-    selected = None
-    for group in _AUDIO_PREFERENCE:
-        for track in tracks:
-            text = '{0} {1}'.format(
-                track.get('language') or '', track.get('name') or '').lower()
-            if any(token in text for token in group):
-                selected = track
-                break
-        if selected:
-            break
-
-    selected = selected or tracks[0]
-    index = selected.get('index', 0)
+    selected = next((track for track in tracks if 'original' in '{0} {1}'.format(
+        track.get('language') or '', track.get('name') or '').casefold()), None)
+    if not selected:
+        # Keep Kodi's own selection when the manifest fails to describe an
+        # original stream. Guessing by language could select a dub again.
+        return False
+    try:
+        index = int(selected.get('index'))
+    except (TypeError, ValueError):
+        return False
     if index != current_index or current_index < 0:
         _rpc('Player.SetAudioStream', {'playerid': 1, 'stream': index})
+    state['applied'] = True
+    state['applied_at'] = int(time.time())
+    state['selected_index'] = index
+    storage.set_local_state(_ORIGINAL_AUDIO_REQUEST_STATE, state)
+    xbmc.log('[NewPipe Playback] áudio original selecionado automaticamente: faixa {0}'.format(index),
+             xbmc.LOGINFO)
+    return True
 
 
 def _remaining_seconds(player):
@@ -142,12 +199,12 @@ def _show_music_up_next(player, shown_key=''):
     message = ui.text(30196, 'Up next: {0}').format(title)
     try:
         xbmcgui.Dialog().notification(
-            'NewPipe', message, upcoming.get('image') or '',
+            'NewPipe MOD', message, upcoming.get('image') or '',
             _NEXT_MUSIC_PREVIEW_DURATION)
-        xbmc.log('[NewPipe Random music] next track shown: {0}'.format(
+        xbmc.log('[NewPipe Random music] próxima faixa mostrada: {0}'.format(
             upcoming.get('video_id', '')), xbmc.LOGINFO)
     except Exception as exc:
-        xbmc.log('[NewPipe Random music] preview not shown: {0}'.format(exc),
+        xbmc.log('[NewPipe Random music] prévia não exibida: {0}'.format(exc),
                  xbmc.LOGWARNING)
     return key
 
@@ -174,12 +231,12 @@ def _start_pending_music_playlist():
                 pass
             playlist.add(random_music.plugin_url(track), item)
         xbmc.Player().play(playlist)
-        xbmc.log('[NewPipe Random music] Kodi playlist started: {0} tracks'.format(
+        xbmc.log('[NewPipe Random music] playlist Kodi iniciada: {0} faixas'.format(
             len(tracks)), xbmc.LOGINFO)
         return True
     except Exception as exc:
         random_music.clear_queue()
-        xbmc.log('[NewPipe Random music] playlist did not start: {0}'.format(exc),
+        xbmc.log('[NewPipe Random music] playlist não iniciou: {0}'.format(exc),
                  xbmc.LOGWARNING)
         return False
 
@@ -198,7 +255,7 @@ class _PlaybackObserver(xbmc.Player):
     def onPlayBackStopped(self):
         """Treat an explicit Kodi Stop as cancellation of Random music."""
         if random_music.is_playlist_active() and random_music.cancel():
-            xbmc.log('[NewPipe Random music] queue cancelled by the Stop button', xbmc.LOGINFO)
+            xbmc.log('[NewPipe Random music] fila cancelada pelo botão Stop', xbmc.LOGINFO)
 
     def _configure_audio(self):
         try:
@@ -208,7 +265,7 @@ class _PlaybackObserver(xbmc.Player):
         if 'googlevideo' not in (current or '').lower():
             return
         xbmc.sleep(1200)
-        _select_audio_track()
+        _force_subscription_original_audio()
 
 
 def run():
@@ -216,33 +273,37 @@ def run():
     observer = _PlaybackObserver()
     last_login_error = ''
     last_poll = 0
+    last_original_audio_try = 0
     last_preview = ''
-    xbmc.log('[NewPipe Playback] progressive helper started', xbmc.LOGINFO)
+    xbmc.log('[NewPipe Playback] helper progressivo iniciado', xbmc.LOGINFO)
     while not monitor.abortRequested():
         _start_pending_music_playlist()
         last_preview = _show_music_up_next(observer, last_preview)
+        # Audio stream metadata can arrive shortly after onAVStarted. Retry
+        # only while the one-shot marker is pending; after a successful switch
+        # it is marked applied and manual selections remain untouched.
+        if time.time() - last_original_audio_try >= 1:
+            last_original_audio_try = time.time()
+            _force_subscription_original_audio()
         if time.time() - last_poll >= 5:
             last_poll = time.time()
             try:
                 result = youtube_sync.poll_pending_once()
                 last_login_error = ''
                 if result.get('state') == 'authorized':
-                    xbmcgui.Dialog().notification(
-                        'NewPipe', 'YouTube account connected. Opening the sync menu.',
-                        time=6000)
-                    _open_account_menu()
+                    _synchronize_authorized_account()
                 elif result.get('state') == 'expired':
                     xbmcgui.Dialog().notification(
-                        'NewPipe', 'The YouTube link code expired', time=5000)
+                        'NewPipe', 'O código de ligação do YouTube expirou', time=5000)
                 elif result.get('state') == 'failed':
                     message = result.get('message', 'erro desconhecido')
                     if message != last_login_error:
-                        xbmc.log('[NewPipe YouTube] link failed: {0}'.format(message), xbmc.LOGWARNING)
+                        xbmc.log('[NewPipe YouTube] ligação falhou: {0}'.format(message), xbmc.LOGWARNING)
                         last_login_error = message
             except Exception as exc:
                 message = str(exc)
                 if message != last_login_error:
-                    xbmc.log('[NewPipe YouTube] link service: {0}'.format(message), xbmc.LOGWARNING)
+                    xbmc.log('[NewPipe YouTube] serviço de ligação: {0}'.format(message), xbmc.LOGWARNING)
                     last_login_error = message
         if monitor.waitForAbort(0.25):
             break

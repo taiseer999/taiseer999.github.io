@@ -1,9 +1,9 @@
-# Addon Name: NewPipe
+# Addon Name: NewPipe MOD
 # Addon id: plugin.video.newpipe
-# Addon Provider: Twilight0
+# Original Provider: Twilight0 | MOD: @TrainAgain2
 msgid ""
 msgstr ""
-"Project-Id-Version: NewPipe\n"
+"Project-Id-Version: NewPipe MOD\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: nl_NL\n"
@@ -293,8 +293,8 @@ msgid "YouTube TV login method"
 msgstr "Aanmeldingsmethode voor YouTube TV"
 
 msgctxt "#30075"
-msgid "Uses the current public YouTube TV client data, following NewPipe's activation flow."
-msgstr "Gebruikt de huidige openbare YouTube TV-clientgegevens, volgens de activatiestroom van NewPipe."
+msgid "Uses the current public YouTube TV client data, following NewPipe MOD's activation flow."
+msgstr "Gebruikt de huidige openbare YouTube TV-clientgegevens, volgens de activatiestroom van NewPipe MOD."
 
 msgctxt "#30076"
 msgid "Creates a YouTube TV activation code and QR. Authorize it with your Google account on another device."
@@ -381,8 +381,8 @@ msgid "Interface language"
 msgstr "Interface-taal"
 
 msgctxt "#30097"
-msgid "Choose the language used by NewPipe menus and messages. Settings labels follow Kodi interface language."
-msgstr "Kies de taal die NewPipe-menu's en -meldingen gebruikt. Instellingslabels volgen de Kodi-interfacetaal."
+msgid "Choose the language used by NewPipe MOD menus and messages. Settings labels follow Kodi interface language."
+msgstr "Kies de taal die NewPipe MOD-menu's en -meldingen gebruikt. Instellingslabels volgen de Kodi-interfacetaal."
 
 msgctxt "#30098"
 msgid "Same as content language"
@@ -440,9 +440,6 @@ msgctxt "#30111"
 msgid "Korean (ko)"
 msgstr "Koreaans (ko)"
 
-msgctxt "#30112"
-msgid "Greek (el)"
-msgstr "Grieks (el)"
 msgctxt "#30120"
 msgid "Brazil (BR)"
 msgstr "Brazilië (BR)"

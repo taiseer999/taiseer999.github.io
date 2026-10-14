@@ -13,8 +13,8 @@ cache_function = FunctionCache(cacheDirectory).cache_function
 reset_cache = FunctionCache(cacheDirectory).reset_cache
 
 ADDON_ID = 'plugin.video.newpipe'
-PLUGINS_ID = 'script.module.resolveurl.pluginsgr'
-PLUGINS_PATH = 'special://home/addons/{0}/resources/plugins/'.format(PLUGINS_ID)
+# The stream resolver is packaged under resources/lib/ytresolver.
+PLAYBACK_ENGINE = 'bundled-ytresolver'
 YT_WATCH = 'https://www.youtube.com/watch?v='
 
 

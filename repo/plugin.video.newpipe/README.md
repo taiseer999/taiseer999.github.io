@@ -1,58 +1,48 @@
-# = NewPipe Kodi addon git repository =
-## Privacy-first YouTube client for Kodi
+# NewPipe MOD for Kodi
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D11UQ0IO)
-[![Patreon](https://img.shields.io/badge/Patreon-support-orange)](https://www.patreon.com/c/twilight0)
-[![PayPal](https://img.shields.io/badge/PayPal-donate-blue)](https://www.paypal.com/paypalme/AliveGR)
+![NewPipe MOD fanart](fanart.jpg)
 
-![](https://raw.githubusercontent.com/Twilight0/plugin.video.newpipe/master/icon.png)
+> Privacy-first YouTube client for Kodi — original upstream by [Twilight0](https://github.com/Twilight0/plugin.video.newpipe), maintained here as **NewPipe MOD** by **@TrainAgain2**.
 
-NewPipe brings the [NewPipe Android app](https://newpipe.net/) philosophy to Kodi:
-watch YouTube with **no account, no official API key, no tracking** — everything
-personal stays in plain JSON files inside the addon profile on your own device.
+NewPipe MOD lets Kodi browse and play publicly available YouTube content without an API key or a mandatory account. Search history, watch history, bookmarks and locally stored subscriptions stay on the device.
 
-## Why this exists
+## Version 1.4.56 — highlights
 
-- The official YouTube addon needs API keys with quotas, and a Google account
-  for subscriptions. Both tie viewing habits to an identity.
-- Scraping-based clients prove you don't need either: listings come from public
-  pages (via `script.module.scrapetube`), playback is resolved locally
-  (via `script.module.resolveurl.pluginsgr` YouTubeGR → localhost DASH proxy
-  → `inputstream.adaptive`).
-- Your subscriptions, playlist bookmarks, watch/search history never leave the
-  box. Delete the profile files (or uninstall) and everything is gone —
-  the same local-only guarantee NewPipe Android makes.
+![YouTube QR activation screen](docs/images/youtube-qr-activation.jpg)
 
-## Features
+- **Shorts menu:** a dedicated main-menu entry that reads the real public YouTube Shorts surface rather than running a text search for “Shorts”.
+- **Fresh discovery menus:** Trending, Live, Trailers, Random Music and Shorts request fresh data whenever opened. Kodi on-disc folder caching is disabled for these views.
+- **Random Music:** each opening creates a new shuffled discovery mix from separate official-video, new-release, live-session and independent-artist queries; duplicate songs and long mix/playlist spam are filtered.
+- **Trailer defaults:** English/original trailer search and a configurable resolution ceiling up to **4K**. Direct playback defaults to **1080p** while preserving the available 360p, 480p, 720p, 1440p and 4K options.
+- **YouTube account linking:** a dedicated Kodi QR panel over the add-on fanart, with the QR code, activation code and a **60-second** live countdown in a fixed layout. Authorization is checked automatically and subscriptions synchronize after approval.
+- **Original audio for subscriptions:** when a subscribed video provides multiple HLS audio tracks, the add-on selects the track explicitly labelled **original** (for example, Spanish – original). All other YouTube-provided audio languages remain available from Kodi's **Audio stream** menu.
+- **No external resolver dependency:** bundled libraries resolve a direct YouTube stream locally; no `plugin.video.youtube` or external `script.module.*` package is required.
 
-- Search videos / channels / playlists (with local search history)
-- Trending and Live browsers (per-category, cached)
-- Channels: videos, shorts, live streams, playlists
-- Local subscriptions + subscription feed (per-channel item count setting)
-- Playlist bookmarks (context menu on any playlist)
-- Local watch history, audio-only mode, function-cache viewer + clear button
-- "Go to channel" + Subscribe/Unsubscribe context menus on video items
+## Installation
 
-## Known upstream limits (honest, not bugs here)
+1. Download `plugin.video.newpipe-1.4.56.zip` from the [v1.4.56 release](../../releases/tag/v1.4.56).
+2. In Kodi, select **Add-ons → Install from zip file** and choose the downloaded ZIP.
+3. Open **NewPipe MOD** from Video add-ons.
+4. Optional: open **YouTube account** to link an account using the QR code. The subscription import begins automatically after approval.
 
-- YouTube removed the combined trending page server-side (`FEtrending` returns
-  HTTP 400); Trending here is per-category view-count-sorted search, same
-  tradeoff NewPipe Android itself documents.
-- Playlist search was broken by a YouTube layout change (results moved to
-  `lockupViewModel` nodes) — fixed in `script.module.scrapetube` 2.8.1,
-  which this addon requires.
+> Install this MOD over an older NewPipe MOD release to retain preferences. Existing settings can remain in the Kodi profile; choose **Defaults** in the add-on settings if the new trailer/direct-quality defaults should be restored.
 
 ## Requirements
 
-- Kodi 20+ (Nexus/Omega), `inputstream.adaptive` for DASH playback
-- `script.module.tulip`, `script.module.urldispatcher`,
-  `script.module.scrapetube` ≥ 2.8.1, `script.module.unicache`,
-  `script.module.resolveurl`, `script.module.resolveurl.pluginsgr`
+- Kodi **20+** (tested on Kodi 21.3 / Android ARM64).
+- `inputstream.adaptive` is used automatically for HLS playback when installed and enabled.
+- Network access to public YouTube endpoints.
 
-**Primary OSes tested:**
+## Privacy and account data
 
-- Garuda (Arch) Linux 64 bit
+- Anonymous browsing does not use an account.
+- Optional YouTube linking stores its session token only inside the local Kodi add-on profile.
+- Local subscriptions, bookmarks and history are JSON files in the same local profile. Removing the add-on/profile removes them.
 
-**Kodi versions tested:**
+## Attribution and license
 
-- Omega 21.x (x64)
+This repository preserves the original author credit, upstream link and licensing notices. See [MOD-ATTRIBUTION.md](MOD-ATTRIBUTION.md) and the bundled [LICENSES](LICENSES/) directory. The add-on is distributed under **GPL-3.0-only**.
+
+## Changelog
+
+Full version history: [changelog.txt](changelog.txt).

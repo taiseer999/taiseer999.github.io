@@ -248,10 +248,6 @@ msgctxt "#30062"
 msgid "Disconnect YouTube account"
 msgstr ""
 
-msgctxt "#30063"
-msgid "My channel"
-msgstr ""
-
 msgctxt "#30064"
 msgid "YouTube authorization is pending"
 msgstr ""
@@ -297,7 +293,7 @@ msgid "YouTube TV login method"
 msgstr ""
 
 msgctxt "#30075"
-msgid "Uses the current public YouTube TV client data, following NewPipe's activation flow."
+msgid "Uses the current public YouTube TV client data, following NewPipe MOD's activation flow."
 msgstr ""
 
 msgctxt "#30076"
@@ -385,7 +381,7 @@ msgid "Interface language"
 msgstr ""
 
 msgctxt "#30097"
-msgid "Choose the language used by NewPipe menus and messages. Settings labels follow Kodi interface language."
+msgid "Choose the language used by NewPipe MOD menus and messages. Settings labels follow Kodi interface language."
 msgstr ""
 
 msgctxt "#30098"
@@ -442,42 +438,6 @@ msgstr ""
 
 msgctxt "#30111"
 msgid "Korean (ko)"
-msgstr ""
-
-msgctxt "#30112"
-msgid "Greek (el)"
-msgstr ""
-
-msgctxt "#30113"
-msgid "Switch YouTube account"
-msgstr ""
-
-msgctxt "#30114"
-msgid "Select YouTube account"
-msgstr ""
-
-msgctxt "#30115"
-msgid "Only one YouTube account found"
-msgstr ""
-
-msgctxt "#30116"
-msgid "Switched to {0}"
-msgstr ""
-
-msgctxt "#30118"
-msgid "Off (show all)"
-msgstr ""
-
-msgctxt "#30119"
-msgid "10"
-msgstr ""
-
-msgctxt "#30167"
-msgid "25"
-msgstr ""
-
-msgctxt "#30168"
-msgid "50"
 msgstr ""
 
 msgctxt "#30120"
@@ -762,4 +722,52 @@ msgstr ""
 
 msgctxt "#30196"
 msgid "Up next: {0}"
+msgstr ""
+
+msgctxt "#30197"
+msgid "Automatic confirmation active — {0}s"
+msgstr ""
+
+msgctxt "#30198"
+msgid "YouTube authorization is checked automatically. Sync starts as soon as access is approved."
+msgstr ""
+
+msgctxt "#30199"
+msgid "Automatic checking is active. {0}s remain in the initial wait; syncing starts immediately after approval."
+msgstr ""
+
+msgctxt "#30200"
+msgid "YouTube synchronized automatically: {0} channels, {1} videos"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Open: {0}\n\nEnter the code:\n[B]{1}[/B]\n\nAfter authorization, subscription synchronization begins automatically."
+msgstr ""
+
+msgctxt "#30202"
+msgid "Code: {0}"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Expires in: {0}"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Close"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Connect YouTube"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Scan the QR with your phone, or open yt.be/activate and enter the code shown below."
+msgstr ""
+
+msgctxt "#30209"
+msgid "Connection setup failed: {0}"
+msgstr ""
+
+msgctxt "#30210"
+msgid "OK: new code   •   Back: close"
 msgstr ""
