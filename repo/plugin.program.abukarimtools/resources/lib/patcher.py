@@ -1944,16 +1944,24 @@ def _os_id():
     """'libreelec', 'coreelec', ... from /etc/os-release ID, '' elsewhere
     (desktop / Android). Cached."""
     if not _OS_ID:
-        osid = ''
+        osid, text = '', ''
         try:
             with open('/etc/os-release', 'r', encoding='utf-8', errors='replace') as f:
-                for line in f:
-                    if line.startswith('ID='):
-                        osid = line.split('=', 1)[1].strip().strip('"').lower()
-                        break
+                text = f.read()
+            for line in text.splitlines():
+                if line.startswith('ID='):
+                    osid = line.split('=', 1)[1].strip().strip('"').lower()
+                    break
         except Exception:
             pass
+        # 3.4.3: community builds ("LibreELEC (community)", kodi.log
+        # 2026-10-14 19:42) - trust NAME / any line too, not only ID
+        low = text.lower()
+        for known in ('libreelec', 'coreelec'):
+            if osid != known and known in low and not (osid in ('libreelec', 'coreelec')):
+                osid = known
         _OS_ID.append(osid)
+        _log('OS id: %s' % (osid or 'other'))
     return _OS_ID[0]
 
 

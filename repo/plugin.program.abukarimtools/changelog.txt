@@ -1,3 +1,17 @@
+v3.4.3
+- kodi.log 2026-10-14 19:42 (LibreELEC (community) DV-R1.0.0-Beta3 13.0,
+  x86, Kodi 22.0-RC1, AF3 50.11.2, AB Tools still 3.4.1): patcher 79 OK /
+  0 failed; nothing of ours failing. patcher._os_id() now also recognises
+  LibreELEC / CoreELEC from NAME (or any os-release line) when a community
+  build sets a non-standard ID, so the 'os': 'libreelec' entries apply
+  there. Logged once as "OS id: ...". Verified: stock LE, community LE
+  (ID=le-community), CoreELEC, Ubuntu.
+- Seen in the same log, not ours: AF3 50.11.2 there has no
+  fonts/LeagueSpartan-ExtraBold.ttf (font_infotag_bold and
+  font_clearlogo_spartan fall back to arial.ttf); TMDb Helper widgets
+  returned "GetDirectory - Error" 7 s after boot (no traceback at info
+  level); the service was started by the Guardian 28 s after boot.
+
 v3.4.2
 - User request: on LibreELEC, Arctic Fuse 3 should use the supplied
   Includes_Font.xml / Includes_Objects.xml. Compared with AF3 5.17.0 (both
