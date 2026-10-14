@@ -1,3 +1,27 @@
+v3.4.2
+- User request: on LibreELEC, Arctic Fuse 3 should use the supplied
+  Includes_Font.xml / Includes_Objects.xml. Compared with AF3 5.17.0 (both
+  the taiseer999.github.io and the Piers copy) those files are an OLDER
+  AF3: a whole-file replace would delete font_infotag_bold (codec flag),
+  font_title_info + size_info_title (info title) and
+  Object_Statistics_Panel / StatisticsDots, and swap the font family and
+  sizes. Their LibreELEC-specific change is the start-up logo only, so it
+  ships as two targeted, version-independent patcher entries:
+    1080i/Includes_Objects.xml  first grouplist of Object_StartUp_Logo ->
+        height 260 / centertop 265, image 192x192 extras/icons/libreelec.png
+        (ships with AF3), label "LibreELEC" height 60, font_logo_xlarge
+        (byte-for-byte the supplied block; sentinel <!-- ABK LibreELEC logo -->)
+    1080i/Includes_Font.xml     font_logo_xlarge (Questrial-Regular 110)
+        after font_logo_large; skipped when the skin already defines it.
+- New patch field 'os' + patcher._os_id() (/etc/os-release ID, cached):
+  both entries carry 'os': 'libreelec' and are selected only there
+  (CoreELEC / desktop / Android: never). Always-on (no toggle); the
+  watchdog re-applies them after an AF3 update.
+- Verified on both real AF3 5.17.0 copies: written once then skipped, the
+  logo block equals the supplied one, one font_logo_xlarge, both files
+  parse as XML, font_infotag_bold / Object_Statistics_Panel kept; selected
+  for libreelec only.
+
 v3.4.1
 - kodi.log 2026-10-14 10:17:48 (3.4.0, phone restore of a 3.3.x backup):
   "add-on reinstall failed: _job_restore.<locals>.job.<locals>.<lambda>()

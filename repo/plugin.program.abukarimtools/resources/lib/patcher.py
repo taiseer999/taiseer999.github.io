@@ -1394,6 +1394,75 @@ PATCHES = [
 # as a proper msgstr in Modern Standard Arabic (the old text also had English
 # "to" / "as" and typos). Always-on bug fix (no toggle); idempotent through
 # the msgstr sentinel; skips cleanly once upstream ships a fixed file.
+# ── Arctic Fuse 3 on LibreELEC: LibreELEC start-up logo (3.4.2) ──
+# User request 2026-10-14: on LibreELEC replace the AF3 start-up logo
+# (Includes_Objects.xml Object_StartUp_Logo: CE.png + 'CoreELEC "NG"') with
+# extras/icons/libreelec.png + "LibreELEC" at double size, which needs a
+# font_logo_xlarge in Includes_Font.xml. Targeted edits, NOT the whole files:
+# the supplied Includes_Font.xml / Includes_Objects.xml predate AF3 5.17.0 and
+# would delete font_infotag_bold, font_title_info and Object_Statistics_Panel.
+# 'os': 'libreelec' = only on LibreELEC (/etc/os-release ID), see _os_id().
+_AF3_LE_LOGO = (
+    '<include name="Object_StartUp_Logo">\n'
+    '        <!-- ABK LibreELEC logo -->\n'
+    '        <control type="grouplist">\n'
+    '            <height>260</height>\n'
+    '            <centertop>265</centertop>\n'
+    '            <orientation>vertical</orientation>\n'
+    '            <align>center</align>\n'
+    '            <control type="image">\n'
+    '                <width>192</width>\n'
+    '                <height>192</height>\n'
+    '                <centerleft>50%</centerleft>\n'
+    '                <aspectratio>keep</aspectratio>\n'
+    '                <texture>special://skin/extras/icons/libreelec.png</texture>\n'
+    '            </control>\n'
+    '            <control type="label">\n'
+    '                <height>60</height>\n'
+    '                <textcolor>main_fg_100</textcolor>\n'
+    '                <label>LibreELEC</label>\n'
+    '                <font>font_logo_xlarge</font>\n'
+    '                <align>center</align>\n'
+    '            </control>\n'
+    '        </control>')
+_AF3_LE_FONT = (
+    '\n            <!-- ABK LibreELEC logo font -->\n'
+    '            <font>\n'
+    '                <name>font_logo_xlarge</name>\n'
+    '                <filename>Questrial-Regular.ttf</filename>\n'
+    '                <size>110</size>\n'
+    '            </font>')
+
+PATCHES += [
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Objects.xml'),
+        'os': 'libreelec',
+        'not_found_ok': True,
+        'old': '', 'new': '',
+        'already_patched_check': '<!-- ABK LibreELEC logo -->',
+        # the FIRST grouplist of Object_StartUp_Logo (image + label)
+        'fallback_pattern': r'<include name="Object_StartUp_Logo">\s*<control type="grouplist">.*?</control>\s*</control>',
+        'fallback_repl': _AF3_LE_LOGO.replace('\\', '\\\\'),
+        'regex_flags': re.S,
+        'description': 'AF3 on LibreELEC - LibreELEC start-up logo',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Font.xml'),
+        'os': 'libreelec',
+        'not_found_ok': True,
+        'old': '', 'new': '',
+        'already_patched_check': '<!-- ABK LibreELEC logo font -->',
+        'obsolete_if_contains': '<name>font_logo_xlarge</name>',
+        'fallback_pattern': r'(<font>\s*<name>font_logo_large</name>.*?</font>)',
+        'fallback_repl': r'\1' + _AF3_LE_FONT,
+        'regex_flags': re.S,
+        'description': 'AF3 on LibreELEC - font_logo_xlarge for the logo',
+    },
+]
+
+
 _SKINVARS_AR_FIX = (
     # id, Arabic (po-escaped: \n stays a literal backslash-n)
     ('32018', r'تمت إضافة\n[B]{}[/B]\nإلى\n[B]{}[/B]'),
@@ -1868,6 +1937,26 @@ def _feature_on(name):
     return False
 
 
+_OS_ID = []
+
+
+def _os_id():
+    """'libreelec', 'coreelec', ... from /etc/os-release ID, '' elsewhere
+    (desktop / Android). Cached."""
+    if not _OS_ID:
+        osid = ''
+        try:
+            with open('/etc/os-release', 'r', encoding='utf-8', errors='replace') as f:
+                for line in f:
+                    if line.startswith('ID='):
+                        osid = line.split('=', 1)[1].strip().strip('"').lower()
+                        break
+        except Exception:
+            pass
+        _OS_ID.append(osid)
+    return _OS_ID[0]
+
+
 def _select(group=None, addon_ids=None, respect_selection=True):
     """Return the patch entries to apply, optionally narrowed to addon ids.
 
@@ -1885,6 +1974,8 @@ def _select(group=None, addon_ids=None, respect_selection=True):
     # while that feature is switched on from its Toggles menu entry.
     selected = [p for p in selected
                 if not p.get('feature') or _feature_on(p['feature'])]
+    # 3.4.2: OS-gated entries ('os': 'libreelec' / 'coreelec' / ...)
+    selected = [p for p in selected if not p.get('os') or p['os'] == _os_id()]
     if respect_selection:
         disabled = _load_disabled()
         if disabled:
