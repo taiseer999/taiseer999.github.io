@@ -39,7 +39,8 @@ def build_install(name, name2, version, url):
     if not require_tools_backup():
         return
 
-    download_build(name, url)
+    if not download_build(name, url):
+        return          # nothing wiped - the box is untouched
     save_backup_restore('backup')
     fresh_start()
     extract_build()
@@ -76,7 +77,8 @@ def patch_gui(url):
     ):
         return
 
-    download_build(local_string(30113), url)
+    if not download_build(local_string(30113), url):
+        return
     extract_gui_patch()
 
     # Some skins (e.g. Arctic Fuse 3, via script.skinvariables) only rebuild
@@ -124,7 +126,8 @@ def patch_gui_no_wipe(url):
     ):
         return
 
-    download_build(local_string(30118), url)
+    if not download_build(local_string(30118), url):
+        return
     extract_userdata_patch()
 
     # Option 2 patches both the skin/menu templates (addons/skin.../shortcuts/)
@@ -186,10 +189,35 @@ def extract_userdata_patch():
         os.unlink(zippath)
 
 def download_build(name, url):
+    """Download and VERIFY the zip. Returns True only for a complete, valid
+    zip. Every caller must stop on False - build_install() wipes the box
+    (fresh_start) right after this, so a broken zip must never get that far."""
     if os.path.exists(zippath):
         os.unlink(zippath)
     d = Downloader(url)
-    d.download_build(name, zippath)
+    if not d.download_build(name, zippath):
+        dialog.ok(addon_name, local_string(30995))  # server stopped responding
+        return False
+    if not _zip_ok(zippath):
+        try:
+            os.unlink(zippath)
+        except Exception:
+            pass
+        dialog.ok(addon_name, local_string(30994))  # incomplete / not a zip
+        return False
+    return True
+
+
+def _zip_ok(path):
+    """Fast integrity check: a truncated download has no central directory
+    and an HTML error page is not a zip, so opening and listing catches both
+    without reading the whole archive."""
+    try:
+        with ZipFile(path, 'r') as z:
+            return len(z.infolist()) > 0
+    except Exception as e:
+        xbmc.log('AB Wizard: downloaded file is not a valid zip: %s' % e, xbmc.LOGERROR)
+        return False
 
 def extract_build():
     if os.path.exists(zippath):

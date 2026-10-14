@@ -1222,10 +1222,15 @@ PATCHES = [
     # every widget spawns one thread per item, and reuselanguageinvoker=false
     # builds a fresh Python interpreter for every plugin:// call. Cap the pool
     # at 3 and keep the interpreter warm. Takes effect after a Kodi restart.
+    # 3.3.4: own toggle (tmdbh_invoker) so the thread cap can stay on while
+    # invoker reuse is switched off; 'revert_when_off' puts 'false' back when
+    # the toggle is disabled (see _revert_disabled).
     {
         'addon_id': 'plugin.video.themoviedb.helper',
         'rel_path': 'addon.xml',
-        'toggle': 'tmdbh_stability',
+        'toggle': 'tmdbh_invoker',
+        'revert_when_off': ('<reuselanguageinvoker>true</reuselanguageinvoker>',
+                            '<reuselanguageinvoker>false</reuselanguageinvoker>'),
         'old': '<reuselanguageinvoker>false</reuselanguageinvoker>',
         'new': '<reuselanguageinvoker>true</reuselanguageinvoker>',
         'already_patched_check': '<reuselanguageinvoker>true</reuselanguageinvoker>',
@@ -1256,7 +1261,9 @@ PATCHES = [
         'old': '',
         'new': '',
         'already_patched_check': '<setting id="max_threads">3</setting>',
-        'fallback_pattern': r'<setting id="max_threads"(?: default="true")?\s*>\s*\d*\s*</setting>|<setting id="max_threads"(?: default="true")?\s*/>',
+        # 3.3.4: only an unlimited (0) / empty / self-closing value is
+        # rewritten - a number the user picked is kept (3.3.3 matched \d*).
+        'fallback_pattern': r'<setting id="max_threads"(?: default="true")?\s*>\s*0?\s*</setting>|<setting id="max_threads"(?: default="true")?\s*/>',
         'fallback_repl': '<setting id="max_threads">3</setting>',
         'not_found_ok': True,
         'description': 'TMDbHelper userdata settings.xml – max_threads=3',
@@ -1666,6 +1673,7 @@ TOGGLE_GROUPS = [
     ('tmdbh_trakt_auth', 'TMDbHelper Trakt Auth QR'),
     ('tmdbh_mpaa_ksa',   'MPAA for KSA'),
     ('tmdbh_stability',  'TMDbHelper: Stability'),
+    ('tmdbh_invoker',    'TMDbHelper: Keep Python Warm'),
     ('tinyppi_codecs',   'TinyPPI: Codec Badges'),
     ('tinyppi_audio',    'TinyPPI: Audio Badges'),
     ('tinyppi_arabic',   'PPI Arabic'),
@@ -1676,7 +1684,8 @@ TOGGLE_GROUPS = [
     ('fenlight_volume',  'Fenlight: Kill Volume Auto-Drop'),
     ('fenlight_tmdbh',   'Fenlight: TMDbHelper Playback Fix'),
     ('a4ksubs_utf8',     'a4kSubtitles: UTF-8 Subtitles Fix'),
-    ('a4ksubs_quiet',    'a4kSubtitles: Hide Account/API-Key Nags'),    ('af3_subtools',     'AF3: Subtitle Buttons (DexSubtitles Sync & Cycler)'),
+    ('a4ksubs_quiet',    'a4kSubtitles: Hide Account/API-Key Nags'),
+    ('af3_subtools',     'AF3: Subtitle Buttons (DexSubtitles Sync & Cycler)'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
 
@@ -2380,6 +2389,38 @@ def reload_skin_if_pending():
         return False
 
 
+def _revert_disabled(addon_ids=None):
+    """Undo entries that carry 'revert_when_off' = (patched, stock) when their
+    toggle is DISABLED. Plain one-shot string swap; yields (ok, msg)."""
+    disabled = _load_disabled()
+    if not disabled:
+        return
+    wanted = set(addon_ids) if addon_ids else None
+    for patch in _all_patches():
+        pair = patch.get('revert_when_off')
+        if not pair or _toggle_of(patch) not in disabled:
+            continue
+        if wanted is not None and patch['addon_id'] not in wanted:
+            continue
+        addon_path = _resolve_addon_dir(patch['addon_id'])
+        if patch.get('base') == 'addon_data':
+            addon_path = os.path.join(ADDON_DATA, patch['addon_id'])
+        if not addon_path:
+            continue
+        target = os.path.join(addon_path, patch['rel_path'])
+        if not os.path.isfile(target):
+            continue
+        try:
+            content = _read(target)
+            if pair[0] not in content:
+                continue
+            _write(target, content.replace(pair[0], pair[1], 1))
+            yield True, '[%s] Patched OK (reverted, toggle off): %s' % (
+                patch['addon_id'], patch['description'])
+        except Exception as e:
+            yield False, '[%s] Revert failed: %s' % (patch['addon_id'], e)
+
+
 def apply_set(group=None, addon_ids=None):
     """Silent patch core — no dialogs, safe to call from the service thread.
 
@@ -2416,6 +2457,15 @@ def apply_set(group=None, addon_ids=None):
                     changed += 1
             else:
                 failed += 1
+
+    for ok, msg in _revert_disabled(addon_ids):
+        _log(msg)
+        results.append((ok, msg))
+        if ok:
+            succeeded += 1
+            changed += 1
+        else:
+            failed += 1
 
     for _n, patch in enumerate(_select(group, addon_ids), 1):
         # Numbered trace (DEBUG since 3.1.0.15) so Kodi's duplicate-message filter

@@ -1336,3 +1336,15 @@ msgstr "تم تثبيت مدير الحسابات"
 msgctxt "#30429"
 msgid "Account Manager could not be installed.[CR]Make sure the Piers repository is installed, then try again."
 msgstr "تعذّر تثبيت مدير الحسابات.[CR]تأكد من تثبيت مستودع Piers ثم أعد المحاولة."
+
+msgctxt "#30994"
+msgid "Download failed - the build file is incomplete or is not a valid zip.[CR]Nothing was changed on this box. Check your connection and try again."
+msgstr "فشل التنزيل؛ ملف البيلد غير مكتمل أو ليس ملف zip صالحًا.[CR]لم يُغيَّر أي شيء على هذا الجهاز. تحقّق من اتصالك ثم أعد المحاولة."
+
+msgctxt "#30995"
+msgid "Download failed - the server stopped responding.[CR]Nothing was changed on this box. Check your connection and try again."
+msgstr "فشل التنزيل؛ توقّف الخادم عن الاستجابة.[CR]لم يُغيَّر أي شيء على هذا الجهاز. تحقّق من اتصالك ثم أعد المحاولة."
+
+msgctxt "#30996"
+msgid "Could not reach the server. Check your connection and try again."
+msgstr "تعذّر الوصول إلى الخادم. تحقّق من اتصالك ثم أعد المحاولة."

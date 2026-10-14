@@ -107,7 +107,7 @@ def file_check(bfile):
         
 def get_page(url):
        req = Request(file_check(url), headers = headers)
-       return urlopen(req).read().decode('utf-8')
+       return urlopen(req, timeout=20).read().decode('utf-8')
     
 def get_version():
     response = ''

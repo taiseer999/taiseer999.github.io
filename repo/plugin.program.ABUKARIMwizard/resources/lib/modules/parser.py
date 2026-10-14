@@ -98,5 +98,5 @@ def get_page(url):
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
     request = Request(url, headers=headers)
-    with urlopen(request) as response:
+    with urlopen(request, timeout=20) as response:
         return response.read().decode('utf-8')

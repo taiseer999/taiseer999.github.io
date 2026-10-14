@@ -13,7 +13,7 @@ from .maintenance import fresh_start, clear_packages, clear_thumbnails, advanced
 from .whitelist import get_whitelist
 from .addonvar import (addon, addon_name, addon_icon, gui_save_default, gui_save_user,
                        advancedsettings_k20, advancedsettings_k21, advancedsettings_k22,
-                       UPDATE_VERSION, CURRENT_BUILD, BUILD_URL)
+                       UPDATE_VERSION, CURRENT_BUILD, BUILD_URL, local_string)
 from .save_data import restore_gui, restore_skin, backup_gui_skin
 from .backup_restore import backup_build, restore_menu, restore_build, get_backup_folder, reset_backup_folder
 
@@ -223,8 +223,11 @@ def router(paramstring):
             xbmcgui.Dialog().notification(addon_name, 'No Notifications to Display!!', addon_icon, 3000)
             sys.exit()
         from . import notify
-        message = notify.get_notify()[1]
-        notify.notification(message)
+        info = notify.get_notify()
+        if not info:
+            xbmcgui.Dialog().notification(addon_name, local_string(30996), addon_icon, 4000)
+            sys.exit()
+        notify.notification(info[1])
 
     elif mode == 101:
         if changelog_dir in ('http://CHANGEME', ''):

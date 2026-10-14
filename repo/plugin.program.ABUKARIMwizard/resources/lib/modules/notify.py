@@ -8,7 +8,12 @@ from uservar import notify_url, changelog_dir
 from .addonvar import setting
 
 def get_notify() -> list:
-    response = get_page(notify_url)
+    try:
+        response = get_page(notify_url)
+    except Exception as e:
+        # Offline / server down / timeout: no popup, and do not stop startup.
+        xbmc.log('AB Wizard: notify fetch failed: %s' % e, xbmc.LOGWARNING)
+        return None
     try:
         split_response = response.split('|||')
         notify_version = int(split_response[0])
@@ -20,7 +25,7 @@ def get_notify() -> list:
 
 def get_changelog():
     build = setting('buildname')
-    rm_colors = "".join(re.split("\[|\]", build)[::2])
+    rm_colors = "".join(re.split(r"\[|\]", build)[::2])
     filename = rm_colors.replace(' ', '%20')
     changelog = '%s%s.txt' %(changelog_dir, filename)
     message = get_page(changelog)

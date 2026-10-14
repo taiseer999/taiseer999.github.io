@@ -10,7 +10,14 @@ ADDON_NAME = ADDON.getAddonInfo('name')
 ICON = ADDON.getAddonInfo('icon')
 
 class Downloader:
+    # 3.9.43: every network call has a timeout. For the build download it is
+    # per socket read, so a stalled server ends the download instead of
+    # freezing the progress dialog forever.
+    TIMEOUT = 60
+
     def __init__(self, url):
+        if url.startswith('https://www.dropbox.com'):
+            url = url.replace('dl=0', 'dl=1')   # dl=0 serves an HTML page
         self.url = url
         self.user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         self.headers = {"User-Agent": self.user_agent}
@@ -18,8 +25,8 @@ class Downloader:
     def get_urllib(self, decoding=True):
         req = Request(self.url, headers = self.headers)
         if decoding:
-            return urlopen(req).read().decode('utf-8')
-        return urlopen(req)
+            return urlopen(req, timeout=self.TIMEOUT).read().decode('utf-8')
+        return urlopen(req, timeout=self.TIMEOUT)
     
     def get_length(self, response):
         try:
@@ -28,7 +35,28 @@ class Downloader:
             return None
     
     def download_build(self, name, zippath):
+        """Download to zippath. Returns True when the whole file arrived.
+
+        False = network error / timeout / short read (the partial file is
+        deleted and the error logged). Cancel still exits as before.
+        """
         dp = xbmcgui.DialogProgress()
+        try:
+            return self._download(dp, name, zippath)
+        except Exception as e:
+            xbmc.log('AB Wizard: download failed (%s): %s' % (self.url, e), xbmc.LOGERROR)
+            try:
+                dp.close()
+            except Exception:
+                pass
+            try:
+                if os.path.exists(zippath):
+                    os.unlink(zippath)
+            except Exception:
+                pass
+            return False
+
+    def _download(self, dp, name, zippath):
         response = self.get_urllib(decoding=False)
         length = self.get_length(response)
         if length is not None:
@@ -86,4 +114,11 @@ class Downloader:
         
         xbmc.sleep(500)
         dp.close()
+        if length is not None and size != int(length):
+            # The server closed the connection early: a clean EOF, no error.
+            xbmc.log('AB Wizard: short download %d of %s bytes' % (size, length),
+                     xbmc.LOGERROR)
+            os.unlink(zippath)
+            return False
+        return True
     

@@ -1306,3 +1306,15 @@ msgstr ""
 msgctxt "#30429"
 msgid "Account Manager could not be installed.[CR]Make sure the Piers repository is installed, then try again."
 msgstr ""
+
+msgctxt "#30994"
+msgid "Download failed - the build file is incomplete or is not a valid zip.[CR]Nothing was changed on this box. Check your connection and try again."
+msgstr ""
+
+msgctxt "#30995"
+msgid "Download failed - the server stopped responding.[CR]Nothing was changed on this box. Check your connection and try again."
+msgstr ""
+
+msgctxt "#30996"
+msgid "Could not reach the server. Check your connection and try again."
+msgstr ""

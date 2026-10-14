@@ -174,7 +174,7 @@ class Image(xbmcgui.ControlImage):
     
     Example::
     
-        self.image = Image('d:\images\picture.jpg', aspectRatio=2)
+        self.image = Image('d:\\images\\picture.jpg', aspectRatio=2)
     """
     def __new__(cls, *args, **kwargs):
         return super(Image, cls).__new__(cls, -10, -10, 1, 1, *args, **kwargs)

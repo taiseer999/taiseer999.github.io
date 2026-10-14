@@ -177,6 +177,8 @@ class Startup:
             return
         
         info = notify.get_notify()
+        if not info:
+            return
         current_notify = int(setting('notifyversion'))
         notify_version = info[0]
         message = info[1]
@@ -216,6 +218,9 @@ class Startup:
             except Exception as e:
                 xbmc.log('Auto Clean failed: %s' % e, xbmc.LOGERROR)
             xbmc.sleep(1000)
-            self.notify_check()
+            try:
+                self.notify_check()
+            except Exception as e:
+                xbmc.log('AB Wizard: notify check failed: %s' % e, xbmc.LOGERROR)
             xbmc.sleep(3000)  # Delay Build Update Notification
             self.check_updates()
