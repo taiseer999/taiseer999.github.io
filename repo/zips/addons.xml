@@ -621,7 +621,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="3.4.3" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="3.4.4" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -652,7 +652,7 @@ updated YouTube addon URL
     <description lang="en_GB">ABUKARIM TOOLS is an all-in-one utility for managing your Kodi setup. It bundles a Skin Installer and Skin Switcher, full backup and restore of your userdata, and quick access to the ABUKARIM Wizard and its maintenance tools (Total Clean and old thumbnail cleanup). A built-in patcher keeps popular add-ons (Seren, Prism, TinyPPI, Arctic Fuse 3, TMDbHelper, RedLight and more) working correctly on CoreELEC and Kodi, and re-applies its fixes automatically after those add-ons update. Also includes handy maintenance tools such as a speed test, a CPU benchmark and an add-on database rebuild.</description>
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، ووصولاً سريعاً إلى معالج أبوكريم وأدوات الصيانة فيه (التنظيف الشامل وحذف الصور المصغّرة القديمة). كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة واختبار أداء المعالج وإعادة بناء قاعدة بيانات الإضافات.</description>
-    <news>v3.4.3 - LibreELEC community builds are recognised too, so the Arctic Fuse 3 LibreELEC start-up logo applies on them. v3.4.2 - Arctic Fuse 3 on LibreELEC: LibreELEC start-up logo instead of CoreELEC. v3.4.1 - FIX: a restore from the phone did not reinstall the add-ons; old backups also bring back the skin.</news>
+    <news>v3.4.4 - TMDbHelper genres now follow the language setting (Arabic genres instead of English). v3.4.3 - LibreELEC community builds are recognised too, so the Arctic Fuse 3 LibreELEC start-up logo applies on them. v3.4.2 - Arctic Fuse 3 on LibreELEC: LibreELEC start-up logo instead of CoreELEC. v3.4.1 - FIX: a restore from the phone did not reinstall the add-ons; old backups also bring back the skin.</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>

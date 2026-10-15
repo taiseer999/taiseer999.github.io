@@ -31,6 +31,41 @@ _TMDBH_CERTFALLBACK_OLD_B64 = 'Y2xhc3MgQ2VydGlmaWNhdGlvbihJdGVtRGV0YWlsc0xpc3QpO
 _TMDBH_CERTFALLBACK_NEW_B64 = 'Y2xhc3MgQ2VydGlmaWNhdGlvbihJdGVtRGV0YWlsc0xpc3QpOgogICAgIyAtLSBVU0EgY2VydGlmaWNhdGlvbiBmYWxsYmFjayAoYnkgQUJVS0FSSU0gVE9PTFMpIC0tCiAgICB0YWJsZSA9ICdjZXJ0aWZpY2F0aW9uJwogICAga2V5cyA9IHR1cGxlKENFUlRJRklDQVRJT05fQ09MVU1OUy5rZXlzKCkpCiAgICBjb25kaXRpb25zID0gJ3BhcmVudF9pZD0/IEFORCBpc29fY291bnRyeSBJTiAoPywgIlVTIikgQU5EIG5hbWUgSVMgTk9UIE5VTEwgQU5EIG5hbWUgIT0gIiIgT1JERVIgQlkgaXNvX2NvdW50cnk9PyBERVNDLCBJRk5VTEwocmVsZWFzZV9kYXRlLCAiOTk5OS05OS05OSIpIEFTQyBMSU1JVCAxJyAgIyBXSEVSRSBjb25kaXRpb25zCiAgICBjb25mbGljdF9jb25zdHJhaW50ID0gJ2lzb19jb3VudHJ5LCBpc29fbGFuZ3VhZ2UsIHJlbGVhc2VfZGF0ZSwgcmVsZWFzZV90eXBlLCBwYXJlbnRfaWQnCgogICAgQHByb3BlcnR5CiAgICBkZWYgdmFsdWVzKHNlbGYpOiAgIyBXSEVSRSBjb25kaXRpb25zIHZhbHVlcyBmb3IgPwogICAgICAgIGlzb19jb3VudHJ5ID0gc2VsZi5jb21tb25fYXBpcy50bWRiX2FwaS5pc29fY291bnRyeQogICAgICAgIHJldHVybiAoc2VsZi5wYXJlbnRfaWQsIGlzb19jb3VudHJ5LCBpc29fY291bnRyeSkK'
 
 
+# TMDbHelper ItemDetailsDatabase - genre language refresh (see the PATCHES entry).
+_TMDBH_GENRE_LANG_BLOCK = (
+    "\n"
+    "    # -- TMDbHelper genre language refresh (by ABUKARIM TOOLS) --\n"
+    "    # Genre rows carry no language and are never overwritten, so after a\n"
+    "    # language change they stay in the old language. Clear them once and\n"
+    "    # expire their items so they are refetched in the current language.\n"
+    "    def create_database(self):\n"
+    "        connection = super().create_database()\n"
+    "        try:\n"
+    "            self._abk_genre_language_refresh()\n"
+    "        except Exception as error:\n"
+    "            self.kodi_log(f'CACHE: ABK genre language refresh failed: {error}', 1)\n"
+    "        return connection\n"
+    "\n"
+    "    def _abk_genre_language_refresh(self):\n"
+    "        import sqlite3\n"
+    "        from tmdbhelper.lib.addon.plugin import get_language\n"
+    "        language = get_language() or 'en-US'\n"
+    "        con = sqlite3.connect(self._db_file, timeout=self._db_timeout)\n"
+    "        try:\n"
+    "            with con:\n"
+    "                con.execute('CREATE TABLE IF NOT EXISTS abk_meta(key TEXT PRIMARY KEY, value TEXT)')\n"
+    "                row = con.execute(\"SELECT value FROM abk_meta WHERE key='genre_language'\").fetchone()\n"
+    "                if row and row[0] == language:\n"
+    "                    return\n"
+    "                con.execute('UPDATE baseitem SET expiry=0 WHERE id IN (SELECT parent_id FROM genre)')\n"
+    "                cleared = con.execute('DELETE FROM genre').rowcount\n"
+    "                con.execute(\"INSERT OR REPLACE INTO abk_meta(key, value) VALUES ('genre_language', ?)\", (language, ))\n"
+    "        finally:\n"
+    "            con.close()\n"
+    "        self.kodi_log(f'CACHE: ABK genre language refresh -> {language} ({cleared} genre rows cleared)', 1)\n"
+)
+
+
 
 
 
@@ -1215,6 +1250,26 @@ PATCHES = [
         'toggle': 'tmdbh_stability',
         'description': 'TMDbHelper player.py \u2013 dead-player guard (getPlayingFile RuntimeError)',
     },
+    # ── TMDbHelper: genres follow the language setting (3.4.4) ──
+    # Genre names sit in ItemDetails.db with NO iso_language column (unlike
+    # title/plot in the translation table), and later writes only fill NULLs
+    # (ON CONFLICT ... ifnull), so an item first cached in English keeps English
+    # genres forever after switching TMDbHelper to ar-SA. This stamps the
+    # language inside ItemDetails.db; on the first DB init of a Kodi session
+    # where it differs (or no stamp yet) it clears the genre rows and expires
+    # their items, so TMDbHelper refetches them in the current language.
+    # Runs inside TMDbHelper's own init (no file deletion, no race with Kodi).
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'items', 'database', 'database.py'),
+        'toggle': 'tmdbh_genre_lang',
+        'old': "    cache_filename = 'ItemDetails.db'\n",
+        'new': "    cache_filename = 'ItemDetails.db'\n" + _TMDBH_GENRE_LANG_BLOCK,
+        'already_patched_check': '# -- TMDbHelper genre language refresh (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r"    cache_filename = [\"']ItemDetails\.db[\"'][ \t]*\r?\n",
+        'fallback_repl': r'\g<0>' + _TMDBH_GENRE_LANG_BLOCK,
+        'description': 'TMDbHelper database.py – refresh cached genres when the language changes',
+    },
     # ── TMDbHelper: thread cap + invoker reuse (3.3.3) ──
     # 2026-10-13 OOM kill on the AM9 (4 GB, no swap): kodi.bin reached 2.08 GB
     # anon-rss opening AF3's Korean hub after TraktHubs added 7 widgets. Stock
@@ -1793,6 +1848,7 @@ TOGGLE_GROUPS = [
     ('tmdbh_mpaa_ksa',   'MPAA for KSA'),
     ('tmdbh_stability',  'TMDbHelper: Stability'),
     ('tmdbh_invoker',    'TMDbHelper: Keep Python Warm'),
+    ('tmdbh_genre_lang', 'TMDbHelper: Genres Follow Language'),
     ('tinyppi_codecs',   'TinyPPI: Codec Badges'),
     ('tinyppi_audio',    'TinyPPI: Audio Badges'),
     ('tinyppi_arabic',   'PPI Arabic'),
