@@ -32,7 +32,7 @@ _TMDBH_CERTFALLBACK_NEW_B64 = 'Y2xhc3MgQ2VydGlmaWNhdGlvbihJdGVtRGV0YWlsc0xpc3QpO
 
 
 # TMDbHelper ItemDetailsDatabase - genre language refresh (see the PATCHES entry).
-_TMDBH_GENRE_LANG_BLOCK = (
+_TMDBH_GENRE_LANG_BLOCK_V1 = (
     "\n"
     "    # -- TMDbHelper genre language refresh (by ABUKARIM TOOLS) --\n"
     "    # Genre rows carry no language and are never overwritten, so after a\n"
@@ -63,6 +63,52 @@ _TMDBH_GENRE_LANG_BLOCK = (
     "        finally:\n"
     "            con.close()\n"
     "        self.kodi_log(f'CACHE: ABK genre language refresh -> {language} ({cleared} genre rows cleared)', 1)\n"
+)
+
+
+# v2 (3.4.5): new sentinel + stamp key 'genre_language_v2' so boxes that ran v1
+# while the global genre list (ItemQueries.db) was still English flush once more.
+_TMDBH_GENRE_LANG_BLOCK = (
+    _TMDBH_GENRE_LANG_BLOCK_V1
+    .replace('# -- TMDbHelper genre language refresh (by ABUKARIM TOOLS) --',
+             '# -- TMDbHelper genre language refresh v2 (by ABUKARIM TOOLS) --')
+    .replace("key='genre_language'", "key='genre_language_v2'")
+    .replace("VALUES ('genre_language', ?)", "VALUES ('genre_language_v2', ?)")
+)
+
+# TMDbHelper FindQueriesDatabase (ItemQueries.db) - the global genre list that
+# every item's genre NAMES are mapped from. It has no language column either and
+# is reused until its expiry, so it can sit in English under ar-SA.
+_TMDBH_GENRE_LIST_LANG_BLOCK = (
+    "\n"
+    "    # -- TMDbHelper genre list language refresh (by ABUKARIM TOOLS) --\n"
+    "    # The global genre list is cached without a language. When the language\n"
+    "    # changes (or no stamp yet) drop it so it is refetched in the current one.\n"
+    "    def create_database(self):\n"
+    "        connection = super().create_database()\n"
+    "        try:\n"
+    "            self._abk_genre_list_language_refresh()\n"
+    "        except Exception as error:\n"
+    "            self.kodi_log(f'CACHE: ABK genre list language refresh failed: {error}', 1)\n"
+    "        return connection\n"
+    "\n"
+    "    def _abk_genre_list_language_refresh(self):\n"
+    "        import sqlite3\n"
+    "        from tmdbhelper.lib.addon.plugin import get_language\n"
+    "        language = get_language() or 'en-US'\n"
+    "        con = sqlite3.connect(self._db_file, timeout=self._db_timeout)\n"
+    "        try:\n"
+    "            with con:\n"
+    "                con.execute('CREATE TABLE IF NOT EXISTS abk_meta(key TEXT PRIMARY KEY, value TEXT)')\n"
+    "                row = con.execute(\"SELECT value FROM abk_meta WHERE key='genre_list_language'\").fetchone()\n"
+    "                if row and row[0] == language:\n"
+    "                    return\n"
+    "                cleared = con.execute('DELETE FROM genres').rowcount\n"
+    "                con.execute(\"DELETE FROM expiry WHERE id='genres'\")\n"
+    "                con.execute(\"INSERT OR REPLACE INTO abk_meta(key, value) VALUES ('genre_list_language', ?)\", (language, ))\n"
+    "        finally:\n"
+    "            con.close()\n"
+    "        self.kodi_log(f'CACHE: ABK genre list language refresh -> {language} ({cleared} genres cleared)', 1)\n"
 )
 
 
@@ -1263,12 +1309,25 @@ PATCHES = [
         'addon_id': 'plugin.video.themoviedb.helper',
         'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'items', 'database', 'database.py'),
         'toggle': 'tmdbh_genre_lang',
-        'old': "    cache_filename = 'ItemDetails.db'\n",
+        # 'old' = a v1-patched file (upgraded in place); a stock file goes
+        # through the regex below instead.
+        'old': "    cache_filename = 'ItemDetails.db'\n" + _TMDBH_GENRE_LANG_BLOCK_V1,
         'new': "    cache_filename = 'ItemDetails.db'\n" + _TMDBH_GENRE_LANG_BLOCK,
-        'already_patched_check': '# -- TMDbHelper genre language refresh (by ABUKARIM TOOLS) --',
-        'fallback_pattern': r"    cache_filename = [\"']ItemDetails\.db[\"'][ \t]*\r?\n",
+        'already_patched_check': '# -- TMDbHelper genre language refresh v2 (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r"    cache_filename = [\"']ItemDetails\.db[\"'][ \t]*\r?\n(?!\r?\n    # -- TMDbHelper genre language refresh)",
         'fallback_repl': r'\g<0>' + _TMDBH_GENRE_LANG_BLOCK,
         'description': 'TMDbHelper database.py – refresh cached genres when the language changes',
+    },
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'query', 'database', 'database.py'),
+        'toggle': 'tmdbh_genre_lang',
+        'old': "    cache_filename = 'ItemQueries.db'\n",
+        'new': "    cache_filename = 'ItemQueries.db'\n" + _TMDBH_GENRE_LIST_LANG_BLOCK,
+        'already_patched_check': '# -- TMDbHelper genre list language refresh (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r"    cache_filename = [\"']ItemQueries\.db[\"'][ \t]*\r?\n",
+        'fallback_repl': r'\g<0>' + _TMDBH_GENRE_LIST_LANG_BLOCK,
+        'description': 'TMDbHelper query database.py \u2013 refresh the global genre list when the language changes',
     },
     # ── TMDbHelper: thread cap + invoker reuse (3.3.3) ──
     # 2026-10-13 OOM kill on the AM9 (4 GB, no swap): kodi.bin reached 2.08 GB

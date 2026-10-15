@@ -1,3 +1,17 @@
+v3.4.5
+- FIX for 3.4.4: on the Mac the flush worked (712 rows cleared) but genres
+  refetched in ENGLISH. TMDbHelper names every item's genres from its global
+  genre list in ItemQueries.db (genres table), which also has no language
+  column and is reused until expiry - it was English. "TMDbHelper: Genres
+  Follow Language" now also patches query/database/database.py
+  (FindQueriesDatabase.create_database): on language change (or no stamp
+  yet) it drops the genres table + its expiry row so the list refetches in
+  the current language. The ItemDetails block moves to v2 (new stamp key
+  genre_language_v2), so boxes that already ran 3.4.4 flush once more;
+  v1-patched files upgrade in place. Verified on TMDbHelper 6.16.2 + 6.17.9
+  through the real _apply_patch (stock, v1-patched, idempotent re-run) and
+  live SQLite runs.
+
 v3.4.4
 - New patch toggle "TMDbHelper: Genres Follow Language" (tmdbh_genre_lang).
   Genres showed English while title/plot were Arabic: TMDbHelper keeps genre
