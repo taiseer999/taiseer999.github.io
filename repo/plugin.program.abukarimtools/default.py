@@ -30,6 +30,7 @@ ICONS  = {
     'icons_toggle':   ADDON_PATH + 'resources/icons/icons_toggle.png',
     'af3_trailers':   ADDON_PATH + 'resources/icons/af3_trailers.png',
     'af3_waves':      ADDON_PATH + 'resources/icons/af3_waves.png',
+    'font_scale':     ADDON_PATH + 'resources/icons/font_scale.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/sources.png',
     'rebuild_addons33': ADDON_PATH + 'resources/icons/rebuild_addons33.png',
     'total_clean':    ADDON_PATH + 'resources/icons/clear_cache.png',
@@ -98,6 +99,7 @@ CATEGORIES = [
         ('icons_toggle',   30020),
         ('af3_trailers',   30430),
         ('af3_waves',      30603),
+        ('font_scale',     30740),
     ]),
     ('profiles', 30598, 'cat_profiles', [
         ('profile_export',  30596),
@@ -111,6 +113,8 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 # 3.1.19: an action, not a folder - as a folder its URL became
                 # the container path, so the skin reload re-ran it in a loop
                 'af3_trailers', 'af3_waves',
+                # 3.4.6: Font Size (original / +5% / -5%)
+                'font_scale',
                 # 3.2 tools: dialogs only, never folders (same reason as above)
                 'bootstrap', 'hw_tuning', 'webserver', 'log_share',
                 'remote_refresh', 'menu_reconcile', 'profile_export',
@@ -132,7 +136,7 @@ def _add_folder(label, cat_key, icon_key):
     xbmcplugin.addDirectoryItem(HANDLE, url, li, isFolder=True)
 
 
-def _add_item(label, mode, is_folder=True, switch=None):
+def _add_item(label, mode, is_folder=True, switch=None, label2=None):
     url = sys.argv[0] + '?mode=' + mode
     if mode == 'abukarimwizard':
         # Installed: link straight into the wizard's Maintenance menu, so it
@@ -143,7 +147,7 @@ def _add_item(label, mode, is_folder=True, switch=None):
             url = wizard_runner.wizard_url(wizard_runner.MODE_MAINTENANCE)
             is_folder = True
     if switch is None:
-        li  = xbmcgui.ListItem(label)
+        li  = xbmcgui.ListItem(label, label2 or '')
         li.setArt({'icon': ICONS[mode], 'thumb': ICONS[mode], 'fanart': FANART})
     else:
         # 3.2.23: on/off entries show the switch art + On/Off as label2
@@ -322,6 +326,17 @@ def _switch_state(mode):
     return None
 
 
+def _mode_label2(mode):
+    """label2 for multi-state entries (3.4.6: Font Size shows its mode)."""
+    if mode == 'font_scale':
+        try:
+            from resources.lib import font_scale
+            return font_scale.mode_label()
+        except Exception:
+            return None
+    return None
+
+
 def category_menu(cat_key):
     from resources.lib.i18n import T
     for c_key, _label_id, _icon, items in CATEGORIES:
@@ -330,7 +345,7 @@ def category_menu(cat_key):
         for mode, label_id in items:
             label = T(label_id)
             _add_item(label, mode, is_folder=(mode not in ACTION_MODES),
-                      switch=_switch_state(mode))
+                      switch=_switch_state(mode), label2=_mode_label2(mode))
         break
     xbmcplugin.setContent(HANDLE, 'files')
     # not cached: the Toggles list shows live on/off states
@@ -511,6 +526,9 @@ def router():
     elif mode == 'af3_waves':
         from resources.lib import af3_waves_toggle
         af3_waves_toggle.run()
+    elif mode == 'font_scale':
+        from resources.lib import font_scale
+        font_scale.run()
 
     elif mode == 'origin_fix':
         _end_directory()
