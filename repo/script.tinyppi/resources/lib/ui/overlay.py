@@ -55,9 +55,6 @@ _releasing = threading.Event()
 # toggles TinyPPI closed.
 _opening = threading.Lock()
 
-# Set True to allow launching on non-CoreELEC platforms (for testing).
-_ALLOW_NON_COREELEC = True
-
 # Arrow-key nudge: pixels per press.  Only when enabled (see _nudge_enabled)
 # and never saved; the next launch starts from the configured offsets.
 _NUDGE_STEP = 10
@@ -129,17 +126,6 @@ def _settings() -> xbmcaddon.Addon:
     return settings.addon()
 
 
-def _is_coreelec() -> bool:
-    """Return whether this is a CoreELEC installation."""
-    if os.path.isdir("/etc/coreelec"):
-        return True
-    try:
-        with open("/etc/os-release") as f:
-            return any("coreelec" in line.lower() for line in f)
-    except OSError:
-        return False
-
-
 def _notify_error(message_id: int) -> None:
     """Show an error notification with localized string *message_id*."""
     xbmcgui.Dialog().notification(
@@ -172,7 +158,18 @@ def _preflight(home: PropertyTarget, player: xbmc.Player, toggle_log: str) -> bo
     Returns True when a view may open; otherwise notifies (or toggles the
     open view closed) and returns False.
     """
-    # Platform gate removed: runs on any system.
+    # Runs on every platform (CoreELEC, LibreELEC, Linux, Windows, macOS,
+    # Android...).  Amlogic-only readings simply stay empty elsewhere.
+    build_version = xbmc.getInfoLabel("System.BuildVersion")
+    try:
+        major_version = int(build_version.split(".")[0])
+    except (ValueError, IndexError):
+        _notify_error(32216)
+        return False
+
+    if major_version < 22:
+        _notify_error(32215)
+        return False
 
     skin_path = xbmcvfs.translatePath("special://skin/")
     if os.path.exists(os.path.join(skin_path, "720p")):
@@ -552,8 +549,7 @@ def open_tinyppi() -> None:
     """Check the environment and show TinyPPI until the viewer closes it.
 
     Starts with the overlay; on a DV source OK switches to the metadata view
-    and Back returns.  Does nothing on non-CoreELEC (unless
-    ``_ALLOW_NON_COREELEC``), Kodi < 22, a 720p skin, without fullscreen
+    and Back returns.  Does nothing on Kodi < 22, a 720p skin, without fullscreen
     video or playback; toggles closed when already open.
     """
     home   = home_window()

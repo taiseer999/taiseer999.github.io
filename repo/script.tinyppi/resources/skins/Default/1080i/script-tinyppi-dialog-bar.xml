@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- ABUKARIM TOOLS: PPI Arabic -->
 <!-- Generated file - do not edit by hand; see tools/gen_dialog_skins.py.
      The bar: the choices in a row rather than stacked, in a panel low enough to leave most of the picture showing. -->
 <window type="dialog">
@@ -55,7 +54,7 @@
                     <top>12</top>
                     <width>1654</width>
                     <height>44</height>
-                    <font>abk_ppi_ar32</font>
+                    <font>font32</font>
                     <textcolor>$INFO[Window(10000).Property(TinyPPI.DialogHeaderColor)]</textcolor>
                     <align>left</align>
                     <aligny>center</aligny>
@@ -96,7 +95,7 @@
                         <height>80</height>
                         <label>[B][CAPITALIZE]$LOCALIZE[10116][/CAPITALIZE][/B]</label>
                         <align>center</align>
-                        <font>abk_ppi_ar21</font>
+                        <font>font23_narrow</font>
                         <onup>1001</onup>
                         <ondown>1001</ondown>
                         <onleft>1004</onleft>
@@ -114,7 +113,7 @@
                         <height>80</height>
                         <label>[B]Original[/B]</label>
                         <align>center</align>
-                        <font>abk_ppi_ar21</font>
+                        <font>font23_narrow</font>
                         <onup>1002</onup>
                         <ondown>1002</ondown>
                         <onleft>1001</onleft>
@@ -132,7 +131,7 @@
                         <height>80</height>
                         <label>[B]SDR → HDR10[/B]</label>
                         <align>center</align>
-                        <font>abk_ppi_ar21</font>
+                        <font>font23_narrow</font>
                         <onup>1003</onup>
                         <ondown>1003</ondown>
                         <onleft>1002</onleft>
@@ -150,7 +149,7 @@
                         <height>80</height>
                         <label>[B]SDR → Dolby Vision[/B]</label>
                         <align>center</align>
-                        <font>abk_ppi_ar21</font>
+                        <font>font23_narrow</font>
                         <onup>1004</onup>
                         <ondown>1004</ondown>
                         <onleft>1003</onleft>
@@ -171,7 +170,7 @@
                         <height>80</height>
                         <label>[B][CAPITALIZE]$LOCALIZE[10116][/CAPITALIZE][/B]</label>
                         <align>center</align>
-                        <font>abk_ppi_ar21</font>
+                        <font>font23_narrow</font>
                         <onup>1101</onup>
                         <ondown>1101</ondown>
                         <onleft>1008</onleft>
@@ -189,7 +188,7 @@
                         <height>80</height>
                         <label>[B]HDR10 (Original)[/B]</label>
                         <align>center</align>
-                        <font>abk_ppi_ar21</font>
+                        <font>font23_narrow</font>
                         <onup>1005</onup>
                         <ondown>1005</ondown>
                         <onleft>1101</onleft>
@@ -207,7 +206,7 @@
                         <height>80</height>
                         <label>[B]HDR10 → SDR[/B]</label>
                         <align>center</align>
-                        <font>abk_ppi_ar21</font>
+                        <font>font23_narrow</font>
                         <onup>1006</onup>
                         <ondown>1006</ondown>
                         <onleft>1005</onleft>
@@ -225,7 +224,7 @@
                         <height>80</height>
                         <label>[B]HDR10 → Dolby Vision[/B]</label>
                         <align>center</align>
-                        <font>abk_ppi_ar21</font>
+                        <font>font23_narrow</font>
                         <onup>1008</onup>
                         <ondown>1008</ondown>
                         <onleft>1006</onleft>
@@ -246,7 +245,7 @@
                         <height>80</height>
                         <label>[B][CAPITALIZE]$LOCALIZE[10116][/CAPITALIZE][/B]</label>
                         <align>center</align>
-                        <font>abk_ppi_ar21</font>
+                        <font>font23_narrow</font>
                         <onup>1201</onup>
                         <ondown>1201</ondown>
                         <onleft>1013</onleft>
@@ -264,7 +263,7 @@
                         <height>80</height>
                         <label>[B]Dolby Vision (Original)[/B]</label>
                         <align>center</align>
-                        <font>abk_ppi_ar21</font>
+                        <font>font23_narrow</font>
                         <onup>1012</onup>
                         <ondown>1012</ondown>
                         <onleft>1201</onleft>
@@ -282,7 +281,7 @@
                         <height>80</height>
                         <label>[B]Dolby Vision → SDR[/B]</label>
                         <align>center</align>
-                        <font>abk_ppi_ar21</font>
+                        <font>font23_narrow</font>
                         <onup>1013</onup>
                         <ondown>1013</ondown>
                         <onleft>1012</onleft>
@@ -303,7 +302,7 @@
                         <height>80</height>
                         <label>[B][CAPITALIZE]$LOCALIZE[10116][/CAPITALIZE][/B]</label>
                         <align>center</align>
-                        <font>abk_ppi_ar21</font>
+                        <font>font23_narrow</font>
                         <onup>1301</onup>
                         <ondown>1301</ondown>
                         <onleft>1301</onleft>

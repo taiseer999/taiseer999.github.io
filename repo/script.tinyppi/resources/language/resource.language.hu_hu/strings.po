@@ -868,12 +868,12 @@ msgid "Forest"
 msgstr "Erdőzöld"
 
 msgctxt "#32215"
-msgid "Only CoreELEC 22 or later is supported"
-msgstr "Csak CoreELEC 22 vagy újabb verzió támogatott"
+msgid "Only Kodi 22 or later is supported"
+msgstr "Csak Kodi 22 vagy újabb verzió támogatott"
 
 msgctxt "#32216"
-msgid "The CoreELEC version could not be detected"
-msgstr "A CoreELEC verziója nem ismerhető fel"
+msgid "The Kodi version could not be detected"
+msgstr "A Kodi verziója nem ismerhető fel"
 
 msgctxt "#32217"
 msgid "720p skins are not supported"
