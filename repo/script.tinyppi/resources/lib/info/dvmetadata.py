@@ -25,6 +25,8 @@ source range, so the last received block is held until replaced (see
 nothing and simply formats it.
 """
 
+from __future__ import annotations
+
 from collections.abc import Iterable
 from functools import cache
 

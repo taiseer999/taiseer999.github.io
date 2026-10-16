@@ -7,6 +7,8 @@ Keeps a Kodi monitor alive for the session to react to notifications, opens
 views handed over by main.py, runs the splash and owns the web dashboard.
 """
 
+from __future__ import annotations
+
 import os
 import threading
 

@@ -13,6 +13,8 @@ brackets, so the add-on's output is easy to filter:
 ``redacted`` takes the credentials out of a path before it is logged.
 """
 
+from __future__ import annotations
+
 import re
 from collections.abc import Callable
 

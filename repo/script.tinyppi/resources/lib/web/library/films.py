@@ -3,6 +3,8 @@
 
 """The film list and starting a film."""
 
+from __future__ import annotations
+
 import xbmc
 from web.library import cache, common
 from web.library.common import log

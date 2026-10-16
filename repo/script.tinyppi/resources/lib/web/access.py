@@ -18,6 +18,8 @@
   token (``trusted_host``).
 """
 
+from __future__ import annotations
+
 import hashlib
 import ipaddress
 import socket

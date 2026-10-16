@@ -8,6 +8,8 @@ setting, whether a video plays, and whether the stream is a DV + HDR10+
 hybrid.
 """
 
+from __future__ import annotations
+
 import json
 from functools import cache
 from typing import Any

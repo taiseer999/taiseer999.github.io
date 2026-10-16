@@ -3,10 +3,13 @@
 
 """Kodi API wrappers and shared window-state helpers."""
 
+from __future__ import annotations
+
 import re
 import threading
 import time
 from collections.abc import Collection, Hashable, Iterable
+from typing import TypeVar
 
 import xbmc
 import xbmcgui
@@ -232,7 +235,10 @@ def _changed_parts(previous: object, current: str | list[str]) -> list[int]:
 
 
 # ``Reading`` below: one string, or a list of cells (the metadata view's rows).
-def _colored_parts[Reading: (str, list[str])](value: Reading, parts: Collection[int],
+Reading = TypeVar("Reading", str, list[str])
+
+
+def _colored_parts(value: Reading, parts: Collection[int],
                                               color: str) -> Reading:
     """Return *value* with the parts listed in *parts* colored.
 
@@ -271,7 +277,7 @@ class ChangeHighlighter:
         self._values: dict[Hashable, str | list[str]] = {}
         self._until: dict[Hashable, dict[int, float]] = {}
 
-    def mark[Reading: (str, list[str])](self, key: Hashable, value: Reading, color: str,
+    def mark(self, key: Hashable, value: Reading, color: str,
                                         now: float | None = None) -> Reading:
         """Record *value* under *key* and return it with its changes colored.
 

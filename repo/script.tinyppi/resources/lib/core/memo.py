@@ -3,6 +3,8 @@
 
 """A one-entry memo for readings recomputed on every tick."""
 
+from __future__ import annotations
+
 from collections.abc import Hashable
 from typing import Any
 

@@ -868,8 +868,8 @@ msgid "Forest"
 msgstr "Waldgrün"
 
 msgctxt "#32215"
-msgid "Only Kodi 22 or later is supported"
-msgstr "Nur Kodi 22 oder neuer wird unterstützt"
+msgid "Only Kodi 21 or later is supported"
+msgstr "Nur Kodi 21 oder neuer wird unterstützt"
 
 msgctxt "#32216"
 msgid "The Kodi version could not be detected"

@@ -17,7 +17,10 @@ setting stores the color's swatch, so a color keeps its place in a setting
 when a family grows; only its name moves on.
 """
 
+from __future__ import annotations
+
 from collections.abc import Mapping
+from typing import TypeVar
 
 # Text, icons, lines and accents: (family, ARGB colors).
 TEXT = (
@@ -338,7 +341,10 @@ BACKGROUND = (
     )),
 )
 
-def named[Entry: (str, tuple[str, str])](
+Entry = TypeVar("Entry", str, tuple[str, str])
+
+
+def named(
     families: tuple[tuple[str, tuple[Entry, ...]], ...], fixed: Mapping[str, int],
 ) -> list[tuple[str | int, Entry]]:
     """Return ``(name, entry)`` for every color of *families*, in order.

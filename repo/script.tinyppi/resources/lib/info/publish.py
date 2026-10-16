@@ -9,6 +9,8 @@ before a window is shown.  The readings themselves come from
 ``info.properties``.
 """
 
+from __future__ import annotations
+
 
 import xbmcgui
 from core import settings

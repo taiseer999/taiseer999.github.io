@@ -868,8 +868,8 @@ msgid "Forest"
 msgstr "Erdőzöld"
 
 msgctxt "#32215"
-msgid "Only Kodi 22 or later is supported"
-msgstr "Csak Kodi 22 vagy újabb verzió támogatott"
+msgid "Only Kodi 21 or later is supported"
+msgstr "Csak Kodi 21 vagy újabb verzió támogatott"
 
 msgctxt "#32216"
 msgid "The Kodi version could not be detected"

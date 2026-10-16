@@ -3,6 +3,8 @@
 
 """What the library's lists share: the JSON-RPC seam and the row helpers."""
 
+from __future__ import annotations
+
 import json
 import math
 import zlib

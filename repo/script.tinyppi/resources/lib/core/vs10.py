@@ -9,6 +9,8 @@ involved: the dialog (ui.mode_select), the dashboard (web.vs10) and
 ``RunScript(script.tinyppi,run_mode,<mode>)`` all switch through here.
 """
 
+from __future__ import annotations
+
 import threading
 import time
 

@@ -3,6 +3,8 @@
 
 """The playing title's history for the dashboard: samples, events, counters."""
 
+from __future__ import annotations
+
 import threading
 import time
 from collections.abc import Mapping

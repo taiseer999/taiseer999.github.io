@@ -9,6 +9,8 @@ description.  The generator imports this outside Kodi, so Kodi modules are
 optional.
 """
 
+from __future__ import annotations
+
 from typing import TypedDict
 
 from core.constants import HOME_WINDOW_ID

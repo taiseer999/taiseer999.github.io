@@ -14,10 +14,12 @@ list, highlights changed readings for the highlight duration, and marks
 sections held from earlier frames as ``(Cached)`` (see _paint).
 """
 
+from __future__ import annotations
+
 import contextlib
 import threading
 import time
-from typing import Any
+from typing import Any, TypeVar
 
 import xbmc
 import xbmcgui
@@ -599,7 +601,10 @@ class DVSectionDialog(DVMetadataDialog):
             self._close(back_to_caller=False)
 
 
-def _dialog[Dialog: xbmcgui.WindowXMLDialog](dialog_class: type[Dialog]) -> Dialog:
+Dialog = TypeVar("Dialog", bound=xbmcgui.WindowXMLDialog)
+
+
+def _dialog(dialog_class: type[Dialog]) -> Dialog:
     """Create a *dialog_class* window from the metadata skin file."""
     return dialog_class(
         "script-tinyppi-dv-metadata.xml",

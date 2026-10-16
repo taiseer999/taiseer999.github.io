@@ -3,6 +3,8 @@
 
 """The "continue watching" row: partly watched films and episodes."""
 
+from __future__ import annotations
+
 from web.library import cache, common
 from web.library.common import log
 from web.library.entries import ArtPaths, ContinueListing, Continuing, Resumable

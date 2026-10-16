@@ -3,6 +3,8 @@
 
 """The dashboard's static files: the route table and a file cache."""
 
+from __future__ import annotations
+
 import gzip
 import os
 import threading

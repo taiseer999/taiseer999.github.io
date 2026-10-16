@@ -16,6 +16,8 @@ The logos are ``ControlImage`` controls added to the fullscreen video window
 Logos are re-resolved every poll, so audio track changes show live.
 """
 
+from __future__ import annotations
+
 import contextlib
 import os
 import time

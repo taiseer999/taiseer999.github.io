@@ -8,6 +8,8 @@ segments like the skin's ``$INFO`` (``render``).  ``overlay_rows`` mirrors
 the skin's conditional labels; ``web.snapshot`` fills the values.
 """
 
+from __future__ import annotations
+
 from collections.abc import Iterable
 
 from core.utils import cond, info, localized

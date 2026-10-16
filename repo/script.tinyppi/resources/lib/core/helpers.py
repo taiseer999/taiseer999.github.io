@@ -3,6 +3,8 @@
 
 """FPS sampling and formatting helpers for info.properties."""
 
+from __future__ import annotations
+
 import math
 import re
 

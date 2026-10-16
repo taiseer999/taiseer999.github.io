@@ -3,6 +3,8 @@
 
 """Text helpers shared by the snapshot, the player state and the library."""
 
+from __future__ import annotations
+
 import re
 from typing import Any
 

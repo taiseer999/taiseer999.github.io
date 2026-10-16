@@ -8,6 +8,8 @@ video window; sizes are fractions of the window's coordinate space
 (``window_dims``).
 """
 
+from __future__ import annotations
+
 import os
 
 import xbmcgui

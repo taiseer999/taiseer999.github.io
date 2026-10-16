@@ -7,6 +7,8 @@ Shared by ``info.dvmetadata`` and ``info.dvcomposer``; ui.dvmetadata reads
 the row kinds through ``info.dvmetadata``.
 """
 
+from __future__ import annotations
+
 import math
 from typing import Any
 

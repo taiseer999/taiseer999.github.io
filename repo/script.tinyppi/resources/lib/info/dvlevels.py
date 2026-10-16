@@ -10,6 +10,8 @@ MDCV / CLL SEIs and HDR10+.  Each returns ``(name, value)`` pairs or full
 sections.  Names, units and scalings follow the parser module's FIELDS.md.
 """
 
+from __future__ import annotations
+
 from collections.abc import Callable, Sequence
 from functools import partial
 

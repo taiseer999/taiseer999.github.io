@@ -8,6 +8,8 @@ base layer.  Their coefficients are the only derived values in the view:
 the RPU splits each into two halves (see ``_coefficient``).
 """
 
+from __future__ import annotations
+
 from collections.abc import Callable, Sequence
 from typing import Any
 

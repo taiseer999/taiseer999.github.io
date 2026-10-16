@@ -3,11 +3,13 @@
 
 """The cached lists, the revision that versions them and pending drops."""
 
+from __future__ import annotations
+
 import importlib
 import threading
 import time
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Generic, TypeVar
 
 from web.library.entries import ArtPaths, Continuing, Episodes, Films, Shows
 
@@ -29,10 +31,11 @@ _QUIET       = 2.0
 _BURST_LIMIT = 10.0
 
 # A list's reader: queries Kodi and returns the list as kept.
-type Reader[Kept] = Callable[[], Kept]
+Kept = TypeVar("Kept")
+Reader = Callable[[], Kept]
 
 
-class Slot[Kept]:
+class Slot(Generic[Kept]):
     """One cached list, read on demand and kept for ``_TTL``.
 
     Readers arriving while a read runs wait for its answer instead of

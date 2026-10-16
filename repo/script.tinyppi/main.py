@@ -7,6 +7,8 @@ The work is done in resources/lib/launcher.py; Kodi's add-on checker asks for
 entry points this small.
 """
 
+from __future__ import annotations
+
 import os
 import sys
 

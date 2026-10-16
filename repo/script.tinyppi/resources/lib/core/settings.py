@@ -16,6 +16,8 @@ Callers can compare the returned handle with the previous one (``is not``) to
 detect a settings change.
 """
 
+from __future__ import annotations
+
 import os
 import threading
 

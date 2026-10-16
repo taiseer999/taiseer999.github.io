@@ -22,6 +22,8 @@ when the series is opened, then cached alongside.
 The rest of the add-on uses only the names below.
 """
 
+from __future__ import annotations
+
 from web.library import cache, common, films, marks, progress, series
 from web.library.cache import changed, invalidate, new_cache, revision, settle
 from web.library.films import art_path, catalogue, movies, play

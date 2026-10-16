@@ -7,6 +7,8 @@ Three modes (``start``, ``osd`` and ``tinyppi``) each have their own logo
 choice and order, position, size and DV pill edge (see ``ui.splash``).
 """
 
+from __future__ import annotations
+
 from typing import NamedTuple
 
 import xbmcaddon

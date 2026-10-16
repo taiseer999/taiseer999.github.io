@@ -8,6 +8,8 @@ the string fields ``info.dvinfo`` serves; everything here is a pure
 function of its arguments.
 """
 
+from __future__ import annotations
+
 import re
 
 from info.dvformat import Block

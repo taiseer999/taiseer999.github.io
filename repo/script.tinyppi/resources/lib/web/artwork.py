@@ -4,6 +4,8 @@
 """Dashboard artwork: the playing title's poster and fanart, and the shelf
 pictures, read through Kodi's VFS."""
 
+from __future__ import annotations
+
 import contextlib
 import os
 import threading

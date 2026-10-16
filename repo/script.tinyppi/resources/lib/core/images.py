@@ -13,6 +13,8 @@ it survives Kodi restarts and add-on updates and is rebuilt only when either
 changes.  ``prune_cache`` removes copies that can no longer be requested.
 """
 
+from __future__ import annotations
+
 import binascii
 import contextlib
 import hashlib

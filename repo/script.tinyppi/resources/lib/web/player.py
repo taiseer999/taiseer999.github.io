@@ -4,6 +4,8 @@
 """The playing video over JSON-RPC: tracks, volume, chapters, live-TV times
 and the transport commands the dashboard may send."""
 
+from __future__ import annotations
+
 import json
 import math
 import re

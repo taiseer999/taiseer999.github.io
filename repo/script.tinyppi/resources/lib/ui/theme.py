@@ -9,6 +9,8 @@ Maps the color settings to ARGB hex strings and publishes them as Home-window
 in Kodi's color picker with the add-on's palette (see ``pick_color``).
 """
 
+from __future__ import annotations
+
 import contextlib
 import json
 import os

@@ -30,6 +30,8 @@ CoreELEC 22 on Amlogic only; elsewhere the label is empty and every field
 falls back to N/A.
 """
 
+from __future__ import annotations
+
 import threading
 import time
 

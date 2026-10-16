@@ -20,6 +20,8 @@ Unidentified films are never marked: guessing from the picture would mark
 every 1.78:1 film.
 """
 
+from __future__ import annotations
+
 import os
 import re
 import unicodedata

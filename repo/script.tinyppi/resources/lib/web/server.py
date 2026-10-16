@@ -10,6 +10,8 @@ the page's files in web/static.py.  Routes are a fixed table, never a filesystem
 state change needs the token.  The server is off unless enabled.
 """
 
+from __future__ import annotations
+
 import contextlib
 import secrets
 import socket

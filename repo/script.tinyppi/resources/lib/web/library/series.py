@@ -3,6 +3,8 @@
 
 """The series list, the episodes of an opened series and starting one."""
 
+from __future__ import annotations
+
 from collections.abc import Sequence
 
 import xbmc

@@ -8,6 +8,8 @@ diffed by web/delta.py and read by js/core.js.  Readings Kodi or the page
 hand over unchecked stay ``object`` (a track index from JSON-RPC, say).
 """
 
+from __future__ import annotations
+
 from typing import Literal, NotRequired, TypedDict
 
 # --- Player ----------------------------------------------------------------

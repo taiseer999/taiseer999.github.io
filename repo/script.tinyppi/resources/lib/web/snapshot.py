@@ -14,6 +14,8 @@ The player's tracks and commands live in web/player.py, the VS10 modes in
 web/vs10.py and the title's history in web/session.py.
 """
 
+from __future__ import annotations
+
 import time
 import zlib
 

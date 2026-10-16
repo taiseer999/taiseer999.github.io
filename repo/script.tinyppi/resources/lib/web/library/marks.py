@@ -3,6 +3,8 @@
 
 """Marking titles seen or unseen and clearing resume points."""
 
+from __future__ import annotations
+
 import time
 
 import xbmc

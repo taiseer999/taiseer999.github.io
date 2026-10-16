@@ -14,7 +14,10 @@ labels) is unchanged; otherwise the whole list is sent.  Other keys are
 compared and sent whole.
 """
 
+from __future__ import annotations
+
 from collections.abc import Callable, Mapping
+from typing import TypeVar
 
 from web.payloads import DeltaFrame, Group, MetadataRow, RowsDelta, Snapshot
 
@@ -80,7 +83,10 @@ def _fields_delta(previous: Mapping[str, object],
     return moved, gone
 
 
-def _list_delta[Item](
+Item = TypeVar("Item")
+
+
+def _list_delta(
     was: list[Item], now: list[Item],
     rows_delta: Callable[[list[Item], list[Item]], list[list[object]] | None],
 ) -> list[Item] | RowsDelta | None:

@@ -3,6 +3,8 @@
 
 """VS10 modes offered on the dashboard and the switches it requests."""
 
+from __future__ import annotations
+
 import threading
 
 import xbmc

@@ -7,6 +7,8 @@ Routes are a fixed table, never a filesystem lookup; every state change
 needs the token.
 """
 
+from __future__ import annotations
+
 import gzip
 import json
 import math

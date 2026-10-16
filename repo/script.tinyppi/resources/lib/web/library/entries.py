@@ -8,6 +8,8 @@ for it (see ``common.number``, ``common.rating``); js/films.js,
 js/series.js and js/continue.js read them.
 """
 
+from __future__ import annotations
+
 from typing import NotRequired, TypedDict
 
 # Artwork paths by library id and kind; kept beside a list, never sent.

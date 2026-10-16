@@ -6,6 +6,8 @@
 Imported by main.py (which sets up sys.path) and by the service.
 """
 
+from __future__ import annotations
+
 import contextlib
 import os
 import threading
@@ -167,7 +169,7 @@ def _preflight(home: PropertyTarget, player: xbmc.Player, toggle_log: str) -> bo
         _notify_error(32216)
         return False
 
-    if major_version < 22:
+    if major_version < 21:
         _notify_error(32215)
         return False
 
@@ -549,7 +551,7 @@ def open_tinyppi() -> None:
     """Check the environment and show TinyPPI until the viewer closes it.
 
     Starts with the overlay; on a DV source OK switches to the metadata view
-    and Back returns.  Does nothing on Kodi < 22, a 720p skin, without fullscreen
+    and Back returns.  Does nothing on Kodi < 21, a 720p skin, without fullscreen
     video or playback; toggles closed when already open.
     """
     home   = home_window()

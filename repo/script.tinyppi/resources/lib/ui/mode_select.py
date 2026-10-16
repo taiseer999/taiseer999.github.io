@@ -7,6 +7,8 @@ Open via ``RunScript(script.tinyppi,dialog)`` or ``open_dialog()``; the
 chosen mode is applied by ``core.vs10.set_mode``.
 """
 
+from __future__ import annotations
+
 import threading
 from typing import Any
 

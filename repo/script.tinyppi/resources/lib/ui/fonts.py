@@ -17,6 +17,8 @@ A skin with several resolution folders (``<res folder=...>`` in its
 addon.xml) has one Font.xml per folder; each gets the entries.
 """
 
+from __future__ import annotations
+
 import contextlib
 import os
 import re

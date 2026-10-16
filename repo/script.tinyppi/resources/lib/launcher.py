@@ -7,6 +7,8 @@ main.py, the entry point Kodi starts, puts resources/lib on the import path
 and calls ``main``.
 """
 
+from __future__ import annotations
+
 import os
 import sys
 import time

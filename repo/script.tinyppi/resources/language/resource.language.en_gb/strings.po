@@ -868,7 +868,7 @@ msgid "Forest"
 msgstr ""
 
 msgctxt "#32215"
-msgid "Only Kodi 22 or later is supported"
+msgid "Only Kodi 21 or later is supported"
 msgstr ""
 
 msgctxt "#32216"

@@ -19,6 +19,8 @@ Kodi has no container InfoLabel, so the container comes from the file
 extension; a stream without one leaves that part out.
 """
 
+from __future__ import annotations
+
 import re
 from collections.abc import Callable
 

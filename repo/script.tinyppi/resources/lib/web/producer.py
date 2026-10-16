@@ -7,6 +7,8 @@ One thread builds the snapshot every open dashboard receives, so five tabs
 cost the same as one.
 """
 
+from __future__ import annotations
+
 import threading
 import time
 
