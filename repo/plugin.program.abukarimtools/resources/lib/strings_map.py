@@ -488,4 +488,14 @@ STRINGS = {
     30737: ('Restore finished. Restart now so every setting takes effect?',
             'اكتملت الاستعادة. هل تريد إعادة التشغيل الآن ليُطبَّق كل إعداد؟'),
     30738: ('Restored from the phone - restart to finish', 'تمت الاستعادة من الجوال، أعد التشغيل لإكمالها'),
+    # ---- 3.4.6: Font Size mode (30740-30749) ----
+    30740: ('Font Size', 'حجم الخط'),
+    30741: ('Original', 'الأصلي'),
+    30742: ('Smaller (-10%)', 'أصغر (-10%)'),
+    30743: ('Smaller (-5%)', 'أصغر (-5%)'),
+    30744: ('Font size: %s - restarting Kodi...', 'حجم الخط: %s - جارٍ إعادة تشغيل Kodi...'),
+    30746: ('Smaller (-15%)', 'أصغر (-15%)'),
+    30747: ('Smaller (-20%)', 'أصغر (-20%)'),
+    30745: ('The font size could not be changed - the skin files cannot be written.',
+            'تعذّر تغيير حجم الخط، إذ لا يمكن الكتابة في ملفات الواجهة.'),
 }
