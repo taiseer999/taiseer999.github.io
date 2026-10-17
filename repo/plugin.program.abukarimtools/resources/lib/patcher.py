@@ -2760,25 +2760,6 @@ def apply_set(group=None, addon_ids=None):
         else:
             failed += 1
 
-    # 3.4.6: Font Size mode (original / +5% / -5%) - LAST, so font blocks the
-    # patches above just added to the skin get scaled in the same pass. A skin
-    # update brings stock sizes back; this puts the chosen mode back on.
-    if not addon_ids or any(_is_active_skin(a) for a in _scope):
-        try:
-            from resources.lib import font_scale
-            ok, msg, wrote = font_scale.reconcile()
-        except Exception as e:
-            ok, msg, wrote = False, '[font size] %s' % e, False
-        _log(msg)
-        results.append((ok, msg))
-        if ok:
-            succeeded += 1
-        else:
-            failed += 1
-        if wrote:
-            changed += 1
-            _mark_skin_reload()
-
     _log('Patch run complete: %d OK, %d failed, %d written.'
          % (succeeded, failed, changed))
     return succeeded, failed, changed, results

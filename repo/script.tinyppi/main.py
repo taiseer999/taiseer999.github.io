@@ -1,24 +1,57 @@
-# SPDX-License-Identifier: AGPL-3.0-or-later
-# Copyright (c) 2026 U3knOwn
-
-"""Add-on entry point: put resources/lib on the import path and run the command.
-
-The work is done in resources/lib/launcher.py; Kodi's add-on checker asks for
-entry points this small.
-"""
-
-from __future__ import annotations
+"""Addon entry point: bootstrap the lib path and dispatch the command."""
 
 import os
 import sys
 
-# Derived from this file, without asking Kodi.
-_LIB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                         "resources", "lib")
-if _LIB_PATH not in sys.path:
-    sys.path.insert(0, _LIB_PATH)
+import xbmcaddon
 
-from launcher import main  # noqa: E402  needs the path above
+
+def _bootstrap_lib_path(addon: xbmcaddon.Addon) -> None:
+    """Add resources/lib to the import path once."""
+    lib_path = os.path.join(addon.getAddonInfo("path"), "resources", "lib")
+    if lib_path not in sys.path:
+        sys.path.insert(0, lib_path)
+
+
+def _split_args(raw_args: list[str]) -> list[str]:
+    """Flatten Kodi's comma-separated script arguments."""
+    args: list[str] = []
+    for raw in raw_args:
+        args.extend(raw.split(","))
+    return args
+
+
+def main() -> None:
+    """Dispatch TinyPPI's script entry point."""
+    addon = xbmcaddon.Addon()
+    _bootstrap_lib_path(addon)
+
+    from ui.mode_select import set_mode
+    from ui.overlay import open_dialog_mode, open_tinyppi
+
+    args = _split_args(sys.argv[1:])
+    command = args[0] if args else ""
+
+    if not command:
+        if addon.getSetting("launch_mode") == "1":
+            open_dialog_mode()
+        else:
+            open_tinyppi()
+        return
+
+    if command == "dialog":
+        open_dialog_mode()
+    elif command == "splash":
+        from ui.splash import open_splash
+        open_splash()
+    elif command == "run_mode" and len(args) > 1:
+        set_mode(args[1])
+    elif command == "custom_color" and len(args) > 1:
+        from ui.theme import custom_color
+        custom_color(args[1])
+    else:
+        open_tinyppi()
+
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,1219 @@
+v3.4.9
+- Font Size: new mode Smaller (-20%) (smaller20, factor 0.80). Same
+  behaviour as the others: TinyPPI-owned fonts untouched, change restarts Kodi.
+
+v3.4.8
+- Font Size modes are now Original, Smaller (-5%), Smaller (-10%) and
+  Smaller (-15%). The +5% "Larger" mode is removed; a box still saved on it
+  is put back to Original by the next patch sweep.
+- Changing the mode from the menu now force-restarts Kodi (the add-on's
+  usual restart path: ABUKARIM Wizard > Force Close, direct exit as
+  fallback) instead of ReloadSkin. CoreELEC comes straight back; on
+  macOS/desktop Kodi closes and is reopened by hand. Picking the mode that
+  is already active changes nothing and does not restart.
+
+v3.4.7
+- FIX for 3.4.6 (kodi.log 2026-10-15 21:37-21:39, Mac, AF3 50.11.3): choosing
+  "Larger" started an endless ReloadSkin loop (~1.3 s per cycle). TinyPPI's
+  fonts.py requires font23_narrow/font32 on special://xbmc/media/Fonts/
+  arial.ttf at EXACT sizes 21/32 (plus abk_ppi_ar21/32 on this build) in
+  every fontset and re-inserts copies on each skin load when they don't
+  match. Font Size scaled them to 22/34 -> TinyPPI inserted 21/32 copies ->
+  the sweep scaled those -> reload -> repeat, adding duplicate blocks to
+  Font.xml each pass. Now those TinyPPI-owned entries (protected names on an
+  absolute special:// path) are never scaled - an earlier scaled copy goes
+  back to its original - and exact duplicates of them inside a fontset are
+  removed (first kept). Every other font still scales. Reproduced against
+  TinyPPI's real check/insert code: 3.4.6 loops (289 font blocks after 8
+  cycles), 3.4.7 cleans up in one write and then stays settled.
+- Safety: if the font files get rewritten more than 4 times in 5 minutes,
+  the Font Size reconcile pauses for the session instead of fighting;
+  picking a mode in the menu clears the pause.
+
+v3.4.6
+- New Toggles entry "Font Size" (حجم الخط) with three modes: Original,
+  Larger (+5%) and Smaller (-5%). Applies to EVERY font of the active skin:
+  each literal <size> in a <font> block and each <param name="size_*"> in
+  Font.xml and the skin's other *font*.xml files (AF3: Font.xml +
+  Includes_Font.xml - all 9 fontsets, Font_Default/Font_Static, the TinyPPI
+  overlay fonts and the PPI Arabic fonts). Sizes stay integers (Kodi reads
+  <size> with GetInt). Each scaled value keeps its original beside it as
+  <!--abk-fs:N-->, so switching modes always scales from the original and
+  "Original" restores the files exactly. The mode is saved in addon_data
+  (font_scale.json) and re-applied by every patch sweep, so a skin update
+  or a newly added font block gets the chosen size again. The menu shows
+  the current mode; a change reloads the skin.
+
+v3.4.5
+- FIX for 3.4.4: on the Mac the flush worked (712 rows cleared) but genres
+  refetched in ENGLISH. TMDbHelper names every item's genres from its global
+  genre list in ItemQueries.db (genres table), which also has no language
+  column and is reused until expiry - it was English. "TMDbHelper: Genres
+  Follow Language" now also patches query/database/database.py
+  (FindQueriesDatabase.create_database): on language change (or no stamp
+  yet) it drops the genres table + its expiry row so the list refetches in
+  the current language. The ItemDetails block moves to v2 (new stamp key
+  genre_language_v2), so boxes that already ran 3.4.4 flush once more;
+  v1-patched files upgrade in place. Verified on TMDbHelper 6.16.2 + 6.17.9
+  through the real _apply_patch (stock, v1-patched, idempotent re-run) and
+  live SQLite runs.
+
+v3.4.4
+- New patch toggle "TMDbHelper: Genres Follow Language" (tmdbh_genre_lang).
+  Genres showed English while title/plot were Arabic: TMDbHelper keeps genre
+  names in ItemDetails.db with no language column and only fills NULLs on
+  later writes, so items cached under English stay English after switching
+  to ar-SA. The patch adds a language stamp to ItemDetails.db (database.py,
+  ItemDetailsDatabase.create_database); on the first DB init of a Kodi
+  session where the language differs (or no stamp yet) it clears the genre
+  rows and expires their items, so they refetch in the current language.
+  No file deletion, runs inside TMDbHelper's own init. Verified on
+  TMDbHelper 6.16.2 and 6.17.9 (exact + regex paths, AST-clean, real SQLite
+  run: flush on first run, no-op on same language, flush on change).
+
+v3.4.3
+- kodi.log 2026-10-14 19:42 (LibreELEC (community) DV-R1.0.0-Beta3 13.0,
+  x86, Kodi 22.0-RC1, AF3 50.11.2, AB Tools still 3.4.1): patcher 79 OK /
+  0 failed; nothing of ours failing. patcher._os_id() now also recognises
+  LibreELEC / CoreELEC from NAME (or any os-release line) when a community
+  build sets a non-standard ID, so the 'os': 'libreelec' entries apply
+  there. Logged once as "OS id: ...". Verified: stock LE, community LE
+  (ID=le-community), CoreELEC, Ubuntu.
+- Seen in the same log, not ours: AF3 50.11.2 there has no
+  fonts/LeagueSpartan-ExtraBold.ttf (font_infotag_bold and
+  font_clearlogo_spartan fall back to arial.ttf); TMDb Helper widgets
+  returned "GetDirectory - Error" 7 s after boot (no traceback at info
+  level); the service was started by the Guardian 28 s after boot.
+
+v3.4.2
+- User request: on LibreELEC, Arctic Fuse 3 should use the supplied
+  Includes_Font.xml / Includes_Objects.xml. Compared with AF3 5.17.0 (both
+  the taiseer999.github.io and the Piers copy) those files are an OLDER
+  AF3: a whole-file replace would delete font_infotag_bold (codec flag),
+  font_title_info + size_info_title (info title) and
+  Object_Statistics_Panel / StatisticsDots, and swap the font family and
+  sizes. Their LibreELEC-specific change is the start-up logo only, so it
+  ships as two targeted, version-independent patcher entries:
+    1080i/Includes_Objects.xml  first grouplist of Object_StartUp_Logo ->
+        height 260 / centertop 265, image 192x192 extras/icons/libreelec.png
+        (ships with AF3), label "LibreELEC" height 60, font_logo_xlarge
+        (byte-for-byte the supplied block; sentinel <!-- ABK LibreELEC logo -->)
+    1080i/Includes_Font.xml     font_logo_xlarge (Questrial-Regular 110)
+        after font_logo_large; skipped when the skin already defines it.
+- New patch field 'os' + patcher._os_id() (/etc/os-release ID, cached):
+  both entries carry 'os': 'libreelec' and are selected only there
+  (CoreELEC / desktop / Android: never). Always-on (no toggle); the
+  watchdog re-applies them after an AF3 update.
+- Verified on both real AF3 5.17.0 copies: written once then skipped, the
+  logo block equals the supplied one, one font_logo_xlarge, both files
+  parse as XML, font_infotag_bold / Object_Statistics_Panel kept; selected
+  for libreelec only.
+
+v3.4.1
+- kodi.log 2026-10-14 10:17:48 (3.4.0, phone restore of a 3.3.x backup):
+  "add-on reinstall failed: _job_restore.<locals>.job.<locals>.<lambda>()
+  missing 1 required positional argument: 'arc'" - reinstall_missing()
+  called the restore progress callback as (pct, msg) while restore
+  callbacks are (i, total, name). Nothing was installed. Now
+  progress(96, 100, 'add-ons'), fenced. (The 3.4.0 test restored without a
+  callback, so it never ran that line - the new test uses the phone's.)
+- Pre-3.4.0 backups (no abk_manifest.json): their guisettings said
+  lookandfeel.skin = skin.estuary (default) although the box's AF3 settings
+  are in the zip. When the backup skin is Estuary/empty and exactly one
+  other installed skin has addon_data in the zip, switch to that one.
+- reinstall_missing(): add-ons that ship with Kodi (special://xbmc/addons,
+  e.g. skin.estuary) are never queued for install - they are not in the
+  user addons folder, so 3.4.0 treated them as missing.
+- Verified: the user's case (3.3.x backup, guisettings Estuary, addon_data
+  of seren / fenlight / AF3 / Estuary / a module, phone callback) -> repos
+  ok, fenlight + seren from repository.taiseer, AF3 from
+  repository.taiseerKODI22, Estuary and the module skipped, switched to AF3,
+  no reinstall error. 3.4.0 manifest test and phone tests unchanged.
+
+v3.4.0
+- User report: "why does the restore not bring back the (video) add-ons and
+  the skin". A backup held userdata only (addon_data, guisettings, keymaps),
+  so on a box without those add-ons only their settings came back and the
+  skin switch had nothing to switch to.
+- Backup (TV and phone): new abk_manifest.json - every installed add-on in
+  special://home/addons except libraries (script.module.*, resource.*,
+  metadata.*, inputstream.*, ... and xbmc.python.module) and AB Tools
+  itself: {id, name, version, kind skin|repo|addon, origin} (origin from
+  Addons33.db via origin_fix.snapshot_origins), plus the active skin, plus
+  the repository add-ons themselves as addons/repository.*/... (files
+  > 2 MB skipped).
+- Restore: the manifest and addons/ are not written into userdata;
+  repositories missing on the box are extracted to special://home/addons,
+  then UpdateLocalAddons, enable + pin origin, UpdateAddonRepos, wait for
+  the listings; then reinstall_missing() installs every add-on/skin the
+  box lacks from its own origin with addon_portal._install_selection
+  (deps, enable, origin pin); no origin -> the repo whose cached listing
+  carries it (origin_fix._repo_candidates/_pick_repo), else Kodi's
+  InstallAddon (30 s). Backups from before 3.4.0 (no manifest): the
+  plugin.video.* / plugin.program.* / skin.* whose addon_data is in the zip.
+  Then the skin switch (guisettings lookandfeel.skin, else manifest skin).
+- Result {installed, failed} shown on the phone ("ثُبِّتت N من الإضافات",
+  failures named). Same path for the TV restore and the Installation
+  Wizard restore step.
+- Verified (mocked Kodi): manifest lists Seren / AF3 / both repos with
+  origins (module + AB Tools left out), repo files in the zip; after
+  removing them, restore put both repos back, installed Seren from
+  repository.taiseer and AF3 from repository.taiseerKODI22, switched to AF3,
+  nothing leaked into userdata; an old backup reinstalled fenlight via the
+  DB repo lookup. Phone tests unchanged.
+
+v3.3.9
+- kodi.log 2026-10-14 10:00 (3.3.8 on the Mac): the phone restore worked -
+  "guisettings.xml ... applied live", "Kodi settings applied live from the
+  backup: 1", "skin.estuary has no skinvariables build template - no
+  rebuild", job ok, RestartApp from the phone at 10:00:51. No skin switch
+  because the backup itself was taken on Estuary (its lookandfeel.skin is
+  the active skin), so restoring it onto the same box changes nothing
+  visible - expected.
+- phone_setup: socketserver printed "Exception occurred during processing
+  of request ... ConnectionResetError" (09:54:06, 10:00:46) and the plugin
+  waited on handler threads after the QR screen closed: the phone's idle
+  keep-alive sockets. Now every reply sends "Connection: close" and closes,
+  handler sockets time out after 20 s, threads are daemons, and a
+  reset / broken pipe / timeout is one debug line (_Server.handle_error).
+  Verified: connection closed after the reply, Finish -> stopped in 0.5 s
+  with an idle connection open, no traceback on a reset.
+- backup_manager._after_restore(): the menu-rebuild check is fenced - a
+  finished restore is never reported as failed because of it.
+
+v3.3.8
+- kodi.log 2026-10-14 09:53 (Mac): a phone restore "did nothing" although it
+  ran (Restore completed, 120 skin settings pushed). Causes: guisettings.xml
+  could not be staged (/storage/.guisettings_pending.xml - /storage exists
+  only on *ELEC), Estuary was the active skin so the restored Arctic Fuse 3
+  menus / settings were invisible, the skinvariables rebuild crashed ("Unable
+  to load special://skin/shortcuts/skinvariables-build-templates.json") and
+  nothing on the TV or phone said what happened. A second tap restored again
+  after the server had stopped.
+- backup_manager._after_restore() (TV and phone restore): non-*ELEC ->
+  apply_guisettings_live() pushes the backup's non-default Kodi settings via
+  JSON-RPC Settings.SetSettingValue (typed from Settings.GetSettings; skin,
+  audio/video output, network, services, system, debug left out; only
+  changed values). *ELEC keeps the staging + autostart.sh path. Then, when
+  the backup's lookandfeel.skin is installed and not active, switch to it
+  (skin_switcher._swap_skin, confirm auto-answered) so the restored menus
+  and skin settings show. Rebuild only when the skin has
+  shortcuts/skinvariables-build-templates.json (also after a TV backup).
+  TV restore offers a restart (30737).
+- restore_backup() returns (files, cancelled, after); phone job result now
+  {files, settings, skin, restart}; TV notification 30738.
+- phone_setup: no new job once Finish / BACK / idle stopped the session
+  (S.stopped) - the late second restore in the log is refused (409).
+- Phone page: the picked file name and size show at once, the restore
+  result says what was restored (files, Kodi settings, skin) with a restart
+  button in place, and every message scrolls into view.
+- Verified (mocked Kodi, desktop, Estuary active, backup from AF3): 2 Kodi
+  settings set live (audio device skipped, default rows skipped), skin
+  switched to AF3, TV notification, no rebuild on a skin without the
+  template, upload after Finish -> 409.
+
+v3.3.7
+- New resources/lib/phone_setup.py + resources/phone/index.html: "Setup
+  from your phone" (الإعداد من الجوال), suggested by the Dex Hub developer.
+  The TV shows a QR (abk_qr.xml, non-modal) with http://<box-ip>:<port>/?t=
+  <random token>; a ThreadingHTTPServer on 8091-8099 serves an Arabic (MSA)
+  mobile page. Everything reuses the TV code, only the questions move:
+    backup   backup_manager.write_backup() -> download to the phone
+    restore  upload a zip (<= 2 GB, must be a zip) -> restore_backup()
+    add-ons  Add-on Portal catalog, addon_portal._install_selection()
+    layout   af3_shortcuts.apply(light|moderate|full)
+    lists    Original, or Trakt: trakt_hubs.phone_fetch() / phone_apply()
+             (add / replace); "link Trakt" runs TMDb Helper's QR on the TV
+    anime    trakt_hubs.phone_anime() (Otaku installed when missing)
+    patches  toggles saved + patcher.apply_set()
+    reboot / finish
+  Safety: token on every request (403 otherwise, hmac compare), one job at
+  a time (409), server up only while the QR is shown - BACK on the TV,
+  Finish on the phone or 30 min idle stops it (a running job finishes).
+  Progress dialogs of the reused tools still show on the TV.
+- backup_manager: the restore loop moved into _restore_members() (TV restore
+  unchanged), plus headless write_backup() / restore_backup().
+- First run: new Step 1d after the skin + device tuning - "Continue the
+  setup from your phone?" (من الجوال / على التلفاز). Sections finished on
+  the phone skip their TV step (restore, portal, layout, lists); the rest
+  of the sequence (patches, password, ...) runs as before.
+- Menu: Setup & Install -> الإعداد من الجوال (icon phone_setup.png).
+- Strings 30730-30736 (EN + AR Fusha).
+- Verified with mocked Kodi + real HTTP: bad token 403, page, info, backup
+  + download (zip contents checked), restore upload (file restored), junk
+  upload 400, add-ons (unknown ids ignored), layout, Trakt fetch + apply
+  (hub widgets written), anime (Otaku installed, home rows), patches
+  (toggles saved), busy 409, finish -> TV QR closed and server stopped.
+  Page rendered in Chromium at phone size, no JS errors.
+
+v3.3.6
+- remote_config: patches.json / portal.json / presets.json / config.json now
+  come ONLY from the taiseer999.github.io repo (branch main, folder
+  abukarim/). The old URL, taiseer999Piers.github.io/master/abukarim/, never
+  existed - kodi.log 2026-10-14 05:44:28 "refresh: {... all 'missing'}", so
+  no box ever got a remote file. Until abukarim/ is published there the
+  built-in defaults apply, exactly as before (a 404 = 'missing').
+- addon_portal._catalog(): the remote portal.json now MERGES over the
+  built-in CATALOG (same id overrides, new ids appended, "remove": [ids],
+  "replace": true for the old full replace), so a stale portal.json can
+  never shrink the Add-on Portal again.
+- New always-on patcher entries (13): script.skinvariables
+  resources/language/resource.language.ar_sa/strings.po - kodi.log
+  05:44:18 "POParser: missing msgstr line in entry" x13. skinvariables
+  2.2.8 on taiseer999.github.io (repo/ source and repo/zips) has the Arabic
+  on a second msgid line, so Kodi dropped #32018 #32025 #32028
+  #32034-#32041 #32043 #32084 and showed English. Each entry rewrites its
+  msgstr in Modern Standard Arabic (the old text also had English "to"/"as"
+  and typos); regex per id, sentinel = the new msgstr head, so it applies
+  once and skips after. Verified on the repo's real file: 13 written, then
+  0; the result parses (polib) where the original does not. Takes effect
+  after a Kodi restart; script.skinvariables is now watched.
+- My Lists: the Simkl card (3.3.5) is REMOVED - simkl_lists.py, the
+  mode=simkl_list route, traktsc_simkl.png and its strings are gone. A box
+  that used it is cleaned at the next ensure(): hubs back to the build's
+  lists, mode Original, simkl_token.json / simkl_cache deleted.
+- New third card "Anime" (أنمي, mode 'anime', traktsc_anime.png), from the
+  user's Otaku favourites list: a multiselect of 8 Otaku routes - next_up,
+  airing_last/this/next_season, trending, popular, top_100, genres - with
+  context.otaku's colouredv2 icons. The picks are widget rows appended to
+  the HOME page (skinvariables-shortcut-homewidgets.json, guid prefix
+  guid-abkn, path plugin://plugin.video.otaku/<route>; Flyer for title
+  lists, Landscape for next_up and the sub-menus). Independent of the hub
+  choice: Movies / TV / Korean are not touched, and Original / Trakt keep
+  the anime rows (_save_state carries 'anime' over). Current picks are
+  pre-ticked; Back = no change; nothing ticked = anime rows removed.
+  ensure() re-adds them when the home file was replaced wholesale.
+  Left out on purpose: OpenWizard (not anime) and airing_calendar (opens a
+  full-screen Anichart window - as a widget it would pop on every Home
+  load). Otaku missing -> offered, installed through the Add-on Portal
+  installer from repository.otaku (mirror zip on taiseer999.github.io).
+- Strings 30709-30727 now the Anime texts (EN + AR Fusha); 30665 reworded.
+
+v3.3.5
+- "Trakt Lists" renamed "My Lists" (قوائمي): 30660/30681/30682/30665; the
+  Custom card is now "Trakt" (تراكت, 30663/30669). trakt_hubs.xml shows
+  three cards (list 100 at 210/1500 like af3_shortcuts).
+- New third card "Simkl" (mode 'simkl', icon traktsc_simkl.png) - new
+  module resources/lib/simkl_lists.py:
+  * auth = Simkl AUTH V2 device flow (POST /oauth2/device, poll
+    /oauth2/token every 5 s, max 15 min) in the add-on's QR window
+    (abk_qr.xml, non-modal, BACK cancels). Token in addon_data
+    simkl_token.json; refreshed silently (refresh_token, 180 days rolling)
+    with a lock file so parallel widgets do not race the rotation.
+  * app key: NOT hard-coded - read from the Piers repo
+    abukarim/config.json "simkl_client_id" (64 hex, an AUTH V2 app from
+    simkl.com/settings/developer), else SIMKL_CLIENT_ID, else Account
+    Manager's simkl module. None -> 30715 and nothing changes.
+  * GET /users/settings -> account id + type; "free" stops with 30717
+    (Simkl serves custom lists to apps only for PRO / VIP; a 200
+    {"error":"premium_only"} is handled the same way).
+  * candidates: /lists/user/{id}?followed=true (own = "قائمتي", followed =
+    "أتابعها", both count as liked -> "select all" row 30723/30724) +
+    official lists of user 5 sorted by likes and popularity (>= 5 items,
+    25 per section). Section from media_type, Korean by name.
+  * widget rows: plugin://plugin.program.abukarimtools/?mode=simkl_list&
+    list_id=..&cat=.. (+ the TMDb Helper reload suffix), same styles as
+    Trakt (Flyer / Landscape). default.py routes simkl_list first, no menu
+    chores. The directory reads GET /lists/{id} (100 titles, cached 1 h,
+    stale copy used when offline), matches IMDb -> TMDb with TMDb Helper's
+    API key (/find, cached for good in simkl_cache/tmdb_map.json) and
+    points each title at TMDb Helper: movies info=play (playable),
+    series info=seasons; no IMDb id -> info=details&query=title&year.
+- ensure() / Original handle Simkl like Custom (LIST_MODES): a hub file
+  replaced wholesale gets the Simkl rows back at boot, Original removes
+  them. Not linked / free / offline leaves the hubs exactly as they are.
+- 16 new strings 30709-30724 (EN + AR Fusha); .po regenerated (310).
+- NOT tested against the live Simkl API (api.simkl.com is not reachable
+  from the build host): verified end to end against a local fake Simkl /
+  TMDb server with mocked Kodi (auth, pickers, widget rows, directory,
+  ensure, Original, free and premium_only accounts).
+
+v3.3.4
+- addon.xml: the xbmc.service extension was commented out again (same
+  regression as v1.9.1 / v2.3 / 3.1.0.27 / 3.1.7) - re-enabled. Without it
+  no boot sweep / watchdog ran, so the 3.3.3 TMDbHelper thread cap only
+  applied after the menu was opened (_ensure_service fallback).
+- New toggle tmdbh_invoker "TMDbHelper: Keep Python Warm": the
+  reuselanguageinvoker=true entry moved out of tmdbh_stability so the thread
+  cap can stay while invoker reuse is switched off (it was the v2.3.4-era
+  suspect for CPythonInvoker deadlocks under Py3.14). New patch field
+  'revert_when_off' (old, new): apply_set() undoes the edit when the toggle
+  is disabled, so OFF restores <reuselanguageinvoker>false.
+- TMDbHelper userdata max_threads: rewritten to 3 only when 0 / empty /
+  self-closing. 3.3.3 matched any number and forced a user value back to 3
+  on every 30-min sweep.
+- <news> trimmed to the last 3 releases (was 18k chars, shipped in the
+  repo addons.xml to every box); full history lives here. 3.1.x notes that
+  existed only in <news> are kept at the end of this file.
+- tools/selftest.py: pre-package check (service extension present, every
+  .py parses, every .xml parses, en/ar .po ids match, every T(id) exists,
+  sentinels match what they write, changelog has the addon.xml version,
+  news <= 1500 chars). Run from the addon root before zipping.
+
+v3.3.3
+- TMDbHelper: Stability also caps TMDb Helper at 3 threads (max_threads
+  default 0 = unlimited in jurialmunkey.ParallelThread) and sets
+  reuselanguageinvoker=true. 2026-10-13 OOM kill on the AM9 (4 GB, no swap):
+  kodi.bin hit 2.08 GB anon-rss opening the AF3 Korean hub after Trakt Lists
+  added 7 widgets. Takes effect after a Kodi restart.
+
+v3.3.2
+- New patch toggle "AF3: Subtitle Buttons": two buttons after Subtitles in
+  the Arctic Fuse 3 player bar - DexSubtitles AutoSync and Subtitle Cycler
+  (installed from repository.taiseer when missing). OSD popups keep the same
+  button layout.
+
+v3.2.70
+- Reverted the 3.2.69 one-line pickers (user: "not nice"): pickers and the
+  widget-mode question are detailed select lists again (icon + second line).
+- The AF3 "Preview" (معاينة) button is hidden ONLY in these dialogs: new
+  always-on patcher entry on skin.arctic.fuse.3 1080i/Dialog_DialogSelect.xml
+  adds "+ String.IsEmpty(Window(Home).Property(abk.nopreview))" to button
+  9004's visible condition (exact block + regex fallback scoped to id 9004;
+  not_found_ok; verified on AF3 source: 1 match, XML valid). trakt_hubs sets
+  the property only while its own select dialogs are open (context manager),
+  so every other select dialog in the skin keeps Preview.
+
+v3.2.69
+- MDBList not authorised -> yes/no before fetching (30703) with buttons
+  "تخطّي" / "فتح إعدادات MDBList": Addon.OpenSettings(TMDb Helper), then
+  SetFocus(-197) = category button 3 ("API keys"; Kodi GUIDialogSettingsBase
+  numbers category buttons -200 + index; TMDb Helper order general, widgets,
+  library, api keys). Waits for the settings window to close (max 15 min),
+  re-reads mdblist_apikey and, when set, fetches MDBList in the same run.
+  Replaces the 3.2.68 notice.
+- Pickers + widget-mode question are plain one-line select lists now
+  (useDetails off): AF3 adds its artwork "Preview" (معاينة) button to every
+  detailed select list. The details (owner, likes, items, "أعجبتني" /
+  "قائمتي", MDBList) follow the name on the same line in a muted colour.
+
+v3.2.68
+- Trakt Lists: when TMDb Helper has no MDBList key, a notice (30703) says
+  MDBList lists appear once MDBList is authorised in TMDb Helper.
+- Verified against the user's TMDb Helper 6.17.9 zip: mdblist_userlist /
+  list_id route, mdblist_apikey setting and api.mdblist.com base are exactly
+  what 3.2.67 uses (only ABUKARIM patches differ from upstream).
+- Note: the "Preview" (معاينة) button in the pickers is Arctic Fuse 3's own
+  DialogSelect_ArtworkPreview (shown for every detailed select list) - not
+  part of this add-on.
+
+v3.2.67
+- MDBList (user request): fetch_mdblist() reads TMDb Helper's own
+  mdblist_apikey and asks api.mdblist.com for lists/user (the user's own,
+  shown as "قائمتي"), lists/top and lists/search?query=korean. Type from the
+  list's mediatype (movie / show), Korean by name; up to 25 per category;
+  merged after the Trakt lists. Widget path = TMDb Helper
+  info=mdblist_userlist&list_id=<id>. No key -> skipped quietly. NOT tested
+  against the live API (api.mdblist.com unreachable from the build host) -
+  field names handled defensively (items/item_count, mediatype/type, wrapped
+  lists).
+- Pickers: nothing is pre-ticked (Back = nothing from that list). When a
+  category has liked Trakt lists, row 1 "All the lists I liked (select all)"
+  adds every one of them; other rows are picked one by one.
+- The 3.2.65 live liked-lists row (info=trakt_likedlists) is replaced by the
+  select-all row; STYLE_VERSION 3 makes ensure() drop it from boxes once.
+
+v3.2.66
+- Trakt Lists widget rows get a style by content instead of copying the
+  hub's first widget: movies / kr_movies -> "Flyer" (AF3 Arabic "منشور"),
+  tv / kr_tv -> "Landscape" ("صورة افقية"); the liked-lists folder follows
+  its hub (Movies Flyer, TV Landscape). Build widgets untouched.
+- state "style_v": ensure() restyles rows written by 3.2.63-3.2.65 once at
+  the next start / end of setup, then is a no-op again.
+
+v3.2.65
+- Trakt Lists, Custom: new question BEFORE fetching (30692) about the hubs'
+  current widgets: Add (keep them, picks after), Replace (hide them -
+  disabled + abk_trakt "off" / "off:<old value>" - picks take their place,
+  Original restores the files exactly), Keep (nothing changes, no Trakt
+  request). Back = Keep. Saved as "wmode"; ensure() re-applies it.
+  Replace only touches a hub that gets at least one pick.
+- Liked lists:
+    * new picker entry "All the lists I liked" (first, pre-ticked) in
+      Movies and TV -> widget path info=trakt_likedlists: TMDb Helper reads
+      the likes live, so lists liked later appear by themselves.
+    * every liked list is always offered: never cut by the call budget, and
+      one Trakt cannot sort (rate limit, empty first page, HTTP 400 on
+      official lists, cached "unusable") goes by its name, else Movies.
+
+v3.2.64
+- Installation Wizard order (user request - Arabic must render correctly):
+    Step 0  Skin Installer (was Step 5, last)
+            -> if a skin other than Estuary is active: UI language Arabic now
+               (skin reload awaited), so every later dialog is Arabic in the
+               Arabic-capable skin; Estuary kept -> setup stays English
+    1 Binary Installer / 1b bootstrap / 1c tuning / 2 Restore / 3 Add-on
+    Portal / 3b Widgets Layout / 3c Trakt Lists / 4 Patches / 4b web server
+- Restore with the skin already running: Kodi keeps the ACTIVE skin's
+  settings in memory and writes them back on the next change / exit, which
+  would undo a restored addon_data/<active skin>/settings.xml. The restore
+  now also pushes those values into Kodi (Skin.SetBool / Skin.Reset /
+  Skin.SetString; skinvariables generator hashes skipped so menus rebuild).
+- Side effects of the new order (all intended): the restore's
+  rebuild_shortcuts now runs with AF3 active (the 07:28 "Unable to load
+  skinvariables-build-templates.json" under Estuary is gone); AF3 patches are
+  applied during setup instead of at the next boot sweep.
+
+v3.2.63
+- Trakt Lists: picks are WIDGET rows now (user's choice), appended to
+  1101widgets / 1102widgets / 1103widgets (Korean movies + series) in the
+  hub's own widget style, path = trakt_userlist + &widget=true&reload=
+  $INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]; liked lists first.
+  Build widget rows untouched and first.
+- Sub-menus are no longer changed. ensure() (boot / end of setup) migrates
+  3.2.57-3.2.62 boxes: removes the two sub-menu groups and the Korean
+  sub-menu entries, un-hides hidden build lists, and turns the saved picks
+  into widgets (build Korean lists excluded - they stay in the sub-menu and
+  are no longer offered in the picker). Verified on the user's own node
+  files (Mac, 07:44 upload): sub-menus come back to the build exactly.
+- Korean detection: "K Dramas" (with a space) is Korean now, and liked lists
+  are always classified by their items (country), never by name alone.
+
+v3.2.62
+- FIX (log 2026-10-12 07:31:57): the picked Trakt lists never appeared.
+  Trakt Lists itself worked (130 lists, picks 22/6/20/10, hubs 1101/1102/1103
+  written), but script.skinvariables then failed to build AF3's menus:
+  ExpatError "not well-formed (invalid token): line 5248, column 36". Its
+  template code escapes only "&" (escape_ampersands) before minidom parses
+  the result, so a list name containing " < > or a control character breaks
+  the whole build and AF3 keeps the old menus.
+- Every list name is now cleaned before it is shown or written:
+  " ' < > { } $ \ -> look-alike characters, control characters removed,
+  whitespace collapsed (_clean).
+- ensure() (boot + end of setup) also re-applies when one of OUR items still
+  carries an unsafe label - boxes on 3.2.61 are repaired and AF3 rebuilt at
+  the next start, no need to pick again.
+- Seen in the same log, not from Trakt Lists: the restore step runs
+  rebuild_shortcuts while Estuary is active ("Unable to load
+  special://skin/shortcuts/skinvariables-build-templates.json", 07:28:18) -
+  harmless, AF3 builds when it is applied.
+
+v3.2.61
+- Trakt Lists: Custom REQUIRES the Trakt link (TMDb Helper, its QR).
+    * no token -> "Custom needs your Trakt account linked" (30669, yes/no);
+      No / closed without a token -> Original is applied (30691 notice),
+      no Trakt request is made.
+    * a stored token that Trakt refuses (401/403 on users/likes/lists) ->
+      the same link prompt once (a NEW token is required), then the fetch
+      is retried; declined -> Original.
+    * a rate limit on the likes still continues with the public lists
+      (3.2.60), since the account IS linked.
+- Original / Custom on failure: a busy/offline Trakt keeps the current hubs
+  (3.2.58); only "not linked" switches to Original.
+
+v3.2.60
+- 3.2.59 verified on the Mac (log 06:38): Trakt step stopped after 1 call,
+  hubs untouched, "Trakt is busy" shown, patcher waited (Step 4 at 06:38:36,
+  patch run 06:38:54).
+- That 429 was on users/likes/lists - the user's ACCOUNT (Retry-After 524 s),
+  while Fen Light also got 429 on sync/last_activities. A rate limit on the
+  likes no longer stops the run: public lists (popular / trending / Korean
+  search, client-id bucket) are still fetched and offered, with a notice
+  (30690). A block on the public calls still stops at once.
+
+v3.2.59
+- FIX (log 2026-10-12 06:28 / 06:31, Mac): in the Installation Wizard the
+  patcher started 1 s after Trakt Lists. The Korean pickers were torn down
+  0.2 s after the progress window closed (multiselect -> None -> "keep the
+  pre-ticked"), so the step ended at once. Now:
+    * Trakt Lists waits for the progress window to be really gone before each
+      picker, and re-opens a picker closed in under 1.5 s (up to 5 times).
+    * run_step() waits for the AF3 rebuild it started (skin_rebuild.busy +
+      busy/progress dialogs, max 120 s) before returning.
+    * service Step 4 waits for no dialog AND for any script.skinvariables
+      build (_wait_skin_build, max 120 s) + 2 s settle before the patcher.
+- Trakt's Cloudflare blocked this Mac ("Access denied | api.trakt.tv used
+  Cloudflare", HTTP 429 without Retry-After) - which is why every list check
+  failed and Movies / TV were empty. A Cloudflare page, a Retry-After over
+  20 s or 3 429s in a row now stop the run at the first hit ("Trakt is busy"),
+  instead of retrying ~100 lists into the block.
+- Log: each picker's result (n of m), "instantly closed" retries, step end.
+
+v3.2.58
+- FIX (log 2026-10-12 06:20, Mac): Trakt Lists asked to link Trakt although
+  TMDb Helper was linked. TMDb Helper's startup check got HTTP 429 from Trakt
+  and logged "[session token expired]" - the stored token itself was valid.
+  The token is now read from TMDb Helper's session property
+  (TMDbHelper.TraktUserToken) first, then its setting; only the token's own
+  expiry counts. The log states which (valid/expired/missing, window/setting).
+- Trakt is rate-limiting TMDb Helper's shared client id, so Trakt Lists is
+  now gentle: list names decide movies/TV/Korean when unambiguous, at most 60
+  item checks per run (liked lists first), 2 at a time, results cached 30
+  days in trakt_hubs.json, one shared back-off; a Retry-After over 20 s stops
+  the run with a "Trakt is busy" message (30689).
+- A failed / offline / rate-limited Custom run no longer resets the hubs to
+  Original - an earlier Custom setup stays exactly as it was.
+- More log lines: link yes/no, token state, calls, 429s, timing.
+
+v3.2.57
+- NEW: Trakt Lists (قوائم تراكت) - resources/lib/trakt_hubs.py, window
+  trakt_hubs.xml, entry in Setup & Install and Installation Wizard step 3c
+  (right after Widgets Layout). Two cards:
+    Original  the AF3 hubs exactly as the build ships them
+    Custom    the user's Trakt likes + the best Trakt lists they tick
+- Custom only touches the AF3 hub sub-menus 1101 (Movies), 1102 (TV) and
+  1103 (Korean). Movies/TV get two groups appended: "قوائم أعجبتني" and
+  "الأفضل في تراكت". Korean: the build's own lists are offered pre-ticked,
+  unticked ones are hidden (disabled + abk_trakt tag), new picks appended.
+  Home page, all widget files and the ABUKARIM lists (taiseer999) are never
+  touched or offered.
+- Lists come from Trakt through TMDb Helper's client id: users/likes/lists
+  (needs TMDb Helper's Trakt link - offered with its QR), lists/popular,
+  lists/trending and search/list for Korean. Each candidate's first 30 items
+  decide movies vs TV and Korean (country kr / language ko).
+- Original is a clean undo (removes every guid-abkt item, re-enables every
+  abk_trakt item). Picks are saved in trakt_hubs.json; at boot and at the end
+  of setup they are put back - without network - only into a hub file that
+  lost all of them (restore, Widgets Layout, skin profile, wizard Patch GUI).
+
+v3.2.56
+- FIX: after every AF3 update the skin was reloaded twice. The watchdog's
+  skin-only run (ids=skin.arctic.fuse.3) skipped the TinyPPI reconcile, which
+  registers the PPI Arabic fonts in the active skin's Font.xml - and a skin
+  update wipes Font.xml. The next full sweep then wrote them ("3 written")
+  and reloaded the skin again. The reconcile now also runs when the active
+  skin is in scope, so both land in the same run and one reload.
+- Note: right after an AB Tools update the running service keeps the old
+  patch list until Kodi restarts (it shows the restart prompt) - patches new
+  in that version are written by the next full sweep, as designed.
+
+v3.2.55
+- FIX: Kodi still froze at random when TMDbHelper started a Fenlight film
+  (GUI thread and Fenlight's thread deadlocked while Fenlight was starting,
+  before its sources window). The cause is the plugin-inside-plugin resolve
+  (TMDbHelper resolving to a plugin://plugin.video.fenlight/ URL). The
+  pinned direct.fenlight.select.json now uses
+  executebuiltin://RunPlugin("plugin://plugin.video.fenlight/..."): TMDbHelper
+  closes its handle with its dummy.mp4, then Fenlight runs as a normal plugin
+  exactly like opening it directly. No pending resolve, so no popup at stop.
+- The Fenlight resolve handoff stays as a guard for any other caller that
+  resolves Fenlight with a live handle.
+
+v3.2.54
+- FIX (3.2.53): the Fenlight resolve handoff never ran. It kept its "already
+  resolved" set on the FenLightPlayer class, and Kodi's xbmc.Player
+  subclasses refuse class attributes (AttributeError), so it fell back to
+  self.play() silently and the resolve still failed at stop (popup / freeze).
+  The set now lives in the module globals; a failure is logged as a warning.
+  Boxes that already carry the 3.2.53 block are upgraded in place.
+- Restart Kodi once after the patch.
+
+v3.2.53
+- FIX: Kodi froze when a film was played from TMDbHelper with the Fenlight
+  player (freeze right at Fenlight's sources window). The shipped
+  direct.fenlight.select.json had is_resolvable=false + is_folder, so
+  TMDbHelper played the Fenlight link with xbmc.Player() - a nested plugin
+  resolve on the GUI thread that deadlocked under Python 3.14.
+- FIX: With the player made resolvable, stopping a Fenlight film opened
+  "Playback failed": Fenlight plays the link itself and never answered the
+  resolve handle, so it failed when Fenlight's script exited. New patch on
+  Fenlight player.py hands the link back with setResolvedUrl when it was
+  called with a live handle (once per handle); Fenlight's own menus are
+  unchanged.
+- New toggle "Fenlight: TMDbHelper Playback Fix" (on by default) covers both
+  entries; the player JSON is pinned in addon_data/.../players/.
+- Restart Kodi once after the patch (Fenlight reuses its Python invoker).
+
+v3.2.52
+- New AF3 Auto Trailers show mode "Trailer button only" (عند الضغط على زر
+  المقطع الدعائي فقط), a fourth choice in "How trailers are shown" - picking
+  it turns the other three off. In this mode nothing plays by itself while
+  browsing; the AF3 Trailer buttons (info page Trailer button, context menu
+  Trailer entry, trailer list, the trailer dialog's Repeat) play through the
+  Auto Trailers source instead of TMDbHelper's plugin.video.youtube link:
+  NewPipe / IMDb in the order of the "Source" setting (IMDb at its quality),
+  the original link last. In the other modes, or with Auto Trailers off, the
+  buttons behave exactly as before.
+- AF3's trailer dialog (1123) runs trailer_play.py (two always-on AF3 patch
+  entries: Custom_1123_Dialog_Trailer.xml, Dialog_DialogTrailer.xml); the
+  script itself decides by the mode, so switching modes needs no re-patch or
+  skin reload.
+
+v3.2.51
+- Renamed to "AB Tools". Icon without the ABUKARIM text and a larger emblem;
+  clearlogo, banner and fanart updated with a short description line.
+
+v3.2.50
+- New add-on artwork matching NewPipe: clearlogo, banner and a fanart with
+  the emblem on the right so the skin's logo and description stay readable.
+
+v3.2.49
+- FIX (3.2.48 regression): Full screen trailers did not expand. The engine
+  remembered every recent trailer address so it would not mistake a parked
+  trailer for the new one; NewPipe resolves a title to the same local address
+  every time (127.0.0.1:<port>/yt/<id>.mpd), so a title already played this
+  session was taken for "an old trailer", its new trailer was let go as real
+  playback ("real playback replaced the trailer") and never went full screen
+  (it also paused trailers 30 s). Now only the one parked trailer being
+  replaced, and only while the new one opens, counts as old.
+- Log: the reason a parked trailer is closed (page left / dialog open /
+  closed elsewhere); quality shows "YouTube" instead of "YouTubep".
+
+v3.2.48
+- AF3 Auto Trailers: new show mode "Inside the artwork" (داخل صورة الخلفية),
+  the default, ported from Dex Hub's trailer director + AF3 trailer patch:
+  * windowed inside AF3's own artwork frame (Background_Video_FlixArt), never
+    full screen - no black frame, no OSD/PPI badges, no refresh-rate switch;
+  * the artwork stays until the trailer's clock moves (+0.25 s settle), then
+    Window(Home).Property(abk.trailer.visible) fades the frame in over 600 ms;
+  * Kodi's busy spinner is closed as soon as it opens (the trailer keeps
+    loading; NewPipe is left alone until its stream is resolved) and AF3's
+    busy loader is hidden meanwhile (abk.trailer.opening);
+  * moving to another title PARKS the trailer (hidden + paused through
+    JSON-RPC) instead of stopping it; the next trailer replaces the file in
+    the open player, coming back resumes it, and a parked trailer is closed
+    only once the keys rest (Kodi closes a player on its GUI thread).
+- Patcher: two feature-gated Includes_Background.xml entries (artwork frame,
+  busy loader). Inert unless an artwork trailer is playing; a skin already
+  patched by Dex Hub is handled too.
+- Settings: 'show' is artwork | background | fullscreen; files from before
+  3.2.48 move to artwork once (show_v 2).
+- Arabic string 30453 rewritten in Modern Standard Arabic.
+
+v3.2.47
+- Patcher: the automatic ReloadSkin() now waits for script.skinvariables.
+  While a skinvariables build is running (a build we started < 30 s ago, its
+  progress window, or generated script-skinvariables-*.xml files written in
+  the last 10 s) the reload is held; the watchdog retries every 15 s.
+  If skinvariables wrote its files after the patch, it already reloaded the
+  skin itself (patched files included) - no second reload. Cap: 5 minutes,
+  then the reload goes ahead (still never during playback/modal dialogs).
+- skin_rebuild.force() records when it starts a build (skinvariables_build.started).
+
+v3.2.45
+- Widgets Layout renamed ترتيب الودجات; all its Arabic texts (window, notes,
+  hints, progress and messages, strings 30630-30648) rewritten in Modern
+  Standard Arabic instead of dialect.
+
+v3.2.44
+- Release of the 3.2.43~beta6-beta8 work: Widgets Layout (ترتيب الودجات) -
+  Installation Wizard step + Setup & Install entry with icon, Arabic card
+  window (خفيف / متوسط / كامل), ABUKARIM Wizard No Wipe Option 1/2 as the
+  source, backup of the current layout, real AF3 rebuild (skin_rebuild).
+
+v3.2.43~beta8 (TEST BUILD)
+- FIX: Widgets Layout (ترتيب الودجات) - Moderate/Full wrote the new
+  script.skinvariables nodes (log: "45 file(s) written") but AF3's home did
+  not change. AF3's build call is keyed on Skin.String(Shortcuts.RebuildDateTime)
+  and script.skinvariables does not hash the node files, so the queued
+  rebuild saw "up to date" and silently did nothing.
+  New resources/lib/skin_rebuild.force(skin): active skin -> bump
+  Shortcuts.RebuildDateTime, then run the build (it regenerates + reloads);
+  other skin -> edit addon_data/<skin>/settings.xml (new stamp, generator
+  hashes emptied) so it rebuilds on its next load (first-run case: AF3 is
+  installed after this step).
+- Same latent bug fixed in menu_reconcile (hidden/restored items) and
+  remote_patches (json_edit on a node) - both use skin_rebuild now.
+
+v3.2.43~beta7 (TEST BUILD)
+- AF3 shortcuts step renamed "Widgets Layout" / "ترتيب الودجات" and made Arabic:
+  * all its texts (window, download progress, messages) are always Arabic,
+    also during setup (which runs Kodi in English) - af3_shortcuts.AR().
+  * new window resources/skins/Default/1080i/af3_shortcuts.xml (id 13003) in
+    the Skin Selection style: three neon cards خفيف / متوسط / كامل with
+    their own icons (af3sc_light/moderate/full.png), a short note under the
+    cards and a "الحالي" badge on the last applied choice.
+  * new menu entry Setup & Install -> ترتيب الودجات (mode af3_shortcuts,
+    icon af3_shortcuts.png). From the menu Back cancels; خفيف changes nothing.
+  * strings 30630-30648 reworded / added.
+
+v3.2.43~beta6 (TEST BUILD)
+- Installation Wizard: new step right after the Add-on Portal - AF3 Shortcuts
+  (resources/lib/af3_shortcuts.py, strings 30630-30640):
+  * Light    - userdata/addon_data/script.skinvariables left as it is.
+  * Moderate - replaced from ABUKARIM Wizard "No Wipe" Option 1 (the "gui"
+               zip of the wizard's installed build = its Patch GUI entry).
+  * Full     - replaced from ABUKARIM Wizard "No Wipe" Option 2 (the "gui"
+               zip of the "test" build).
+  * the build file is read from the installed wizard's uservar.py (default:
+    taiseer999.github.io Builds.txt); only the addon_data/script.skinvariables
+    part of the zip is extracted, nothing else.
+  * every nodes/<skin>/ folder in the zip replaces the box's folder; loose
+    files are overwritten; other skins' menus are left alone. The old copy is
+    zipped to addon_data/plugin.program.abukarimtools/af3_shortcuts_backup/
+    (3 kept). Items for add-ons that are not installed are hidden.
+  * Back = Light. A popup closed instantly is shown again.
+  * a skin profile applied later in the same setup no longer overwrites the
+    chosen shortcuts (skin_profiles skips its skinvariables part).
+
+v3.2.43~beta3 (TEST BUILD)
+- NEW (Maintenance): CPU Benchmark - port of script.pystone.benchmark 1.1.8
+  (Lunatixz, GPLv3); pystone vendored at resources/lib/modules/pystone.py,
+  tool in resources/lib/cpu_benchmark.py, new icon cpu_benchmark.png.
+  * shows Kodi build, OS, CPU (incl. /proc/device-tree model), arch, cores
+    and Python version, then one pystone pass (n=50000) per CPU core and
+    the average score; the result is uploaded to paste.kodi.tv (log_share
+    uploader) and the link is shown.
+  * no kodi_six / requests needed; passes run on a worker thread, so BACK
+    closes at any time (stops after the current pass).
+  * Kodi's debug overlay (CPU/RAM) is on during the run and always put back.
+  * strings 30620-30626 (English / Arabic).
+
+v3.2.43~beta2 (TEST BUILD)
+- addon.xml <requires>: plugin.video.newpipe 1.0.0~beta1, unicache 1.0.1,
+  urldispatcher 1.1.0, scrapetube 2.8.2, resolveurl 5.1.210,
+  resolveurl.pluginsgr 0.2.5, websocket 1.6.4, magneto 6.10.01,
+  netclient 1.2.0, parsers 1.0.0, python.twitch 3.0.2 - all on
+  repository.taiseer, installed by Kodi together with ABUKARIM TOOLS.
+
+v3.2.43~beta1 (TEST BUILD)
+- AF3 Auto Trailers: new trailer source "NewPipe (YouTube)" (default in this
+  test) next to IMDb - new "Source" row in the AF3 Auto Trailers settings.
+  * YouTube id: the focused item's trailer link (ListItem.Trailer / the
+    TMDbHelper Home property), else TMDb /videos (TMDbHelper's key; official
+    YouTube Trailer > Trailer > Teaser, English or language-less).
+  * played through NewPipe's own route
+    plugin://plugin.video.newpipe/?action=play&url=<id>; the resolved stream
+    (local DASH proxy) is adopted as "ours", so full screen / stop / hand-over
+    work as with IMDb. Start timeout 25 s for NewPipe (12 s for IMDb).
+  * no YouTube trailer, or NewPipe not installed/enabled -> IMDb as before.
+  * a NewPipe trailer that opens after the cursor already moved on is stopped
+    (title + YouTube/local-proxy URL match; a real movie is never touched).
+  * the Quality setting applies to IMDb only - YouTube quality is chosen by
+    NewPipe/PluginsGR.
+
+v3.2.42
+- Add-on Portal: TinyPPI (script.tinyppi) added, pinned to the ABUKARIM
+  repository, with the note "for non CE22" after the repository name.
+  New optional "note" field per add-on in portal.json.
+- FIX (3.2.41): the cleanup no longer forces _ALLOW_NON_COREELEC back to
+  False - the TinyPPI build on the ABUKARIM repos (for non-CE22 boxes) ships
+  with it set to True and must keep it.
+- strings_map.py now carries the Buy Me a Coffee strings (30610-30613) that
+  were only in the .po files, so tools/gen_po.py no longer drops them.
+
+v3.2.41
+- REMOVED: TinyPPI "Run on non-CE" (_ALLOW_NON_COREELEC = True) and its
+  toggle. Boxes that had it get TinyPPI's own value back
+  (_ALLOW_NON_COREELEC = False). TinyPPI is now left with only: PPI Arabic /
+  English and the codec/audio badge PNGs.
+
+v3.2.40
+- TinyPPI reduced to what the build needs:
+  * PPI Arabic ON  -> Arabic strings + ABUKARIM Arabic font (Noto, registered
+    in the active skin's Font.xml as abk_ppi_ar21/abk_ppi_ar32 - the skin's
+    own font23_narrow/font32 are untouched) + no ':' after the labels.
+  * PPI Arabic OFF -> TinyPPI's own English overlay, byte for byte.
+  * kept: codec/audio badge PNGs, "Run on non-CE".
+- The overlay XMLs are now derived from a pristine copy (<file>.abk_orig,
+  refreshed after every TinyPPI install/update), so OFF really restores the
+  colons and fonts - the old in-place colon edit could not be undone.
+- The Arabic font switch only happens once the font exists in every Font.xml
+  of the active skin; otherwise the overlay keeps TinyPPI's fonts.
+- REMOVED: classic PPI (AF3 dialog colours) - its swap is undone on boxes
+  that had it; the PPI AF3 Home bridge (home_publish.py + monitor.py hook),
+  which ran a full TinyPPI read pass every second during playback - both
+  files are cleaned out of TinyPPI (restart Kodi once). The AF3 legacy
+  dialog keeps working from Kodi's own infolabels.
+- Dead code removed (old TinyPPI no-fonts patch constants).
+
+v3.2.39
+- FIX: TinyPPI Arabic labels scrambled (rows showed settings help texts,
+  e.g. "Color of the playing file name." where "Video" belongs). Cause: the
+  PPI Arabic reconcile wrote strings.po.abk_arabic_bak only ONCE, so a TinyPPI
+  2.11 -> 2.15 update made while PPI Arabic was OFF kept the 2.11 backup; the
+  stub then replaced 2.15's real Arabic and switching PPI Arabic ON restored
+  the 2.11 file over 2.15.0 (different string ids).
+  * the backup is now refreshed from every real Arabic file;
+  * a backup or live Arabic file from another TinyPPI version (its English
+    msgids don't match en_gb on the same ids) is never restored/kept;
+  * self-heal: a box already carrying the wrong file gets the English
+    fallback stub and the stale backup is dropped - reinstall/update TinyPPI
+    to get its own Arabic back.
+
+v3.2.38
+- AF3 Auto Trailers - sharper picture:
+  * when a title's latest trailer is below the chosen quality (old IMDb
+    uploads are often SD only), up to 3 more of its trailers are checked and
+    the sharpest one up to that quality plays;
+  * trailers cached by older versions are re-checked once;
+  * new quality option: 4K (2160p) - picks 4K when IMDb has it, else the best;
+  * the log shows the resolution of every trailer found and started.
+
+v3.2.37
+- AF3 Auto Trailers: the show mode is stored under a new key, so the
+  "Behind the page" that 3.2.35 saved by mistake is dropped - trailers open
+  full screen again without touching the settings.
+
+v3.2.36
+- AF3 Auto Trailers: the "Show" row opens a picker (Full screen / Behind the
+  page) instead of flipping on click - opening it just to look switched full
+  screen off. The log now prints the show mode on every settings change and
+  on every trailer start.
+
+v3.2.35
+- AF3 Auto Trailers open FULL SCREEN (new default). The trailer starts
+  windowed and, as soon as its first frames are on screen, switches to the
+  full-screen video window - no black frame, no spinner over an empty screen.
+  Back leaves full screen and stops the trailer; the same title does not
+  replay until the cursor moves. Full-screen trailers play with sound and
+  work even with AF3 'Background video' off.
+- New row in the AF3 Auto Trailers settings: "Show: Full screen / Behind the
+  page" (Behind the page = the old background behaviour).
+
+v3.2.33
+- Main menu: "Support ABUKARIM - Buy Me a Coffee" (Buy Me a Coffee icon).
+  Opens a full-screen QR code to buymeacoffee.com/taiseer999.
+
+v3.2.32
+- All icons (main icon, menu icons, switches) now sit on one solid dark
+  background (#0D1116). Repository logos keep their own artwork.
+
+v3.2.31
+- Fanart logo made smaller.
+
+v3.2.30
+- New fanart matching the main icon: tools in a cyan ring with ABUKARIM TOOLS.
+
+v3.2.29
+- Simplified main add-on icon: wrench and screwdriver in a cyan ring with
+  ABUKARIM, in the same style as the ABUKARIM Wizard icon.
+
+v3.2.28
+- Skin Profiles icons now show what they are about - the home screen's menus
+  and widgets: a TV with a widget row (category), with an upload badge
+  (Export) and a download badge (Restore).
+
+v3.2.27
+- "Run First-Time Setup" is now "Installation Wizard" (معالج التثبيت) with a
+  magic-wand icon.
+- Skin Selection icon: paint palette with a download badge (skin installation).
+
+v3.2.26
+- Icon set v2 (after the AF3 screenshots):
+  * transparent background - the skin's own tile shows through, no darker
+    square inside the tile, focus colour fills the whole tile;
+  * two-tone glyphs (cyan line + soft cyan fill, white detail), slightly
+    smaller so they sit inside the tile like the skin's own icons;
+  * no more duplicates: Patches category = shield, Apply Patches = bandage;
+    Toggles category = line switch; Profiles category = ID card, Export /
+    Restore = person with up / down arrow;
+  * Toggles list: each switch keeps its own glyph (DPlex chevrons, Korean
+    circle, trailers clapper, waves) with your on/off switch as a small badge
+    in the corner; the bare switch in dialogs is padded to the same scale.
+
+v3.2.25
+- Simplified icon set: 23 menu icons redrawn as one flat line-icon family
+  (dark tile, cyan + white strokes, same weight and padding, no text baked
+  in). Brand icons kept (ABUKARIM Wizard, DPlex, Korean Media, the three
+  repositories) and the on/off switches; the Toggles category uses the
+  switch icon.
+
+v3.2.24
+- Cleanup before release - removed patches that are no longer needed:
+  * Seren maintenance.py UTF-8 (2 entries);
+  * TMDbHelper trakt_stats dict guard (upstream fixed it - logged "obsolete"
+    on every sweep);
+  * TinyPPI "Fix Font" (install_fonts) - TinyPPI 2.15 rewrote its font
+    handling (ensure_fonts), the patch no longer matched anything;
+  * Last Played service replacement (+ its toggle) - replaced by the new
+    Last Played (ABUKARIM) add-on;
+  * DexSubtitles auto-download retirement (old-build cleanup, nothing left
+    to undo);
+  * the 2.11-era TinyPPI overlay snapshots (classic/Arabic are in-place now).
+- FIX: PPI AF3 Home publisher never started on TinyPPI 2.15 - monitor.py now
+  logs via _log("KodiMonitor started"); the inject anchor matches both forms.
+- Add-on Portal and presets install Last Played (ABUKARIM)
+  (plugin.video.abukarim.lastplayed) instead of plugin.video.last_played.
+
+v3.2.23
+- New Maintenance icon.
+- On/off switch art (toggle_on.png / toggle_off.png) wherever the add-on shows
+  a state:
+  * Toggles menu: AF3 Auto Trailers, AF3 Waves, DPlex tab, Korean Media tab
+    show the switch for their current state (+ On/Off as label2);
+  * "Apply Patches" checklist is now a list of switches - pick a row to flip
+    it, "Done - apply" runs the patches, Back cancels (swallowed-dialog guard
+    kept);
+  * AF3 Auto Trailers settings: Auto trailers / Sound rows are switches;
+  * DPlex / Korean tab dialog: turn on / turn off rows carry the switch art.
+
+v3.2.22
+- Freeze on the AM9 ~50 s after boot (log 2026-10-04 21:52): the boot relink
+  forced UpdateAddonRepos on every boot (an add-on only an older cached
+  listing carries counts as "stale" forever), so all repositories refreshed -
+  with Kodi's auto-updates and a repo timing out - exactly while TMDbHelper /
+  Fen Light were starting playback. Ordinary boots now link from the cached
+  listings only; the forced refresh stays only right after an add-on database
+  rebuild and in the manual "Fix Add-on Update Origins". The once-per-session
+  refresh on menu open is gone too.
+
+v3.2.21
+- classic PPI (AF3 dialog look) now works on TinyPPI 2.15.0 too: it was a pure
+  token swap of TinyPPI's own overlay (TinyPPI.*Color -> TinyPPI.Dialog*Color,
+  overlay-bg -> dialog-bg caps), so it is applied in place on the installed
+  version instead of copying the 2.11-era file. Checked against the 2.15.0
+  source: 46 label colons removed, 15 tokens swapped, XML valid, re-runs are
+  no-ops.
+
+v3.2.20
+- FIX: TinyPPI Arabic came out scrambled after patching TinyPPI 2.15.0 (log
+  2026-10-04). Two causes, both fixed:
+  * "PPI Arabic - remove label colons" was a whole-file copy of the 2.11-era
+    script-tinyppi-main.xml and overwrote 2.15.0's own file. It is now an
+    in-place edit of the CURRENT file (only the ':' after each
+    $ADDON[script.tinyppi NNNNN] label goes), on any TinyPPI version.
+  * The Arabic strings.po "restore from backup" put an old 2.11 backup over
+    2.15.0's real Arabic translation (19:35). It now restores only over our
+    own empty stub; a newer real translation wins and the stale backup is
+    dropped.
+- classic PPI (AF3 dialog look) is still a whole 2.11-era file, so it is now
+  written only over that same overlay; on a newer TinyPPI it is skipped and
+  logged ("changed upstream ... built for an older version").
+
+v3.2.19
+- FIX: Kodi froze at boot / on the add-on update (log 2026-10-04 15:40). The
+  3.2.17 background relink fired UpdateAddonRepos while the service main
+  thread was in menu reconcile asking Kodi's add-on manager (HasAddon /
+  JSON-RPC) - the main thread never came back (no watchdog, no remote
+  refresh) and Kodi hung with it.
+  * relink is sequential again, boot retry budget 60 s (was 180 s);
+  * menu reconcile decides "installed" from the add-on folders only - no
+    add-on manager calls at all on the boot path;
+  * boot steps log "Boot: menu reconcile..." / "...done" / "remote config
+    refresh..." so any future stall shows exactly where.
+
+v3.2.18
+- FIX: updating ABUKARIM TOOLS while Kodi runs did nothing until a restart
+  (log 2026-10-04 12:33): the running copy had been started by the guardian
+  (RunScript), which Kodi does not stop on an update, so the new 3.2.17
+  service waited 15 s, saw the old heartbeat and exited - no restart prompt.
+  A newer version now TAKES OVER from an older running copy (heartbeat carries
+  version + token, resources/lib/svc_state.py) and shows the restart prompt;
+  the old copy's watchdog / window rescue / update watch stop by themselves
+  (3.2.18 and later). Same version = real duplicate, still exits.
+- Guardian-run watchdog also yields to a real service copy that starts later.
+
+v3.2.17
+- Auto-patch watchdog no longer waits for repository relinking: with an empty
+  repo cache the relink retries for up to 3 minutes and held the watchdog back
+  (log 2026-10-04: service up 12:15:38, watchdog only 12:18:45). Relinking now
+  runs in the background.
+
+v3.2.16
+- Every restart now goes through ABUKARIM Wizard > Maintenance > Force Close
+  (plugin mode 18). The clean Quit / RestartApp hung on Kodi 22 ("Stopping the
+  application..." forever, log 2026-10-04 12:14). Used by the update prompt,
+  Origin Fix, Device Tuning, tab toggle and the add-on DB rebuild (desktop).
+  If the wizard is missing or does not act within 5 s, Kodi is exited directly
+  (same thing the wizard does). CoreELEC brings Kodi back by itself.
+- Update prompt now appears right when ABUKARIM TOOLS is updated while Kodi is
+  running (checks addon.xml every 20 s, waits until nothing plays and no
+  dialog is open), not only on the next boot.
+- The service frees its heartbeat when it stops and a new copy waits 15 s for
+  the old one, so an updated service is no longer turned away as a duplicate.
+
+v3.2.15
+- FIX: auto-patching stopped because the service never got going at boot.
+  The service, the watchdog and i18n all called xbmcaddon.Addon() at import;
+  with the damaged Addons33.db ("Can't update database Addons33 from version
+  0") that call can block at boot, so the service hung before its first log
+  line. Import-time paths/version now come from special:// paths
+  (resources/lib/paths.py); Addon() is only created on first real use.
+- First line of service.py logs "[AbukarimTools Service] process started"
+  before anything else - shows whether Kodi launched it at all.
+- Guardian: if the service it kicked still has no heartbeat after 45 s, the
+  guardian runs the auto-patch watchdog + window rescue itself.
+
+v3.2.14
+- FIX: since 2026-10-04 Kodi 22 never started the ABUKARIM TOOLS service at
+  boot (no "[AbukarimTools Service] started" line in any log; DexHub and Last
+  Played were skipped too - that is also why Last Played recorded nothing).
+  Without the service there was no watchdog and no window rescue, so the AF3
+  update froze again. New guardian.py: AF3 Home runs it once per session
+  (always-on Home.xml onload patch); it waits 25 s and starts every watched
+  service whose heartbeat is missing (ABUKARIM TOOLS, Last Played (ABUKARIM)),
+  and logs when one of them is disabled.
+- Window rescue now starts first thing in the service, before the boot chores.
+
+v3.2.13
+- FIX: black screen / "frozen" Kodi every time the ACTIVE skin updates
+  (AF3 5.10.25 -> 5.10.26, log 2026-10-04 07:15). Kodi unloads the skin
+  before extracting the update, then ReloadSkin restores "the window that was
+  open" - which by then is none, so the new skin loads with no window at all
+  and TMDbHelper floods the log with "Window id does not exist". A small
+  service thread now spots an invalid current window lasting 4 s and opens
+  Home (15 s cooldown, idle for the first 20 s of boot).
+
+v3.2.12
+- Last Played fix now covers EVERY video add-on, not just TMDbHelper flows.
+  While you browse, the service remembers the last 8 playable add-on items
+  you focused (also over AF3's windowed trailers). When a stream starts, the
+  one that matches it (TMDb/IMDb id first, then exact title / show+SxE) is
+  saved as the replay link, and the list shows that add-on as the source -
+  Seren, Umbrella, POV, Fen Light, anything. "Sources as folder" entries can
+  no longer win over the real title. Fallbacks unchanged: TMDbHelper link
+  from ids, then the raw stream. Toggle renamed "Record Streams (all video
+  add-ons)".
+
+v3.2.11
+- NEW Toggles > "Last Played: Record Streams (TMDbHelper/Fen Light)" (on by
+  default). Last Played 6.4.0 never recorded TMDbHelper -> Fen Light playback:
+  the dummy.mp4 splash fired its stop with empty data, the real stream was read
+  before its info settled and anything not typed movie/episode was dropped.
+  The service is replaced: capture on onAVStarted, dummy + AF3 trailers
+  ignored, internet items classified from their TMDb/IMDb ids, entry saved at
+  start (survives a crash/power-off) and stored as a TMDbHelper play link so it
+  replays after the debrid link expires. Restarted automatically after patching.
+- NEW Toggles > "a4kSubtitles: Hide Account/API-Key Nags" (on by default).
+  OpenSubtitles / SubDL / SubSource without accounts no longer pop
+  "requires authentication / API Key" (and "IMDB ID is not provided") on every
+  search - they go to the log. a4k's debug chatter (player_props dumps,
+  "no subtitles found for ...") is written only when Kodi debug logging is on.
+
+v3.2.10
+- NEW Toggles > "AF3: Waves While Loading" (own icon). Arctic Fuse 3's
+  Background_BusyLoader plays resource.images.arctic.waves full-screen while
+  Kodi's busy dialog is up - most visibly right after a movie's player is
+  picked. The toggle flips the AF3 skin bool abk.nobusywaves; an always-on
+  AF3 patch (Includes_Background.xml) makes the loader obey it. Takes effect
+  on the next busy dialog - no restart; the list shows On/Off.
+
+v3.2.9
+- Backup/Restore (menu and first-run restore step): the "Include my
+  customisations?" checklist is gone. skinshortcuts + skinvariables (your
+  menus and widgets) are always included in a backup and always restored
+  when the backup contains them; the skin's templates are rebuilt afterwards.
+
+v3.2.8
+- FIX (log 2026-10-03 20:47): Kodi 21+ ignores the <cache> block of
+  advancedsettings.xml - the box ran with "Buffer Mode 0, 256 MB, adaptive"
+  although the file asked for 200 MB / 20x. Device Tuning now writes
+  filecache.memorysize / filecache.readfactor through JSON-RPC, snapped to the
+  options this Kodi offers; never shrinks a larger cache on big boxes.
+- FIX: the tuning dialog showed "System.CpuInfo" as the device name on
+  macOS - now the CPU model / platform name.
+- FIX (video 2026-10-03 20:46): Restore Skin Profile only listed automatic
+  backups, so a profile just exported "did not exist". It now lists exports
+  and backups and can browse for any profile zip (Desktop, USB, SMB); the
+  skin is read from profile.json inside the zip.
+- make_build.py warns that advancedsettings <cache> is ignored.
+
+v3.2.7
+- NEW remote patch flag "once": the entry is applied a single time per box
+  (recorded by its "id" in patches_once.json) and skipped afterwards, so a
+  whole-file replacement (inject_file + replace) no longer reverts later user
+  or menu-reconcile edits on every sweep. Publish a newer file under a new id.
+- repo_validate.py: "once" needs an "id"; warns on replace without "once".
+
+v3.2.6
+- NEW remote "json_edit" patches: edit JSON files by matching items on their
+  fields (guid / label / "~substring") instead of text, so formatting
+  differences between boxes don't matter. Ops: match+set/unset, remove,
+  append/insert (idempotent via "unless"), move before. Works on add-on files
+  and, with "base": "addon_data", on userdata (e.g. script.skinvariables
+  nodes). A changed node of the active skin triggers a template rebuild.
+- Patching > Update Online Fixes & Catalogs now applies the downloaded
+  patches immediately and shows the result.
+- repo_validate.py checks json_edit entries.
+
+v3.2.5
+- Dedicated icons (512x512, same neon style) for the 3.2 entries: Finish Build
+  Install, Optimize for This Device, Remote Access, Share Log (QR), Update
+  Online Fixes & Catalogs, Repair Menus & Widgets, Export Skin Profile (also
+  the Skin Profiles category). Restore Skin Profile Backup keeps backup.png.
+
+v3.2.4
+- FIX (video 2026-10-03 09:49, AF3 power tray: empty slot, Force Close red in
+  the editor): menu_reconcile asked System.HasAddon() whether
+  plugin.program.ABUKARIMwizard is installed. Kodi lowercases condition
+  strings, so a mixed-case id never matches (same root cause as
+  wizard_runner 3.1.3) and the item was hidden. Mixed-case ids are now checked
+  through JSON-RPC Addons.GetAddonDetails (installed + enabled); items hidden
+  by mistake come back on the next boot or with Repair Menus & Widgets.
+- Skin conditions are never generated for mixed-case ids (they could only
+  ever evaluate false); bootstrap uses the same presence check.
+
+v3.2.3
+- FIX (log 2026-10-03 09:40, AF3 power tray "Skin Variables error", 0 items,
+  could not edit): menu_reconcile tagged the items it hid with
+  "abk_hidden": [ids] - a LIST. skinvariables passes every item field to
+  ListItem.setProperties(), which only takes strings, so any node holding a
+  hidden item raised TypeError and the whole menu failed. The tag is now a
+  comma-separated string; list tags written by 3.2.0-3.2.2 are converted on the
+  next boot (or Maintenance > Repair Menus & Widgets) and the skin's
+  templates are rebuilt.
+
+v3.2.2
+- FIX (screenshot 2026-10-03 09:32): Remote Access showed "http://Busy:8080"
+  - Network.IPAddress read from Python returned Kodi's "Busy" placeholder.
+  The LAN address now comes from the OS (UDP socket, nothing is sent), with
+  the info label as a retried fallback; never shows a non-IP value.
+
+v3.2.1
+- FIX (log 2026-10-03 09:07): the Remote Access / Share Log QR screen drew its
+  text but not its images (xbmcgui.WindowDialog + ControlImage on Kodi 22), so
+  the previous dialog's last frame showed through behind it. Rebuilt as a
+  WindowXMLDialog (skins/Default/1080i/abk_qr.xml) in the portal's style,
+  backdrop from white.png, QR kept in addon_data/.../qr/. Waits for other
+  dialogs to close and reopens if Kodi swallows it.
+- FIX (same log): right after the Add-on Portal's installs, the preset list
+  returned -1 after ~1 s and the patch checklist returned None after ~50 ms
+  with no input, so setup skipped the preset and the patch step. New
+  dialog_guard: a cancel faster than 1 s is treated as swallowed - wait for
+  the screen to settle and reopen (max 3).
+- FIX: OriginFix "corrected" add-ons whose origin is Kodi's ORIGIN_SYSTEM
+  (b6a50484-...) every 15 s; Kodi puts it straight back. They are skipped now.
+
+v3.2.0
+- NEW Remote config: patches.json / portal.json / presets.json / config.json
+  are read from taiseer999Piers.github.io/abukarim/ (refreshed at boot, max
+  every 6 h, cache-only everywhere else). Patches can now be added or killed
+  without a tools release; remote entries support min_version/max_version and
+  target_sha256 so they never touch an upstream file they were not written for.
+- NEW skins.json fields (all optional, old catalogs keep working):
+  sha256 (download verified), companions (replaces the hardcoded map),
+  min_kodi / max_kodi / platforms (incompatible skins are hidden),
+  profile + profile_sha256 (Piers settings/menus/widgets per skin, applied
+  before the skin is activated, previous files backed up).
+- NEW Skin Profiles menu: export the current skin's profile as a portable zip
+  (dev paths rewritten to special://home) + restore a profile backup.
+- NEW Menu reconcile: menu items / widgets that point at an add-on that is not
+  installed are hidden (skinvariables: disabled flag, skinshortcuts v3:
+  System.HasAddon visible) and come back automatically once it is installed.
+  Runs at boot and after the Add-on Portal; also in Maintenance.
+- NEW First run: setup preset (Full / Lite / Plex-Emby / Custom) pre-ticks the
+  Add-on Portal; device tuning sizes the video cache from RAM; every box gets
+  its own web server password (shown once with a QR for Kore/Yatse); thin-build
+  bootstrap installs add-ons listed in bootstrap.json from their repos.
+- Tools menu entries for these are actions (not folders), per the 3.1.19 rule.
+- segno (QR) vendored in resources/lib/vendor (OpenWizard copy was removed).
+- NEW Share Log (QR): uploads kodi.log / kodi.old.log to paste.kodi.tv with
+  keys, tokens, passwords, e-mails, debrid links and public IPs scrubbed.
+- NEW Setup > Optimize for This Device, Remote Access, Finish Build Install;
+  Patches > Update Online Fixes & Catalogs; Maintenance > Repair Menus.
+
+Older releases (moved from addon.xml <news> in 3.3.4)
+- v3.1.20 - FIX: AF3 Auto Trailers stopped every trailer a split second after it opened (and retried every few seconds). The trailer now keeps playing while Kodi opens the stream.
+- v3.1.19 - FIX: AF3 Auto Trailers switched itself on and off in a loop after the skin reload (and could reset its settings). The entry now runs once, reloads the skin only after its list closes, and saves safely.
+- v3.1.18 - AF3 Auto Trailers: picking the Toggles entry now switches it ON straight away (then shows sound, delay and quality); pick it again and choose the first line to turn it off.
+- v3.1.17 - AF3 Auto Trailers: the Toggles entry now shows On/Off, the trailer engine also starts from the AF3 Home screen when Kodi skips the ABUKARIM TOOLS service, and the log explains every step (focus, lookup, start).
+- v3.1.16 - New in Toggles: AF3 Auto Trailers. Rest on a movie or show on the Arctic Fuse 3 Home or hubs and its trailer plays behind the page (straight from IMDb - no YouTube add-on, no account). Choose sound on/off, how long to wait (1-10 s) and 720p/1080p. Back and the footer ignore a playing trailer.
+- v3.1.15 - Removed the DexSubtitles Auto-Download and Prism: TMDbHelper Play patches. The DexSubtitles background service added by older versions is removed automatically (restart Kodi once).
+- v3.1.14 - AF3: Vertical Plot now also applies to the OSD seek bar info and the library views opened from the menus/sub-menus (plot scrolls vertically, smaller mini font, same spacing as Home).
+- v3.1.11 - FIX: add-ons such as Arctic Fuse 3 could be linked to the wrong repository (one with an older version, so they never updated). Linking now picks the repository that carries your installed version, prefers the Piers repository on Kodi 22, corrects wrong links automatically, and refreshes the repositories when their saved listing is out of date.
+- v3.1.10 - FIX: some add-ons (e.g. Arctic Fuse 3) stayed without an update source because Kodi did not start the ABUKARIM TOOLS background service. Opening ABUKARIM TOOLS now starts the service if it is not running and links add-ons to their repositories straight away.
+- v3.1.9 - Rebuild Add-on Database is now hands-free: ABUKARIM TOOLS re-enables itself after the first restart and finishes the rebuild on its own.
+- v3.1.8 - FIX: Rebuild Add-on Database now links your add-ons back to their repositories (update sources are saved before the rebuild and restored after it; the rest are matched after a repository refresh). Fix Add-on Update Origins also refreshes the repositories first on a fresh database.
+- v3.1.7 - FIX: the background service was switched off again, so patches were not re-applied at boot and the boot-time repo linking never ran; it is back on. Finishing an add-on database rebuild from the menu no longer freezes the menu.
+- v3.1.6 - Clearer Rebuild Add-on Database instructions: after the first restart, enable ABUKARIM TOOLS in My add-ons and it finishes the rest.
+- v3.1.5 - FIX: Rebuild Add-on Database could get stuck after the first restart. It now re-enables only the add-ons that were enabled before, puts your skin back, and cannot get stuck in a loop.
+- v3.1.4 - FIX: the ABUKARIM Wizard was reported as not installed even when it was.
+- v3.1.3 - The built-in OpenWizard was removed; the Maintenance menu now opens the ABUKARIM Wizard, and Total Clean / Clear Old Thumbnails run through it (offers to install the wizard if it is missing).
+- v3.1.0.31 - FIX: the Node Icons toggle had no title in the Toggles menu.
+- v3.1.0.30 - FIX: Node Icons toggle crashed (its texts were missing). TinyPPI fonts patch works with the newer TinyPPI (no more "1 failed" on every sweep). No more "Unknown addon id" errors in the log for add-ons that are not installed.
+- v3.1.0.29 - New icons for "Setup & Install" and "Fix Add-on Update Origins"; DPlex toggle icon shows again; background service re-enabled and Skin/Add-on Portal installs patch immediately again; unused files, code and strings removed.
+- v3.1.0.28 - AF3: Vertical Plot (Home) - the plot now sits a little lower, with more space under the genre line (ratings row unchanged). Patches that change the active skin now reload it automatically (waits until playback ends, no dialog is open and first-run is finished).
+- v3.1.0.27 - FIX: auto-patching works again - the background service (watchdog) was disabled in addon.xml; Skin Portal and Add-on Portal installs now patch immediately.
+- v3.1.0.26 - New patch toggle "AF3: Highlight Genre & Widget Titles": the Genre plotline and all widget titles use the skin highlight colour.
+- v3.1.0.25 - AF3: Vertical Plot (Home) now also shows the Home plot in the smaller mini font (font_mini_plot); plot font elsewhere unchanged.
+- v3.1.0.24 - New patch toggle "AF3: Vertical Plot (Home)": the Arctic Fuse 3 Home plot scrolls vertically like AF2 instead of horizontally.
+- v3.1.0.23 - Add-on Portal auto-answers every "Add-on required / enable?" prompt during and just after installing (POV re-enables itself from its own service).
+- v3.1.0.22 - No more "Add-on required / enable this add-on?" popups after installing from the Add-on Portal or Skin Selection - add-ons are enabled silently.
+- v3.1.0.21 - Fix: Run First-Time Setup did nothing in 3.1.0.20 (script launched without add-on context); now launched via RunPlugin.
+- v3.1.0.20 - First-run: welcome splash removed; steps no longer overlap (auto-patch sweeps pause during setup, setup runs detached from the menu, swallowed dialogs are re-shown instead of being treated as Skip).
+- v3.1.0.19 - First-run setup now opens the Add-on Portal after the restore step (before patches and Skin Selection); Back skips it.
+- v3.1.0.18 - Skin Selection redesigned: repository picker is now three large neon cards, and the skin gallery shows a live details panel (preview, name, installed state) beside a 3-column screenshot grid.
+- v3.1.0.17 - New Add-on Portal (Setup & Install): tick any of 9 video add-ons (Dex Hub, DPlex, Fen Light+, Last Played, POV, Red Light, Seren, Umbrella, YouTube) and install them from their pinned repositories, with repos, dependencies and update origin handled automatically.
+- v3.1.0.16 - Backup Manager: addon_data/plugin.program.abukarimtools is now excluded from both backup and restore (older backups that contain it are skipped on restore).
+- v3.1.0.15 - Fix Kodi freezing when opening the add-on (TinyPPI fonts.py regex).

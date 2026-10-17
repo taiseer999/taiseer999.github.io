@@ -621,7 +621,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="3.4.10" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="3.4.11" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -652,7 +652,7 @@ updated YouTube addon URL
     <description lang="en_GB">ABUKARIM TOOLS is an all-in-one utility for managing your Kodi setup. It bundles a Skin Installer and Skin Switcher, full backup and restore of your userdata, and quick access to the ABUKARIM Wizard and its maintenance tools (Total Clean and old thumbnail cleanup). A built-in patcher keeps popular add-ons (Seren, Prism, TinyPPI, Arctic Fuse 3, TMDbHelper, RedLight and more) working correctly on CoreELEC and Kodi, and re-applies its fixes automatically after those add-ons update. Also includes handy maintenance tools such as a speed test, a CPU benchmark and an add-on database rebuild.</description>
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، ووصولاً سريعاً إلى معالج أبوكريم وأدوات الصيانة فيه (التنظيف الشامل وحذف الصور المصغّرة القديمة). كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة واختبار أداء المعالج وإعادة بناء قاعدة بيانات الإضافات.</description>
-    <news>v3.4.9 - Font Size: new -20% mode. v3.4.8 - Font Size: Original, -5%, -10% or -15% (Larger removed); a change restarts Kodi. v3.4.7 - FIX: Font Size no longer fights TinyPPI (endless skin reload); its overlay fonts keep their size and the duplicate font entries are cleaned up. v3.4.6 - New Toggles mode "Font Size": Original, Larger (+5%) or Smaller (-5%) for every font of the skin. v3.4.5 - FIX: TMDbHelper genre list also refreshed, so genres really come back in Arabic. v3.4.4 - TMDbHelper genres now follow the language setting (Arabic genres instead of English). v3.4.3 - LibreELEC community builds are recognised too, so the Arctic Fuse 3 LibreELEC start-up logo applies on them. v3.4.2 - Arctic Fuse 3 on LibreELEC: LibreELEC start-up logo instead of CoreELEC. v3.4.1 - FIX: a restore from the phone did not reinstall the add-ons; old backups also bring back the skin.</news>
+    <news>v3.4.5 - FIX: TMDbHelper genre list also refreshed, so genres really come back in Arabic. v3.4.4 - TMDbHelper genres now follow the language setting (Arabic genres instead of English). v3.4.3 - LibreELEC community builds are recognised too, so the Arctic Fuse 3 LibreELEC start-up logo applies on them. v3.4.2 - Arctic Fuse 3 on LibreELEC: LibreELEC start-up logo instead of CoreELEC. v3.4.1 - FIX: a restore from the phone did not reinstall the add-ons; old backups also bring back the skin.</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>
@@ -5142,18 +5142,17 @@ v1.0.1 (2019-08-06)
     <fanart>fanart.jpg</fanart>
   </assets>
 </extension>
-</addon><addon id="script.tinyppi" name="TinyPPI" version="2.15.4.1" provider-name="jamal2362">
+</addon><addon id="script.tinyppi" name="TinyPPI" version="2.16" provider-name="jamal2362">
     <requires>
-        <import addon="xbmc.python" version="3.0.1" />
-        <import addon="script.module.sidedata" version="1.6.0" optional="true" />
+        <import addon="xbmc.python" version="3.0.0" />
     </requires>
-    <extension point="xbmc.service" library="resources/lib/service/start.py" />
+    <extension point="xbmc.service" library="resources/lib/service/monitor.py" />
     <extension point="xbmc.python.script" library="main.py">
         <provides>executable</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
-        <license>AGPL-3.0-or-later</license>
+        <license>MIT</license>
         <source>https://github.com/CE-Repo/script.tinyppi</source>
         <summary lang="ar">يعرض معلومات مخصصة عن عملية المشغل</summary>
         <summary lang="de">Zeigt benutzerdefinierte Prozessinformationen an</summary>
@@ -5165,17 +5164,9 @@ v1.0.1 (2019-08-06)
         <description lang="en">Opens a separate process information window. This window displays codec, video, and audio details for the currently playing media.</description>
         <description lang="hu">Megnyit egy külön folyamatinformációs ablakot. Ez az ablak az aktuálisan lejátszott média kodek-, videó- és hangadatait jeleníti meg.</description>
         <description lang="zh">打开一个独立的进程信息窗口。此窗口显示当前播放媒体的编解码器、视频和音频详细信息。</description>
-        
-        <news>v2.15.3
-- Web dashboard: the token travels in a request header only, never in a URL; the live stream and pictures use a session cookie instead.
-- Web dashboard: reading without the token works on the home network only, and the lockout after wrong tokens counts per device.
-- Web dashboard: fixed shelves that went wrong while the library changed or during a search, the cover tint, the bar colour on load; a dashboard that cannot start is now handled cleanly.
-- Resume points, frame rates and luminance values Kodi reports as invalid no longer break the display.
-- Colour settings with non-Latin digits are read correctly, and missing translations fall back to English.
-- Share passwords no longer appear in the log.</news>
         <assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.png</fanart>
+            <icon>icon.jpg</icon>
+            <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
 </addon><addon id="script.unlock.advancedsettings" name="Unlock Kodi Advanced Settings" version="1.0.3" provider-name="Alex Bratchik">

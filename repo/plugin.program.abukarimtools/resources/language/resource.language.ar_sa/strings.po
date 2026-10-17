@@ -1296,35 +1296,3 @@ msgctxt "#30738"
 msgid "Restored from the phone - restart to finish"
 msgstr "تمت الاستعادة من الجوال، أعد التشغيل لإكمالها"
 
-msgctxt "#30740"
-msgid "Font Size"
-msgstr "حجم الخط"
-
-msgctxt "#30741"
-msgid "Original"
-msgstr "الأصلي"
-
-msgctxt "#30742"
-msgid "Smaller (-10%)"
-msgstr "أصغر (-10%)"
-
-msgctxt "#30743"
-msgid "Smaller (-5%)"
-msgstr "أصغر (-5%)"
-
-msgctxt "#30744"
-msgid "Font size: %s - restarting Kodi..."
-msgstr "حجم الخط: %s - جارٍ إعادة تشغيل Kodi..."
-
-msgctxt "#30745"
-msgid "The font size could not be changed - the skin files cannot be written."
-msgstr "تعذّر تغيير حجم الخط، إذ لا يمكن الكتابة في ملفات الواجهة."
-
-msgctxt "#30746"
-msgid "Smaller (-15%)"
-msgstr "أصغر (-15%)"
-
-msgctxt "#30747"
-msgid "Smaller (-20%)"
-msgstr "أصغر (-20%)"
-

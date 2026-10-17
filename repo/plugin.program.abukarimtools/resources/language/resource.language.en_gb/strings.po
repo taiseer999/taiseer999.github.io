@@ -1296,35 +1296,3 @@ msgctxt "#30738"
 msgid "Restored from the phone - restart to finish"
 msgstr ""
 
-msgctxt "#30740"
-msgid "Font Size"
-msgstr ""
-
-msgctxt "#30741"
-msgid "Original"
-msgstr ""
-
-msgctxt "#30742"
-msgid "Smaller (-10%)"
-msgstr ""
-
-msgctxt "#30743"
-msgid "Smaller (-5%)"
-msgstr ""
-
-msgctxt "#30744"
-msgid "Font size: %s - restarting Kodi..."
-msgstr ""
-
-msgctxt "#30745"
-msgid "The font size could not be changed - the skin files cannot be written."
-msgstr ""
-
-msgctxt "#30746"
-msgid "Smaller (-15%)"
-msgstr ""
-
-msgctxt "#30747"
-msgid "Smaller (-20%)"
-msgstr ""
-

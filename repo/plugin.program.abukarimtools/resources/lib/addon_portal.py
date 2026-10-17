@@ -90,26 +90,7 @@ NOTES = {
     'script.tinyppi': 30420,
 }
 
-# 3.4.10: add-ons that come from their AUTHOR'S repository whenever this box
-# meets the upstream add-on's own requirements; every other box keeps the
-# catalogue repo above (for TinyPPI: the ABUKARIM all-device build).
-#   addon id -> (upstream repo, name of the local requirement check)
-UPSTREAM = {
-    'script.tinyppi': ('repository.jamal2362', '_tinyppi_upstream_ok'),
-}
-
-# Where a repository's own zip is found when it is NOT mirrored in
-# repository.taiseer (resolved from that repo's own addons.xml).
-REPO_SOURCES = {
-    'repository.jamal2362': ('https://raw.githubusercontent.com/CE-Repo/'
-                             'repository.jamal2362/main/addons/zips/'),
-}
-
-# addon id -> catalogue repo, for entries switched to UPSTREAM (fallback).
-_FALLBACK = {}
-
 REPO_NAMES = {
-    'repository.jamal2362':    'Jamal2362',
     'repository.dexworld':     'DexWorld',
     'repository.taiseer':      'ABUKARIM',
     'repository.kodifitzwell': 'kodifitzwell',
@@ -161,170 +142,10 @@ def _catalog():
     by_id = {r[0]: r for r in remote}
     out = [by_id.pop(c[0], c) for c in CATALOG if c[0] not in drop]
     out += [r for r in remote if r[0] in by_id and r[0] not in drop]
-    return [_prefer_upstream(e) for e in out]
-
-
-# ---------------------------------------------------------------------------
-# upstream repository when the add-on's own requirements are met (3.4.10)
-# ---------------------------------------------------------------------------
-
-def _is_coreelec():
-    if os.path.isdir('/etc/coreelec'):
-        return True
-    try:
-        with open('/etc/os-release') as f:
-            return any('coreelec' in line.lower() for line in f)
-    except OSError:
-        return False
-
-
-def _abi_version(abi_id):
-    """Version Kodi provides for a core ABI id (xbmc.python, xbmc.gui ...)."""
-    try:
-        return xbmc.getInfoLabel('System.AddonVersion(%s)' % abi_id) or ''
-    except Exception:
-        return ''
-
-
-def _tinyppi_upstream_ok():
-    """jamal2362's TinyPPI: Kodi 22+ (xbmc.python 3.1.0) on CoreELEC only -
-    its overlay refuses to open anywhere else."""
-    if not _is_coreelec():
-        return False
-    if _kodi_version() < (22,):
-        return False
-    py = _abi_version('xbmc.python')
-    return not py or _vtuple(py) >= (3, 1, 0)
-
-
-def _upstream_local_ok(addon_id):
-    spec = UPSTREAM.get(addon_id)
-    if not spec:
-        return False
-    try:
-        return bool(globals()[spec[1]]())
-    except Exception as e:
-        _log('%s: requirement check failed: %s' % (addon_id, e), xbmc.LOGWARNING)
-        return False
-
-
-def _prefer_upstream(entry):
-    aid, name, rid, icon = entry
-    spec = UPSTREAM.get(aid)
-    if not spec or rid == spec[0] or not _upstream_local_ok(aid):
-        return entry
-    _FALLBACK[aid] = rid
-    return (aid, name, spec[0], icon)
-
-
-# Kodi <platform> tags -> condition that must hold on this box.
-_PLATFORM_COND = {
-    'linux':   'System.Platform.Linux + !System.Platform.Android',
-    'android': 'System.Platform.Android',
-    'osx':     'System.Platform.OSX',
-    'osx64':   'System.Platform.OSX',
-    'osxarm64': 'System.Platform.OSX',
-    'ios':     'System.Platform.IOS',
-    'tvos':    'System.Platform.TVOS',
-    'windx':   'System.Platform.Windows',
-    'windows': 'System.Platform.Windows',
-    'freebsd': 'System.Platform.Linux',
-}
-
-
-def _platform_ok(tags):
-    tags = [t.strip().lower() for t in (tags or '').split() if t.strip()]
-    if not tags or 'all' in tags:
-        return True
-    for t in tags:
-        cond = _PLATFORM_COND.get(t) or _PLATFORM_COND.get(t.split('-')[0])
-        if cond and xbmc.getCondVisibility(cond):
-            return True
-    return False
-
-
-def _listing_block(listing, addon_id):
-    """<addon ...>...</addon> of addon_id from an addons.xml (highest version)."""
-    try:
-        root = ET.fromstring(listing)
-    except Exception:
-        return None
-    best = None
-    for a in root.findall('addon'):
-        if a.get('id') == addon_id and (
-                best is None or _ver_key(a.get('version')) > _ver_key(best.get('version'))):
-            best = a
-    return best
-
-
-def _upstream_meta_ok(addon_id, repo_id):
-    """Check the upstream add-on's OWN addon.xml (from its repository
-    listing): platform tag, core ABI versions, and that every required
-    add-on is present here or carried by the same repository."""
-    base = REPO_SOURCES.get(repo_id)
-    if not base:
-        return True
-    try:
-        listing = _http_get(base + 'addons.xml')
-    except Exception as e:
-        _log('%s: listing failed: %s' % (repo_id, e), xbmc.LOGWARNING)
-        return False
-    node = _listing_block(listing, addon_id)
-    if node is None:
-        _log('%s: %s not listed' % (repo_id, addon_id), xbmc.LOGWARNING)
-        return False
-    carried = set(a.get('id') for a in ET.fromstring(listing).findall('addon'))
-    for ext in node.findall('extension'):
-        if ext.get('point') == 'xbmc.addon.metadata':
-            plat = ext.find('platform')
-            if plat is not None and not _platform_ok(plat.text):
-                _log('%s %s: platform "%s" not met' % (addon_id, node.get('version'),
-                                                     plat.text), xbmc.LOGINFO)
-                return False
-    for imp in node.findall('./requires/import'):
-        dep = imp.get('addon') or ''
-        if not dep or (imp.get('optional') or '').lower() == 'true':
-            continue
-        need = imp.get('version') or ''
-        if dep.startswith(_SKIP_DEP_PREFIXES):
-            have = _abi_version(dep)
-            if need and have and _vtuple(have) < _vtuple(need):
-                _log('%s: needs %s %s, Kodi has %s' % (addon_id, dep, need, have))
-                return False
-        elif not _has_addon(dep) and dep not in carried:
-            _log('%s: dependency %s unavailable' % (addon_id, dep))
-            return False
-    return True
-
-
-def _route_upstream(entries):
-    """Final say before installing, whoever asked (portal, phone setup,
-    backup restore): an UPSTREAM add-on goes to its author's repository only
-    when this box meets that add-on's own requirements (local check + its
-    addon.xml in the repo listing); otherwise to the catalogue repo - also
-    when a restored backup recorded the upstream repo from another box."""
-    out = []
-    for aid, name, rid in entries:
-        spec = UPSTREAM.get(aid)
-        if spec:
-            fb = _FALLBACK.get(aid) or next(
-                (c[2] for c in CATALOG if c[0] == aid), rid)
-            if fb == spec[0]:
-                fb = rid if rid != spec[0] else 'repository.taiseer'
-            if _upstream_local_ok(aid) and _upstream_meta_ok(aid, spec[0]):
-                _log('%s: upstream requirements met -> %s' % (aid, spec[0]))
-                rid = spec[0]
-            else:
-                _log('%s: upstream requirements not met -> %s' % (aid, fb))
-                rid = fb
-        out.append((aid, name, rid))
     return out
 
 
-def _note(addon_id, repo_id=None):
-    spec = UPSTREAM.get(addon_id)
-    if spec and repo_id == spec[0]:
-        return ''                 # the "for non CE22" note is for the fallback
+def _note(addon_id):
     note = NOTES.get(addon_id)
     if isinstance(note, int):
         try:
@@ -481,17 +302,14 @@ def _resolve_repo_zip(repo_id):
     override = (_remote_portal().get('repo_zips') or {}).get(repo_id)
     if override:
         return override
-    for base in (REPO_SOURCES.get(repo_id), TAISEER_ZIPS):
-        if not base:
-            continue
-        try:
-            ver = _addons_xml_version(_http_get(base + 'addons.xml'), repo_id)
-        except Exception as e:
-            _log('listing %s failed: %s' % (base, e), xbmc.LOGWARNING)
-            continue
-        if ver:
-            return '%s%s/%s-%s.zip' % (base, repo_id, repo_id, ver)
-    return None
+    try:
+        ver = _addons_xml_version(_http_get(TAISEER_ZIPS + 'addons.xml'), repo_id)
+    except Exception as e:
+        _log('mirror listing failed: %s' % e, xbmc.LOGWARNING)
+        return None
+    if not ver:
+        return None
+    return '%s%s/%s-%s.zip' % (TAISEER_ZIPS, repo_id, repo_id, ver)
 
 
 # ---------------------------------------------------------------------------
@@ -655,7 +473,6 @@ def _wait_repo_listings(repo_ids, timeout_ms=40000):
 
 def _install_selection(entries):
     """entries = [(addon_id, name, repo_id)]. Returns [(name, ok, note)]."""
-    entries = _route_upstream(entries)
     results = []
     prog = xbmcgui.DialogProgress()
     prog.create(TITLE, T(30401))
@@ -777,7 +594,7 @@ class AddonPortal(xbmcgui.WindowXMLDialog):
             li.setArt({'icon': icon, 'thumb': icon})
             li.setProperty('addonid', aid)
             repo = REPO_NAMES.get(rid, rid)
-            note = _note(aid, rid)
+            note = _note(aid)
             li.setProperty('repo', '%s  ·  %s' % (repo, note) if note else repo)
             li.setProperty('installed', 'true' if _is_local(aid) else '')
             li.setProperty('status', T(30407) if _is_local(aid) else '')
