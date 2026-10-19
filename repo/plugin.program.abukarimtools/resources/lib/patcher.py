@@ -1974,6 +1974,10 @@ _TOGGLE_OF = {
      os.path.join('a4kSubtitles', 'download.py')):                           'a4ksubs_utf8',
 }
 
+# Toggles whose patch Kodi only reads at start-up (addon.xml): switching one
+# needs a Kodi restart before it does anything.
+_RESTART_TOGGLES = {'tmdbh_invoker'}
+
 _SELECTION_FILE = os.path.join(
     ADDON_DATA, 'plugin.program.abukarimtools', 'patch_toggles.json')
 
@@ -2818,13 +2822,16 @@ def _choose_toggles():
     # 3.2.23: a list of on/off switches (toggle art) instead of checkboxes;
     # picking a row flips it, "Done - apply" runs the patches.
     from resources.lib import toggle_ui
+    from resources.lib.i18n import T
     states = toggle_ui.switch_list(
         '%s – choose what to patch' % ADDON_NAME,
-        [(tid, label, tid not in disabled) for tid, label in shown])
+        [(tid, label, tid not in disabled) for tid, label in shown],
+        confirm_back=(T(30750), T(30751), T(30752)))
 
-    # Back -> abort the whole run, leave saved toggles untouched.
+    # Back (or "Discard") -> abort the whole run, leave saved toggles untouched.
     if states is None:
-        return False
+        _log('Toggle checklist closed without saving - nothing changed.')
+        return None
 
     # Toggles not shown (add-on absent) keep their previous state so a temporary
     # uninstall doesn't silently flip them.
@@ -2834,8 +2841,12 @@ def _choose_toggles():
             new_disabled.discard(tid)
         else:
             new_disabled.add(tid)
-    _save_disabled(new_disabled)
-    return True
+    flipped = new_disabled ^ disabled
+    if _save_disabled(new_disabled):
+        _log('Toggles saved: off=%s%s' % (
+            ','.join(sorted(new_disabled)) or 'none',
+            ' (changed: %s)' % ','.join(sorted(flipped)) if flipped else ''))
+    return flipped
 
 
 def run(group=None, addon_ids=None):
@@ -2848,10 +2859,11 @@ def run(group=None, addon_ids=None):
     addon_ids=[...] still narrows to specific add-ons (used by callers that want
     a one-off re-apply); the toggle filter in _select() applies on top of it.
     """
-    if not _choose_toggles():
+    flipped = _choose_toggles()
+    if flipped is None:
         return  # user cancelled the checklist
 
-    succeeded, failed, _changed, results = apply_set(group, addon_ids=addon_ids)
+    succeeded, failed, changed, results = apply_set(group, addon_ids=addon_ids)
 
     lines = []
     for ok, msg in results:
@@ -2869,3 +2881,16 @@ def run(group=None, addon_ids=None):
 
     DIALOG.ok(ADDON_NAME, summary)
     reload_skin_if_pending()
+
+    # 3.4.13: some toggles only take effect when Kodi starts (Kodi reads an
+    # add-on's addon.xml once at boot - reuselanguageinvoker is one of them).
+    if changed and flipped & _RESTART_TOGGLES:
+        _log('Restart-only toggle changed (%s) - offering a Kodi restart.'
+             % ','.join(sorted(flipped & _RESTART_TOGGLES)))
+        try:
+            from resources.lib import origin_fix
+            from resources.lib.i18n import T
+            origin_fix.recommend_restart(T(30753), title=ADDON_NAME,
+                                         yeslabel=T(30754), nolabel=T(30755))
+        except Exception as e:
+            _log('restart offer failed: %s' % e, xbmc.LOGWARNING)

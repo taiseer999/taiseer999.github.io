@@ -1328,3 +1328,27 @@ msgctxt "#30747"
 msgid "Smaller (-20%)"
 msgstr "أصغر (-20%)"
 
+msgctxt "#30750"
+msgid "You changed some switches. Save the changes and apply them?"
+msgstr "لقد غيّرت بعض المفاتيح. هل تريد حفظ التغييرات وتطبيقها؟"
+
+msgctxt "#30751"
+msgid "Save and apply"
+msgstr "حفظ وتطبيق"
+
+msgctxt "#30752"
+msgid "Discard"
+msgstr "تجاهل"
+
+msgctxt "#30753"
+msgid "TMDbHelper: Keep Python Warm takes effect only after Kodi restarts. Restart now?"
+msgstr "لا يسري خيار TMDbHelper: Keep Python Warm إلا بعد إعادة تشغيل Kodi. هل تريد إعادة التشغيل الآن؟"
+
+msgctxt "#30754"
+msgid "Restart now"
+msgstr "أعد التشغيل الآن"
+
+msgctxt "#30755"
+msgid "Later"
+msgstr "لاحقًا"
+

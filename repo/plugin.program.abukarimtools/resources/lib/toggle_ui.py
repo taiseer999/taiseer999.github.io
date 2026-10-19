@@ -36,12 +36,19 @@ def item(label, on, label2=None):
     return li
 
 
-def switch_list(title, rows, done_label=None):
+def switch_list(title, rows, done_label=None, confirm_back=None):
     """rows: [(key, label, on), ...]. Returns {key: on} after "Done", or None
     on Back. Each pick flips that switch and reopens the list on the same row.
     A list that answers faster than a person can (Kodi swallowed it while
-    busy) is reopened instead of being treated as Back."""
+    busy) is reopened instead of being treated as Back.
+
+    3.4.13: confirm_back=(message, yeslabel, nolabel). When given and Back is
+    pressed after at least one switch was flipped, ask first: yes returns the
+    new states exactly like "Done", no discards them (None). Before this,
+    Back silently threw the flips away and nothing was saved (2026-10-19:
+    Keep Python Warm switched off, never saved, stayed on)."""
     states = [(k, l, bool(o)) for k, l, o in rows]
+    initial = {k: o for k, _l, o in states}
     done = done_label or T(30604)
     pos, quick = 0, 0
     while True:
@@ -55,6 +62,11 @@ def switch_list(title, rows, done_label=None):
                 quick += 1
                 xbmc.sleep(800)
                 continue
+            current = {k: o for k, _l, o in states}
+            if confirm_back and current != initial:
+                msg, yes, no = confirm_back
+                if xbmcgui.Dialog().yesno(title, msg, yeslabel=yes, nolabel=no):
+                    return current
             return None
         quick = 0
         if choice == 0:

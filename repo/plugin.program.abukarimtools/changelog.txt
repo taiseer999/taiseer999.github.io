@@ -1,3 +1,20 @@
+v3.4.13
+- FIX: Apply Patches checklist - Back threw switch changes away silently.
+  toggle_ui.switch_list only returned the new states from the "Done - apply"
+  row; Back returned None and _choose_toggles exited without saving or
+  logging. 2026-10-19 (AM9, after a CPythonInvoker crash): TMDbHelper: Keep
+  Python Warm was switched off and Back pressed, patch_toggles.json was never
+  written, so the watchdog kept reuselanguageinvoker=true. Now Back after a
+  change asks "Save and apply / Discard" (30750-30752); Back with nothing
+  changed still closes quietly.
+- kodi.log now records the outcome: "Toggles saved: off=... (changed: ...)"
+  or "Toggle checklist closed without saving - nothing changed."
+- Keep Python Warm only takes effect when Kodi starts (Kodi reads
+  addon.xml once at boot). Changing it now offers a Kodi restart after the
+  patch run (30753-30755, via origin_fix.recommend_restart - Later keeps
+  the change for the next start). _RESTART_TOGGLES lists such toggles.
+- (3.4.10-3.4.12 shipped without changelog entries.)
+
 v3.4.9
 - Font Size: new mode Smaller (-20%) (smaller20, factor 0.80). Same
   behaviour as the others: TinyPPI-owned fonts untouched, change restarts Kodi.
