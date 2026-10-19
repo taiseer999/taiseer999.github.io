@@ -498,13 +498,9 @@ STRINGS = {
     30747: ('Smaller (-20%)', 'أصغر (-20%)'),
     30745: ('The font size could not be changed - the skin files cannot be written.',
             'تعذّر تغيير حجم الخط، إذ لا يمكن الكتابة في ملفات الواجهة.'),
-    # ---- 3.4.13: patch checklist - save on Back + restart offer (30750-30759) ----
+    # ---- 3.4.13: patch checklist - save on Back (30750-30759) ----
     30750: ('You changed some switches. Save the changes and apply them?',
             'لقد غيّرت بعض المفاتيح. هل تريد حفظ التغييرات وتطبيقها؟'),
     30751: ('Save and apply', 'حفظ وتطبيق'),
     30752: ('Discard', 'تجاهل'),
-    30753: ('TMDbHelper: Keep Python Warm takes effect only after Kodi restarts. Restart now?',
-            'لا يسري خيار TMDbHelper: Keep Python Warm إلا بعد إعادة تشغيل Kodi. هل تريد إعادة التشغيل الآن؟'),
-    30754: ('Restart now', 'أعد التشغيل الآن'),
-    30755: ('Later', 'لاحقًا'),
 }

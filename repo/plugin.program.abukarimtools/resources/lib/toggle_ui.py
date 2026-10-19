@@ -46,7 +46,7 @@ def switch_list(title, rows, done_label=None, confirm_back=None):
     pressed after at least one switch was flipped, ask first: yes returns the
     new states exactly like "Done", no discards them (None). Before this,
     Back silently threw the flips away and nothing was saved (2026-10-19:
-    Keep Python Warm switched off, never saved, stayed on)."""
+    a switch turned off, never saved, stayed on)."""
     states = [(k, l, bool(o)) for k, l, o in rows]
     initial = {k: o for k, _l, o in states}
     done = done_label or T(30604)

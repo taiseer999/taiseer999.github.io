@@ -1329,29 +1329,28 @@ PATCHES = [
         'fallback_repl': r'\g<0>' + _TMDBH_GENRE_LIST_LANG_BLOCK,
         'description': 'TMDbHelper query database.py \u2013 refresh the global genre list when the language changes',
     },
-    # ── TMDbHelper: thread cap + invoker reuse (3.3.3) ──
+    # ── TMDbHelper: thread cap (3.3.3); invoker reuse removed (3.4.14) ──
     # 2026-10-13 OOM kill on the AM9 (4 GB, no swap): kodi.bin reached 2.08 GB
     # anon-rss opening AF3's Korean hub after TraktHubs added 7 widgets. Stock
     # max_threads default is 0 = UNLIMITED in jurialmunkey.ParallelThread, so
-    # every widget spawns one thread per item, and reuselanguageinvoker=false
-    # builds a fresh Python interpreter for every plugin:// call. Cap the pool
-    # at 3 and keep the interpreter warm. Takes effect after a Kodi restart.
-    # 3.3.4: own toggle (tmdbh_invoker) so the thread cap can stay on while
-    # invoker reuse is switched off; 'revert_when_off' puts 'false' back when
-    # the toggle is disabled (see _revert_disabled).
+    # every widget spawns one thread per item. The thread cap (tmdbh_stability)
+    # stays. 3.4.14: the "Keep Python Warm" toggle (tmdbh_invoker,
+    # reuselanguageinvoker=true, 3.3.3-3.4.13) is REMOVED - 2026-10-19 AM9
+    # crashlog: SIGSEGV in libpython while a reused TMDbHelper interpreter
+    # was being torn down as three new ones started. This always-on entry
+    # puts TMDbHelper's stock 'false' back on boxes the toggle had changed
+    # (a no-op on stock files). Kodi reads addon.xml at start-up, so it takes
+    # effect after the next Kodi restart.
     {
         'addon_id': 'plugin.video.themoviedb.helper',
         'rel_path': 'addon.xml',
-        'toggle': 'tmdbh_invoker',
-        'revert_when_off': ('<reuselanguageinvoker>true</reuselanguageinvoker>',
-                            '<reuselanguageinvoker>false</reuselanguageinvoker>'),
-        'old': '<reuselanguageinvoker>false</reuselanguageinvoker>',
-        'new': '<reuselanguageinvoker>true</reuselanguageinvoker>',
-        'already_patched_check': '<reuselanguageinvoker>true</reuselanguageinvoker>',
-        'fallback_pattern': r'<reuselanguageinvoker>\s*false\s*</reuselanguageinvoker>',
-        'fallback_repl': '<reuselanguageinvoker>true</reuselanguageinvoker>',
+        'old': '<reuselanguageinvoker>true</reuselanguageinvoker>',
+        'new': '<reuselanguageinvoker>false</reuselanguageinvoker>',
+        'already_patched_check': '<reuselanguageinvoker>false</reuselanguageinvoker>',
+        'fallback_pattern': r'<reuselanguageinvoker>\s*true\s*</reuselanguageinvoker>',
+        'fallback_repl': '<reuselanguageinvoker>false</reuselanguageinvoker>',
         'not_found_ok': True,
-        'description': 'TMDbHelper addon.xml – reuselanguageinvoker=true',
+        'description': 'TMDbHelper addon.xml – restore stock reuselanguageinvoker=false (Keep Python Warm removed)',
     },
     {
         'addon_id': 'plugin.video.themoviedb.helper',
@@ -1906,7 +1905,6 @@ TOGGLE_GROUPS = [
     ('tmdbh_trakt_auth', 'TMDbHelper Trakt Auth QR'),
     ('tmdbh_mpaa_ksa',   'MPAA for KSA'),
     ('tmdbh_stability',  'TMDbHelper: Stability'),
-    ('tmdbh_invoker',    'TMDbHelper: Keep Python Warm'),
     ('tmdbh_genre_lang', 'TMDbHelper: Genres Follow Language'),
     ('tinyppi_codecs',   'TinyPPI: Codec Badges'),
     ('tinyppi_audio',    'TinyPPI: Audio Badges'),
@@ -1973,10 +1971,6 @@ _TOGGLE_OF = {
     ('service.subtitles.a4ksubtitles',
      os.path.join('a4kSubtitles', 'download.py')):                           'a4ksubs_utf8',
 }
-
-# Toggles whose patch Kodi only reads at start-up (addon.xml): switching one
-# needs a Kodi restart before it does anything.
-_RESTART_TOGGLES = {'tmdbh_invoker'}
 
 _SELECTION_FILE = os.path.join(
     ADDON_DATA, 'plugin.program.abukarimtools', 'patch_toggles.json')
@@ -2859,11 +2853,10 @@ def run(group=None, addon_ids=None):
     addon_ids=[...] still narrows to specific add-ons (used by callers that want
     a one-off re-apply); the toggle filter in _select() applies on top of it.
     """
-    flipped = _choose_toggles()
-    if flipped is None:
+    if _choose_toggles() is None:
         return  # user cancelled the checklist
 
-    succeeded, failed, changed, results = apply_set(group, addon_ids=addon_ids)
+    succeeded, failed, _changed, results = apply_set(group, addon_ids=addon_ids)
 
     lines = []
     for ok, msg in results:
@@ -2882,15 +2875,3 @@ def run(group=None, addon_ids=None):
     DIALOG.ok(ADDON_NAME, summary)
     reload_skin_if_pending()
 
-    # 3.4.13: some toggles only take effect when Kodi starts (Kodi reads an
-    # add-on's addon.xml once at boot - reuselanguageinvoker is one of them).
-    if changed and flipped & _RESTART_TOGGLES:
-        _log('Restart-only toggle changed (%s) - offering a Kodi restart.'
-             % ','.join(sorted(flipped & _RESTART_TOGGLES)))
-        try:
-            from resources.lib import origin_fix
-            from resources.lib.i18n import T
-            origin_fix.recommend_restart(T(30753), title=ADDON_NAME,
-                                         yeslabel=T(30754), nolabel=T(30755))
-        except Exception as e:
-            _log('restart offer failed: %s' % e, xbmc.LOGWARNING)

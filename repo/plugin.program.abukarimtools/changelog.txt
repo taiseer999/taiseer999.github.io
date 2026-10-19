@@ -1,3 +1,19 @@
+v3.4.14
+- REMOVED toggle tmdbh_invoker "TMDbHelper: Keep Python Warm" (3.3.4) and
+  its reuselanguageinvoker=true patch. 2026-10-19 AM9 crashlog: SIGSEGV in
+  libpython on a new CPythonInvoker thread while a reused TMDbHelper
+  interpreter (alive ~3 min) was in OnExit and three more were in
+  Py_NewInterpreter - the reuse teardown racing new sub-interpreters.
+- Replaced by an always-on entry that restores TMDbHelper's stock
+  <reuselanguageinvoker>false</reuselanguageinvoker> where the toggle had
+  set true (no-op on stock files). Kodi reads addon.xml at start-up, so it
+  takes effect after the next restart. The thread cap (tmdbh_stability,
+  max_threads=3) is unchanged and stays on.
+- The 3.4.13 restart offer (30753-30755, _RESTART_TOGGLES) existed only
+  for this toggle and is removed with it. Save-on-Back stays.
+- A saved "tmdbh_invoker" in patch_toggles.json is now an unknown id and
+  is ignored.
+
 v3.4.13
 - FIX: Apply Patches checklist - Back threw switch changes away silently.
   toggle_ui.switch_list only returned the new states from the "Done - apply"
@@ -9,10 +25,6 @@ v3.4.13
   changed still closes quietly.
 - kodi.log now records the outcome: "Toggles saved: off=... (changed: ...)"
   or "Toggle checklist closed without saving - nothing changed."
-- Keep Python Warm only takes effect when Kodi starts (Kodi reads
-  addon.xml once at boot). Changing it now offers a Kodi restart after the
-  patch run (30753-30755, via origin_fix.recommend_restart - Later keeps
-  the change for the next start). _RESTART_TOGGLES lists such toggles.
 - (3.4.10-3.4.12 shipped without changelog entries.)
 
 v3.4.9

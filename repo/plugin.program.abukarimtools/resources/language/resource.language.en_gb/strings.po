@@ -1340,15 +1340,3 @@ msgctxt "#30752"
 msgid "Discard"
 msgstr ""
 
-msgctxt "#30753"
-msgid "TMDbHelper: Keep Python Warm takes effect only after Kodi restarts. Restart now?"
-msgstr ""
-
-msgctxt "#30754"
-msgid "Restart now"
-msgstr ""
-
-msgctxt "#30755"
-msgid "Later"
-msgstr ""
-
