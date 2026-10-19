@@ -1,3 +1,17 @@
+v3.4.15
+- FIX: AF3 50.11.7 - the info page's Trailer button and the context menu's
+  Trailer entry did nothing. Both call the include
+  Action_SelectTrailerSource_OnClick, which 50.11.7 dropped from
+  Includes_Actions.xml (still present in upstream 3.4.0), so the button had
+  no onclick. New always-on patch puts it back: it sets the trailer link and
+  title and opens the trailer dialog (1123), whose onload already runs
+  trailer_play.py (NewPipe / IMDb).
+- With no trailer link on the item (TMDb/IMDb-only titles, which the skin
+  still shows the button for) the link is 'abk://lookup' instead of empty, so
+  the dialog no longer closes on open and trailer_play.py finds the trailer by
+  id - also when the auto-trailers' "Trailer button only" mode is off.
+- Stands aside by itself if AF3 ships the include again.
+
 v3.4.14
 - REMOVED toggle tmdbh_invoker "TMDbHelper: Keep Python Warm" (3.3.4) and
   its reuselanguageinvoker=true patch. 2026-10-19 AM9 crashlog: SIGSEGV in

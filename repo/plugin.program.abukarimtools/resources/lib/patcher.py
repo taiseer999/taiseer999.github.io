@@ -117,6 +117,35 @@ _TMDBH_GENRE_LIST_LANG_BLOCK = (
 
 
 
+# AF3 50.11.x: the Trailer button's include, restored (3.4.15). See the PATCHES
+# entry for Includes_Actions.xml. Link: the item's own trailer, else
+# TMDbHelper's, else 'abk://lookup' (trailer_play.py then searches by id).
+_AF3_SELECT_TRAILER_BLOCK = (
+    '    <!-- ABUKARIM: trailer source (AF3 50.11 dropped this include) -->\n'
+    '    <variable name="ABK_Trailer_Link">\n'
+    '        <value condition="!String.IsEmpty(ListItem.Trailer)">$INFO[ListItem.Trailer]</value>\n'
+    '        <value condition="!String.IsEmpty(Container.ListItem.Trailer)">$INFO[Container.ListItem.Trailer]</value>\n'
+    '        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Trailer))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Trailer)]</value>\n'
+    '        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_trailer))">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_trailer)]</value>\n'
+    '        <value>abk://lookup</value>\n'
+    '    </variable>\n'
+    '    <variable name="ABK_Trailer_Title">\n'
+    '        <value condition="!String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>\n'
+    '        <value condition="!String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>\n'
+    '        <value condition="!String.IsEmpty(Container.ListItem.TVShowTitle)">$INFO[Container.ListItem.TVShowTitle]</value>\n'
+    '        <value condition="!String.IsEmpty(Container.ListItem.Title)">$INFO[Container.ListItem.Title]</value>\n'
+    '        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.TVShowTitle))">$INFO[Window(Home).Property(TMDbHelper.ListItem.TVShowTitle)]</value>\n'
+    '        <value>$INFO[Window(Home).Property(TMDbHelper.ListItem.Title)]</value>\n'
+    '    </variable>\n'
+    '    <include name="Action_SelectTrailerSource_OnClick">\n'
+    '        <onclick>SetProperty(PlayTrailerItems,$VAR[Path_VideoInfo_Trailers],Home)</onclick>\n'
+    '        <onclick>SetProperty(PlayTrailerTitle,$ESCVAR[ABK_Trailer_Title],Home)</onclick>\n'
+    '        <onclick>SetProperty(PlayTrailer,$ESCVAR[ABK_Trailer_Link],Home)</onclick>\n'
+    '        <onclick>ActivateWindow(1123)</onclick>\n'
+    '    </include>\n'
+    '\n'
+)
+
 # ---------------------------------------------------------------------------
 ADDON_NAME  = 'ABUKARIM TOOLS'
 HOME        = xbmcvfs.translatePath('special://home/')
@@ -1121,6 +1150,29 @@ PATCHES = [
         'fallback_repl': ('<onclick>RunScript(special://home/addons/plugin.program.abukarimtools/trailer_play.py)</onclick>'
                           '<!-- ABUKARIM: trailer button -->'),
         'description': 'AF3 trailer dialog - Repeat plays through NewPipe/IMDb',
+    },
+    # ── AF3 50.11.x: Trailer button / context-menu Trailer were dead (3.4.15) ──
+    # The info page's Trailer button (DialogInfo_VideoButtons_Trailer) and the
+    # context menu's Trailer entry both call <include>Action_SelectTrailerSource_OnClick</include>,
+    # but AF3 50.11.7 dropped that include from Includes_Actions.xml (it is still
+    # in upstream 3.4.0) - an undefined include has no onclick, so pressing
+    # Trailer did nothing. This puts it back, opening the trailer dialog (1123)
+    # whose onload runs trailer_play.py. Unlike the stock version it never
+    # leaves PlayTrailer empty: with no trailer link on the item it passes
+    # 'abk://lookup', so the dialog stays open and trailer_play.py finds the
+    # trailer by IMDb/TMDb id (the button is shown for TMDb/IMDb-only items too).
+    # The sentinel is the include NAME, so if AF3 ships it again natively the
+    # entry stands aside.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Actions.xml'),
+        'not_found_ok': True,
+        'old': '    <include name="Action_PlayTrailer_OnClick">\n',
+        'new': _AF3_SELECT_TRAILER_BLOCK + '    <include name="Action_PlayTrailer_OnClick">\n',
+        'already_patched_check': 'name="Action_SelectTrailerSource_OnClick"',
+        'fallback_pattern': r'([ \t]*)<include name="Action_PlayTrailer_OnClick">',
+        'fallback_repl': _AF3_SELECT_TRAILER_BLOCK + r'\g<0>',
+        'description': 'AF3 Includes_Actions.xml - restore Action_SelectTrailerSource_OnClick (Trailer button)',
     },
 
     {   # AF3 auto-trailers (3.1.17): Kodi does not always start the

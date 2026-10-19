@@ -35,6 +35,7 @@ from resources.lib.af3_trailers import config, imdb, newpipe  # noqa: E402
 HOME = xbmcgui.Window(10000)
 DIALOG_ID = 1123
 TOKEN_PROP = 'abk.trailer.button'
+LOOKUP = 'abk://lookup'   # PlayTrailer placeholder: no link, find it by id
 
 
 def _log(msg, level=xbmc.LOGINFO):
@@ -145,17 +146,21 @@ def _from_imdb(imdb_id, tmdb_id, dbtype, title, quality):
 
 def run():
     link = HOME.getProperty('PlayTrailer')
+    # 3.4.15: AF3 50.11's Trailer button (restored by the patcher) passes
+    # LOOKUP when the item carries no trailer link - search by id instead.
+    if link == LOOKUP:
+        link = ''
     title = HOME.getProperty('PlayTrailerTitle') or 'Trailer'
     token = '%.6f' % time.time()
     HOME.setProperty(TOKEN_PROP, token)
     cfg = config.load()
     # 3.2.52: only in the "Trailer button only" mode of AF3 Auto Trailers;
     # in the other modes (or with Auto Trailers off) the button plays AF3's
-    # own link exactly as before
-    if not (cfg.get('enabled') and cfg.get('show') == 'buttons'):
+    # own link exactly as before - and with no link at all (3.4.15) it
+    # falls through to the NewPipe/IMDb search below rather than doing nothing
+    if not (cfg.get('enabled') and cfg.get('show') == 'buttons') and link:
         _log('"%s": Trailer-button mode is off - AF3 link as is' % title)
-        if link:
-            xbmc.executebuiltin('PlayMedia("%s",False,1)' % link.replace('"', '\\"'))
+        xbmc.executebuiltin('PlayMedia("%s",False,1)' % link.replace('"', '\\"'))
         return
     imdb_id, tmdb_id, dbtype = _ids()
     _log('button: "%s" link=%s imdb=%s tmdb=%s (%s) source=%s'
