@@ -2,8 +2,29 @@
 # Module: default
 # Author: jurialmunkey
 # License: GPL v.3 https://www.gnu.org/copyleft/gpl.html
-from xbmc import Actor, VideoStreamDetail, AudioStreamDetail, SubtitleStreamDetail, LOGINFO
+from xbmc import Actor, VideoStreamDetail, AudioStreamDetail, SubtitleStreamDetail, LOGINFO, getInfoLabel
 from xbmc import log as kodi_log
+
+
+VIDEO_STREAM_DETAILS_KEYS = {
+    21: ('aspect', 'codec', 'duration', 'height', 'width', 'hdrtype', ),
+    19: ('aspect', 'codec', 'duration', 'height', 'width', )    # Dont include hdrtype because of pre Nexus Beta issues
+}
+
+
+AUDIO_STREAM_DETAILS_KEYS = {
+    19: ('channels', 'codec', 'language', ),
+}
+
+
+SUBTITLE_STREAM_DETAILS_KEYS = {
+    19: ('language', ),
+}
+
+
+def get_key_by_version(data, target=None):
+    target = target or int(getInfoLabel('System.BuildVersion').split('.')[0])
+    return data[max((k for k in data if k <= target), default=None)]
 
 
 def set_info_tag(
@@ -68,8 +89,15 @@ class _ListItemInfoTag():
                     raise TypeError
                 func(v)
 
+            except AttributeError:
+                """ InfoTag setter doesnt exist for that key so skip.
+                Occurs when user is on Kodi version before that particular setter was added.
+                Error caught without raising to maintain backwards compatibility without versioning.
+                """
+                continue
+
             except KeyError:
-                if _tag_attr.get('skip'):
+                if 'skip' in _tag_attr:
                     continue
 
                 if 'route' in _tag_attr:
@@ -84,13 +112,17 @@ class _ListItemInfoTag():
             except TypeError:
                 func(_tag_attr['convert'](v))  # Attempt to force conversion to correct type
 
+    def set_datetime(self, label: str, *args, **kwargs):
+        """ Wrapper for ListItem.setInfo() to ListItem.setDateTime() """
+        self._listitem.setDateTime(label)
+
 
 class _ListItemInfoTagVideo(_ListItemInfoTag):
     _tag_gttr = 'getVideoInfoTag'
     _tag_attr = {
         'size': {'skip': True},  # Currently no infoTag setter for this property
         'count': {'skip': True},  # Currently no infoTag setter for this property
-        'date': {'attr': 'setDateAdded', 'convert': str, 'classinfo': str},  # Unsure if this is the correct place to route this generic value
+        'date': {'route': 'set_datetime'},
         'genre': {'attr': 'setGenres', 'convert': lambda x: [x], 'classinfo': (list, tuple)},
         'country': {'attr': 'setCountries', 'convert': lambda x: [x], 'classinfo': (list, tuple)},
         'year': {'attr': 'setYear', 'convert': int, 'classinfo': int},
@@ -142,6 +174,24 @@ class _ListItemInfoTagVideo(_ListItemInfoTag):
         'dbid': {'attr': 'setDbId', 'convert': int, 'classinfo': int},
     }
 
+    _stream_detail_attr = {
+        'video': {
+            'attr': 'addVideoStream',
+            'stream_detail_class': VideoStreamDetail,
+            'allowed_kwgs': get_key_by_version(VIDEO_STREAM_DETAILS_KEYS)
+        },
+        'audio': {
+            'attr': 'addAudioStream',
+            'stream_detail_class': AudioStreamDetail,
+            'allowed_kwgs': get_key_by_version(AUDIO_STREAM_DETAILS_KEYS)
+        },
+        'subtitle': {
+            'attr': 'addSubtitleStream',
+            'stream_detail_class': SubtitleStreamDetail,
+            'allowed_kwgs': get_key_by_version(SUBTITLE_STREAM_DETAILS_KEYS)
+        },
+    }
+
     def set_info_cast(self, cast: list, *args, **kwargs):
         """ Wrapper to convert cast and castandrole from ListItem.setInfo() to InfoTagVideo.setCast() """
         def _set_cast_member(x, i):
@@ -155,34 +205,29 @@ class _ListItemInfoTagVideo(_ListItemInfoTag):
         """ Wrapper for compatibility with Matrix ListItem.setCast() method """
         self._info_tag.setCast([Actor(**i) for i in cast])
 
+    def get_stream_detail(self, i, stream_detail_class, allowed_kwgs=()):
+        try:
+            return stream_detail_class(**i)  # Try with all properties returned from JSON RPC first
+        except TypeError:
+            streams_kwgs = {k: v for k, v in i.items() if k in allowed_kwgs}  # If it fails try with restriction to core properties only
+            return stream_detail_class(**streams_kwgs)
+
+    def set_stream_detail(self, stream_details, key='video'):
+        try:
+            attributes = self._stream_detail_attr[key]
+            stream_details_values = stream_details[key]
+        except (KeyError, TypeError):
+            return
+        for i in stream_details_values:
+            func = getattr(self._info_tag, attributes['attr'])
+            func(self.get_stream_detail(i, attributes['stream_detail_class'], attributes['allowed_kwgs']))
+
     def set_stream_details(self, stream_details: dict):
         """ Wrapper for compatibility with multiple ListItem.addStreamInfo() methods in one call """
         if not stream_details:
             return
-
-        try:
-            for i in stream_details['video']:
-                try:
-                    self._info_tag.addVideoStream(VideoStreamDetail(**i))
-                except TypeError:
-                    # TEMP BANDAID workaround for inconsistent key names prior to Nexus Beta changes
-                    i['hdrType'] = i.pop('hdrtype', '')
-                    i['stereoMode'] = i.pop('stereomode', '')
-                    self._info_tag.addVideoStream(VideoStreamDetail(**i))
-        except (KeyError, TypeError):
-            pass
-
-        try:
-            for i in stream_details['audio']:
-                self._info_tag.addAudioStream(AudioStreamDetail(**i))
-        except (KeyError, TypeError):
-            pass
-
-        try:
-            for i in stream_details['subtitle']:
-                self._info_tag.addSubtitleStream(SubtitleStreamDetail(**i))
-        except (KeyError, TypeError):
-            pass
+        for k in self._stream_detail_attr.keys():
+            self.set_stream_detail(stream_details, k)
 
     def add_stream_info(self, stream_type, stream_values):
         """ Wrapper for compatibility with Matrix ListItem.addStreamInfo() method """
@@ -193,8 +238,14 @@ class _ListItemInfoTagVideo(_ListItemInfoTag):
     def set_resume_point(self, infoproperties: dict, resume_key='ResumeTime', total_key='TotalTime', pop_keys=True):
         """ Wrapper to get/pop resumetime and totaltime properties for InfoTagVideo.setResumePoint() """
         getter_func = infoproperties.pop if pop_keys else infoproperties.get
-        resume_time = getter_func(resume_key, None)
-        total_time = getter_func(total_key, None)
+        try:
+            resume_time = float(getter_func(resume_key, 0.0))
+        except ValueError:
+            resume_time = None
+        try:
+            total_time = float(getter_func(total_key, 0.0))
+        except ValueError:
+            total_time = None
         if resume_time and total_time:
             self._info_tag.setResumePoint(resume_time, total_time)
         elif resume_time:
@@ -203,7 +254,9 @@ class _ListItemInfoTagVideo(_ListItemInfoTag):
 
     def set_unique_ids(self, unique_ids: dict, default_id: str = None):
         """ Wrapper for compatibility with Matrix ListItem.setUniqueIDs() method """
-        self._info_tag.setUniqueIDs({k: f'{v}' for k, v in unique_ids.items()}, default_id)
+        func = self._info_tag.setUniqueIDs
+        data = {k: f'{v}' for k, v in unique_ids.items()}
+        func(data, default_id) if default_id else func(data)
 
 
 class _ListItemInfoTagMusic(_ListItemInfoTag):
@@ -232,6 +285,7 @@ class _ListItemInfoTagMusic(_ListItemInfoTag):
         'musicbrainzartistid': {'attr': 'setMusicBrainzArtistID', 'convert': lambda x: [x], 'classinfo': (list, tuple)},
         'musicbrainzalbumid': {'attr': 'setMusicBrainzAlbumID', 'convert': str, 'classinfo': str},
         'musicbrainzalbumartistid': {'attr': 'setMusicBrainzAlbumArtistID', 'convert': lambda x: [x], 'classinfo': (list, tuple)},
+        'songvideourl': {'attr': 'setSongVideoURL', 'convert': str, 'classinfo': str},
         'comment': {'attr': 'setComment', 'convert': str, 'classinfo': str},
         'albumartist': {'attr': 'setAlbumArtist', 'convert': str, 'classinfo': str},  # Not listed in setInfo docs but included for forward compatibility
     }
