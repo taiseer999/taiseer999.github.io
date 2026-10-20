@@ -927,28 +927,10 @@ PATCHES = [
         'not_found_ok': True,
         'old': '<param name="plotfont">font_mini_plot</param>  <!-- ABUKARIM: plot font (hub) -->',
         'new': ('<param name="plotfont">font_mini_plot</param>  <!-- ABUKARIM: plot font (hub) -->\n'
-                '                    <param name="plottop">40</param>\n'
-                '                    <param name="plotboxh">100</param>  <!-- ABUKARIM: plot gap (hub) v2 -->'),
-        'already_patched_check': 'ABUKARIM: plot gap (hub)',
-        'description': 'AF3 - Home hub plot gap under the genre line',
-    },
-    {   # 3.4.16: v1 (top 54 / box 80) cut the 3rd plot line in half - raise the
-        # first line 14px and make the box 3 full font_mini_plot lines (~33px each).
-        # Bottom moves 134 -> 140, still above the ratings row.
-        'addon_id': 'skin.arctic.fuse.3',
-        'rel_path': os.path.join('1080i', 'Includes_Hubs.xml'),
-        'toggle': 'af3_vplot',
-        'not_found_ok': True,
-        'old': ('<param name="plottop">54</param>\n'
+                '                    <param name="plottop">54</param>\n'
                 '                    <param name="plotboxh">80</param>  <!-- ABUKARIM: plot gap (hub) -->'),
-        'new': ('<param name="plottop">40</param>\n'
-                '                    <param name="plotboxh">100</param>  <!-- ABUKARIM: plot gap (hub) v2 -->'),
-        'already_patched_check': '<!-- ABUKARIM: plot gap (hub) v2 -->',
-        'fallback_pattern': (r'<param name="plottop">\d+</param>(\s*)'
-                             r'<param name="plotboxh">\d+</param>  <!-- ABUKARIM: plot gap \(hub\) -->'),
-        'fallback_repl': (r'<param name="plottop">40</param>\1'
-                          r'<param name="plotboxh">100</param>  <!-- ABUKARIM: plot gap (hub) v2 -->'),
-        'description': 'AF3 - Home hub plot shows 3 full lines (gap v2)',
+        'already_patched_check': '<!-- ABUKARIM: plot gap (hub) -->',
+        'description': 'AF3 - Home hub plot gap under the genre line',
     },
     {
         'addon_id': 'skin.arctic.fuse.3',
@@ -957,28 +939,10 @@ PATCHES = [
         'not_found_ok': True,
         'old': '<param name="plotfont">font_mini_plot</param>  <!-- ABUKARIM: plot font (spotlight) -->',
         'new': ('<param name="plotfont">font_mini_plot</param>  <!-- ABUKARIM: plot font (spotlight) -->\n'
-                '                <param name="plottop">40</param>\n'
-                '                <param name="plotboxh">100</param>  <!-- ABUKARIM: plot gap (spotlight) v2 -->'),
-        'already_patched_check': 'ABUKARIM: plot gap (spotlight)',
-        'description': 'AF3 - Home spotlight plot gap under the genre line',
-    },
-    {   # 3.4.16: v1 (top 54 / box 80) cut the 3rd plot line in half - raise the
-        # first line 14px and make the box 3 full font_mini_plot lines (~33px each).
-        # Bottom moves 134 -> 140, still above the ratings row.
-        'addon_id': 'skin.arctic.fuse.3',
-        'rel_path': os.path.join('1080i', 'Includes_Hubs.xml'),
-        'toggle': 'af3_vplot',
-        'not_found_ok': True,
-        'old': ('<param name="plottop">54</param>\n'
+                '                <param name="plottop">54</param>\n'
                 '                <param name="plotboxh">80</param>  <!-- ABUKARIM: plot gap (spotlight) -->'),
-        'new': ('<param name="plottop">40</param>\n'
-                '                <param name="plotboxh">100</param>  <!-- ABUKARIM: plot gap (spotlight) v2 -->'),
-        'already_patched_check': '<!-- ABUKARIM: plot gap (spotlight) v2 -->',
-        'fallback_pattern': (r'<param name="plottop">\d+</param>(\s*)'
-                             r'<param name="plotboxh">\d+</param>  <!-- ABUKARIM: plot gap \(spotlight\) -->'),
-        'fallback_repl': (r'<param name="plottop">40</param>\1'
-                          r'<param name="plotboxh">100</param>  <!-- ABUKARIM: plot gap (spotlight) v2 -->'),
-        'description': 'AF3 - Home spotlight plot shows 3 full lines (gap v2)',
+        'already_patched_check': '<!-- ABUKARIM: plot gap (spotlight) -->',
+        'description': 'AF3 - Home spotlight plot gap under the genre line',
     },
 
     # ── AF3: Vertical Plot — OSD seek bar / info overlay + library views ──
@@ -1707,6 +1671,97 @@ PATCHES += [_skinvars_ar_entry(_sid, _ar) for _sid, _ar in _SKINVARS_AR_FIX]
 
 
 
+# ── AB Scrapers support for Fenlight & Umbrella (3.4.16) ──
+# script.module.abscrapers merges CocoScrapers + Gears + Magneto behind one
+# magneto-style API (abscrapers.sources()). Two things kept it out:
+#  1. Fenlight's import_external_scrapers() hard-requires
+#     <module>.modules.control.getProviderDefaults(); when that import fails it
+#     returns False and Fenlight drops ALL external scrapers ("Error Importing
+#     External Module"). Made tolerant: modules.control -> <module>.common ->
+#     no defaults (only affects the "default providers only" scrape mode).
+#  2. With no external module chosen yet, both add-ons refuse to scrape
+#     externals. If AB Scrapers is installed and nothing was chosen, they now
+#     fall back to it. A module the user picked by hand always wins.
+_ABS_FEN_DEFAULTS_OLD = (
+    "\t\t\tself.provider_defaults = [k.split('.')[1] for k, v in manual_function_import("
+    "'%s.modules.control' % self.ext_name, 'getProviderDefaults')().items() if v == 'true']")
+_ABS_FEN_DEFAULTS_NEW = (
+    "\t\t\t# -- AB Scrapers support (by ABUKARIM TOOLS) --\r\n"
+    "\t\t\ttry: _abk_defaults = manual_function_import('%s.modules.control' % self.ext_name, 'getProviderDefaults')()\r\n"
+    "\t\t\texcept Exception:\r\n"
+    "\t\t\t\ttry: _abk_defaults = manual_function_import('%s.common' % self.ext_name, 'getProviderDefaults')()\r\n"
+    "\t\t\t\texcept Exception: _abk_defaults = {}\r\n"
+    "\t\t\tself.provider_defaults = [k.split('.')[1] for k, v in _abk_defaults.items() if v == 'true']")
+_ABS_FEN_INFO_OLD = "\tif module in ('empty_setting', ''): return None, ''"
+_ABS_FEN_INFO_NEW = (
+    "\tif module in ('empty_setting', ''):\r\n"
+    "\t\t# -- AB Scrapers default external module (by ABUKARIM TOOLS) --\r\n"
+    "\t\tif __import__('xbmc').getCondVisibility('System.HasAddon(script.module.abscrapers)'): return 'script.module.abscrapers', 'abscrapers'\r\n"
+    "\t\treturn None, ''")
+_ABS_UMB_OLD = (
+    "\t\t\tif getSetting('external_provider.module', '') == '':\r\n"
+    "\t\t\t\t#no external_provider_module\r\n"
+    "\t\t\t\tcontrol.notification(message=control.lang(40447))\r\n"
+    "\t\t\t\tself.sourceDict = internalSources()\r\n"
+    "\t\t\t\tself.sourceDict.extend(cloudSources())\r\n"
+    "\t\t\telse:\r\n"
+    "\t\t\t\ttry:\r\n"
+    "\t\t\t\t\tfrom sys import path\r\n"
+    "\t\t\t\t\tpath.append(control.transPath('special://home/addons/%s/lib' % getSetting('external_provider.module', '')))\r\n"
+    "\t\t\t\t\tfrom importlib import import_module\r\n"
+    "\t\t\t\t\tfs_sources = getattr(import_module(getSetting('external_provider.name')), 'sources')\r\n")
+_ABS_UMB_NEW = (
+    "\t\t\t# -- AB Scrapers default external module (by ABUKARIM TOOLS) --\r\n"
+    "\t\t\t_abk_mod, _abk_name = getSetting('external_provider.module', ''), getSetting('external_provider.name')\r\n"
+    "\t\t\tif _abk_mod == '' and control.condVisibility('System.HasAddon(script.module.abscrapers)'): _abk_mod, _abk_name = 'script.module.abscrapers', 'abscrapers'\r\n"
+    "\t\t\tif _abk_mod == '':\r\n"
+    "\t\t\t\t#no external_provider_module\r\n"
+    "\t\t\t\tcontrol.notification(message=control.lang(40447))\r\n"
+    "\t\t\t\tself.sourceDict = internalSources()\r\n"
+    "\t\t\t\tself.sourceDict.extend(cloudSources())\r\n"
+    "\t\t\telse:\r\n"
+    "\t\t\t\ttry:\r\n"
+    "\t\t\t\t\tfrom sys import path\r\n"
+    "\t\t\t\t\tpath.append(control.transPath('special://home/addons/%s/lib' % _abk_mod))\r\n"
+    "\t\t\t\t\tfrom importlib import import_module\r\n"
+    "\t\t\t\t\tfs_sources = getattr(import_module(_abk_name), 'sources')\r\n")
+
+PATCHES += [
+    {
+        'addon_id': 'plugin.video.fenlight',
+        'rel_path': os.path.join('resources', 'lib', 'modules', 'sources.py'),
+        'toggle': 'abscrapers_support',
+        'old': _ABS_FEN_DEFAULTS_OLD,
+        'new': _ABS_FEN_DEFAULTS_NEW,
+        'already_patched_check': '# -- AB Scrapers support (by ABUKARIM TOOLS) --',
+        'fallback_pattern': (r"\t\t\tself\.provider_defaults = \[k\.split\('\.'\)\[1\] for k, v in "
+                             r"manual_function_import\('%s\.modules\.control' % self\.ext_name, "
+                             r"'getProviderDefaults'\)\(\)\.items\(\) if v == 'true'\]"),
+        'fallback_repl': lambda _m: _ABS_FEN_DEFAULTS_NEW,
+        'description': 'Fenlight sources.py - external module without modules.control (AB Scrapers) no longer disables external scrapers',
+    },
+    {
+        'addon_id': 'plugin.video.fenlight',
+        'rel_path': os.path.join('resources', 'lib', 'modules', 'settings.py'),
+        'toggle': 'abscrapers_support',
+        'old': _ABS_FEN_INFO_OLD,
+        'new': _ABS_FEN_INFO_NEW,
+        'already_patched_check': '# -- AB Scrapers default external module (by ABUKARIM TOOLS) --',
+        'description': 'Fenlight settings.py - use AB Scrapers when no external module is chosen',
+    },
+    {
+        'addon_id': 'plugin.video.umbrella',
+        'rel_path': os.path.join('resources', 'lib', 'modules', 'sources.py'),
+        'toggle': 'abscrapers_support',
+        'not_found_ok': True,
+        'old': _ABS_UMB_OLD,
+        'new': _ABS_UMB_NEW,
+        'already_patched_check': '# -- AB Scrapers default external module (by ABUKARIM TOOLS) --',
+        'description': 'Umbrella sources.py - use AB Scrapers when no external module is chosen',
+    },
+]
+
+
 def _restart_addon(addon_id):
     """Disable + re-enable an add-on so a patched xbmc.service reloads now."""
     import json as _json
@@ -2003,6 +2058,7 @@ TOGGLE_GROUPS = [
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
     ('fenlight_volume',  'Fenlight: Kill Volume Auto-Drop'),
     ('fenlight_tmdbh',   'Fenlight: TMDbHelper Playback Fix'),
+    ('abscrapers_support', 'AB Scrapers: Fenlight & Umbrella Support'),
     ('a4ksubs_utf8',     'a4kSubtitles: UTF-8 Subtitles Fix'),
     ('a4ksubs_quiet',    'a4kSubtitles: Hide Account/API-Key Nags'),
     ('af3_subtools',     'AF3: Subtitle Buttons (DexSubtitles Sync & Cycler)'),

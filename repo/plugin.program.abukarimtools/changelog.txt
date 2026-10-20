@@ -1,10 +1,15 @@
 v3.4.16
-- AF3 Vertical Plot (Home hub + spotlight): the plot's third line was cut in
-  half (box 80px = ~2.4 lines of font_mini_plot). The plot now starts 14px
-  higher (top 54 -> 40) and the box holds three full lines (80 -> 100); its
-  bottom moves only 6px and stays above the ratings row. A skin that already
-  carries the old 54/80 values (the AF3 50.11.x fork ships them built in) is
-  upgraded in place. OSD / library views are unchanged.
+- NEW switch "AB Scrapers: Fenlight & Umbrella Support" (Apply Patches, on by
+  default) for script.module.abscrapers (CocoScrapers + Gears + Magneto):
+  - Fenlight sources.py: an external module without
+    <module>.modules.control.getProviderDefaults no longer makes Fenlight
+    drop every external scraper ("Error Importing External Module"); falls
+    back to <module>.common, then to no defaults.
+  - Fenlight settings.py and Umbrella sources.py: when no external module has
+    been chosen and AB Scrapers is installed, it is used automatically. A
+    module picked by hand in the add-on always wins.
+  - Umbrella is now on the watch list, so the patch comes back after an
+    Umbrella update.
 
 v3.4.15
 - FIX: AF3 50.11.7 - the info page's Trailer button and the context menu's

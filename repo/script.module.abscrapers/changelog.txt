@@ -1,0 +1,39 @@
+[B]AB Scrapers v1.0.2[/B]
+- Provider trace in kodi.log, on by default (Maintenance > Log provider results to kodi.log):
+  - one line when an add-on loads providers: which add-on (Umbrella, Fen Light, Red Light...),
+    how many providers and which ones;
+  - one line per provider call: engine, result count and time, or the error it raised.
+  Makes it visible whether an add-on actually reached AB Scrapers and what came back.
+
+[B]AB Scrapers v1.0.1[/B]
+- Fen Light & Umbrella compatibility: abscrapers.modules.control (getProviderDefaults)
+  and abscrapers.modules.cfscrape are now provided, so both add-ons accept AB Scrapers
+  as their external scraper module.
+- Telegram: link/search failures are now always written to kodi.log ([Telegram] lines),
+  even with debug logging off, and the real error is shown in the notification.
+- Telegram: provider is switched on automatically once an account is linked;
+  the status dialog shows whether the provider is ON or OFF.
+- Telegram: logs "provider skipped: no Telegram account linked" instead of silently returning nothing.
+- Telegram provider: fixed sources() overwriting itself on the instance (second search on the
+  same instance crashed).
+
+[B]AB Scrapers v1.0.0[/B]
+- First release. One module built from three engines:
+  - CocoScrapers 1.0.39
+  - Gears Scrapers 1.6.2
+  - Magneto 6.10.04
+- 51 providers in total (27 exist in one engine, 24 in two or three).
+- Multi-engine providers: when a provider exists in several engines with different
+  instances, mirrors or APIs (Comet, MediaFusion, TorrentGalaxy, Knaben, Torlock,
+  Torz, Zilean, YTS, LimeTorrents, TorrentProject), AB Scrapers runs them in parallel
+  and merges the results by info-hash, keeping the copy with the most seeders.
+- Per-provider engine selector: Auto (curated) / All engines / one engine.
+- One shared settings store for every engine (picks up on-disk changes without restart).
+- Magneto instance selectors for Comet, Torz and Zilean.
+- CocoScrapers MediaFusion custom URL + device setup; fixed the upstream mismatch
+  between the saved user-data setting and the setting the provider read.
+- CocoScrapers Prowlarr test/indexer buttons now use the same URL/API key as the providers.
+- Gears Telegram (TorrentSearchRoBot) provider with per-device account linking.
+- Magneto AIOStreams player + TMDbHelper player JSON.
+- Unified health check showing which engines answered for each provider.
+- English and Arabic (Modern Standard) interface strings.

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="33000">
+		<setting id="module.provider" type="text" label="" default="AB Scrapers" visible="false" />
+		<setting type="lsep" label="33009" />
+		<setting type="action" label="33010" action="RunPlugin(plugin://script.module.abscrapers/?action=Defaults)" />
+		<setting type="action" label="33011" action="RunPlugin(plugin://script.module.abscrapers/?action=toggleAll&amp;setting=true)" />
+		<setting type="action" label="33012" action="RunPlugin(plugin://script.module.abscrapers/?action=toggleAll&amp;setting=false)" />
+		<setting type="action" label="33013" action="RunPlugin(plugin://script.module.abscrapers/?action=toggleAllPackTorrent)" />
+		<setting type="lsep" label="33014" />
+		<setting id="composite.timeout" type="slider" label="33015" default="30" range="10,5,90" option="int" />
+		<setting type="action" label="33017" action="RunPlugin(plugin://script.module.abscrapers/?action=ShowHelp&amp;name=torrentInfo)" />
+		<setting type="action" label="33018" action="RunPlugin(plugin://script.module.abscrapers/?action=ShowHelp&amp;name=packScrapers)" />
+		<setting type="action" label="33016" action="RunPlugin(plugin://script.module.abscrapers/?action=ShowChangelog)" />
+	</category>
+	<category label="33001">
+		<setting type="lsep" label="33019" />
+		<setting id="provider.aiostreams" type="bool" label="AIOStreams  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.animetosho" type="bool" label="AnimeTosho  [COLOR grey](Gears)[/COLOR]" default="true" />
+		<setting id="provider.apachetorrent" type="bool" label="ApacheTorrent  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.bitlord" type="bool" label="BitLord  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.bittorrented" type="bool" label="BitTorrented  [COLOR grey](Gears)[/COLOR]" default="true" />
+		<setting id="provider.btdig" type="bool" label="BTDig  [COLOR grey](Gears)[/COLOR]" default="true" />
+		<setting id="provider.cleanbay" type="bool" label="CleanBay  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.damagnet" type="bool" label="DaMagNet  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.extto" type="bool" label="EXT.to  [COLOR grey](Gears)[/COLOR]" default="true" />
+		<setting id="provider.glodls" type="bool" label="GloDLS  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.kontrast" type="bool" label="KONTRAST  [COLOR grey](Gears)[/COLOR]" default="true" />
+		<setting id="provider.magnetdl" type="bool" label="MagnetDL  [COLOR grey](Gears)[/COLOR]" default="true" />
+		<setting id="provider.nnmclub" type="bool" label="NNM-Club  [COLOR grey](Gears)[/COLOR]" default="true" />
+		<setting id="provider.peerflix" type="bool" label="Peerflix  [COLOR grey](Gears)[/COLOR]" default="true" />
+		<setting id="provider.rarbgdump" type="bool" label="RarbgDump  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.redetorrent" type="bool" label="RedeTorrent  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.snowfl" type="bool" label="Snowfl  [COLOR grey](Gears)[/COLOR]" default="true" />
+		<setting id="provider.telegrambot" type="bool" label="Telegram (TorrentSearchRoBot)  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.therarbg" type="bool" label="TheRarBG  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.torrent9" type="bool" label="Torrent9  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.torrentdownloads" type="bool" label="TorrentDownloads  [COLOR grey](Gears)[/COLOR]" default="true" />
+		<setting id="provider.torrentfunk" type="bool" label="TorrentFunk  [COLOR grey](Gears)[/COLOR]" default="true" />
+		<setting id="provider.torrentscsv" type="bool" label="Torrents-CSV  [COLOR grey](Gears)[/COLOR]" default="true" />
+		<setting id="provider.torrentz2" type="bool" label="Torrentz2  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.torseek" type="bool" label="TorSeek  [COLOR grey](Gears)[/COLOR]" default="true" />
+		<setting id="provider.yourbittorrent" type="bool" label="YourBitTorrent  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.zooqle" type="bool" label="Zooqle  [COLOR grey](Gears)[/COLOR]" default="true" />
+	</category>
+	<category label="33002">
+		<setting type="lsep" label="33020" />
+		<setting id="provider.1337x" type="bool" label="1337x  [COLOR grey](CocoScrapers / Gears | Auto: Gears)[/COLOR]" default="false" />
+		<setting id="engine.1337x" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33024|33025" visible="eq(-1,true)" />
+		<setting id="provider.bitmagnet" type="bool" label="Bitmagnet  [COLOR grey](Gears / Magneto | Auto: Gears)[/COLOR]" default="true" />
+		<setting id="engine.bitmagnet" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33025|33026" visible="eq(-1,true)" />
+		<setting id="provider.bitsearch" type="bool" label="BitSearch  [COLOR grey](CocoScrapers / Gears | Auto: Gears)[/COLOR]" default="false" />
+		<setting id="engine.bitsearch" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33024|33025" visible="eq(-1,true)" />
+		<setting id="provider.comet" type="bool" label="Comet  [COLOR grey](CocoScrapers / Gears / Magneto | Auto: Gears+Magneto+CocoScrapers)[/COLOR]" default="true" />
+		<setting id="engine.comet" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33024|33025|33026" visible="eq(-1,true)" />
+		<setting id="provider.dmm" type="bool" label="DMM  [COLOR grey](Gears / Magneto | Auto: Gears)[/COLOR]" default="false" />
+		<setting id="engine.dmm" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33025|33026" visible="eq(-1,true)" />
+		<setting id="provider.eztv" type="bool" label="EZTV  [COLOR grey](CocoScrapers / Gears | Auto: Gears)[/COLOR]" default="false" />
+		<setting id="engine.eztv" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33024|33025" visible="eq(-1,true)" />
+		<setting id="provider.kickass2" type="bool" label="Kickass  [COLOR grey](CocoScrapers / Gears / Magneto | Auto: Gears)[/COLOR]" default="false" />
+		<setting id="engine.kickass2" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33024|33025|33026" visible="eq(-1,true)" />
+		<setting id="provider.knaben" type="bool" label="Knaben  [COLOR grey](CocoScrapers / Gears / Magneto | Auto: Gears+Magneto)[/COLOR]" default="true" />
+		<setting id="engine.knaben" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33024|33025|33026" visible="eq(-1,true)" />
+		<setting id="provider.limetorrents" type="bool" label="LimeTorrents  [COLOR grey](CocoScrapers / Gears | Auto: Gears+CocoScrapers)[/COLOR]" default="true" />
+		<setting id="engine.limetorrents" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33024|33025" visible="eq(-1,true)" />
+		<setting id="provider.mediafusion" type="bool" label="MediaFusion  [COLOR grey](CocoScrapers / Gears / Magneto | Auto: Gears+CocoScrapers)[/COLOR]" default="true" />
+		<setting id="engine.mediafusion" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33024|33025|33026" visible="eq(-1,true)" />
+		<setting id="provider.meteor" type="bool" label="Meteor  [COLOR grey](Gears / Magneto | Auto: Gears)[/COLOR]" default="false" />
+		<setting id="engine.meteor" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33025|33026" visible="eq(-1,true)" />
+		<setting id="provider.nyaa" type="bool" label="Nyaa  [COLOR grey](CocoScrapers / Gears / Magneto | Auto: Magneto)[/COLOR]" default="false" />
+		<setting id="engine.nyaa" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33024|33025|33026" visible="eq(-1,true)" />
+		<setting id="provider.piratebay" type="bool" label="PirateBay  [COLOR grey](CocoScrapers / Gears / Magneto | Auto: Gears)[/COLOR]" default="true" />
+		<setting id="engine.piratebay" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33024|33025|33026" visible="eq(-1,true)" />
+		<setting id="provider.rutor" type="bool" label="Rutor  [COLOR grey](Gears / Magneto | Auto: Gears)[/COLOR]" default="false" />
+		<setting id="engine.rutor" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33025|33026" visible="eq(-1,true)" />
+		<setting id="provider.torlock" type="bool" label="Torlock  [COLOR grey](Gears / Magneto | Auto: Gears+Magneto)[/COLOR]" default="true" />
+		<setting id="engine.torlock" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33025|33026" visible="eq(-1,true)" />
+		<setting id="provider.torrentdownload" type="bool" label="TorrentDownload  [COLOR grey](CocoScrapers / Gears / Magneto | Auto: Gears)[/COLOR]" default="false" />
+		<setting id="engine.torrentdownload" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33024|33025|33026" visible="eq(-1,true)" />
+		<setting id="provider.torrentgalaxy" type="bool" label="TorrentGalaxy  [COLOR grey](CocoScrapers / Gears | Auto: CocoScrapers+Gears)[/COLOR]" default="false" />
+		<setting id="engine.torrentgalaxy" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33024|33025" visible="eq(-1,true)" />
+		<setting id="provider.torrentio" type="bool" label="Torrentio  [COLOR grey](CocoScrapers / Gears / Magneto | Auto: Gears)[/COLOR]" default="true" />
+		<setting id="engine.torrentio" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33024|33025|33026" visible="eq(-1,true)" />
+		<setting id="provider.torrentproject2" type="bool" label="TorrentProject  [COLOR grey](CocoScrapers / Gears | Auto: CocoScrapers+Gears)[/COLOR]" default="false" />
+		<setting id="engine.torrentproject2" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33024|33025" visible="eq(-1,true)" />
+		<setting id="provider.torrentsdb" type="bool" label="TorrentsDB  [COLOR grey](Gears / Magneto | Auto: Gears)[/COLOR]" default="true" />
+		<setting id="engine.torrentsdb" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33025|33026" visible="eq(-1,true)" />
+		<setting id="provider.torz" type="bool" label="StremThru Torz  [COLOR grey](Gears / Magneto | Auto: Gears+Magneto)[/COLOR]" default="true" />
+		<setting id="engine.torz" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33025|33026" visible="eq(-1,true)" />
+		<setting id="provider.ytsmx" type="bool" label="YTS  [COLOR grey](CocoScrapers / Gears / Magneto | Auto: Gears+Magneto)[/COLOR]" default="false" />
+		<setting id="engine.ytsmx" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33024|33025|33026" visible="eq(-1,true)" />
+		<setting id="provider.zilean" type="bool" label="Zilean  [COLOR grey](Gears / Magneto | Auto: Gears+Magneto)[/COLOR]" default="false" />
+		<setting id="engine.zilean" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33025|33026" visible="eq(-1,true)" />
+	</category>
+	<category label="33003">
+		<setting id="comet.url" type="enum" label="33027" default="0" values="Stremio.ru|Feels.legal|Midnightignite" />
+		<setting id="torz.url" type="enum" label="33028" default="0" values="Stremio.ru|13377001.xyz|Midnightignite" />
+		<setting id="zilean.url" type="enum" label="33029" default="0" values="Stremio.ru|Midnightignite" />
+		<setting type="lsep" label="33030" />
+		<setting id="mediafusion.usecustomurl" type="bool" label="33031" default="false" />
+		<setting id="mediafusion.customurl" type="text" label="33032" default="" subsetting="true" visible="eq(-1,true)" />
+		<setting id="mediafusion.userdata" type="text" label="33033" default="" />
+		<setting type="action" label="33034" action="RunPlugin(plugin://script.module.abscrapers/?action=mediafusionAuth)" />
+		<setting type="action" label="33035" action="RunPlugin(plugin://script.module.abscrapers/?action=mediafusionReset)" />
+		<setting type="lsep" label="33036" />
+		<setting id="torrentio.bypass_filter" type="bool" label="33036" default="false" />
+	</category>
+	<category label="33004">
+		<setting id="provider.prowlarr" type="bool" label="Prowlarr  [COLOR grey](CocoScrapers / Gears / Magneto)[/COLOR]" default="false" />
+		<setting id="engine.prowlarr" type="enum" label="33021" default="0" subsetting="true" lvalues="33022|33023|33024|33025|33026" visible="eq(-1,true)" />
+		<setting id="prowlarr.url" type="text" label="33037" default="" subsetting="true" visible="eq(-2,true)" />
+		<setting id="prowlarr.token" type="text" label="33038" default="" subsetting="true" visible="eq(-3,true)" />
+		<setting type="action" label="33039" visible="eq(-4,true)" action="RunPlugin(plugin://script.module.abscrapers/?action=TestProwlarrConnection)" />
+		<setting type="action" label="33040" visible="eq(-5,true)" action="RunPlugin(plugin://script.module.abscrapers/?action=ProwlarrIndexers)" />
+	</category>
+	<category label="33005">
+		<setting type="lsep" label="33041" />
+		<setting type="action" label="33042" action="RunPlugin(plugin://script.module.abscrapers/?action=telegram_pair)" />
+		<setting type="action" label="33043" action="RunPlugin(plugin://script.module.abscrapers/?action=telegram_status)" />
+	</category>
+	<category label="33006">
+		<setting id="filter.foreign.single.audio" type="bool" label="33044" default="false" />
+		<setting id="filter.undesirables" type="bool" label="33045" default="false" />
+		<setting type="action" label="33046" subsetting="true" enable="eq(-1,true)" action="RunPlugin(plugin://script.module.abscrapers/?action=undesirablesSelect)" />
+		<setting type="action" label="33047" subsetting="true" enable="eq(-2,true)" action="RunPlugin(plugin://script.module.abscrapers/?action=undesirablesInput)" />
+		<setting type="action" label="33048" subsetting="true" enable="eq(-3,true)" action="RunPlugin(plugin://script.module.abscrapers/?action=undesirablesUserRemove)" />
+		<setting type="action" label="33049" subsetting="true" enable="eq(-4,true)" action="RunPlugin(plugin://script.module.abscrapers/?action=undesirablesUserRemoveAll)" />
+		<setting type="action" label="33050" action="RunPlugin(plugin://script.module.abscrapers/?action=ShowHelp&amp;name=undesirablesFilter)" />
+	</category>
+	<category label="33007">
+		<setting id="player.aiostreams" type="bool" label="" default="true" visible="false" />
+		<setting type="action" label="33072" action="RunPlugin(plugin://script.module.abscrapers/?action=ShowReadme)" />
+		<setting type="action" label="33073" action="RunPlugin(plugin://script.module.abscrapers/?action=InstallJson)" />
+		<setting type="lsep" label="33066" />
+		<setting id="aiostreams_instance" type="enum" label="33067" default="0" values="Stremio.ru|Custom|Viren070|ForTheWeak|Midnightignite" />
+		<setting id="aio.custom_url" type="text" label="33069" default="" visible="eq(-1,1)" />
+		<setting id="aio.username" type="text" label="33070" default="" />
+		<setting id="aio.password" type="text" label="33071" default="" option="hidden" />
+		<setting type="lsep" label="33051" />
+		<setting id="results.list_format" type="enum" label="33052" default="1" lvalues="33053|33054" />
+		<setting id="highlight.type" type="enum" label="33055" default="1" lvalues="33056|33057" />
+		<setting id="scraper_single_highlight" type="text" label="" default="dodgerblue" visible="false" />
+		<setting id="scraper_single_display" type="action" label="33058" default="[COLOR FF1E90FF]dodgerblue[/COLOR]" action="RunPlugin(plugin://script.module.abscrapers/?action=ColorPick&amp;setting=scraper_single_highlight)" />
+		<setting id="scraper_4k_highlight" type="text" label="" default="magenta" visible="false" />
+		<setting id="scraper_4k_display" type="action" label="33059" default="[COLOR FFFF00FF]magenta[/COLOR]" action="RunPlugin(plugin://script.module.abscrapers/?action=ColorPick&amp;setting=scraper_4k_highlight)" />
+		<setting id="scraper_1080p_highlight" type="text" label="" default="orange" visible="false" />
+		<setting id="scraper_1080p_display" type="action" label="33060" default="[COLOR FFFFA500]orange[/COLOR]" action="RunPlugin(plugin://script.module.abscrapers/?action=ColorPick&amp;setting=scraper_1080p_highlight)" />
+		<setting id="scraper_720p_highlight" type="text" label="" default="blue" visible="false" />
+		<setting id="scraper_720p_display" type="action" label="33061" default="[COLOR FF0000FF]blue[/COLOR]" action="RunPlugin(plugin://script.module.abscrapers/?action=ColorPick&amp;setting=scraper_720p_highlight)" />
+		<setting id="scraper_SD_highlight" type="text" label="" default="green" visible="false" />
+		<setting id="scraper_SD_display" type="action" label="33062" default="[COLOR FF008000]green[/COLOR]" action="RunPlugin(plugin://script.module.abscrapers/?action=ColorPick&amp;setting=scraper_SD_highlight)" />
+		<setting id="results.language_filter" type="bool" label="33063" default="false" />
+		<setting id="results.language" type="select" label="33064" default="Arabic" values="English|Arabic|Bulgarian|Chinese|Croatian|Czech|Danish|Dutch|Estonian|Finnish|French|German|Greek|Hebrew|Hindi|Hungarian|Indonesian|Italian|Japanese|Korean|Latvian|Lithuanian|Malay|Norwegian|Persian|Polish|Portuguese|Romanian|Russian|Serbian|Slovakian|Slovenian|Spanish|Swedish|Taiwanese|Tamil|Telugu|Thai|Turkish|Ukrainian|Vietnamese" subsetting="true" visible="eq(-1,true)" />
+		<setting id="scraping_timeout" type="slider" label="33065" default="30" range="10,5,90" option="int" />
+	</category>
+	<category label="33008">
+		<setting type="action" label="33074" action="RunPlugin(plugin://script.module.abscrapers/?action=healthCheck)" />
+		<setting type="action" label="33075" option="close" action="RunPlugin(plugin://script.module.abscrapers/?action=cleanSettings)" />
+		<setting type="lsep" label="33076" />
+		<setting id="log.providers" type="bool" label="33077" default="true" />
+		<setting id="debug.enabled" type="bool" label="33078" default="false" />
+		<setting id="debug.location" type="enum" label="33079" default="0" lvalues="33080|33081" enable="eq(-1,true)" />
+		<setting id="debug.reversed" type="bool" label="33082" default="false" visible="eq(-1,1)" />
+		<setting type="action" label="33083" visible="eq(-2,1)" action="RunPlugin(plugin://script.module.abscrapers/?action=tools_clearLogFile)" />
+		<setting type="action" label="33084" visible="eq(-3,1)" action="RunPlugin(plugin://script.module.abscrapers/?action=tools_viewLogFile&amp;name=AB Scrapers)" />
+		<setting type="action" label="33085" action="RunPlugin(plugin://script.module.abscrapers/?action=tools_uploadLogFile)" />
+	</category>
+</settings>
