@@ -927,10 +927,28 @@ PATCHES = [
         'not_found_ok': True,
         'old': '<param name="plotfont">font_mini_plot</param>  <!-- ABUKARIM: plot font (hub) -->',
         'new': ('<param name="plotfont">font_mini_plot</param>  <!-- ABUKARIM: plot font (hub) -->\n'
-                '                    <param name="plottop">54</param>\n'
-                '                    <param name="plotboxh">80</param>  <!-- ABUKARIM: plot gap (hub) -->'),
-        'already_patched_check': '<!-- ABUKARIM: plot gap (hub) -->',
+                '                    <param name="plottop">40</param>\n'
+                '                    <param name="plotboxh">100</param>  <!-- ABUKARIM: plot gap (hub) v2 -->'),
+        'already_patched_check': 'ABUKARIM: plot gap (hub)',
         'description': 'AF3 - Home hub plot gap under the genre line',
+    },
+    {   # 3.4.16: v1 (top 54 / box 80) cut the 3rd plot line in half - raise the
+        # first line 14px and make the box 3 full font_mini_plot lines (~33px each).
+        # Bottom moves 134 -> 140, still above the ratings row.
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Hubs.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': ('<param name="plottop">54</param>\n'
+                '                    <param name="plotboxh">80</param>  <!-- ABUKARIM: plot gap (hub) -->'),
+        'new': ('<param name="plottop">40</param>\n'
+                '                    <param name="plotboxh">100</param>  <!-- ABUKARIM: plot gap (hub) v2 -->'),
+        'already_patched_check': '<!-- ABUKARIM: plot gap (hub) v2 -->',
+        'fallback_pattern': (r'<param name="plottop">\d+</param>(\s*)'
+                             r'<param name="plotboxh">\d+</param>  <!-- ABUKARIM: plot gap \(hub\) -->'),
+        'fallback_repl': (r'<param name="plottop">40</param>\1'
+                          r'<param name="plotboxh">100</param>  <!-- ABUKARIM: plot gap (hub) v2 -->'),
+        'description': 'AF3 - Home hub plot shows 3 full lines (gap v2)',
     },
     {
         'addon_id': 'skin.arctic.fuse.3',
@@ -939,10 +957,28 @@ PATCHES = [
         'not_found_ok': True,
         'old': '<param name="plotfont">font_mini_plot</param>  <!-- ABUKARIM: plot font (spotlight) -->',
         'new': ('<param name="plotfont">font_mini_plot</param>  <!-- ABUKARIM: plot font (spotlight) -->\n'
-                '                <param name="plottop">54</param>\n'
-                '                <param name="plotboxh">80</param>  <!-- ABUKARIM: plot gap (spotlight) -->'),
-        'already_patched_check': '<!-- ABUKARIM: plot gap (spotlight) -->',
+                '                <param name="plottop">40</param>\n'
+                '                <param name="plotboxh">100</param>  <!-- ABUKARIM: plot gap (spotlight) v2 -->'),
+        'already_patched_check': 'ABUKARIM: plot gap (spotlight)',
         'description': 'AF3 - Home spotlight plot gap under the genre line',
+    },
+    {   # 3.4.16: v1 (top 54 / box 80) cut the 3rd plot line in half - raise the
+        # first line 14px and make the box 3 full font_mini_plot lines (~33px each).
+        # Bottom moves 134 -> 140, still above the ratings row.
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Hubs.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': ('<param name="plottop">54</param>\n'
+                '                <param name="plotboxh">80</param>  <!-- ABUKARIM: plot gap (spotlight) -->'),
+        'new': ('<param name="plottop">40</param>\n'
+                '                <param name="plotboxh">100</param>  <!-- ABUKARIM: plot gap (spotlight) v2 -->'),
+        'already_patched_check': '<!-- ABUKARIM: plot gap (spotlight) v2 -->',
+        'fallback_pattern': (r'<param name="plottop">\d+</param>(\s*)'
+                             r'<param name="plotboxh">\d+</param>  <!-- ABUKARIM: plot gap \(spotlight\) -->'),
+        'fallback_repl': (r'<param name="plottop">40</param>\1'
+                          r'<param name="plotboxh">100</param>  <!-- ABUKARIM: plot gap (spotlight) v2 -->'),
+        'description': 'AF3 - Home spotlight plot shows 3 full lines (gap v2)',
     },
 
     # ── AF3: Vertical Plot — OSD seek bar / info overlay + library views ──

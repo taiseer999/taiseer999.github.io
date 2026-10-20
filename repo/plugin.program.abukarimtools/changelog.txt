@@ -1,3 +1,11 @@
+v3.4.16
+- AF3 Vertical Plot (Home hub + spotlight): the plot's third line was cut in
+  half (box 80px = ~2.4 lines of font_mini_plot). The plot now starts 14px
+  higher (top 54 -> 40) and the box holds three full lines (80 -> 100); its
+  bottom moves only 6px and stays above the ratings row. A skin that already
+  carries the old 54/80 values (the AF3 50.11.x fork ships them built in) is
+  upgraded in place. OSD / library views are unchanged.
+
 v3.4.15
 - FIX: AF3 50.11.7 - the info page's Trailer button and the context menu's
   Trailer entry did nothing. Both call the include
