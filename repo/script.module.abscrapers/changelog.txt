@@ -1,3 +1,13 @@
+[B]AB Scrapers v1.0.3[/B]
+- NEW Filters > "Filter repeated results" (default: Same release name and size):
+  indexers such as Comet return the same release several times under different
+  info-hashes (identical name, identical size); the add-on only removes identical
+  hashes, so every copy was listed. Modes: Off / Same hash / Same release name and size.
+  The copy with the most seeders is kept.
+- "Also across providers in the same search" (default on): a release already returned
+  by one provider is not listed again from another.
+- kodi.log shows "<provider>: N repeated results filtered (M kept)".
+
 [B]AB Scrapers v1.0.2[/B]
 - Provider trace in kodi.log, on by default (Maintenance > Log provider results to kodi.log):
   - one line when an add-on loads providers: which add-on (Umbrella, Fen Light, Red Light...),

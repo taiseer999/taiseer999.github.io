@@ -949,210 +949,230 @@ msgid "Remove undesirables"
 msgstr ""
 
 msgctxt "#33046"
-msgid "Manage default undesirables"
+msgid "Filter repeated results"
 msgstr ""
 
 msgctxt "#33047"
-msgid "Define extra undesirables (comma separated)"
+msgid "Off"
 msgstr ""
 
 msgctxt "#33048"
-msgid "Remove extra undesirables"
+msgid "Same hash"
 msgstr ""
 
 msgctxt "#33049"
-msgid "Clear ALL extra undesirables"
+msgid "Same release name and size"
 msgstr ""
 
 msgctxt "#33050"
-msgid "Undesirables filter help"
+msgid "Also across providers in the same search"
 msgstr ""
 
 msgctxt "#33051"
-msgid "Results"
+msgid "Manage default undesirables"
 msgstr ""
 
 msgctxt "#33052"
-msgid "Results format"
+msgid "Define extra undesirables (comma separated)"
 msgstr ""
 
 msgctxt "#33053"
-msgid "List"
+msgid "Remove extra undesirables"
 msgstr ""
 
 msgctxt "#33054"
-msgid "Wide list"
+msgid "Clear ALL extra undesirables"
 msgstr ""
 
 msgctxt "#33055"
-msgid "Result highlight type"
+msgid "Undesirables filter help"
 msgstr ""
 
 msgctxt "#33056"
-msgid "By resolution"
+msgid "Results"
 msgstr ""
 
 msgctxt "#33057"
-msgid "Single colour"
+msgid "Results format"
 msgstr ""
 
 msgctxt "#33058"
-msgid "Single colour highlight"
+msgid "List"
 msgstr ""
 
 msgctxt "#33059"
-msgid "4K highlight colour"
+msgid "Wide list"
 msgstr ""
 
 msgctxt "#33060"
-msgid "1080p highlight colour"
+msgid "Result highlight type"
 msgstr ""
 
 msgctxt "#33061"
-msgid "720p highlight colour"
+msgid "By resolution"
 msgstr ""
 
 msgctxt "#33062"
-msgid "SD highlight colour"
+msgid "Single colour"
 msgstr ""
 
 msgctxt "#33063"
-msgid "Highlight priority language"
+msgid "Single colour highlight"
 msgstr ""
 
 msgctxt "#33064"
-msgid "Priority language"
+msgid "4K highlight colour"
 msgstr ""
 
 msgctxt "#33065"
-msgid "Scraping timeout"
+msgid "1080p highlight colour"
 msgstr ""
 
 msgctxt "#33066"
-msgid "Setup"
+msgid "720p highlight colour"
 msgstr ""
 
 msgctxt "#33067"
-msgid "Instance"
+msgid "SD highlight colour"
 msgstr ""
 
 msgctxt "#33068"
-msgid "Custom"
+msgid "Highlight priority language"
 msgstr ""
 
 msgctxt "#33069"
-msgid "URL"
+msgid "Priority language"
 msgstr ""
 
 msgctxt "#33070"
-msgid "Username (UUID)"
+msgid "Scraping timeout"
 msgstr ""
 
 msgctxt "#33071"
-msgid "Password"
+msgid "Setup"
 msgstr ""
 
 msgctxt "#33072"
-msgid "AIOStreams README"
+msgid "Instance"
 msgstr ""
 
 msgctxt "#33073"
-msgid "Install TMDbHelper player (AIOStreams)"
+msgid "Custom"
 msgstr ""
 
 msgctxt "#33074"
-msgid "Test all providers"
+msgid "URL"
 msgstr ""
 
 msgctxt "#33075"
-msgid "Clean settings file"
+msgid "Username (UUID)"
 msgstr ""
 
 msgctxt "#33076"
-msgid "Logging"
+msgid "Password"
 msgstr ""
 
 msgctxt "#33077"
-msgid "Log provider results to kodi.log"
+msgid "AIOStreams README"
 msgstr ""
 
 msgctxt "#33078"
-msgid "Enable debug logging"
+msgid "Install TMDbHelper player (AIOStreams)"
 msgstr ""
 
 msgctxt "#33079"
-msgid "Logging location"
+msgid "Test all providers"
 msgstr ""
 
 msgctxt "#33080"
-msgid "Kodi log"
+msgid "Clean settings file"
 msgstr ""
 
 msgctxt "#33081"
-msgid "Addon log"
+msgid "Logging"
 msgstr ""
 
 msgctxt "#33082"
-msgid "Write addon log in reverse order"
+msgid "Log provider results to kodi.log"
 msgstr ""
 
 msgctxt "#33083"
-msgid "Clear addon log"
+msgid "Enable debug logging"
 msgstr ""
 
 msgctxt "#33084"
-msgid "View addon log"
+msgid "Logging location"
 msgstr ""
 
 msgctxt "#33085"
-msgid "Upload addon log"
+msgid "Kodi log"
 msgstr ""
 
 msgctxt "#33086"
-msgid "Settings"
+msgid "Addon log"
 msgstr ""
 
 msgctxt "#33087"
-msgid "Provider health check"
+msgid "Write addon log in reverse order"
 msgstr ""
 
 msgctxt "#33088"
-msgid "AIOStreams: test movies"
+msgid "Clear addon log"
 msgstr ""
 
 msgctxt "#33089"
-msgid "AIOStreams: test series"
+msgid "View addon log"
 msgstr ""
 
 msgctxt "#33090"
-msgid "Changelog"
+msgid "Upload addon log"
 msgstr ""
 
 msgctxt "#33091"
-msgid "Done"
+msgid "Settings"
 msgstr ""
 
 msgctxt "#33092"
-msgid "Error"
+msgid "Provider health check"
 msgstr ""
 
 msgctxt "#33093"
-msgid "Test enabled providers only"
+msgid "AIOStreams: test movies"
 msgstr ""
 
 msgctxt "#33094"
-msgid "Test every provider"
+msgid "AIOStreams: test series"
 msgstr ""
 
 msgctxt "#33095"
-msgid "Enter a valid movie IMDb id:"
+msgid "Changelog"
 msgstr ""
 
 msgctxt "#33096"
-msgid "Please wait..."
+msgid "Done"
 msgstr ""
 
 msgctxt "#33097"
+msgid "Error"
+msgstr ""
+
+msgctxt "#33098"
+msgid "Test enabled providers only"
+msgstr ""
+
+msgctxt "#33099"
+msgid "Test every provider"
+msgstr ""
+
+msgctxt "#33100"
+msgid "Enter a valid movie IMDb id:"
+msgstr ""
+
+msgctxt "#33101"
+msgid "Please wait..."
+msgstr ""
+
+msgctxt "#33102"
 msgid "Movie %s not found"
 msgstr ""
 

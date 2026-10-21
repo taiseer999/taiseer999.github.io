@@ -36,11 +36,13 @@ def _traced(name, engine, cls):
 	class source(cls):
 		ab_provider, ab_engines = name, (engine,)
 		def sources(self, data, hostDict):
-			return trace(name, engine, 'sources', lambda: cls.sources(self, data, hostDict))
+			from abscrapers import dedupe
+			return dedupe.apply(trace(name, engine, 'sources', lambda: cls.sources(self, data, hostDict)), data, name)
 		if hasattr(cls, 'sources_packs'):
 			def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
-				return trace(name, engine, 'sources_packs', lambda: cls.sources_packs(self, data, hostDict,
-					search_series=search_series, total_seasons=total_seasons, bypass_filter=bypass_filter))
+				from abscrapers import dedupe
+				return dedupe.apply(trace(name, engine, 'sources_packs', lambda: cls.sources_packs(self, data, hostDict,
+					search_series=search_series, total_seasons=total_seasons, bypass_filter=bypass_filter)), data, name)
 	source.__module__ = cls.__module__
 	return source
 

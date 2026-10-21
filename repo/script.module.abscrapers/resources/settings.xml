@@ -120,49 +120,51 @@
 	</category>
 	<category label="33006">
 		<setting id="filter.foreign.single.audio" type="bool" label="33044" default="false" />
+		<setting id="filter.duplicates" type="enum" label="33046" default="2" lvalues="33047|33048|33049" />
+		<setting id="filter.duplicates.cross" type="bool" label="33050" default="true" subsetting="true" visible="!eq(-1,0)" />
 		<setting id="filter.undesirables" type="bool" label="33045" default="false" />
-		<setting type="action" label="33046" subsetting="true" enable="eq(-1,true)" action="RunPlugin(plugin://script.module.abscrapers/?action=undesirablesSelect)" />
-		<setting type="action" label="33047" subsetting="true" enable="eq(-2,true)" action="RunPlugin(plugin://script.module.abscrapers/?action=undesirablesInput)" />
-		<setting type="action" label="33048" subsetting="true" enable="eq(-3,true)" action="RunPlugin(plugin://script.module.abscrapers/?action=undesirablesUserRemove)" />
-		<setting type="action" label="33049" subsetting="true" enable="eq(-4,true)" action="RunPlugin(plugin://script.module.abscrapers/?action=undesirablesUserRemoveAll)" />
-		<setting type="action" label="33050" action="RunPlugin(plugin://script.module.abscrapers/?action=ShowHelp&amp;name=undesirablesFilter)" />
+		<setting type="action" label="33051" subsetting="true" enable="eq(-1,true)" action="RunPlugin(plugin://script.module.abscrapers/?action=undesirablesSelect)" />
+		<setting type="action" label="33052" subsetting="true" enable="eq(-2,true)" action="RunPlugin(plugin://script.module.abscrapers/?action=undesirablesInput)" />
+		<setting type="action" label="33053" subsetting="true" enable="eq(-3,true)" action="RunPlugin(plugin://script.module.abscrapers/?action=undesirablesUserRemove)" />
+		<setting type="action" label="33054" subsetting="true" enable="eq(-4,true)" action="RunPlugin(plugin://script.module.abscrapers/?action=undesirablesUserRemoveAll)" />
+		<setting type="action" label="33055" action="RunPlugin(plugin://script.module.abscrapers/?action=ShowHelp&amp;name=undesirablesFilter)" />
 	</category>
 	<category label="33007">
 		<setting id="player.aiostreams" type="bool" label="" default="true" visible="false" />
-		<setting type="action" label="33072" action="RunPlugin(plugin://script.module.abscrapers/?action=ShowReadme)" />
-		<setting type="action" label="33073" action="RunPlugin(plugin://script.module.abscrapers/?action=InstallJson)" />
-		<setting type="lsep" label="33066" />
-		<setting id="aiostreams_instance" type="enum" label="33067" default="0" values="Stremio.ru|Custom|Viren070|ForTheWeak|Midnightignite" />
-		<setting id="aio.custom_url" type="text" label="33069" default="" visible="eq(-1,1)" />
-		<setting id="aio.username" type="text" label="33070" default="" />
-		<setting id="aio.password" type="text" label="33071" default="" option="hidden" />
-		<setting type="lsep" label="33051" />
-		<setting id="results.list_format" type="enum" label="33052" default="1" lvalues="33053|33054" />
-		<setting id="highlight.type" type="enum" label="33055" default="1" lvalues="33056|33057" />
+		<setting type="action" label="33077" action="RunPlugin(plugin://script.module.abscrapers/?action=ShowReadme)" />
+		<setting type="action" label="33078" action="RunPlugin(plugin://script.module.abscrapers/?action=InstallJson)" />
+		<setting type="lsep" label="33071" />
+		<setting id="aiostreams_instance" type="enum" label="33072" default="0" values="Stremio.ru|Custom|Viren070|ForTheWeak|Midnightignite" />
+		<setting id="aio.custom_url" type="text" label="33074" default="" visible="eq(-1,1)" />
+		<setting id="aio.username" type="text" label="33075" default="" />
+		<setting id="aio.password" type="text" label="33076" default="" option="hidden" />
+		<setting type="lsep" label="33056" />
+		<setting id="results.list_format" type="enum" label="33057" default="1" lvalues="33058|33059" />
+		<setting id="highlight.type" type="enum" label="33060" default="1" lvalues="33061|33062" />
 		<setting id="scraper_single_highlight" type="text" label="" default="dodgerblue" visible="false" />
-		<setting id="scraper_single_display" type="action" label="33058" default="[COLOR FF1E90FF]dodgerblue[/COLOR]" action="RunPlugin(plugin://script.module.abscrapers/?action=ColorPick&amp;setting=scraper_single_highlight)" />
+		<setting id="scraper_single_display" type="action" label="33063" default="[COLOR FF1E90FF]dodgerblue[/COLOR]" action="RunPlugin(plugin://script.module.abscrapers/?action=ColorPick&amp;setting=scraper_single_highlight)" />
 		<setting id="scraper_4k_highlight" type="text" label="" default="magenta" visible="false" />
-		<setting id="scraper_4k_display" type="action" label="33059" default="[COLOR FFFF00FF]magenta[/COLOR]" action="RunPlugin(plugin://script.module.abscrapers/?action=ColorPick&amp;setting=scraper_4k_highlight)" />
+		<setting id="scraper_4k_display" type="action" label="33064" default="[COLOR FFFF00FF]magenta[/COLOR]" action="RunPlugin(plugin://script.module.abscrapers/?action=ColorPick&amp;setting=scraper_4k_highlight)" />
 		<setting id="scraper_1080p_highlight" type="text" label="" default="orange" visible="false" />
-		<setting id="scraper_1080p_display" type="action" label="33060" default="[COLOR FFFFA500]orange[/COLOR]" action="RunPlugin(plugin://script.module.abscrapers/?action=ColorPick&amp;setting=scraper_1080p_highlight)" />
+		<setting id="scraper_1080p_display" type="action" label="33065" default="[COLOR FFFFA500]orange[/COLOR]" action="RunPlugin(plugin://script.module.abscrapers/?action=ColorPick&amp;setting=scraper_1080p_highlight)" />
 		<setting id="scraper_720p_highlight" type="text" label="" default="blue" visible="false" />
-		<setting id="scraper_720p_display" type="action" label="33061" default="[COLOR FF0000FF]blue[/COLOR]" action="RunPlugin(plugin://script.module.abscrapers/?action=ColorPick&amp;setting=scraper_720p_highlight)" />
+		<setting id="scraper_720p_display" type="action" label="33066" default="[COLOR FF0000FF]blue[/COLOR]" action="RunPlugin(plugin://script.module.abscrapers/?action=ColorPick&amp;setting=scraper_720p_highlight)" />
 		<setting id="scraper_SD_highlight" type="text" label="" default="green" visible="false" />
-		<setting id="scraper_SD_display" type="action" label="33062" default="[COLOR FF008000]green[/COLOR]" action="RunPlugin(plugin://script.module.abscrapers/?action=ColorPick&amp;setting=scraper_SD_highlight)" />
-		<setting id="results.language_filter" type="bool" label="33063" default="false" />
-		<setting id="results.language" type="select" label="33064" default="Arabic" values="English|Arabic|Bulgarian|Chinese|Croatian|Czech|Danish|Dutch|Estonian|Finnish|French|German|Greek|Hebrew|Hindi|Hungarian|Indonesian|Italian|Japanese|Korean|Latvian|Lithuanian|Malay|Norwegian|Persian|Polish|Portuguese|Romanian|Russian|Serbian|Slovakian|Slovenian|Spanish|Swedish|Taiwanese|Tamil|Telugu|Thai|Turkish|Ukrainian|Vietnamese" subsetting="true" visible="eq(-1,true)" />
-		<setting id="scraping_timeout" type="slider" label="33065" default="30" range="10,5,90" option="int" />
+		<setting id="scraper_SD_display" type="action" label="33067" default="[COLOR FF008000]green[/COLOR]" action="RunPlugin(plugin://script.module.abscrapers/?action=ColorPick&amp;setting=scraper_SD_highlight)" />
+		<setting id="results.language_filter" type="bool" label="33068" default="false" />
+		<setting id="results.language" type="select" label="33069" default="Arabic" values="English|Arabic|Bulgarian|Chinese|Croatian|Czech|Danish|Dutch|Estonian|Finnish|French|German|Greek|Hebrew|Hindi|Hungarian|Indonesian|Italian|Japanese|Korean|Latvian|Lithuanian|Malay|Norwegian|Persian|Polish|Portuguese|Romanian|Russian|Serbian|Slovakian|Slovenian|Spanish|Swedish|Taiwanese|Tamil|Telugu|Thai|Turkish|Ukrainian|Vietnamese" subsetting="true" visible="eq(-1,true)" />
+		<setting id="scraping_timeout" type="slider" label="33070" default="30" range="10,5,90" option="int" />
 	</category>
 	<category label="33008">
-		<setting type="action" label="33074" action="RunPlugin(plugin://script.module.abscrapers/?action=healthCheck)" />
-		<setting type="action" label="33075" option="close" action="RunPlugin(plugin://script.module.abscrapers/?action=cleanSettings)" />
-		<setting type="lsep" label="33076" />
-		<setting id="log.providers" type="bool" label="33077" default="true" />
-		<setting id="debug.enabled" type="bool" label="33078" default="false" />
-		<setting id="debug.location" type="enum" label="33079" default="0" lvalues="33080|33081" enable="eq(-1,true)" />
-		<setting id="debug.reversed" type="bool" label="33082" default="false" visible="eq(-1,1)" />
-		<setting type="action" label="33083" visible="eq(-2,1)" action="RunPlugin(plugin://script.module.abscrapers/?action=tools_clearLogFile)" />
-		<setting type="action" label="33084" visible="eq(-3,1)" action="RunPlugin(plugin://script.module.abscrapers/?action=tools_viewLogFile&amp;name=AB Scrapers)" />
-		<setting type="action" label="33085" action="RunPlugin(plugin://script.module.abscrapers/?action=tools_uploadLogFile)" />
+		<setting type="action" label="33079" action="RunPlugin(plugin://script.module.abscrapers/?action=healthCheck)" />
+		<setting type="action" label="33080" option="close" action="RunPlugin(plugin://script.module.abscrapers/?action=cleanSettings)" />
+		<setting type="lsep" label="33081" />
+		<setting id="log.providers" type="bool" label="33082" default="true" />
+		<setting id="debug.enabled" type="bool" label="33083" default="false" />
+		<setting id="debug.location" type="enum" label="33084" default="0" lvalues="33085|33086" enable="eq(-1,true)" />
+		<setting id="debug.reversed" type="bool" label="33087" default="false" visible="eq(-1,1)" />
+		<setting type="action" label="33088" visible="eq(-2,1)" action="RunPlugin(plugin://script.module.abscrapers/?action=tools_clearLogFile)" />
+		<setting type="action" label="33089" visible="eq(-3,1)" action="RunPlugin(plugin://script.module.abscrapers/?action=tools_viewLogFile&amp;name=AB Scrapers)" />
+		<setting type="action" label="33090" action="RunPlugin(plugin://script.module.abscrapers/?action=tools_uploadLogFile)" />
 	</category>
 </settings>

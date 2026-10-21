@@ -2319,6 +2319,16 @@ By using or contributing to this repository, you agree that the developer is not
 			<icon>icon.png</icon>
 		</assets>
 	</extension>
+</addon><addon id="resource.images.arctic.splash" name="Arctic Splash" version="1.0.3" provider-name="jurialmunkey">
+    <requires>
+        <import addon="kodi.resource" version="1.0.0" />
+    </requires>
+    <extension point="kodi.resource.images" compile="false" type="skinbackgrounds" />
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Seasonal layered splash artwork for Arctic</summary>
+        <description lang="en_GB">Mount Fuji and lake splash artwork with nine composited layers, four seasons, five weather patterns, and 24 hourly states. Includes high quality WebP artwork with lossless transparency and PNG overlays.</description>
+        <platform>all</platform>
+    </extension>
 </addon><addon id="resource.images.backgroundoverlays.basic" name="Background Overlays Pack - Basic" version="1.0.0" provider-name="marcelveldt, mgonzales">
 	<extension point="kodi.resource.images" compile="false" type="backgroundoverlays" />
 	<requires>
@@ -3241,7 +3251,7 @@ v.3.3.7
             <icon>resources/images/icon.png</icon>
         </assets>
     </extension>
-</addon><addon id="script.module.abscrapers" name="AB Scrapers" version="1.0.2" provider-name="ABUKARIM">
+</addon><addon id="script.module.abscrapers" name="AB Scrapers" version="1.0.3" provider-name="ABUKARIM">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" />
@@ -3265,7 +3275,7 @@ v.3.3.7
 			<icon>icon.png</icon>
 			<fanart>fanart.jpg</fanart>
 		</assets>
-		<news>v1.0.2 - Provider trace in kodi.log (which add-on called, each provider result count, time, errors). v1.0.1 - Telegram: always-on logging, real error shown on screen, provider auto-enabled after linking. v1.0.0 - first release: CocoScrapers 1.0.39 + Gears Scrapers 1.6.2 + Magneto 6.10.04 merged into AB Scrapers.</news>
+		<news>v1.0.3 - New filter for repeated results (same release name and size under different hashes, e.g. Comet), on by default. v1.0.2 - Provider trace in kodi.log (which add-on called, each provider result count, time, errors). v1.0.1 - Telegram: always-on logging, real error shown on screen, provider auto-enabled after linking. v1.0.0 - first release: CocoScrapers 1.0.39 + Gears Scrapers 1.6.2 + Magneto 6.10.04 merged into AB Scrapers.</news>
 	</extension>
 </addon><addon id="script.module.acctmgr" version="1.2.0c" name="[COLOR dodgerblue][B]Account Manager[/B][/COLOR] [COLOR white][B]Lite[/B][/COLOR]" provider-name="Zaxxon709">
 	<requires>

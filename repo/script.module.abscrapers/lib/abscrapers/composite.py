@@ -89,7 +89,8 @@ def make_composite(name, impls):
 			deadline = time.monotonic() + _timeout()
 			for t in threads: t.join(max(0.0, deadline - time.monotonic()))
 			with lock: snapshot = list(collected)
-			return merge(snapshot)
+			from abscrapers import dedupe
+			return dedupe.apply(merge(snapshot), args[0] if args else None, name)
 
 		def sources(self, data, hostDict):
 			if not data: return []

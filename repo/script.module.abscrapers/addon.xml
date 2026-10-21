@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.module.abscrapers" name="AB Scrapers" version="1.0.2" provider-name="ABUKARIM">
+<addon id="script.module.abscrapers" name="AB Scrapers" version="1.0.3" provider-name="ABUKARIM">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" />
@@ -23,6 +23,6 @@
 			<icon>icon.png</icon>
 			<fanart>fanart.jpg</fanart>
 		</assets>
-		<news>v1.0.2 - Provider trace in kodi.log (which add-on called, each provider result count, time, errors). v1.0.1 - Telegram: always-on logging, real error shown on screen, provider auto-enabled after linking. v1.0.0 - first release: CocoScrapers 1.0.39 + Gears Scrapers 1.6.2 + Magneto 6.10.04 merged into AB Scrapers.</news>
+		<news>v1.0.3 - New filter for repeated results (same release name and size under different hashes, e.g. Comet), on by default. v1.0.2 - Provider trace in kodi.log (which add-on called, each provider result count, time, errors). v1.0.1 - Telegram: always-on logging, real error shown on screen, provider auto-enabled after linking. v1.0.0 - first release: CocoScrapers 1.0.39 + Gears Scrapers 1.6.2 + Magneto 6.10.04 merged into AB Scrapers.</news>
 	</extension>
 </addon>

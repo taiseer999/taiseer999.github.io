@@ -192,210 +192,230 @@ msgid "Remove undesirables"
 msgstr "إزالة غير المرغوب فيه"
 
 msgctxt "#33046"
+msgid "Filter repeated results"
+msgstr "تصفية النتائج المكرّرة"
+
+msgctxt "#33047"
+msgid "Off"
+msgstr "إيقاف"
+
+msgctxt "#33048"
+msgid "Same hash"
+msgstr "البصمة نفسها"
+
+msgctxt "#33049"
+msgid "Same release name and size"
+msgstr "اسم الإصدار والحجم نفساهما"
+
+msgctxt "#33050"
+msgid "Also across providers in the same search"
+msgstr "وبين المزوّدين أيضًا في البحث نفسه"
+
+msgctxt "#33051"
 msgid "Manage default undesirables"
 msgstr "إدارة الكلمات غير المرغوب فيها الافتراضية"
 
-msgctxt "#33047"
+msgctxt "#33052"
 msgid "Define extra undesirables (comma separated)"
 msgstr "تحديد كلمات إضافية غير مرغوب فيها (مفصولة بفواصل)"
 
-msgctxt "#33048"
+msgctxt "#33053"
 msgid "Remove extra undesirables"
 msgstr "إزالة الكلمات الإضافية غير المرغوب فيها"
 
-msgctxt "#33049"
+msgctxt "#33054"
 msgid "Clear ALL extra undesirables"
 msgstr "مسح جميع الكلمات الإضافية غير المرغوب فيها"
 
-msgctxt "#33050"
+msgctxt "#33055"
 msgid "Undesirables filter help"
 msgstr "مساعدة مرشّح غير المرغوب فيه"
 
-msgctxt "#33051"
+msgctxt "#33056"
 msgid "Results"
 msgstr "النتائج"
 
-msgctxt "#33052"
+msgctxt "#33057"
 msgid "Results format"
 msgstr "تنسيق النتائج"
 
-msgctxt "#33053"
+msgctxt "#33058"
 msgid "List"
 msgstr "قائمة"
 
-msgctxt "#33054"
+msgctxt "#33059"
 msgid "Wide list"
 msgstr "قائمة عريضة"
 
-msgctxt "#33055"
+msgctxt "#33060"
 msgid "Result highlight type"
 msgstr "نوع تمييز النتائج"
 
-msgctxt "#33056"
+msgctxt "#33061"
 msgid "By resolution"
 msgstr "حسب الدقة"
 
-msgctxt "#33057"
+msgctxt "#33062"
 msgid "Single colour"
 msgstr "لون واحد"
 
-msgctxt "#33058"
+msgctxt "#33063"
 msgid "Single colour highlight"
 msgstr "لون التمييز الموحّد"
 
-msgctxt "#33059"
+msgctxt "#33064"
 msgid "4K highlight colour"
 msgstr "لون تمييز 4K"
 
-msgctxt "#33060"
+msgctxt "#33065"
 msgid "1080p highlight colour"
 msgstr "لون تمييز 1080p"
 
-msgctxt "#33061"
+msgctxt "#33066"
 msgid "720p highlight colour"
 msgstr "لون تمييز 720p"
 
-msgctxt "#33062"
+msgctxt "#33067"
 msgid "SD highlight colour"
 msgstr "لون تمييز SD"
 
-msgctxt "#33063"
+msgctxt "#33068"
 msgid "Highlight priority language"
 msgstr "تمييز اللغة ذات الأولوية"
 
-msgctxt "#33064"
+msgctxt "#33069"
 msgid "Priority language"
 msgstr "اللغة ذات الأولوية"
 
-msgctxt "#33065"
+msgctxt "#33070"
 msgid "Scraping timeout"
 msgstr "مهلة البحث"
 
-msgctxt "#33066"
+msgctxt "#33071"
 msgid "Setup"
 msgstr "الإعداد"
 
-msgctxt "#33067"
+msgctxt "#33072"
 msgid "Instance"
 msgstr "الخادم"
 
-msgctxt "#33068"
+msgctxt "#33073"
 msgid "Custom"
 msgstr "مخصص"
 
-msgctxt "#33069"
+msgctxt "#33074"
 msgid "URL"
 msgstr "الرابط"
 
-msgctxt "#33070"
+msgctxt "#33075"
 msgid "Username (UUID)"
 msgstr "اسم المستخدم (UUID)"
 
-msgctxt "#33071"
+msgctxt "#33076"
 msgid "Password"
 msgstr "كلمة المرور"
 
-msgctxt "#33072"
+msgctxt "#33077"
 msgid "AIOStreams README"
 msgstr "دليل AIOStreams"
 
-msgctxt "#33073"
+msgctxt "#33078"
 msgid "Install TMDbHelper player (AIOStreams)"
 msgstr "تثبيت مشغّل TMDbHelper (AIOStreams)"
 
-msgctxt "#33074"
+msgctxt "#33079"
 msgid "Test all providers"
 msgstr "اختبار جميع المزوّدين"
 
-msgctxt "#33075"
+msgctxt "#33080"
 msgid "Clean settings file"
 msgstr "تنظيف ملف الإعدادات"
 
-msgctxt "#33076"
+msgctxt "#33081"
 msgid "Logging"
 msgstr "السجلات"
 
-msgctxt "#33077"
+msgctxt "#33082"
 msgid "Log provider results to kodi.log"
 msgstr "تسجيل نتائج المزوّدين في سجل Kodi"
 
-msgctxt "#33078"
+msgctxt "#33083"
 msgid "Enable debug logging"
 msgstr "تفعيل سجل التصحيح"
 
-msgctxt "#33079"
+msgctxt "#33084"
 msgid "Logging location"
 msgstr "موقع السجل"
 
-msgctxt "#33080"
+msgctxt "#33085"
 msgid "Kodi log"
 msgstr "سجل Kodi"
 
-msgctxt "#33081"
+msgctxt "#33086"
 msgid "Addon log"
 msgstr "سجل الإضافة"
 
-msgctxt "#33082"
+msgctxt "#33087"
 msgid "Write addon log in reverse order"
 msgstr "كتابة سجل الإضافة بترتيب معكوس"
 
-msgctxt "#33083"
+msgctxt "#33088"
 msgid "Clear addon log"
 msgstr "مسح سجل الإضافة"
 
-msgctxt "#33084"
+msgctxt "#33089"
 msgid "View addon log"
 msgstr "عرض سجل الإضافة"
 
-msgctxt "#33085"
+msgctxt "#33090"
 msgid "Upload addon log"
 msgstr "رفع سجل الإضافة"
 
-msgctxt "#33086"
+msgctxt "#33091"
 msgid "Settings"
 msgstr "الإعدادات"
 
-msgctxt "#33087"
+msgctxt "#33092"
 msgid "Provider health check"
 msgstr "فحص حالة المزوّدين"
 
-msgctxt "#33088"
+msgctxt "#33093"
 msgid "AIOStreams: test movies"
 msgstr "AIOStreams: تجربة الأفلام"
 
-msgctxt "#33089"
+msgctxt "#33094"
 msgid "AIOStreams: test series"
 msgstr "AIOStreams: تجربة المسلسلات"
 
-msgctxt "#33090"
+msgctxt "#33095"
 msgid "Changelog"
 msgstr "سجل التغييرات"
 
-msgctxt "#33091"
+msgctxt "#33096"
 msgid "Done"
 msgstr "تمّ"
 
-msgctxt "#33092"
+msgctxt "#33097"
 msgid "Error"
 msgstr "خطأ"
 
-msgctxt "#33093"
+msgctxt "#33098"
 msgid "Test enabled providers only"
 msgstr "اختبار المزوّدين المفعّلين فقط"
 
-msgctxt "#33094"
+msgctxt "#33099"
 msgid "Test every provider"
 msgstr "اختبار جميع المزوّدين"
 
-msgctxt "#33095"
+msgctxt "#33100"
 msgid "Enter a valid movie IMDb id:"
 msgstr "أدخل معرّف IMDb صالحًا لفيلم:"
 
-msgctxt "#33096"
+msgctxt "#33101"
 msgid "Please wait..."
 msgstr "يرجى الانتظار..."
 
-msgctxt "#33097"
+msgctxt "#33102"
 msgid "Movie %s not found"
 msgstr "لم يُعثر على الفيلم %s"
 
