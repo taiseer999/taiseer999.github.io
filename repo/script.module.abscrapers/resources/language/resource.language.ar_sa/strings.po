@@ -116,306 +116,314 @@ msgid "Magneto"
 msgstr "Magneto"
 
 msgctxt "#33027"
-msgid "Comet instance (Magneto engine)"
-msgstr "خادم Comet (محرك Magneto)"
+msgid "Comet instance (Coco / Magneto engines)"
+msgstr "خادم Comet (محركا Coco وMagneto)"
 
 msgctxt "#33028"
-msgid "Torz instance (Magneto engine)"
-msgstr "خادم Torz (محرك Magneto)"
+msgid "Torz instance (Coco / Magneto engines)"
+msgstr "خادم Torz (محركا Coco وMagneto)"
 
 msgctxt "#33029"
-msgid "Zilean instance (Magneto engine)"
-msgstr "خادم Zilean (محرك Magneto)"
+msgid "Zilean instance (Coco / Magneto engines)"
+msgstr "خادم Zilean (محركا Coco وMagneto)"
 
 msgctxt "#33030"
 msgid "MediaFusion (CocoScrapers engine)"
 msgstr "MediaFusion (محرك CocoScrapers)"
 
 msgctxt "#33031"
+msgid "AIOStreams scraper (CocoScrapers engine)"
+msgstr "مزوّد AIOStreams (محرك CocoScrapers)"
+
+msgctxt "#33032"
+msgid "MediaFusion instance (CocoScrapers engine)"
+msgstr "خادم MediaFusion (محرك CocoScrapers)"
+
+msgctxt "#33033"
 msgid "Use custom MediaFusion URL"
 msgstr "استخدام رابط MediaFusion مخصص"
 
-msgctxt "#33032"
+msgctxt "#33034"
 msgid "Custom MediaFusion URL"
 msgstr "رابط MediaFusion المخصص"
 
-msgctxt "#33033"
+msgctxt "#33035"
 msgid "MediaFusion user data"
 msgstr "بيانات مستخدم MediaFusion"
 
-msgctxt "#33034"
+msgctxt "#33036"
 msgid "Configure MediaFusion (QR / code)"
 msgstr "إعداد MediaFusion (رمز الربط)"
 
-msgctxt "#33035"
+msgctxt "#33037"
 msgid "Clear MediaFusion user data"
 msgstr "مسح بيانات مستخدم MediaFusion"
 
-msgctxt "#33036"
+msgctxt "#33038"
 msgid "Torrentio: bypass filter (CocoScrapers engine)"
 msgstr "Torrentio: تجاوز المرشّح (محرك CocoScrapers)"
 
-msgctxt "#33037"
+msgctxt "#33039"
 msgid "Prowlarr URL"
 msgstr "رابط Prowlarr"
 
-msgctxt "#33038"
+msgctxt "#33040"
 msgid "Prowlarr API key"
 msgstr "مفتاح واجهة Prowlarr"
 
-msgctxt "#33039"
+msgctxt "#33041"
 msgid "Test Prowlarr connection"
 msgstr "اختبار الاتصال بـ Prowlarr"
 
-msgctxt "#33040"
+msgctxt "#33042"
 msgid "List Prowlarr indexers"
 msgstr "عرض مفهرسات Prowlarr"
 
-msgctxt "#33041"
+msgctxt "#33043"
 msgid "Link your own Telegram account to enable the Telegram provider. Scan the QR code with the Telegram app: Settings > Devices > Link Desktop Device."
 msgstr "اربط حسابك في تيليجرام لتفعيل مزوّد تيليجرام. امسح رمز QR بتطبيق تيليجرام: الإعدادات ثم الأجهزة ثم ربط جهاز مكتبي."
 
-msgctxt "#33042"
+msgctxt "#33044"
 msgid "Link Telegram account"
 msgstr "ربط حساب تيليجرام"
 
-msgctxt "#33043"
+msgctxt "#33045"
 msgid "Telegram link status / unlink"
 msgstr "حالة ربط تيليجرام / إلغاء الربط"
 
-msgctxt "#33044"
+msgctxt "#33046"
 msgid "Remove foreign single-audio sources"
 msgstr "إزالة المصادر ذات الصوت الأجنبي المنفرد"
 
-msgctxt "#33045"
+msgctxt "#33047"
 msgid "Remove undesirables"
 msgstr "إزالة غير المرغوب فيه"
 
-msgctxt "#33046"
+msgctxt "#33048"
 msgid "Filter repeated results"
 msgstr "تصفية النتائج المكرّرة"
 
-msgctxt "#33047"
+msgctxt "#33049"
 msgid "Off"
 msgstr "إيقاف"
 
-msgctxt "#33048"
+msgctxt "#33050"
 msgid "Same hash"
 msgstr "البصمة نفسها"
 
-msgctxt "#33049"
+msgctxt "#33051"
 msgid "Same release name and size"
 msgstr "اسم الإصدار والحجم نفساهما"
 
-msgctxt "#33050"
+msgctxt "#33052"
 msgid "Also across providers in the same search"
 msgstr "وبين المزوّدين أيضًا في البحث نفسه"
 
-msgctxt "#33051"
+msgctxt "#33053"
 msgid "Manage default undesirables"
 msgstr "إدارة الكلمات غير المرغوب فيها الافتراضية"
 
-msgctxt "#33052"
+msgctxt "#33054"
 msgid "Define extra undesirables (comma separated)"
 msgstr "تحديد كلمات إضافية غير مرغوب فيها (مفصولة بفواصل)"
 
-msgctxt "#33053"
+msgctxt "#33055"
 msgid "Remove extra undesirables"
 msgstr "إزالة الكلمات الإضافية غير المرغوب فيها"
 
-msgctxt "#33054"
+msgctxt "#33056"
 msgid "Clear ALL extra undesirables"
 msgstr "مسح جميع الكلمات الإضافية غير المرغوب فيها"
 
-msgctxt "#33055"
+msgctxt "#33057"
 msgid "Undesirables filter help"
 msgstr "مساعدة مرشّح غير المرغوب فيه"
 
-msgctxt "#33056"
+msgctxt "#33058"
 msgid "Results"
 msgstr "النتائج"
 
-msgctxt "#33057"
+msgctxt "#33059"
 msgid "Results format"
 msgstr "تنسيق النتائج"
 
-msgctxt "#33058"
+msgctxt "#33060"
 msgid "List"
 msgstr "قائمة"
 
-msgctxt "#33059"
+msgctxt "#33061"
 msgid "Wide list"
 msgstr "قائمة عريضة"
 
-msgctxt "#33060"
+msgctxt "#33062"
 msgid "Result highlight type"
 msgstr "نوع تمييز النتائج"
 
-msgctxt "#33061"
+msgctxt "#33063"
 msgid "By resolution"
 msgstr "حسب الدقة"
 
-msgctxt "#33062"
+msgctxt "#33064"
 msgid "Single colour"
 msgstr "لون واحد"
 
-msgctxt "#33063"
+msgctxt "#33065"
 msgid "Single colour highlight"
 msgstr "لون التمييز الموحّد"
 
-msgctxt "#33064"
+msgctxt "#33066"
 msgid "4K highlight colour"
 msgstr "لون تمييز 4K"
 
-msgctxt "#33065"
+msgctxt "#33067"
 msgid "1080p highlight colour"
 msgstr "لون تمييز 1080p"
 
-msgctxt "#33066"
+msgctxt "#33068"
 msgid "720p highlight colour"
 msgstr "لون تمييز 720p"
 
-msgctxt "#33067"
+msgctxt "#33069"
 msgid "SD highlight colour"
 msgstr "لون تمييز SD"
 
-msgctxt "#33068"
+msgctxt "#33070"
 msgid "Highlight priority language"
 msgstr "تمييز اللغة ذات الأولوية"
 
-msgctxt "#33069"
+msgctxt "#33071"
 msgid "Priority language"
 msgstr "اللغة ذات الأولوية"
 
-msgctxt "#33070"
+msgctxt "#33072"
 msgid "Scraping timeout"
 msgstr "مهلة البحث"
 
-msgctxt "#33071"
+msgctxt "#33073"
 msgid "Setup"
 msgstr "الإعداد"
 
-msgctxt "#33072"
+msgctxt "#33074"
 msgid "Instance"
 msgstr "الخادم"
 
-msgctxt "#33073"
+msgctxt "#33075"
 msgid "Custom"
 msgstr "مخصص"
 
-msgctxt "#33074"
+msgctxt "#33076"
 msgid "URL"
 msgstr "الرابط"
 
-msgctxt "#33075"
+msgctxt "#33077"
 msgid "Username (UUID)"
 msgstr "اسم المستخدم (UUID)"
 
-msgctxt "#33076"
+msgctxt "#33078"
 msgid "Password"
 msgstr "كلمة المرور"
 
-msgctxt "#33077"
+msgctxt "#33079"
 msgid "AIOStreams README"
 msgstr "دليل AIOStreams"
 
-msgctxt "#33078"
+msgctxt "#33080"
 msgid "Install TMDbHelper player (AIOStreams)"
 msgstr "تثبيت مشغّل TMDbHelper (AIOStreams)"
 
-msgctxt "#33079"
+msgctxt "#33081"
 msgid "Test all providers"
 msgstr "اختبار جميع المزوّدين"
 
-msgctxt "#33080"
+msgctxt "#33082"
 msgid "Clean settings file"
 msgstr "تنظيف ملف الإعدادات"
 
-msgctxt "#33081"
+msgctxt "#33083"
 msgid "Logging"
 msgstr "السجلات"
 
-msgctxt "#33082"
+msgctxt "#33084"
 msgid "Log provider results to kodi.log"
 msgstr "تسجيل نتائج المزوّدين في سجل Kodi"
 
-msgctxt "#33083"
+msgctxt "#33085"
 msgid "Enable debug logging"
 msgstr "تفعيل سجل التصحيح"
 
-msgctxt "#33084"
+msgctxt "#33086"
 msgid "Logging location"
 msgstr "موقع السجل"
 
-msgctxt "#33085"
+msgctxt "#33087"
 msgid "Kodi log"
 msgstr "سجل Kodi"
 
-msgctxt "#33086"
+msgctxt "#33088"
 msgid "Addon log"
 msgstr "سجل الإضافة"
 
-msgctxt "#33087"
+msgctxt "#33089"
 msgid "Write addon log in reverse order"
 msgstr "كتابة سجل الإضافة بترتيب معكوس"
 
-msgctxt "#33088"
+msgctxt "#33090"
 msgid "Clear addon log"
 msgstr "مسح سجل الإضافة"
 
-msgctxt "#33089"
+msgctxt "#33091"
 msgid "View addon log"
 msgstr "عرض سجل الإضافة"
 
-msgctxt "#33090"
+msgctxt "#33092"
 msgid "Upload addon log"
 msgstr "رفع سجل الإضافة"
 
-msgctxt "#33091"
+msgctxt "#33093"
 msgid "Settings"
 msgstr "الإعدادات"
 
-msgctxt "#33092"
+msgctxt "#33094"
 msgid "Provider health check"
 msgstr "فحص حالة المزوّدين"
 
-msgctxt "#33093"
+msgctxt "#33095"
 msgid "AIOStreams: test movies"
 msgstr "AIOStreams: تجربة الأفلام"
 
-msgctxt "#33094"
+msgctxt "#33096"
 msgid "AIOStreams: test series"
 msgstr "AIOStreams: تجربة المسلسلات"
 
-msgctxt "#33095"
+msgctxt "#33097"
 msgid "Changelog"
 msgstr "سجل التغييرات"
 
-msgctxt "#33096"
+msgctxt "#33098"
 msgid "Done"
 msgstr "تمّ"
 
-msgctxt "#33097"
+msgctxt "#33099"
 msgid "Error"
 msgstr "خطأ"
 
-msgctxt "#33098"
+msgctxt "#33100"
 msgid "Test enabled providers only"
 msgstr "اختبار المزوّدين المفعّلين فقط"
 
-msgctxt "#33099"
+msgctxt "#33101"
 msgid "Test every provider"
 msgstr "اختبار جميع المزوّدين"
 
-msgctxt "#33100"
+msgctxt "#33102"
 msgid "Enter a valid movie IMDb id:"
 msgstr "أدخل معرّف IMDb صالحًا لفيلم:"
 
-msgctxt "#33101"
+msgctxt "#33103"
 msgid "Please wait..."
 msgstr "يرجى الانتظار..."
 
-msgctxt "#33102"
+msgctxt "#33104"
 msgid "Movie %s not found"
 msgstr "لم يُعثر على الفيلم %s"
 

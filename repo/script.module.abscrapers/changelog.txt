@@ -1,3 +1,21 @@
+[B]AB Scrapers v1.1.0[/B]
+- CocoScrapers engine updated 1.0.39 -> 1.0.43. Coco 1.0.43 carries kodifitzwell's POV 6.10.16
+  provider code, the newest upstream of the Magneto providers (Magneto 6.10.16+ no longer ships
+  its own providers - it is now a wrapper around POV - so the Magneto engine stays on 6.10.04).
+- 3 new providers: BitCQ, isoHunt, TorrentQuest (off by default) - 54 providers in total.
+- Auto engine choices re-evaluated:
+  - newer Coco code replaces Magneto where they were the same provider (Comet, Knaben, Nyaa,
+    Torlock, Torz, YTS, Zilean);
+  - upstream fixes picked up: Knaben JSON API, Torlock Torznab, Nyaa RSS, new YTS endpoint,
+    new BitSearch domain, DMM without rate-limiting, Comet/MediaFusion/Meteor format changes,
+    Kickass parsing;
+  - AIOStreams now runs Gears + Coco (Coco supports instance choice and login).
+- New settings (Instances): AIOStreams scraper instance / URL / username / password and the
+  MediaFusion instance for the Coco engine.
+- Per-provider "Engine" selectors list the new Coco options automatically.
+- Any provider that returns nothing (None) instead of a list now hands the add-on an empty
+  list (Coco 1.0.43 isoHunt does this on a failed search, which can break the caller).
+
 [B]AB Scrapers v1.0.3[/B]
 - NEW Filters > "Filter repeated results" (default: Same release name and size):
   indexers such as Comet return the same release several times under different

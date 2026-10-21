@@ -25,32 +25,36 @@ ENGINE_DIRS = {
 #  - same endpoint in several engines   -> run only the strongest implementation
 #  - different instances/mirrors/APIs   -> run them together and merge by info-hash
 AUTO = {
+	# CocoScrapers 1.0.43 ships kodifitzwell's POV 6.10.16 provider code - the newest
+	# upstream of what Magneto 6.10.04 had (Magneto 6.10.16+ dropped its own providers).
+	# So Coco replaces Magneto wherever the two were the same code.
 	'1337x': ('gears',),                     # gears probes 8 mirrors, coco hard-codes one
+	'aiostreams': ('gears', 'coco'),         # gears multi-instance + coco instance/login (AIOStreams v2 auth)
 	'bitmagnet': ('gears',),
-	'bitsearch': ('gears',),
-	'comet': ('gears', 'magneto', 'coco'),   # feels.legal + selectable instance + elfhosted
-	'dmm': ('gears',),
+	'bitsearch': ('coco', 'gears'),          # coco: new bitsearch.eu domain/format; gears: bitsearch.to
+	'comet': ('gears', 'coco'),              # feels.legal + selectable instance (latest format fix)
+	'dmm': ('coco',),                        # upstream fix: one page, avoids DMM rate-limiting
 	'eztv': ('gears',),
-	'kickass2': ('gears',),                  # mirror probing
-	'knaben': ('gears', 'magneto'),          # html site + api.knaben.org
+	'kickass2': ('gears', 'coco'),           # gears mirror probing + coco new search/result parsing
+	'knaben': ('gears', 'coco'),             # html site + JSON API
 	'limetorrents': ('gears', 'coco'),       # different mirror sets
-	'mediafusion': ('gears', 'coco'),        # midnightignite + elfhosted/custom (with user data)
-	'meteor': ('gears',),
-	'nyaa': ('magneto',),                    # RSS feed parser
+	'mediafusion': ('gears', 'coco'),        # midnightignite + stremio.ru/custom (with user data)
+	'meteor': ('coco',),                     # upstream format fix
+	'nyaa': ('coco',),                       # RSS feed parser (newest)
 	'piratebay': ('gears',),
 	'prowlarr': ('gears',),                  # same user instance in every engine
 	'rutor': ('gears',),
-	'torlock': ('gears', 'magneto'),         # html + torznab api
+	'torlock': ('gears', 'coco'),            # html + torznab api (newest)
 	'torrentdownload': ('gears',),
 	'torrentgalaxy': ('coco', 'gears'),      # json api (3 mirrors, packs) + html detail scrape
 	'torrentio': ('gears',),
 	'torrentproject2': ('coco', 'gears'),    # .com + .org
 	'torrentsdb': ('gears',),
-	'torz': ('gears', 'magneto'),            # fixed instance + selectable instance
-	'ytsmx': ('gears', 'magneto'),           # yts mirrors + accel.li api
-	'zilean': ('gears', 'magneto'),
+	'torz': ('gears', 'coco'),               # fixed instance + selectable instance
+	'ytsmx': ('gears', 'coco'),              # yts mirrors + new YTS API endpoint
+	'zilean': ('gears', 'coco'),             # fixed instance + selectable instance
 }
-PREFERENCE = ('gears', 'magneto', 'coco')
+PREFERENCE = ('gears', 'coco', 'magneto')
 
 
 def _scan(engine):
