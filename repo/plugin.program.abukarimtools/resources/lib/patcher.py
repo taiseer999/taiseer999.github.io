@@ -1567,6 +1567,11 @@ PATCHES = [
 # the supplied Includes_Font.xml / Includes_Objects.xml predate AF3 5.17.0 and
 # would delete font_infotag_bold, font_title_info and Object_Statistics_Panel.
 # 'os': 'libreelec' = only on LibreELEC (/etc/os-release ID), see _os_id().
+# 3.4.19: also matches a logo block an earlier ABK platform patch wrote (its
+# "<!-- ABK ... logo -->" marker), so a box that changes platform - CoreELEC 21
+# NG upgraded to 22 NO, say - gets the new logo instead of keeping the old one.
+_AF3_LOGO_RE = (r'<include name="Object_StartUp_Logo">\s*(?:<!-- ABK [^>]*? logo -->\s*)?'
+                r'<control type="grouplist">.*?</control>\s*</control>')
 _AF3_LE_LOGO = (
     '<include name="Object_StartUp_Logo">\n'
     '        <!-- ABK LibreELEC logo -->\n'
@@ -1607,7 +1612,7 @@ PATCHES += [
         'old': '', 'new': '',
         'already_patched_check': '<!-- ABK LibreELEC logo -->',
         # the FIRST grouplist of Object_StartUp_Logo (image + label)
-        'fallback_pattern': r'<include name="Object_StartUp_Logo">\s*<control type="grouplist">.*?</control>\s*</control>',
+        'fallback_pattern': _AF3_LOGO_RE,
         'fallback_repl': _AF3_LE_LOGO.replace('\\', '\\\\'),
         'regex_flags': re.S,
         'description': 'AF3 on LibreELEC - LibreELEC start-up logo',
@@ -1626,6 +1631,89 @@ PATCHES += [
         'description': 'AF3 on LibreELEC - font_logo_xlarge for the logo',
     },
 ]
+
+
+# ── Arctic Fuse 3: one skin (Piers repo) for every platform (3.4.18) ──
+# All three skins.json now install the SAME AF3 from taiseer999Piers.github.io
+# (its start-up logo says CoreELEC "NO" = Piers / Kodi 22). On a Kodi 21.3 or a
+# CoreELEC 21.3 "NG" box the two platform-specific bits are put back:
+#   * Includes_Objects.xml Object_StartUp_Logo  -> kodi.png + KODI  /
+#                                                  CE.png + CoreELEC "NG"
+#   * extras/profiles/Mountains (1).jpg         -> Kodi / CoreELEC picture
+# The logo is a TARGETED edit, not the supplied whole Includes_Objects.xml:
+# those copies predate AF3 50.11.9 and would delete Object_StatisticsDots_Month
+# (verified against the Piers repo source 2026-10-21) - the logo block is the
+# only platform difference between them. 'platform' gate = _platform_id():
+# 'kodi21' (not CoreELEC/LibreELEC, Kodi 21), 'coreelec21' (CoreELEC, Kodi 21),
+# 3.4.19: 'kodi22' / 'coreelec22' (Kodi 22 and newer, e.g. 23 alpha) get the
+# splash logo too - plain Kodi shows KODI, CoreELEC shows CoreELEC "NO"; the
+# Mountains picture stays the skin's own Kodi 22 one there. LibreELEC (21 and
+# 22) keeps its own logo patch above, which is not version-gated.
+def _af3_logo_block(tag, icon, label):
+    return (
+        '<include name="Object_StartUp_Logo">\n'
+        '        <!-- ABK %s logo -->\n'
+        '        <control type="grouplist">\n'
+        '            <height>128</height>\n'
+        '            <centertop>350</centertop>\n'
+        '            <orientation>vertical</orientation>\n'
+        '            <align>center</align>\n'
+        '            <control type="image">\n'
+        '                <width>96</width>\n'
+        '                <height>96</height>\n'
+        '                <centerleft>50%%</centerleft>\n'
+        '                <aspectratio>keep</aspectratio>\n'
+        '                <texture>special://skin/extras/icons/%s</texture>\n'
+        '            </control>\n'
+        '            <control type="label">\n'
+        '                <height>30</height>\n'
+        '                <textcolor>main_fg_100</textcolor>\n'
+        '                <label>%s</label>\n'
+        '                <font>font_logo_large</font>\n'
+        '                <align>center</align>\n'
+        '            </control>\n'
+        '        </control>') % (tag, icon, label)
+
+
+_AF3_PLATFORMS = (
+    # platform id,  sentinel tag,   icon,       label,               asset folder
+    ('kodi21',     'Kodi 21',      'kodi.png', 'KODI',              'kodi21'),
+    ('coreelec21', 'CoreELEC NG',  'CE.png',   'CoreELEC "NG"',     'coreelec21'),
+    ('kodi22',     'Kodi 22',      'kodi.png', 'KODI',              None),
+    ('coreelec22', 'CoreELEC NO',  'CE.png',   'CoreELEC "NO"',     None),
+)
+
+for _pid, _tag, _icon, _label, _dir in _AF3_PLATFORMS:
+    PATCHES += [
+        {
+            'addon_id': 'skin.arctic.fuse.3',
+            'rel_path': os.path.join('1080i', 'Includes_Objects.xml'),
+            'platform': _pid,
+            'not_found_ok': True,
+            'old': '', 'new': '',
+            'already_patched_check': '<!-- ABK %s logo -->' % _tag,
+            # the FIRST grouplist of Object_StartUp_Logo (image + label)
+            'fallback_pattern': _AF3_LOGO_RE,
+            'fallback_repl': _af3_logo_block(_tag, _icon, _label).replace('\\', '\\\\'),
+            'regex_flags': re.S,
+            'description': 'AF3 on %s - %s start-up logo' % (_tag, _label),
+        },
+    ]
+    if _dir:
+        PATCHES += [
+        {
+            'addon_id': 'skin.arctic.fuse.3',
+            'rel_path': os.path.join('extras', 'profiles', 'Mountains (1).jpg'),
+            'platform': _pid,
+            'inject_file': True,
+            'binary': True,
+            'replace': True,
+            'not_found_ok': True,
+            'inject_source': os.path.join('resources', 'af3_platform', _dir,
+                                          'Mountains (1).jpg'),
+            'description': 'AF3 on %s - profile picture Mountains (1).jpg' % _tag,
+        },
+        ]
 
 
 _SKINVARS_AR_FIX = (
@@ -2222,6 +2310,29 @@ def _os_id():
     return _OS_ID[0]
 
 
+_PLATFORM_ID = []
+
+
+def _platform_id():
+    """'kodi21', 'coreelec21', 'libreelec21', 'coreelec22', 'kodi22', ...:
+    the OS family (_os_id(); anything else = plain 'kodi') + Kodi's major
+    version from System.BuildVersion. Cached."""
+    if not _PLATFORM_ID:
+        osid = _os_id()
+        fam = osid if osid in ('coreelec', 'libreelec') else 'kodi'
+        try:
+            major = int(re.match(r'\d+', xbmc.getInfoLabel('System.BuildVersion')).group(0))
+        except Exception:
+            major = 0
+        # 3.4.19: Kodi 22 and every newer build (23 alpha ...) = the Piers
+        # generation, so one 'kodi22' / 'coreelec22' tag covers them.
+        if major > 22:
+            major = 22
+        _PLATFORM_ID.append('%s%d' % (fam, major))
+        _log('Platform id: %s' % _PLATFORM_ID[0])
+    return _PLATFORM_ID[0]
+
+
 def _select(group=None, addon_ids=None, respect_selection=True):
     """Return the patch entries to apply, optionally narrowed to addon ids.
 
@@ -2241,6 +2352,10 @@ def _select(group=None, addon_ids=None, respect_selection=True):
                 if not p.get('feature') or _feature_on(p['feature'])]
     # 3.4.2: OS-gated entries ('os': 'libreelec' / 'coreelec' / ...)
     selected = [p for p in selected if not p.get('os') or p['os'] == _os_id()]
+    # 3.4.18: platform-gated entries ('platform': 'kodi21' / 'coreelec21' ...)
+    selected = [p for p in selected if not p.get('platform')
+                or _platform_id() in ((p['platform'],) if isinstance(p['platform'], str)
+                                      else tuple(p['platform']))]
     if respect_selection:
         disabled = _load_disabled()
         if disabled:

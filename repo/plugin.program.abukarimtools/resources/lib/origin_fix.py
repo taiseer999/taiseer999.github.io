@@ -63,6 +63,29 @@ PREFERRED_REPOS = PREFERRED_REPOS_22 if _kodi_major() >= 22 else PREFERRED_REPOS
 # Never rewrite the origin of these ids even if a repo carries them.
 SKIP_IDS = set()
 
+# 3.4.18: add-ons that must update from ONE repository on every platform,
+# whatever they were installed from. Arctic Fuse 3 now ships only from the
+# Piers repo (all three skins.json point to it), so every existing install -
+# Kodi 21.3, CoreELEC 21.3 "NG" and Piers - is linked to
+# repository.taiseerKODI22, overriding an origin that points elsewhere. The
+# repository add-on itself is installed first when it is missing.
+PINNED_ORIGINS = {
+    'skin.arctic.fuse.3': 'repository.taiseerKODI22',
+    # 3.4.20: AF3's own dependencies update from their author's repository
+    # (jurialmunkey), not from the taiseer repos.
+    'script.texturemaker':            'repository.jurialmunkey',
+    'resource.images.arctic.splash':  'repository.jurialmunkey',
+    'script.skinvariables':           'repository.jurialmunkey',
+    'plugin.video.themoviedb.helper': 'repository.jurialmunkey',
+}
+_PINNED_REPO_BASE = {
+    'repository.taiseerKODI22': ('https://raw.githubusercontent.com/taiseer999/'
+                                 'taiseer999Piers.github.io/main/repo/zips/'),
+    'repository.jurialmunkey':  ('https://raw.githubusercontent.com/jurialmunkey/'
+                                 'repository.jurialmunkey/master/repo/zips/'),
+}
+_REPO_INSTALL_TRIED = set()     # one network attempt per repo per session
+
 
 def _log(msg):
     xbmc.log('[AbukarimTools OriginFix] %s' % msg, xbmc.LOGINFO)
@@ -194,6 +217,93 @@ def _locally_installed(addon_id):
 ORIGIN_SYSTEM = 'b6a50484-93a0-4afb-a01c-8d17e059feda'
 
 
+def _local_dir_for(addon_id):
+    """Name of the add-on's folder in the addons dir (case-insensitive match,
+    repo zips have shipped as repository.taiseerKodi22 too), or None."""
+    if os.path.isfile(os.path.join(ADDONS_PATH, addon_id, 'addon.xml')):
+        return addon_id
+    try:
+        low = addon_id.lower()
+        for name in os.listdir(ADDONS_PATH):
+            if name.lower() == low and os.path.isfile(
+                    os.path.join(ADDONS_PATH, name, 'addon.xml')):
+                return name
+    except OSError:
+        pass
+    return None
+
+
+def ensure_repo_installed(repo_id):
+    """Install a pinned repository add-on from its own repo when it is missing.
+
+    Returns True when the repository is present afterwards. One network try
+    per session; every failure is logged and returns False (the pinned origin
+    is then left alone so the add-on keeps updating from where it does now).
+    """
+    if _local_dir_for(repo_id):
+        return True
+    base = _PINNED_REPO_BASE.get(repo_id)
+    if not base or repo_id in _REPO_INSTALL_TRIED:
+        return False
+    _REPO_INSTALL_TRIED.add(repo_id)
+    try:
+        from resources.lib import skin_installer as si
+        ver = si._companion_version(base, repo_id)
+        if not ver:
+            _log('pinned repo %s: version lookup failed' % repo_id)
+            return False
+        url = '%s%s/%s-%s.zip' % (base, repo_id, repo_id, ver)
+        _log('installing pinned repository %s <- %s' % (repo_id, url))
+        tmp = si._download_zip_silent(url)
+        if not tmp or not si._extract_zip_silent(tmp):
+            _log('pinned repo %s: download/extract failed' % repo_id)
+            return False
+        xbmc.executebuiltin('UpdateLocalAddons')
+        xbmc.sleep(1500)
+        si._enable_addon(repo_id)
+        # one-time: fetch the new repository's listing so the update to its
+        # Arctic Fuse 3 is found without waiting for Kodi's own schedule
+        xbmc.executebuiltin('UpdateAddonRepos')
+        ok = bool(_local_dir_for(repo_id))
+        _log('pinned repository %s installed=%s' % (repo_id, ok))
+        return ok
+    except Exception as e:  # noqa: BLE001 - must never break linking
+        _log('pinned repo %s install crashed: %s' % (repo_id, e))
+        return False
+
+
+def _apply_pinned_ready(cur, result, ready):
+    """Point every ready PINNED_ORIGINS add-on at its repository, whatever
+    origin it has now (empty, another taiseer repo, ...)."""
+    for addon_id, repo_id in sorted(PINNED_ORIGINS.items()):
+        if addon_id not in ready or not _locally_installed(addon_id):
+            continue
+        cur.execute('SELECT origin FROM installed WHERE addonID = ?', (addon_id,))
+        row = cur.fetchone()
+        if row is None:
+            continue                      # not registered yet - next pass
+        old = row[0] or ''
+        if old.lower() == repo_id.lower():
+            continue
+        cur.execute('UPDATE installed SET origin = ? WHERE addonID = ?',
+                    (repo_id, addon_id))
+        if cur.rowcount:
+            result['fixed'][addon_id] = repo_id
+            if old:
+                result.setdefault('corrected', []).append(addon_id)
+            _log('origin pinned: %s %s -> %s' % (addon_id, old or '(empty)', repo_id))
+
+
+def _ensure_pinned_repos():
+    """Install the repositories of the pinned add-ons that are on this box.
+    Returns the set of pinned add-on ids whose repository is present."""
+    ready = set()
+    for addon_id, repo_id in PINNED_ORIGINS.items():
+        if _locally_installed(addon_id) and ensure_repo_installed(repo_id):
+            ready.add(addon_id)
+    return ready
+
+
 def fix_addons(addon_ids=None):
     """Repair empty origins.
 
@@ -206,6 +316,15 @@ def fix_addons(addon_ids=None):
          'error': str or None}
     """
     result = {'fixed': {}, 'unmatched': [], 'error': None}
+
+    pinned_ready = set()
+    try:
+        wanted = set(PINNED_ORIGINS) if addon_ids is None \
+            else set(PINNED_ORIGINS) & set(addon_ids)
+        if wanted:
+            pinned_ready = _ensure_pinned_repos() & wanted
+    except Exception as e:  # noqa: BLE001
+        _log('pinned repo check crashed: %s' % e)
 
     db_path = _find_addons_db()
     if not db_path:
@@ -227,6 +346,11 @@ def fix_addons(addon_ids=None):
             _log(result['error'])
             return result
 
+        # 3.4.18: pinned add-ons (Arctic Fuse 3 -> repository.taiseerKODI22)
+        # first, overriding any other origin; the generic passes skip them.
+        if pinned_ready:
+            _apply_pinned_ready(cur, result, pinned_ready)
+
         if addon_ids is None:
             cur.execute("SELECT addonID FROM installed "
                         "WHERE origin IS NULL OR origin = ''")
@@ -236,7 +360,7 @@ def fix_addons(addon_ids=None):
 
         updates = []
         for addon_id in targets:
-            if not addon_id or addon_id in SKIP_IDS:
+            if not addon_id or addon_id in SKIP_IDS or addon_id in PINNED_ORIGINS:
                 continue
             if not _locally_installed(addon_id):
                 continue  # bundled/system add-on – never touch
@@ -274,7 +398,8 @@ def fix_addons(addon_ids=None):
             cur.execute("SELECT addonID, origin FROM installed "
                         "WHERE origin IS NOT NULL AND origin != ''")
             for addon_id, origin in cur.fetchall():
-                if not addon_id or addon_id in SKIP_IDS or addon_id in result['fixed']:
+                if (not addon_id or addon_id in SKIP_IDS
+                        or addon_id in result['fixed'] or addon_id in PINNED_ORIGINS):
                     continue
                 # 3.2.0: Kodi's ORIGIN_SYSTEM marks add-ons that ship with Kodi
                 # itself. Kodi puts it back on every scan, so "correcting" it
@@ -376,6 +501,8 @@ def restore_origins(mapping):
         for aid, origin in sorted(mapping.items()):
             if not aid or not origin or aid in SKIP_IDS:
                 continue
+            if aid in PINNED_ORIGINS:
+                origin = PINNED_ORIGINS[aid]
             if not _locally_installed(aid):
                 continue
             cur.execute('SELECT origin FROM installed WHERE addonID = ?', (aid,))
@@ -505,6 +632,15 @@ def set_origin(addon_id, repo_id):
     if not _locally_installed(addon_id):
         _log('set_origin skipped (not local): %s' % addon_id)
         return False
+    pinned = PINNED_ORIGINS.get(addon_id)
+    if pinned:
+        # 3.4.18: e.g. AF3 installed from the Kodi/CE skins.json entry still
+        # comes from the Piers repo - link it there, overriding any origin.
+        if not ensure_repo_installed(pinned):
+            _log('set_origin: pinned repo %s missing, using %s' % (pinned, repo_id))
+            pinned = None
+        else:
+            repo_id = pinned
 
     db_path = _find_addons_db()
     if not db_path:
@@ -524,6 +660,14 @@ def set_origin(addon_id, repo_id):
         if row is None:
             _log('set_origin: %s not yet registered' % addon_id)
             return False
+        if pinned:
+            if (row[0] or '').lower() == pinned.lower():
+                return False
+            cur.execute('UPDATE installed SET origin = ? WHERE addonID = ?',
+                        (repo_id, addon_id))
+            conn.commit()
+            _log('set_origin (pinned): %s %s -> %s' % (addon_id, row[0] or '(empty)', repo_id))
+            return bool(cur.rowcount)
         if (row[0] or '') != '':
             _log('set_origin: %s already has origin %s' % (addon_id, row[0]))
             return False

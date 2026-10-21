@@ -1,3 +1,44 @@
+v3.4.20
+- AF3 dependencies linked to repository.jurialmunkey on every platform
+  (same pinned-origin mechanism as AF3 -> repository.taiseerKODI22):
+  script.texturemaker, resource.images.arctic.splash, script.skinvariables,
+  plugin.video.themoviedb.helper. Any other origin (taiseer / taiseerCE /
+  taiseerKODI22 / empty) is overridden. repository.jurialmunkey is installed
+  from github.com/jurialmunkey/repository.jurialmunkey when missing (one try
+  per session). Applied on boot, on menu open and by "Fix Add-on Update
+  Origins"; a portal install of the AF3 companion TMDbHelper is linked there
+  too.
+
+v3.4.19
+- AF3 start-up logo (splash) on Kodi 22 and newer, by system:
+  - CoreELEC: CE.png + CoreELEC "NO"
+  - plain Kodi (macOS, Windows, Android, Linux): kodi.png + KODI
+  - LibreELEC: libreelec.png + LibreELEC (existing patch, any Kodi version)
+  Kodi 23 alpha and later count as Kodi 22. Mountains (1).jpg keeps the
+  skin's own Kodi 22 picture on Kodi 22.
+- The logo patch now also replaces a logo written by an earlier ABK platform
+  patch, so a box that changes system or Kodi version (CoreELEC 21 NG ->
+  22 NO) gets the right logo.
+
+v3.4.18
+- Arctic Fuse 3: ONE version (taiseer999Piers.github.io) for all three
+  skins.json. "Fix Add-on Update Origins", every boot and every menu open now
+  link skin.arctic.fuse.3 to repository.taiseerKODI22 on every platform,
+  overriding an origin that points at repository.taiseer / taiseerCE. A box
+  without repository.taiseerKODI22 gets it installed from the Piers repo first
+  (one try per session). Portal installs of AF3 from the Kodi / CE entries are
+  linked to the Piers repo too.
+- NEW always-on platform patches for AF3 ('platform' gate = OS + Kodi major):
+  - Kodi 21.3 (not CoreELEC/LibreELEC): start-up logo kodi.png + KODI,
+    extras/profiles/Mountains (1).jpg = Kodi picture.
+  - CoreELEC 21.3 "NG": start-up logo CE.png + CoreELEC "NG",
+    Mountains (1).jpg = CoreELEC picture.
+  - Kodi 22 / Piers and LibreELEC unchanged (LibreELEC keeps its own logo).
+  The logo is a targeted edit of Object_StartUp_Logo, not a whole
+  Includes_Objects.xml: the supplied copies predate AF3 50.11.9 and would
+  delete Object_StatisticsDots_Month. Re-applied by the watchdog after every
+  AF3 update.
+
 v3.4.16
 - NEW switch "AB Scrapers: Fenlight & Umbrella Support" (Apply Patches, on by
   default) for script.module.abscrapers (CocoScrapers + Gears + Magneto):
