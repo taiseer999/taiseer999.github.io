@@ -21,6 +21,7 @@ def main_menu():
 	items = (
 		('Settings', {'action': 'Settings'}, icon, False),
 		('Provider health check', {'action': 'healthCheck'}, 'DefaultAddonService.png', False),
+		('Check provider access (blocked / banned)', {'action': 'accessCheck'}, 'DefaultNetwork.png', False),
 		('AIOStreams: test movies', {'action': 'Movies'}, 'DefaultMovies.png', True),
 		('AIOStreams: test series', {'action': 'Series'}, 'DefaultTVShows.png', True),
 		('AIOStreams README', {'action': 'ShowReadme'}, 'DefaultIconInfo.png', False),
@@ -94,6 +95,10 @@ elif action == 'tools_uploadLogFile':
 elif action == 'healthCheck':
 	from abscrapers.health import run
 	run()
+
+elif action == 'accessCheck':
+	from abscrapers.access import run_dialog
+	run_dialog()
 
 elif action == 'telegram_pair':
 	from abscrapers.engines.gears.modules.telegram_auth import pair_with_telegram

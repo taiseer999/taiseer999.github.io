@@ -1,3 +1,17 @@
+[B]AB Scrapers v1.1.1[/B]
+- NEW "Check provider access (blocked / banned)" - Maintenance, and the add-on's main menu.
+  Probes every host each provider uses (with the engines that actually run for it) and tells why
+  one is unreachable, instead of the health check's bare "0 results":
+  - Blocked (DNS): your DNS gives no / a sinkhole address while public DNS (DNS-over-HTTPS) resolves it;
+  - Blocked (connection cut): DNS fine, connection reset during connect/TLS (ISP SNI filter);
+  - Blocked (block page): ISP / regulator "site blocked" page (English and Arabic markers);
+  - Banned (HTTP 403), Rate-limited (429), Blocked (legal, 451), Cloudflare challenge,
+    No response (timeout), Site error (5xx), Domain dead.
+  A provider counts as reachable if any of its mirrors answers. Selecting a provider shows each
+  host, its IP, HTTP code, details and the matching fix (DNS change vs VPN vs wait).
+- Every result is also written to kodi.log as "[Access] provider: STATUS | host=STATUS (...)".
+- Arabic description now says 54 providers.
+
 [B]AB Scrapers v1.1.0[/B]
 - CocoScrapers engine updated 1.0.39 -> 1.0.43. Coco 1.0.43 carries kodifitzwell's POV 6.10.16
   provider code, the newest upstream of the Magneto providers (Magneto 6.10.16+ no longer ships
