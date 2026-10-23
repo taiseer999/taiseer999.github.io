@@ -26,6 +26,7 @@ ID ranges:
   30660-30705  My Lists / قوائمي (Original / Trakt / Anime); Anime 30709-30727
   30706-30708  AF3 Subtitle Buttons (Subtitle Cycler install)
   30760-30769  Installation Wizard - confirm before skipping a step
+  30770-30779  Installation Wizard - setup-in-progress backdrop, final restart
 """
 
 STRINGS = {
@@ -56,8 +57,8 @@ STRINGS = {
             "معالج أبوكريم غير مثبّت أو معطّل. هل تريد تثبيته الآن؟"),
 
     # ---- first-run / service (30050-30099) ----
-    30050: ("Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, opens the Add-on Portal, asks for the widgets layout, applies patches, then opens the Skin Installer.",
-            "تشغيل الإعداد لأول مرة الآن؟[CR][CR]سيتم تثبيت الملفات الثنائية، وعرض استعادة نسخة احتياطية، وفتح بوابة الإضافات، واختيار ترتيب الودجات، وتطبيق الترقيعات، ثم فتح مثبت الواجهات."),
+    30050: ("Run first-time setup now?[CR][CR]Skin Installer, binaries, backup restore, Add-on Portal, widgets layout, lists and patches.[CR]Do not restart or exit while it runs - Kodi restarts by itself at the end (the box reboots on CoreELEC).",
+            "هل تريد تشغيل الإعداد لأول مرة الآن؟[CR][CR]مثبّت الواجهات، والملفات الثنائية، واستعادة النسخة الاحتياطية، وبوابة الإضافات، وترتيب الودجات، والقوائم، والترقيعات.[CR]لا تُعِد التشغيل ولا تخرج أثناء الإعداد، إذ يُعاد تشغيل Kodi تلقائياً في النهاية (ويُعاد تشغيل الجهاز على CoreELEC)."),
     30051: ("Run setup",                       "\u062a\u0634\u063a\u064a\u0644 \u0627\u0644\u0625\u0639\u062f\u0627\u062f"),
     30052: ("Cancel",                          "\u0625\u0644\u063a\u0627\u0621"),
     30053: ("Apply Patches failed \u2014 run it from ABUKARIM TOOLS",
@@ -507,9 +508,18 @@ STRINGS = {
     # ---- 3.4.21: Installation Wizard - confirm before skipping (30760-30769) ----
     30760: ('Skip this step?', 'تخطّي هذه الخطوة؟'),
     30761: ('Are you sure you want to skip “%s”?[CR]You can run it later from ABUKARIM TOOLS.',
-            'هل أنت متأكد من تخطّي «%s»؟[CR]يمكنك تشغيلها لاحقًا من ABUKARIM TOOLS.'),
+            'هل أنت متأكد من تخطّي «%s»؟[CR]يمكنك تشغيلها لاحقاً من ABUKARIM TOOLS.'),
     30762: ('Yes, skip', 'نعم، تخطَّ'),
     30763: ('Back to the step', 'العودة إلى الخطوة'),
     30764: ('Setup preset', 'نوع الإعداد'),
     30765: ('Skin Installer', 'مثبّت الواجهات'),
+    # ---- 3.4.22: Installation Wizard backdrop + final restart (30770-30779) ----
+    30770: ('Setup in progress', 'الإعداد قيد التنفيذ'),
+    30771: ('Please do not restart, unplug or exit until setup is complete.[CR]Kodi restarts by itself when setup finishes.',
+            'يُرجى عدم إعادة التشغيل أو فصل الكهرباء أو الخروج حتى يكتمل الإعداد.[CR]سيُعاد التشغيل تلقائياً عند انتهاء الإعداد.'),
+    30772: ('Please wait - do not unplug the box.', 'يُرجى الانتظار وعدم فصل الكهرباء عن الجهاز.'),
+    30773: ('Setup complete - restarting Kodi…', 'اكتمل الإعداد، جارٍ إعادة تشغيل Kodi…'),
+    30774: ('Setup complete - rebooting…', 'اكتمل الإعداد، جارٍ إعادة تشغيل الجهاز…'),
+    30775: ('Installing components', 'تثبيت المكوّنات'),
+    30776: ('Finishing up', 'اللمسات الأخيرة'),
 }

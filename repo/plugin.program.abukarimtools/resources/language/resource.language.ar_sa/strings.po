@@ -93,8 +93,8 @@ msgid "ABUKARIM Wizard is not installed or is disabled. Install it now?"
 msgstr "معالج أبوكريم غير مثبّت أو معطّل. هل تريد تثبيته الآن؟"
 
 msgctxt "#30050"
-msgid "Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, opens the Add-on Portal, asks for the widgets layout, applies patches, then opens the Skin Installer."
-msgstr "تشغيل الإعداد لأول مرة الآن؟[CR][CR]سيتم تثبيت الملفات الثنائية، وعرض استعادة نسخة احتياطية، وفتح بوابة الإضافات، واختيار ترتيب الودجات، وتطبيق الترقيعات، ثم فتح مثبت الواجهات."
+msgid "Run first-time setup now?[CR][CR]Skin Installer, binaries, backup restore, Add-on Portal, widgets layout, lists and patches.[CR]Do not restart or exit while it runs - Kodi restarts by itself at the end (the box reboots on CoreELEC)."
+msgstr "هل تريد تشغيل الإعداد لأول مرة الآن؟[CR][CR]مثبّت الواجهات، والملفات الثنائية، واستعادة النسخة الاحتياطية، وبوابة الإضافات، وترتيب الودجات، والقوائم، والترقيعات.[CR]لا تُعِد التشغيل ولا تخرج أثناء الإعداد، إذ يُعاد تشغيل Kodi تلقائياً في النهاية (ويُعاد تشغيل الجهاز على CoreELEC)."
 
 msgctxt "#30051"
 msgid "Run setup"
@@ -1346,7 +1346,7 @@ msgstr "تخطّي هذه الخطوة؟"
 
 msgctxt "#30761"
 msgid "Are you sure you want to skip “%s”?[CR]You can run it later from ABUKARIM TOOLS."
-msgstr "هل أنت متأكد من تخطّي «%s»؟[CR]يمكنك تشغيلها لاحقًا من ABUKARIM TOOLS."
+msgstr "هل أنت متأكد من تخطّي «%s»؟[CR]يمكنك تشغيلها لاحقاً من ABUKARIM TOOLS."
 
 msgctxt "#30762"
 msgid "Yes, skip"
@@ -1363,4 +1363,32 @@ msgstr "نوع الإعداد"
 msgctxt "#30765"
 msgid "Skin Installer"
 msgstr "مثبّت الواجهات"
+
+msgctxt "#30770"
+msgid "Setup in progress"
+msgstr "الإعداد قيد التنفيذ"
+
+msgctxt "#30771"
+msgid "Please do not restart, unplug or exit until setup is complete.[CR]Kodi restarts by itself when setup finishes."
+msgstr "يُرجى عدم إعادة التشغيل أو فصل الكهرباء أو الخروج حتى يكتمل الإعداد.[CR]سيُعاد التشغيل تلقائياً عند انتهاء الإعداد."
+
+msgctxt "#30772"
+msgid "Please wait - do not unplug the box."
+msgstr "يُرجى الانتظار وعدم فصل الكهرباء عن الجهاز."
+
+msgctxt "#30773"
+msgid "Setup complete - restarting Kodi…"
+msgstr "اكتمل الإعداد، جارٍ إعادة تشغيل Kodi…"
+
+msgctxt "#30774"
+msgid "Setup complete - rebooting…"
+msgstr "اكتمل الإعداد، جارٍ إعادة تشغيل الجهاز…"
+
+msgctxt "#30775"
+msgid "Installing components"
+msgstr "تثبيت المكوّنات"
+
+msgctxt "#30776"
+msgid "Finishing up"
+msgstr "اللمسات الأخيرة"
 

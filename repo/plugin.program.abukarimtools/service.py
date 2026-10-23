@@ -532,7 +532,7 @@ def run_first_run_sequence(monitor):
     # Reboot prompt LAST — only after the done marker is safely on disk, so a
     # user-approved reboot can never cut the completion record short and
     # re-trigger the sequence on the next boot.
-    _prompt_reboot_if_coreelec(monitor)
+    _finish_and_restart(monitor)
 
 
 def run_now(monitor=None, remove_flag=True, force=False):
@@ -601,10 +601,32 @@ def run_now(monitor=None, remove_flag=True, force=False):
 
     # Same ordering rule as the automatic path: done marker first, reboot
     # prompt second.
-    _prompt_reboot_if_coreelec(monitor)
+    _finish_and_restart(monitor)
+
+
+def _overlay(fn, *args):
+    """3.4.22: setup backdrop calls - never allowed to break setup."""
+    try:
+        from resources.lib import setup_overlay
+        getattr(setup_overlay, fn)(*args)
+    except Exception:
+        _log('Setup backdrop %s failed (ignored):\n%s'
+             % (fn, traceback.format_exc()), xbmc.LOGWARNING)
 
 
 def _run_steps(monitor):
+    """3.4.22: the blurred "setup in progress" backdrop is up for the whole
+    sequence; it is only removed here on a crash (on success it stays until
+    the final restart)."""
+    _overlay('start')
+    try:
+        _run_steps_inner(monitor)
+    except BaseException:
+        _overlay('stop')
+        raise
+
+
+def _run_steps_inner(monitor):
     _log('Starting first-run sequence.')
 
     # Make Kodi's core dialogs readable before we show any: force the UI
@@ -628,6 +650,7 @@ def _run_steps(monitor):
     # Portal, Widgets Layout, Trakt Lists, patches) is shown in the
     # Arabic-capable skin, in Arabic. Estuary has no Arabic glyphs.
     _log('Step 0 — Skin Installer (first).')
+    _overlay('step', 30765)
     _step_skin_installer()
     _wait_skin_settle(monitor)
     _wait_no_modal(monitor)
@@ -644,6 +667,7 @@ def _run_steps(monitor):
         _log('Skin Installer left Estuary active - setup stays in English.')
 
     _log('Step 1 — Binary Installer.')
+    _overlay('step', 30775)
     _step_binary_installer(monitor)
     # The binary installer ends with UpdateLocalAddons; Kodi's add-on rescan
     # that follows is what dismissed the restore popup instantly (3.1.0.19
@@ -661,6 +685,7 @@ def _run_steps(monitor):
         'resources.lib.hw_tuning', fromlist=['auto']).auto())
 
     _log('Step 1d — Setup from the phone (optional).')
+    _overlay('step', 30730)
     phone = _step_phone(monitor)
     if phone:
         _log('Done from the phone: %s' % ', '.join(sorted(phone)))
@@ -669,12 +694,14 @@ def _run_steps(monitor):
         _log('Step 2 — Restore: done from the phone.')
     else:
         _log('Step 2 — Restore popup.')
+        _overlay('step', 30058)
         _final_choice(monitor)
 
     if 'addons' in phone:
         _log('Step 3 — Add-on Portal: done from the phone.')
     else:
         _log('Step 3 — Preset + Add-on Portal.')
+        _overlay('step', 30021)
         _wait_no_modal(monitor)
         _step_addon_portal()
 
@@ -682,6 +709,7 @@ def _run_steps(monitor):
         _log('Step 3b — Widgets Layout: done from the phone.')
     else:
         _log('Step 3b — Widgets Layout (Light / Moderate / Full).')
+        _overlay('step', 30630)
         _wait_no_modal(monitor)
         _step_af3_shortcuts(monitor)
 
@@ -689,10 +717,12 @@ def _run_steps(monitor):
         _log('Step 3c — My Lists: done from the phone.')
     else:
         _log('Step 3c — My Lists (Original / Trakt / Anime).')
+        _overlay('step', 30660)
         _wait_no_modal(monitor)
         _step_trakt_hubs(monitor)
 
     _log('Step 4 — Apply Patches.')
+    _overlay('step', 30005)
     # 3.2.59: the patcher waits - until no dialog is up and any AF3 menu
     # rebuild started by Widgets Layout / Trakt Lists has finished (it was
     # starting 1 s after the Trakt step, log 2026-10-12 06:31:11).
@@ -703,6 +733,7 @@ def _run_steps(monitor):
     _step_patcher(monitor)
 
     _log('Step 4b — Per-box remote access password.')
+    _overlay('step', 30776)
     _wait_no_modal(monitor)
     _step_guarded('webserver', lambda: __import__(
         'resources.lib.webserver_secure', fromlist=['first_run']).first_run())
@@ -746,29 +777,66 @@ def _is_coreelec():
         return False
 
 
-def _prompt_reboot_if_coreelec(monitor):
-    if not _is_coreelec():
-        _log('Reboot skipped (not CoreELEC).')
+def _finish_and_restart(monitor):
+    """3.4.22: setup always ends with a FORCED restart, no question asked:
+    CoreELEC -> reboot the box, any other system -> restart Kodi.
+    The backdrop switches to "Setup complete - rebooting / restarting" first.
+    Called only after the done marker is on disk (see the callers)."""
+    coreelec = _is_coreelec()
+    # Let the freshly-loaded skin / Arabic switch settle first.
+    if monitor.waitForAbort(4):
         return
-    # Let the freshly-loaded skin settle before rebooting.
-    if monitor.waitForAbort(10):
-        return  # Kodi is shutting down anyway
-    # Make sure no modal is in the way.
-    _wait_no_modal(monitor)
-    # Reboot automatically (no prompt) to finish applying the build. Show a
-    # brief heads-up first so the reboot isn't mistaken for a crash.
+    _wait_no_modal(monitor, timeout=60)
+    _overlay('finish', 30774 if coreelec else 30773)
     try:
-        xbmc.executebuiltin(
-            'Notification(%s, %s, 5000)'
-            % (ADDON_NAME,
-               'Setup complete — rebooting to finish. / '
-               'اكتمل الإعداد — سيُعاد التشغيل.'))
+        from resources.lib import setup_overlay
+        backdrop = setup_overlay.shown()
     except Exception:
-        pass
+        backdrop = False
+    if not backdrop:
+        # No backdrop on this Kodi: say it with a notification instead.
+        try:
+            xbmcgui.Dialog().notification(
+                ADDON_NAME, 'Setup complete — %s / %s' % (
+                    'rebooting' if coreelec else 'restarting Kodi',
+                    'اكتمل الإعداد، جارٍ إعادة التشغيل'),
+                xbmcgui.NOTIFICATION_INFO, 5000)
+        except Exception:
+            pass
     if monitor.waitForAbort(5):
+        _overlay('stop')
         return
-    _log('First-run complete — rebooting system automatically.')
-    xbmc.executebuiltin('Reboot')
+    # The backdrop goes before the shutdown starts: an open add-on window
+    # must not be what Kodi waits on while stopping.
+    _overlay('stop')
+
+    if coreelec:
+        _log('First-run complete — rebooting the box (forced).')
+        xbmc.executebuiltin('Reboot')
+        if monitor.waitForAbort(60):
+            return
+        _log('Reboot builtin did not act within 60 s — systemctl reboot.',
+             xbmc.LOGWARNING)
+        try:
+            import subprocess
+            subprocess.Popen(['systemctl', 'reboot'])
+        except Exception:
+            os.system('reboot')
+        return
+
+    _log('First-run complete — restarting Kodi (forced).')
+    xbmc.executebuiltin('RestartApp')
+    if monitor.waitForAbort(25):
+        return
+    # RestartApp not supported (Android) or ignored: the add-on's one hard
+    # restart path (ABUKARIM Wizard Force Close / os._exit).
+    _log('RestartApp did not act within 25 s — forcing the restart.',
+         xbmc.LOGWARNING)
+    try:
+        from resources.lib import origin_fix
+        origin_fix.force_restart('first-run complete')
+    except Exception:
+        os._exit(1)
 
 
 def _read_text(path):

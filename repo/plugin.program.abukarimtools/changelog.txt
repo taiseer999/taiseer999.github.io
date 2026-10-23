@@ -1,3 +1,26 @@
+v3.4.22
+- Installation Wizard backdrop (resources/lib/setup_overlay.py +
+  abk_setup_overlay.xml): a blurred full-screen background with a warning,
+  in English AND Arabic together - "Setup in progress - please do not
+  restart, unplug or exit until setup is complete" - and the current step
+  (EN  •  AR) with a spinner. Shown modeless BEHIND every setup dialog
+  (zorder 0), no focusable control, every key ignored. A keeper thread shows
+  it again after a skin reload (Skin Installer, language switch, layout
+  rebuild); if it keeps vanishing (>12 times a minute) it gives up quietly.
+  Safety: if this Kodi counts the backdrop as a modal dialog (setup waits on
+  System.HasModalDialog everywhere) it is removed at once and setup runs as
+  before. Removed on a crash; on success it stays until the restart.
+- End of setup = FORCED restart, no question: CoreELEC reboots the box
+  (Reboot; systemctl reboot if Kodi has not gone down after 60 s); every
+  other system restarts Kodi (RestartApp; ABUKARIM Wizard Force Close /
+  os._exit if nothing happened after 25 s - e.g. Android). The backdrop
+  shows "Setup complete - rebooting / restarting Kodi" first and is closed
+  just before the restart so it never holds the shutdown up. Replaces the
+  CoreELEC-only reboot (other systems used to get no restart at all).
+- Setup confirmation text (30050) lists the steps in the real order and
+  says Kodi restarts by itself at the end.
+- Strings 30770-30776, EN + AR (Fusha).
+
 v3.4.21
 - Installation Wizard: every way of skipping a step now asks for
   confirmation first ("Skip this step?" - Yes, skip / Back to the step):

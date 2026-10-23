@@ -93,7 +93,7 @@ msgid "ABUKARIM Wizard is not installed or is disabled. Install it now?"
 msgstr ""
 
 msgctxt "#30050"
-msgid "Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, opens the Add-on Portal, asks for the widgets layout, applies patches, then opens the Skin Installer."
+msgid "Run first-time setup now?[CR][CR]Skin Installer, binaries, backup restore, Add-on Portal, widgets layout, lists and patches.[CR]Do not restart or exit while it runs - Kodi restarts by itself at the end (the box reboots on CoreELEC)."
 msgstr ""
 
 msgctxt "#30051"
@@ -1362,5 +1362,33 @@ msgstr ""
 
 msgctxt "#30765"
 msgid "Skin Installer"
+msgstr ""
+
+msgctxt "#30770"
+msgid "Setup in progress"
+msgstr ""
+
+msgctxt "#30771"
+msgid "Please do not restart, unplug or exit until setup is complete.[CR]Kodi restarts by itself when setup finishes."
+msgstr ""
+
+msgctxt "#30772"
+msgid "Please wait - do not unplug the box."
+msgstr ""
+
+msgctxt "#30773"
+msgid "Setup complete - restarting Kodi…"
+msgstr ""
+
+msgctxt "#30774"
+msgid "Setup complete - rebooting…"
+msgstr ""
+
+msgctxt "#30775"
+msgid "Installing components"
+msgstr ""
+
+msgctxt "#30776"
+msgid "Finishing up"
 msgstr ""
 
