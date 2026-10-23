@@ -25,7 +25,7 @@ ENGINE_DIRS = {
 #  - same endpoint in several engines   -> run only the strongest implementation
 #  - different instances/mirrors/APIs   -> run them together and merge by info-hash
 AUTO = {
-	# CocoScrapers 1.0.43 ships kodifitzwell's POV 6.10.16 provider code - the newest
+	# CocoScrapers 1.0.44 ships kodifitzwell's POV 6.10.16 provider code - the newest
 	# upstream of what Magneto 6.10.04 had (Magneto 6.10.16+ dropped its own providers).
 	# So Coco replaces Magneto wherever the two were the same code.
 	'1337x': ('gears',),                     # gears probes 8 mirrors, coco hard-codes one
@@ -34,7 +34,7 @@ AUTO = {
 	'bitsearch': ('coco', 'gears'),          # coco: new bitsearch.eu domain/format; gears: bitsearch.to
 	'comet': ('gears', 'coco'),              # feels.legal + selectable instance (latest format fix)
 	'dmm': ('coco',),                        # upstream fix: one page, avoids DMM rate-limiting
-	'eztv': ('gears',),
+	'eztv': ('gears', 'coco'),              # site search + IMDb JSON API (paginated, air-date matching)
 	'kickass2': ('gears', 'coco'),           # gears mirror probing + coco new search/result parsing
 	'knaben': ('gears', 'coco'),             # html site + JSON API
 	'limetorrents': ('gears', 'coco'),       # different mirror sets
@@ -43,7 +43,7 @@ AUTO = {
 	'nyaa': ('coco',),                       # RSS feed parser (newest)
 	'piratebay': ('gears',),
 	'prowlarr': ('gears',),                  # same user instance in every engine
-	'rutor': ('gears',),
+	'rutor': ('coco',),                      # same site; coco also searches single episodes (gears: movies only)
 	'torlock': ('gears', 'coco'),            # html + torznab api (newest)
 	'torrentdownload': ('gears',),
 	'torrentgalaxy': ('coco', 'gears'),      # json api (3 mirrors, packs) + html detail scrape

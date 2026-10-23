@@ -26,7 +26,9 @@ class source:
 		self.item_totals = {'4K': 0, '1080p': 0, '720p': 0, 'SD': 0, 'CAM': 0 }
 		self.min_seeders = 0
 
+	@source_utils.airdate_sources
 	def sources(self, data, hostDict):
+		airdate = source_utils.episode_airdate(data) if data and 'tvshowtitle' in data else None
 		sources = []
 		if not data: return sources
 		append = sources.append
@@ -38,12 +40,12 @@ class source:
 				title = data['tvshowtitle'].replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ').replace('$', 's')
 				if title == 'The End of the Fucking World' or title == 'The End of the F***ing World': title = 'The End of the Fxxxing World'
 				episode_title = data['title']
-				hdlr = 'S%02dE%02d' % (int(data['season']), int(data['episode']))
+				hdlr = source_utils.episode_identifier(data, 'S%02dE%02d' % (int(data['season']), int(data['episode'])))
 			else:
 				title = data['title'].replace('&', 'and').replace('/', ' ').replace('$', 's')
 				if title == 'The Fuck-It List' or title == 'The F**k-It List': title = 'The Fxxk-It List'
 				episode_title = None
-				hdlr = year
+				hdlr = source_utils.episode_identifier(data, year)
 			query = '%s %s' % (re.sub(r'[^A-Za-z0-9\s\.-]+', '', title), hdlr)
 			url = '%s%s' % (self.base_link, self.search_link.format(query[0].lower(), cleantitle.geturl(query)))
 			# log_utils.log('url = %s' % url)
@@ -75,8 +77,8 @@ class source:
 				name = url.split('&dn=')[1].replace('&ndash;', '-')
 				name = source_utils.clean_name(name)
 
-				if not source_utils.check_title(title, aliases, name, hdlr, year): continue
-				name_info = source_utils.info_from_name(name, title, year, hdlr, episode_title)
+				if not source_utils.check_title(title, aliases, name, hdlr, year, airdate=airdate): continue
+				name_info = source_utils.info_from_name(name, title, year, hdlr, episode_title, airdate=airdate)
 				if source_utils.remove_lang(name_info, check_foreign_audio): continue
 				if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
 

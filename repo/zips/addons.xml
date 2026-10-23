@@ -3251,7 +3251,7 @@ v.3.3.7
             <icon>resources/images/icon.png</icon>
         </assets>
     </extension>
-</addon><addon id="script.module.abscrapers" name="AB Scrapers" version="1.1.1" provider-name="ABUKARIM">
+</addon><addon id="script.module.abscrapers" name="AB Scrapers" version="1.1.2" provider-name="ABUKARIM">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" />
@@ -3265,7 +3265,7 @@ v.3.3.7
 		<reuselanguageinvoker>false</reuselanguageinvoker>
 		<summary lang="en_GB">AB Scrapers - CocoScrapers + Gears + Magneto in one module</summary>
 		<summary lang="ar_SA">AB Scrapers - وحدة واحدة تجمع CocoScrapers وGears وMagneto</summary>
-		<description lang="en_GB">One scraper module built from three engines (CocoScrapers 1.0.43, Gears Scrapers 1.6.2, Magneto 6.10.04). 54 providers; where a provider exists in several engines with different instances or mirrors, AB Scrapers runs them together and merges the results by info-hash. Per-provider engine choice (Auto / All / single engine), one shared settings file, undesirables filter, Prowlarr, MediaFusion, Telegram and the AIOStreams player.</description>
+		<description lang="en_GB">One scraper module built from three engines (CocoScrapers 1.0.44, Gears Scrapers 1.6.2, Magneto 6.10.04). 54 providers; where a provider exists in several engines with different instances or mirrors, AB Scrapers runs them together and merges the results by info-hash. Per-provider engine choice (Auto / All / single engine), one shared settings file, undesirables filter, Prowlarr, MediaFusion, Telegram and the AIOStreams player.</description>
 		<description lang="ar_SA">وحدة بحث واحدة مبنية من ثلاثة محركات (CocoScrapers وGears وMagneto) تضم 54 مزوّدًا. إذا توفّر المزوّد في أكثر من محرك بخوادم أو مرايا مختلفة، تشغّلها الوحدة معًا وتدمج النتائج حسب البصمة دون تكرار. يمكن اختيار المحرك لكل مزوّد (تلقائي / الكل / محرك واحد)، مع ملف إعدادات موحّد ومرشّح للمحتوى غير المرغوب فيه ودعم Prowlarr وMediaFusion وتيليجرام ومشغّل AIOStreams.</description>
 		<platform>all</platform>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
@@ -3275,7 +3275,7 @@ v.3.3.7
 			<icon>icon.png</icon>
 			<fanart>fanart.jpg</fanart>
 		</assets>
-		<news>v1.1.1 - New "Check provider access": shows per provider whether it is blocked for you (DNS, connection cut, block page), banned (403), rate-limited, behind Cloudflare, down or dead, with the fix. v1.1.0 - CocoScrapers engine updated to 1.0.43: newest upstream provider code, 3 new providers (BitCQ, isoHunt, TorrentQuest), AIOStreams login and MediaFusion instance. v1.0.3 - New filter for repeated results (same release name and size under different hashes, e.g. Comet), on by default. v1.0.2 - Provider trace in kodi.log (which add-on called, each provider result count, time, errors). v1.0.1 - Telegram: always-on logging, real error shown on screen, provider auto-enabled after linking. v1.0.0 - first release: CocoScrapers 1.0.39 + Gears Scrapers 1.6.2 + Magneto 6.10.04 merged into AB Scrapers.</news>
+		<news>v1.1.2 - CocoScrapers engine updated to 1.0.44: TV episodes also match by air date (daily / talk shows released as 2026.10.22), EZTV moved to the JSON API and now runs with Gears, Rutor searches single episodes. AIOStreams player fixed: no longer returns nothing when its own login is empty. v1.1.1 - New "Check provider access": shows per provider whether it is blocked for you (DNS, connection cut, block page), banned (403), rate-limited, behind Cloudflare, down or dead, with the fix. v1.1.0 - CocoScrapers engine updated to 1.0.43: newest upstream provider code, 3 new providers (BitCQ, isoHunt, TorrentQuest), AIOStreams login and MediaFusion instance. v1.0.3 - New filter for repeated results (same release name and size under different hashes, e.g. Comet), on by default. v1.0.2 - Provider trace in kodi.log (which add-on called, each provider result count, time, errors). v1.0.1 - Telegram: always-on logging, real error shown on screen, provider auto-enabled after linking. v1.0.0 - first release: CocoScrapers 1.0.39 + Gears Scrapers 1.6.2 + Magneto 6.10.04 merged into AB Scrapers.</news>
 	</extension>
 </addon><addon id="script.module.acctmgr" version="1.2.0c" name="[COLOR dodgerblue][B]Account Manager[/B][/COLOR] [COLOR white][B]Lite[/B][/COLOR]" provider-name="Zaxxon709">
 	<requires>

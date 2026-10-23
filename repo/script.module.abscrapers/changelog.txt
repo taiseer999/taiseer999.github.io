@@ -1,3 +1,33 @@
+[B]AB Scrapers v1.1.2[/B]
+- CocoScrapers engine updated 1.0.43 -> 1.0.44.
+- Episode air-date matching (upstream 1.0.44): when the calling add-on sends the episode's
+  air date ("premiered"), every Coco TV provider also accepts releases named by date
+  (Show.2026.10.22 / Show 2026-10-22) next to the usual SxxEyy. Text-search providers
+  (1337x, BitSearch, Kickass, Knaben, LimeTorrents, Nyaa, PirateBay, Prowlarr, Rutor,
+  Torlock, TorrentDownload, TorrentGalaxy, TorrentProject, Torrentz2) run a second,
+  date-based query and the two result sets are merged by hash. Daily and talk shows
+  (news, late-night, wrestling) now find sources. No air date -> behaviour unchanged.
+- Same air-date support added to AB's extra Coco providers (BitCQ, Bitlord, isoHunt,
+  TorrentFunk, TorrentQuest, YourBittorrent).
+- Picked up 1.0.43 provider changes that 1.1.1 still lacked:
+  - EZTV: paginated IMDb JSON API (numbered, air-date and season-pack matching) instead
+    of website scraping; Auto now runs Gears (site search) + Coco (API) and merges;
+  - Rutor: single-episode TV searches; Auto now uses the Coco engine for Rutor
+    (same site as Gears, which only searches movies);
+  - Knaben: query building cleanup.
+- FIX AIOStreams player returned "No Results" instantly, with nothing in kodi.log, when
+  AIOStreams Player > Username/Password were empty (the scraper login under Instances was
+  not used). Now: player login -> else the scraper login and instance -> else an anonymous
+  search with the built-in config (same as the AIOStreams scraper).
+  Every search now logs which login/instance was used, HTTP 401/403 (wrong UUID for that
+  instance) and 0-result searches.
+- AIOStreams player without a login: the built-in config has no debrid, so AIOStreams
+  returns only P2P torrents, which the player drops (it plays debrid links only) - it
+  found 1313 results and showed none. The debrid keys authorized in Account Manager
+  (Real-Debrid, AllDebrid, Premiumize, TorBox, OffCloud, EasyDebrid) are now added to the
+  built-in config, so AIOStreams returns playable debrid links.
+  If only P2P comes back, the count is logged and a notification says what to set.
+
 [B]AB Scrapers v1.1.1[/B]
 - NEW "Check provider access (blocked / banned)" - Maintenance, and the add-on's main menu.
   Probes every host each provider uses (with the engines that actually run for it) and tells why

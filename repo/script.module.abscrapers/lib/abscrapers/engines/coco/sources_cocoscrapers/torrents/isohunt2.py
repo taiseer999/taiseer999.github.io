@@ -33,7 +33,9 @@ class source:
 			}
 		self.min_seeders = 0
 
+	@source_utils.airdate_sources
 	def sources(self, data, hostDict):
+		self.airdate = source_utils.episode_airdate(data) if data and 'tvshowtitle' in data else None
 		self.sources = []
 		if not data: return self.sources
 		self.sources_append = self.sources.append
@@ -44,11 +46,11 @@ class source:
 			if 'tvshowtitle' in data:
 				self.title = data['tvshowtitle'].replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ').replace('$', 's')
 				self.episode_title = data['title']
-				self.hdlr = 'S%02dE%02d' % (int(data['season']), int(data['episode']))
+				self.hdlr = source_utils.episode_identifier(data, 'S%02dE%02d' % (int(data['season']), int(data['episode'])))
 			else:
 				self.title = data['title'].replace('&', 'and').replace('/', ' ').replace('$', 's')
 				self.episode_title = None
-				self.hdlr = self.year
+				self.hdlr = source_utils.episode_identifier(data, self.year)
 			query = '%s %s' % (re.sub(r'[^A-Za-z0-9\s\.-]+', '', self.title), self.hdlr)
 			url = '%s%s' % (self.base_link, self.search_link % quote_plus(query))
 			# log_utils.log('url = %s' % url)
@@ -96,8 +98,8 @@ class source:
 				hash = re.search(r'btih:(.*?)&', url, re.I).group(1)
 				name = source_utils.clean_name(url.split('&dn=')[1])
 
-				if not source_utils.check_title(self.title, self.aliases, name, self.hdlr, self.year): continue
-				name_info = source_utils.info_from_name(name, self.title, self.year, self.hdlr, self.episode_title)
+				if not source_utils.check_title(self.title, self.aliases, name, self.hdlr, self.year, airdate=self.airdate): continue
+				name_info = source_utils.info_from_name(name, self.title, self.year, self.hdlr, self.episode_title, airdate=self.airdate)
 				if source_utils.remove_lang(name_info, self.check_foreign_audio): continue
 				if self.undesirables and source_utils.remove_undesirables(name_info, self.undesirables): continue
 
