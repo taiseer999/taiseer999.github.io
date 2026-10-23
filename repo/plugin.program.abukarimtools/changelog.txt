@@ -1,3 +1,19 @@
+v3.4.21
+- Installation Wizard: every way of skipping a step now asks for
+  confirmation first ("Skip this step?" - Yes, skip / Back to the step):
+  - Skin Installer: Back on the repository picker or closing the portal
+    without installing a skin (Back to the step = repository picker again)
+  - Restore: the Skip button or Back on the restore popup
+  - Setup preset: Back on the preset list
+  - Add-on Portal: Back, or No on "Install these add-ons?" (the portal
+    reopens with the same ticks)
+  - Widgets Layout: Back (was silently Light)
+  - My Lists: Back (was silently Original)
+  A confirmation swallowed by a skin reload / add-on rescan is asked again;
+  if it is swallowed every time the step is skipped as before, so setup can
+  never loop. Menu entries (Setup & Install) are unchanged: Back still
+  cancels at once there.
+
 v3.4.20
 - AF3 dependencies linked to repository.jurialmunkey on every platform
   (same pinned-origin mechanism as AF3 -> repository.taiseerKODI22):

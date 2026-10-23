@@ -848,7 +848,7 @@ def _patch_now():
         _log('post-install patch failed: %s' % e)
 
 
-def run(first_run=False, preselect=None):
+def _open_portal(preselect):
     import time
     selection = None
     # A window closed in under 1.5 s with no choice was swallowed by a skin
@@ -864,12 +864,23 @@ def run(first_run=False, preselect=None):
             break
         _log('portal closed instantly (attempt %d) - reopening' % (attempt + 1))
         xbmc.sleep(1500)
-    if not selection:
-        return False
+    return selection
 
-    names = ', '.join(n for _a, n, _r in selection)
-    if not xbmcgui.Dialog().yesno(TITLE, T(30418) % names):
-        return False
+
+def run(first_run=False, preselect=None, confirm_skip=None):
+    """confirm_skip (Installation Wizard, 3.4.21): called when the portal is
+    left without installing (Back, or No on the install question). True =
+    skip the step; False = the portal opens again with the same ticks."""
+    while True:
+        selection = _open_portal(preselect)
+        if selection:
+            names = ', '.join(n for _a, n, _r in selection)
+            if xbmcgui.Dialog().yesno(TITLE, T(30418) % names):
+                break
+            preselect = {a for a, _n, _r in selection}
+        if confirm_skip is None or confirm_skip():
+            return False
+        _log('skip cancelled - reopening the portal')
 
     results = _install_selection(selection)
     ok = [n for n, good, _ in results if good]

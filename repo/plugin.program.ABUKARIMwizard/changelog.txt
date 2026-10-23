@@ -1,3 +1,13 @@
+v3.9.44
+- The ABUKARIM TOOLS backup before a build install is OPTIONAL again (was
+  mandatory - no backup, no install). After "Continue" the wizard asks:
+  Back up / Skip backup / Cancel install (Back = Cancel install, nothing
+  changed). If the backup is not completed: Retry backup / Install without
+  backup / Cancel install. ABUKARIM TOOLS missing -> a notification and the
+  install goes ahead. tools_backup.require_tools_backup() renamed
+  offer_tools_backup() (old name kept as an alias). Strings 30380-30382
+  reworded, new 30385-30387, EN + AR (Fusha).
+
 v3.9.43
 - build_install / Patch GUI / No-Wipe Option 2: download_build() now returns
   False unless the file is complete (bytes == Content-Length) and opens as a

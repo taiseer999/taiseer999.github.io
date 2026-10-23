@@ -25,6 +25,7 @@ ID ranges:
   30630-30649  Widgets Layout / ترتيب الودجات (Light / Moderate / Full)
   30660-30705  My Lists / قوائمي (Original / Trakt / Anime); Anime 30709-30727
   30706-30708  AF3 Subtitle Buttons (Subtitle Cycler install)
+  30760-30769  Installation Wizard - confirm before skipping a step
 """
 
 STRINGS = {
@@ -503,4 +504,12 @@ STRINGS = {
             'لقد غيّرت بعض المفاتيح. هل تريد حفظ التغييرات وتطبيقها؟'),
     30751: ('Save and apply', 'حفظ وتطبيق'),
     30752: ('Discard', 'تجاهل'),
+    # ---- 3.4.21: Installation Wizard - confirm before skipping (30760-30769) ----
+    30760: ('Skip this step?', 'تخطّي هذه الخطوة؟'),
+    30761: ('Are you sure you want to skip “%s”?[CR]You can run it later from ABUKARIM TOOLS.',
+            'هل أنت متأكد من تخطّي «%s»؟[CR]يمكنك تشغيلها لاحقًا من ABUKARIM TOOLS.'),
+    30762: ('Yes, skip', 'نعم، تخطَّ'),
+    30763: ('Back to the step', 'العودة إلى الخطوة'),
+    30764: ('Setup preset', 'نوع الإعداد'),
+    30765: ('Skin Installer', 'مثبّت الواجهات'),
 }

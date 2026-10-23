@@ -1070,10 +1070,34 @@ def run(first_run=False):
         skin_switcher.set_skin_op_busy(False)
 
 
+# _run_once() result when the user left without installing a skin (Back on
+# the repo picker or on the portal).
+_BACKED_OUT = object()
+
+
 def _run_impl(first_run=False):
+    """3.4.21: in the Installation Wizard, leaving without a skin asks
+    "Skip this step?" first; "Back to the step" opens the repo picker again."""
+    while True:
+        res = _run_once(first_run=first_run)
+        if res is not _BACKED_OUT:
+            return res
+        if not first_run:
+            return False
+        try:
+            from resources.lib import skip_guard
+            if skip_guard.confirm(T(30765)):
+                return False
+        except Exception as e:
+            _log('skip confirmation failed (%s) - skipping' % e)
+            return False
+        _log('skip cancelled - back to the Skin Installer')
+
+
+def _run_once(first_run=False):
     url, background = _choose_source()
     if not url:
-        return False
+        return _BACKED_OUT
 
     try:
         items = _fetch_json(url)
@@ -1149,4 +1173,4 @@ def _run_impl(first_run=False):
         return ok
 
     _log('portal closed with no pending skin to apply')
-    return False
+    return _BACKED_OUT

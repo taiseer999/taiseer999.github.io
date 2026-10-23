@@ -454,11 +454,13 @@ def _ask(hint):
 def choose(wait_clear=None, settle=None, from_menu=False):
     """Light / Moderate / Full, or None (menu: Back = cancel).
 
-    Setup: Back = Light. A window closed instantly (< 1.5 s, torn down by an
-    add-on rescan after the portal) is shown again instead of being read as
-    Back - the same rule as the restore popup and the repo picker.
+    Setup: Back = Light, after a "Skip this step?" confirmation (3.4.21). A
+    window closed instantly (< 1.5 s, torn down by an add-on rescan after the
+    portal) is shown again instead of being read as Back - the same rule as
+    the restore popup and the repo picker.
     """
-    for attempt in range(1, 7):
+    attempt = 0
+    while attempt < 6:
         if wait_clear:
             wait_clear()
         started = time.time()
@@ -466,7 +468,16 @@ def choose(wait_clear=None, settle=None, from_menu=False):
         if idx >= 0:
             return MODES[idx]
         if time.time() - started > 1.5:
-            return None if from_menu else LIGHT
+            if from_menu:
+                return None
+            # 3.4.21: setup - Back asks before skipping; "Back to the step"
+            # shows the cards again.
+            from resources.lib import skip_guard
+            from resources.lib.i18n import T
+            if skip_guard.confirm(T(30630)):
+                return LIGHT
+            continue
+        attempt += 1
         _log('window closed instantly (attempt %d) - showing it again' % attempt)
         if settle and not settle(2):
             break

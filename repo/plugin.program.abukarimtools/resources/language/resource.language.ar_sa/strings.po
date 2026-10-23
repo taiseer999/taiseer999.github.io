@@ -1340,3 +1340,27 @@ msgctxt "#30752"
 msgid "Discard"
 msgstr "تجاهل"
 
+msgctxt "#30760"
+msgid "Skip this step?"
+msgstr "تخطّي هذه الخطوة؟"
+
+msgctxt "#30761"
+msgid "Are you sure you want to skip “%s”?[CR]You can run it later from ABUKARIM TOOLS."
+msgstr "هل أنت متأكد من تخطّي «%s»؟[CR]يمكنك تشغيلها لاحقًا من ABUKARIM TOOLS."
+
+msgctxt "#30762"
+msgid "Yes, skip"
+msgstr "نعم، تخطَّ"
+
+msgctxt "#30763"
+msgid "Back to the step"
+msgstr "العودة إلى الخطوة"
+
+msgctxt "#30764"
+msgid "Setup preset"
+msgstr "نوع الإعداد"
+
+msgctxt "#30765"
+msgid "Skin Installer"
+msgstr "مثبّت الواجهات"
+

@@ -1340,3 +1340,27 @@ msgctxt "#30752"
 msgid "Discard"
 msgstr ""
 
+msgctxt "#30760"
+msgid "Skip this step?"
+msgstr ""
+
+msgctxt "#30761"
+msgid "Are you sure you want to skip “%s”?[CR]You can run it later from ABUKARIM TOOLS."
+msgstr ""
+
+msgctxt "#30762"
+msgid "Yes, skip"
+msgstr ""
+
+msgctxt "#30763"
+msgid "Back to the step"
+msgstr ""
+
+msgctxt "#30764"
+msgid "Setup preset"
+msgstr ""
+
+msgctxt "#30765"
+msgid "Skin Installer"
+msgstr ""
+

@@ -244,6 +244,18 @@ def _step_guarded(name, fn):
         return None
 
 
+def _confirm_skip(step_name):
+    """3.4.21: "Skip this step?" - True = skip, False = show the step again.
+    A crash here must never block setup, so it falls back to skipping."""
+    try:
+        from resources.lib import skip_guard
+        return skip_guard.confirm(step_name)
+    except Exception:
+        _log('Skip confirmation crashed (skipping):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+        return True
+
+
 def _step_addon_portal():
     try:
         from resources.lib import addon_portal
@@ -251,14 +263,21 @@ def _step_addon_portal():
         preselect = set()
         try:
             from resources.lib import presets
-            preselect = presets.addon_selection(presets.choose())
+            while True:
+                preset = presets.choose()
+                # 3.4.21: Back on the preset list asks before skipping it.
+                if preset is not None or _confirm_skip(T(30764)):
+                    break
+            preselect = presets.addon_selection(preset)
         except Exception:
             _log('Preset step failed (portal opens unticked):\n%s'
                  % traceback.format_exc(), xbmc.LOGWARNING)
         _log('Opening Add-on Portal… (preselect=%s)' % sorted(preselect))
         # first_run=True: no restart recommendation at the end (the sequence
         # still has steps to run; the caller handles the final reboot).
-        addon_portal.run(first_run=True, preselect=preselect)
+        # confirm_skip: closing the portal without installing asks first.
+        addon_portal.run(first_run=True, preselect=preselect,
+                         confirm_skip=lambda: _confirm_skip(T(30021)))
         return True
     except Exception:
         _log('Add-on Portal failed:\n%s' % traceback.format_exc(), xbmc.LOGERROR)
@@ -445,14 +464,20 @@ def _final_choice(monitor):
      -1 slow              -> user pressed Back: treat as skip
     """
     choice = None
-    for attempt in range(1, 7):
+    attempt = 0
+    while attempt < 6 and not monitor.abortRequested():
         _wait_no_modal(monitor)
         started = time.time()
         idx = xbmcgui.Dialog().select(T(30057).replace('[CR]', ' '),
                                       [T(30058), T(30059)])
         if idx >= 0 or time.time() - started > 1.5:
             choice = (idx == 0)
-            break
+            # 3.4.21: Skip / Back asks first; "Back to the step" re-asks.
+            if choice or _confirm_skip(T(30058)):
+                break
+            choice = None
+            continue
+        attempt += 1
         _log('Restore popup was dismissed instantly (attempt %d) — waiting '
              'and asking again.' % attempt)
         if not _settle(monitor, 2):

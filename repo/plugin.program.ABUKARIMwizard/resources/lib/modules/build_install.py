@@ -13,7 +13,7 @@ import xbmcvfs
 import xbmcaddon
 from .downloader import Downloader
 from .save_data import save_backup_restore
-from .tools_backup import require_tools_backup
+from .tools_backup import offer_tools_backup
 from .maintenance import fresh_start, clean_backups, truncate_tables
 from .addonvar import (dp, dialog, zippath, addon_name, addon_icon, addon_id,
                        home, setting, setting_set, local_string, addons_db)
@@ -35,8 +35,8 @@ def build_install(name, name2, version, url):
     ):
         return
 
-    # Mandatory ABUKARIM TOOLS backup - no backup, no install.
-    if not require_tools_backup():
+    # Optional ABUKARIM TOOLS backup (Back up / Skip backup / Cancel install).
+    if not offer_tools_backup():
         return
 
     if not download_build(name, url):

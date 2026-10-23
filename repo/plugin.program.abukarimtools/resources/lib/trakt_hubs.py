@@ -1125,9 +1125,10 @@ def _ask(hint):
 
 
 def choose(wait_clear=None, settle=None, from_menu=False):
-    """Original / Custom, or None (menu: Back = cancel). Setup: Back =
+    """Original / Custom, or None (menu: Back = cancel). Setup: Back (confirmed) =
     Original; a window torn down instantly is shown again (af3_shortcuts rule)."""
-    for attempt in range(1, 7):
+    attempt = 0
+    while attempt < 6:
         if wait_clear:
             wait_clear()
         started = time.time()
@@ -1135,7 +1136,16 @@ def choose(wait_clear=None, settle=None, from_menu=False):
         if idx >= 0:
             return MODES[idx]
         if time.time() - started > 1.5:
-            return None if from_menu else ORIGINAL
+            if from_menu:
+                return None
+            # 3.4.21: setup - Back asks before skipping; "Back to the step"
+            # shows the cards again.
+            from resources.lib import skip_guard
+            from resources.lib.i18n import T
+            if skip_guard.confirm(T(30660)):
+                return ORIGINAL
+            continue
+        attempt += 1
         _log('window closed instantly (attempt %d) - showing it again' % attempt)
         if settle and not settle(2):
             break

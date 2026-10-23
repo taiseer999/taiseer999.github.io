@@ -1,10 +1,18 @@
 """
-Mandatory ABUKARIM TOOLS backup before a build install.
+Optional ABUKARIM TOOLS backup before a build install (3.9.44; was mandatory
+in 3.9.42-3.9.43).
 
-build_install() calls require_tools_backup() right after the user confirms
-the install. The install only goes ahead once ABUKARIM TOOLS has written a
-new backup zip. If ABUKARIM TOOLS is missing, the backup is cancelled or
-fails, the install is aborted (the user can retry the backup first).
+build_install() calls offer_tools_backup() right after the user confirms the
+install:
+
+    Back up your setup with ABUKARIM TOOLS first?
+        [Back up]   [Skip backup]   [Cancel install]
+
+Back up      -> ABUKARIM TOOLS backup; if it is not completed:
+                [Retry backup] [Install without backup] [Cancel install]
+Skip backup  -> install goes ahead without a backup
+Back / Cancel install -> nothing is changed on the box
+ABUKARIM TOOLS missing -> a notification, install goes ahead.
 
 How the backup is run: ABUKARIM TOOLS' own backup_manager.BackupManager
 ._do_backup(dialog, set(SKIN_ADDONS)) - the same call its Backup/Restore menu
@@ -167,31 +175,57 @@ def _run_tools_backup():
     return any(_new_zip_in(f, started) for f in spy.folders)
 
 
-def require_tools_backup():
-    """Mandatory step before a build install. Returns True to continue."""
-    if not _ensure_tools_enabled():
-        _log('ABUKARIM TOOLS not installed - build install blocked.',
-             xbmc.LOGWARNING)
-        xbmcgui.Dialog().ok(addon_name, _s(
-            30380,
-            'ABUKARIM TOOLS is required to back up your setup before a build '
-            'is installed.[CR]Install ABUKARIM TOOLS first, then try again.'))
-        return False
+def _ask(message, yeslabel, nolabel):
+    """yes = 1, no = 0, Cancel install (custom button) / Back = -1."""
+    res = xbmcgui.Dialog().yesnocustom(
+        addon_name, message,
+        customlabel=_s(30383, 'Cancel install'),
+        nolabel=nolabel, yeslabel=yeslabel,
+        defaultbutton=xbmcgui.DLG_YESNO_YES_BTN)
+    if res == 1:
+        return 1
+    if res == 0:
+        return 0
+    return -1          # 2 = Cancel install, -1 = Back / dismissed
 
-    xbmcgui.Dialog().ok(addon_name, _s(
-        30381,
-        'Before the build is installed, ABUKARIM TOOLS will back up your '
-        'setup.[CR]Choose where to save the backup.'))
+
+def offer_tools_backup():
+    """Optional step before a build install. Returns True to continue the
+    install, False to cancel it (nothing changed yet)."""
+    if not _ensure_tools_enabled():
+        _log('ABUKARIM TOOLS not installed - installing without a backup.',
+             xbmc.LOGWARNING)
+        xbmcgui.Dialog().notification(addon_name, _s(
+            30380, 'ABUKARIM TOOLS is not installed - continuing without a '
+                   'backup.'), xbmcgui.NOTIFICATION_WARNING, 5000)
+        return True
+
+    choice = _ask(_s(30381, 'Back up your setup with ABUKARIM TOOLS before '
+                            'the build is installed? (Recommended)'),
+                  _s(30385, 'Back up'), _s(30386, 'Skip backup'))
+    if choice < 0:
+        _log('User cancelled - build install aborted.')
+        return False
+    if choice == 0:
+        _log('User skipped the backup - continuing with build install.')
+        return True
 
     while True:
         if _run_tools_backup():
             _log('Backup done - continuing with build install.')
             return True
-        if not xbmcgui.Dialog().yesno(
-                addon_name,
-                _s(30382, 'The backup was not completed. The build cannot be '
-                          'installed without a backup.'),
-                nolabel=_s(30383, 'Cancel install'),
-                yeslabel=_s(30384, 'Retry backup')):
+        choice = _ask(_s(30382, 'The backup was not completed.[CR]Retry the '
+                                'backup, install without a backup, or cancel '
+                                'the install?'),
+                      _s(30384, 'Retry backup'),
+                      _s(30387, 'Install without backup'))
+        if choice < 0:
             _log('User cancelled - build install aborted.')
             return False
+        if choice == 0:
+            _log('Backup not completed - user chose to install without it.')
+            return True
+
+
+# Old name (3.9.42-3.9.43), kept so nothing that still imports it breaks.
+require_tools_backup = offer_tools_backup
