@@ -3,26 +3,33 @@
 setup_overlay.py - "Setup in progress" backdrop for the Installation Wizard.
 
 3.4.22: while the wizard runs, a blurred full-screen backdrop sits BEHIND
-every setup dialog and warns, in English and Arabic at the same time, not to
+the setup dialogs and warns, in English and Arabic at the same time, not to
 restart, unplug or exit until setup is complete. The current step is shown
 under the warning; at the end it switches to "Setup complete - restarting".
 
 How it stays out of the way:
   * shown with show() (modeless), never doModal(): the setup code keeps
-    running and every setup dialog opens on top of it (window zorder 0);
+    running and setup dialogs open on top of it (window zorder 0);
   * no focusable control and onAction ignores every key, so Back / Menu
     cannot close it or reach the home screen behind it;
   * the whole wizard waits on System.HasModalDialog. start() checks that the
     backdrop does NOT count as a modal dialog on this Kodi; if it does, the
     backdrop is removed for the rest of the run (setup works as before).
 
-Skin reloads (Skin Installer, language switch, Widgets Layout rebuild) tear
-every add-on window down. A keeper thread sees the backdrop is gone and shows
-it again; if that keeps failing it gives up quietly - the backdrop is a
-courtesy, never a reason for setup to stop.
+3.4.23 - SKIN RELOADS (kodi.log 2026-10-24 05:52:03, macOS): the 3.4.22
+keeper THREAD re-created the backdrop 0.7 s after the Skin Installer's
+ReloadSkin, while Kodi was still stopping/restarting add-on services - the
+GUI thread never logged again (frozen). Rules now:
+  * every window call (show / close / setProperty) happens on the setup
+    thread only - there is no background thread any more;
+  * pause() closes the backdrop BEFORE each step that reloads the skin
+    (Skin Installer, language switch, Widgets Layout, My Lists, patches);
+  * ensure() shows it again only after the screen has been calm (no busy
+    dialog, no modal dialog, no skin build) for STABLE_S seconds; if it never
+    calms down within ENSURE_MAX_S, the backdrop simply stays off.
+The backdrop is a courtesy, never a reason for setup to stop.
 """
 
-import threading
 import time
 
 import xbmc
@@ -32,8 +39,9 @@ from resources.lib import paths as _paths
 from resources.lib.strings_map import STRINGS
 
 XML = 'abk_setup_overlay.xml'
-HOME = xbmcgui.Window(10000)
 PROP_RUNNING = 'abk.setup.running'
+STABLE_S = 3.0
+ENSURE_MAX_S = 20.0
 
 
 def _log(msg, level=xbmc.LOGINFO):
@@ -43,6 +51,17 @@ def _log(msg, level=xbmc.LOGINFO):
 def _pair(sid):
     en, ar = STRINGS.get(int(sid)) or ('', '')
     return en, (ar or en)
+
+
+def _home_prop(value):
+    try:
+        w = xbmcgui.Window(10000)
+        if value:
+            w.setProperty(PROP_RUNNING, value)
+        else:
+            w.clearProperty(PROP_RUNNING)
+    except Exception:
+        pass
 
 
 class _Window(xbmcgui.WindowXMLDialog):
@@ -64,21 +83,40 @@ class _Window(xbmcgui.WindowXMLDialog):
         return
 
 
+def _busy():
+    """Why the screen is not calm yet ('' = calm)."""
+    try:
+        if xbmc.getCondVisibility('Window.IsActive(busydialog)') or \
+                xbmc.getCondVisibility('Window.IsActive(busydialognocancel)'):
+            return 'busy dialog'
+        if xbmc.getCondVisibility('System.HasModalDialog'):
+            return 'modal dialog'
+        if xbmcgui.getCurrentWindowId() == 9999:
+            return 'no window (skin loading)'
+    except Exception:
+        return 'gui query failed'
+    try:
+        from resources.lib import skin_rebuild
+        reason = skin_rebuild.busy()
+        if reason:
+            return 'skin build: %s' % reason
+    except Exception:
+        pass
+    return ''
+
+
 class _Overlay(object):
     def __init__(self):
-        self.lock = threading.RLock()
         self.win = None
         self.props = {}
-        self.active = False
-        self.disabled = False
-        self.thread = None
-        self.reshows = []
+        self.active = False       # setup is running (start .. stop)
+        self.disabled = False     # never show again in this run
         self.by_name = False
         self.win_id = 0
 
-    # -- window handling --------------------------------------------------
+    # -- window handling (setup thread only) ------------------------------
     def _visible(self):
-        """None = cannot tell on this Kodi (the keeper then leaves it alone)."""
+        """True / False, or None when this Kodi cannot tell."""
         try:
             if self.by_name:
                 return xbmc.getCondVisibility('Window.IsVisible(%s)' % XML)
@@ -89,12 +127,12 @@ class _Overlay(object):
         return None
 
     def _learn_detection(self):
-        """Right after the first show: which visibility test works here."""
         try:
             self.by_name = bool(xbmc.getCondVisibility(
                 'Window.IsVisible(%s)' % XML))
         except Exception:
             self.by_name = False
+        self.win_id = 0
         if not self.by_name:
             try:
                 did = xbmcgui.getCurrentWindowDialogId()
@@ -103,119 +141,111 @@ class _Overlay(object):
                     self.win_id = did
             except Exception:
                 pass
-        _log('visibility check: %s' % (
-            'by xml name' if self.by_name else
-            ('by id %d' % self.win_id) if self.win_id else
-            'unavailable - backdrop not re-shown after a skin reload'))
 
     def _show(self):
-        with self.lock:
-            self._close_win()
-            try:
-                self.win = _Window(XML, _paths.ADDON_PATH, 'Default', '1080i',
-                                   props=dict(self.props))
-                self.win.show()
-            except Exception as e:
-                _log('show failed: %s' % e, xbmc.LOGWARNING)
-                self.win = None
-                return False
-            return True
+        self._drop()
+        try:
+            self.win = _Window(XML, _paths.ADDON_PATH, 'Default', '1080i',
+                               props=dict(self.props))
+            self.win.show()
+        except Exception as e:
+            _log('show failed: %s' % e, xbmc.LOGWARNING)
+            self.win = None
+            return False
+        xbmc.sleep(400)
+        self._learn_detection()
+        return True
 
-    def _close_win(self):
+    def _drop(self, close=True):
         w, self.win = self.win, None
-        if w is not None:
+        if w is None:
+            return
+        if close:
             try:
                 w.close()
             except Exception:
                 pass
+        try:
+            del w
+        except Exception:
+            pass
+
+    def _set(self, key, value):
+        self.props[key] = value
+        if self.win is not None:
             try:
-                del w
+                self.win.setProperty(key, value)
             except Exception:
                 pass
 
-    def _set(self, key, value):
-        with self.lock:
-            self.props[key] = value
-            if self.win is not None:
-                try:
-                    self.win.setProperty(key, value)
-                except Exception:
-                    pass
-
-    # -- keeper -----------------------------------------------------------
-    def _keeper(self):
+    def _wait_calm(self, max_s):
         mon = xbmc.Monitor()
-        missing = 0
-        while self.active and not mon.abortRequested():
-            if mon.waitForAbort(1):
-                break
-            if not self.active or self.disabled:
-                break
-            vis = self._visible()
-            if vis is None:
-                continue
-            if vis:
-                missing = 0
-                continue
-            missing += 1
-            if missing < 2:             # a reload passes through "gone" briefly
-                continue
-            if xbmc.getCondVisibility('Window.IsActive(busydialog)') or \
-                    xbmc.getCondVisibility('Window.IsActive(busydialognocancel)'):
-                continue                # mid skin reload: try again next second
-            now = time.time()
-            self.reshows = [t for t in self.reshows if now - t < 60] + [now]
-            if len(self.reshows) > 12:
-                _log('backdrop keeps disappearing - giving up for this run',
-                     xbmc.LOGWARNING)
-                self.disabled = True
-                with self.lock:
-                    self._close_win()
-                break
-            _log('backdrop gone (skin reload?) - showing it again')
-            if self._show() and not self.by_name:
-                xbmc.sleep(500)
-                self.win_id = 0
-                self._learn_detection()
-            missing = 0
-        with self.lock:
-            if not self.active:
-                self._close_win()
+        calm_since = None
+        deadline = time.time() + max_s
+        reason = ''
+        while time.time() < deadline and not mon.abortRequested():
+            reason = _busy()
+            if reason:
+                calm_since = None
+            else:
+                calm_since = calm_since or time.time()
+                if time.time() - calm_since >= STABLE_S:
+                    return True
+            if mon.waitForAbort(0.25):
+                return False
+        _log('screen not calm after %ds (%s) - backdrop stays off for now'
+             % (max_s, reason or '?'))
+        return False
 
     # -- public -----------------------------------------------------------
     def start(self):
         if self.active or self.disabled:
             return
-        try:
-            HOME.setProperty(PROP_RUNNING, "1")
-        except Exception:
-            pass
         t_en, t_ar = _pair(30770)
         b_en, b_ar = _pair(30771)
         self.props.update({'title_en': t_en, 'title_ar': t_ar,
                            'body_en': b_en, 'body_ar': b_ar,
                            'step': '', 'done': ''})
-        modal_before = xbmc.getCondVisibility('System.HasModalDialog')
+        self.active = True
+        _home_prop('1')
+        if not self._wait_calm(ENSURE_MAX_S):
+            return                      # ensure() tries again later
         if not self._show():
-            self.disabled = True
             return
-        xbmc.sleep(600)
-        if not modal_before and xbmc.getCondVisibility('System.HasModalDialog'):
+        xbmc.sleep(300)
+        if xbmc.getCondVisibility('System.HasModalDialog'):
             # This Kodi counts the backdrop as modal - the wizard would wait on
             # it forever. Drop it; setup runs exactly as before.
             _log('backdrop counts as a modal dialog on this Kodi - disabled',
                  xbmc.LOGWARNING)
             self.disabled = True
-            with self.lock:
-                self._close_win()
+            self._drop()
             return
-        self._learn_detection()
-        self.active = True
-        self.thread = threading.Thread(target=self._keeper,
-                                       name='abk-setup-overlay')
-        self.thread.daemon = True
-        self.thread.start()
-        _log('backdrop shown')
+        _log('backdrop shown (visibility check: %s)' % (
+            'xml name' if self.by_name else
+            ('id %d' % self.win_id) if self.win_id else 'unavailable'))
+
+    def pause(self, why=''):
+        """Close the backdrop before something that reloads the skin."""
+        if self.win is not None:
+            _log('backdrop hidden%s' % (' (%s)' % why if why else ''))
+            self._drop()
+
+    def ensure(self):
+        """Show the backdrop again if it is not up - only once calm."""
+        if not self.active or self.disabled:
+            return
+        if self.win is not None:
+            vis = self._visible()
+            if vis or vis is None:
+                return                  # up (or cannot tell: leave it alone)
+            # Torn down by a reload we did not pause for: forget the dead
+            # window WITHOUT calling into it.
+            self._drop(close=False)
+        if not self._wait_calm(ENSURE_MAX_S):
+            return
+        if self._show():
+            _log('backdrop shown again')
 
     def step(self, sid):
         """Show step `sid` (a strings_map id) as 'English  •  Arabic'."""
@@ -235,12 +265,8 @@ class _Overlay(object):
 
     def stop(self):
         self.active = False
-        with self.lock:
-            self._close_win()
-        try:
-            HOME.clearProperty(PROP_RUNNING)
-        except Exception:
-            pass
+        self._drop()
+        _home_prop('')
         _log('backdrop removed')
 
 
@@ -259,6 +285,14 @@ def start():
     _guard(_OVERLAY.start)
 
 
+def pause(why=''):
+    _guard(_OVERLAY.pause, why)
+
+
+def ensure():
+    _guard(_OVERLAY.ensure)
+
+
 def step(sid):
     _guard(_OVERLAY.step, sid)
 
@@ -272,4 +306,4 @@ def stop():
 
 
 def shown():
-    return _OVERLAY.active and not _OVERLAY.disabled
+    return _OVERLAY.win is not None and not _OVERLAY.disabled

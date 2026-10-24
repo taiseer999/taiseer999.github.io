@@ -304,6 +304,7 @@ def _step_phone(monitor):
         if not yes:
             _log('Setup continues on the TV.')
             return set()
+        _overlay('pause', 'phone setup applies changes')
         from resources.lib import phone_setup
         done = phone_setup.run(first_run=True)
         _settle(monitor, 2)
@@ -483,6 +484,7 @@ def _final_choice(monitor):
         if not _settle(monitor, 2):
             return
     if choice:
+        _overlay('pause', 'restore can switch the skin')
         _step_restore()
     else:
         _log('User skipped the restore step.')
@@ -615,10 +617,10 @@ def _overlay(fn, *args):
 
 
 def _run_steps(monitor):
-    """3.4.22: the blurred "setup in progress" backdrop is up for the whole
-    sequence; it is only removed here on a crash (on success it stays until
-    the final restart)."""
-    _overlay('start')
+    """3.4.22: the blurred "setup in progress" backdrop. It is started after
+    the Skin Installer (3.4.23) and hidden around every step that reloads the
+    skin (see setup_overlay). Removed here on a crash; on success it stays
+    until the final restart."""
     try:
         _run_steps_inner(monitor)
     except BaseException:
@@ -649,8 +651,9 @@ def _run_steps_inner(monitor):
     # 3.2.64: the skin comes FIRST, so every later step (restore, Add-on
     # Portal, Widgets Layout, Trakt Lists, patches) is shown in the
     # Arabic-capable skin, in Arabic. Estuary has no Arabic glyphs.
+    # 3.4.23: no backdrop yet - the Skin Installer is full screen and its
+    # ReloadSkin must not happen under an add-on window (3.4.22 froze here).
     _log('Step 0 — Skin Installer (first).')
-    _overlay('step', 30765)
     _step_skin_installer()
     _wait_skin_settle(monitor)
     _wait_no_modal(monitor)
@@ -668,6 +671,7 @@ def _run_steps_inner(monitor):
 
     _log('Step 1 — Binary Installer.')
     _overlay('step', 30775)
+    _overlay('start')                  # waits until the new skin is calm
     _step_binary_installer(monitor)
     # The binary installer ends with UpdateLocalAddons; Kodi's add-on rescan
     # that follows is what dismissed the restore popup instantly (3.1.0.19
@@ -686,6 +690,7 @@ def _run_steps_inner(monitor):
 
     _log('Step 1d — Setup from the phone (optional).')
     _overlay('step', 30730)
+    _overlay('ensure')
     phone = _step_phone(monitor)
     if phone:
         _log('Done from the phone: %s' % ', '.join(sorted(phone)))
@@ -695,6 +700,7 @@ def _run_steps_inner(monitor):
     else:
         _log('Step 2 — Restore popup.')
         _overlay('step', 30058)
+        _overlay('ensure')
         _final_choice(monitor)
 
     if 'addons' in phone:
@@ -702,6 +708,8 @@ def _run_steps_inner(monitor):
     else:
         _log('Step 3 — Preset + Add-on Portal.')
         _overlay('step', 30021)
+        # The portal reconciles menus afterwards (skin rebuild): no backdrop.
+        _overlay('pause', 'Add-on Portal rebuilds the menus')
         _wait_no_modal(monitor)
         _step_addon_portal()
 
@@ -710,6 +718,7 @@ def _run_steps_inner(monitor):
     else:
         _log('Step 3b — Widgets Layout (Light / Moderate / Full).')
         _overlay('step', 30630)
+        _overlay('pause', 'Widgets Layout rebuilds the skin')
         _wait_no_modal(monitor)
         _step_af3_shortcuts(monitor)
 
@@ -718,11 +727,13 @@ def _run_steps_inner(monitor):
     else:
         _log('Step 3c — My Lists (Original / Trakt / Anime).')
         _overlay('step', 30660)
+        _overlay('pause', 'My Lists rebuilds the skin')
         _wait_no_modal(monitor)
         _step_trakt_hubs(monitor)
 
     _log('Step 4 — Apply Patches.')
     _overlay('step', 30005)
+    _overlay('pause', 'patches may reload the skin')
     # 3.2.59: the patcher waits - until no dialog is up and any AF3 menu
     # rebuild started by Widgets Layout / Trakt Lists has finished (it was
     # starting 1 s after the Trakt step, log 2026-10-12 06:31:11).
@@ -734,6 +745,8 @@ def _run_steps_inner(monitor):
 
     _log('Step 4b — Per-box remote access password.')
     _overlay('step', 30776)
+    _wait_skin_settle(monitor)
+    _overlay('ensure')
     _wait_no_modal(monitor)
     _step_guarded('webserver', lambda: __import__(
         'resources.lib.webserver_secure', fromlist=['first_run']).first_run())
@@ -752,6 +765,7 @@ def _run_steps_inner(monitor):
     # setup dialog so nothing shown during setup is affected, and BEFORE the
     # caller's reboot prompt — that prompt uses a hardcoded English Python
     # string, so it stays readable regardless of UI language.
+    _overlay('pause', 'switch to Arabic reloads the skin')
     try:
         from resources.lib import set_language
         set_language.force_arabic()
@@ -788,6 +802,7 @@ def _finish_and_restart(monitor):
         return
     _wait_no_modal(monitor, timeout=60)
     _overlay('finish', 30774 if coreelec else 30773)
+    _overlay('ensure')                 # back up after the Arabic switch
     try:
         from resources.lib import setup_overlay
         backdrop = setup_overlay.shown()

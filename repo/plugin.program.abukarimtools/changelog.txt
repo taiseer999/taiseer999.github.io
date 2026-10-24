@@ -1,3 +1,20 @@
+v3.4.23
+- FIX: Installation Wizard froze right after the Skin Installer (kodi.log
+  2026-10-24 05:52:03, macOS / Kodi 23 alpha): the 3.4.22 backdrop keeper
+  THREAD re-created its window 0.7 s after ReloadSkin, while Kodi was still
+  stopping/restarting add-on services; the GUI thread never logged again.
+  setup_overlay rewritten:
+  - no background thread; every window call happens on the setup thread;
+  - the backdrop starts AFTER the Skin Installer + Arabic switch, once the
+    screen has been calm (no busy/modal dialog, no skin build, a valid
+    window) for 3 s;
+  - it is hidden BEFORE every step that can reload the skin - phone setup,
+    restore, Add-on Portal (menu rebuild), Widgets Layout, My Lists,
+    patches, the final Arabic switch - and shown again only when calm
+    (max 20 s wait, otherwise it just stays off);
+  - a window torn down by an unexpected reload is forgotten without calling
+    into it.
+
 v3.4.22
 - Installation Wizard backdrop (resources/lib/setup_overlay.py +
   abk_setup_overlay.xml): a blurred full-screen background with a warning,
