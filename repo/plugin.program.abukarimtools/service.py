@@ -681,7 +681,8 @@ def _run_steps_inner(monitor):
 
     _log('Step 1a — TinyPPI (CoreELEC 22 only, from repository.jamal2362).')
     _step_guarded('tinyppi', lambda: __import__(
-        'resources.lib.addon_portal', fromlist=['ensure_tinyppi']).ensure_tinyppi())
+        'resources.lib.addon_portal', fromlist=['ensure_tinyppi']).ensure_tinyppi(
+            force=True))
     _wait_no_modal(monitor)
 
     _log('Step 1b — Thin-build bootstrap (no-op on a full build).')
@@ -1134,6 +1135,27 @@ def _start_update_watch(monitor, boot_version):
     t.start()
 
 
+def _tinyppi_boot(monitor):
+    from resources.lib import addon_portal
+    if not addon_portal._upstream_local_ok('script.tinyppi'):
+        return                                   # not CoreELEC 22
+    if os.path.exists(addon_portal.TINYPPI_DONE):
+        return
+    if os.path.exists(LOCK_FILE):
+        _log('TinyPPI check: setup running - it handles TinyPPI itself.')
+        return
+    waited = 0
+    while not xbmc.getCondVisibility('Window.IsVisible(home)'):
+        if monitor.waitForAbort(2):
+            return
+        waited += 2
+        if waited > 180:
+            _log('TinyPPI check: Home never came up - next boot.')
+            return
+    _wait_no_modal(monitor, timeout=120)
+    addon_portal.ensure_tinyppi()
+
+
 def main():
     monitor = xbmc.Monitor()
 
@@ -1325,6 +1347,16 @@ def main():
         _relink_after_rebuild(monitor)
     except Exception:
         _log('Post-rebuild repo linking crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
+    # 3.4.25: TinyPPI on CoreELEC 22 = repository.jamal2362. Once per box:
+    # install it when missing, replace the old ABUKARIM build (taiseer repos /
+    # zip). Any other system: nothing. Sequential (no thread - see 3.2.19),
+    # never under setup, only once Home is up with no dialog. Fenced.
+    try:
+        _tinyppi_boot(monitor)
+    except Exception:
+        _log('TinyPPI check crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
     # 3.2.57: Custom Trakt lists - re-apply the saved picks to an AF3 hub

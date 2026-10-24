@@ -1,3 +1,18 @@
+v3.4.25
+- TinyPPI on CoreELEC 22 also on boxes that are already set up: once per
+  box, at boot (service, after Home is up and no dialog is open; skipped
+  while the Installation Wizard runs - it does the same as Step 1a):
+  - missing -> installed from repository.jamal2362;
+  - installed from repository.taiseer / taiseerCE / taiseerKODI22 or from a
+    zip (the old ABUKARIM build) -> REPLACED: the jamal2362 zip is
+    downloaded first (old copy kept and retried next boot if it fails),
+    then the old copy is disabled and removed and jamal2362's installed,
+    enabled and linked to its repository;
+  - installed from jamal2362 or a system copy -> left alone.
+  Marker addon_data/.../tinyppi_ce22.done: it runs once, so a TinyPPI the
+  user uninstalls afterwards is not reinstalled at boot (the wizard still
+  does it). Notification 30778 when installed. Other systems: nothing.
+
 v3.4.24
 - TinyPPI = CoreELEC 22 only, from repository.jamal2362 (addon_portal
   UPSTREAM_ONLY). Requirements: CoreELEC + Kodi 22+ (xbmc.python 3.1.0) +

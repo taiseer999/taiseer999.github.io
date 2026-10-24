@@ -522,4 +522,5 @@ STRINGS = {
     30775: ('Installing components', 'تثبيت المكوّنات'),
     30776: ('Finishing up', 'اللمسات الأخيرة'),
     30777: ('CoreELEC 22 only', 'لـ CoreELEC 22 فقط'),
+    30778: ('Installed from Jamal2362 (CoreELEC 22)', 'ثُبّت من Jamal2362 (CoreELEC 22)'),
 }

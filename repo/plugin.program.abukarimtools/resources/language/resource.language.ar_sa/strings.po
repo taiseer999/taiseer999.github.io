@@ -1392,3 +1392,7 @@ msgctxt "#30777"
 msgid "CoreELEC 22 only"
 msgstr "لـ CoreELEC 22 فقط"
 
+msgctxt "#30778"
+msgid "Installed from Jamal2362 (CoreELEC 22)"
+msgstr "ثُبّت من Jamal2362 (CoreELEC 22)"
+

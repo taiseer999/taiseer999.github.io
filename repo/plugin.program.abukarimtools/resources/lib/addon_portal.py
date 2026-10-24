@@ -30,6 +30,8 @@ Flow per run:
 import os
 import re
 import gzip
+import shutil
+import time
 import json
 import threading
 import urllib.request
@@ -929,17 +931,135 @@ def run(first_run=False, preselect=None, confirm_skip=None):
     return bool(ok)
 
 
-def ensure_tinyppi():
-    """3.4.24 Installation Wizard: CoreELEC 22 -> install TinyPPI from
-    repository.jamal2362 when it is missing. Any other system: nothing."""
+TINYPPI_DONE = os.path.join(
+    xbmcvfs.translatePath('special://profile/addon_data/'
+                          'plugin.program.abukarimtools/'),
+    'tinyppi_ce22.done')
+
+# Origins that mean "the old ABUKARIM build" (empty = installed from a zip).
+_TINYPPI_OLD_ORIGINS = ('', 'repository.taiseer', 'repository.taiseerce',
+                        'repository.taiseerkodi22')
+
+
+def _installed_origin(addon_id):
+    """installed.origin from Addons33.db, or None when unknown."""
+    try:
+        from resources.lib import origin_fix
+        db = origin_fix._find_addons_db()
+        if not db:
+            return None
+        conn = origin_fix._connect(db)
+        try:
+            row = conn.execute('SELECT origin FROM installed WHERE addonID = ?',
+                               (addon_id,)).fetchone()
+        finally:
+            conn.close()
+        return (row[0] or '') if row else None
+    except Exception as e:
+        _log('origin of %s unreadable: %s' % (addon_id, e), xbmc.LOGWARNING)
+        return None
+
+
+def _mark_tinyppi_done(state):
+    try:
+        os.makedirs(os.path.dirname(TINYPPI_DONE), exist_ok=True)
+        with open(TINYPPI_DONE, 'w') as f:
+            f.write('%s %d' % (state, int(time.time())))
+    except Exception:
+        pass
+
+
+def _jamal_tinyppi_zip():
+    """(zip_url, version) of TinyPPI in jamal2362's repo, straight from its
+    published listing (works before the repository add-on is installed)."""
+    base = REPO_SOURCES['repository.jamal2362']
+    try:
+        ver = _addons_xml_version(_http_get(base + 'addons.xml'), 'script.tinyppi')
+    except Exception as e:
+        _log('TinyPPI: jamal2362 listing failed: %s' % e, xbmc.LOGWARNING)
+        return None, ''
+    if not ver:
+        return None, ''
+    return '%sscript.tinyppi/script.tinyppi-%s.zip' % (base, ver), ver
+
+
+def ensure_tinyppi(force=False):
+    """3.4.24/3.4.25 - TinyPPI on CoreELEC 22 comes from repository.jamal2362.
+
+    CoreELEC 22:
+      * missing                         -> install from jamal2362
+      * installed from repository.taiseer / taiseerCE / taiseerKODI22 or a
+        zip (the old ABUKARIM build)    -> REPLACE with jamal2362's
+      * installed from jamal2362 / a system copy -> nothing
+    Any other system: nothing at all.
+
+    Runs from the Installation Wizard (force=True) and once per box from the
+    service at boot (marker TINYPPI_DONE: an uninstall afterwards is
+    respected). A failed download keeps the old copy and retries next boot.
+    """
     aid = 'script.tinyppi'
+    jamal = UPSTREAM[aid][0]
     if not _upstream_local_ok(aid):
         _log('TinyPPI: not CoreELEC 22 - nothing to do')
         return False
-    if _is_local(aid):
-        _log('TinyPPI: already installed')
+    if not force and os.path.exists(TINYPPI_DONE):
         return True
-    res = _install_selection([(aid, 'TinyPPI', UPSTREAM[aid][0])])
+
+    replace = False
+    if _is_local(aid) or os.path.isdir(os.path.join(ADDONS_PATH, aid)):
+        origin = _installed_origin(aid)
+        user_copy = os.path.isdir(os.path.join(ADDONS_PATH, aid))
+        if origin is None or not user_copy or \
+                origin.lower() not in _TINYPPI_OLD_ORIGINS:
+            _log('TinyPPI: already installed (origin %r) - nothing to do'
+                 % origin)
+            _mark_tinyppi_done('kept')
+            return True
+        _log('TinyPPI: installed from %r (old ABUKARIM build) - replacing '
+             'with %s' % (origin or 'zip', jamal))
+        replace = True
+
+    if not _upstream_meta_ok(aid, jamal):
+        _log('TinyPPI: %s does not offer it for this box right now - retry '
+             'next boot' % jamal, xbmc.LOGWARNING)
+        return False
+
+    if replace:
+        # Prove the new zip is reachable BEFORE the old copy is removed.
+        url, ver = _jamal_tinyppi_zip()
+        tmp = _si()._download_zip_silent(url) if url else None
+        if not tmp:
+            _log('TinyPPI: jamal2362 zip not reachable - old copy kept, retry '
+                 'next boot', xbmc.LOGWARNING)
+            return False
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+        try:
+            xbmc.executeJSONRPC(json.dumps({
+                'jsonrpc': '2.0', 'id': 1, 'method': 'Addons.SetAddonEnabled',
+                'params': {'addonid': aid, 'enabled': False}}))
+        except Exception:
+            pass
+        xbmc.sleep(1500)                  # let its service stop
+        try:
+            shutil.rmtree(os.path.join(ADDONS_PATH, aid))
+        except Exception as e:
+            _log('TinyPPI: could not remove the old copy (%s) - installing '
+                 'over it' % e, xbmc.LOGWARNING)
+        xbmc.executebuiltin('UpdateLocalAddons')
+        xbmc.sleep(2500)
+
+    res = _install_selection([(aid, 'TinyPPI', jamal)])
     ok = bool(res) and all(r[1] for r in res)
-    _log('TinyPPI (CoreELEC 22) from %s: %s' % (UPSTREAM[aid][0], res))
+    _log('TinyPPI (CoreELEC 22) %s from %s: %s'
+         % ('replaced' if replace else 'installed', jamal, res))
+    if ok:
+        _mark_tinyppi_done('replaced' if replace else 'installed')
+        try:
+            xbmcgui.Dialog().notification(
+                'TinyPPI', T(30778), xbmcgui.NOTIFICATION_INFO, 5000)
+        except Exception:
+            pass
     return ok
