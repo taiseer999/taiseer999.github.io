@@ -244,7 +244,6 @@ STRINGS = {
             "تثبيت هذه الإضافات من مستودعاتها؟[CR][CR]%s"),
     30419: ("The add-ons were installed and linked to their repositories.\nA restart is recommended so their updates become active.\nتم تثبيت الإضافات وربطها بمستودعاتها.\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة.",
             "تم تثبيت الإضافات وربطها بمستودعاتها.\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة."),
-    30420: ("for non CE22",                    "لغير CE22"),
 
     # ---- AF3 auto-trailers (30430-30459) ----
     30430: ("AF3 Auto Trailers",               "التريلرات التلقائية (AF3)"),
@@ -522,4 +521,5 @@ STRINGS = {
     30774: ('Setup complete - rebooting…', 'اكتمل الإعداد، جارٍ إعادة تشغيل الجهاز…'),
     30775: ('Installing components', 'تثبيت المكوّنات'),
     30776: ('Finishing up', 'اللمسات الأخيرة'),
+    30777: ('CoreELEC 22 only', 'لـ CoreELEC 22 فقط'),
 }

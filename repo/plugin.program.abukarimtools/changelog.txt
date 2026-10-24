@@ -1,3 +1,16 @@
+v3.4.24
+- TinyPPI = CoreELEC 22 only, from repository.jamal2362 (addon_portal
+  UPSTREAM_ONLY). Requirements: CoreELEC + Kodi 22+ (xbmc.python 3.1.0) +
+  the add-on's own addon.xml in jamal2362's listing.
+  - CoreELEC 22: listed in the Add-on Portal / phone setup with repo
+    Jamal2362, and the Installation Wizard installs it automatically
+    (new Step 1a, after the binaries) when it is missing.
+  - Any other system: nothing - not listed in the portal / phone setup /
+    presets, never installed by a backup restore (reported as "CoreELEC 22
+    only"), no fallback to the old ABUKARIM build in repository.taiseer.
+    An already installed TinyPPI is left alone.
+- Note string 30420 "for non CE22" removed; new 30777 "CoreELEC 22 only".
+
 v3.4.23
 - FIX: Installation Wizard froze right after the Skin Installer (kodi.log
   2026-10-24 05:52:03, macOS / Kodi 23 alpha): the 3.4.22 backdrop keeper

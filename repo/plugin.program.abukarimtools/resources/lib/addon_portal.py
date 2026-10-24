@@ -72,7 +72,7 @@ CATALOG = [
      'resources/media/addon_icons/icon.png'),
     ('plugin.video.seren',       'Seren',       'repository.taiseer',
      TAISEER_ZIPS + 'plugin.video.seren/resources/images/ico-seren-3.png'),
-    ('script.tinyppi',           'TinyPPI',     'repository.taiseer',
+    ('script.tinyppi',           'TinyPPI',     'repository.jamal2362',
      TAISEER_ZIPS + 'script.tinyppi/icon.png'),
     ('plugin.video.umbrella',    'Umbrella',    'repository.umbrella',
      'https://raw.githubusercontent.com/umbrellaplug/umbrellaplug.github.io/'
@@ -84,11 +84,14 @@ CATALOG = [
 
 # Optional one-line note shown after the repository name in the list
 # (string id from strings.po, or plain text from portal.json "note").
-# TinyPPI: CoreELEC 22 ships its own; the ABUKARIM build (non-CoreELEC check
-# disabled) is for every other box.
-NOTES = {
-    'script.tinyppi': 30420,
-}
+NOTES = {}
+
+# 3.4.24: add-ons that exist ONLY where their upstream requirements are met.
+# TinyPPI = CoreELEC + Kodi 22+ (xbmc.python 3.1.0), installed from
+# repository.jamal2362 - on any other system AB Tools does nothing with it:
+# not listed in the portal / phone setup / presets, never installed by a
+# restore, no fallback to the old ABUKARIM build in repository.taiseer.
+UPSTREAM_ONLY = {'script.tinyppi'}
 
 # 3.4.10: add-ons that come from their AUTHOR'S repository whenever this box
 # meets the upstream add-on's own requirements; every other box keeps the
@@ -161,6 +164,8 @@ def _catalog():
     by_id = {r[0]: r for r in remote}
     out = [by_id.pop(c[0], c) for c in CATALOG if c[0] not in drop]
     out += [r for r in remote if r[0] in by_id and r[0] not in drop]
+    out = [e for e in out
+           if e[0] not in UPSTREAM_ONLY or _upstream_local_ok(e[0])]
     return [_prefer_upstream(e) for e in out]
 
 
@@ -306,6 +311,14 @@ def _route_upstream(entries):
     out = []
     for aid, name, rid in entries:
         spec = UPSTREAM.get(aid)
+        if spec and aid in UPSTREAM_ONLY:
+            # 3.4.24: upstream or nothing (TinyPPI: CoreELEC 22 only).
+            if _upstream_local_ok(aid) and _upstream_meta_ok(aid, spec[0]):
+                _log('%s: upstream requirements met -> %s' % (aid, spec[0]))
+                out.append((aid, name, spec[0]))
+            else:
+                _log('%s: not for this system (upstream only) - skipped' % aid)
+            continue
         if spec:
             fb = _FALLBACK.get(aid) or next(
                 (c[2] for c in CATALOG if c[0] == aid), rid)
@@ -655,8 +668,14 @@ def _wait_repo_listings(repo_ids, timeout_ms=40000):
 
 def _install_selection(entries):
     """entries = [(addon_id, name, repo_id)]. Returns [(name, ok, note)]."""
+    asked = list(entries)
     entries = _route_upstream(entries)
-    results = []
+    kept = set(e[0] for e in entries)
+    # 3.4.24: an upstream-only add-on this system cannot take (TinyPPI off
+    # CoreELEC 22) is reported, not installed.
+    results = [(n, False, T(30777)) for a, n, _r in asked if a not in kept]
+    if not entries:
+        return results
     prog = xbmcgui.DialogProgress()
     prog.create(TITLE, T(30401))
     # Answer every "Add-on required / enable this add-on?" (and install)
@@ -908,3 +927,19 @@ def run(first_run=False, preselect=None, confirm_skip=None):
         except Exception as e:
             _log('restart recommendation failed: %s' % e)
     return bool(ok)
+
+
+def ensure_tinyppi():
+    """3.4.24 Installation Wizard: CoreELEC 22 -> install TinyPPI from
+    repository.jamal2362 when it is missing. Any other system: nothing."""
+    aid = 'script.tinyppi'
+    if not _upstream_local_ok(aid):
+        _log('TinyPPI: not CoreELEC 22 - nothing to do')
+        return False
+    if _is_local(aid):
+        _log('TinyPPI: already installed')
+        return True
+    res = _install_selection([(aid, 'TinyPPI', UPSTREAM[aid][0])])
+    ok = bool(res) and all(r[1] for r in res)
+    _log('TinyPPI (CoreELEC 22) from %s: %s' % (UPSTREAM[aid][0], res))
+    return ok

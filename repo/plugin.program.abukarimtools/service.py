@@ -679,6 +679,11 @@ def _run_steps_inner(monitor):
     _settle(monitor, 3)
     _wait_no_modal(monitor)
 
+    _log('Step 1a — TinyPPI (CoreELEC 22 only, from repository.jamal2362).')
+    _step_guarded('tinyppi', lambda: __import__(
+        'resources.lib.addon_portal', fromlist=['ensure_tinyppi']).ensure_tinyppi())
+    _wait_no_modal(monitor)
+
     _log('Step 1b — Thin-build bootstrap (no-op on a full build).')
     _step_guarded('bootstrap', lambda: __import__(
         'resources.lib.bootstrap', fromlist=['run']).run())

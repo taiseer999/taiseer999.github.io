@@ -564,10 +564,6 @@ msgctxt "#30419"
 msgid "The add-ons were installed and linked to their repositories.\\nA restart is recommended so their updates become active.\\nتم تثبيت الإضافات وربطها بمستودعاتها.\\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة."
 msgstr "تم تثبيت الإضافات وربطها بمستودعاتها.\\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة."
 
-msgctxt "#30420"
-msgid "for non CE22"
-msgstr "لغير CE22"
-
 msgctxt "#30430"
 msgid "AF3 Auto Trailers"
 msgstr "التريلرات التلقائية (AF3)"
@@ -1391,4 +1387,8 @@ msgstr "تثبيت المكوّنات"
 msgctxt "#30776"
 msgid "Finishing up"
 msgstr "اللمسات الأخيرة"
+
+msgctxt "#30777"
+msgid "CoreELEC 22 only"
+msgstr "لـ CoreELEC 22 فقط"
 
