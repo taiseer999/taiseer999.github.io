@@ -1,3 +1,14 @@
+v3.4.27
+- Speedtest uses a LOCAL server only. The server list now comes from the
+  speedtest.net IP-geolocated API and is filtered to the client's own country
+  (e.g. JO -> Amman/Irbid), then the lowest-ping one is chosen. Before, the
+  legacy static list + latency pick could land on a foreign server (Ankara).
+  Falls back to the static list (same country filter), and only uses foreign
+  servers if the country has none.
+- Speedtest logs client country, candidate count and chosen server to kodi.log
+  ([AbukarimTools Speedtest]).
+- Python 3.9+ fixes: root.getiterator -> root.iter, isSet -> is_set.
+
 v3.4.26
 - NEW patch toggle "DexHub: Plugin Entry Fix (Kodi 22)" (dexhub_entry, on by
   default): comments the xbmc.ui.screensaver extension out of

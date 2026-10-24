@@ -57,6 +57,10 @@ class FakeShutdownEvent(object):
     """
 
     @staticmethod
+    def is_set():
+        return False
+
+    @staticmethod
     def isSet():
         "Dummy method to always return false"""
         return False
@@ -694,7 +698,7 @@ def print_dots(shutdown_event):
     status
     """
     def inner(current, total, start=False, end=False):
-        if shutdown_event.isSet():
+        if shutdown_event.is_set():
             return
 
         sys.stdout.write('.')
@@ -733,7 +737,7 @@ class HTTPDownloader(threading.Thread):
         try:
             if (timeit.default_timer() - self.starttime) <= self.timeout:
                 f = self._opener(self.request)
-                while (not self._shutdown_event.isSet() and
+                while (not self._shutdown_event.is_set() and
                         (timeit.default_timer() - self.starttime) <=
                         self.timeout):
                     self.result.append(len(f.read(10240)))
@@ -787,7 +791,7 @@ class HTTPUploaderData(object):
 
     def read(self, n=10240):
         if ((timeit.default_timer() - self.start) <= self.timeout and
-                not self._shutdown_event.isSet()):
+                not self._shutdown_event.is_set()):
             chunk = self.data.read(n)
             self.total.append(len(chunk))
             return chunk
@@ -825,7 +829,7 @@ class HTTPUploader(threading.Thread):
         request = self.request
         try:
             if ((timeit.default_timer() - self.starttime) <= self.timeout and
-                    not self._shutdown_event.isSet()):
+                    not self._shutdown_event.is_set()):
                 try:
                     f = self._opener(request)
                 except TypeError:
@@ -1143,7 +1147,123 @@ class Speedtest(object):
 
         return self.config
 
+    def _klog(self, msg):
+        try:
+            import xbmc
+            xbmc.log('[AbukarimTools Speedtest] %s' % msg, xbmc.LOGINFO)
+        except Exception:
+            pass
+
+    def _client_cc(self):
+        return ('%s' % self.config.get('client', {}).get('country', '')).upper()
+
+    def _api_servers(self):
+        """speedtest.net JS API - servers located from the caller's public IP,
+        nearest first. Returns a list of dicts (same keys as the XML list)."""
+        if json is None:
+            return []
+        for url in ('https://www.speedtest.net/api/js/servers?engine=js&limit=50',
+                    'http://www.speedtest.net/api/js/servers?engine=js&limit=50'):
+            try:
+                uh, e = catch_request(build_request(url), opener=self._opener)
+                if e or uh is None:
+                    self._klog('API %s failed: %s' % (url, e))
+                    continue
+                stream = get_response_stream(uh)
+                raw = stream.read()
+                stream.close()
+                uh.close()
+                if int(uh.code) != 200:
+                    continue
+                if isinstance(raw, bytes):
+                    raw = raw.decode('utf-8', 'ignore')
+                data = json.loads(raw)
+                if isinstance(data, list) and data:
+                    return data
+            except Exception as exc:
+                self._klog('API %s error: %r' % (url, exc))
+        return []
+
+    def _add_server(self, attrib, servers, exclude):
+        attrib = dict((k, '%s' % v) for k, v in attrib.items())
+        try:
+            sid = int(attrib.get('id'))
+        except (TypeError, ValueError):
+            return
+        if servers and sid not in servers:
+            return
+        if sid in self.config['ignore_servers'] or sid in exclude:
+            return
+        try:
+            d = distance(self.lat_lon, (float(attrib.get('lat')),
+                                        float(attrib.get('lon'))))
+        except Exception:
+            try:
+                d = float(attrib.get('distance') or 0)
+            except (TypeError, ValueError):
+                return
+        attrib['d'] = d
+        self.servers.setdefault(d, []).append(attrib)
+
     def get_servers(self, servers=None, exclude=None):
+        """LOCAL server list: same country as the client only.
+
+        1. speedtest.net JS API (IP-geolocated), filtered to client country
+        2. legacy static XML list, filtered to client country
+        3. only if the country has no servers at all: nearest of any country
+        """
+        if servers is None:
+            servers = []
+        if exclude is None:
+            exclude = []
+        for server_list in (servers, exclude):
+            for i, s in enumerate(server_list):
+                try:
+                    server_list[i] = int(s)
+                except ValueError:
+                    raise InvalidServerIDType(
+                        '%s is an invalid server type, must be int' % s
+                    )
+
+        client = self.config.get('client', {})
+        cc = self._client_cc()
+        self._klog('client ip=%s isp=%s country=%s lat=%s lon=%s' % (
+            client.get('ip'), client.get('isp'), cc,
+            client.get('lat'), client.get('lon')))
+
+        self.servers.clear()
+        api = self._api_servers()
+        if not cc and api:
+            # config had no country: nearest API server is in the IP's country
+            cc = ('%s' % api[0].get('cc', '')).upper()
+        local = [a for a in api if cc and ('%s' % a.get('cc', '')).upper() == cc]
+        self._klog('API: %d servers, %d in %s' % (len(api), len(local), cc or '?'))
+        for attrib in local:
+            self._add_server(attrib, servers, exclude)
+
+        if not self.servers:
+            self._get_servers_static(servers=servers, exclude=exclude)
+            if cc:
+                kept = {}
+                for d, lst in self.servers.items():
+                    lst = [a for a in lst if ('%s' % a.get('cc', '')).upper() == cc]
+                    if lst:
+                        kept[d] = lst
+                self._klog('static list: %d in %s' % (
+                    sum(len(v) for v in kept.values()), cc))
+                if kept:
+                    self.servers = kept
+
+        if not self.servers and api:
+            self._klog('no servers in %s - using nearest of any country' % (cc or '?'))
+            for attrib in api:
+                self._add_server(attrib, servers, exclude)
+
+        if (servers or exclude) and not self.servers:
+            raise NoMatchedServers()
+        return self.servers
+
+    def _get_servers_static(self, servers=None, exclude=None):
         """Retrieve a the list of speedtest.net servers, optionally filtered
         to servers matching those specified in the ``servers`` argument
         """
@@ -1214,7 +1334,7 @@ class Speedtest(object):
                     buf = ''.encode().join(serversxml)
                     try:
                         root = ET.fromstring(buf)
-                        elements = root.getiterator('server')
+                        elements = root.iter('server')
                     except AttributeError:
                         root = DOM.parseString(buf)
                         elements = root.getElementsByTagName('server')
@@ -1405,6 +1525,7 @@ class Speedtest(object):
         self.results.server = best
 
         self._best.update(best)
+        self._klog('best: id=%s %s (%s, %s) %.0f km, %s ms' % (best.get('id'), best.get('sponsor'), best.get('name'), best.get('cc', best.get('country')), float(best.get('d', 0)), fastest))
         printer('Best Server:\n%r' % best, debug=True)
         return best
 
