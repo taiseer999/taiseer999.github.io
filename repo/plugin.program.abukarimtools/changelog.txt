@@ -1,3 +1,15 @@
+v3.4.26
+- NEW patch toggle "DexHub: Plugin Entry Fix (Kodi 22)" (dexhub_entry, on by
+  default): comments the xbmc.ui.screensaver extension out of
+  plugin.video.dexhub's addon.xml. Kodi 22 beta1 ran DexHub's screensaver.py
+  for plugin:// calls (kodi.log: every Home widget/menu call logged "Kodi ran
+  the screensaver entry ... handed to default.py", then "waiting on thread").
+  With pluginsource as the only script entry Kodi has nothing else to pick.
+  Dex Hub is no longer offered as a screensaver. Toggle off restores the stock
+  line. DexHub joins the AutoPatch watchdog, so a DexHub update is re-patched.
+- Patcher: entries with 'rescan_addons' fire UpdateLocalAddons after a write
+  or revert, so an addon.xml change takes effect without a Kodi restart.
+
 v3.4.25
 - TinyPPI on CoreELEC 22 also on boxes that are already set up: once per
   box, at boot (service, after Home is up and no dialog is open; skipped

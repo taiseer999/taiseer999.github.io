@@ -1850,6 +1850,39 @@ PATCHES += [
 ]
 
 
+# ── DexHub: Plugin Entry Fix (3.4.26, toggle 'dexhub_entry') ──
+# Kodi 22 beta1 runs DexHub's xbmc.ui.screensaver library (screensaver.py)
+# for plugin:// calls - kodi.log 2026-10-24: every Home widget / menu call
+# (continue, nextup, emby_menu, silo_menu, providers) logged "Kodi ran the
+# screensaver entry ... handed to default.py" and the invokers then sat in
+# "waiting on thread". DexHub's own redirect hides the crash but not the
+# misroute. Commenting the screensaver extension out of addon.xml leaves
+# pluginsource as DexHub's only script entry, so Kodi has nothing else to
+# pick. Cost: Dex Hub is no longer offered as a screensaver. Kodi reads
+# addon.xml on UpdateLocalAddons, fired after the write ('rescan_addons').
+# Toggle off -> revert_when_off restores the stock line.
+_DEXHUB_SS_STOCK = '<extension point="xbmc.ui.screensaver" library="screensaver.py" />'
+_DEXHUB_SS_OFF = ('<!-- ABK dexhub-ss-off: <extension point="xbmc.ui.screensaver" '
+                  'library="screensaver.py" /> -->')
+
+PATCHES += [
+    {
+        'addon_id': 'plugin.video.dexhub',
+        'rel_path': 'addon.xml',
+        'toggle': 'dexhub_entry',
+        'old': _DEXHUB_SS_STOCK,
+        'new': _DEXHUB_SS_OFF,
+        'already_patched_check': 'ABK dexhub-ss-off',
+        'fallback_pattern': r'<extension\s+point=["\']xbmc\.ui\.screensaver["\'][^>]*?/>',
+        'fallback_repl': lambda _m: '<!-- ABK dexhub-ss-off: ' + _m.group(0) + ' -->',
+        'revert_when_off': (_DEXHUB_SS_OFF, _DEXHUB_SS_STOCK),
+        'rescan_addons': True,
+        'not_found_ok': True,
+        'description': 'DexHub addon.xml - screensaver extension off (Kodi 22 ran screensaver.py for plugin:// calls)',
+    },
+]
+
+
 def _restart_addon(addon_id):
     """Disable + re-enable an add-on so a patched xbmc.service reloads now."""
     import json as _json
@@ -2150,6 +2183,7 @@ TOGGLE_GROUPS = [
     ('a4ksubs_utf8',     'a4kSubtitles: UTF-8 Subtitles Fix'),
     ('a4ksubs_quiet',    'a4kSubtitles: Hide Account/API-Key Nags'),
     ('af3_subtools',     'AF3: Subtitle Buttons (DexSubtitles Sync & Cycler)'),
+    ('dexhub_entry',     'DexHub: Plugin Entry Fix (Kodi 22)'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
 
@@ -2936,10 +2970,15 @@ def _revert_disabled(addon_ids=None):
             if pair[0] not in content:
                 continue
             _write(target, content.replace(pair[0], pair[1], 1))
+            if patch.get('rescan_addons'):
+                _RESCAN_PENDING[0] = True
             yield True, '[%s] Patched OK (reverted, toggle off): %s' % (
                 patch['addon_id'], patch['description'])
         except Exception as e:
             yield False, '[%s] Revert failed: %s' % (patch['addon_id'], e)
+
+
+_RESCAN_PENDING = [False]
 
 
 def apply_set(group=None, addon_ids=None):
@@ -3012,6 +3051,8 @@ def apply_set(group=None, addon_ids=None):
             # watchdog popped a false 're-applied' toast.
             if ('Patched OK' in msg) or ('File injected OK' in msg):
                 changed += 1
+                if patch.get('rescan_addons'):
+                    _RESCAN_PENDING[0] = True
                 if _is_active_skin(patch['addon_id']):
                     _mark_skin_reload()
         else:
@@ -3035,6 +3076,13 @@ def apply_set(group=None, addon_ids=None):
         if wrote:
             changed += 1
             _mark_skin_reload()
+
+    # 3.4.26: an addon.xml changed ('rescan_addons') - Kodi only reads
+    # addon.xml when it scans, so ask for a rescan now instead of a restart.
+    if _RESCAN_PENDING[0]:
+        _RESCAN_PENDING[0] = False
+        _log('addon.xml changed - UpdateLocalAddons.')
+        xbmc.executebuiltin('UpdateLocalAddons')
 
     _log('Patch run complete: %d OK, %d failed, %d written.'
          % (succeeded, failed, changed))
