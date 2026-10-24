@@ -3,6 +3,7 @@
 	<category label="General">
 		<setting id="showinstalledbuild" type="bool" label="Show installed build information" default="true" />
 		<setting id="showkodistats" type="bool" label="Show Kodi system information" default="true" />
+		<setting id="speedtest_server_id" type="text" label="Speedtest server ID (empty = nearest local server)" default="" />
 	</category>
 	<category label="30053">
 		<setting type="lsep" label="30054"/>

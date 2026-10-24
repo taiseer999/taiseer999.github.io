@@ -217,71 +217,116 @@ def get_config():
     return config
 
 
-def closest_servers(client, total=False):
+def _read_url(url, timeout=10):
+    """Return response body as text, or None on any failure."""
+    try:
+        handler = urlopen(build_request(url), timeout=timeout)
+        if int(getattr(handler, 'code', 200)) != 200:
+            handler.close()
+            return None
+        data = handler.read()
+        handler.close()
+        return data.decode('utf-8', 'ignore') if isinstance(data, bytes) else data
+    except Exception as exc:  # pylint: disable=broad-except
+        log(0, 'Speedtest: request failed {url}: {err}', url=url, err=exc)
+        return None
 
+
+def _pinned_server_id():
+    try:
+        from xbmcaddon import Addon
+        return Addon().getSetting('speedtest_server_id').strip()
+    except Exception:  # pylint: disable=broad-except
+        return ''
+
+
+def _normalize(srv, client):
+    """Make an API/static server entry look like what the rest of the code expects."""
+    srv = dict((k, v) for k, v in srv.items())
+    for key in ('url', 'lat', 'lon', 'name', 'country', 'cc', 'sponsor', 'id', 'host'):
+        srv[key] = '%s' % srv.get(key, '')
+    try:
+        srv['d'] = distance([float(client['lat']), float(client['lon'])],
+                            [float(srv['lat']), float(srv['lon'])])
+    except (KeyError, TypeError, ValueError):
+        try:
+            srv['d'] = float(srv.get('distance') or 0)
+        except (TypeError, ValueError):
+            srv['d'] = 0.0
+    return srv
+
+
+def _api_servers(extra=''):
+    """speedtest.net JS API: servers geolocated by the caller's public IP, nearest first."""
+    import json
+    for base in ('https://www.speedtest.net/api/js/servers?engine=js&https_functional=true&limit=30',
+                 'http://www.speedtest.net/api/js/servers?engine=js&limit=30'):
+        text = _read_url(base + extra)
+        if not text:
+            continue
+        try:
+            data = json.loads(text)
+        except ValueError:
+            continue
+        if isinstance(data, list) and data:
+            return data
+    return []
+
+
+def _static_servers():
     urls = [
         'https://www.speedtest.net/speedtest-servers-static.php',
         'http://c.speedtest.net/speedtest-servers-static.php',
     ]
-    errors = []
-    servers = {}
     for url in urls:
+        text = _read_url(url)
+        if not text:
+            continue
         try:
-            request = build_request(url)
-            handler = catch_request(request)
-            if handler is False:
-                # errors.append('%s' % e)
-                raise SpeedtestCliServerListError
-            serversxml = []
-            while not Monitor().abortRequested():
-                serversxml.append(handler.read(10240))
-                if not serversxml[-1]:
-                    break
-            if int(handler.code) != 200:
-                handler.close()
-                raise SpeedtestCliServerListError
-            handler.close()
-            try:
-                if 'minidom' in sys.modules:
-                    root = minidom.parseString(''.join(serversxml))
-                    elements = root.getElementsByTagName('server')
-                else:
-                    root = ElementTree.fromstring(''.encode().join(serversxml))
-                    elements = root.iter(tag='server')
-            except SyntaxError:
-                raise SpeedtestCliServerListError  # pylint: disable=raise-missing-from
-            for server in elements:
-                try:
-                    attrib = server.attrib
-                except AttributeError:
-                    attrib = dict(list(server.attributes.items()))
-                ddd = distance([float(client['lat']), float(client['lon'])], [float(attrib.get('lat')), float(attrib.get('lon'))])
-                attrib['d'] = ddd
-                if ddd not in servers:
-                    servers[ddd] = [attrib]
-                else:
-                    servers[ddd].append(attrib)
-            del root
-            del serversxml
-            del elements
-        except SpeedtestCliServerListError:
+            root = ElementTree.fromstring(text.encode('utf-8'))
+        except Exception:  # pylint: disable=broad-except
             continue
-        if servers:
-            break
-    if not servers:
-        log(0, 'Failed to retrieve list of speedtest.net servers: {errors}', errors='\n'.join(errors))
+        found = [dict(e.attrib) for e in root.iter(tag='server')]
+        if found:
+            return found
+    return []
+
+
+def closest_servers(client, total=False):
+    """Return local servers only (same country as the client), nearest first.
+
+    Order of preference:
+      1. Server ID pinned in add-on settings (speedtest_server_id)
+      2. speedtest.net API (IP-geolocated) filtered to the client's country
+      3. Static server list filtered to the client's country
+    Only if no server exists in the client's country do we fall back to the
+    nearest servers regardless of country.
+    """
+    cc = ('%s' % client.get('country', '')).upper()
+
+    pinned = _pinned_server_id()
+    if pinned:
+        for srv in _api_servers('&search=%s' % pinned):
+            if '%s' % srv.get('id') == pinned:
+                log(0, 'Speedtest: using pinned server {id}', id=pinned)
+                return [_normalize(srv, client)]
+        log(0, 'Speedtest: pinned server {id} not found, using automatic local selection', id=pinned)
+
+    candidates = [_normalize(s, client) for s in _api_servers()]
+    if not candidates:
+        candidates = [_normalize(s, client) for s in _static_servers()]
+    if not candidates:
+        log(0, 'Failed to retrieve list of speedtest.net servers')
         sys.exit(1)
-    closest = []
-    for ddd in sorted(servers.keys()):
-        for sss in servers[ddd]:
-            closest.append(sss)
-            if len(closest) == 5 and not total:
-                break
-        else:
-            continue
-        break
-    del servers
-    return closest
+
+    local = [s for s in candidates if cc and s.get('cc', '').upper() == cc]
+    if local:
+        candidates = local
+    else:
+        log(0, 'Speedtest: no servers found in country {cc}, using nearest', cc=cc or '?')
+
+    candidates.sort(key=lambda s: s['d'])
+    return candidates if total else candidates[:5]
 
 
 def get_best_server(servers):

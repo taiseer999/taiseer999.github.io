@@ -1,3 +1,11 @@
+v3.9.45
+- Speedtest now always uses a LOCAL server: server list comes from the
+  speedtest.net IP-geolocated API and is filtered to your own country,
+  then the lowest-latency one is picked. Falls back to the static list,
+  and only to foreign servers if your country has none.
+- New setting (General): "Speedtest server ID" - pin one exact server.
+  Leave empty for automatic local selection.
+
 v3.9.44
 - The ABUKARIM TOOLS backup before a build install is OPTIONAL again (was
   mandatory - no backup, no install). After "Continue" the wizard asks:
