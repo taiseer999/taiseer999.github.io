@@ -27,6 +27,7 @@ ID ranges:
   30706-30708  AF3 Subtitle Buttons (Subtitle Cycler install)
   30760-30769  Installation Wizard - confirm before skipping a step
   30770-30779  Installation Wizard - setup-in-progress backdrop, final restart
+  30780-30799  Maintenance - Clean Unused Items
 """
 
 STRINGS = {
@@ -523,4 +524,26 @@ STRINGS = {
     30776: ('Finishing up', 'اللمسات الأخيرة'),
     30777: ('CoreELEC 22 only', 'لـ CoreELEC 22 فقط'),
     30778: ('Installed from Jamal2362 (CoreELEC 22)', 'ثُبّت من Jamal2362 (CoreELEC 22)'),
+    # ---- 3.4.28: Maintenance - Clean Unused Items (30780-30799) ----
+    30780: ('Clean Unused Items', 'تنظيف العناصر غير المستخدمة'),
+    30781: ('Scanning the build…', 'جارٍ فحص البناء…'),
+    30782: ('Reading installed add-ons', 'قراءة الإضافات المثبّتة'),
+    30783: ('Checking what each add-on uses', 'التحقق مما تستخدمه كل إضافة'),
+    30784: ('Checking user data', 'فحص بيانات المستخدم'),
+    30785: ('Nothing to clean - the build has no unused items.', 'لا يوجد ما يحتاج إلى تنظيف، فليس في البناء عناصر غير مستخدمة.'),
+    30786: ('Select items to remove', 'اختر العناصر المراد حذفها'),
+    30787: ('Remove %d item(s) (%s)?[CR]A removed add-on is reinstalled automatically if another add-on needs it later.',
+            'هل تريد حذف %d عنصر (%s)؟[CR]تُثبَّت الإضافة المحذوفة تلقائياً إن احتاجت إليها إضافة أخرى لاحقاً.'),
+    30788: ('Removing…', 'جارٍ الحذف…'),
+    30789: ('Removed %d item(s), freed %s.', 'حُذف %d عنصر، وحُرِّرت مساحة قدرها %s.'),
+    30790: ('Add-on', 'إضافة'),
+    30791: ('Module', 'مكتبة برمجية'),
+    30792: ('Script', 'سكربت'),
+    30793: ('Resource', 'مورد'),
+    30794: ('Context menu', 'قائمة سياق'),
+    30795: ('Scraper', 'جالب بيانات'),
+    30796: ('Add-on data', 'بيانات إضافة'),
+    30797: ('Skin leftover', 'بقايا واجهة'),
+    30798: ('Old sources file', 'ملف مصادر قديم'),
+    30799: ('%d item(s) could not be removed - see kodi.log.', 'تعذّر حذف %d عنصر، راجع سجل Kodi.'),
 }

@@ -33,8 +33,9 @@ ICONS  = {
     'font_scale':     ADDON_PATH + 'resources/icons/font_scale.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/sources.png',
     'rebuild_addons33': ADDON_PATH + 'resources/icons/rebuild_addons33.png',
-    'total_clean':    ADDON_PATH + 'resources/icons/clear_cache.png',
-    'old_thumbs':     ADDON_PATH + 'resources/icons/clear_cache.png',
+    'total_clean':    ADDON_PATH + 'resources/icons/total_clean.png',
+    'old_thumbs':     ADDON_PATH + 'resources/icons/old_thumbs.png',
+    'build_cleanup':  ADDON_PATH + 'resources/icons/build_cleanup.png',
     'speedtest':      ADDON_PATH + 'resources/icons/speedtest.png',
     'cpu_benchmark':  ADDON_PATH + 'resources/icons/cpu_benchmark.png',
     'addon_portal':   ADDON_PATH + 'resources/icons/addon_portal.png',
@@ -86,6 +87,7 @@ CATEGORIES = [
         ('abukarimwizard', 30008),
         ('total_clean',    30012),
         ('old_thumbs',     30013),
+        ('build_cleanup',  30780),
         ('rebuild_addons33', 30018),
         ('speedtest',      30019),
         ('cpu_benchmark',  30620),
@@ -110,6 +112,8 @@ CATEGORIES = [
 # Modes that are leaf actions (run then return), not plugin folders.
 ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 'total_clean', 'old_thumbs',
+                # 3.4.28: Clean Unused Items (dialogs only)
+                'build_cleanup',
                 # 3.1.19: an action, not a folder - as a folder its URL became
                 # the container path, so the skin reload re-ran it in a loop
                 'af3_trailers', 'af3_waves',
@@ -465,6 +469,10 @@ def router():
     elif mode == 'old_thumbs':
         from resources.lib import wizard_runner
         wizard_runner.run_old_thumbs()
+
+    elif mode == 'build_cleanup':
+        from resources.lib import build_cleanup
+        build_cleanup.run()
 
     elif mode == 'openwizard':
         # Legacy URL (<= 3.1.2 favourites / skin shortcuts), which were

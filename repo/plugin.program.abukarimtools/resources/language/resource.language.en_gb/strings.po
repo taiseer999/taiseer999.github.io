@@ -1396,3 +1396,83 @@ msgctxt "#30778"
 msgid "Installed from Jamal2362 (CoreELEC 22)"
 msgstr ""
 
+msgctxt "#30780"
+msgid "Clean Unused Items"
+msgstr ""
+
+msgctxt "#30781"
+msgid "Scanning the build…"
+msgstr ""
+
+msgctxt "#30782"
+msgid "Reading installed add-ons"
+msgstr ""
+
+msgctxt "#30783"
+msgid "Checking what each add-on uses"
+msgstr ""
+
+msgctxt "#30784"
+msgid "Checking user data"
+msgstr ""
+
+msgctxt "#30785"
+msgid "Nothing to clean - the build has no unused items."
+msgstr ""
+
+msgctxt "#30786"
+msgid "Select items to remove"
+msgstr ""
+
+msgctxt "#30787"
+msgid "Remove %d item(s) (%s)?[CR]A removed add-on is reinstalled automatically if another add-on needs it later."
+msgstr ""
+
+msgctxt "#30788"
+msgid "Removing…"
+msgstr ""
+
+msgctxt "#30789"
+msgid "Removed %d item(s), freed %s."
+msgstr ""
+
+msgctxt "#30790"
+msgid "Add-on"
+msgstr ""
+
+msgctxt "#30791"
+msgid "Module"
+msgstr ""
+
+msgctxt "#30792"
+msgid "Script"
+msgstr ""
+
+msgctxt "#30793"
+msgid "Resource"
+msgstr ""
+
+msgctxt "#30794"
+msgid "Context menu"
+msgstr ""
+
+msgctxt "#30795"
+msgid "Scraper"
+msgstr ""
+
+msgctxt "#30796"
+msgid "Add-on data"
+msgstr ""
+
+msgctxt "#30797"
+msgid "Skin leftover"
+msgstr ""
+
+msgctxt "#30798"
+msgid "Old sources file"
+msgstr ""
+
+msgctxt "#30799"
+msgid "%d item(s) could not be removed - see kodi.log."
+msgstr ""
+

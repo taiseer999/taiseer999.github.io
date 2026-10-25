@@ -1396,3 +1396,83 @@ msgctxt "#30778"
 msgid "Installed from Jamal2362 (CoreELEC 22)"
 msgstr "ثُبّت من Jamal2362 (CoreELEC 22)"
 
+msgctxt "#30780"
+msgid "Clean Unused Items"
+msgstr "تنظيف العناصر غير المستخدمة"
+
+msgctxt "#30781"
+msgid "Scanning the build…"
+msgstr "جارٍ فحص البناء…"
+
+msgctxt "#30782"
+msgid "Reading installed add-ons"
+msgstr "قراءة الإضافات المثبّتة"
+
+msgctxt "#30783"
+msgid "Checking what each add-on uses"
+msgstr "التحقق مما تستخدمه كل إضافة"
+
+msgctxt "#30784"
+msgid "Checking user data"
+msgstr "فحص بيانات المستخدم"
+
+msgctxt "#30785"
+msgid "Nothing to clean - the build has no unused items."
+msgstr "لا يوجد ما يحتاج إلى تنظيف، فليس في البناء عناصر غير مستخدمة."
+
+msgctxt "#30786"
+msgid "Select items to remove"
+msgstr "اختر العناصر المراد حذفها"
+
+msgctxt "#30787"
+msgid "Remove %d item(s) (%s)?[CR]A removed add-on is reinstalled automatically if another add-on needs it later."
+msgstr "هل تريد حذف %d عنصر (%s)؟[CR]تُثبَّت الإضافة المحذوفة تلقائياً إن احتاجت إليها إضافة أخرى لاحقاً."
+
+msgctxt "#30788"
+msgid "Removing…"
+msgstr "جارٍ الحذف…"
+
+msgctxt "#30789"
+msgid "Removed %d item(s), freed %s."
+msgstr "حُذف %d عنصر، وحُرِّرت مساحة قدرها %s."
+
+msgctxt "#30790"
+msgid "Add-on"
+msgstr "إضافة"
+
+msgctxt "#30791"
+msgid "Module"
+msgstr "مكتبة برمجية"
+
+msgctxt "#30792"
+msgid "Script"
+msgstr "سكربت"
+
+msgctxt "#30793"
+msgid "Resource"
+msgstr "مورد"
+
+msgctxt "#30794"
+msgid "Context menu"
+msgstr "قائمة سياق"
+
+msgctxt "#30795"
+msgid "Scraper"
+msgstr "جالب بيانات"
+
+msgctxt "#30796"
+msgid "Add-on data"
+msgstr "بيانات إضافة"
+
+msgctxt "#30797"
+msgid "Skin leftover"
+msgstr "بقايا واجهة"
+
+msgctxt "#30798"
+msgid "Old sources file"
+msgstr "ملف مصادر قديم"
+
+msgctxt "#30799"
+msgid "%d item(s) could not be removed - see kodi.log."
+msgstr "تعذّر حذف %d عنصر، راجع سجل Kodi."
+

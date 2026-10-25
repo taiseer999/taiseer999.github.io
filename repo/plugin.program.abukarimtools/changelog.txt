@@ -1,3 +1,50 @@
+v3.4.30
+- Clean Unused Items:
+  * Skin Shortcuts (script.skinshortcuts) and Global Search
+    (script.globalsearch) are offered when no add-on in use requires or calls
+    them (they were skipped before because they show in Programs).
+  * Arctic Zephyr Rounded companions - "Artic Day and Night" and any add-on
+    with "zephyr" in its id or name - are removed with script.skin.info.service
+    when AZR is not installed.
+  * Skin leftovers inside script.skinshortcuts data are no longer listed one by
+    one when Skin Shortcuts itself is being removed.
+- New icons: Clean Unused Items (add-on box with minus), Total Clean (broom),
+  Clear Old Thumbnails (picture with clock) - were all the trash-can icon.
+
+v3.4.29
+- Clean Unused Items: conditional rules (removed even though they are
+  services/programs the generic scan never offers):
+  * script.skin.info.service - when Arctic Zephyr Rounded is not installed
+  * script.reboottoandroidtv - when the box is not CoreELEC
+  * every add-on with "bingie" in its id - when no Bingie skin is installed
+  They are disabled through JSON-RPC before deletion (a running service
+  stops), their addon_data / package zips go with them, and modules only they
+  used become unused too. Kept (and logged) if an add-on still in use
+  requires one of them.
+
+v3.4.28
+- NEW Maintenance > "Clean Unused Items" (build_cleanup.py). Scans the build,
+  lists everything unused (each with its size) in a multi-select, removes only
+  what is ticked, then runs UpdateLocalAddons:
+  * Add-ons nothing uses: script.module.* / library scripts, resource.*,
+    context.* (only when the add-on they open is gone), metadata.* scrapers.
+    "Used" = required (also optional) by a used add-on, or named in its files,
+    its addon_data (settings.xml / json / sqlite), guisettings, sources,
+    favourites, keymaps, playlists, or a library scraper (MyVideos path).
+    Resolved as a chain, so a module used only by another unused module goes
+    too. Its addon_data and packages/*.zip go with it. Add-ons with a service,
+    plugin source, skin, repository, binary or <provides> are never listed.
+    Always kept: ABUKARIM TOOLS, ABUKARIM Wizard, acctmgr, abscrapers.
+  * userdata: old sources.xml copies (sources.xml.bak, sources_old.xml ...).
+  * addon_data of add-ons that are not installed. script/skin/resource/
+    context/metadata data pre-ticked; plugin/service data listed un-ticked
+    (it can hold logins/tokens).
+  * script.skinshortcuts / script.skinvariables files and folders of skins
+    that are not installed (skin.x.hash, skin.x-*.DATA.xml,
+    skin.x.userdata.json, nodes/skin.x/ ...).
+  Every removal is logged as [AbukarimTools Cleanup]; deletes are refused
+  outside special://home.
+
 v3.4.27
 - Speedtest uses a LOCAL server only. The server list now comes from the
   speedtest.net IP-geolocated API and is filtered to the client's own country
