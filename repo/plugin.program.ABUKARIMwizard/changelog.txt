@@ -1,3 +1,10 @@
+v3.9.46
+- Auto Clean on startup now reports what it did: kodi.log gets the cache
+  items removed + space freed, the old-thumbs size, and a "done" summary
+  with the next run date. A single notification appears at boot when
+  something was actually cleaned (it used to run completely silently,
+  so it looked like it never worked).
+
 v3.9.45
 - Speedtest now always uses a LOCAL server: server list comes from the
   speedtest.net IP-geolocated API and is filtered to your own country,

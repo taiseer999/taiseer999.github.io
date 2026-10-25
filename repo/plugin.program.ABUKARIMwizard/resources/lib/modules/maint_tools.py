@@ -337,13 +337,13 @@ def old_thumbs(silent=False):
             os.remove(path)
         except OSError:
             pass
-    _log('%s old thumbs cleaned up' % len(images))
+    _log('%s old thumbs cleaned up (%s)' % (len(images), convert_size(size)))
     if not silent:
         if images:
             _notify(_s(30249, 'Clear Old Thumbs: %s files / %s') % (len(images), convert_size(size)))
         else:
             _notify(_s(30250, 'Clear Old Thumbs: none found'))
-    return True
+    return (len(images), size)
 
 
 def _crash_logs():
@@ -455,12 +455,27 @@ def auto_clean():
         _log('Auto Clean: next run %s' % next_run)
         return
     setting_set('nextautocleanup', (now + timedelta(days=CLEANFREQ_DAYS[freq])).strftime('%Y-%m-%d %H:%M:%S'))
+    items, freed = 0, 0
     if setting('autoclean_cache') != 'false':
         _log('Auto Clean: cache')
-        clear_cache(silent=True)
+        before = get_cache_size()
+        removed = clear_cache(silent=True)
+        cache_freed = max(0, before - get_cache_size())
+        _log('Auto Clean: cache - %s items removed, %s freed' % (removed, convert_size(cache_freed)))
+        items += removed
+        freed += cache_freed
     if setting('autoclean_thumbs') != 'false':
         _log('Auto Clean: old thumbs')
-        old_thumbs(silent=True)
+        res = old_thumbs(silent=True)
+        if res:
+            items += res[0]
+            freed += res[1]
+    _log('Auto Clean: done - %s items, %s freed; next run %s'
+         % (items, convert_size(freed), setting('nextautocleanup')))
+    # One quiet toast at boot, only when something was actually cleaned,
+    # so the user can see the auto clean ran (it used to be fully silent).
+    if items:
+        _notify(_s(30997, 'Auto Clean: removed %s items (%s)') % (items, convert_size(freed)), 4000)
 
 
 ###########################

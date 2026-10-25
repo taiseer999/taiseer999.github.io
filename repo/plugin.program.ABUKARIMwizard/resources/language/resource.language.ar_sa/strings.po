@@ -1360,3 +1360,7 @@ msgstr "فشل التنزيل؛ توقّف الخادم عن الاستجابة.
 msgctxt "#30996"
 msgid "Could not reach the server. Check your connection and try again."
 msgstr "تعذّر الوصول إلى الخادم. تحقّق من اتصالك ثم أعد المحاولة."
+
+msgctxt "#30997"
+msgid "Auto Clean: removed %s items (%s)"
+msgstr "التنظيف التلقائي: حُذف %s عنصرًا (%s)"
