@@ -53,22 +53,17 @@ class BaseDirItem:
 
 
 class BaseDirItemAuthorised(BaseDirItem):
+    @cached_property
+    def authorisation(self):
+        return self.get_authorisation()
 
-    authorisation_setting = None
+    def get_authorisation(self):
+        raise NotImplementedError
 
     @property
     def authorisation_type(self):
-        if not self.authorisation_setting:
-            return 'Trakt'
-        from tmdbhelper.lib.addon.plugin import get_setting
-        return get_setting(self.authorisation_setting, 'str')
+        return self.authorisation.authorisation_type
 
     @property
     def enabled(self):
-        if self.authorisation_type == 'Trakt':
-            from jurialmunkey.window import get_property
-            return bool(get_property('TraktIsAuth'))
-        if self.authorisation_type == 'MDbList':
-            from tmdbhelper.lib.addon.plugin import get_setting
-            return bool(get_setting('mdblist_apikey', 'str'))
-        return False
+        return self.authorisation.is_authorized

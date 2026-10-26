@@ -185,6 +185,14 @@ class _ListItem(object):
         self.infoproperties.update({'isPlayable': 'true'}) if self.is_resolvable else None
         return self.infoproperties
 
+    @cached_property
+    def action_discovery(self):
+        return self.get_action_discovery()
+
+    def get_action_discovery(self):
+        from tmdbhelper.lib.script.actions.discovery import ActionDiscovery
+        return ActionDiscovery()
+
     def finalise_context_menu(self):
         from tmdbhelper.lib.items.context import ContextMenu
         self.context_menu += ContextMenu(self).get()
@@ -558,6 +566,14 @@ class _Season(_Tvshow):
     mediatype = 'season'
     trakt_type = 'season'
 
+    @property
+    def totalepisodes(self):
+        if self.infoproperties.get('specialseason'):
+            return super().totalepisodes
+        if global_setting['seasons_anticipated']:
+            return self.airedepisodes
+        return super().totalepisodes
+
     @cached_property
     def is_unaired(self):
         if not self.infolabels.get('premiered'):
@@ -609,17 +625,6 @@ class _Episode(_Video):
     ftv_type = 'tv'
     thumb_override = 0
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.label_format = self.init_label_format()
-
-    def init_label_format(self):
-        if boolean(self.infoproperties.pop('no_label_formatting', False)):
-            return '{label}'
-        if not self.episode or self.season is None:
-            return '{label}'
-        return '{season}x{episode:0>2}. {label}'
-
     @property
     def playcount(self):
         return try_int(self.infolabels.get('playcount'), fallback=None)
@@ -665,8 +670,22 @@ class _Episode(_Video):
     def title(self):
         return self.infolabels.get('title') or self.label
 
+    @property
+    def label_season(self):
+        return self.infoproperties.get('group_season') or self.season
+
+    @property
+    def label_episode(self):
+        return self.infoproperties.get('group_episode') or self.episode
+
+    @cached_property
+    def label_format(self):
+        if not self.label_episode or self.label_season is None:
+            return '{label}'
+        return '{season}x{episode:0>2}. {label}'
+
     def finalise_label(self):
-        self.label = self.label_format.format(season=self.season, episode=self.episode, label=self.title)
+        self.label = self.label_format.format(season=self.label_season, episode=self.label_episode, label=self.title)
         self.label = super().finalise_label()
         return self.label
 
