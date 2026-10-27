@@ -1,4 +1,16 @@
-# script.tinyppi
+<p align="center">
+  <img width="1200" alt="script.tinyppi" src="fanart.png" />
+</p>
+
+<p align="center">
+  <a href="https://github.com/CE-Repo/script.tinyppi/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/CE-Repo/script.tinyppi/actions/workflows/ci.yml/badge.svg?branch=main" /></a>
+  <a href="tests/README.md"><img alt="Python coverage" src="https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2FCE-Repo%2Fscript.tinyppi%2Fmain%2Fpyproject.toml&query=%24.tool.coverage.report.fail_under&label=coverage%20%28Python%29&suffix=%25&color=brightgreen" /></a>
+  <a href="tests/README.md"><img alt="Dashboard coverage" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2FCE-Repo%2Fscript.tinyppi%2Fmain%2Fpackage.json&query=%24.config.coverage&label=coverage%20%28dashboard%29&suffix=%25&color=brightgreen" /></a>
+  <a href="https://github.com/astral-sh/ruff"><img alt="Ruff" src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" /></a>
+  <a href="https://mypy-lang.org/"><img alt="Checked with mypy" src="https://www.mypy-lang.org/static/mypy_badge.svg" /></a>
+  <a href="https://eslint.org/"><img alt="Linted with ESLint" src="https://img.shields.io/badge/lint-ESLint-4B32C3?logo=eslint" /></a>
+  <a href="https://github.com/rubik/xenon"><img alt="Complexity A" src="https://img.shields.io/badge/complexity-A%20(radon)-brightgreen" /></a>
+</p>
 
 A CoreELEC addon that displays detailed playback information in a custom overlay window during video playback. It provides real-time data on video, audio, HDR, system resources, and more — with special support for **Amlogic** hardware (e.g. CoreELEC devices).
 
@@ -6,11 +18,11 @@ A CoreELEC addon that displays detailed playback information in a custom overlay
 
 ## Screenshots
 <p align="center">
-<img width="1200" alt="VS10-Dialog" src="https://github.com/user-attachments/assets/6e3d9687-f6b6-4724-a346-e5ffb9a4c3dc" />
+<img width="1200" alt="No Convert" src="https://github.com/user-attachments/assets/ddba5b90-11e4-4439-9f87-4c37cc2f89ac" />
 </p>
 
 <p align="center">
-<img width="1200" alt="VS10-Dialog" src="https://github.com/user-attachments/assets/de617104-cf29-4ead-9c8a-a0fb75ce5b94" />
+<img width="1200" alt="Convert" src="https://github.com/user-attachments/assets/3e1f43ad-535c-407d-9e7c-51b6fe12694a" />
 </p>
 
 <p align="center">
@@ -73,17 +85,63 @@ xbmc.executebuiltin('RunScript(script.tinyppi)')
 plugin://script.tinyppi/
 ```
 
+### The fastest shortcut there is
+
+Every launch above starts a Python script, and Kodi builds a fresh interpreter
+for one each time. TinyPPI's background service is already running with
+everything loaded, so it opens the overlay itself and the launch is only there
+to ask it to — which it does within a few milliseconds.
+
+A keymap can ask it directly instead, skipping the script entirely:
+
+```xml
+<keymap>
+  <global>
+    <keyboard>
+      <xxxxx>NotifyAll(script.tinyppi,open_overlay)</xxxxx>
+    </keyboard>
+  </global>
+</keymap>
+```
+
+Use `open_dialog` in place of `open_overlay` for the VS10 mode dialog. The key
+toggles the same way `RunAddon` does — pressed again while TinyPPI is up, it
+closes it. This needs TinyPPI's service to be running, which it is unless the
+addon has been disabled; `RunAddon(script.tinyppi)` keeps working either way and
+falls back to opening the overlay in its own script if the service does not
+answer.
+
+---
+
+## Colors
+
+Every color in the settings is chosen in Kodi's own color picker: select the
+setting and pick a tile. The picker offers TinyPPI's own palette of 250 colors
+(250 dark shades for backgrounds), and the setting's row shows the color in
+force. The tiles are sorted by color: grays first (neutral, cool, warm), then
+red, orange, yellow, green, cyan, blue, violet and pink, each in a vivid and a
+soft family (Red, Soft red; for backgrounds Dark red, Dusky red), each family
+light to dark. Every tile is named after its family and numbered within it:
+Red, Red 1, Red 2 and so on. The colors the settings start out on (White,
+Charcoal, Forest, ...) keep their translated names.
+
+The first tile in the picker is **HEX color**. It opens the keyboard on the
+current color's 6-digit HEX code, to be changed to any color at all. The second
+tile is the setting's default color, marked (Default), so it is always one step
+away; the rest of the palette follows. The opacity of each element stays a
+slider of its own beside its color.
+
 ---
 
 ## Codec Logos
 
 TinyPPI can display the current **video (HDR) and audio format** as stacked logos
-directly on the video window during playback. The video/HDR logo sits on top, the
-audio logo below it, on a rounded panel whose colors and opacity are fully themeable
-in the add-on settings. The logos are re-resolved live, so switching the audio track
-updates the audio logo on the fly.
+directly on the video window during playback. By default the video/HDR logo sits on
+top and the audio logo below it, on a rounded panel whose colors and opacity are
+fully themeable in the add-on settings. The logos are re-resolved live, so switching
+the audio track updates the audio logo on the fly.
 
-You can enable the logos in three independent situations (**Settings → Codec Logos**):
+You can enable the logos in three independent situations (**Settings → Codec logos**):
 
 - **On playback start** — shown for the first few seconds after a video starts
   (duration configurable).
@@ -91,7 +149,16 @@ You can enable the logos in three independent situations (**Settings → Codec L
 - **While the TinyPPI overlay is open** — shown alongside the info overlay.
 
 For each situation the horizontal/vertical position and the size can be adjusted
-separately.
+separately, and so can the logo stack itself:
+
+- **Logo order** — *Video on top, audio below* (default) or *Audio on top, video
+  below*.
+- **Show video codec logo** / **Show audio codec logo** — turn either one off to
+  leave just the other logo on the panel. With both on, the panel keeps its
+  all-or-nothing behavior and stays hidden for an audio codec that has no logo.
+  A video with no audio track at all shows its video logo on its own.
+- **Dolby Vision pill position** — the layer pill (FEL / MEL / other DV profile)
+  sits on the panel's *Bottom edge* (default) or its *Top edge*.
 
 ### Supported formats
 
@@ -109,7 +176,13 @@ separately.
 
 | Logo | Format |
 |------|--------|
-| AAC | AAC (incl. HE-AAC) |
+| AAC | AAC |
+| AAC-LC | AAC Low Complexity |
+| AAC LATM | AAC in LATM/LOAS |
+| AAC-LTP | AAC Long Term Prediction |
+| AAC-SSR | AAC Scalable Sample Rate |
+| HE-AAC | High-Efficiency AAC |
+| HE-AAC v2 | High-Efficiency AAC v2 |
 | Dolby Digital | Dolby Digital (AC-3) |
 | Dolby Digital Plus | Dolby Digital Plus (E-AC-3) |
 | Dolby Digital Plus Atmos | Dolby Digital Plus with Dolby Atmos |
@@ -126,7 +199,9 @@ separately.
 | FLAC | FLAC |
 | PCM | PCM / LPCM |
 | MP3 | MP3 |
+| OGG | Ogg Vorbis |
 | OPUS | Opus |
+| VORBIS | Vorbis |
 
 Formats without a matching logo simply omit the audio image.
 
@@ -172,6 +247,139 @@ simply omit the image.
 
 ---
 
+## Dolby Vision Metadata View
+
+The view is switched by **Settings → DV metadata → Dolby Vision metadata
+view**, which is on out of the box; with it off, **OK** on the overlay does
+nothing.
+
+With it on, pressing **OK** on the open TinyPPI overlay during a **Dolby
+Vision** source switches to a debug view listing everything the stream's side
+data carries — far more than the overlay itself has room for. The list
+refreshes ten times a second, so the per-frame blocks follow the picture.
+
+| Key | In the list | In a section opened on its own |
+|-----|-------------|--------------------------------|
+| **Up / Down** | Jump to the previous / next section | Scroll through the section |
+| **OK** | Open the section under the cursor on its own | — |
+| **Back** | Return to the TinyPPI overlay | Return to the list, on the same section |
+| **Stop** | Close TinyPPI | Close TinyPPI |
+
+**Back** on the overlay itself closes TinyPPI, as it always does.
+
+A reading that just moved is written in the highlight colour and stays in it for
+**Settings → DV metadata → Changed values → Highlight duration** (750 ms out of
+the box), so a change is readable without slowing the refresh down; the
+overlay's own Dolby Vision readings have the same pair of settings under
+**Settings → TinyPPI overlay → Changed values**. On any other source **OK**
+keeps doing nothing: there is no Dolby Vision side data to show.
+
+The view is grouped by metadata block:
+
+| Section | Contents |
+|---------|----------|
+| Stream | Kodi's own HDR type and detail, the side-data sections that arrived, the stream flags (`converted`, `rpu-removed`, …), the layer structure and the parser version |
+| Configuration record | The dvcC / dvvC record: version, profile, compatibility ID, level, RPU / BL / EL presence, metadata compression |
+| RPU | Guessed profile, CM version, DM compression, the DM metadata IDs, scene refresh flag and extension-block count, and the full RPU header (types, VDR profile / level / normalized IDC, the VDR sequence-info and DM-metadata presence flags, BL / EL / VDR bit depth, EL type, full range, resampling, residual and coefficient fields, previous-RPU reuse, the NAL prefix and the reserved field) |
+| Composer | The reshaping metadata the decoder actually applies to the base layer: the mapping's colour space, chroma format and tile partitioning, then a section per component (Y, Cb, Cr) with its curve shape, its pivots and the coefficients of every segment — and, on the dual-layer profiles that carry one, the NLQ dequantization data |
+| L1 | Frame luminance, min / max / average, as raw PQ codes and nits |
+| Source master | The PQ range of the master the grade was made from, and its display diagonal |
+| Colorimetry | The VDR DM signal description and the YCC → RGB / RGB → LMS matrices, in raw codes |
+| L2 / L8 | Every trim pass, as raw 12-bit codes and on the Dolby UI scale, plus L8's secondary saturation / hue vectors on the streams that carry them and each pass's own block length |
+| L3 | PQ offsets |
+| L4 | Temporal stability: the anchor PQ and power |
+| L5 | Active-area offsets (the black bars the RPU declares) |
+| L6 | The RPU's own mastering display and MaxCLL / MaxFALL |
+| L9 / L10 | Source primaries and the target displays the L8 trims are graded against, each with its block length |
+| L11 | Content type, whitepoint, reference mode and the reserved bytes |
+| L254 / L255 | The CM v4.0 marker block, and the debug run mode block on the rare stream that carries one |
+| Static metadata | The MDCV / CLL SEIs — the stream's own HDR10 layer, shown apart from L6 |
+| HDR10+ | The ST 2094-40 payload, when the stream carries one alongside Dolby Vision |
+
+Blocks the stream does not carry are still listed, with their values shown as
+`—`, so an absent block is visible rather than silently missing. Reading and
+parsing is done by
+[script.module.sidedata](https://github.com/matthane/script.module.sidedata);
+the field names and units follow its own field reference.
+
+Everything in the view is printed as the bitstream carries it, with one
+exception: the composer's coefficients. The RPU splits each of them into an
+integer and a fractional half that say nothing read apart, so they are shown
+combined — `int + frac / 2 ** coefficient_log2_denom`, the arithmetic the RPU
+syntax itself defines, with the denominator readable in the **RPU** section
+above. The composer is also the one part of a parse TinyPPI asks for rather
+than always builds: it runs to hundreds of coefficients, so it is read only
+while this view is open and the overlay's own polling never pays for it.
+
+---
+
+## VS10 Dialog Layouts
+
+The VS10 dialog — the menu that offers the player-process overlay and whatever
+VS10 output modes the playing source has — is drawn in one of three designs.
+Pick one under **Settings → VS10 dialog → Layout**:
+
+| Layout | What it looks like |
+| --- | --- |
+| **Single button** | One button, and **left** or **right** steps it to the next choice. For a remote that has little more than a direction pad and OK. The default. |
+| **Bar** | The choices side by side rather than stacked, in a panel low enough to leave most of the picture showing. |
+| **Dialog** | The panel the add-on opened with before the layouts existed: the choices stacked. |
+
+Every layout draws the same choices, and how many there are depends on the
+source: four on SDR and HDR10, three on Dolby Vision, and the
+player-process button on its own where there are no VS10 modes to offer —
+HDR10+, HLG, and a Dolby Vision grade carrying HDR10+ alongside its RPU.
+A layout keeps the same panel whichever of those is playing and spreads the
+choices over it, so the dialog does not change size under you when the
+detection finishes.
+
+### Position
+
+Under **Settings → VS10 dialog → Dialog position** the panel can be moved.
+All three layouts are narrower than the screen, so both directions apply to
+each of them:
+
+- **Vertical position** — 0% is a margin below the top edge of the screen,
+  100% rests the panel on the bottom one. Defaults to 100%.
+- **Horizontal position** — 0% is the left margin and 100% the right one.
+  Defaults to 50%.
+
+The colours of every layout come from the **VS10 dialog** colour settings,
+which now include **Button text** — the colour of the buttons the remote is
+not sitting on, which the dialog used to take from the overlay's description
+colour and so could not be set on its own.
+
+## Web Dashboard
+
+TinyPPI can serve everything the overlay shows to a browser on your phone or
+laptop, so the readings can be followed **while the picture stays untouched**:
+every reading of the overlay, the Dolby Vision metadata and luminance chart,
+the history of the title, a remote and VS10 switching, and the film and series
+library with continue watching. The dashboard is off out of the box; switch it
+on under **Settings → Dashboard**, then open the address it names on any device
+on the same network:
+
+```
+http://<box-ip>:8099/
+```
+
+**Settings → Dashboard → Show address and token** prints that address together
+with the access token, which is what you need standing in front of the TV with
+a phone in your hand. It is meant for a home network: **do not forward its port
+to the internet**.
+
+A free [MDBList](https://mdblist.com) API key under **Settings → Dashboard →
+Ratings** has the overview card show what IMDb, TMDb, Trakt, Letterboxd, Rotten
+Tomatoes, Metacritic and more gave a film, rather than only the ratings Kodi's
+scraper wrote, which stay the fallback.
+
+Everything about it — the tabs, the themes, the library, the remote, what it
+costs the box and how it is secured — is described in
+the wiki's **[Web Dashboard](wiki/Web-Dashboard.md)** and
+**[Dashboard Security](wiki/Dashboard-Security.md)** pages.
+
+---
+
 ## Advanced Launch Arguments
 
 TinyPPI supports additional arguments to open specific modes or apply VS10 output modes directly — without opening the overlay or the dialog first.
@@ -183,6 +391,12 @@ RunScript(script.tinyppi,dialog)
 ```
 
 Opens the VS10 mode selection dialog instead of the main TinyPPI overlay.
+It shows the modes that apply to the playing source; on an **HDR10+** or
+an **HLG** stream — neither of which is a VS10 input — it draws no modes at
+all and leaves the player-process button on its own. A **Dolby Vision title
+that carries HDR10+ alongside its RPU** is drawn the same way: the driver does
+not take a VS10 mode for that hybrid grade, so none is offered. `run_mode`
+still applies one there, and says so in the log.
 
 ### Apply a VS10 output mode directly
 
@@ -229,18 +443,53 @@ xbmc.executebuiltin('RunScript(script.tinyppi,run_mode,dv)')
 
 ---
 
+## Tests
+
+Unit tests run outside Kodi (`python3 -m pytest tests`); an end-to-end suite
+drives a real Kodi 22 and checks the service, the overlay, the dialogs, the
+dashboard and every setting. Both are described in
+**[tests/README.md](tests/README.md)**.
+
+---
+
 ## Credits
 
 TinyPPI builds on the work of the following projects — many thanks to their authors and contributors.
 
-### hdrprobe
+### script.module.sidedata
 
-[**hdrprobe**](https://github.com/matthane/hdrprobe) by [matthane](https://github.com/matthane)
+[**script.module.sidedata**](https://github.com/matthane/script.module.sidedata) by [matthane](https://github.com/matthane)
 
-A tool for probing and analyzing HDR metadata from video streams. TinyPPI draws on hdrprobe's approach to detecting and interpreting HDR formats — including HDR10, HDR10+, HLG and Dolby Vision — to display accurate HDR information in the overlay.
+Parsers for the raw Dolby Vision and HDR payloads CoreELEC 22 publishes through
+`Player.Process(video.sidedata)` — the Dolby Vision RPU and dvcC/dvvC
+configuration record, the HDR10+ ST 2094-40 metadata and the static MDCV / CLL
+SEIs. TinyPPI reads every DV/HDR value it shows through this module, so the
+overlay follows the stream frame by frame instead of probing the file. RPU
+parsing is done by quietvoid's [dovi_tool](https://github.com/quietvoid/dovi_tool)
+(libdovi), HDR10+ parsing by FFmpeg's libavutil.
 
-### Google Noto Fonts
 
-[**Google Noto Fonts**](https://github.com/notofonts/notofonts.github.io) by [The Noto Project (Google)](https://fonts.google.com/noto)
+---
 
-Noto ("No Tofu") is Google's font family designed to cover all languages with a harmonious look, eliminating missing-character boxes ("tofu"). TinyPPI uses Noto fonts to render the overlay text clearly and consistently across a wide range of characters. The fonts are licensed under the [SIL Open Font License 1.1](https://openfontlicense.org/).
+## License
+
+TinyPPI's **source code** is licensed under the
+[**GNU Affero General Public License v3.0 or later**](LICENSE).
+
+The AGPL was chosen over the plain GPL because TinyPPI serves a web dashboard
+over the network. Section 13 means that anyone who modifies TinyPPI and lets
+others reach it over a network has to offer those users the source of the
+modified version — the same obligation a modified copy handed out as a file
+already carries.
+
+The **name, the logo and the artwork** are not covered by that license; they
+are [all rights reserved, with a limited redistribution license](LICENSE-ASSETS)
+for unmodified releases. Forking the code is expressly welcome — a fork just
+needs its own name and its own artwork, the way a Firefox rebuild needs to be
+called something else. The format logos (Dolby, DTS, IMAX) belong to their
+respective owners and are used only to identify the format a stream carries.
+
+Third-party attributions are collected in [NOTICE](NOTICE).
+
+Versions up to and including **2.7.6** were released under the MIT license and
+remain available under it.

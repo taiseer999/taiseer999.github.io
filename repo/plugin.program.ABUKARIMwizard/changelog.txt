@@ -1,3 +1,10 @@
+v3.9.47
+- After a build is installed and Kodi restarts, the wizard waits for Home to
+  settle and asks to run the ABUKARIM TOOLS Installation Wizard ("Run now" /
+  "Later"). "Run now" starts AB Tools setup directly (no second confirm);
+  AB Tools is enabled first if the build left it disabled. Asked once only -
+  "Later" leaves it in AB Tools > Setup.
+
 v3.9.46
 - Auto Clean on startup now reports what it did: kodi.log gets the cache
   items removed + space freed, the old-thumbs size, and a "done" summary

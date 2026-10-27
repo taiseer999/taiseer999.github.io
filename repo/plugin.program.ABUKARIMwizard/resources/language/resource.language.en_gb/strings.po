@@ -1334,3 +1334,15 @@ msgstr ""
 msgctxt "#30997"
 msgid "Auto Clean: removed %s items (%s)"
 msgstr ""
+
+msgctxt "#30998"
+msgid "The build is installed.[CR][CR]Run the ABUKARIM TOOLS Installation Wizard now to finish setting up this box (skin, restore, add-ons, lists and patches)?"
+msgstr ""
+
+msgctxt "#30999"
+msgid "Run now"
+msgstr ""
+
+msgctxt "#31000"
+msgid "Later"
+msgstr ""

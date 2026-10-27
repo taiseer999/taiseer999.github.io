@@ -1,48 +1,74 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 U3knOwn
+
 """PNG scaling with an on-disk cache of display-sized textures.
 
-Kodi does not expose the image resampling filter used by ControlImage, so a
-texture much larger than its on-screen box is rescaled here (box filter, in
-premultiplied alpha) and the result cached under the add-on's profile
-directory.  Source images are never modified.
+Kodi does not let add-ons choose ControlImage's resampling filter, so a
+texture much larger than its on-screen box is scaled here (box filter in
+premultiplied alpha) and cached in the add-on's profile.  Source images are
+never modified.  Used for the codec logos (ui/splash.py).
 
-Used for the codec logos (ui/splash.py) and the channel layout graphics
-(info/properties.py).
+A cached texture is named after the logo's content and the target size, so
+it survives Kodi restarts and add-on updates and is rebuilt only when either
+changes.  ``prune_cache`` removes copies that can no longer be requested.
 """
+from __future__ import annotations
 
 import binascii
+import contextlib
+import hashlib
 import math
 import os
+import re
 import struct
 import threading
 import time
 import zlib
+from collections.abc import Callable, Iterable, Iterator, Mapping
+from typing import NamedTuple
 
 import xbmc
 import xbmcvfs
+from core.constants import PROFILE_DIR
+from core.files import atomic_write
+from core.log import channel
+from typing import Tuple  # py3.8: runtime type aliases
 
-# Cache of display-sized textures, keyed by source name, size and mtime.
-_CACHE_DIR = "special://profile/addon_data/script.tinyppi/scaled_images"
+# Display-sized textures, keyed by source name, size and content.
+_CACHE_DIR = f"{PROFILE_DIR}/scaled_images"
 _PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 
-# Builds currently running via ensure_texture(), so a caller polling once a
-# second does not start the same scale over and over.
-_builds: set = set()
-_builds_lock = threading.Lock()
+# Part of every content key.  Raise it whenever the scaler's output changes,
+# so older textures stop matching (and prune_cache removes them).
+_SCALER_VERSION = b"2"
 
-# Only ever scale one image at a time (the playback-start prewarm and an overlay
-# poll can both reach display_texture): several CPU-bound threads would fight
-# each other and Kodi for the interpreter, for no gain.
+# ``<source name>_<width>x<height>_<content key>.png``; anything else in the
+# cache was left by an older version or an interrupted build.
+_CACHE_NAME = re.compile(
+    r"^(?P<stem>.+)_(?P<w>\d+)x(?P<h>\d+)_(?P<key>[0-9a-f]{16})\.png$"
+)
+
+# Age after which prune_cache treats a temporary file as abandoned rather
+# than still being written.
+_STALE_TMP_SECONDS = 600.0
+
+# Content keys per source path, with the (mtime, size) they were computed
+# at: a source is hashed again only when it changed on disk, and an update
+# that rewrites an unchanged logo costs one hash but no scaling.
+_content_keys: dict[str, tuple[tuple[int, int], str]] = {}
+
+# Scale one image at a time (the playback-start prewarm and an overlay poll
+# can both reach display_texture); parallel CPU-bound builds only compete for
+# the interpreter.
 _build_gate = threading.Lock()
 
-# Scaling is pure Python and CPU-bound, and CPython hands the interpreter lock
-# to such a thread again and again — a background build would leave Kodi's UI
-# and polling threads waiting seconds for their turn.  Pausing briefly every few
-# rows hands the lock over; it costs the build a little and keeps TinyPPI
-# responsive while it runs.
+# Scaling is CPU-bound pure Python and would starve Kodi's UI and polling
+# threads of the interpreter lock for seconds.  A short pause every few rows
+# hands the lock over and keeps TinyPPI responsive.
 _YIELD_ROWS    = 16
 _YIELD_SECONDS = 0.002
 
-# Same idea for the flat per-pixel passes: roughly one pause per 16 source rows.
+# The same for the flat per-pixel passes: about one pause per 16 rows.
 _YIELD_PIXELS = 16 * 1024
 
 
@@ -51,6 +77,7 @@ def _breathe(row: int) -> None:
     if row % _YIELD_ROWS == _YIELD_ROWS - 1:
         time.sleep(_YIELD_SECONDS)
 
+
 def _translate_path(path: str) -> str:
     try:
         return xbmcvfs.translatePath(path)
@@ -58,18 +85,19 @@ def _translate_path(path: str) -> str:
         return xbmc.translatePath(path)
 
 
+_log = channel("images")
+
+
 def _log_debug(message: str) -> None:
-    try:
-        xbmc.log(f"TinyPPI images: {message}", xbmc.LOGDEBUG)
-    except Exception:
-        pass
+    with contextlib.suppress(RuntimeError):
+        _log(message)
 
 
 def _png_dimensions(path: str) -> tuple[int, int]:
     try:
         with open(path, "rb") as handle:
             header = handle.read(24)
-    except Exception:
+    except OSError:
         return (0, 0)
     if len(header) < 24 or not header.startswith(_PNG_SIGNATURE):
         return (0, 0)
@@ -161,34 +189,58 @@ def _palette_indices(row: bytes, width: int, bit_depth: int) -> list[int]:
     return indices
 
 
-def _decode_png_rgba(path: str) -> tuple[int, int, list[tuple[int, int, int, int]]]:
-    with open(path, "rb") as handle:
-        data = handle.read()
+class _PngChunks(NamedTuple):
+    """What the decoder reads from a PNG's chunks."""
+
+    width: int
+    height: int
+    bit_depth: int
+    color_type: int
+    palette: list[tuple[int, int, int]]
+    transparency: bytes
+    data: bytes
+
+
+_Pixel = Tuple[int, int, int, int]
+
+
+def _png_chunks(data: bytes) -> Iterator[tuple[bytes, bytes]]:
+    """Yield the ``(type, payload)`` of each chunk after the signature."""
+    pos = len(_PNG_SIGNATURE)
+    while pos < len(data):
+        length = struct.unpack(">I", data[pos:pos + 4])[0]
+        yield data[pos + 4:pos + 8], data[pos + 8:pos + 8 + length]
+        pos += 12 + length
+
+
+def _png_header(payload: bytes) -> tuple[int, int, int, int]:
+    """Return width, height, bit depth and colour type from an IHDR chunk."""
+    (
+        width, height, bit_depth, color_type,
+        compression, filter_method, interlace,
+    ) = struct.unpack(">IIBBBBB", payload)
+    if compression != 0 or filter_method != 0 or interlace != 0:
+        raise ValueError("unsupported PNG format")
+    return width, height, bit_depth, color_type
+
+
+def _read_png_chunks(data: bytes) -> _PngChunks:
+    """Return the header, palette, transparency and image data of a PNG."""
     if not data.startswith(_PNG_SIGNATURE):
         raise ValueError("not a PNG")
 
-    pos = len(_PNG_SIGNATURE)
-    width = height = bit_depth = color_type = interlace = 0
+    header = (0, 0, 0, 0)
     palette: list[tuple[int, int, int]] = []
     transparency = b""
     idat = []
 
-    while pos < len(data):
-        length = struct.unpack(">I", data[pos:pos + 4])[0]
-        kind = data[pos + 4:pos + 8]
-        payload = data[pos + 8:pos + 8 + length]
-        pos += 12 + length
+    for kind, payload in _png_chunks(data):
         if kind == b"IHDR":
-            (
-                width, height, bit_depth, color_type,
-                compression, filter_method, interlace,
-            ) = struct.unpack(">IIBBBBB", payload)
-            if compression != 0 or filter_method != 0 or interlace != 0:
-                raise ValueError("unsupported PNG format")
+            header = _png_header(payload)
         elif kind == b"PLTE":
             palette = [
-                tuple(payload[i:i + 3])
-                for i in range(0, len(payload), 3)
+                (payload[i], payload[i + 1], payload[i + 2])
+                for i in range(0, len(payload) - 2, 3)
             ]
         elif kind == b"tRNS":
             transparency = payload
@@ -197,55 +249,88 @@ def _decode_png_rgba(path: str) -> tuple[int, int, list[tuple[int, int, int, int
         elif kind == b"IEND":
             break
 
+    return _PngChunks(*header, palette, transparency, b"".join(idat))
+
+
+def _check_png_format(bit_depth: int, color_type: int) -> None:
+    """Raise ValueError for a bit depth or colour type the decoder lacks."""
     if bit_depth != 8 and color_type != 3:
         raise ValueError("unsupported PNG bit depth")
     if color_type == 3 and bit_depth not in (1, 2, 4, 8):
         raise ValueError("unsupported indexed PNG bit depth")
-    if color_type not in (0, 2, 3, 4, 6):
+    if color_type not in _PIXEL_READERS:
         raise ValueError("unsupported PNG color type")
 
-    raw = zlib.decompress(b"".join(idat))
-    rows = _unfilter_png_scanlines(raw, width, height, bit_depth, color_type)
-    pixels: list[tuple[int, int, int, int]] = []
 
-    if color_type == 6:
-        for row in rows:
-            pixels.extend(
-                (row[i], row[i + 1], row[i + 2], row[i + 3])
-                for i in range(0, len(row), 4)
-            )
-    elif color_type == 2:
-        transparent = None
-        if len(transparency) >= 6:
-            transparent = struct.unpack(">HHH", transparency[:6])
-        for row in rows:
-            for i in range(0, len(row), 3):
-                rgb = (row[i], row[i + 1], row[i + 2])
-                alpha = 0 if transparent == rgb else 255
-                pixels.append((rgb[0], rgb[1], rgb[2], alpha))
-    elif color_type == 4:
-        for row in rows:
-            pixels.extend(
-                (row[i], row[i], row[i], row[i + 1])
-                for i in range(0, len(row), 2)
-            )
-    elif color_type == 0:
-        transparent = None
-        if len(transparency) >= 2:
-            transparent = struct.unpack(">H", transparency[:2])[0]
-        for row in rows:
-            for gray in row:
-                alpha = 0 if transparent == gray else 255
-                pixels.append((gray, gray, gray, alpha))
-    else:
-        alphas = list(transparency)
-        for row in rows:
-            for index in _palette_indices(row, width, bit_depth):
-                r, g, b = palette[index]
-                alpha = alphas[index] if index < len(alphas) else 255
-                pixels.append((r, g, b, alpha))
+def _rgba_pixels(rows: list[bytes], png: _PngChunks) -> list[_Pixel]:
+    return [
+        (row[i], row[i + 1], row[i + 2], row[i + 3])
+        for row in rows
+        for i in range(0, len(row), 4)
+    ]
 
-    return (width, height, pixels)
+
+def _rgb_pixels(rows: list[bytes], png: _PngChunks) -> list[_Pixel]:
+    transparent = None
+    if len(png.transparency) >= 6:
+        transparent = struct.unpack(">HHH", png.transparency[:6])
+    pixels: list[_Pixel] = []
+    for row in rows:
+        for i in range(0, len(row), 3):
+            rgb = (row[i], row[i + 1], row[i + 2])
+            alpha = 0 if transparent == rgb else 255
+            pixels.append((rgb[0], rgb[1], rgb[2], alpha))
+    return pixels
+
+
+def _gray_alpha_pixels(rows: list[bytes], png: _PngChunks) -> list[_Pixel]:
+    return [
+        (row[i], row[i], row[i], row[i + 1])
+        for row in rows
+        for i in range(0, len(row), 2)
+    ]
+
+
+def _gray_pixels(rows: list[bytes], png: _PngChunks) -> list[_Pixel]:
+    transparent = None
+    if len(png.transparency) >= 2:
+        transparent = struct.unpack(">H", png.transparency[:2])[0]
+    return [
+        (gray, gray, gray, 0 if transparent == gray else 255)
+        for row in rows
+        for gray in row
+    ]
+
+
+def _indexed_pixels(rows: list[bytes], png: _PngChunks) -> list[_Pixel]:
+    alphas = list(png.transparency)
+    pixels: list[_Pixel] = []
+    for row in rows:
+        for index in _palette_indices(row, png.width, png.bit_depth):
+            r, g, b = png.palette[index]
+            alpha = alphas[index] if index < len(alphas) else 255
+            pixels.append((r, g, b, alpha))
+    return pixels
+
+
+# Pixel readers by PNG colour type.
+_PIXEL_READERS: dict[int, Callable[[list[bytes], _PngChunks], list[_Pixel]]] = {
+    0: _gray_pixels,
+    2: _rgb_pixels,
+    3: _indexed_pixels,
+    4: _gray_alpha_pixels,
+    6: _rgba_pixels,
+}
+
+
+def _decode_png_rgba(path: str) -> tuple[int, int, list[_Pixel]]:
+    with open(path, "rb") as handle:
+        png = _read_png_chunks(handle.read())
+    _check_png_format(png.bit_depth, png.color_type)
+    raw = zlib.decompress(png.data)
+    rows = _unfilter_png_scanlines(raw, png.width, png.height, png.bit_depth,
+                                   png.color_type)
+    return (png.width, png.height, _PIXEL_READERS[png.color_type](rows, png))
 
 
 def _premultiply_rgba(
@@ -261,8 +346,11 @@ def _premultiply_rgba(
 
 
 def _box_taps(src_len: int, dst_len: int) -> list[tuple[int, list[float]]]:
-    """Return one ``(first source index, normalised weights)`` box-filter tap per
-    output pixel, computed once per axis and reused for every row/column."""
+    """Return one box-filter tap per output pixel.
+
+    Each tap is ``(first source index, normalised weights)``; computed once
+    per axis and reused for every row or column.
+    """
     scale = src_len / float(dst_len)
     taps = []
     for i in range(dst_len):
@@ -284,7 +372,7 @@ def _resize_horizontal(
     src_w: int, src_h: int, dst_w: int,
 ) -> list[tuple[float, float, float, float]]:
     taps = _box_taps(src_w, dst_w)
-    resized = []
+    resized: list[tuple[float, float, float, float]] = []
     append = resized.append
     for y in range(src_h):
         _breathe(y)
@@ -306,7 +394,7 @@ def _resize_vertical(
     pixels: list[tuple[float, float, float, float]],
     src_w: int, src_h: int, dst_h: int,
 ) -> list[tuple[float, float, float, float]]:
-    resized = []
+    resized: list[tuple[float, float, float, float]] = []
     append = resized.append
     for y, (start, weights) in enumerate(_box_taps(src_h, dst_h)):
         _breathe(y)
@@ -337,10 +425,13 @@ def _unpremultiply_rgba(
         if alpha == 0:
             rgba.extend((0, 0, 0, 0))
         else:
+            # Divided by the exact coverage, not the rounded byte: a half
+            # covered white edge would otherwise come out as 254.
+            scale = 255.0 / a
             rgba.extend((
-                _clamp_byte(r * 255.0 / alpha),
-                _clamp_byte(g * 255.0 / alpha),
-                _clamp_byte(b * 255.0 / alpha),
+                _clamp_byte(r * scale),
+                _clamp_byte(g * scale),
+                _clamp_byte(b * scale),
                 alpha,
             ))
     return bytes(rgba)
@@ -359,23 +450,16 @@ def _write_png_rgba(path: str, width: int, height: int, rgba: bytes) -> None:
         + _png_chunk(b"IDAT", zlib.compress(bytes(rows), 9))
         + _png_chunk(b"IEND", b"")
     )
-    with open(path, "wb") as handle:
-        handle.write(png)
+    atomic_write(path, png)
 
 
 def _scale_png_to_cache(src_path: str, dst_path: str, dst_w: int, dst_h: int) -> None:
-    """Scale ``src_path`` into ``dst_path`` via a temp file + rename, so a
-    concurrent builder never observes a half-written PNG."""
-    tmp_path = f"{dst_path}.{os.getpid()}-{threading.get_ident()}.tmp"
-    _scale_png_for_display(src_path, tmp_path, dst_w, dst_h)
-    try:
-        os.replace(tmp_path, dst_path)
-    except OSError:
-        try:
-            os.remove(tmp_path)
-        except OSError:
-            pass
-        raise
+    """Scale *src_path* into *dst_path*.
+
+    The file is written atomically (see ``core.files``), so neither a
+    concurrent builder nor a power cut can leave a half-written PNG.
+    """
+    _scale_png_for_display(src_path, dst_path, dst_w, dst_h)
 
 
 def _scale_png_for_display(src_path: str, dst_path: str, dst_w: int, dst_h: int) -> None:
@@ -386,10 +470,12 @@ def _scale_png_for_display(src_path: str, dst_path: str, dst_w: int, dst_h: int)
     _write_png_rgba(dst_path, dst_w, dst_h, _unpremultiply_rgba(resized))
 
 
-def _cache_target(path: str, box_w: int, box_h: int):
-    """Return ``(cache_path, dst_w, dst_h)`` for a texture worth scaling, or
-    ``None`` when the source can be used as-is (not a PNG, unreadable, or
-    already at/below display size — this never upscales)."""
+def _cache_target(path: str, box_w: int, box_h: int) -> tuple[str, int, int] | None:
+    """Return ``(cache_path, dst_w, dst_h)`` for a texture worth scaling.
+
+    None when the source can be used as is: not a PNG, unreadable, or already
+    at or below display size (this never upscales).
+    """
     if not path.lower().endswith(".png"):
         return None
 
@@ -398,23 +484,38 @@ def _cache_target(path: str, box_w: int, box_h: int):
     if not dst_w or (src_w <= dst_w and src_h <= dst_h):
         return None
 
-    stat = os.stat(path)
     cache_dir = _translate_path(_CACHE_DIR)
     name = os.path.splitext(os.path.basename(path))[0]
-    cache_name = (
-        f"{name}_{src_w}x{src_h}_{dst_w}x{dst_h}_"
-        f"{int(stat.st_mtime)}_{stat.st_size}.png"
-    )
+    cache_name = f"{name}_{dst_w}x{dst_h}_{_content_key(path)}.png"
     return (os.path.join(cache_dir, cache_name), dst_w, dst_h)
 
 
-def display_texture(path: str, box_w: int, box_h: int) -> str:
-    """Return ``path`` scaled to fit ``box_w`` x ``box_h`` and cached, building
-    the cache entry now if missing.
+def _content_key(path: str) -> str:
+    """Return the key the cached copies of *path* are filed under.
 
-    Scaling is slow, so only call this off the UI thread (``ready_texture`` is
-    the non-blocking counterpart).  Falls back to the source path unchanged if
-    no scaling is needed or the cache can't be built.
+    A content digest rather than the modification time: an add-on update
+    rewrites every file, and a time-based key would rescale every logo after
+    each update.
+    """
+    stat = os.stat(path)
+    stamp = (stat.st_mtime_ns, stat.st_size)
+    held = _content_keys.get(path)
+    if held is not None and held[0] == stamp:
+        return held[1]
+    with open(path, "rb") as handle:
+        key = hashlib.blake2b(
+            _SCALER_VERSION + handle.read(), digest_size=8
+        ).hexdigest()
+    _content_keys[path] = (stamp, key)
+    return key
+
+
+def display_texture(path: str, box_w: int, box_h: int) -> str:
+    """Return *path* scaled to fit *box_w* x *box_h*, building the cache entry
+    if missing.
+
+    Scaling is slow: call this off the UI thread.  Returns *path* unchanged
+    when no scaling is needed or the cache cannot be built.
     """
     try:
         target = _cache_target(path, box_w, box_h)
@@ -422,8 +523,8 @@ def display_texture(path: str, box_w: int, box_h: int) -> str:
             return path
         cache_path, dst_w, dst_h = target
         if not os.path.exists(cache_path):
-            # One build at a time, and re-check inside the gate: whoever waited
-            # here may have been waiting for this very file.
+            # Re-check inside the gate: the previous holder may have built
+            # this very file.
             with _build_gate:
                 if not os.path.exists(cache_path):
                     os.makedirs(os.path.dirname(cache_path), exist_ok=True)
@@ -434,47 +535,60 @@ def display_texture(path: str, box_w: int, box_h: int) -> str:
         return path
 
 
-def ready_texture(path: str, box_w: int, box_h: int) -> str:
-    """Return the scaled texture only if it is already cached, else ``""``.
+def prune_cache(media_root: str) -> int:
+    """Delete cached textures that can no longer be requested; return the count.
 
-    Never scales, so it is safe on the UI thread: callers show the unscaled
-    source until a build (see ``ensure_texture``) has finished.
+    Copies of an unchanged logo are kept at every size, so moving a size
+    slider back finds its copy.  Removed are copies of logos that changed or
+    are no longer in *media_root*, files named by an older scheme, and
+    abandoned temporary files.
+
+    Holds the build gate, so it never races a build in this process; a
+    temporary file counts as abandoned only after ``_STALE_TMP_SECONDS``,
+    which covers builds in other processes.
     """
+    cache_dir = _translate_path(_CACHE_DIR)
     try:
-        target = _cache_target(path, box_w, box_h)
-        if target is None:
-            return path
-        cache_path = target[0]
-        return cache_path if os.path.exists(cache_path) else ""
-    except Exception as exc:
-        _log_debug(f"cache lookup failed for {os.path.basename(path)}: {exc}")
-        return path
+        entries = os.listdir(cache_dir)
+    except OSError:
+        return 0  # nothing cached yet
+
+    sources: dict[str, list[str]] = {}
+    for folder, _dirs, files in os.walk(media_root):
+        for file_name in files:
+            stem, extension = os.path.splitext(file_name)
+            if extension.lower() == ".png":
+                sources.setdefault(stem, []).append(os.path.join(folder, file_name))
+
+    removed = 0
+    now = time.time()
+    with _build_gate:
+        current: dict[str, set[str]] = {}
+        for entry in entries:
+            path = os.path.join(cache_dir, entry)
+            try:
+                if entry.endswith(".tmp"):
+                    stale = now - os.stat(path).st_mtime > _STALE_TMP_SECONDS
+                else:
+                    match = _CACHE_NAME.match(entry)
+                    stale = match is None or match["key"] not in _current_keys(
+                        match["stem"], sources, current)
+                if stale:
+                    os.remove(path)
+                    removed += 1
+            except OSError as exc:
+                _log_debug(f"could not prune {entry}: {exc}")
+    return removed
 
 
-def ensure_texture(path: str, box_w: int, box_h: int) -> None:
-    """Build the scaled texture in the background unless it is cached or already
-    being built.  Returns immediately."""
-    try:
-        target = _cache_target(path, box_w, box_h)
-        if target is None or os.path.exists(target[0]):
-            return
-    except Exception:
-        return
-
-    key = (path, box_w, box_h)
-    with _builds_lock:
-        if key in _builds:
-            return
-        _builds.add(key)
-
-    threading.Thread(
-        target=_build_worker, args=(key,), name="TinyPPI-scale", daemon=True,
-    ).start()
-
-
-def _build_worker(key: tuple) -> None:
-    try:
-        display_texture(*key)
-    finally:
-        with _builds_lock:
-            _builds.discard(key)
+def _current_keys(stem: str, sources: Mapping[str, Iterable[str]],
+                  current: dict[str, set[str]]) -> set[str]:
+    """Return the content keys of the sources named *stem*, once per prune."""
+    keys = current.get(stem)
+    if keys is None:
+        keys = set()
+        for path in sources.get(stem, ()):
+            with contextlib.suppress(OSError):
+                keys.add(_content_key(path))
+        current[stem] = keys
+    return keys

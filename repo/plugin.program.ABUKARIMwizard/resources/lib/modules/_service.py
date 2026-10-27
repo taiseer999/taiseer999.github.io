@@ -209,7 +209,14 @@ class Startup:
         if setting('firstrun') == 'true':
             enable_addons()
             backup_gui_skin(gui_save_default)
-            setting_set('firstrun', 'false')
+            setting_set('firstrun', 'false')   # cleared first: the prompt never loops
+            # 3.9.47: first boot after a build install -> offer the
+            # ABUKARIM TOOLS Installation Wizard.
+            try:
+                from .tools_setup_prompt import run as _tools_setup_prompt
+                _tools_setup_prompt()
+            except Exception as e:
+                xbmc.log('AB Wizard: setup prompt failed: %s' % e, xbmc.LOGERROR)
         else:
             clear_packages_startup()
             try:

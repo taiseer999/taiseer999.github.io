@@ -1,331 +1,153 @@
-"""VS10-mode selection dialog.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 U3knOwn
 
-Open via ``RunScript(script.tinyppi,dialog)`` or ``open_dialog()``.
+"""The VS10 mode-selection dialog.
+
+Open via ``RunScript(script.tinyppi,dialog)`` or ``open_dialog()``; the
+chosen mode is applied by ``core.vs10.set_mode``.
 """
+from __future__ import annotations
 
-import json
 import threading
-import time
+from typing import Any
 
 import xbmc
-import xbmcaddon
 import xbmcgui
-from core.utils import clear_overlay_state
+from core import settings
+from core.log import log
+from core.utils import (
+    PROP_HDR10PLUS_PRESENT,
+    clear_overlay_state,
+    home_window,
+)
+from core.vs10 import delay, set_mode
+from ui import dialog_layout
 
-_ADDON      = xbmcaddon.Addon()
-_ADDON_PATH = _ADDON.getAddonInfo("path")
+# The add-on folder (via the shared settings handle, see core.settings).
+_ADDON_PATH = settings.addon().getAddonInfo("path")
 
-_POLICY = "/sys/module/aml_media/parameters/dolby_vision_policy"
-_ENABLE = "/sys/module/aml_media/parameters/dolby_vision_enable"
-_DVMODE = "/sys/class/amdolby_vision/dv_mode"
-
-# One of the settings introduced alongside the native VS10 keymap actions in
-# SamuriHL/coreelec-xbmc commit 7df0943. Both were added in the same change, so
-# its presence over JSON-RPC tells us the running Kodi build ships the VS10
-# output engine (and therefore the vs10.* actions).
-_VS10_PROBE_SETTING = "coreelec.amlogic.dolbyvision.vs10.dv"
-
-# Cached result of the one-time capability probe (None = not yet probed).
-_vs10_actions = None
-
-_BTN_TINYPPI = 1001
-
-
-def _w(path: str, value: str) -> None:
-    try:
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(value)
-        xbmc.log(f"TinyPPI: {path} = {value}", xbmc.LOGINFO)
-    except OSError as e:
-        xbmc.log(f"TinyPPI: FAILED {path}: {e}", xbmc.LOGERROR)
-
-
-def _delay(ms: int) -> None:
-    try:
-        xbmc.sleep(ms)
-    except Exception:
-        time.sleep(ms / 1000)
-
-
-def _read(path: str):
-    """Read a sysfs node, returning its stripped contents or None on failure."""
-    try:
-        with open(path, encoding="utf-8") as f:
-            return f.read().strip()
-    except OSError:
-        return None
-
-
-def _dv_state():
-    """Snapshot the DV driver nodes, used to tell whether a native action took."""
-    return (_read(_POLICY), _read(_ENABLE), _read(_DVMODE))
-
-
-def _wait_for_dv_change(before, timeout_ms: int = 500, step_ms: int = 50) -> bool:
-    """Poll the DV driver state, returning True once it differs from ``before``."""
-    waited = 0
-    while waited < timeout_ms:
-        _delay(step_ms)
-        waited += step_ms
-        if _dv_state() != before:
-            return True
-    return False
-
-
-def _is_playing_video() -> bool:
-    """True when a video is playing, i.e. when native VS10 actions can apply."""
-    try:
-        return xbmc.Player().isPlayingVideo()
-    except Exception:
-        return False
-
-
-def _write_sequence(
-    steps: tuple[tuple[str, str], ...],
-    delay_ms: int = 100,
-) -> None:
-    """Write a sysfs sequence, waiting between steps when requested."""
-    for index, (path, value) in enumerate(steps):
-        if index and delay_ms > 0:
-            _delay(delay_ms)
-        _w(path, value)
-
-
-def _set_passthrough_mode(dv_mode: str, delay_ms: int = 100) -> None:
-    """Set the CoreELEC policy and enable Dolby Vision in the requested mode."""
-    _write_sequence(
-        (
-            (_POLICY, "2"),
-            (_ENABLE, "Y"),
-            (_DVMODE, dv_mode),
-        ),
-        delay_ms=delay_ms,
-    )
-
-
-def _set_sdr_conversion_mode(dv_mode: str) -> None:
-    """Reset to SDR first, then enable the requested conversion mode."""
-    _write_sequence(
-        (
-            (_POLICY, "2"),
-            (_DVMODE, "0"),
-            (_ENABLE, "Y"),
-            (_DVMODE, dv_mode),
-        )
-    )
-
-
-def original_sdr() -> None:
-    _set_passthrough_mode("0", delay_ms=0)
-
-
-def hdr10() -> None:
-    _set_sdr_conversion_mode("3")
-
-
-def dv() -> None:
-    _set_passthrough_mode("2")
-
-
-def original_hdr() -> None:
-    _set_passthrough_mode("3")
-
-
-def original_hlg() -> None:
-    # HLG is not a valid VS10 input, so turn VS10 off (policy=follow-source,
-    # enable=N) to let HLG pass through the standard HDR path untouched.
-    _write_sequence(
-        (
-            (_POLICY, "0"),
-            (_ENABLE, "N"),
-        )
-    )
-
-
-# Alias of dv; kept as its own name so keymaps can use both.
-original_dv = dv
-
-
-def sdr8() -> None:
-    _set_sdr_conversion_mode("5")
-
-
-def sdr10() -> None:
-    _set_sdr_conversion_mode("4")
-
-
-_MODES = {
-    "original_sdr": original_sdr,
-    "hdr10": hdr10,
-    "dv": dv,
-    "original_hdr": original_hdr,
-    "original_hlg": original_hlg,
-    "original_dv": original_dv,
-    "sdr8": sdr8,
-    "sdr10": sdr10,
-}
-
-
-# Native VS10 keymap action (SamuriHL/coreelec-xbmc commit 7df0943) that each
-# TinyPPI mode maps to. When these actions are available they are fired instead
-# of the sysfs sequences above, which are then skipped entirely.
-#
-# Only four actions exist, and vs10.sdr is hard-wired to SDR10 output
-# (DOLBY_VISION_OUTPUT_MODE_SDR10, dv_mode 4). There is NO action for SDR8
-# output (DOLBY_VISION_OUTPUT_MODE_SDR8, dv_mode 5), so 'sdr8' has no native
-# entry here on purpose: it always takes the sysfs path, which writes dv_mode 5
-# -- the exact same state the native engine uses for SDR8. That keeps a real
-# distinction between 8-bit and 10-bit SDR output.
-_VS10_ACTION = {
-    "original_sdr": "vs10.original",
-    "original_hdr": "vs10.original",
-    "original_hlg": "vs10.original",
-    "original_dv":  "vs10.dv",
-    "dv":           "vs10.dv",
-    "hdr10":        "vs10.hdr10",
-    "sdr10":        "vs10.sdr",
-}
-
-
-def _probe_vs10_actions() -> bool:
-    """Return True if this Kodi build ships the native VS10 output engine.
-
-    Probes one of its settings over JSON-RPC, since the settings and the
-    ``vs10.*`` keymap actions were added in the same commit: a ``result`` means
-    the actions exist too, an ``error`` means we must drive sysfs ourselves.
-    """
-    request = json.dumps(
-        {
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "Settings.GetSettingValue",
-            "params": {"setting": _VS10_PROBE_SETTING},
-        }
-    )
-    try:
-        response = json.loads(xbmc.executeJSONRPC(request))
-    except Exception as e:
-        xbmc.log(f"TinyPPI: VS10 Actions probe failed: {e}", xbmc.LOGWARNING)
-        return False
-    return isinstance(response, dict) and "result" in response
-
-
-def _vs10_actions_available() -> bool:
-    """Cached capability check, logging the chosen path once per session."""
-    global _vs10_actions
-    if _vs10_actions is None:
-        _vs10_actions = _probe_vs10_actions()
-        if _vs10_actions:
-            xbmc.log(
-                "TinyPPI: native VS10 Actions available -> preferred during "
-                "playback, with sysfs fallback if they don't take effect",
-                xbmc.LOGINFO,
-            )
-        else:
-            xbmc.log(
-                "TinyPPI: native VS10 Actions not available -> using the "
-                "built-in TinyPPI VS10 (sysfs) path",
-                xbmc.LOGINFO,
-            )
-    return _vs10_actions
-
-
-def set_mode(name: str) -> None:
-    """Apply the VS10 mode ``name`` (see ``_MODES``), preferring native actions.
-
-    The native ``vs10.*`` actions only do anything during playback and can
-    still silently no-op, so we try them only then and verify the DV driver
-    state actually moved; either failure falls back to the built-in sysfs
-    sequence, which always works.
-    """
-    sysfs = _MODES.get(name)
-    if sysfs is None:
-        xbmc.log(f"TinyPPI: Unknown mode '{name}'", xbmc.LOGERROR)
-        return
-
-    action = _VS10_ACTION.get(name)
-    if action and _vs10_actions_available():
-        if _is_playing_video():
-            before = _dv_state()
-            xbmc.executebuiltin(f"Action({action})")
-            if _wait_for_dv_change(before):
-                xbmc.log(
-                    f"TinyPPI: mode '{name}' set via VS10 Actions -> "
-                    f"Action({action})",
-                    xbmc.LOGINFO,
-                )
-                return
-            xbmc.log(
-                f"TinyPPI: VS10 Action({action}) had no effect on the DV "
-                "driver -> falling back to built-in TinyPPI VS10 (sysfs)",
-                xbmc.LOGWARNING,
-            )
-        else:
-            xbmc.log(
-                f"TinyPPI: no video playing -> VS10 Action({action}) cannot "
-                f"apply; using built-in TinyPPI VS10 (sysfs) for '{name}'",
-                xbmc.LOGINFO,
-            )
-    elif _vs10_actions_available():
-        # Native engine is present but this mode has no native action (e.g.
-        # 'sdr8' -- the actions only expose SDR10, not SDR8). Use sysfs so the
-        # real 8-bit vs 10-bit SDR distinction is preserved.
-        xbmc.log(
-            f"TinyPPI: '{name}' has no native VS10 action -> using built-in "
-            "TinyPPI VS10 (sysfs) to keep the exact output",
-            xbmc.LOGINFO,
-        )
-
-    sysfs()
-    xbmc.log(
-        f"TinyPPI: mode '{name}' set via built-in TinyPPI VS10 (sysfs)",
-        xbmc.LOGINFO,
-    )
-
-
-__all__ = list(_MODES.keys()) + ["open_dialog", "set_mode"]
-
-
-# Dialog button id -> mode name (routed through ``set_mode`` so the dialog also
-# prefers the native VS10 Actions when they are available).
+# Dialog button id -> mode, from the same description the window files are
+# generated from (ui.dialog_layout).
 _ACTIONS = {
-    # SDR
-    1002: "original_sdr",
-    1003: "hdr10",
-    1004: "dv",
-    # HDR10
-    1005: "original_hdr",
-    1006: "sdr8",
-    1008: "dv",
-    # HLG (Original bypasses VS10 so HLG stays HLG)
-    1009: "original_hlg",
-    1010: "sdr8",
-    1011: "dv",
-    # DV
-    1012: "original_dv",
-    1013: "sdr8",
+    control_id: action
+    for branch in dialog_layout.BRANCHES
+    for control_id, _label, action in branch["buttons"]
+    if action is not None
 }
 
 
 class SettingsDialog(xbmcgui.WindowXMLDialog):
     """Menu dialog to pick a VS10 output mode or launch the TinyPPI overlay."""
 
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        # The layout this window was built from (geometry, key handling).
+        self._layout = dialog_layout.dialog_mode()
+        # Current choice of the single-button layout.
+        self._step = 0
+        self._branch_key: str | None = None
+        self._running = False
+        self._pending_mode: int | str | None = None
+        self._monitor: xbmc.Monitor | None = None
+
     def onInit(self) -> None:
-        # The SDR / HDR10 / DV groups branch on TinyPPI.HdrType, filled by
-        # hdrprobe in the background; refresh it so the right group appears
-        # once detection completes.
+        # Refresh TinyPPI.HdrType before placing the panel: the branch
+        # decides which button gets focus.
         self._running = True
         self._pending_mode = None
         self._monitor = xbmc.Monitor()
+        self._publish_hdr_type(logged=False)
+        self._place()
         threading.Thread(target=self._hdr_type_loop, daemon=True).start()
 
-    def _hdr_type_loop(self) -> None:
-        from info.properties import publish_hdr_type
+    # --- Layout ------------------------------------------------------------
 
-        home = xbmcgui.Window(10000)
-        while self._running and not self._monitor.abortRequested():
-            publish_hdr_type(home)
-            if self._monitor.waitForAbort(0.5):
+    def _place(self) -> None:
+        """Move the panel to the configured position, then reveal it.
+
+        The window files keep the panel hidden until then, so it never jumps.
+        """
+        left, top = dialog_layout.panel_position(self._layout)
+        try:
+            self.getControl(dialog_layout.GROUP_PANEL).setPosition(left, top)
+        except RuntimeError as e:
+            log(f"could not place the dialog panel: {e}", xbmc.LOGWARNING)
+        home_window().setProperty(dialog_layout.PROP_PLACED, "1")
+        # Default focus went nowhere while hidden; focus the visible branch.
+        self._sync_branch(force=True)
+
+    def _branch(self) -> dialog_layout.Branch:
+        home = home_window()
+        return dialog_layout.branch_for(
+            home.getProperty("TinyPPI.HdrType"),
+            home.getProperty(PROP_HDR10PLUS_PRESENT),
+        )
+
+    def _sync_branch(self, force: bool = False) -> None:
+        """Follow branch changes: focus the first button, update the step.
+
+        The branch can change while the dialog is open (detection finishing,
+        output switched).
+        """
+        branch = self._branch()
+        if not force and branch["key"] == self._branch_key:
+            return
+        self._branch_key = branch["key"]
+        if self._layout == dialog_layout.MODE_SINGLE:
+            self._show_step()
+            focus = dialog_layout.SINGLE_BUTTON
+        else:
+            focus = branch["buttons"][0][0]
+        try:
+            self.setFocusId(focus)
+        except RuntimeError as e:
+            log(f"could not focus dialog button {focus}: {e}", xbmc.LOGDEBUG)
+
+    def _set_label(self, control_id: int, text: str) -> None:
+        try:
+            self.getControl(control_id).setLabel(text)
+        except RuntimeError as e:
+            if self._running:
+                log(f"could not set label {control_id}: {e}", xbmc.LOGWARNING)
+
+    def _show_step(self) -> None:
+        """Show the current choice on the single button (the step wraps)."""
+        buttons = self._branch()["buttons"]
+        self._step %= len(buttons)
+        _control_id, markup, _action = buttons[self._step]
+        self._set_label(dialog_layout.SINGLE_BUTTON,
+                        dialog_layout.plain_label(markup))
+
+    # --- Lifecycle ---------------------------------------------------------
+
+    def _publish_hdr_type(self, logged: bool = True) -> bool:
+        """Republish the HDR type; False when the read failed.
+
+        *logged* suppresses repeated failure logs.
+        """
+        from info.publish import publish_hdr_type
+
+        try:
+            publish_hdr_type(home_window())
+            return True
+        except Exception as e:
+            if not logged:
+                log(f"HDR type refresh failed: {e}", xbmc.LOGWARNING)
+            return False
+
+    def _hdr_type_loop(self) -> None:
+        """Republish the HDR type until the dialog closes (failures cost a cycle)."""
+        logged = False
+        monitor = self._monitor
+        if monitor is None:  # before onInit
+            return
+        while self._running and not monitor.abortRequested():
+            if self._publish_hdr_type(logged):
+                if self._running:
+                    self._sync_branch()
+            else:
+                logged = True
+            if monitor.waitForAbort(0.5):
                 break
 
     def close(self) -> None:
@@ -333,20 +155,22 @@ class SettingsDialog(xbmcgui.WindowXMLDialog):
         super().close()
 
     def onClick(self, control_id: int) -> None:
-        if control_id == _BTN_TINYPPI:
+        if control_id == dialog_layout.SINGLE_BUTTON:
+            # The single button acts as its current choice.
+            buttons = self._branch()["buttons"]
+            control_id = buttons[self._step % len(buttons)][0]
+
+        if control_id in dialog_layout.PPI_BUTTONS:
             self.close()
-            clear_overlay_state(xbmcgui.Window(10000))
+            clear_overlay_state(home_window())
             from ui.overlay import open_tinyppi
             open_tinyppi()
             return
 
         mode = _ACTIONS.get(control_id)
         if mode:
-            # Defer applying: a native VS10 action fired now would be dropped by
-            # the window manager while this modal dialog's closing animation is
-            # still running ("ignoring action ..., because topmost modal dialog
-            # closing animation is running"). open_dialog() applies it once
-            # doModal() has returned, i.e. after the dialog is fully gone.
+            # Applied by open_dialog() after doModal(): Kodi drops actions
+            # while a modal dialog's closing animation runs.
             self._pending_mode = mode
             self.close()
 
@@ -357,12 +181,26 @@ class SettingsDialog(xbmcgui.WindowXMLDialog):
             xbmcgui.ACTION_STOP,
         ):
             self.close()
+            return
+        if self._layout != dialog_layout.MODE_SINGLE:
+            return
+        # Left and right step through the choices (the button navigates to
+        # itself, so the actions arrive here).
+        if action.getId() == dialog_layout.ACTION_MOVE_LEFT:
+            self._step -= 1
+            self._show_step()
+        elif action.getId() == dialog_layout.ACTION_MOVE_RIGHT:
+            self._step += 1
+            self._show_step()
 
 
 def open_dialog() -> None:
-    """Create and display the mode-selection dialog modally."""
+    """Show the mode-selection dialog and apply the chosen mode."""
+    home = home_window()
+    # Hidden until the dialog has placed its panel.
+    home.clearProperty(dialog_layout.PROP_PLACED)
     win = SettingsDialog(
-        "script-tinyppi-dialog.xml",
+        dialog_layout.xml_file(),
         _ADDON_PATH,
         "Default",
         "1080i",
@@ -371,8 +209,6 @@ def open_dialog() -> None:
     mode = getattr(win, "_pending_mode", None)
     del win
     if mode:
-        # The dialog and its closing animation are fully gone now, so a native
-        # VS10 action will reach the fullscreen video player instead of being
-        # ignored. Let the underlying window settle first, then apply.
-        _delay(250)
+        # The dialog is gone; let the video window settle, then apply.
+        delay(250)
         set_mode(mode)

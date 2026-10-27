@@ -1,18 +1,19 @@
-"""Compute and publish Window properties for TinyPPI.
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 U3knOwn
 
-Call ``update_properties(window)`` once per polling interval.
+"""The overlay's readings, one function per row: video, HDR, audio,
+subtitles and system.
+
+``info.publish`` writes them into the window properties the skin shows.
 """
+from __future__ import annotations
 
+import math
 import re
 
-import xbmc
-import xbmcaddon
-import xbmcgui
-from core.helpers import format_fps, fps_display_texts, normalize_fps
+from core.helpers import format_fps, normalize_fps
 from core.maps import (
-    AUDIO_BIT_DEPTH_MAP,
     AUDIO_CODEC_MAP,
-    AUDIO_PCM_DEPTH_CODECS,
     CHANNELS_ICON_HEIGHT_MAP,
     CHANNELS_ICON_MAP,
     CHANNELS_INPUT_MAP,
@@ -23,76 +24,46 @@ from core.maps import (
     SUBTITLE_CODEC_MAP,
     VIDEO_CODEC_MAP,
 )
+from core.memo import KeyedMemo
 from core.utils import (
     clean,
     cond,
     first_float,
+    home_window,
     info,
+    is_effective_dv,
     parse_offsets,
     picture_aspect_ratio,
-    set_window_properties,
 )
-from info.cropdetect import (
-    live_detection_enabled,
-    live_detection_pending,
-    live_detection_settling,
-    live_measurement_available,
-    resolve_l5_offsets,
+from info.dvinfo import (
+    get_bit_depth,
+    get_hdr_format,
+    is_status_label,
+    na_label,
 )
 from info.imax import is_enhanced_title, is_known_imax_title
-from info.dvinfo import (
-    L5_EMPTY,
-    L5_PENDING_STEP,
-    get_active_audio_bit_depth,
-    get_active_audio_sample_rate,
-    get_bit_depth,
-    get_cm_version,
-    get_dv_bl_present,
-    get_dv_el_present,
-    get_dv_el_type,
-    get_dv_profile,
-    get_dv_rpu_present,
-    get_dv_version,
-    get_hdr10_max_cll_fall,
-    get_hdr10_mdl,
-    get_hdr_format,
-    get_l5_offsets,
-    get_l6_rpu_max_cll_fall,
-    get_l6_rpu_mdl,
-    get_output_mode,
-    get_structure,
-    is_fetch_label,
-    is_status_label,
-    l5_pending_frame,
-)
 
-# Channel graphics ship pre-scaled to the exact box the skin draws them in
-# (see script-tinyppi-main.xml), so Kodi never resamples them: SDR and
-# HDR10 / HDR10+ / HLG share the 495x298 box, DV uses the smaller 400x241 panel.
+# Channel graphics ship pre-scaled to the skin's boxes, so Kodi never
+# resamples them: SDR and HDR10/HDR10+/HLG use 495x298, DV the smaller
+# 400x241 panel (see script-tinyppi-main.xml).
 _CHANNEL_DIR_DEFAULT = "channels/495x298"
 _CHANNEL_DIR_DV      = "channels/400x241"
 
 
-def _is_dv() -> bool:
-    """Mirror the skin's DV branch, which draws the smaller channel panel."""
-    return "dolby" in xbmcgui.Window(10000).getProperty("TinyPPI.HdrType").lower()
-
-
 def _channel_dir() -> str:
-    """Return the folder holding the display-sized graphics for the current
-    output type: the DV panel is smaller than the SDR / HDR box."""
-    return _CHANNEL_DIR_DV if _is_dv() else _CHANNEL_DIR_DEFAULT
+    """Return the channel graphics folder for the current output type."""
+    return _CHANNEL_DIR_DV if is_effective_dv() else _CHANNEL_DIR_DEFAULT
 
 
 def _channels_shown() -> bool:
     """Return whether the channel graphics are switched on."""
-    return xbmcgui.Window(10000).getProperty("TinyPPI.ShowChannelIcon") == "1"
+    return home_window().getProperty("TinyPPI.ShowChannelIcon") == "1"
 
 
 # --- Video properties ------------------------------------------------------
 
 def get_VideoDecoderVar() -> str:
-    """Return 'HW' or 'SW' based on the active video decoder type."""
+    """Return 'HW' or 'SW' for the active video decoder."""
     return "HW" if cond("Player.Process(videohwdecoder)") else "SW"
 
 
@@ -102,7 +73,7 @@ def get_VideoDecoderLongVar() -> str:
 
 
 def get_VideoPixelFormatVar() -> str:
-    """Parse ``amlogic.pixformat`` into e.g. ``10-bit (YUV 4:2:0)`` / ``8-bit, RGB``."""
+    """Format ``amlogic.pixformat``, e.g. ``10-bit (YUV 4:2:0)`` or ``8-bit, RGB``."""
     val = info("Player.Process(amlogic.pixformat)").strip()
     if not val:
         return ""
@@ -130,7 +101,7 @@ def get_VideoPixelFormatVar() -> str:
 
 
 def get_DisplayModeVar() -> str:
-    """Parse ``amlogic.displaymode`` into a compact string like ``1080p 23.976Hz``."""
+    """Format ``amlogic.displaymode`` compactly, e.g. ``1080p 23.976Hz``."""
     val = info("Player.Process(amlogic.displaymode)").strip()
     if not val:
         return ""
@@ -161,23 +132,13 @@ def get_VideoResolutionVar() -> str:
     return f"{width}x{height}{scan} {format_fps(fps)}FPS"
 
 
-# Aspect ratios a computed picture is snapped to when it lands close enough.
-# borderprobe measures the coded frame at full resolution, but a bar edge that
-# falls inside a coding block can still be read a pixel or two either way —
-# enough to nudge a 2.39 film to 2.40 without snapping.  Anything further out
-# than the tolerance is shown as calculated rather than forced onto a familiar
-# number.
-#
-# Note the limit this cannot cross: 2.35 and 2.39 are themselves only 0.04
-# apart, so a measured bar cannot tell them apart and lands on whichever is
-# nearer.  Since the live measurement is preferred over the RPU whenever one
-# exists, that applies to DV titles too — their RPU would have named the ratio
-# exactly, and a 2.35 title can read as 2.39 while detection is on.
+# Standard aspect ratios a computed ratio snaps to.  Pixel-exact RPU offsets
+# still land slightly off (a 2.39 film would read 2.40); ratios beyond the
+# tolerance are shown as computed.
 _STANDARD_ARS = (
     1.33, 1.37, 1.43, 1.66, 1.78, 1.85, 1.90, 2.00, 2.20, 2.35, 2.39, 2.55, 2.76,
 )
 _AR_SNAP_TOLERANCE = 0.02           # relative to the standard ratio
-
 
 
 def _snapped_ar(ratio: float) -> str:
@@ -188,25 +149,15 @@ def _snapped_ar(ratio: float) -> str:
     return f"{ratio:.2f}"
 
 
-def get_AspectRatioVar(
-    l5_offsets: str, is_dv: bool | None = None, live_available: bool = False
-) -> str:
+def get_AspectRatioVar(l5_offsets: str, is_dv: bool | None = None) -> str:
     """Return the display aspect ratio of the picture inside the black bars.
 
-    Kodi's ``videodar`` describes the coded frame, so an IMAX title sits on 1.78
-    for its whole runtime even while the picture on screen is 2.39; scaling the
-    coded ratio by the bars (RPU or live measurement, whichever ``l5_offsets``
-    carries) gives the ratio actually being watched.  Falls back to Kodi's own
-    value when the bars are unknown, or when they're a genuine ``0 | 0 | 0 | 0``
-    that isn't backed by anything: outside Dolby Vision, with no live
-    measurement landed yet, ``l5_offsets`` is only ever dvinfo's placeholder,
-    never a confirmed reading, so it carries no more information than Kodi's
-    own ratio.  A confirmed ``0 | 0 | 0 | 0`` is computed anyway, since there it
-    is a real answer (no crop) rather than an unset placeholder -- true on a
-    Dolby Vision stream (the RPU itself is the confirmation, live measurement
-    or not) and on any format once a live measurement has actually landed.
-    ``is_dv`` and ``live_available`` let a caller pass in already-read state;
-    left out, ``is_dv`` is read here and ``live_available`` defaults to False.
+    Kodi's ``videodar`` describes the coded frame, so a letterboxed 2.39 film
+    reads 1.78; scaling by the RPU's active-area offsets gives the visible
+    ratio.  Falls back to Kodi's value when the bars are unknown, or when
+    they are all zero outside Dolby Vision (there they are only dvinfo's
+    placeholder).  In Dolby Vision all-zero is a real "no crop".  *is_dv* may
+    pass in an already-read state.
     """
     raw = clean(info("Player.Process(videodar)"))
 
@@ -214,9 +165,9 @@ def get_AspectRatioVar(
     if bars is None:
         return raw
 
-    if not any(bars) and not live_available:
+    if not any(bars):
         if is_dv is None:
-            is_dv = _is_dv()
+            is_dv = is_effective_dv()
         if not is_dv:
             return raw
 
@@ -225,15 +176,11 @@ def get_AspectRatioVar(
 
 
 def get_ImaxVar() -> str:
-    """Return ``IMAX Enhanced`` / ``IMAX`` for a film recognised as IMAX
-    material, or ``''`` otherwise.
+    """Return ``IMAX Enhanced``, ``IMAX`` or '' for the playing film.
 
-    Recognised from its filename (an ``IMAX`` / ``IMAX Enhanced`` release
-    name), or failing that from an entry in ``imax_titles.txt`` (bundled plus
-    the user's own copy) -- see info.imax.  Shown for the whole runtime
-    regardless of the live-detection setting: the badge names the film, not
-    the framing of whatever is on screen this second, so it neither needs nor
-    benefits from a live measurement.
+    Recognised by release name or title list (see ``info.imax``) and shown
+    for the whole runtime: the badge describes the film, not the current
+    framing.
     """
     if not is_known_imax_title():
         return ""
@@ -241,7 +188,7 @@ def get_ImaxVar() -> str:
 
 
 def get_VideoBitrateMBVar() -> str:
-    """Convert the video bitrate from kb/s to Mb/s and return a display string."""
+    """Return the video bitrate in Mb/s for display."""
     bitrate = clean(info("VideoPlayer.VideoBitrate"))
     try:
         mbit = float(bitrate) / 1000.0
@@ -253,7 +200,7 @@ def get_VideoBitrateMBVar() -> str:
 
 
 def get_VideoLiveBitrateVar() -> str:
-    """Return video live bitrate with dot instead of comma."""
+    """Return the live video bitrate with a decimal point."""
     bitrate = info("Player.Process(videolivebitrate)")
     if not bitrate:
         return ""
@@ -270,11 +217,11 @@ def get_VideoCodecVar() -> str:
 
 
 def get_VideoDecoderNameVar() -> str:
-    """Return the vendor prefix for the active decoder (``AML-`` / ``FF-``).
+    """Return the decoder vendor prefix (``AML-`` / ``FF-``).
 
-    ``Player.Process(videodecoder)`` reports e.g. ``am-h264`` / ``ff-hevc``; the
-    skin concatenates this prefix with ``VideoCodecVar`` (``AML-H.265``).
-    Unknown values are passed through upper-cased.
+    ``Player.Process(videodecoder)`` reports e.g. ``am-h264``; the skin joins
+    the prefix with ``VideoCodecVar`` (``AML-H.265``).  Unknown values are
+    returned upper-cased.
     """
     raw = info("Player.Process(videodecoder)").strip()
     if not raw:
@@ -291,13 +238,10 @@ def get_VideoDecoderNameVar() -> str:
 def get_VideoBitDepthVar() -> str:
     """Return the source bit depth for display, e.g. ``12-bit``.
 
-    Uses hdrprobe's detected depth (see dvinfo.py).  The ``Fetching...`` label
-    passes through while detection runs; when the depth is unknown, falls back
-    to ``10-bit`` for HDR and ``8-bit`` for SDR instead of the ``N/A`` label.
+    Only a full enhancement layer gives 12-bit (reported by dvinfo); every
+    other HDR format is 10-bit, SDR is 8-bit.
     """
     value = get_bit_depth()
-    if is_fetch_label(value):
-        return value
     if not value or is_status_label(value):
         return "10-bit" if get_hdr_format() else "8-bit"
     return f"{value}-bit"
@@ -305,20 +249,20 @@ def get_VideoBitDepthVar() -> str:
 
 # --- HDR / Dolby Vision properties -----------------------------------------
 
-# Cached (pixformat, result) for get_DoviTunnelVar: the sysfs DV mode only
-# changes on a VS10 switch, which also changes the pixel format, so keying on
-# pixformat avoids re-reading sysfs every cycle.
-_dovi_tunnel_cache: tuple[str, str] | None = None
+# get_DoviTunnelVar's result by pixel format.  The sysfs DV mode only
+# changes with a VS10 switch, which also changes the pixel format.
+_dovi_tunnel = KeyedMemo()
 
 
 def get_DoviTunnelVar() -> str:
-    """Return ``"DV Tunnel"`` when sysfs DV mode is 1 and the output is 8-bit,
-    else ``""``.  Cached per Amlogic pixel format."""
-    global _dovi_tunnel_cache
+    """Return ``"DV Tunnel"`` for sysfs DV mode 1 with 8-bit output, else ''.
 
+    Cached per Amlogic pixel format.
+    """
     pixformat = info("Player.Process(amlogic.pixformat)").strip()
-    if _dovi_tunnel_cache is not None and _dovi_tunnel_cache[0] == pixformat:
-        return _dovi_tunnel_cache[1]
+    held = _dovi_tunnel.get(pixformat)
+    if held is not None:
+        return held
 
     result = ""
     bits = re.search(r"(\d+)-bit", pixformat, re.IGNORECASE)
@@ -332,24 +276,38 @@ def get_DoviTunnelVar() -> str:
                 if f.read().strip() == "1":
                     result = "DV Tunnel"
         except OSError:
-            # Don't cache a failure; retry next cycle.
+            # Not cached: retry next cycle.
             return ""
 
-    _dovi_tunnel_cache = (pixformat, result)
+    _dovi_tunnel.put(pixformat, result)
     return result
 
 
-def _with_unit(value: str, unit: str) -> str:
-    """Append ``unit`` to a metadata value, but not to status labels.
+# Gap between a value and its unit (``1000 l 400 cd/m²``).
+_UNIT_GAP = " "
 
-    The ``0 | 0`` placeholder still gets the unit (``0 | 0 cd/m²``); the
-    ``Fetching...`` label is left unchanged.
+
+# On-screen separator for multi-part metadata values: a lowercase L reads
+# better than a pipe in font23_narrow.  Swapped only when publishing, so the
+# values stay pipe-joined for parse_offsets().
+_DISPLAY_SEPARATOR = "l"
+
+
+def separated(value: str) -> str:
+    """Return *value* with pipes replaced by the display separator."""
+    return value.replace("|", _DISPLAY_SEPARATOR)
+
+
+def with_unit(value: str, unit: str) -> str:
+    """Append *unit* to a metadata value, but not to status labels.
+
+    The ``0 | 0`` placeholder still gets the unit; ``N/A`` does not.
     """
     if not value or is_status_label(value):
         return value
     if not unit:
         return value
-    return f"{value} {unit}"
+    return f"{value}{_UNIT_GAP}{unit}"
 
 
 # --- Amlogic EOFT / gamut --------------------------------------------------
@@ -360,19 +318,37 @@ def get_ModeVar() -> str:
     return parts[0] if parts else ""
 
 
+def output_hdr_token(eoft_gamut: str) -> str:
+    """Map an ``amlogic.eoft_gamut`` reading to an HDR token ('' for SDR).
+
+    Only the mode field (the first token, see ``get_ModeVar``) is read.  The
+    tokens are the keys of ``core.maps.HDR_LOGO_MAP``: dolbyvision, hdr10+,
+    hlg, hdr10.
+    """
+    parts = (eoft_gamut or "").split()
+    mode = parts[0].upper() if parts else ""
+    if "DV" in mode or "DOLBY" in mode:
+        return "dolbyvision"
+    if "HDR10+" in mode or "HDR10PLUS" in mode or "PLUS" in mode:
+        return "hdr10+"
+    if "HLG" in mode:
+        return "hlg"
+    if "HDR" in mode:
+        return "hdr10"
+    return ""
+
+
 def get_GamutVar() -> str:
     """Return the second token of ``amlogic.eoft_gamut`` (the gamut field)."""
     parts = info("Player.Process(amlogic.eoft_gamut)").split()
     return parts[1] if len(parts) > 1 else ""
 
 
-def _output_mode_from_videoplayer() -> str:
-    """Classify Kodi's ``VideoPlayer.HDRType`` InfoLabel into an output-mode
-    label (``SDR`` / ``HDR10`` / ``HLG`` / ``HDR10+`` / ``Dolby Vision``).
+def output_mode_from_videoplayer() -> str:
+    """Map ``VideoPlayer.HDRType`` to an output-mode label.
 
-    Reads Kodi's own source-side HDR detection, so it works as the fallback when
-    hdrprobe detection could not run.  An empty ``VideoPlayer.HDRType`` means no
-    HDR signalling, i.e. ``SDR``.
+    Uses Kodi's own HDR detection, so streams without side data still name
+    their format.  Empty means SDR.
     """
     hdr = info("VideoPlayer.HDRType").lower()
     if not hdr:
@@ -388,33 +364,21 @@ def _output_mode_from_videoplayer() -> str:
     return "SDR"
 
 
-def _media_source_name(output_mode: str) -> str:
-    """Collapse an output-mode string to the bare format name for the Media
-    source row (dropping the DV / HDR10+ profile suffix).
-
-    Status labels and unrecognised values pass through unchanged.
-    """
-    if not output_mode or is_status_label(output_mode):
-        return output_mode
-
-    low = output_mode.lower()
-    if "dolby" in low:
-        return "Dolby Vision"
-    if "hdr10+" in low:
-        return "HDR10+"
-    if "hdr10" in low:
-        return "HDR10"
-    if "hlg" in low:
-        return "HLG"
-    if "sdr" in low:
-        return "SDR"
-    return output_mode
-
-
 # --- Audio properties ------------------------------------------------------
 
+def _has_audio() -> bool:
+    """Return whether Kodi names a codec for the current audio track.
+
+    Without one Kodi may still report channels, a bitrate and a format;
+    those rows read N/A like the codec instead.
+    """
+    return bool(info("VideoPlayer.AudioCodec").strip())
+
+
 def get_AudioBitrateKBVar() -> str:
-    """Convert the audio bitrate from kb/s to Kb/s and return a display string."""
+    """Return the audio bitrate in Kb/s for display."""
+    if not _has_audio():
+        return ""
     bitrate = clean(info("VideoPlayer.AudioBitrate"))
     try:
         kbps = int(float(bitrate))
@@ -424,7 +388,9 @@ def get_AudioBitrateKBVar() -> str:
 
 
 def get_AudioLiveBitrateVar() -> str:
-    """Return audio live bitrate with dot instead of comma."""
+    """Return the live audio bitrate with a decimal point."""
+    if not _has_audio():
+        return ""
     bitrate = info("Player.Process(audiolivebitrate)")
     if not bitrate:
         return ""
@@ -436,12 +402,12 @@ def get_AudioCodecVar() -> str:
     """Return the mapped display name for the current audio codec."""
     codec = info("VideoPlayer.AudioCodec")
     if not codec:
-        return xbmc.getLocalizedString(13205)
+        return na_label()
     return AUDIO_CODEC_MAP.get(codec, codec)
 
 
 def get_AudioCodecSpatialVar() -> str:
-    """Return the spatial-audio suffix: ``'(Atmos)'``, ``'(IMAX Enhanced)'``, or ``''``."""
+    """Return ``(Atmos)``, ``(IMAX Enhanced)`` or '' for the audio codec."""
     codec = info("VideoPlayer.AudioCodec")
     if codec == "dtshd_ma_x_imax":
         return "(IMAX Enhanced)"
@@ -451,7 +417,9 @@ def get_AudioCodecSpatialVar() -> str:
 
 
 def get_AudioChannelsVar() -> str:
-    """Return the surround layout string for the current channel count, e.g. ``'7.1'``."""
+    """Return the surround layout for the channel count, e.g. ``7.1``."""
+    if not _has_audio():
+        return ""
     try:
         ch = int(info("VideoPlayer.AudioChannels"))
         return CHANNELS_MAP.get(ch, "")
@@ -460,21 +428,24 @@ def get_AudioChannelsVar() -> str:
 
 
 def get_AudioChannelsInputVar() -> str:
-    """Return the full speaker-label string for the current channel count."""
+    """Return the speaker labels for the channel count."""
+    if not _has_audio():
+        return na_label()
     try:
         ch = int(info("VideoPlayer.AudioChannels"))
-        return CHANNELS_INPUT_MAP.get(ch, xbmc.getLocalizedString(13205))
+        return CHANNELS_INPUT_MAP.get(ch, na_label())
     except (ValueError, TypeError):
-        return xbmc.getLocalizedString(13205)
+        return na_label()
 
 
 def _channel_layout() -> str:
-    """Return the speaker layout for the current track, e.g. ``5.1.2``.
+    """Return the speaker layout of the track, e.g. ``5.1.2``, or ''.
 
-    Empty when the channel count has no graphic (4, 9 and 10 channels).  Atmos
-    and DTS:X streams take the height-channel variant: Kodi reports no height
-    count, so a 6- or 8-channel track is read as 5.1.2 / 7.1.2.
+    Atmos and DTS:X tracks with 6 or 8 channels use the height variant
+    (5.1.2 / 7.1.2), since Kodi reports no height count.
     """
+    if not _has_audio():
+        return ""
     try:
         ch = int(info("VideoPlayer.AudioChannels"))
     except (ValueError, TypeError):
@@ -487,15 +458,14 @@ def _channel_layout() -> str:
 
 
 def get_ChannelLayerVar() -> str:
-    """Return the speaker-layout backdrop drawn behind the active channels,
-    sized for the current output type's panel."""
+    """Return the speaker-layout backdrop for the current panel size."""
     return f"{_channel_dir()}/layer.png" if _channels_shown() else ""
 
 
 def get_ChannelIconVar() -> str:
-    """Return the speaker-layout graphic for the current channel count, sized
-    for the current output type's panel.  Empty when the count has no graphic,
-    which also hides the control in the skin.
+    """Return the speaker-layout graphic for the channel count, or ''.
+
+    Empty also hides the control in the skin.
     """
     if not _channels_shown():
         return ""
@@ -505,116 +475,149 @@ def get_ChannelIconVar() -> str:
 
 
 def get_AudioBitDepthVar() -> str:
-    """Return the source audio bit depth for display, e.g. ``24-bit``.
+    """Return the audio bit depth for display, e.g. ``24-bit``.
 
-    Prefers the depth audioprobe read from the source bitstream itself for the
-    active track (see dvinfo.py).  While detection runs or finds nothing, known
-    bitstream codecs fall back to AUDIO_BIT_DEPTH_MAP, since Kodi's own
-    ``audiobitspersample`` reports the sink format (always ``8`` during
-    passthrough).  Kodi's value is used only for codecs it decodes itself
-    (AUDIO_PCM_DEPTH_CODECS); lossy codecs have no PCM bit depth and return
-    ``''``, so the skin shows only the sample rate.
+    Kodi reports 0 for streams without a PCM depth (lossy codecs,
+    passthrough); that is shown as ''.
     """
-    probed = get_active_audio_bit_depth()
-    if probed:
-        return f"{probed}-bit"
-
-    codec = info("VideoPlayer.AudioCodec").lower().strip()
-    depth = AUDIO_BIT_DEPTH_MAP.get(codec)
-    if depth:
-        return f"{depth}-bit"
-
-    if codec in AUDIO_PCM_DEPTH_CODECS and not cond("Player.Passthrough"):
-        bits = clean(info("Player.Process(audiobitspersample)"))
-        if bits:
-            return f"{bits}-bit"
-
-    return ""
+    if not _has_audio():
+        return ""
+    bits = clean(info("Player.Process(AudioBitsPerSample)")).strip()
+    try:
+        depth = int(float(bits))
+    except (TypeError, ValueError):
+        return ""
+    return f"{depth}-bit" if depth > 0 else ""
 
 
 def get_AudioSampleRateVar() -> str:
-    """Return the source audio sample rate for display, e.g. ``96 kHz``.
-
-    Prefers the rate audioprobe read from the source bitstream: Kodi reports
-    the DTS compatibility core's rate (48 kHz) even when the extension carries
-    96/192 kHz.  Falls back to Kodi's own value while detection runs.
-    """
-    samplerate = get_active_audio_sample_rate()
-    if not samplerate:
-        samplerate = clean(info("Player.Process(audiosamplerate)"))
+    """Return the audio sample rate in kHz, e.g. ``96 kHz`` or ``44.1 kHz``."""
+    if not _has_audio():
+        return ""
+    samplerate = clean(info("Player.Process(AudioSamplerate)"))
     try:
         hz = float(samplerate)
     except (TypeError, ValueError):
+        return ""
+    if hz <= 0:
         return ""
     khz = hz / 1000.0
     return f"{int(khz)} kHz" if khz.is_integer() else f"{khz:.1f} kHz"
 
 
 def get_AudioNameVar() -> str:
-    """Return the native language name for the active audio track language code."""
+    """Return the native name of the audio language."""
+    if not _has_audio():
+        return ""
     code = info("VideoPlayer.AudioLanguage").lower().strip()
     return LANGUAGE_MAP.get(code, "") if code else ""
 
 
+def _language_short(label: str) -> str:
+    """Return the short code of the language in InfoLabel *label*.
+
+    Codes missing from the map are shown as Kodi reports them, uppercased;
+    untagged tracks (common on Blu-ray .m2ts) read ``UNK``.
+    """
+    code = info(label).lower().strip()
+    return LANGUAGE_MAP_SHORT.get(code, code.upper()) if code else "UNK"
+
+
 def get_AudioNameShortVar() -> str:
-    """Return the native short language name for the active audio track language code."""
-    code = info("VideoPlayer.AudioLanguage").lower().strip()
-    return LANGUAGE_MAP_SHORT.get(code, "") if code else ""
+    """Return the short code of the audio language, ``UNK`` if untagged.
+
+    Empty without an audio track, so the row reads N/A.
+    """
+    if not _has_audio():
+        return ""
+    return _language_short("VideoPlayer.AudioLanguage")
 
 
 # --- Subtitle properties ---------------------------------------------------
 
 def get_SubtitleNameVar() -> str:
-    """Return the native language name for the active subtitle language code."""
+    """Return the native name of the subtitle language."""
     code = info("VideoPlayer.SubtitlesLanguage").lower().strip()
     return LANGUAGE_MAP.get(code, "") if code else ""
 
 
 def get_SubtitleNameShortVar() -> str:
-    """Return the native short language name for the active subtitle language code."""
-    code = info("VideoPlayer.SubtitlesLanguage").lower().strip()
-    return LANGUAGE_MAP_SHORT.get(code, "") if code else ""
+    """Return the short code of the subtitle language, ``UNK`` if untagged.
+
+    Without it an untagged track would read just its codec, e.g. ``(PGS)``.
+    """
+    return _language_short("VideoPlayer.SubtitlesLanguage")
 
 
 def get_SubtitleCodecVar() -> str:
-    """Return the mapped display name for the current subtitle codec."""
+    """Return the display name of the subtitle codec."""
     codec = info("VideoPlayer.SubtitleCodec").lower().strip()
     return SUBTITLE_CODEC_MAP.get(codec, codec.upper()) if codec else ""
 
 
 # --- System properties -----------------------------------------------------
 
-_CPU_CORE_RE = re.compile(r"#\d+:\s*([\d.]+)%")
+_CPU_CORE_RE = re.compile(r"#(\d+):\s*([^%\s]+)%")
+
+# The last finite load of each core, by core number.  Kodi reports a core as
+# ``nan%`` when its /proc/stat counters did not move between two samples (a
+# read within the same tick, or a core the SoC parked), so such a core keeps
+# its previous reading instead of breaking the row.
+_last_core_loads: dict[int, float] = {}
 
 
 def _cpu_core_loads(raw: str) -> list[float]:
-    """Parse ``System.CpuUsage`` into the per-core percentages."""
+    """Return the per-core percentages from ``System.CpuUsage``.
+
+    A core reading ``nan`` / ``inf`` takes its last finite load; one never
+    read before, or unreadable text, is skipped.
+    """
     loads = []
-    for val in _CPU_CORE_RE.findall(raw):
+    for core, val in _CPU_CORE_RE.findall(raw):
         try:
-            loads.append(float(val))
+            load = float(val)
         except ValueError:
             continue
+        index = int(core)
+        if math.isfinite(load):
+            load = max(0.0, min(load, 100.0))
+            _last_core_loads[index] = load
+        elif index in _last_core_loads:
+            load = _last_core_loads[index]
+        else:
+            continue
+        loads.append(load)
     return loads
 
 
+# The more cores, the tighter the row, so it still ends within the bars
+# beneath it: up to this many each load keeps its percent sign...
+_CPU_PERCENT_CORES = 5
+# ...and up to this many they are parted by " | " rather than ", ".
+_CPU_PIPED_CORES = 7
+
+
 def get_CpuUsageVar() -> str:
-    """Parse ``System.CpuUsage`` into a pipe-separated per-core string,
-    e.g. ``'12 | 08 | 15 | 10'``."""
-    raw = info("System.CpuUsage")
-    if not raw:
-        return ""
+    """Return the per-core CPU load, or ''.
 
-    loads = _cpu_core_loads(raw)
-    if not loads:
-        return raw
+    Up to ``_CPU_PERCENT_CORES`` cores ``12% | 08% | 15% | 10% | 11%``, up to
+    ``_CPU_PIPED_CORES`` ``12 | 08 | 15 | 10 | 11 | 09``, beyond that
+    ``12, 08, 15, 10, 11, 09, 14, 13``.
+    """
+    loads = _cpu_core_loads(info("System.CpuUsage"))
+    unit = "%" if len(loads) <= _CPU_PERCENT_CORES else ""
+    separator = " | " if len(loads) <= _CPU_PIPED_CORES else ", "
+    return separator.join(f"{int(v):02d}{unit}" for v in loads)
 
-    return " | ".join(f"{int(v):02d}" for v in loads)
+
+def get_CpuTotalProgressVar() -> float:
+    """Return the average CPU load over all cores as 0-100 for the bar."""
+    loads = _cpu_core_loads(info("System.CpuUsage"))
+    return sum(loads) / len(loads) if loads else 0.0
 
 
 def get_CpuTopUsageVar() -> str:
-    """Return the average CPU usage across all cores, e.g. ``'34%'``, derived
-    from ``System.CpuUsage``.  Empty when no per-core values are parseable."""
+    """Return the average CPU load over all cores, e.g. ``34%``, or ''."""
     loads = _cpu_core_loads(info("System.CpuUsage"))
     if not loads:
         return ""
@@ -623,8 +626,7 @@ def get_CpuTopUsageVar() -> str:
 
 
 def get_CpuTemperatureProgressVar() -> float:
-    """Map System.CPUTemperature to a 0-100 progress value
-    (Celsius 0-110 C, Fahrenheit 32-230 F)."""
+    """Map ``System.CPUTemperature`` to 0-100 (0-110 °C or 32-230 °F)."""
     raw = info("System.CPUTemperature").strip()
     if not raw:
         return 0.0
@@ -646,250 +648,4 @@ def get_CpuTemperatureProgressVar() -> float:
         (temperature - minimum)
         / (maximum - minimum)
         * 100.0
-    )
-
-
-def _metadata_unit() -> str:
-    """Return the configured L6 metadata unit, including Kodi color markup."""
-    unit_color = info("Window(10000).Property(TinyPPI.UnitColor)")
-    unit_label = info("Window(10000).Property(TinyPPI.UnitLabel)")
-
-    if not unit_label:
-        return ""
-    if unit_color:
-        return f"[COLOR={unit_color}]{unit_label}[/COLOR]"
-    return unit_label
-
-
-def _channel_setting_for(hdr_type: str) -> str:
-    """Return the channel setting that governs an ``HdrType`` token.
-
-    Mirrors the branches the skin draws: DV has its own panel, HDR10 / HDR10+ /
-    HLG share one layout, and an empty type means SDR.
-    """
-    low = hdr_type.lower()
-    if "dolby" in low:
-        return "channels_dv"
-    if not low:
-        return "channels_sdr"
-    return "channels_hdr"
-
-
-def publish_channel_visibility(home=None) -> None:
-    """Publish ``TinyPPI.ShowChannelIcon`` for the current output type.
-
-    Re-read every poll rather than once at open: the HDR type is detected
-    asynchronously, so a stream that turns out to be DV must switch to the DV
-    setting while the overlay is up.  A fresh ``Addon()`` avoids its cached
-    settings, so toggling one applies without reopening.
-    """
-    home = home or xbmcgui.Window(10000)
-    setting = _channel_setting_for(home.getProperty("TinyPPI.HdrType"))
-    enabled = xbmcaddon.Addon().getSetting(setting) == "true"
-    home.setProperty("TinyPPI.ShowChannelIcon", "1" if enabled else "0")
-
-
-def publish_hdr_type(home=None) -> None:
-    """Publish the hdrprobe-detected HDR type as ``TinyPPI.HdrType`` on the Home
-    window, for the overlay and mode-select dialog to branch on.
-
-    HDR10+ is published as ``hdr10plus`` because Kodi's boolean parser treats
-    ``+`` as AND; it still contains ``hdr10`` so ``String.Contains`` branches match.
-    """
-    hdr_type = get_hdr_format()
-    if hdr_type == "hdr10+":
-        hdr_type = "hdr10plus"
-    (home or xbmcgui.Window(10000)).setProperty("TinyPPI.HdrType", hdr_type)
-
-
-def _set_progress(window, values: tuple[tuple[int, float], ...]) -> None:
-    """Publish a batch of progress-control percentages."""
-    for control_id, value in values:
-        window.getControl(control_id).setPercent(value)
-
-
-# The L5-derived set as last written to the overlay window, so wait_poll can
-# tell a tick that carries news from one that does not.  Kept in step by
-# update_properties, which always writes the set and always records it.
-_l5_published: tuple[tuple[str, str], ...] | None = None
-
-
-def _l5_derived() -> tuple[tuple[str, str], ...]:
-    """Return every property that follows from the L5 offsets, plus the IMAX
-    badge (which does not, but is refreshed on the same fast beat so it never
-    lags a change of file).
-
-    Split out of update_properties so wait_poll can refresh just this set
-    between full updates.  Cheap enough to call several times a second (a
-    cache read plus whatever the sampler last published, no frame decoding);
-    ``enabled`` and ``available`` are read once here and passed down rather
-    than re-read by every caller below.
-    """
-    enabled = live_detection_enabled()
-
-    static = get_l5_offsets()
-    static_bars = parse_offsets(static)
-    # A genuine RPU reading -- anything past all-zero -- is authoritative and
-    # ends the question; live measurement exists only to answer it when the
-    # RPU itself has nothing (a bare "0 | 0 | 0 | 0", or detection still
-    # fetching, which parses to no bars at all).
-    has_rpu_area = static_bars is not None and any(static_bars)
-
-    if enabled and not has_rpu_area:
-        offsets = resolve_l5_offsets(static)
-        # Says the displayed value came from the picture rather than the RPU —
-        # not that the two differ, which they usually do not on a fixed-framing
-        # title.
-        available = live_measurement_available()
-        # Show the placeholder while the value on screen is not yet the one
-        # that will stand: either nothing is known at all (no RPU offsets,
-        # nothing measured), or the measurement that outranks the RPU is still
-        # on its way and within its grace period.  A settled measurement of
-        # zero is an answer, not a wait, and keeps its zeros.
-        if (offsets == L5_EMPTY and live_detection_pending()) or live_detection_settling():
-            offsets = l5_pending_frame()
-    else:
-        # The RPU already has the answer (or the option is off, in which case
-        # it's the only answer there is) -- no live measurement is run or shown.
-        offsets = static
-        available = False
-    icon_visible = "true" if offsets and not is_status_label(offsets) else "false"
-
-    return (
-        ("AspectRatioVar", get_AspectRatioVar(offsets, live_available=available)),
-        ("ImaxVar", get_ImaxVar()),
-        ("DoviLevel5OffsetsVar", offsets),
-        ("DoviLevel5OffsetsIconVisible", icon_visible),
-        ("DoviLevel5OffsetsLive", "true" if available else "false"),
-    )
-
-
-def wait_poll(monitor, window, seconds: float = 1.0) -> bool:
-    """Wait out one polling interval, keeping the L5 row current meanwhile.
-
-    Returns True when Kodi asked to abort.
-
-    The placeholder needs a faster beat than the poll to read as an animation,
-    and a fresh measurement benefits from the same beat instead of sitting
-    unseen for the rest of the second.  Only the L5-derived set is refreshed
-    here — every other property stays on the original cadence — and only when
-    it actually changed, so a film whose framing never moves triggers no writes
-    (``update_properties`` always writes and records the set, so the comparison
-    starts from what's really on the window).
-    """
-    global _l5_published
-
-    remaining = seconds
-    while remaining > 0:
-        step = min(L5_PENDING_STEP, remaining)
-        if monitor.waitForAbort(step):
-            return True
-        remaining -= step
-        derived = _l5_derived()
-        if derived != _l5_published:
-            set_window_properties(window, derived)
-            _l5_published = derived
-    return False
-
-
-def update_properties(window) -> None:
-    """Compute all player properties and publish them to ``window``.
-
-    Call from ``onInit()`` and from the polling loop.
-    """
-    global _l5_published
-
-    publish_hdr_type()
-    # Depends on the type just published, and gates the channel graphics below.
-    publish_channel_visibility()
-
-    unit = _metadata_unit()
-    fps_info_text, fps_out_text = fps_display_texts(
-        clean(info("Player.Process(videofps)"))
-    )
-
-    # Output-mode line from hdrprobe; fall back to a plain label from Kodi's
-    # ``VideoPlayer.HDRType`` when it would show N/A (``Fetching...`` is kept).
-    output_mode = get_output_mode()
-    # Pending flag: the skin uses it to suppress the conversion-arrow suffix
-    # while only the ``Fetching...`` placeholder should show.
-    output_mode_pending = is_fetch_label(output_mode)
-    if is_status_label(output_mode) and not is_fetch_label(output_mode):
-        output_mode = _output_mode_from_videoplayer() or output_mode
-
-    # Black bars measured off the running picture are what gets shown once a
-    # measurement has landed; the RPU's own offsets stand in until then, and
-    # again whenever detection is off or has given up.  Computed by
-    # _l5_derived() so the poll loop can refresh the same set between updates.
-
-    l5_derived          = _l5_derived()
-    l6_rpu_mdl          = _with_unit(get_l6_rpu_mdl(), unit)
-    l6_rpu_max_cll_fall = _with_unit(get_l6_rpu_max_cll_fall(), unit)
-    hdr10_mdl           = _with_unit(get_hdr10_mdl(), unit)
-    hdr10_max_cll_fall  = _with_unit(get_hdr10_max_cll_fall(), unit)
-
-    set_window_properties(
-        window,
-        (
-            ("VideoDecoderVar", get_VideoDecoderVar()),
-            ("VideoDecoderLongVar", get_VideoDecoderLongVar()),
-            ("VideoPixelFormatVar", get_VideoPixelFormatVar()),
-            ("DisplayModeVar", get_DisplayModeVar()),
-            ("VideoResolutionVar", get_VideoResolutionVar()),
-            *l5_derived,
-            ("VideoBitrateMBVar", get_VideoBitrateMBVar()),
-            ("VideoLiveBitrateVar", get_VideoLiveBitrateVar()),
-            ("VideoCodecVar", get_VideoCodecVar()),
-            ("VideoDecoderNameVar", get_VideoDecoderNameVar()),
-            ("VideoBitDepthVar", get_VideoBitDepthVar()),
-            ("DoviProfileVar", output_mode),
-            ("DoviProfileAltVar", output_mode.replace("Dolby Vision Profile", "DV Profile")),
-            ("MediaSourceVar", _media_source_name(output_mode)),
-            ("DoviProfilePending", "true" if output_mode_pending else "false"),
-            ("DoviTunnelVar", get_DoviTunnelVar()),
-            ("DoviCmVersionVar", get_cm_version()),
-            ("DoviStructureVar", get_structure()),
-            ("DoviLevel6RpuMdlVar", l6_rpu_mdl),
-            ("DoviLevel6RpuMaxCllFallVar", l6_rpu_max_cll_fall),
-            ("Hdr10MdlVar", hdr10_mdl),
-            ("Hdr10MaxCllFallVar", hdr10_max_cll_fall),
-            ("DoviVersionVar", get_dv_version()),
-            ("DoviProfileNumberVar", get_dv_profile()),
-            ("DoviRpuPresentVar", get_dv_rpu_present()),
-            ("DoviBlPresentVar", get_dv_bl_present()),
-            ("DoviElPresentVar", get_dv_el_present()),
-            ("DoviElTypeVar", get_dv_el_type()),
-            ("ModeVar", get_ModeVar()),
-            ("GamutVar", get_GamutVar()),
-            ("FpsInfoVar", fps_info_text),
-            ("FpsDropVar", fps_out_text),
-            ("AudioBitrateKBVar", get_AudioBitrateKBVar()),
-            ("AudioLiveBitrateVar", get_AudioLiveBitrateVar()),
-            ("AudioCodecVar", get_AudioCodecVar()),
-            ("AudioCodecSpatialVar", get_AudioCodecSpatialVar()),
-            ("AudioChannelsVar", get_AudioChannelsVar()),
-            ("AudioChannelsInputVar", get_AudioChannelsInputVar()),
-            ("ChannelIconVar", get_ChannelIconVar()),
-            ("ChannelLayerVar", get_ChannelLayerVar()),
-            ("AudioBitDepthVar", get_AudioBitDepthVar()),
-            ("AudioSampleRateVar", get_AudioSampleRateVar()),
-            ("AudioNameVar", get_AudioNameVar()),
-            ("AudioNameShortVar", get_AudioNameShortVar()),
-            ("SubtitleCodecVar", get_SubtitleCodecVar()),
-            ("SubtitleNameVar", get_SubtitleNameVar()),
-            ("SubtitleNameShortVar", get_SubtitleNameShortVar()),
-            ("CpuUsageVar", get_CpuUsageVar()),
-            ("CpuTopUsageVar", get_CpuTopUsageVar()),
-        ),
-    )
-
-    # Recorded after the write above, so wait_poll's comparison starts from what
-    # is actually on the window.
-    _l5_published = l5_derived
-
-    _set_progress(
-        window,
-        (
-            (9100, get_CpuTemperatureProgressVar()),
-        ),
     )
