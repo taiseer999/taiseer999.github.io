@@ -162,26 +162,48 @@ def _targets(rec, defs):
     return t
 
 
+def _value(sid):
+    r = _rpc('Settings.GetSettingValue', {'setting': sid})
+    return (r.get('result') or {}).get('value')
+
+
 def apply(rec=None):
-    """Write the recommendation. Returns True when a setting changed."""
+    """Write the recommendation and save it to guisettings.xml.
+    Returns True when a setting changed (in memory or on disk)."""
     cur_mem, _cur_rf, defs = current()
     if not defs:
         _log('cache settings not exposed by this Kodi build - nothing done',
              xbmc.LOGWARNING)
         return False
     rec = rec or recommend(cur_mem=cur_mem)
+    targets = _targets(rec, defs)
     changed = False
-    for sid, val in _targets(rec, defs).items():
+    applied = {}
+    for sid, val in targets.items():
         if defs[sid].get('value') == val:
+            applied[sid] = val
             continue
         r = _rpc('Settings.SetSettingValue', {'setting': sid, 'value': val})
-        if r.get('result') is True or r.get('result') == 'OK':
+        now = _value(sid)
+        if now == val:
             changed = True
+            applied[sid] = val
             _log('%s -> %s' % (sid, val))
         else:
-            _log('%s -> %s refused: %s' % (sid, val, r.get('error')), xbmc.LOGWARNING)
+            _log('%s -> %s refused (rpc=%s, now=%s)' % (sid, val, r, now),
+                 xbmc.LOGWARNING)
+    # 3.4.31: SetSettingValue is memory-only and our restart is os._exit, so
+    # the change was lost on every restart. Persist it to disk now.
+    if applied:
+        from resources.lib import settings_flush
+        text = settings_flush._read(settings_flush._path())
+        on_disk = not settings_flush._missing(text, applied) if text else False
+        if not on_disk:
+            if settings_flush.flush(applied):
+                changed = True
     if changed:
-        _log('cache tuned for %d MB RAM (%s tier)' % (rec['ram_mb'], rec['tier']))
+        _log('cache tuned for %d MB RAM (%s tier): %s'
+             % (rec['ram_mb'], rec['tier'], applied))
     return changed
 
 
@@ -212,12 +234,23 @@ def run():
         xbmcgui.Dialog().ok(TITLE, msg)
         return
     if all(defs[k].get('value') == v for k, v in tgt.items()):
+        # Applied in memory - make sure it is on disk too, otherwise the
+        # next force restart drops it again; if it was not, offer restart.
+        if apply(rec):
+            _recommend_restart()
+            return
         xbmcgui.Dialog().ok(TITLE, msg + '[CR][CR]' + T(30542))
         return
     if xbmcgui.Dialog().yesno(TITLE, msg):
-        if apply(rec):
-            try:
-                from resources.lib import origin_fix
-                origin_fix.recommend_restart(message=T(30543))
-            except Exception:
-                xbmcgui.Dialog().ok(TITLE, T(30543))
+        if not apply(rec):
+            xbmcgui.Dialog().ok(TITLE, T(30544))
+        else:
+            _recommend_restart()
+
+
+def _recommend_restart():
+    try:
+        from resources.lib import origin_fix
+        origin_fix.recommend_restart(message=T(30543))
+    except Exception:
+        xbmcgui.Dialog().ok(TITLE, T(30543))

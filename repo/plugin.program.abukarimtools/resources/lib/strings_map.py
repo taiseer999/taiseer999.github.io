@@ -294,6 +294,8 @@ STRINGS = {
             "الجهاز: %s[CR]الذاكرة: %d ميغابايت[CR][CR]الذاكرة المؤقتة الحالية: %d ميغابايت، معامل القراءة %d[CR]المقترح: %d ميغابايت، معامل القراءة %d[CR][CR]تطبيق القيم المقترحة؟"),
     30542: ("Already optimal - nothing to change.", "الإعدادات مثالية مسبقاً - لا يوجد ما يتغير."),
     30543: ("Cache settings saved. Restart Kodi to use them.", "تم حفظ إعدادات الذاكرة المؤقتة. أعد تشغيل كودي لتفعيلها."),
+    30544: ("Kodi did not accept the cache values - nothing was changed. See kodi.log ([AbukarimTools HwTuning]).",
+            "لم يقبل كودي قيم الذاكرة المؤقتة، ولم يتغيّر شيء. راجع سجل kodi.log ([AbukarimTools HwTuning])."),
     30550: ("Use these to connect a phone remote app (Kore, Yatse) or a browser.[CR][CR]Address: %s[CR]Username: %s[CR]Password: %s",
             "استخدم هذه البيانات لربط تطبيق ريموت على الجوال (Kore أو Yatse) أو من المتصفح.[CR][CR]العنوان: %s[CR]اسم المستخدم: %s[CR]كلمة المرور: %s"),
     30551: ("Show login", "عرض بيانات الدخول"),

@@ -1,3 +1,19 @@
+v3.4.31
+- FIX: Device Tuning did not change the cache values. JSON-RPC
+  Settings.SetSettingValue only changes Kodi's settings in memory; Kodi
+  writes guisettings.xml on a clean exit, but every ABUKARIM restart is a
+  force close (os._exit), so the new readfactor was thrown away and Kodi
+  came back on "adaptive". New settings_flush module triggers a real
+  settings save (Skin.SetBool -> CSettings::Save), verifies the values in
+  guisettings.xml and writes them there directly if Kodi did not.
+- Device Tuning reads each value back after setting it, logs refusals, and
+  says so on screen instead of silently doing nothing.
+- If the values were applied in memory but never reached disk, opening
+  Device Tuning again now saves them and offers the restart.
+- Language switch to English (set_language) used a "SaveSettings" builtin
+  that does not exist in Kodi - same loss on force restart; now uses the
+  same settings_flush.
+
 v3.4.30
 - Clean Unused Items:
   * Skin Shortcuts (script.skinshortcuts) and Global Search

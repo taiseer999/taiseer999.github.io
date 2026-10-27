@@ -720,6 +720,10 @@ msgctxt "#30543"
 msgid "Cache settings saved. Restart Kodi to use them."
 msgstr ""
 
+msgctxt "#30544"
+msgid "Kodi did not accept the cache values - nothing was changed. See kodi.log ([AbukarimTools HwTuning])."
+msgstr ""
+
 msgctxt "#30550"
 msgid "Use these to connect a phone remote app (Kore, Yatse) or a browser.[CR][CR]Address: %s[CR]Username: %s[CR]Password: %s"
 msgstr ""

@@ -720,6 +720,10 @@ msgctxt "#30543"
 msgid "Cache settings saved. Restart Kodi to use them."
 msgstr "تم حفظ إعدادات الذاكرة المؤقتة. أعد تشغيل كودي لتفعيلها."
 
+msgctxt "#30544"
+msgid "Kodi did not accept the cache values - nothing was changed. See kodi.log ([AbukarimTools HwTuning])."
+msgstr "لم يقبل كودي قيم الذاكرة المؤقتة، ولم يتغيّر شيء. راجع سجل kodi.log ([AbukarimTools HwTuning])."
+
 msgctxt "#30550"
 msgid "Use these to connect a phone remote app (Kore, Yatse) or a browser.[CR][CR]Address: %s[CR]Username: %s[CR]Password: %s"
 msgstr "استخدم هذه البيانات لربط تطبيق ريموت على الجوال (Kore أو Yatse) أو من المتصفح.[CR][CR]العنوان: %s[CR]اسم المستخدم: %s[CR]كلمة المرور: %s"

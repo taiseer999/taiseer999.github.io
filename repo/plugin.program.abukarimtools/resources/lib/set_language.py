@@ -71,18 +71,12 @@ def _flush():
     such restart. Best-effort: never raises.
     """
     try:
-        # Ask Kodi to write settings now. Not all builds expose SaveSettings as
-        # a builtin; if it is a no-op the sleep below still covers the normal
-        # async flush window.
-        xbmc.executebuiltin('SaveSettings')
+        # 3.4.31: there is no "SaveSettings" builtin; settings_flush triggers
+        # a real CSettings::Save() and verifies guisettings.xml on disk.
+        from resources.lib import settings_flush
+        settings_flush.flush({_SETTING: _ENGLISH})
     except Exception as exc:
-        _log('SaveSettings builtin failed (ignored): %r' % exc,
-             xbmc.LOGWARNING)
-    # Give the write time to reach disk before the caller restarts Kodi.
-    try:
-        xbmc.sleep(1500)
-    except Exception:
-        pass
+        _log('settings flush failed (ignored): %r' % exc, xbmc.LOGWARNING)
 
 
 def force_english(only_if_arabic=True):
