@@ -516,6 +516,8 @@ PATCHES = [
         'new': '',
         'count': 0,  # 0 -> re.subn replaces every match
         'description': 'RedLight sources_results.xml - dark fallback when the window theme property is empty (kills the intermittent white background)',
+        # Lucent replaces this window entirely (no circle.png pills left to fix).
+        'obsolete_if_contains': '<!-- LUCENT for ',
         'already_patched_check': '<!-- ABUKARIM: dark fallback when the theme property is empty -->',
         'fallback_pattern': (
             r'([ \t]*)<control type="image">(\r?\n)'
@@ -1548,6 +1550,23 @@ PATCHES = [
         'fallback_repl': _AF3_SUBTOOLS_POPUP_XML.replace('\\', '\\\\') + r'\1',
         'description': 'AF3 Subtitle Buttons - matching slots in OSD popups (no duplicate icons)',
     },
+    # ── Lucent theme for Fen Light, Red Light, POV & Umbrella (toggle 'lucent_sources') ──
+    # Source results + scraping/resolving windows restyled after the Lucent theme
+    # for Seren (djdirty60/Seren-Thema). One entry per add-on; lucent_sources.py
+    # copies the helper/textures/XMLs, adds fenced hooks, and backs up the stock
+    # XMLs so switching the toggle off restores them (see _revert_disabled).
+    {'addon_id': 'plugin.video.fenlight', 'lucent': 'fenlight', 'toggle': 'lucent_sources', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'sources_results.xml'),
+     'old': '', 'new': '', 'description': 'Fen Light - Lucent source windows'},
+    {'addon_id': 'plugin.video.redlight', 'lucent': 'redlight', 'toggle': 'lucent_sources', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'sources_playback.xml'),
+     'old': '', 'new': '', 'description': 'Red Light - Lucent source windows'},
+    {'addon_id': 'plugin.video.pov', 'lucent': 'pov', 'toggle': 'lucent_sources', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'sources_results.xml'),
+     'old': '', 'new': '', 'description': 'POV - Lucent source windows'},
+    {'addon_id': 'plugin.video.umbrella', 'lucent': 'umbrella', 'toggle': 'lucent_sources', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'source_results.xml'),
+     'old': '', 'new': '', 'description': 'Umbrella - Lucent source windows'},
 ]
 
 
@@ -1972,6 +1991,11 @@ def _apply_patch(patch):
                 return True, '[%s] Addon not present – skipping (optional).' % patch['addon_id']
             return False, '[%s] Addon not found: %s' % (patch['addon_id'], addon_path)
 
+    # Lucent theme entries are whole-feature installs handled by their own module.
+    if patch.get('lucent'):
+        from resources.lib import lucent_sources
+        return lucent_sources.apply(addon_path, patch['lucent'])
+
     # Version window (remote entries, optional on built-ins): a patch written
     # for 3.4.x must never touch 3.5.0.
     if patch.get('min_version') or patch.get('max_version'):
@@ -2184,6 +2208,7 @@ TOGGLE_GROUPS = [
     ('a4ksubs_quiet',    'a4kSubtitles: Hide Account/API-Key Nags'),
     ('af3_subtools',     'AF3: Subtitle Buttons (DexSubtitles Sync & Cycler)'),
     ('dexhub_entry',     'DexHub: Plugin Entry Fix (Kodi 22)'),
+    ('lucent_sources',   'Lucent Theme: Fen Light, Red Light, POV & Umbrella'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
 
@@ -2951,6 +2976,21 @@ def _revert_disabled(addon_ids=None):
     if not disabled:
         return
     wanted = set(addon_ids) if addon_ids else None
+    # Lucent theme: put the stock windows back and remove the hooks.
+    if 'lucent_sources' in disabled:
+        from resources.lib import lucent_sources
+        for aid, profile in lucent_sources.PROFILE_OF.items():
+            if wanted is not None and aid not in wanted:
+                continue
+            addon_path = _resolve_addon_dir(aid)
+            if not addon_path:
+                continue
+            try:
+                res = lucent_sources.revert(addon_path, profile)
+            except Exception as e:
+                res = (False, '[%s] Lucent revert failed: %s' % (aid, e))
+            if res:
+                yield res
     for patch in _all_patches():
         pair = patch.get('revert_when_off')
         if not pair or _toggle_of(patch) not in disabled:

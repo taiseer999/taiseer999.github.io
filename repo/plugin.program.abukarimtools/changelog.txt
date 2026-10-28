@@ -1,3 +1,46 @@
+v3.4.33
+- Lucent Theme, from the first on-device test (RL / Umbrella / POV):
+  * Umbrella source_progress.xml and POV progress_media.xml: the counts were
+    plain text. A new update() hook (lucent_progress) reads the 4K / 1080p /
+    720p / SD numbers out of the add-on's own progress text (POV Int + Ext are
+    added up) into tiles, and keeps the rest (time, remaining providers) below.
+    Heading switches to "Opening stream" when resolving starts.
+  * Umbrella started from TMDbHelper gets a slim meta with no clearlogo,
+    rating or MPAA, so its Lucent windows had a bare title and only the year.
+    Missing fields are now taken from the focused Kodi item, only when its
+    TMDb / IMDb id matches the title being played.
+  * Release names and the provider line lost their FIRST characters
+    ("JNE PART TWO...", ".LDEBRID"): Kodi trims an overflowing label from the
+    start on a right-to-left (Arabic) GUI. Both are now fitted in Python; the
+    meta line drops trailing parts instead of being cut. No title scrolling.
+  * Badges capped at 7 (what the card shows). Helper version 2; existing
+    3.4.32 hooks are replaced on the next sweep.
+
+v3.4.32
+- NEW toggle "Lucent Theme: Fen Light, Red Light, POV & Umbrella" (Apply
+  Patches checklist). Restyles the stream list and the scraping / resolving /
+  resume screens after the Lucent theme for Seren (djdirty60/Seren-Thema):
+  cinematic backdrop, logo + meta pills + plot on the left, glass stream panel
+  on the right, one card per stream (quality pill, release, provider / cache /
+  size / site, up to 7 badges: DV, HDR, HEVC, REMUX, Atmos, TrueHD, DTS-X,
+  5.1/7.1 ...). CAM/SCR releases get a red quality pill.
+  * Fen Light / Red Light: sources_results.xml + sources_playback.xml (all three
+    list layouts, filter list on LEFT, resume buttons). Red Light keeps its
+    Home-window scrape counters and resume countdown.
+  * POV: sources_results.xml + progress_media.xml.
+  * Umbrella: source_results.xml, uncached_results.xml, source_progress.xml
+    (icon-only and hidden progress modes kept; Back / View Uncached pills).
+- How: new lucent_sources module copies a small helper (lucent_theme.py) into
+  each add-on, adds fenced one-line hooks (# >>> ABK LUCENT) that turn the
+  add-on's own properties into lucent.* ones (badges split one per slot), and
+  copies the textures. Stock XMLs are backed up to addon_data/lucent_stock and
+  restored byte-exact when the toggle is turned off. All-or-nothing per add-on:
+  if an upstream update moves a hook anchor, nothing is written for that add-on
+  and Apply Patches reports it.
+- RedLight dark-fallback patch on sources_results.xml skips itself while
+  Lucent owns that window.
+- tools/gen_lucent.py regenerates the nine window XMLs.
+
 v3.4.31
 - FIX: Device Tuning did not change the cache values. JSON-RPC
   Settings.SetSettingValue only changes Kodi's settings in memory; Kodi
