@@ -354,7 +354,7 @@ def card(state, profile):
                             <height>42</height>
                             <texture border="21">lucent/pill42.png</texture>
                             <colordiffuse>%(pd)s</colordiffuse>
-                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
+                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq)) + String.IsEmpty(ListItem.Property(lucent.res))</visible>
                         </control>
                         <control type="image">
                             <left>20</left>
@@ -375,7 +375,18 @@ def card(state, profile):
                             <aligny>center</aligny>
                             <textcolor>%(pt)s</textcolor>
                             <label>[B]$INFO[ListItem.Property(lucent.quality)][/B]</label>
-                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
+                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq)) + String.IsEmpty(ListItem.Property(lucent.res))</visible>
+                        </control>
+                        <!-- Resolution flag (Arctic Fuse 3 colour flags) -->
+                        <control type="image">
+                            <left>20</left>
+                            <top>14</top>
+                            <width>124</width>
+                            <height>46</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>lucent/res/$INFO[ListItem.Property(lucent.res)].png</texture>
+                            <colordiffuse>%(resd)s</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(lucent.res))</visible>
                         </control>
                         <control type="label">
                             <left>20</left>
@@ -389,11 +400,12 @@ def card(state, profile):
                             <label>[B]$INFO[ListItem.Property(lucent.quality)][/B]</label>
                             <visible>!String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
                         </control>
+                        <!-- Debrid / service icon (AB Wizard account manager artwork) -->
                         <control type="image">
-                            <left>62</left>
-                            <top>72</top>
-                            <width>40</width>
-                            <height>40</height>
+                            <left>58</left>
+                            <top>66</top>
+                            <width>48</width>
+                            <height>48</height>
                             <aspectratio>keep</aspectratio>
                             <texture>$INFO[ListItem.Property(lucent.icon)]</texture>
                             <colordiffuse>%(icon)s</colordiffuse>
@@ -438,7 +450,7 @@ def card(state, profile):
                     </control>
                 </control>''' % {
         'zoom': zoom, 'body': body, 'full': full, 'pd': pill_diffuse, 'pt': pill_text,
-        'icon': 'FFFFFFFF' if active else '99FFFFFF', 'tc': title_color, 'mc': meta_color,
+        'icon': 'FFFFFFFF' if active else 'D9FFFFFF', 'resd': 'FFFFFFFF' if active else 'D9FFFFFF', 'tc': title_color, 'mc': meta_color,
         'scroll': scroll, 'tl': title_label, 'badges': badge_row(badge_diffuse), 'fl': full_label}
 
 

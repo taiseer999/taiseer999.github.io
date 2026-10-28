@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Lucent theme helper - injected by AB Tools (plugin.program.abukarimtools).
-# LUCENT_HELPER_VERSION = 2
+# LUCENT_HELPER_VERSION = 3
 #
 # Normalises each add-on's own source-list and meta properties into one shared
 # 'lucent.*' property set, so a single Lucent window layout works for Fen Light,
@@ -114,6 +114,29 @@ def _fit(text, limit):
 	return text.rstrip(' .-_') + '…'
 
 
+# Resolution flag (Arctic Fuse 3 media/flags/color/resolution) per quality.
+_RES = {'8K': '8k', '4K': '4k', '2160P': '4k', 'UHD': '4k', '1080P': '1080', '1080': '1080', 'FHD': '1080',
+		'720P': '720', '720': '720', 'HD': '720', 'SD': '480', '480P': '480', '576P': '480'}
+# Debrid / service icon (AB Wizard account manager artwork) per provider name.
+_PROVIDERS = (('realdebrid', ('REAL-DEBRID', 'REALDEBRID', 'RD', 'RD_CLOUD', 'RD CLOUD')),
+			('alldebrid', ('ALLDEBRID', 'AD', 'AD_CLOUD', 'AD CLOUD')),
+			('premiumize', ('PREMIUMIZE', 'PREMIUMIZE.ME', 'PM', 'PM_CLOUD', 'PM CLOUD')),
+			('torbox', ('TORBOX', 'TB', 'TB_CLOUD', 'TB CLOUD')),
+			('offcloud', ('OFFCLOUD', 'OC', 'OC_CLOUD', 'OC CLOUD')),
+			('easydebrid', ('EASYDEBRID', 'ED')),
+			('easynews', ('EASYNEWS', 'EN')))
+_PROVIDER_OF = {alias: icon for icon, aliases in _PROVIDERS for alias in aliases}
+
+
+def _provider_icon(*names):
+	for name in names:
+		key = _clean(name).upper().strip()
+		if key in _PROVIDER_OF: return 'lucent/providers/%s.png' % _PROVIDER_OF[key]
+		for alias, icon in _PROVIDER_OF.items():
+			if len(alias) > 3 and alias in key: return 'lucent/providers/%s.png' % icon
+	return ''
+
+
 def lucent_item(listitem, profile):
 	"""Add lucent.* properties to one source list item (reads the add-on's own ones)."""
 	try:
@@ -135,7 +158,8 @@ def lucent_item(listitem, profile):
 				'lucent.meta': _fit('  ·  '.join(meta), _META_PX),
 				'lucent.lowq': 'true' if quality in _LOWQ else '',
 				'lucent.uncached': 'true' if 'UNCACHED' in source_type.upper() else '',
-				'lucent.icon': get(keys['icon']) if keys['icon'] else ''}
+				'lucent.res': '' if quality in _LOWQ else _RES.get(quality, ''),
+				'lucent.icon': _provider_icon(provider, site)}
 		found = badges(get(keys['info']), quality)
 		for n in range(_MAX_BADGES):
 			props['lucent.badge_%d' % (n + 1)] = found[n] if n < len(found) else ''

@@ -1,3 +1,16 @@
+v3.4.34
+- Lucent Theme cards:
+  * Quality pill replaced by the colour resolution flags from Arctic Fuse 3
+    (media/flags/color/resolution: 4K, 1080p, 720p, SD 480, 8K) in
+    media/lucent/res/. CAM / SCR / TELE keep the red text pill; any quality
+    without a flag falls back to the text pill.
+  * Debrid / service icon under the flag now uses the AB Wizard account manager
+    artwork (Real-Debrid, AllDebrid, Premiumize, TorBox, Offcloud, EasyDebrid,
+    Easynews; incl. *_cloud sources), 96px rounded, in media/lucent/providers/.
+    Replaces each add-on's own small provider icon; Umbrella cards now get one
+    too. No icon for sources without a service (folders, direct hosters).
+- Helper version 3 (lucent.res, lucent.icon mapping).
+
 v3.4.33
 - Lucent Theme, from the first on-device test (RL / Umbrella / POV):
   * Umbrella source_progress.xml and POV progress_media.xml: the counts were
