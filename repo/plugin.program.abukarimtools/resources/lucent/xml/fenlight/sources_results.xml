@@ -235,7 +235,7 @@
                 <height>40</height>
                 <font>font12</font>
                 <textcolor>FF8F9BA6</textcolor>
-                <label>◀  Press LEFT for filters</label>
+                <label>▶  Press RIGHT to filter</label>
                 <visible>!Control.HasFocus(2100) + !String.IsEqual(Window.Property(filter_applied),true)</visible>
             </control>
             <control type="label">
@@ -341,7 +341,7 @@
                 <focusposition>1</focusposition>
                 <movement>3</movement>
                 <onleft>2100</onleft>
-                <onright>2060</onright>
+                <onright>2100</onright>
                 <visible>String.IsEqual(Window.Property(window_format),list)</visible>
                 <itemlayout height="148" width="936">
                 <control type="group">
@@ -935,7 +935,7 @@
                 <focusposition>1</focusposition>
                 <movement>3</movement>
                 <onleft>2100</onleft>
-                <onright>2063</onright>
+                <onright>2100</onright>
                 <visible>String.IsEqual(Window.Property(window_format),rows)</visible>
                 <itemlayout height="148" width="936">
                 <control type="group">
@@ -1529,7 +1529,7 @@
                 <focusposition>1</focusposition>
                 <movement>3</movement>
                 <onleft>2100</onleft>
-                <onright>2064</onright>
+                <onright>2100</onright>
                 <visible>String.IsEqual(Window.Property(window_format),widelist)</visible>
                 <itemlayout height="148" width="936">
                 <control type="group">

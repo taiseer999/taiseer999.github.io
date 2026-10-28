@@ -491,7 +491,7 @@ def stream_list(lid, visible, profile, scroll_id):
                 <scrolltime tween="cubic" easing="out">250</scrolltime>
                 <focusposition>1</focusposition>
                 <movement>3</movement>%(nav)s
-                <onright>%(sid)s</onright>%(vis)s
+                <onright>%(right)s</onright>%(vis)s
                 <itemlayout height="148" width="936">%(idle)s
                 </itemlayout>
                 <focusedlayout height="148" width="936" condition="!Control.HasFocus(%(id)s)">%(dim)s
@@ -499,7 +499,7 @@ def stream_list(lid, visible, profile, scroll_id):
                 <focusedlayout height="148" width="936" condition="Control.HasFocus(%(id)s)">%(active)s
                 </focusedlayout>
             </control>
-''' % {'id': lid, 'sid': scroll_id, 'vis': vis, 'nav': nav,
+''' % {'id': lid, 'sid': scroll_id, 'vis': vis, 'nav': nav, 'right': profile.get('onright', lid),
            'idle': card('idle', profile), 'dim': card('dim', profile), 'active': card('active', profile)}
 
 
@@ -793,7 +793,7 @@ def fen_results_profile(name):
                 <height>40</height>
                 <font>font12</font>
                 <textcolor>FF8F9BA6</textcolor>
-                <label>◀  Press LEFT for filters</label>
+                <label>▶  Press RIGHT to filter</label>
                 <visible>!Control.HasFocus(2100) + !String.IsEqual(Window.Property(filter_applied),true)</visible>
             </control>
             <control type="label">
@@ -810,7 +810,7 @@ def fen_results_profile(name):
     return {
         'name': name,
         'lists': [('2000', fmt % 'list', '2060'), ('2001', fmt % 'rows', '2063'), ('2002', fmt % 'widelist', '2064')],
-        'list_nav': '\n                <onleft>2100</onleft>',
+        'list_nav': '\n                <onleft>2100</onleft>', 'onright': '2100',
         'full_prop': 'perform_full_search', 'full_label': 'Perform Full Search',
         'subhead': '[UPPERCASE]$INFO[Window.Property(total_results)] Results $INFO[Window.Property(filters_ignored)] $INFO[Window.Property(filter_info)][/UPPERCASE]',
         'left_extra': filter_list, 'plot_fade_cond': 'Control.HasFocus(2100)',
@@ -841,7 +841,7 @@ def pov_results_profile():
             <height>40</height>
             <font>font12</font>
             <textcolor>FF8F9BA6</textcolor>
-            <label>MENU for options  ·  INFO for details</label>
+            <label>RIGHT to filter  ·  MENU for options  ·  INFO for details</label>
         </control>''',
     }
 
@@ -868,8 +868,17 @@ def umbrella_results_profile(list_id, what, buttons=True):
         'lists': [(list_id, None, '5060')],
         'list_nav': nav,
         'full_prop': 'lucent.never_set', 'full_label': '',
-        'subhead': '[UPPERCASE]$INFO[Window().Property(umbrella.total_results)] Results[/UPPERCASE]',
-        'left_extra': extra,
+        'subhead': '[UPPERCASE]$INFO[Window().Property(umbrella.total_results)] Results$INFO[Window.Property(lucent.filter_info),  ·  Filter: ,  ·  BACK to clear][/UPPERCASE]',
+        'left_extra': extra + '''
+        <control type="label">
+            <left>96</left>
+            <top>%d</top>
+            <width>720</width>
+            <height>40</height>
+            <font>font12</font>
+            <textcolor>FF8F9BA6</textcolor>
+            <label>RIGHT to filter  ·  MENU for options  ·  INFO for details</label>
+        </control>''' % (960 if buttons else 936),
     }
 
 
@@ -963,6 +972,102 @@ def umbrella_progress():
     return window_shell('Umbrella', 'progress', body)
 
 
+def pov_contextmenu():
+    """POV options dialog (long-press / MENU on a stream; also POV's image viewer).
+    Contract: list 2020, ListItem.Property(tikiskins.context.label)."""
+    label = '$INFO[ListItem.Property(tikiskins.context.label)]'
+    body = '''
+        <control type="image">
+            <texture>lucent/white.png</texture>
+            <colordiffuse>B3000000</colordiffuse>
+            <animation effect="fade" start="0" end="100" time="200">WindowOpen</animation>
+            <animation effect="fade" end="0" time="150">WindowClose</animation>
+        </control>
+        <control type="group">
+            <animation effect="fade" start="0" end="100" time="220">WindowOpen</animation>
+            <animation effect="zoom" start="94" end="100" center="auto" time="220" tween="cubic" easing="out">WindowOpen</animation>
+            <animation effect="fade" end="0" time="150">WindowClose</animation>
+            <centerleft>50%%</centerleft>
+            <centertop>50%%</centertop>
+            <width>640</width>
+            <height max="760">auto</height>
+            <control type="image">
+                <texture border="48">lucent/panel.png</texture>
+                <colordiffuse>F2162532</colordiffuse>
+            </control>
+            <control type="image">
+                <texture border="48">lucent/panel_edge.png</texture>
+                <colordiffuse>2EFFFFFF</colordiffuse>
+            </control>
+            <control type="image">
+                <left>32</left>
+                <top>28</top>
+                <width>48</width>
+                <height>48</height>
+                <aspectratio>keep</aspectratio>
+                <texture>$INFO[Window.Property(tikiskins.pov.icon)]</texture>
+            </control>
+            <control type="label">
+                <left>96</left>
+                <top>28</top>
+                <width>500</width>
+                <height>48</height>
+                <font>font27</font>
+                <aligny>center</aligny>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>[B]Options[/B]</label>
+            </control>
+            <control type="image">
+                <left>32</left>
+                <top>100</top>
+                <width>576</width>
+                <height>1</height>
+                <texture>lucent/white.png</texture>
+                <colordiffuse>1AFFFFFF</colordiffuse>
+            </control>
+            <control type="list" id="2020">
+                <left>24</left>
+                <top>116</top>
+                <width>592</width>
+                <height max="616">auto</height>
+                <onup>2020</onup>
+                <ondown>2020</ondown>
+                <orientation>vertical</orientation>
+                <scrolltime tween="cubic" easing="out">200</scrolltime>
+                <itemlayout height="77" width="592">
+                    <control type="label">
+                        <left>32</left>
+                        <width>528</width>
+                        <height>64</height>
+                        <font>font12</font>
+                        <aligny>center</aligny>
+                        <textcolor>FFDCE2E7</textcolor>
+                        <label>%(label)s</label>
+                    </control>
+                </itemlayout>
+                <focusedlayout height="77" width="592">
+                    <control type="image">
+                        <width>592</width>
+                        <height>64</height>
+                        <texture border="32">lucent/pill64.png</texture>
+                        <colordiffuse>FFFFFFFF</colordiffuse>
+                        <animation effect="zoom" start="97" end="100" center="auto" time="160" tween="cubic" easing="out">Focus</animation>
+                    </control>
+                    <control type="label">
+                        <left>32</left>
+                        <width>528</width>
+                        <height>64</height>
+                        <font>font12</font>
+                        <aligny>center</aligny>
+                        <textcolor>FF%(bg)s</textcolor>
+                        <label>[B]%(label)s[/B]</label>
+                    </control>
+                </focusedlayout>
+            </control>
+        </control>''' % {'label': label, 'bg': BG}
+    return window_shell('POV', 'options menu', body)
+
+
 def resume_buttons_fen():
     resume = 'String.IsEqual(Window.Property(window_mode),resume)'
     return button_row([
@@ -997,6 +1102,7 @@ def build():
         'Red Light', rl_counts, rl % 'percent', 'Window.Property(resume_timeout_percent)', resume_buttons_redlight())
     files['pov/sources_results.xml'] = results_window(pov_results_profile())
     files['pov/progress_media.xml'] = pov_progress()
+    files['pov/contextmenu.xml'] = pov_contextmenu()
     files['umbrella/source_results.xml'] = results_window(umbrella_results_profile('2000', 'results'))
     files['umbrella/uncached_results.xml'] = results_window(umbrella_results_profile('2001', 'uncached', buttons=False))
     files['umbrella/source_progress.xml'] = umbrella_progress()

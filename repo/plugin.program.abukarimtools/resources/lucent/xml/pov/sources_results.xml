@@ -179,7 +179,7 @@
             <height>40</height>
             <font>font12</font>
             <textcolor>FF8F9BA6</textcolor>
-            <label>MENU for options  ·  INFO for details</label>
+            <label>RIGHT to filter  ·  MENU for options  ·  INFO for details</label>
         </control>
         <!-- ============ Right: glass stream panel ============ -->
         <control type="group">
@@ -272,7 +272,7 @@
                 <scrolltime tween="cubic" easing="out">250</scrolltime>
                 <focusposition>1</focusposition>
                 <movement>3</movement>
-                <onright>2060</onright>
+                <onright>2000</onright>
                 <visible>String.StartsWith(Window.Property(tikiskins.window_style),list)</visible>
                 <itemlayout height="148" width="936">
                 <control type="group">
@@ -865,7 +865,7 @@
                 <scrolltime tween="cubic" easing="out">250</scrolltime>
                 <focusposition>1</focusposition>
                 <movement>3</movement>
-                <onright>2061</onright>
+                <onright>2001</onright>
                 <visible>String.StartsWith(Window.Property(tikiskins.window_style),infolist)</visible>
                 <itemlayout height="148" width="936">
                 <control type="group">
@@ -1458,7 +1458,7 @@
                 <scrolltime tween="cubic" easing="out">250</scrolltime>
                 <focusposition>1</focusposition>
                 <movement>3</movement>
-                <onright>2062</onright>
+                <onright>2002</onright>
                 <visible>String.StartsWith(Window.Property(tikiskins.window_style),widelist)</visible>
                 <itemlayout height="148" width="936">
                 <control type="group">

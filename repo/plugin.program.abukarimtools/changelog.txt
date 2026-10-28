@@ -1,3 +1,27 @@
+v3.4.36
+- Lucent Theme: POV contextmenu.xml (the options dialog from a long press of
+  OK / MENU on a stream; POV's image viewer uses it too) restyled - dim
+  backdrop, centred glass panel with the POV icon and "Options" header, white
+  focused pill like the filter list. Same contract (list 2020,
+  tikiskins.context.label), XML only, no new hooks; backed up and restored with
+  the other Lucent windows.
+
+v3.4.35
+- Lucent Theme: RIGHT on the stream list filters the sources.
+  * Fen Light / Red Light: RIGHT (and still LEFT) opens the add-on's own filter
+    list; RIGHT or BACK there returns to the streams. Hint now says
+    "Press RIGHT to filter".
+  * POV: RIGHT calls POV's own filter menu (filter_results - quality, provider,
+    title, info); BACK clears it, as before. New one-line onAction hook.
+  * Umbrella (results + uncached): had no filter at all. New lucent_filter in
+    the helper: quality, debrid service, source site, title keywords, and
+    info badges (multi-select: DV, HDR, Atmos, REMUX ...). Each pick filters
+    from the full list; "Show all results" or BACK restores it. Keeps
+    Umbrella's item_list in step so play / info / context menu still act on
+    the right source. Sub-header shows "Filter: ... BACK to clear".
+  * The stream lists no longer move focus to the scrollbar on RIGHT.
+- Helper version 4.
+
 v3.4.34
 - Lucent Theme cards:
   * Quality pill replaced by the colour resolution flags from Arctic Fuse 3

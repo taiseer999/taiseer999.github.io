@@ -218,6 +218,15 @@
                 </control>
             </control>
         </control>
+        <control type="label">
+            <left>96</left>
+            <top>960</top>
+            <width>720</width>
+            <height>40</height>
+            <font>font12</font>
+            <textcolor>FF8F9BA6</textcolor>
+            <label>RIGHT to filter  ·  MENU for options  ·  INFO for details</label>
+        </control>
         <!-- ============ Right: glass stream panel ============ -->
         <control type="group">
             <animation effect="fade" start="0" end="100" time="350" delay="150">WindowOpen</animation>
@@ -264,7 +273,7 @@
                 <height>26</height>
                 <font>font12</font>
                 <textcolor>FF8F9BA6</textcolor>
-                <label>[UPPERCASE]$INFO[Window().Property(umbrella.total_results)] Results[/UPPERCASE]</label>
+                <label>[UPPERCASE]$INFO[Window().Property(umbrella.total_results)] Results$INFO[Window.Property(lucent.filter_info),  ·  Filter: ,  ·  BACK to clear][/UPPERCASE]</label>
             </control>
             <control type="image">
                 <left>40</left>
@@ -308,7 +317,7 @@
                 <focusposition>1</focusposition>
                 <movement>3</movement>
                 <onleft>2090</onleft>
-                <onright>5060</onright>
+                <onright>2000</onright>
                 <itemlayout height="148" width="936">
                 <control type="group">
                     <left>16</left>

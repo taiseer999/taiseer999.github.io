@@ -42,8 +42,8 @@ _HELPER_REL = os.path.join('resources', 'lib', 'modules', 'lucent_theme.py')
 
 _FEN_IMPORT = ('try: from modules.lucent_theme import lucent_item, lucent_window, lucent_progress\n'
                'except Exception: lucent_item = lucent_window = lambda *a, **k: None; lucent_progress = lambda w, c, p=0: c\n')
-_UMB_IMPORT = ('try: from resources.lib.modules.lucent_theme import lucent_item, lucent_window, lucent_progress\n'
-               'except Exception: lucent_item = lucent_window = lambda *a, **k: None; lucent_progress = lambda w, c, p=0: c\n')
+_UMB_IMPORT = ('try: from resources.lib.modules.lucent_theme import lucent_item, lucent_window, lucent_progress, lucent_filter\n'
+               'except Exception: lucent_item = lucent_window = lambda *a, **k: None; lucent_progress = lambda w, c, p=0: c; lucent_filter = lambda *a: False\n')
 
 # Each hook: (file relative to the add-on, anchor, code, 'before'|'after').
 # Code is inserted at the anchor's own indentation (for 'before') or the
@@ -79,9 +79,13 @@ SPECS = {
     },
     'pov': {
         'addon_id': 'plugin.video.pov', 'label': 'POV',
-        'xml': ('sources_results.xml', 'progress_media.xml'),
+        'xml': ('sources_results.xml', 'progress_media.xml', 'contextmenu.xml'),
         'hooks': [
             (os.path.join(_WIN, 'sources.py'), 'from windows import BaseDialog\n', _FEN_IMPORT, 'after'),
+            # RIGHT on the stream list -> POV's own filter menu
+            (os.path.join(_WIN, 'sources.py'),
+             '\tdef onAction(self, action):\n\t\tchosen_listitem = self.get_listitem(self.window_id)\n',
+             'if action == self.right_actions and self.getFocusId() == self.window_id: return self.filter_results()\n', 'after'),
             (os.path.join(_WIN, 'sources.py'), "\t\t\t\tset_property('source', str(count))\n",
              "lucent_item(listitem, 'pov')\n", 'after'),
             (os.path.join(_WIN, 'sources.py'),
@@ -106,6 +110,8 @@ for _f in ('source_results.py', 'uncached_results.py'):
         (os.path.join(_WIN, _f), 'from resources.lib.windows.base import BaseDialog\n', _UMB_IMPORT, 'after'),
         (os.path.join(_WIN, _f), "\t\t\t\t\tlistitem.setProperty('umbrella.quality_icon1', str(quality1_icon))\n",
          "lucent_item(listitem, 'umbrella')\n", 'after'),
+        (os.path.join(_WIN, _f), '\t\t\tif action_id in self.info_actions:\n',
+         'if lucent_filter(self, action_id, self.window_id): return\n', 'before'),
         (os.path.join(_WIN, _f), '\tdef set_properties(self):\n\t\tif self.meta is None: return\n',
          "lucent_window(self, self.meta, fanart=self.meta.get('fanart') or addonFanart())\n", 'after'),
     ]

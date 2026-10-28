@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Lucent theme helper - injected by AB Tools (plugin.program.abukarimtools).
-# LUCENT_HELPER_VERSION = 3
+# LUCENT_HELPER_VERSION = 4
 #
 # Normalises each add-on's own source-list and meta properties into one shared
 # 'lucent.*' property set, so a single Lucent window layout works for Fen Light,
@@ -274,3 +274,83 @@ def lucent_window(window, meta, fanart='', clearlogo=None):
 		window.setProperty('lucent.clearlogo', clearlogo if clearlogo is not None else (get('clearlogo') or ''))
 	except Exception:
 		pass
+
+
+# ───────────── Umbrella: RIGHT on the stream list opens a filter ─────────────
+_RIGHT, _BACK = 2, (9, 10, 13, 92)
+_Q_ORDER = ('4K', '1080P', '720P', 'SD', 'SCR', 'CAM')
+
+
+def _apply_filter(window, list_id, items, info):
+	ctrl = window.getControl(list_id)
+	ctrl.reset()
+	ctrl.addItems(items)
+	window.item_list = items
+	window.setProperty('umbrella.total_results', str(len(items)))
+	window.setProperty('lucent.filter_info', info)
+	try: window.setFocusId(list_id); ctrl.selectItem(0)
+	except Exception: pass
+
+
+def lucent_filter(window, action_id, list_id):
+	"""Umbrella result windows: RIGHT on the list -> filter menu, BACK -> clear.
+	Returns True when the action was handled here."""
+	try:
+		full = getattr(window, '_lucent_full', None)
+		if action_id in _BACK and full is not None:
+			window._lucent_full = None
+			_apply_filter(window, list_id, full, '')
+			return True
+		if action_id != _RIGHT or window.getFocusId() != list_id: return False
+		import xbmcgui
+		dialog = xbmcgui.Dialog()
+		items = full if full is not None else list(window.item_list)
+		if not items: return True
+		get = lambda li, k: _clean(li.getProperty(k))
+		qualities = sorted({get(i, 'umbrella.quality').upper() for i in items} - {''},
+						key=lambda q: _Q_ORDER.index(q) if q in _Q_ORDER else 99)
+		services = sorted({get(i, 'umbrella.debrid') for i in items} - {''})
+		sites = sorted({get(i, 'umbrella.provider') for i in items} - {''})
+		choices = [('Show %s only' % q, 'quality', q) for q in qualities]
+		choices += [('Show %s only' % d, 'debrid', d) for d in services]
+		choices += [('Source: %s' % p, 'site', p) for p in sites]
+		choices += [('Filter by title...', 'title', ''), ('Filter by info (HDR, Atmos ...)...', 'info', '')]
+		if full is not None: choices.insert(0, ('Show all results', 'all', ''))
+		pick = dialog.select('Filter results', [c[0] for c in choices])
+		if pick < 0: return True
+		label, kind, value = choices[pick]
+		if kind == 'all':
+			window._lucent_full = None
+			_apply_filter(window, list_id, items, '')
+			return True
+		if kind in ('quality', 'debrid', 'site'): label = value
+		if kind == 'quality': result = [i for i in items if get(i, 'umbrella.quality').upper() == value]
+		elif kind == 'debrid': result = [i for i in items if get(i, 'umbrella.debrid') == value]
+		elif kind == 'site': result = [i for i in items if get(i, 'umbrella.provider') == value]
+		elif kind == 'title':
+			text = dialog.input('Keywords (comma separated)')
+			words = [w.strip().upper() for w in (text or '').split(',') if w.strip()]
+			if not words: return True
+			result = [i for i in items if all(w in get(i, 'umbrella.name').upper() for w in words)]
+			label = 'Title: ' + ', '.join(words)
+		else:
+			present = []
+			for i in items:
+				for n in range(1, _MAX_BADGES + 1):
+					b = i.getProperty('lucent.badge_%d' % n)
+					if b and b not in present: present.append(b)
+			present.sort(key=lambda b: _RANK.get(b, 999))
+			if not present: return True
+			sel = dialog.multiselect('Filter by info', present)
+			if not sel: return True
+			want = [present[n] for n in sel]
+			result = [i for i in items if all(w in [i.getProperty('lucent.badge_%d' % n) for n in range(1, _MAX_BADGES + 1)] for w in want)]
+			label = ' + '.join(want)
+		if not result:
+			dialog.ok('Filter results', 'No results')
+			return True
+		window._lucent_full = items
+		_apply_filter(window, list_id, result, label)
+		return True
+	except Exception:
+		return False
