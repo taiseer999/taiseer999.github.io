@@ -810,7 +810,7 @@ def fen_results_profile(name):
     return {
         'name': name,
         'lists': [('2000', fmt % 'list', '2060'), ('2001', fmt % 'rows', '2063'), ('2002', fmt % 'widelist', '2064')],
-        'list_nav': '\n                <onleft>2100</onleft>', 'onright': '2100',
+        'list_nav': '\n                <onleft>2100</onleft>',
         'full_prop': 'perform_full_search', 'full_label': 'Perform Full Search',
         'subhead': '[UPPERCASE]$INFO[Window.Property(total_results)] Results $INFO[Window.Property(filters_ignored)] $INFO[Window.Property(filter_info)][/UPPERCASE]',
         'left_extra': filter_list, 'plot_fade_cond': 'Control.HasFocus(2100)',

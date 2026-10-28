@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Lucent theme helper - injected by AB Tools (plugin.program.abukarimtools).
-# LUCENT_HELPER_VERSION = 4
+# LUCENT_HELPER_VERSION = 5
 #
 # Normalises each add-on's own source-list and meta properties into one shared
 # 'lucent.*' property set, so a single Lucent window layout works for Fen Light,
@@ -354,3 +354,36 @@ def lucent_filter(window, action_id, list_id):
 		return True
 	except Exception:
 		return False
+
+
+# ───────────── Fen Light / Red Light: RIGHT on the stream list ─────────────
+def _log(msg):
+	try:
+		import xbmc
+		xbmc.log('[Lucent] %s' % msg, xbmc.LOGINFO)
+	except Exception:
+		pass
+
+
+def lucent_fen_filter(window):
+	"""Open the add-on's own filter entries (filter list 2100) as a menu and
+	apply the pick through its own filter_action - no focus moves involved."""
+	try:
+		import xbmcgui
+		items = list(getattr(window, 'filter_list', None) or [])
+		_log('RIGHT -> filter menu (%d entries, filter applied=%s)' % (len(items), getattr(window, 'filter_applied', False)))
+		if not items: return
+		labels = [li.getProperty('label') for li in items]
+		offset = 0
+		if getattr(window, 'filter_applied', False):
+			labels.insert(0, 'Show all results')
+			offset = 1
+		pick = xbmcgui.Dialog().select('Filter results', labels)
+		if pick < 0: return
+		if offset and pick == 0:
+			window.clear_filter()
+			return
+		window.select_item(window.filter_window_id, pick - offset)
+		window.filter_action(window.selection_actions[0])
+	except Exception as e:
+		_log('filter menu failed: %r' % e)

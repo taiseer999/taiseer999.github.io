@@ -341,7 +341,7 @@
                 <focusposition>1</focusposition>
                 <movement>3</movement>
                 <onleft>2100</onleft>
-                <onright>2100</onright>
+                <onright>2000</onright>
                 <visible>String.IsEqual(Window.Property(window_format),list)</visible>
                 <itemlayout height="148" width="936">
                 <control type="group">
@@ -935,7 +935,7 @@
                 <focusposition>1</focusposition>
                 <movement>3</movement>
                 <onleft>2100</onleft>
-                <onright>2100</onright>
+                <onright>2001</onright>
                 <visible>String.IsEqual(Window.Property(window_format),rows)</visible>
                 <itemlayout height="148" width="936">
                 <control type="group">
@@ -1529,7 +1529,7 @@
                 <focusposition>1</focusposition>
                 <movement>3</movement>
                 <onleft>2100</onleft>
-                <onright>2100</onright>
+                <onright>2002</onright>
                 <visible>String.IsEqual(Window.Property(window_format),widelist)</visible>
                 <itemlayout height="148" width="936">
                 <control type="group">

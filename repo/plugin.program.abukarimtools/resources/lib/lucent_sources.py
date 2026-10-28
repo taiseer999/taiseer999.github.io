@@ -40,8 +40,8 @@ _SKIN = os.path.join('resources', 'skins', 'Default')
 _WIN = os.path.join('resources', 'lib', 'windows')
 _HELPER_REL = os.path.join('resources', 'lib', 'modules', 'lucent_theme.py')
 
-_FEN_IMPORT = ('try: from modules.lucent_theme import lucent_item, lucent_window, lucent_progress\n'
-               'except Exception: lucent_item = lucent_window = lambda *a, **k: None; lucent_progress = lambda w, c, p=0: c\n')
+_FEN_IMPORT = ('try: from modules.lucent_theme import lucent_item, lucent_window, lucent_progress, lucent_fen_filter\n'
+               'except Exception: lucent_item = lucent_window = lucent_fen_filter = lambda *a, **k: None; lucent_progress = lambda w, c, p=0: c\n')
 _UMB_IMPORT = ('try: from resources.lib.modules.lucent_theme import lucent_item, lucent_window, lucent_progress, lucent_filter\n'
                'except Exception: lucent_item = lucent_window = lambda *a, **k: None; lucent_progress = lambda w, c, p=0: c; lucent_filter = lambda *a: False\n')
 
@@ -54,6 +54,12 @@ SPECS = {
         'xml': ('sources_results.xml', 'sources_playback.xml'),
         'hooks': [
             (os.path.join(_WIN, 'sources.py'), 'from modules import kodi_utils\n', _FEN_IMPORT, 'after'),
+            # RIGHT on the stream list -> the add-on's own filter entries as a menu,
+            # applied through its own filter_action (no focus moves: the XML
+            # <onright> route bounced, and focusing the hidden list was unreliable).
+            (os.path.join(_WIN, 'sources.py'),
+             "\t\tif self.get_visibility('Control.HasFocus(%s)' % self.filter_window_id): return self.filter_action(action)\n",
+             'if action == self.right_action: return lucent_fen_filter(self)\n', 'after'),
             (os.path.join(_WIN, 'sources.py'), '\t\t\t\t\tyield listitem\n\t\t\t\texcept: pass\n',
              "lucent_item(listitem, 'fen')\n", 'before'),
             (os.path.join(_WIN, 'sources.py'),
@@ -68,6 +74,12 @@ SPECS = {
         'xml': ('sources_results.xml', 'sources_playback.xml'),
         'hooks': [
             (os.path.join(_WIN, 'sources.py'), 'from modules.utils import TaskPool\n', _FEN_IMPORT, 'after'),
+            # RIGHT on the stream list -> the add-on's own filter entries as a menu,
+            # applied through its own filter_action (no focus moves: the XML
+            # <onright> route bounced, and focusing the hidden list was unreliable).
+            (os.path.join(_WIN, 'sources.py'),
+             "\t\tif self.get_visibility('Control.HasFocus(%s)' % self.filter_window_id): return self.filter_action(action)\n",
+             'if action == self.right_action: return lucent_fen_filter(self)\n', 'after'),
             (os.path.join(_WIN, 'sources.py'), '\t\t\t\titem_list.append((listitem, count))\n',
              "lucent_item(listitem, 'fen')\n", 'before'),
             (os.path.join(_WIN, 'sources.py'),

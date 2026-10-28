@@ -1,3 +1,25 @@
+v3.4.38
+- FIX Lucent Theme: RIGHT still did nothing in Red Light (debug log: five
+  Right actions reached window 13005, Red Light ran a fresh interpreter so the
+  3.4.37 hook was loaded, no Python error, focus never reached list 2100).
+  Instead of moving focus to the faded-out filter list, RIGHT now opens the
+  add-on's own filter entries (self.filter_list labels) in a select dialog and
+  applies the pick through its own filter_action, exactly like selecting the
+  row in the list. When a filter is active the menu starts with "Show all
+  results" (clear_filter). Same for Fen Light. LEFT still opens the side list.
+- The helper now logs "[Lucent] RIGHT -> filter menu (N entries ...)" at INFO,
+  and any failure, so the next log shows what happened.
+- Helper version 5.
+
+v3.4.37
+- FIX Lucent Theme: RIGHT did nothing in Red Light / Fen Light. The list's
+  XML <onright>2100 moved focus to the filter list BEFORE the add-on's
+  onAction ran; onAction then saw focus on 2100 and its filter_action treats
+  RIGHT there as "close filter", so focus bounced straight back. The stream
+  lists now keep focus on RIGHT and a fenced hook right after that check calls
+  setFocusId(filter_window_id). RIGHT (or BACK) inside the filter list still
+  returns to the streams; LEFT unchanged.
+
 v3.4.36
 - Lucent Theme: POV contextmenu.xml (the options dialog from a long press of
   OK / MENU on a stream; POV's image viewer uses it too) restyled - dim
