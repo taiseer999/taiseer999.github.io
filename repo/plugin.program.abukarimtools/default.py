@@ -426,6 +426,12 @@ def router():
         service.run_now(remove_flag=True, force=True)
         return
 
+    if mode == 'subtitle_style':
+        # 4.6.2: AF3 OSD Subtitle Look button - height / font size / font panel.
+        from resources.lib import sub_quick
+        sub_quick.open_window()
+        return
+
     if mode == 'subtitle_cycler':
         # 3.3.2: AF3 OSD Subtitle Cycler button when script.subtitle.cycler
         # is missing/disabled - install it from repository.taiseer, then run it.

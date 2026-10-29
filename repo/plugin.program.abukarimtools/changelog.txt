@@ -1,3 +1,54 @@
+v4.6.6
+- TMDbHelper 7.x (tested on 7.0.8): new min_version 7.0.0 entries, the old
+  ones capped at max_version 6.99.99 (skipped cleanly, no failures):
+  * tmdbh_trakt_auth: api/trakt/api.py TraktAPI.login -> _abk_qr_login()
+    (QR window, same device/token polling; stock dialog if it errors).
+  * tmdbh_mpaa_ksa: items/database/tmdbdata.py
+    CertificationDetailsDataBaseCache - iso_country IN (?, "US"), own
+    country first, empty names skipped.
+  * tmdbh_genre_lang: items/database/database.py ItemDetailsDataBase -
+    after check_database_initialization (7.x calls create_database only for
+    a new file), once per session + language (window property).
+  * query/database/database.py: no 7.x entry - 7.x caches the genre list
+    per language already (TMDbGenres.db, GenreLookup.<lang>).
+
+v4.6.5
+- Subtitle Look height = subtitles.marginvertical (Kodi 0..50 %, clamped
+  1..50, step 1 %) with subtitles.align = Bottom (1). Kodi reloads the
+  subtitle style on any settings change (CRenderer::UpdateSubtitleStyle ->
+  LoadSettings + ResetSubtitlePosition), so it is live and absolute. JSON-RPC
+  SetSettingValue only checks visibility, so the setting's "disabled while
+  playing" dependency does not block it. SubtitleShiftUp/Down dropped: their
+  distance accelerates (CMovingSpeed 100 px/s^2, max 300) and is 0 within one
+  frame, so a press never moved a known amount. OK on Height = 4.95 %.
+  addon_data/subtitle_look.json no longer used.
+
+v4.6.4
+- Subtitle Look: slider nibs are images moved with setPosition (the progress
+  righttexture stayed at the left end).
+- Height is absolute: calibrate() = 1400 SubtitleShiftDown (Kodi clamps at
+  its lowest) + POS_BASE 60 up = level 0. Range 0..40 presses (10 steps
+  each), no going below 0 / off screen. Calibrated on first use and on OK on
+  the Height row. State: subtitle_look.json {level, calibrated}.
+
+v4.6.3
+- Subtitle Look height: one press = 10 Kodi SubtitleShift actions
+  (POS_ACTIONS), bar span 30 presses each way. subtitles.align is always set
+  to Manual (0) - "Below picture" (2) capped the shift near the bottom.
+  Saved offset key renamed (position_presses), so the counter starts at 0.
+
+v4.6.2
+- NEW toggle af3_substyle "AF3: Subtitle Look Button (Height, Size & Font)":
+  icon extras/icons/substyle.png, button 6012 before Video settings (6008)
+  in VideoOSD.xml, and a matching empty slot in the OSD popups
+  (Includes_OSD.xml). Both XML parts carry revert_when_off.
+- The button runs RunPlugin(?mode=subtitle_style) -> sub_quick.py, window
+  abk_subquick.xml (top right, so the subtitle line is the live preview):
+  Height = SubtitleShiftUp/Down (sets subtitles.align to Manual first when
+  needed; the bar shows steps moved, kept in addon_data/subtitle_look.json),
+  Font size = subtitles.fontsize (step 2, Kodi's min/max), Font =
+  subtitles.fontname next/previous, wrapping around.
+
 v4.6.1
 - Service icons restored, unchanged (media/lucent/providers, AB Wizard account
   manager artwork, same files as 3.4.34+), shown on every card: Search All
