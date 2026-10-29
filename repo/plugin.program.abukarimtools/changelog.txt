@@ -1,3 +1,16 @@
+v4.5.2
+- FIX POV (real cause of "list failed: '<' not supported between instances
+  of 'str' and 'int'", traceback in kodi.log 2026-10-29 11:07): POV's
+  caches/meta_cache.py get_memory_cache compares the expiry read back from
+  metacache.db (text) with an int timestamp. New always-on patch casts it
+  (fallback: database lookup). Bridge helper v4 also guards it in memory for
+  a POV updated since. 4.5.1's results clean-up stays as a second guard.
+- FIX Search All / Umbrella: Umbrella scrapes by title; with Kodi in Arabic
+  the title was Arabic ("Koko" -> "كوكو", 0 results). For Umbrella only, the
+  English title / show name / episode name (+ year, IMDb, TVDb ids if
+  missing) are read from TMDb (en-US, Umbrella's TMDb key) when the given
+  names are not Latin script.
+
 v4.5.1
 - FIX Search All / POV: "list failed: argument of type 'int' is not a
   container or iterable" and "'<' not supported between instances of 'str'

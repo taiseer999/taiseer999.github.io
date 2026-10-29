@@ -146,6 +146,8 @@ class Session(object):
     def url(self, key, aid, kind, index=None):
         """plugin:// URL of an add-on's list ('list') or play ('play') mode."""
         m = self.media
+        if key == 'umb':
+            m = getattr(self, 'umb_media', None) or m
         mode = 'app_list_sources' if kind == 'list' else 'app_play_source'
         if key == 'umb':                    # Umbrella: action=..., needs the names and the other ids
             params = {'action': mode, 'title': m.get('title', ''), 'year': m.get('year', ''),
@@ -174,6 +176,8 @@ class Session(object):
 
     def _run(self, key, aid, name):
         rid = self.request_id(key)
+        if key == 'umb':
+            self.umb_media = _english_names(self.media)
         url = self.url(key, aid, 'list')
         path = os.path.join(_DATA, aid, 'device_select', '%s.json' % rid)
         t0 = time.time()
@@ -210,6 +214,60 @@ class Session(object):
                 listener()
             except Exception as e:
                 _log('update failed: %s' % e, xbmc.LOGWARNING)
+
+
+# ───────────────────────── Umbrella: English names ─────────────────────────
+# Umbrella scrapes by title. With Kodi in Arabic, TMDbHelper (and the focused
+# item) give the Arabic title, and title-based scrapers then find nothing
+# (kodi.log 2026-10-29: "Koko" sent as "كوكو", 0 results). Ask TMDb for the
+# English names, with Umbrella's own TMDb key.
+
+_UMB_TMDB_KEY = 'edde6b5e41246ab79a2697cd125e1781'     # Umbrella's built-in default
+
+
+def _latin(text):
+    return all(ord(c) < 0x250 for c in str(text or ''))
+
+
+def _tmdb(path):
+    import urllib.request
+    key = ''
+    try:
+        import xbmcaddon
+        key = xbmcaddon.Addon('plugin.video.umbrella').getSetting('tmdb.apikey')
+    except Exception:
+        pass
+    url = 'https://api.themoviedb.org/3/%s%sapi_key=%s&language=en-US' % (path, '&' if '?' in path else '?', key or _UMB_TMDB_KEY)
+    with urllib.request.urlopen(url, timeout=6) as r:
+        return json.loads(r.read().decode('utf-8'))
+
+
+def _english_names(media):
+    m = dict(media)
+    if _latin(m.get('title')) and _latin(m.get('tvshowtitle')) and m.get('imdb'):
+        return m
+    try:
+        if m['media_type'] == 'movie':
+            d = _tmdb('movie/%s?append_to_response=external_ids' % m['tmdb_id'])
+            m['title'] = d.get('title') or m.get('title', '')
+            m['year'] = (d.get('release_date') or '')[:4] or m.get('year', '')
+            m['imdb'] = m.get('imdb') or d.get('imdb_id') or ''
+        else:
+            d = _tmdb('tv/%s?append_to_response=external_ids' % m['tmdb_id'])
+            ext = d.get('external_ids') or {}
+            m['tvshowtitle'] = d.get('name') or m.get('tvshowtitle', '')
+            m['year'] = (d.get('first_air_date') or '')[:4] or m.get('year', '')
+            m['imdb'] = m.get('imdb') or ext.get('imdb_id') or ''
+            m['tvdb'] = m.get('tvdb') or str(ext.get('tvdb_id') or '')
+            try:
+                e = _tmdb('tv/%s/season/%s/episode/%s' % (m['tmdb_id'], m['season'], m['episode']))
+                m['title'] = e.get('name') or m.get('title', '')
+            except Exception:
+                pass
+        _log('Umbrella names: %s / %s (%s) %s' % (m.get('title'), m.get('tvshowtitle'), m.get('year'), m.get('imdb')))
+    except Exception as e:
+        _log('Umbrella names from TMDb failed (%s) - using the ones given' % e, xbmc.LOGWARNING)
+    return m
 
 
 # ───────────────────────── merging ─────────────────────────

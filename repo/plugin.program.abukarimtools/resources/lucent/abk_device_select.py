@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # AB Tools "Search All" bridge - injected by AB Tools (plugin.program.abukarimtools).
-# ABK_DEVICE_SELECT_VERSION = 3
+# ABK_DEVICE_SELECT_VERSION = 4
 #
 # Gives Red Light, POV and Umbrella Fen Light's device-select modes, so AB Tools
 # can collect their sources next to the other add-ons' and play the one picked:
@@ -105,6 +105,8 @@ def _run(aid, kind, p):
 		finally:
 			if restore: restore()
 	from modules.sources import Sources
+	if aid == 'plugin.video.pov':
+		_guard_pov_meta()
 	if aid == 'plugin.video.pov' and kind == 'list':
 		import modules.sources as pov
 		restore = _guard_pov(pov)
@@ -132,6 +134,26 @@ def _run(aid, kind, p):
 
 _POV_TEXT = ('extraInfo', 'cache_provider', 'quality', 'name', 'display_name', 'scrape_provider',
 			 'debrid', 'source', 'provider', 'name_info', 'size_label')
+
+
+def _guard_pov_meta():
+	"""POV's metadata memory cache can hold its expiry as text and then raises
+	"'<' not supported between instances of 'str' and 'int'" on the next lookup
+	of that title (AB Tools also patches meta_cache.py; this covers a POV that
+	was updated since). A failed memory lookup just falls back to the database."""
+	try:
+		from caches.meta_cache import MetaCache
+	except Exception:
+		return
+	orig = MetaCache.get_memory_cache
+	if getattr(orig, '_abk', False): return
+	def safe(self, *a, **k):
+		try:
+			return orig(self, *a, **k)
+		except (TypeError, ValueError):
+			return None
+	safe._abk = True
+	MetaCache.get_memory_cache = safe
 
 
 def _clean_pov(item, ranks):

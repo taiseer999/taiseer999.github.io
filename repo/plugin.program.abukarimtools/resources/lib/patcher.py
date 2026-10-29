@@ -1572,6 +1572,18 @@ PATCHES = [
     {'addon_id': 'plugin.video.umbrella', 'lucent': 'umbrella', 'feature': 'lucent_umbrella', 'not_found_ok': True,
      'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'source_results.xml'),
      'old': '', 'new': '', 'description': 'Umbrella - Glass theme source windows'},
+    # ── POV: metadata memory cache compares a text expiry with a number (4.5.2) ──
+    # A movie's meta read back from metacache.db keeps its "expires" column as
+    # text, is put in the memory cache (window property) that way, and the next
+    # lookup of that title in the session raises TypeError "'<' not supported
+    # between instances of 'str' and 'int'" in get_memory_cache - POV then
+    # cannot open sources for it (CoreELEC report, kodi.log 2026-10-29).
+    {'addon_id': 'plugin.video.pov', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'lib', 'caches', 'meta_cache.py'),
+     'old': "\t\texpiry, meta = self.jsloads(cache_data)\n\t\tif expiry < current_time: return None\n",
+     'new': "\t\texpiry, meta = self.jsloads(cache_data)\n\t\ttry:\n\t\t\tif int(expiry) < current_time: return None\n\t\texcept (TypeError, ValueError): return None  # ABK: text expiry from metacache.db\n",
+     'already_patched_check': '# ABK: text expiry from metacache.db',
+     'description': 'POV meta_cache.py - text expiry in the memory cache no longer breaks source search'},
     # ── Search All (3.4.48): Toggles > Glass Theme > "Search All add-ons" ──
     # Red Light gets Fen Light's device-select modes back (Fen Light has them);
     # TMDbHelper gets the "AB Search All" player that opens resources/lib/ab_search.py.
