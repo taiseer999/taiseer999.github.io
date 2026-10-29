@@ -509,16 +509,16 @@
                 <orientation>horizontal</orientation>
                 <scrolltime tween="cubic" easing="out">200</scrolltime>
                 <ondown>2000</ondown>
-                <itemlayout height="52" width="238">
+                <itemlayout height="52" width="258">
                     <control type="image">
-                        <width>226</width>
+                        <width>246</width>
                         <height>52</height>
                         <texture border="26">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill60.png</texture>
                         <colordiffuse>1AFFFFFF</colordiffuse>
                         <visible>String.IsEmpty(ListItem.Property(abs.active))</visible>
                     </control>
                     <control type="image">
-                        <width>226</width>
+                        <width>246</width>
                         <height>52</height>
                         <texture border="26">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill60.png</texture>
                         <colordiffuse>66D6F0FF</colordiffuse>
@@ -570,27 +570,39 @@
                         <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="true">Conditional</animation>
                         <visible>!String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
+                    <!-- name and count in separate labels: one mixed label was
+                         re-ordered and cut from the start with Kodi in Arabic -->
                     <control type="label">
-                        <left>30</left>
-                        <width>190</width>
+                        <left>38</left>
+                        <width>148</width>
                         <height>52</height>
                         <font>font12</font>
-                        <align>center</align>
+                        <align>left</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
-                        <label>[B]$INFO[ListItem.Label][/B]$INFO[ListItem.Label2,  ,]</label>
+                        <label>[B]$INFO[ListItem.Label][/B]</label>
+                    </control>
+                    <control type="label">
+                        <left>186</left>
+                        <width>50</width>
+                        <height>52</height>
+                        <font>font12</font>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
                     </control>
                 </itemlayout>
-                <focusedlayout height="52" width="238" condition="!Control.HasFocus(2300)">
+                <focusedlayout height="52" width="258" condition="!Control.HasFocus(2300)">
                     <control type="image">
-                        <width>226</width>
+                        <width>246</width>
                         <height>52</height>
                         <texture border="26">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill60.png</texture>
                         <colordiffuse>1AFFFFFF</colordiffuse>
                         <visible>String.IsEmpty(ListItem.Property(abs.active))</visible>
                     </control>
                     <control type="image">
-                        <width>226</width>
+                        <width>246</width>
                         <height>52</height>
                         <texture border="26">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill60.png</texture>
                         <colordiffuse>66D6F0FF</colordiffuse>
@@ -642,20 +654,32 @@
                         <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="true">Conditional</animation>
                         <visible>!String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
+                    <!-- name and count in separate labels: one mixed label was
+                         re-ordered and cut from the start with Kodi in Arabic -->
                     <control type="label">
-                        <left>30</left>
-                        <width>190</width>
+                        <left>38</left>
+                        <width>148</width>
                         <height>52</height>
                         <font>font12</font>
-                        <align>center</align>
+                        <align>left</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
-                        <label>[B]$INFO[ListItem.Label][/B]$INFO[ListItem.Label2,  ,]</label>
+                        <label>[B]$INFO[ListItem.Label][/B]</label>
+                    </control>
+                    <control type="label">
+                        <left>186</left>
+                        <width>50</width>
+                        <height>52</height>
+                        <font>font12</font>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
                     </control>
                 </focusedlayout>
-                <focusedlayout height="52" width="238" condition="Control.HasFocus(2300)">
+                <focusedlayout height="52" width="258" condition="Control.HasFocus(2300)">
                     <control type="image">
-                        <width>226</width>
+                        <width>246</width>
                         <height>52</height>
                         <texture border="26">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill60.png</texture>
                         <colordiffuse>FFFFFFFF</colordiffuse>
@@ -706,15 +730,27 @@
                         <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="true">Conditional</animation>
                         <visible>!String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
+                    <!-- name and count in separate labels: one mixed label was
+                         re-ordered and cut from the start with Kodi in Arabic -->
                     <control type="label">
-                        <left>30</left>
-                        <width>190</width>
+                        <left>38</left>
+                        <width>148</width>
                         <height>52</height>
                         <font>font12</font>
-                        <align>center</align>
+                        <align>left</align>
                         <aligny>center</aligny>
                         <textcolor>FF0B1119</textcolor>
-                        <label>[B]$INFO[ListItem.Label][/B]$INFO[ListItem.Label2,  ,]</label>
+                        <label>[B]$INFO[ListItem.Label][/B]</label>
+                    </control>
+                    <control type="label">
+                        <left>186</left>
+                        <width>50</width>
+                        <height>52</height>
+                        <font>font12</font>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF0B1119</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
                     </control>
                 </focusedlayout>
             </control>

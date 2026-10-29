@@ -229,7 +229,7 @@ def _latin(text):
     return all(ord(c) < 0x250 for c in str(text or ''))
 
 
-def _tmdb(path):
+def _tmdb(path, lang='en-US'):
     import urllib.request
     key = ''
     try:
@@ -237,7 +237,7 @@ def _tmdb(path):
         key = xbmcaddon.Addon('plugin.video.umbrella').getSetting('tmdb.apikey')
     except Exception:
         pass
-    url = 'https://api.themoviedb.org/3/%s%sapi_key=%s&language=en-US' % (path, '&' if '?' in path else '?', key or _UMB_TMDB_KEY)
+    url = 'https://api.themoviedb.org/3/%s%sapi_key=%s&language=%s' % (path, '&' if '?' in path else '?', key or _UMB_TMDB_KEY, lang)
     with urllib.request.urlopen(url, timeout=6) as r:
         return json.loads(r.read().decode('utf-8'))
 
@@ -268,6 +268,76 @@ def _english_names(media):
     except Exception as e:
         _log('Umbrella names from TMDb failed (%s) - using the ones given' % e, xbmc.LOGWARNING)
     return m
+
+
+# ───────────────────────── window meta from TMDb ─────────────────────────
+# Logo, backdrop, plot, rating, certificate and genres for the left column.
+# TMDbHelper's player URL carries only ids and names, and the focused item is
+# often not the title any more by the time AB Tools runs (screenshot
+# 2026-10-29: title and year only). Kodi's language first, English fallback.
+
+_IMG = 'https://image.tmdb.org/t/p/%s%s'
+
+
+def _ui_lang():
+    try:
+        return xbmc.getLanguage(xbmc.ISO_639_1) or 'en'
+    except Exception:
+        return 'en'
+
+
+def _pick_logo(logos, lang):
+    for want in (lang, 'en', None):
+        for lg in logos or []:
+            if lg.get('iso_639_1') == want and lg.get('file_path', '').endswith('.png'):
+                return _IMG % ('w500', lg['file_path'])
+    return ''
+
+
+def tmdb_window_meta(media):
+    """{'fanart', 'clearlogo', 'plot', 'rating', 'mpaa', 'genre', 'year', ...} or {}."""
+    lang = _ui_lang()
+    tag = 'en-US' if lang == 'en' else lang
+    imgs = 'include_image_language=%s,en,null' % lang
+    out = {}
+    try:
+        if media['media_type'] == 'movie':
+            d = _tmdb('movie/%s?append_to_response=images,release_dates&%s' % (media['tmdb_id'], imgs), tag)
+            out['year'] = (d.get('release_date') or '')[:4]
+            for c in (d.get('release_dates') or {}).get('results', []):
+                if c.get('iso_3166_1') == 'US':
+                    cert = [r.get('certification') for r in c.get('release_dates', []) if r.get('certification')]
+                    if cert:
+                        out['mpaa'] = cert[0]
+        else:
+            d = _tmdb('tv/%s?append_to_response=images,content_ratings&%s' % (media['tmdb_id'], imgs), tag)
+            out['year'] = (d.get('first_air_date') or '')[:4]
+            for c in (d.get('content_ratings') or {}).get('results', []):
+                if c.get('iso_3166_1') == 'US' and c.get('rating'):
+                    out['mpaa'] = c['rating']
+            try:
+                e = _tmdb('tv/%s/season/%s/episode/%s' % (media['tmdb_id'], media['season'], media['episode']), tag)
+                out['ep_plot'] = e.get('overview') or ''
+                out['ep_name_tmdb'] = e.get('name') or ''
+            except Exception:
+                pass
+        out['plot'] = out.pop('ep_plot', '') or d.get('overview') or ''
+        if not out['plot'] and tag != 'en-US':
+            try:
+                path = 'movie/%s' if media['media_type'] == 'movie' else 'tv/%s'
+                out['plot'] = _tmdb(path % media['tmdb_id']).get('overview') or ''
+            except Exception:
+                pass
+        if d.get('backdrop_path'):
+            out['fanart'] = _IMG % ('w1280', d['backdrop_path'])
+        out['clearlogo'] = _pick_logo((d.get('images') or {}).get('logos'), lang)
+        if d.get('vote_average'):
+            out['rating'] = d['vote_average']
+        out['genre'] = ', '.join(g.get('name', '') for g in (d.get('genres') or [])[:3])
+    except Exception as e:
+        _log('window meta from TMDb failed: %s' % e, xbmc.LOGWARNING)
+        return {}
+    return {k: v for k, v in out.items() if v}
 
 
 # ───────────────────────── merging ─────────────────────────
@@ -313,6 +383,11 @@ _PRETTY = {'ALLDEBRID': 'AllDebrid', 'REAL-DEBRID': 'Real-Debrid', 'REALDEBRID':
 def _pretty(name):
     return _PRETTY.get(name.upper(), name.title() if name.isupper() else name)
 
+
+# Title fit for the stream cards, narrower than the add-ons' windows: the
+# skin font here ran wider and Kodi in Arabic cut the overflow from the START
+# ("sion 2025 ..." for "Obsession 2025 ..."), screenshot 2026-10-29.
+_TITLE_PX = 600
 
 # size buckets in the filter menu (GB, string id)
 _SIZES = ((0, 5, 30830), (5, 15, 30831), (15, 40, 30832), (40, 1e9, 30833))
@@ -384,6 +459,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 _log('window meta: %s' % e)
         self.setProperty('abs.heading', T(30817))
         self.setProperty('abs.addons_heading', T(30818))
+        if not all(self.meta.get(k) for k in ('fanart', 'clearlogo', 'plot')):
+            threading.Thread(target=self._fill_meta, name='abs_meta').start()
         self.ready = True
         self.session.listener = self.refresh
         self.refresh()
@@ -395,6 +472,22 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
     def close(self):
         self.session.closed = True
         super().close()
+
+    def _fill_meta(self):
+        extra = tmdb_window_meta(self.session.media)
+        if not extra or self.session.closed:
+            return
+        meta = dict(self.meta)
+        for k, v in extra.items():
+            if not meta.get(k):
+                meta[k] = v
+        self.meta = meta
+        th = _theme()
+        if th:
+            try:
+                th.lucent_window(self, meta, fanart=meta.get('fanart', ''), clearlogo=meta.get('clearlogo', ''))
+            except Exception as e:
+                _log('window meta: %s' % e)
 
     def _focus(self, cid):
         # no <defaultcontrol>: the chips are empty until onInit fills them, and
@@ -662,7 +755,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                     not any(part.upper() in m.upper() or m.upper() in part.upper() for m in meta):
                 meta.append(part)
         ntags = min(len(row['refs']), 4)
-        meta_px = 690 - ntags * 70
+        meta_px = 610 - ntags * 70
         title = _clean(item.get('display_name') or item.get('name'))
         props = {'lucent.quality': q, 'lucent.lowq': 'true' if q in ('CAM', 'SCR', 'TELE', 'HC') else '',
                  'lucent.uncached': '', 'lucent.res': '', 'lucent.icon': ''}
@@ -670,7 +763,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             try:
                 while len(meta) > 1 and th._px('  ·  '.join(meta).upper()) > meta_px:
                     meta.pop()
-                props['lucent.title'] = th._fit(title, th._TITLE_PX)
+                props['lucent.title'] = th._fit(title, _TITLE_PX)
                 props['lucent.meta'] = th._fit('  ·  '.join(meta), meta_px)
                 if th._colored():
                     if not props['lucent.lowq']:

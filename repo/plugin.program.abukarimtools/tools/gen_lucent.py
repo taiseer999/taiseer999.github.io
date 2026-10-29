@@ -1414,7 +1414,7 @@ def ab_chip(focused):
     if focused:
         bg = '''
                     <control type="image">
-                        <width>226</width>
+                        <width>246</width>
                         <height>52</height>
                         <texture border="26">lucent/pill60.png</texture>
                         <colordiffuse>FFFFFFFF</colordiffuse>
@@ -1423,14 +1423,14 @@ def ab_chip(focused):
     else:
         bg = '''
                     <control type="image">
-                        <width>226</width>
+                        <width>246</width>
                         <height>52</height>
                         <texture border="26">lucent/pill60.png</texture>
                         <colordiffuse>1AFFFFFF</colordiffuse>
                         <visible>String.IsEmpty(ListItem.Property(abs.active))</visible>
                     </control>
                     <control type="image">
-                        <width>226</width>
+                        <width>246</width>
                         <height>52</height>
                         <texture border="26">lucent/pill60.png</texture>
                         <colordiffuse>66D6F0FF</colordiffuse>
@@ -1458,15 +1458,27 @@ def ab_chip(focused):
                         <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="true">Conditional</animation>
                         <visible>!String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
+                    <!-- name and count in separate labels: one mixed label was
+                         re-ordered and cut from the start with Kodi in Arabic -->
                     <control type="label">
-                        <left>30</left>
-                        <width>190</width>
+                        <left>38</left>
+                        <width>148</width>
                         <height>52</height>
                         <font>font12</font>
-                        <align>center</align>
+                        <align>left</align>
                         <aligny>center</aligny>
                         <textcolor>%(tc)s</textcolor>
-                        <label>[B]$INFO[ListItem.Label][/B]$INFO[ListItem.Label2,  ,]</label>
+                        <label>[B]$INFO[ListItem.Label][/B]</label>
+                    </control>
+                    <control type="label">
+                        <left>186</left>
+                        <width>50</width>
+                        <height>52</height>
+                        <font>font12</font>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <textcolor>%(tc)s</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
                     </control>''' % {'bg': bg, 'dots': dots, 'tc': tc, 'cc': cc}
 
 
@@ -1584,11 +1596,11 @@ def ab_search_window():
                 <orientation>horizontal</orientation>
                 <scrolltime tween="cubic" easing="out">200</scrolltime>
                 <ondown>2000</ondown>
-                <itemlayout height="52" width="238">%(chip)s
+                <itemlayout height="52" width="258">%(chip)s
                 </itemlayout>
-                <focusedlayout height="52" width="238" condition="!Control.HasFocus(2300)">%(chip)s
+                <focusedlayout height="52" width="258" condition="!Control.HasFocus(2300)">%(chip)s
                 </focusedlayout>
-                <focusedlayout height="52" width="238" condition="Control.HasFocus(2300)">%(chipf)s
+                <focusedlayout height="52" width="258" condition="Control.HasFocus(2300)">%(chipf)s
                 </focusedlayout>
             </control>
             <control type="image">

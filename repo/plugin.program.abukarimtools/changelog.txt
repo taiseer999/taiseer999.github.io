@@ -1,3 +1,16 @@
+v4.5.3
+- FIX Search All left column empty except title + year (screenshot
+  2026-10-29): TMDbHelper's player URL has ids/names only and the focused item
+  often no longer matches. tmdb_window_meta() fetches logo (png, Kodi
+  language > en > none), w1280 backdrop, plot (Kodi language, English
+  fallback), rating, US certificate, genres; episodes use the episode plot.
+  Runs in a thread after the window opens, fills only what is missing.
+- FIX chips in Arabic: "Red Light  528" was one label, bidi-reordered and
+  cut from the start ("ight 528 Rec"). Name and count are now separate labels;
+  chips 20px wider.
+- FIX stream titles cut from the start in Arabic ("sion 2025 ..."): titles
+  fitted to 600px (was 690), meta line to 610px minus the add-on tags.
+
 v4.5.2
 - FIX POV (real cause of "list failed: '<' not supported between instances
   of 'str' and 'int'", traceback in kodi.log 2026-10-29 11:07): POV's
