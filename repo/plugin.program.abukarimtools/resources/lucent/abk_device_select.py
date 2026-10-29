@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # AB Tools "Search All" bridge - injected by AB Tools (plugin.program.abukarimtools).
-# ABK_DEVICE_SELECT_VERSION = 2
+# ABK_DEVICE_SELECT_VERSION = 3
 #
 # Gives Red Light, POV and Umbrella Fen Light's device-select modes, so AB Tools
 # can collect their sources next to the other add-ons' and play the one picked:
@@ -14,6 +14,7 @@ import os
 import sys
 import time
 import json
+import traceback
 
 import xbmc
 import xbmcaddon
@@ -80,7 +81,7 @@ def app_mode(mode, params):
 		try:
 			return _run(aid, 'list', p)
 		except Exception as e:
-			_log('list failed: %s' % e)
+			_log('list failed: %s\n%s' % (e, traceback.format_exc()))
 		finally:
 			_end_if_open()
 		return
@@ -104,6 +105,14 @@ def _run(aid, kind, p):
 		finally:
 			if restore: restore()
 	from modules.sources import Sources
+	if aid == 'plugin.video.pov' and kind == 'list':
+		import modules.sources as pov
+		restore = _guard_pov(pov)
+		try:
+			p.update({'device_list': 'true', 'background': 'true', 'autoplay': 'false', 'prescrape': 'false'})
+			return Sources().source_select(p)
+		finally:
+			restore()
 	if kind == 'list':
 		p.update({'device_list': 'true', 'background': 'true', 'autoplay': 'false', 'prescrape': 'false'})
 	else:
@@ -111,6 +120,52 @@ def _run(aid, kind, p):
 	if aid == 'plugin.video.pov':
 		return Sources().source_select(p)
 	return Sources().playback_prep(p)
+
+
+# ───────────────────────── POV: results with odd field types ─────────────────────────
+# Some scraper results reach POV with a size given as text or an info field
+# that is not text; POV's sort / filter then raise (kodi.log 2026-10-29:
+# "'<' not supported between instances of 'str' and 'int'", "argument of type
+# 'int' is not a container or iterable") and the whole list is lost. For AB
+# Tools' list only: on such an error clean the fields and run POV's own
+# processing again (put back afterwards: POV may keep this interpreter).
+
+_POV_TEXT = ('extraInfo', 'cache_provider', 'quality', 'name', 'display_name', 'scrape_provider',
+			 'debrid', 'source', 'provider', 'name_info', 'size_label')
+
+
+def _clean_pov(item, ranks):
+	for k in _POV_TEXT:
+		if k in item and not isinstance(item[k], str):
+			item[k] = '' if item[k] is None else str(item[k])
+	try: item['size'] = float(item.get('size') or 0)
+	except Exception: item['size'] = 0.0
+	if ranks and item.get('quality') not in ranks: item['quality'] = 'SD'
+	item.setdefault('extraInfo', '')
+	item.setdefault('cache_provider', '')
+	item.setdefault('scrape_provider', 'external')
+	return item
+
+
+def _guard_pov(pov):
+	rp = pov.ResultsProcessor
+	orig = rp.process
+	ranks = getattr(pov, 'quality_ranks', None)
+	def process(self, results):
+		try:
+			return orig(self, results)
+		except Exception:
+			_log('POV could not sort its results, cleaning them and retrying:\n%s' % traceback.format_exc())
+		clean = [_clean_pov(dict(i), ranks) for i in (results or []) if isinstance(i, dict)]
+		try:
+			return orig(self, clean)
+		except Exception:
+			_log('POV still failing, listing the cleaned results unsorted:\n%s' % traceback.format_exc())
+			return [i for i in clean if 'Uncached' not in i['cache_provider']]
+	rp.process = process
+	def restore():
+		rp.process = orig
+	return restore
 
 
 class _Silent(object):

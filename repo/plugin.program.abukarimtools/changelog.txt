@@ -1,3 +1,13 @@
+v4.5.1
+- FIX Search All / POV: "list failed: argument of type 'int' is not a
+  container or iterable" and "'<' not supported between instances of 'str'
+  and 'int'" (CoreELEC report, kodi.log 2026-10-29) - POV's ResultsProcessor
+  choked on results whose size / info fields had the wrong type and the whole
+  list was lost. Bridge helper v3: for AB Tools' list only, on such an error
+  the fields are cleaned (size -> float, text fields -> str, unknown quality
+  -> SD) and POV's own processing runs again; restored afterwards. Full
+  tracebacks are now logged for any bridge failure.
+
 v4.5.0
 - Release of 3.4.32 - 3.4.50 (Glass Theme for Fen Light / Red Light / POV /
   Umbrella source windows, Search All across the four add-ons). Version
