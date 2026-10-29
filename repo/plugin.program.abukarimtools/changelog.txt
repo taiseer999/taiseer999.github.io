@@ -1,3 +1,14 @@
+v3.4.46
+- FIX Glass Theme filter window "Apply did nothing / stuck": kodi.log showed
+  "Control 5000 in window 1300x has been asked to focus, but it can't" every
+  time the themed select opened - the list was focused before it was laid
+  out, and with no focused control every key is ignored. The window now
+  retries focus (up to 1 s) until the list takes it, and any key press
+  re-focuses the list if focus was lost.
+- New log lines: "[Lucent] filter by info: <tags>" and
+  "[Lucent] filter result: N rows on screen / no change".
+- Helper v11.
+
 v3.4.45
 - Glass Theme RIGHT filter (Red Light / Fen Light), from the 07:59 recording:
   * Filters did not stack: DV+Atmos gave 64, then "Filter by Info > DV" gave

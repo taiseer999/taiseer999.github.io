@@ -1,0 +1,1526 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.program.abukarimtools\n"
+"Report-Msgid-Bugs-To: ABUKARIM TOOLS\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "#30001"
+msgid "Installation Wizard"
+msgstr "معالج التثبيت"
+
+msgctxt "#30002"
+msgid "Backup/Restore"
+msgstr "نسخ احتياطي / استعادة"
+
+msgctxt "#30003"
+msgid "Skin Selection"
+msgstr "اختيار الواجهة"
+
+msgctxt "#30004"
+msgid "New Build Tools"
+msgstr "أدوات البناء الجديد"
+
+msgctxt "#30005"
+msgid "Apply Patches"
+msgstr "تطبيق الترقيعات"
+
+msgctxt "#30007"
+msgid "Fix Add-on Update Origins"
+msgstr "إصلاح مصادر تحديث الإضافات"
+
+msgctxt "#30008"
+msgid "ABUKARIM Wizard"
+msgstr "معالج أبوكريم"
+
+msgctxt "#30009"
+msgid "Skin Switcher"
+msgstr "مبدل الواجهات"
+
+msgctxt "#30010"
+msgid "DPlex Tab On/Off"
+msgstr "تبويب DPlex تشغيل/إيقاف"
+
+msgctxt "#30011"
+msgid "Korean Media Tab On/Off"
+msgstr "تبويب المحتوى الكوري تشغيل/إيقاف"
+
+msgctxt "#30012"
+msgid "Total Clean (Cache, Packages, Thumbnails)"
+msgstr "تنظيف شامل (الذاكرة المؤقتة، الحزم، الصور المصغرة)"
+
+msgctxt "#30013"
+msgid "Clear Old Thumbnails"
+msgstr "حذف الصور المصغرة القديمة"
+
+msgctxt "#30014"
+msgid "Setup & Install"
+msgstr "الإعداد والتنصيب"
+
+msgctxt "#30015"
+msgid "Patching"
+msgstr "التعديلات والترقيعات"
+
+msgctxt "#30016"
+msgid "Maintenance"
+msgstr "الصيانة والتنظيف"
+
+msgctxt "#30017"
+msgid "Toggles"
+msgstr "التبديلات"
+
+msgctxt "#30018"
+msgid "Rebuild Add-on Database"
+msgstr "إعادة بناء قاعدة بيانات الإضافات"
+
+msgctxt "#30019"
+msgid "Speed Test"
+msgstr "اختبار السرعة"
+
+msgctxt "#30020"
+msgid "Node Icons: Color / Black & White"
+msgstr "أيقونات الأقسام: ملونة / أبيض وأسود"
+
+msgctxt "#30021"
+msgid "Add-on Portal"
+msgstr "بوابة الإضافات"
+
+msgctxt "#30022"
+msgid "ABUKARIM Wizard is not installed or is disabled. Install it now?"
+msgstr "معالج أبوكريم غير مثبّت أو معطّل. هل تريد تثبيته الآن؟"
+
+msgctxt "#30050"
+msgid "Run first-time setup now?[CR][CR]Skin Installer, binaries, backup restore, Add-on Portal, widgets layout, lists and patches.[CR]Do not restart or exit while it runs - Kodi restarts by itself at the end (the box reboots on CoreELEC)."
+msgstr "هل تريد تشغيل الإعداد لأول مرة الآن؟[CR][CR]مثبّت الواجهات، والملفات الثنائية، واستعادة النسخة الاحتياطية، وبوابة الإضافات، وترتيب الودجات، والقوائم، والترقيعات.[CR]لا تُعِد التشغيل ولا تخرج أثناء الإعداد، إذ يُعاد تشغيل Kodi تلقائياً في النهاية (ويُعاد تشغيل الجهاز على CoreELEC)."
+
+msgctxt "#30051"
+msgid "Run setup"
+msgstr "تشغيل الإعداد"
+
+msgctxt "#30052"
+msgid "Cancel"
+msgstr "إلغاء"
+
+msgctxt "#30053"
+msgid "Apply Patches failed — run it from ABUKARIM TOOLS"
+msgstr "فشل تطبيق الترقيعات — شغّله من ABUKARIM TOOLS"
+
+msgctxt "#30054"
+msgid "Skin Installer could not be started.[CR]You can run it later from ABUKARIM TOOLS."
+msgstr "تعذر بدء مثبت الواجهات.[CR]يمكنك تشغيله لاحقاً من ABUKARIM TOOLS."
+
+msgctxt "#30055"
+msgid "Binary installer failed — run it from ABUKARIM TOOLS"
+msgstr "فشل مثبت الملفات الثنائية — شغّله من ABUKARIM TOOLS"
+
+msgctxt "#30056"
+msgid "Restore could not be started.[CR]You can run it later from ABUKARIM TOOLS → Backup/Restore."
+msgstr "تعذر بدء الاستعادة.[CR]يمكنك تشغيلها لاحقاً من ABUKARIM TOOLS ← نسخ احتياطي/استعادة."
+
+msgctxt "#30057"
+msgid "Setup is almost complete.[CR][CR]Would you like to restore a previous backup?"
+msgstr "الإعداد أوشك على الاكتمال.[CR][CR]هل تريد استعادة نسخة احتياطية سابقة؟"
+
+msgctxt "#30058"
+msgid "Restore Backup"
+msgstr "استعادة نسخة"
+
+msgctxt "#30059"
+msgid "Skip"
+msgstr "تخطي"
+
+msgctxt "#30060"
+msgid "Add-on Portal failed — run it from ABUKARIM TOOLS"
+msgstr "فشل فتح بوابة الإضافات — شغّلها من ABUKARIM TOOLS"
+
+msgctxt "#30100"
+msgid "Connecting…"
+msgstr "جارٍ الاتصال…"
+
+msgctxt "#30101"
+msgid "Download cancelled."
+msgstr "تم إلغاء التنزيل."
+
+msgctxt "#30102"
+msgid "Downloading… %d / %d KB"
+msgstr "جارٍ التنزيل… %d / %d ك.ب"
+
+msgctxt "#30103"
+msgid "Downloading… %d KB"
+msgstr "جارٍ التنزيل… %d ك.ب"
+
+msgctxt "#30104"
+msgid "Verifying…"
+msgstr "جارٍ التحقق…"
+
+msgctxt "#30105"
+msgid "Download incomplete or corrupt. Please try again."
+msgstr "التنزيل غير مكتمل أو تالف. الرجاء المحاولة مرة أخرى."
+
+msgctxt "#30106"
+msgid "Download failed:[CR]%s"
+msgstr "فشل التنزيل:[CR]%s"
+
+msgctxt "#30107"
+msgid "Preparing extraction…"
+msgstr "جارٍ التحضير للاستخراج…"
+
+msgctxt "#30108"
+msgid "Checking archive integrity…"
+msgstr "جارٍ التحقق من سلامة الأرشيف…"
+
+msgctxt "#30109"
+msgid "ZIP integrity check failed.[CR]First bad file: %s"
+msgstr "فشل فحص سلامة الملف المضغوط.[CR]أول ملف تالف: %s"
+
+msgctxt "#30110"
+msgid "Extraction cancelled."
+msgstr "تم إلغاء الاستخراج."
+
+msgctxt "#30111"
+msgid "Extraction error: size mismatch for[CR]%s"
+msgstr "خطأ في الاستخراج: عدم تطابق الحجم لـ[CR]%s"
+
+msgctxt "#30112"
+msgid "Installing…"
+msgstr "جارٍ التثبيت…"
+
+msgctxt "#30113"
+msgid "Done."
+msgstr "تم."
+
+msgctxt "#30114"
+msgid "The downloaded file is not a valid ZIP archive."
+msgstr "الملف المُنزّل ليس أرشيف ZIP صالحاً."
+
+msgctxt "#30115"
+msgid "Extraction failed:[CR]%s"
+msgstr "فشل الاستخراج:[CR]%s"
+
+msgctxt "#30116"
+msgid "Enabling %s…"
+msgstr "جارٍ تفعيل %s…"
+
+msgctxt "#30117"
+msgid "Could not enable %s. Try selecting it manually in Settings."
+msgstr "تعذر تفعيل %s. حاول اختياره يدوياً من الإعدادات."
+
+msgctxt "#30118"
+msgid "Applying %s…"
+msgstr "جارٍ تطبيق %s…"
+
+msgctxt "#30119"
+msgid "%s was installed but could not be selected automatically.[CR]Select it manually from Settings > Interface > Skin."
+msgstr "تم تثبيت %s لكن تعذر اختياره تلقائياً.[CR]اختره يدوياً من الإعدادات > الواجهة > المظهر."
+
+msgctxt "#30120"
+msgid "No ZIP URL found for this skin."
+msgstr "لم يُعثر على رابط ZIP لهذه الواجهة."
+
+msgctxt "#30121"
+msgid "This skin is already installed.[CR]Reinstall %s?"
+msgstr "هذه الواجهة مثبتة بالفعل.[CR]إعادة تثبيت %s؟"
+
+msgctxt "#30122"
+msgid "Install %s?"
+msgstr "تثبيت %s؟"
+
+msgctxt "#30123"
+msgid "Network error:[CR]%s"
+msgstr "خطأ في الشبكة:[CR]%s"
+
+msgctxt "#30124"
+msgid "The feed returned invalid JSON."
+msgstr "أرجع المصدر JSON غير صالح."
+
+msgctxt "#30125"
+msgid "Feed error:[CR]%s"
+msgstr "خطأ في المصدر:[CR]%s"
+
+msgctxt "#30126"
+msgid "✓ %s installed successfully."
+msgstr "✓ تم تثبيت %s بنجاح."
+
+msgctxt "#30150"
+msgid "No installed skins found."
+msgstr "لم يُعثر على واجهات مثبتة."
+
+msgctxt "#30151"
+msgid "Choose a skin"
+msgstr "اختر واجهة"
+
+msgctxt "#30180"
+msgid "Platform: [B]%s[/B][CR]Repo: [B]%s[/B][CR][CR]Install the following binary add-ons?[CR][CR]%s"
+msgstr "المنصة: [B]%s[/B][CR]المستودع: [B]%s[/B][CR][CR]تثبيت الإضافات الثنائية التالية؟[CR][CR]%s"
+
+msgctxt "#30181"
+msgid "Checking repository…"
+msgstr "جارٍ التحقق من المستودع…"
+
+msgctxt "#30182"
+msgid "Binary add-ons: repo %s unreachable"
+msgstr "الإضافات الثنائية: المستودع %s غير متاح"
+
+msgctxt "#30183"
+msgid "[COLOR red]✘[/COLOR]  Could not reach [B]%s[/B].[CR][CR]Check your internet connection and that the repo is available for your platform."
+msgstr "[COLOR red]✘[/COLOR]  تعذر الوصول إلى [B]%s[/B].[CR][CR]تحقق من اتصالك بالإنترنت ومن توفر المستودع لمنصتك."
+
+msgctxt "#30184"
+msgid "Installing [B]%s[/B]…"
+msgstr "جارٍ تثبيت [B]%s[/B]…"
+
+msgctxt "#30185"
+msgid "[COLOR lime]✔[/COLOR]  %s – already installed"
+msgstr "[COLOR lime]✔[/COLOR]  %s – مثبت بالفعل"
+
+msgctxt "#30186"
+msgid "[COLOR lime]✔[/COLOR]  %s – installed OK"
+msgstr "[COLOR lime]✔[/COLOR]  %s – تم التثبيت"
+
+msgctxt "#30187"
+msgid "[COLOR red]✘[/COLOR]  %s – install failed"
+msgstr "[COLOR red]✘[/COLOR]  %s – فشل التثبيت"
+
+msgctxt "#30188"
+msgid "Binary add-ons: %d OK, %d failed"
+msgstr "الإضافات الثنائية: %d نجح، %d فشل"
+
+msgctxt "#30189"
+msgid "Binary add-ons installed (%d/%d)"
+msgstr "تم تثبيت الإضافات الثنائية (%d/%d)"
+
+msgctxt "#30190"
+msgid "[B]Binary Install Results[/B] ([I]%s[/I])[CR][CR]"
+msgstr "[B]نتائج تثبيت الملفات الثنائية[/B] ([I]%s[/I])[CR][CR]"
+
+msgctxt "#30191"
+msgid "[CR][CR]%d succeeded,  %d failed."
+msgstr "[CR][CR]%d نجح،  %d فشل."
+
+msgctxt "#30220"
+msgid "Collecting files…"
+msgstr "جارٍ جمع الملفات…"
+
+msgctxt "#30221"
+msgid "No files found to back up."
+msgstr "لا توجد ملفات للنسخ الاحتياطي."
+
+msgctxt "#30222"
+msgid "Backup cancelled."
+msgstr "تم إلغاء النسخ الاحتياطي."
+
+msgctxt "#30223"
+msgid "Backup complete![CR][CR]%d files saved to:[CR]%s"
+msgstr "اكتمل النسخ الاحتياطي![CR][CR]تم حفظ %d ملف في:[CR]%s"
+
+msgctxt "#30224"
+msgid "Backup failed![CR]%s"
+msgstr "فشل النسخ الاحتياطي![CR]%s"
+
+msgctxt "#30225"
+msgid "Select backup ZIP to restore"
+msgstr "اختر ملف النسخة الاحتياطية (ZIP) للاستعادة"
+
+msgctxt "#30226"
+msgid "Restoring…"
+msgstr "جارٍ الاستعادة…"
+
+msgctxt "#30227"
+msgid "Restore cancelled (partial restore may have occurred)."
+msgstr "تم إلغاء الاستعادة (قد تكون تمت استعادة جزئية)."
+
+msgctxt "#30228"
+msgid "Restore complete! %d files restored.[CR][CR]guisettings.xml will be applied on next boot.[CR][CR]Please restart Kodi manually for the changes to take effect."
+msgstr "اكتملت الاستعادة! تمت استعادة %d ملف.[CR][CR]سيُطبّق guisettings.xml عند الإقلاع التالي.[CR][CR]الرجاء إعادة تشغيل Kodi يدوياً لتطبيق التغييرات."
+
+msgctxt "#30229"
+msgid "Restore failed![CR]%s"
+msgstr "فشلت الاستعادة![CR]%s"
+
+msgctxt "#30231"
+msgid "This will overwrite existing addon_data files, guisettings.xml, and keymaps.[CR][CR]Continue with restore?"
+msgstr "سيؤدي هذا إلى الكتابة فوق ملفات addon_data وguisettings.xml وkeymaps الحالية.[CR][CR]المتابعة مع الاستعادة؟"
+
+msgctxt "#30260"
+msgid "[COLOR red]✘[/COLOR]  Missing bundled file:[CR][I]%s[/I]"
+msgstr "[COLOR red]✘[/COLOR]  ملف مرفق مفقود:[CR][I]%s[/I]"
+
+msgctxt "#30261"
+msgid "[COLOR lime]ENABLED[/COLOR]"
+msgstr "[COLOR lime]مُفعّل[/COLOR]"
+
+msgctxt "#30262"
+msgid "[COLOR red]DISABLED[/COLOR]"
+msgstr "[COLOR red]معطّل[/COLOR]"
+
+msgctxt "#30263"
+msgid "[COLOR gray]UNKNOWN[/COLOR]"
+msgstr "[COLOR gray]غير معروف[/COLOR]"
+
+msgctxt "#30264"
+msgid "%s Tab  –  currently %s"
+msgstr "تبويب %s  –  الحالة %s"
+
+msgctxt "#30265"
+msgid "[COLOR lime]Enable[/COLOR]  %s tab"
+msgstr "[COLOR lime]تفعيل[/COLOR]  تبويب %s"
+
+msgctxt "#30266"
+msgid "[COLOR red]Disable[/COLOR]  %s tab"
+msgstr "[COLOR red]تعطيل[/COLOR]  تبويب %s"
+
+msgctxt "#30267"
+msgid "This will %s the %s tab and[CR][B]restart Kodi[/B] to apply the change.[CR][CR]Continue?"
+msgstr "سيؤدي هذا إلى %s تبويب %s و[CR][B]إعادة تشغيل Kodi[/B] لتطبيق التغيير.[CR][CR]متابعة؟"
+
+msgctxt "#30268"
+msgid "[COLOR lime]enable[/COLOR]"
+msgstr "[COLOR lime]تفعيل[/COLOR]"
+
+msgctxt "#30269"
+msgid "[COLOR red]disable[/COLOR]"
+msgstr "[COLOR red]تعطيل[/COLOR]"
+
+msgctxt "#30270"
+msgid "Apply && Restart"
+msgstr "تطبيق وإعادة تشغيل"
+
+msgctxt "#30271"
+msgid "[COLOR red]✘[/COLOR]  Failed to write:[CR][I]%s[/I][CR][CR]%s"
+msgstr "[COLOR red]✘[/COLOR]  فشل الكتابة:[CR][I]%s[/I][CR][CR]%s"
+
+msgctxt "#30272"
+msgid "%s tab %s – restarting Kodi…"
+msgstr "تبويب %s %s – جارٍ إعادة تشغيل Kodi…"
+
+msgctxt "#30273"
+msgid "enabled"
+msgstr "مُفعّل"
+
+msgctxt "#30274"
+msgid "disabled"
+msgstr "معطّل"
+
+msgctxt "#30290"
+msgid "Patches re-applied after add-on update"
+msgstr "أُعيد تطبيق الترقيعات بعد تحديث الإضافة"
+
+msgctxt "#30320"
+msgid "SKIN SELECTION"
+msgstr "اختيار الواجهة"
+
+msgctxt "#30321"
+msgid "Select a skin to install · Press Back to exit"
+msgstr "اختر واجهة لتثبيتها · اضغط رجوع للخروج"
+
+msgctxt "#30322"
+msgid "Select Repository"
+msgstr "اختر المستودع"
+
+msgctxt "#30323"
+msgid "OK to select  ·  Back to cancel"
+msgstr "موافق للاختيار  ·  رجوع للإلغاء"
+
+msgctxt "#30325"
+msgid "Selected Skin"
+msgstr "الواجهة المختارة"
+
+msgctxt "#30330"
+msgid "Rebuild the Kodi add-on database (Addons33.db)?[CR][CR]This deletes the database so Kodi builds a clean one. Your enabled add-ons, current skin and update sources are remembered first. The box restarts [B]twice[/B] and takes a few minutes.[CR][CR]After the first restart Kodi opens on Estuary with all add-ons disabled - this is normal. ABUKARIM TOOLS re-enables itself within about a minute and finishes the rest. If nothing happens after 3 minutes, enable it once in Add-ons > My add-ons > Program add-ons."
+msgstr "إعادة بناء قاعدة بيانات إضافات كودي (Addons33.db)؟[CR][CR]سيتم حذف القاعدة ليبنيها كودي من جديد، بعد حفظ الإضافات المفعّلة والواجهة الحالية ومصادر التحديث. سيُعيد الجهاز التشغيل [B]مرتين[/B] وقد يستغرق بضع دقائق.[CR][CR]بعد إعادة التشغيل الأولى سيفتح كودي على واجهة Estuary وكل الإضافات معطّلة - وهذا طبيعي. ستُفعّل ABUKARIM TOOLS نفسها خلال دقيقة تقريباً وتُكمل الباقي. إذا لم يحدث شيء بعد 3 دقائق، فعّلها مرة واحدة من الإضافات > إضافاتي > إضافات البرامج."
+
+msgctxt "#30331"
+msgid "Rebuild scheduled. The box will restart now, delete the database before Kodi starts, then restart once more after re-enabling the add-ons that were enabled and restoring your skin. Update sources are repaired on the boot after that.[CR][CR]Do not power off during this."
+msgstr "تمت جدولة إعادة البناء. سيُعيد الجهاز التشغيل الآن، وسيحذف قاعدة البيانات قبل بدء كودي، ثم يُعيد التشغيل مرة أخرى بعد إعادة تفعيل الإضافات التي كانت مفعّلة واستعادة واجهتك. تُصلَح مصادر التحديث في التشغيل الذي يليه.[CR][CR]لا تُطفئ الجهاز أثناء ذلك."
+
+msgctxt "#30332"
+msgid "Re-enabling add-ons after database rebuild…"
+msgstr "جارٍ إعادة تفعيل الإضافات بعد إعادة بناء قاعدة البيانات…"
+
+msgctxt "#30334"
+msgid "No Addons33.db was found (Kodi may already be on a fresh one).[CR][CR]Re-enable all add-ons and restart anyway?"
+msgstr "لم يتم العثور على Addons33.db (قد يكون كودي يعمل على قاعدة جديدة بالفعل).[CR][CR]هل تريد إعادة تفعيل جميع الإضافات وإعادة التشغيل على أي حال؟"
+
+msgctxt "#30335"
+msgid "Could not delete the add-on database file."
+msgstr "تعذّر حذف ملف قاعدة بيانات الإضافات."
+
+msgctxt "#30336"
+msgid "The database was deleted. Kodi will now close.[CR][CR]Open Kodi again and it will finish the rebuild automatically - Kodi cannot relaunch itself on this platform."
+msgstr "تم حذف قاعدة البيانات. سيُغلق كودي الآن.[CR][CR]افتح كودي مرة أخرى وسيُكمل إعادة البناء تلقائياً - لا يستطيع كودي إعادة تشغيل نفسه على هذا النظام."
+
+msgctxt "#30337"
+msgid "Update sources linked for %d add-on(s) - active after the next restart."
+msgstr "تم ربط مصادر التحديث لـ %d إضافة - تصبح فعّالة بعد إعادة التشغيل القادمة."
+
+msgctxt "#30340"
+msgid "Icon folder not found:[CR]%s[CR][CR]This skin does not ship colored/monochrome icon sets."
+msgstr "مجلد الأيقونات غير موجود:[CR]%s[CR][CR]هذه الواجهة لا تحتوي على مجموعتي الأيقونات الملونة والأحادية."
+
+msgctxt "#30341"
+msgid "Node Icons - current: %s"
+msgstr "أيقونات الأقسام - الحالية: %s"
+
+msgctxt "#30342"
+msgid "Colored"
+msgstr "ملونة"
+
+msgctxt "#30343"
+msgid "Monochrome"
+msgstr "أبيض وأسود"
+
+msgctxt "#30344"
+msgid "Unknown"
+msgstr "غير معروفة"
+
+msgctxt "#30345"
+msgid "%s icons applied (%d files)"
+msgstr "تم تطبيق الأيقونات %s (%d ملف)"
+
+msgctxt "#30346"
+msgid "No active skin found."
+msgstr "لم يتم العثور على واجهة نشطة."
+
+msgctxt "#30400"
+msgid "ADD-ON PORTAL"
+msgstr "بوابة الإضافات"
+
+msgctxt "#30401"
+msgid "Preparing…"
+msgstr "جارٍ التحضير…"
+
+msgctxt "#30402"
+msgid "Checking repository: %s"
+msgstr "جارٍ فحص المستودع: %s"
+
+msgctxt "#30403"
+msgid "Refreshing repositories…"
+msgstr "جارٍ تحديث المستودعات…"
+
+msgctxt "#30404"
+msgid "[B]Installing:[/B] %s[CR]from %s"
+msgstr "[B]جارٍ التثبيت:[/B] %s[CR]من %s"
+
+msgctxt "#30405"
+msgid "%s[CR]Dependency: %s"
+msgstr "%s[CR]اعتمادية: %s"
+
+msgctxt "#30406"
+msgid "Done"
+msgstr "تم"
+
+msgctxt "#30407"
+msgid "Installed"
+msgstr "مثبّتة"
+
+msgctxt "#30408"
+msgid "Tick the add-ons to install, then press Install · Back to exit"
+msgstr "حدّد الإضافات المطلوبة ثم اضغط تثبيت · رجوع للخروج"
+
+msgctxt "#30409"
+msgid "Install Selected"
+msgstr "تثبيت المحدد"
+
+msgctxt "#30410"
+msgid "cancelled"
+msgstr "أُلغي"
+
+msgctxt "#30411"
+msgid "install failed"
+msgstr "فشل التثبيت"
+
+msgctxt "#30412"
+msgid "missing: %s"
+msgstr "ناقص: %s"
+
+msgctxt "#30413"
+msgid "installed but not enabled"
+msgstr "مثبّتة لكن غير مفعّلة"
+
+msgctxt "#30414"
+msgid "%d selected"
+msgstr "المحدد: %d"
+
+msgctxt "#30415"
+msgid "Select All"
+msgstr "تحديد الكل"
+
+msgctxt "#30416"
+msgid "Clear All"
+msgstr "إلغاء التحديد"
+
+msgctxt "#30417"
+msgid "Nothing selected"
+msgstr "لم يتم تحديد شيء"
+
+msgctxt "#30418"
+msgid "Install these add-ons from their repositories?[CR][CR]%s"
+msgstr "تثبيت هذه الإضافات من مستودعاتها؟[CR][CR]%s"
+
+msgctxt "#30419"
+msgid "The add-ons were installed and linked to their repositories.\\nA restart is recommended so their updates become active.\\nتم تثبيت الإضافات وربطها بمستودعاتها.\\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة."
+msgstr "تم تثبيت الإضافات وربطها بمستودعاتها.\\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة."
+
+msgctxt "#30430"
+msgid "AF3 Auto Trailers"
+msgstr "التريلرات التلقائية (AF3)"
+
+msgctxt "#30431"
+msgid "Auto trailers: %s"
+msgstr "التريلرات التلقائية: %s"
+
+msgctxt "#30432"
+msgid "Sound: %s"
+msgstr "الصوت: %s"
+
+msgctxt "#30433"
+msgid "Start after: %d sec"
+msgstr "التشغيل بعد: %d ثانية"
+
+msgctxt "#30434"
+msgid "Quality: %s"
+msgstr "الجودة: %s"
+
+msgctxt "#30435"
+msgid "How long a title waits before its trailer starts"
+msgstr "كم ينتظر العمل قبل ما يبدأ التريلر"
+
+msgctxt "#30436"
+msgid "On"
+msgstr "مفعّل"
+
+msgctxt "#30437"
+msgid "Off"
+msgstr "متوقف"
+
+msgctxt "#30438"
+msgid "Auto trailers on"
+msgstr "تم تفعيل التريلرات التلقائية"
+
+msgctxt "#30439"
+msgid "Auto trailers off"
+msgstr "تم إيقاف التريلرات التلقائية"
+
+msgctxt "#30440"
+msgid "Arctic Fuse 3 is not installed."
+msgstr "واجهة Arctic Fuse 3 غير مثبّتة."
+
+msgctxt "#30441"
+msgid "On - works when Arctic Fuse 3 is the active skin"
+msgstr "مفعّل - يعمل عندما تكون Arctic Fuse 3 هي الواجهة الحالية"
+
+msgctxt "#30442"
+msgid "‘Background video’ is off in the Arctic Fuse 3 skin settings, so trailers cannot show behind the page.[CR]Turn ‘Background video’ back on in the skin settings."
+msgstr "خيار «فيديو الخلفية» متوقف في إعدادات واجهة Arctic Fuse 3، لذلك لن تظهر التريلرات خلف الصفحة.[CR]فعّل «فيديو الخلفية» من إعدادات الواجهة."
+
+msgctxt "#30443"
+msgid "%d sec"
+msgstr "%d ثانية"
+
+msgctxt "#30444"
+msgid "Trailer quality"
+msgstr "جودة التريلر"
+
+msgctxt "#30445"
+msgid "Show: %s"
+msgstr "طريقة العرض: %s"
+
+msgctxt "#30446"
+msgid "Full screen"
+msgstr "ملء الشاشة"
+
+msgctxt "#30447"
+msgid "Behind the page"
+msgstr "خلف الصفحة"
+
+msgctxt "#30448"
+msgid "How trailers are shown"
+msgstr "طريقة عرض التريلر"
+
+msgctxt "#30449"
+msgid "Source: %s"
+msgstr "المصدر: %s"
+
+msgctxt "#30450"
+msgid "NewPipe (YouTube)"
+msgstr "NewPipe (يوتيوب)"
+
+msgctxt "#30451"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#30452"
+msgid "Where trailers come from"
+msgstr "مصدر التريلرات"
+
+msgctxt "#30453"
+msgid "NewPipe (plugin.video.newpipe) is not installed or is disabled - trailers come from IMDb until it is."
+msgstr "إضافة NewPipe (plugin.video.newpipe) غير مثبّتة أو معطّلة - ستأتي التريلرات من IMDb إلى أن تُثبَّت."
+
+msgctxt "#30454"
+msgid "Inside the artwork (smooth)"
+msgstr "داخل صورة الخلفية (سلس)"
+
+msgctxt "#30530"
+msgid "Replace the current settings and menus of %s with the Piers profile?[CR](Your current files are backed up first.)"
+msgstr "استبدال إعدادات وقوائم %s الحالية بملف بيرز الجاهز؟[CR](يتم حفظ نسخة احتياطية من ملفاتك أولاً.)"
+
+msgctxt "#30531"
+msgid "No profile backups yet."
+msgstr "لا توجد نسخ احتياطية للملفات الشخصية بعد."
+
+msgctxt "#30532"
+msgid "Profile restored."
+msgstr "تمت استعادة الملف الشخصي."
+
+msgctxt "#30533"
+msgid "The profile could not be restored - see the log."
+msgstr "تعذّرت استعادة الملف الشخصي - راجع السجل."
+
+msgctxt "#30534"
+msgid "%s has no settings or menus to export yet."
+msgstr "لا توجد إعدادات أو قوائم لتصديرها في %s بعد."
+
+msgctxt "#30535"
+msgid "Also copy the profile to... (Back = skip)"
+msgstr "نسخ الملف أيضاً إلى... (رجوع = تخطي)"
+
+msgctxt "#30536"
+msgid "Exported %d files to:[CR]%s[CR][CR]Upload the zip to the repo's profiles/ folder and add this to the skin's entry in skins.json:[CR][CR]%s"
+msgstr "تم تصدير %d ملف إلى:[CR]%s[CR][CR]ارفع الملف إلى مجلد profiles/ في المستودع وأضف هذا إلى مدخل الواجهة في skins.json:[CR][CR]%s"
+
+msgctxt "#30537"
+msgid "Browse for a profile zip..."
+msgstr "استعراض ملف واجهة (zip)..."
+
+msgctxt "#30538"
+msgid "Export:"
+msgstr "تصدير:"
+
+msgctxt "#30539"
+msgid "Backup:"
+msgstr "نسخة:"
+
+msgctxt "#30540"
+msgid "Video cache tuned for this device: %d MB"
+msgstr "تم ضبط ذاكرة الفيديو المؤقتة لهذا الجهاز: %d ميغابايت"
+
+msgctxt "#30541"
+msgid "Device: %s[CR]RAM: %d MB[CR][CR]Current cache: %d MB, readfactor %d[CR]Recommended: %d MB, readfactor %d[CR][CR]Apply the recommended values?"
+msgstr "الجهاز: %s[CR]الذاكرة: %d ميغابايت[CR][CR]الذاكرة المؤقتة الحالية: %d ميغابايت، معامل القراءة %d[CR]المقترح: %d ميغابايت، معامل القراءة %d[CR][CR]تطبيق القيم المقترحة؟"
+
+msgctxt "#30542"
+msgid "Already optimal - nothing to change."
+msgstr "الإعدادات مثالية مسبقاً - لا يوجد ما يتغير."
+
+msgctxt "#30543"
+msgid "Cache settings saved. Restart Kodi to use them."
+msgstr "تم حفظ إعدادات الذاكرة المؤقتة. أعد تشغيل كودي لتفعيلها."
+
+msgctxt "#30544"
+msgid "Kodi did not accept the cache values - nothing was changed. See kodi.log ([AbukarimTools HwTuning])."
+msgstr "لم يقبل كودي قيم الذاكرة المؤقتة، ولم يتغيّر شيء. راجع سجل kodi.log ([AbukarimTools HwTuning])."
+
+msgctxt "#30550"
+msgid "Use these to connect a phone remote app (Kore, Yatse) or a browser.[CR][CR]Address: %s[CR]Username: %s[CR]Password: %s"
+msgstr "استخدم هذه البيانات لربط تطبيق ريموت على الجوال (Kore أو Yatse) أو من المتصفح.[CR][CR]العنوان: %s[CR]اسم المستخدم: %s[CR]كلمة المرور: %s"
+
+msgctxt "#30551"
+msgid "Show login"
+msgstr "عرض بيانات الدخول"
+
+msgctxt "#30552"
+msgid "New password"
+msgstr "كلمة مرور جديدة"
+
+msgctxt "#30553"
+msgid "Turn remote access off"
+msgstr "إيقاف التحكم عن بُعد"
+
+msgctxt "#30554"
+msgid "Turn remote access on"
+msgstr "تشغيل التحكم عن بُعد"
+
+msgctxt "#30555"
+msgid "Remote access is off."
+msgstr "التحكم عن بُعد متوقف."
+
+msgctxt "#30556"
+msgid "Remote access turned off."
+msgstr "تم إيقاف التحكم عن بُعد."
+
+msgctxt "#30560"
+msgid "Current session (kodi.log)"
+msgstr "الجلسة الحالية (kodi.log)"
+
+msgctxt "#30561"
+msgid "Previous session - use after a crash (kodi.old.log)"
+msgstr "الجلسة السابقة - بعد التعليق أو الانهيار (kodi.old.log)"
+
+msgctxt "#30562"
+msgid "Log file not found:[CR]%s"
+msgstr "ملف السجل غير موجود:[CR]%s"
+
+msgctxt "#30563"
+msgid "Reading and cleaning the log..."
+msgstr "جاري قراءة السجل وتنظيفه..."
+
+msgctxt "#30564"
+msgid "Uploading..."
+msgstr "جاري الرفع..."
+
+msgctxt "#30565"
+msgid "Upload failed:[CR]%s"
+msgstr "فشل الرفع:[CR]%s"
+
+msgctxt "#30566"
+msgid "Scan the code or send this link to Abukarim:[CR][CR][B]%s[/B][CR][CR]Passwords, keys and tokens were removed before upload."
+msgstr "امسح الرمز أو أرسل هذا الرابط لأبوكريم:[CR][CR][B]%s[/B][CR][CR]تم حذف كلمات المرور والمفاتيح قبل الرفع."
+
+msgctxt "#30570"
+msgid "Installing %d add-ons from their repositories..."
+msgstr "جاري تثبيت %d إضافة من مستودعاتها..."
+
+msgctxt "#30571"
+msgid "(%d/%d) %s"
+msgstr "(%d/%d) %s"
+
+msgctxt "#30572"
+msgid "These add-ons could not be installed yet:[CR]%s[CR][CR]Run Setup > Finish Build Install later to retry."
+msgstr "تعذّر تثبيت هذه الإضافات حالياً:[CR]%s[CR][CR]شغّل الإعداد > إكمال تثبيت البناء لاحقاً لإعادة المحاولة."
+
+msgctxt "#30580"
+msgid "Choose a setup preset"
+msgstr "اختر نوع الإعداد"
+
+msgctxt "#30589"
+msgid "Menus checked: %d hidden, %d restored."
+msgstr "تم فحص القوائم: إخفاء %d، استعادة %d."
+
+msgctxt "#30590"
+msgid "Finish Build Install"
+msgstr "إكمال تثبيت البناء"
+
+msgctxt "#30591"
+msgid "Optimize for This Device"
+msgstr "تحسين الإعدادات لهذا الجهاز"
+
+msgctxt "#30592"
+msgid "Remote Access (Web Server)"
+msgstr "التحكم عن بُعد (خادم الويب)"
+
+msgctxt "#30593"
+msgid "Share Log (QR)"
+msgstr "مشاركة السجل (QR)"
+
+msgctxt "#30594"
+msgid "Update Online Fixes & Catalogs"
+msgstr "تحديث الإصلاحات والقوائم من الإنترنت"
+
+msgctxt "#30595"
+msgid "Repair Menus & Widgets"
+msgstr "إصلاح القوائم والودجات"
+
+msgctxt "#30596"
+msgid "Export Current Skin Profile"
+msgstr "تصدير ملف الواجهة الحالية"
+
+msgctxt "#30597"
+msgid "Restore Skin Profile Backup"
+msgstr "استعادة نسخة ملف الواجهة"
+
+msgctxt "#30598"
+msgid "Skin Profiles"
+msgstr "ملفات الواجهات"
+
+msgctxt "#30599"
+msgid "Online data:[CR]%s"
+msgstr "البيانات من الإنترنت:[CR]%s"
+
+msgctxt "#30600"
+msgid "Waves while loading turned on"
+msgstr "تم تشغيل الأمواج أثناء التحميل"
+
+msgctxt "#30601"
+msgid "Waves while loading turned off"
+msgstr "تم إيقاف الأمواج أثناء التحميل"
+
+msgctxt "#30602"
+msgid "Switch to Arctic Fuse 3 first - this setting belongs to that skin."
+msgstr "انتقل إلى واجهة Arctic Fuse 3 أولاً - هذا الإعداد خاص بها."
+
+msgctxt "#30603"
+msgid "AF3: Waves While Loading"
+msgstr "AF3: الأمواج أثناء التحميل"
+
+msgctxt "#30604"
+msgid "[B]Done - apply[/B]"
+msgstr "[B]تم - تطبيق[/B]"
+
+msgctxt "#30610"
+msgid "Support ABUKARIM - Buy Me a Coffee"
+msgstr "ادعم ABUKARIM - اشترِ لي قهوة"
+
+msgctxt "#30611"
+msgid "Buy Me a Coffee"
+msgstr "اشترِ لي قهوة"
+
+msgctxt "#30612"
+msgid "Enjoying the Piers build and ABUKARIM add-ons?[CR]Scan the code with your phone to support the work."
+msgstr "عاجبك بيلد Piers وإضافات ABUKARIM؟[CR]امسح الكود بجوالك لدعم الشغل."
+
+msgctxt "#30613"
+msgid "Press OK or BACK to close"
+msgstr "اضغط OK أو رجوع للإغلاق"
+
+msgctxt "#30620"
+msgid "CPU Benchmark"
+msgstr "اختبار أداء المعالج"
+
+msgctxt "#30621"
+msgid "Score"
+msgstr "النتيجة"
+
+msgctxt "#30622"
+msgid "View your results here"
+msgstr "اعرض نتيجتك هنا"
+
+msgctxt "#30623"
+msgid "Uploading the result..."
+msgstr "جارٍ رفع النتيجة..."
+
+msgctxt "#30624"
+msgid "Pass"
+msgstr "الجولة"
+
+msgctxt "#30625"
+msgid "Press BACK or OK to exit"
+msgstr "اضغط رجوع أو OK للخروج"
+
+msgctxt "#30626"
+msgid "CPU Benchmark failed:[CR]%s"
+msgstr "فشل اختبار أداء المعالج:[CR]%s"
+
+msgctxt "#30630"
+msgid "Widgets Layout"
+msgstr "ترتيب الودجات"
+
+msgctxt "#30631"
+msgid "Light"
+msgstr "خفيف"
+
+msgctxt "#30632"
+msgid "Keep your current layout[CR]exactly as it is"
+msgstr "يبقى ترتيبك الحالي[CR]كما هو دون أي تغيير"
+
+msgctxt "#30633"
+msgid "Moderate"
+msgstr "متوسط"
+
+msgctxt "#30634"
+msgid "ABUKARIM Wizard layout[CR](No Wipe - Option 1)"
+msgstr "ترتيب معالج أبوكريم[CR](دون مسح - الخيار الأول)"
+
+msgctxt "#30635"
+msgid "Full"
+msgstr "كامل"
+
+msgctxt "#30636"
+msgid "ABUKARIM Wizard layout[CR](No Wipe - Option 2)"
+msgstr "ترتيب معالج أبوكريم[CR](دون مسح - الخيار الثاني)"
+
+msgctxt "#30637"
+msgid "Downloading the widgets layout..."
+msgstr "جارٍ تنزيل ترتيب الودجات..."
+
+msgctxt "#30638"
+msgid "Widgets layout applied: %s"
+msgstr "تم تطبيق ترتيب الودجات: %s"
+
+msgctxt "#30639"
+msgid "Could not get the widgets layout - your current one was kept."
+msgstr "تعذّر الحصول على ترتيب الودجات، وتم الإبقاء على الترتيب الحالي."
+
+msgctxt "#30640"
+msgid "The download has no widgets layout in it - your current one was kept."
+msgstr "لا يحتوي الملف على ترتيب للودجات، وتم الإبقاء على الترتيب الحالي."
+
+msgctxt "#30641"
+msgid "Choose how the Arctic Fuse 3 home menus and widgets are arranged"
+msgstr "اختر طريقة ترتيب قوائم الصفحة الرئيسية وودجاتها في Arctic Fuse 3"
+
+msgctxt "#30642"
+msgid "Arrows to move  •  OK to choose  •  Back = Light (no change)"
+msgstr "الأسهم للتنقل  •  OK للاختيار  •  رجوع = خفيف (دون تغيير)"
+
+msgctxt "#30643"
+msgid "Arrows to move  •  OK to choose  •  Back to cancel"
+msgstr "الأسهم للتنقل  •  OK للاختيار  •  رجوع للإلغاء"
+
+msgctxt "#30644"
+msgid "Current"
+msgstr "الحالي"
+
+msgctxt "#30645"
+msgid "Nothing is downloaded or changed - the default layout"
+msgstr "لن يتم تنزيل أو تغيير أي شيء - الترتيب الافتراضي"
+
+msgctxt "#30646"
+msgid "Your current layout is backed up first"
+msgstr "يتم حفظ ترتيبك الحالي في نسخة احتياطية أولاً"
+
+msgctxt "#30647"
+msgid "Your current layout is backed up first"
+msgstr "يتم حفظ ترتيبك الحالي في نسخة احتياطية أولاً"
+
+msgctxt "#30648"
+msgid "Widgets layout left as it is"
+msgstr "بقي ترتيب الودجات كما هو"
+
+msgctxt "#30649"
+msgid "No trailer found for this title"
+msgstr "لم يُعثر على مقطع دعائي لهذا العنوان"
+
+msgctxt "#30650"
+msgid "Trailer button only"
+msgstr "عند الضغط على زر المقطع الدعائي فقط"
+
+msgctxt "#30660"
+msgid "My Lists"
+msgstr "قوائمي"
+
+msgctxt "#30661"
+msgid "Original"
+msgstr "الأصلي"
+
+msgctxt "#30662"
+msgid "The ABUKARIM build lists[CR]exactly as they are"
+msgstr "قوائم بيلد أبوكريم[CR]كما هي دون أي تغيير"
+
+msgctxt "#30663"
+msgid "Trakt"
+msgstr "تراكت"
+
+msgctxt "#30664"
+msgid "Your Trakt likes + the best[CR]Trakt lists you choose"
+msgstr "القوائم التي أعجبتك في تراكت[CR]وأفضل قوائم تراكت التي تختارها"
+
+msgctxt "#30665"
+msgid "Trakt lists for the Movies, TV Shows and Korean sections - anime lists for the home page"
+msgstr "قوائم تراكت لأقسام الأفلام والمسلسلات والكوري، وقوائم الأنمي للصفحة الرئيسية"
+
+msgctxt "#30666"
+msgid "Nothing is downloaded or changed"
+msgstr "لن يتم تنزيل أو تغيير أي شيء"
+
+msgctxt "#30667"
+msgid "Your lists are added as widgets - the home page and the ABUKARIM lists stay as they are"
+msgstr "تُضاف قوائمك ودجات في الأقسام، وتبقى الصفحة الرئيسية وقوائم أبوكريم كما هي"
+
+msgctxt "#30668"
+msgid "Arrows to move  •  OK to choose  •  Back = Original"
+msgstr "الأسهم للتنقل  •  OK للاختيار  •  رجوع = الأصلي"
+
+msgctxt "#30669"
+msgid "Trakt needs your Trakt account linked to TMDb Helper. Link it now?[CR]Without the link the original lists are used."
+msgstr "يتطلب خيار «تراكت» ربط حسابك في تراكت بإضافة TMDb Helper. هل تريد الربط الآن؟[CR]من دون الربط تُطبَّق القوائم الأصلية."
+
+msgctxt "#30670"
+msgid "Fetching the lists from Trakt..."
+msgstr "جارٍ جلب القوائم من تراكت..."
+
+msgctxt "#30671"
+msgid "Sorting the lists (%d / %d)..."
+msgstr "جارٍ فرز القوائم (%d من %d)..."
+
+msgctxt "#30672"
+msgid "Could not reach Trakt - your current lists were kept."
+msgstr "تعذّر الاتصال بتراكت، وتم الإبقاء على القوائم الحالية."
+
+msgctxt "#30673"
+msgid "Movie lists"
+msgstr "قوائم الأفلام"
+
+msgctxt "#30674"
+msgid "TV show lists"
+msgstr "قوائم المسلسلات"
+
+msgctxt "#30675"
+msgid "Korean movie lists"
+msgstr "قوائم الأفلام الكورية"
+
+msgctxt "#30676"
+msgid "Korean series lists"
+msgstr "قوائم المسلسلات الكورية"
+
+msgctxt "#30677"
+msgid "Lists I Liked"
+msgstr "قوائم أعجبتني"
+
+msgctxt "#30678"
+msgid "Best on Trakt"
+msgstr "الأفضل في تراكت"
+
+msgctxt "#30679"
+msgid "by %s  •  %d likes  •  %d items"
+msgstr "بواسطة %s  •  %d إعجاب  •  %d عنصر"
+
+msgctxt "#30680"
+msgid "Liked"
+msgstr "أعجبتني"
+
+msgctxt "#30681"
+msgid "My Lists: %s"
+msgstr "قوائمي: %s"
+
+msgctxt "#30682"
+msgid "My Lists left as they are"
+msgstr "بقيت قوائمي كما هي"
+
+msgctxt "#30683"
+msgid "TMDb Helper is not installed - your current lists were kept."
+msgstr "إضافة TMDb Helper غير مثبّتة، وتم الإبقاء على القوائم الحالية."
+
+msgctxt "#30684"
+msgid "Waiting for the Trakt link..."
+msgstr "بانتظار ربط حساب تراكت..."
+
+msgctxt "#30685"
+msgid "No lists were found on Trakt - your current lists were kept."
+msgstr "لم يُعثر على قوائم في تراكت، وتم الإبقاء على القوائم الحالية."
+
+msgctxt "#30686"
+msgid "Movies"
+msgstr "أفلام"
+
+msgctxt "#30687"
+msgid "Series"
+msgstr "مسلسلات"
+
+msgctxt "#30688"
+msgid "Already in the build"
+msgstr "موجودة في البيلد"
+
+msgctxt "#30689"
+msgid "Trakt is busy right now (too many requests). Try again in a few minutes - your current lists were kept."
+msgstr "خادم تراكت مشغول الآن بسبب كثرة الطلبات. حاول مرة أخرى بعد بضع دقائق، وتم الإبقاء على القوائم الحالية."
+
+msgctxt "#30690"
+msgid "Your liked lists are not available right now (Trakt limit) - showing the best Trakt lists only."
+msgstr "القوائم التي أعجبتك غير متاحة الآن بسبب حدّ تراكت، وتُعرض أفضل قوائم تراكت فقط."
+
+msgctxt "#30691"
+msgid "Trakt is not linked - the original lists were applied."
+msgstr "لم يتم ربط حساب تراكت، وطُبّقت القوائم الأصلية."
+
+msgctxt "#30692"
+msgid "What should happen to the current widgets of the Movies, TV Shows and Korean sections?"
+msgstr "ماذا تريد أن نفعل بالودجات الحالية في أقسام الأفلام والمسلسلات والكوري؟"
+
+msgctxt "#30693"
+msgid "Add to them"
+msgstr "الإضافة عليها"
+
+msgctxt "#30694"
+msgid "The current widgets stay, the lists you pick are added after them"
+msgstr "تبقى الودجات الحالية، وتُضاف القوائم التي تختارها بعدها"
+
+msgctxt "#30695"
+msgid "Replace them"
+msgstr "استبدالها"
+
+msgctxt "#30696"
+msgid "All the lists I liked (select all)"
+msgstr "كل القوائم التي أعجبتني (تحديد الكل)"
+
+msgctxt "#30697"
+msgid "The current widgets are hidden and the lists you pick take their place (Original brings them back)"
+msgstr "تُخفى الودجات الحالية وتحلّ القوائم التي تختارها مكانها، ويعيدها خيار «الأصلي»"
+
+msgctxt "#30698"
+msgid "Keep them as they are"
+msgstr "إبقاؤها كما هي"
+
+msgctxt "#30699"
+msgid "Nothing is added or changed in the sections"
+msgstr "لا يُضاف شيء ولا يتغيّر شيء في الأقسام"
+
+msgctxt "#30700"
+msgid "Tick to add all %d of your liked lists here at once"
+msgstr "حدّدها لإضافة كل القوائم التي أعجبتك هنا دفعة واحدة (%d قائمة)"
+
+msgctxt "#30701"
+msgid "MDBList  •  by %s  •  %d likes  •  %d items"
+msgstr "MDBList  •  بواسطة %s  •  %d إعجاب  •  %d عنصر"
+
+msgctxt "#30702"
+msgid "My list"
+msgstr "قائمتي"
+
+msgctxt "#30703"
+msgid "MDBList lists appear once MDBList is authorised in TMDb Helper (MDbList API key). Open its settings now?"
+msgstr "تظهر قوائم MDBList بعد توثيق MDBList في إضافة TMDb Helper (مفتاح MDbList API). هل تريد فتح إعداداتها الآن؟"
+
+msgctxt "#30704"
+msgid "Skip"
+msgstr "تخطّي"
+
+msgctxt "#30705"
+msgid "Open MDBList settings"
+msgstr "فتح إعدادات MDBList"
+
+msgctxt "#30706"
+msgid "Installing Subtitle Cycler..."
+msgstr "جارٍ تثبيت Subtitle Cycler…"
+
+msgctxt "#30707"
+msgid "Subtitle Cycler could not be installed"
+msgstr "تعذّر تثبيت Subtitle Cycler"
+
+msgctxt "#30708"
+msgid "Subtitle Cycler installed"
+msgstr "تم تثبيت Subtitle Cycler"
+
+msgctxt "#30709"
+msgid "Anime"
+msgstr "أنمي"
+
+msgctxt "#30710"
+msgid "Otaku anime lists[CR]on the home page"
+msgstr "قوائم الأنمي من إضافة Otaku[CR]في الصفحة الرئيسية"
+
+msgctxt "#30711"
+msgid "The lists you pick are added as widgets on the home page - the sections stay as they are"
+msgstr "تُضاف القوائم التي تختارها ودجات في الصفحة الرئيسية، وتبقى الأقسام كما هي"
+
+msgctxt "#30712"
+msgid "Anime lists for the home page"
+msgstr "قوائم الأنمي للصفحة الرئيسية"
+
+msgctxt "#30713"
+msgid "Anime needs the Otaku add-on. Install it now?"
+msgstr "يتطلب خيار «أنمي» إضافة Otaku. هل تريد تثبيتها الآن؟"
+
+msgctxt "#30714"
+msgid "Otaku could not be installed - the home page was left as it is."
+msgstr "تعذّر تثبيت Otaku، وبقيت الصفحة الرئيسية كما هي."
+
+msgctxt "#30715"
+msgid "Anime: %d lists added to the home page"
+msgstr "أنمي: أُضيفت %d من القوائم إلى الصفحة الرئيسية"
+
+msgctxt "#30716"
+msgid "Anime lists removed from the home page"
+msgstr "أُزيلت قوائم الأنمي من الصفحة الرئيسية"
+
+msgctxt "#30717"
+msgid "Home page left as it is"
+msgstr "بقيت الصفحة الرئيسية كما هي"
+
+msgctxt "#30718"
+msgid "Installing Otaku..."
+msgstr "جارٍ تثبيت Otaku..."
+
+msgctxt "#30719"
+msgid "Anime: Next Up"
+msgstr "أنمي: الحلقة التالية"
+
+msgctxt "#30720"
+msgid "Anime: Airing Last Season"
+msgstr "أنمي: عُرض الموسم الماضي"
+
+msgctxt "#30721"
+msgid "Anime: Airing This Season"
+msgstr "أنمي: يُعرض هذا الموسم"
+
+msgctxt "#30722"
+msgid "Anime: Airing Next Season"
+msgstr "أنمي: يُعرض الموسم القادم"
+
+msgctxt "#30723"
+msgid "Anime: Trending"
+msgstr "أنمي: الأكثر رواجًا"
+
+msgctxt "#30724"
+msgid "Anime: Popular"
+msgstr "أنمي: الأكثر شعبية"
+
+msgctxt "#30725"
+msgid "Anime: Top 100"
+msgstr "أنمي: أفضل 100"
+
+msgctxt "#30726"
+msgid "Anime: Genres & Tags"
+msgstr "أنمي: التصنيفات والوسوم"
+
+msgctxt "#30727"
+msgid "Needs your anime account linked in Otaku"
+msgstr "يتطلب ربط حساب الأنمي في Otaku"
+
+msgctxt "#30730"
+msgid "Setup from your phone"
+msgstr "الإعداد من الجوال"
+
+msgctxt "#30731"
+msgid "Scan the code with your phone and finish the setup there: backup and restore, add-ons, widgets, lists and patches - no FTP needed.[CR]The phone must be on the same network as this box. Or open: %s"
+msgstr "امسح الرمز بجوالك وأكمل الإعداد منه: النسخ الاحتياطي والاستعادة، والإضافات، والودجات، والقوائم، والترقيعات، دون الحاجة إلى FTP.[CR]يجب أن يكون الجوال على شبكة الجهاز نفسها، أو افتح: %s"
+
+msgctxt "#30732"
+msgid "BACK = finish"
+msgstr "رجوع = إنهاء"
+
+msgctxt "#30733"
+msgid "The phone setup could not start (no free network port)."
+msgstr "تعذّر تشغيل الإعداد من الجوال (لا يوجد منفذ شبكة متاح)."
+
+msgctxt "#30734"
+msgid "Continue the setup from your phone?[CR]Backup and restore, add-ons, widgets and lists - all from the phone, no FTP needed."
+msgstr "هل تريد إكمال الإعداد من جوالك؟[CR]النسخ الاحتياطي والاستعادة والإضافات والودجات والقوائم كلها من الجوال، دون الحاجة إلى FTP."
+
+msgctxt "#30735"
+msgid "From the phone"
+msgstr "من الجوال"
+
+msgctxt "#30736"
+msgid "On the TV"
+msgstr "على التلفاز"
+
+msgctxt "#30737"
+msgid "Restore finished. Restart now so every setting takes effect?"
+msgstr "اكتملت الاستعادة. هل تريد إعادة التشغيل الآن ليُطبَّق كل إعداد؟"
+
+msgctxt "#30738"
+msgid "Restored from the phone - restart to finish"
+msgstr "تمت الاستعادة من الجوال، أعد التشغيل لإكمالها"
+
+msgctxt "#30740"
+msgid "Font Size"
+msgstr "حجم الخط"
+
+msgctxt "#30741"
+msgid "Original"
+msgstr "الأصلي"
+
+msgctxt "#30742"
+msgid "Smaller (-10%)"
+msgstr "أصغر (-10%)"
+
+msgctxt "#30743"
+msgid "Smaller (-5%)"
+msgstr "أصغر (-5%)"
+
+msgctxt "#30744"
+msgid "Font size: %s - restarting Kodi..."
+msgstr "حجم الخط: %s - جارٍ إعادة تشغيل Kodi..."
+
+msgctxt "#30745"
+msgid "The font size could not be changed - the skin files cannot be written."
+msgstr "تعذّر تغيير حجم الخط، إذ لا يمكن الكتابة في ملفات الواجهة."
+
+msgctxt "#30746"
+msgid "Smaller (-15%)"
+msgstr "أصغر (-15%)"
+
+msgctxt "#30747"
+msgid "Smaller (-20%)"
+msgstr "أصغر (-20%)"
+
+msgctxt "#30750"
+msgid "You changed some switches. Save the changes and apply them?"
+msgstr "لقد غيّرت بعض المفاتيح. هل تريد حفظ التغييرات وتطبيقها؟"
+
+msgctxt "#30751"
+msgid "Save and apply"
+msgstr "حفظ وتطبيق"
+
+msgctxt "#30752"
+msgid "Discard"
+msgstr "تجاهل"
+
+msgctxt "#30760"
+msgid "Skip this step?"
+msgstr "تخطّي هذه الخطوة؟"
+
+msgctxt "#30761"
+msgid "Are you sure you want to skip “%s”?[CR]You can run it later from ABUKARIM TOOLS."
+msgstr "هل أنت متأكد من تخطّي «%s»؟[CR]يمكنك تشغيلها لاحقاً من ABUKARIM TOOLS."
+
+msgctxt "#30762"
+msgid "Yes, skip"
+msgstr "نعم، تخطَّ"
+
+msgctxt "#30763"
+msgid "Back to the step"
+msgstr "العودة إلى الخطوة"
+
+msgctxt "#30764"
+msgid "Setup preset"
+msgstr "نوع الإعداد"
+
+msgctxt "#30765"
+msgid "Skin Installer"
+msgstr "مثبّت الواجهات"
+
+msgctxt "#30770"
+msgid "Setup in progress"
+msgstr "الإعداد قيد التنفيذ"
+
+msgctxt "#30771"
+msgid "Please do not restart, unplug or exit until setup is complete.[CR]Kodi restarts by itself when setup finishes."
+msgstr "يُرجى عدم إعادة التشغيل أو فصل الكهرباء أو الخروج حتى يكتمل الإعداد.[CR]سيُعاد التشغيل تلقائياً عند انتهاء الإعداد."
+
+msgctxt "#30772"
+msgid "Please wait - do not unplug the box."
+msgstr "يُرجى الانتظار وعدم فصل الكهرباء عن الجهاز."
+
+msgctxt "#30773"
+msgid "Setup complete - restarting Kodi…"
+msgstr "اكتمل الإعداد، جارٍ إعادة تشغيل Kodi…"
+
+msgctxt "#30774"
+msgid "Setup complete - rebooting…"
+msgstr "اكتمل الإعداد، جارٍ إعادة تشغيل الجهاز…"
+
+msgctxt "#30775"
+msgid "Installing components"
+msgstr "تثبيت المكوّنات"
+
+msgctxt "#30776"
+msgid "Finishing up"
+msgstr "اللمسات الأخيرة"
+
+msgctxt "#30777"
+msgid "CoreELEC 22 only"
+msgstr "لـ CoreELEC 22 فقط"
+
+msgctxt "#30778"
+msgid "Installed from Jamal2362 (CoreELEC 22)"
+msgstr "ثُبّت من Jamal2362 (CoreELEC 22)"
+
+msgctxt "#30780"
+msgid "Clean Unused Items"
+msgstr "تنظيف العناصر غير المستخدمة"
+
+msgctxt "#30781"
+msgid "Scanning the build…"
+msgstr "جارٍ فحص البناء…"
+
+msgctxt "#30782"
+msgid "Reading installed add-ons"
+msgstr "قراءة الإضافات المثبّتة"
+
+msgctxt "#30783"
+msgid "Checking what each add-on uses"
+msgstr "التحقق مما تستخدمه كل إضافة"
+
+msgctxt "#30784"
+msgid "Checking user data"
+msgstr "فحص بيانات المستخدم"
+
+msgctxt "#30785"
+msgid "Nothing to clean - the build has no unused items."
+msgstr "لا يوجد ما يحتاج إلى تنظيف، فليس في البناء عناصر غير مستخدمة."
+
+msgctxt "#30786"
+msgid "Select items to remove"
+msgstr "اختر العناصر المراد حذفها"
+
+msgctxt "#30787"
+msgid "Remove %d item(s) (%s)?[CR]A removed add-on is reinstalled automatically if another add-on needs it later."
+msgstr "هل تريد حذف %d عنصر (%s)؟[CR]تُثبَّت الإضافة المحذوفة تلقائياً إن احتاجت إليها إضافة أخرى لاحقاً."
+
+msgctxt "#30788"
+msgid "Removing…"
+msgstr "جارٍ الحذف…"
+
+msgctxt "#30789"
+msgid "Removed %d item(s), freed %s."
+msgstr "حُذف %d عنصر، وحُرِّرت مساحة قدرها %s."
+
+msgctxt "#30790"
+msgid "Add-on"
+msgstr "إضافة"
+
+msgctxt "#30791"
+msgid "Module"
+msgstr "مكتبة برمجية"
+
+msgctxt "#30792"
+msgid "Script"
+msgstr "سكربت"
+
+msgctxt "#30793"
+msgid "Resource"
+msgstr "مورد"
+
+msgctxt "#30794"
+msgid "Context menu"
+msgstr "قائمة سياق"
+
+msgctxt "#30795"
+msgid "Scraper"
+msgstr "جالب بيانات"
+
+msgctxt "#30796"
+msgid "Add-on data"
+msgstr "بيانات إضافة"
+
+msgctxt "#30797"
+msgid "Skin leftover"
+msgstr "بقايا واجهة"
+
+msgctxt "#30798"
+msgid "Old sources file"
+msgstr "ملف مصادر قديم"
+
+msgctxt "#30799"
+msgid "%d item(s) could not be removed - see kodi.log."
+msgstr "تعذّر حذف %d عنصر، راجع سجل Kodi."
+
+msgctxt "#30800"
+msgid "Glass Theme (Source Windows)"
+msgstr "السمة الزجاجية (نوافذ المصادر)"
+
+msgctxt "#30801"
+msgid "Glass Theme - choose the add-ons"
+msgstr "السمة الزجاجية - اختر الإضافات"
+
+msgctxt "#30802"
+msgid "%d / %d On"
+msgstr "مفعّلة: %d من %d"
+
+msgctxt "#30803"
+msgid "None of Fen Light, Red Light, POV or Umbrella is installed."
+msgstr "لم تُثبَّت أيٌّ من الإضافات Fen Light أو Red Light أو POV أو Umbrella."
+
+msgctxt "#30804"
+msgid "Glass Theme on: %s"
+msgstr "فُعِّلت السمة الزجاجية: %s"
+
+msgctxt "#30805"
+msgid "Original look restored: %s"
+msgstr "أُعيد الشكل الأصلي: %s"
+
+msgctxt "#30806"
+msgid "Could not change: %s - see kodi.log."
+msgstr "تعذّر التغيير: %s، راجع سجل Kodi."
+
+msgctxt "#30807"
+msgid "Shows the next time the source list opens."
+msgstr "يظهر التغيير عند فتح قائمة المصادر في المرة القادمة."
+
+msgctxt "#30808"
+msgid "Colored resolution & service icons"
+msgstr "شارات الدقة وأيقونات الخدمات الملوّنة"
+
+msgctxt "#30809"
+msgid "Colored resolution & service icons on"
+msgstr "فُعِّلت شارات الدقة وأيقونات الخدمات الملوّنة"
+
+msgctxt "#30810"
+msgid "Original quality label & add-on icons"
+msgstr "أُعيدت تسمية الجودة الأصلية وأيقونات الإضافة"
+

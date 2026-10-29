@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Lucent theme helper - injected by AB Tools (plugin.program.abukarimtools).
-# LUCENT_HELPER_VERSION = 10
+# LUCENT_HELPER_VERSION = 11
 #
 # Normalises each add-on's own source-list and meta properties into one shared
 # 'lucent.*' property set, so a single Lucent window layout works for Fen Light,
@@ -386,7 +386,23 @@ def lucent_select(heading, labels, subtitle='', multi=False, counts=None, live=N
 			for main, cnt in rows:
 				items.append(xbmcgui.ListItem(main, cnt, offscreen=True))
 			self.ctrl.addItems(items)
-			self.setFocusId(5000)
+			self._focus()
+
+		def _has_focus(self):
+			try: return self.getFocusId() == 5000
+			except Exception: return False
+
+		def _focus(self):
+			# Kodi can refuse focus while the list is still being laid out
+			# ("Control 5000 ... can't focus"); with no focused control every
+			# key - arrows, OK, Apply - is ignored. Retry until it takes.
+			import xbmc
+			for _ in range(40):
+				try: self.setFocusId(5000)
+				except Exception: pass
+				if self._has_focus(): return
+				xbmc.sleep(25)
+			_log('select window: list never took focus')
 
 		def onClick(self, control_id):
 			if control_id != 5000: return
@@ -417,6 +433,8 @@ def lucent_select(heading, labels, subtitle='', multi=False, counts=None, live=N
 			if action.getId() in _BACK:
 				self.result = None if multi else -1
 				self.close()
+			elif not self._has_focus():
+				self._focus()                    # recover a lost focus on any key
 
 	try:
 		win = _Select('lucent_select.xml', path, 'Default', '1080i')
@@ -573,10 +591,13 @@ def lucent_fen_filter(window):
 			mod.select_dialog = _themed_select_dialog(window, original, base)
 		window.item_list = base                  # filter_action filters self.item_list
 		window.set_filter = capture
+		before = getattr(window, '_lucent_current', None)
 		try:
 			window.filter_action(window.selection_actions[0])
 		finally:
 			window.item_list = full
+			after = getattr(window, '_lucent_current', None)
+			_log('filter result: %s' % ('%d rows on screen' % len(after) if after is not before and after is not None else 'no change'))
 			del window.set_filter                # back to the class method
 			if original is not None:
 				mod.select_dialog = original
@@ -617,6 +638,7 @@ def _themed_select_dialog(window, original, base=None):
 			r = lucent_select(heading, [labels[n] for n in shown], multi=multi,
 							counts=[counts[n] for n in shown] if counts else None, live=live)
 			if multi:
+				_log('filter by info: %s' % ('cancelled' if not r else ', '.join(str(tags[shown[n]]) for n in r)))
 				return [function_list[shown[n]] for n in r] if r else None
 			return function_list[shown[r]] if r is not None and r >= 0 else None
 		except Exception as e:
