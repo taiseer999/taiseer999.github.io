@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 # Lucent theme helper - injected by AB Tools (plugin.program.abukarimtools).
-# LUCENT_HELPER_VERSION = 7
+# LUCENT_HELPER_VERSION = 8
 #
 # Normalises each add-on's own source-list and meta properties into one shared
 # 'lucent.*' property set, so a single Lucent window layout works for Fen Light,
 # Red Light, POV and Umbrella. Everything here is best-effort: any failure is
 # swallowed so the add-on's own window always keeps working.
+import os
 import re
 
 # Property names each add-on already puts on its source list items.
@@ -318,6 +319,107 @@ def lucent_window(window, meta, fanart='', clearlogo=None):
 		pass
 
 
+# ───────────── Themed filter menu (lucent_select.xml, shipped by AB Tools) ─────────────
+_AR = {'Filter results': 'تصفية النتائج', 'Show all results': 'عرض كل النتائج',
+	'Show %s only': 'عرض %s فقط', 'Source: %s': 'المصدر: %s', 'Filter by title...': 'تصفية حسب العنوان...',
+	'Filter by info (HDR, Atmos ...)...': 'تصفية حسب المعلومات (HDR وAtmos ...)...',
+	'Filter by info': 'تصفية حسب المعلومات', 'Keywords (comma separated)': 'كلمات مفتاحية (مفصولة بفواصل)',
+	'No results': 'لا توجد نتائج', 'Apply': 'تطبيق', '%s results': '%s نتيجة', '%d selected': 'المحدد: %d',
+	'Choose one or more, then Apply': 'اختر عنصرًا أو أكثر ثم اضغط تطبيق', 'Title: %s': 'العنوان: %s'}
+
+
+def _t(text):
+	try:
+		import xbmc
+		if xbmc.getLanguage(xbmc.ISO_639_1) == 'ar': return _AR.get(text, text)
+	except Exception:
+		pass
+	return text
+
+
+def _addon_root():
+	# <add-on>/resources/lib/modules/lucent_theme.py
+	return os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
+
+_COUNT_RE = re.compile(r'^(.*?)\s*\|\s*(?:\[B\])?\s*(\d+)\s*(?:\[/B\])?\s*(?:Results?|نتيجة|نتائج)?\s*$', re.I)
+
+
+def _split_count(label):
+	m = _COUNT_RE.match(label or '')
+	return (m.group(1).strip(), m.group(2)) if m else (label, '')
+
+
+def lucent_select(heading, labels, subtitle='', multi=False, counts=None):
+	"""Themed replacement for Dialog().select / multiselect. Returns the picked
+	index (-1 on Back) or, with multi=True, the list of picked indexes (None on
+	Back). Falls back to Kodi's own dialog if the window can't be shown."""
+	import xbmcgui
+	rows = []
+	for n, lab in enumerate(labels):
+		main, cnt = _split_count(lab)
+		if counts and n < len(counts) and counts[n] is not None: cnt = str(counts[n])
+		rows.append((main, cnt))
+	path = _addon_root()
+	if not os.path.isfile(os.path.join(path, 'resources', 'skins', 'Default', '1080i', 'lucent_select.xml')):
+		d = xbmcgui.Dialog()
+		return d.multiselect(heading, labels) if multi else d.select(heading, labels)
+
+	class _Select(xbmcgui.WindowXMLDialog):
+		def __init__(self, *a, **k):
+			self.result = None if multi else -1
+			self.checked = set()
+
+		def onInit(self):
+			self.setProperty('lucent.heading', heading)
+			self.setProperty('lucent.subtitle', subtitle or (_t('Choose one or more, then Apply') if multi else ''))
+			self.setProperty('lucent.multi', 'true' if multi else '')
+			self.setProperty('lucent.rows', str(max(1, min(8, len(rows) + (1 if multi else 0)))))
+			self.ctrl = self.getControl(5000)
+			items = []
+			if multi:
+				li = xbmcgui.ListItem(_t('Apply'), '', offscreen=True)
+				li.setProperty('lucent.kind', 'apply')
+				items.append(li)
+			for main, cnt in rows:
+				items.append(xbmcgui.ListItem(main, cnt, offscreen=True))
+			self.ctrl.addItems(items)
+			self.setFocusId(5000)
+
+		def onClick(self, control_id):
+			if control_id != 5000: return
+			pos = self.ctrl.getSelectedPosition()
+			if not multi:
+				self.result = pos
+				return self.close()
+			if pos == 0:
+				self.result = sorted(self.checked)
+				return self.close()
+			n = pos - 1
+			li = self.ctrl.getListItem(pos)
+			if n in self.checked:
+				self.checked.discard(n); li.setProperty('lucent.checked', '')
+			else:
+				self.checked.add(n); li.setProperty('lucent.checked', 'true')
+			self.ctrl.getListItem(0).setLabel('%s (%d)' % (_t('Apply'), len(self.checked)) if self.checked else _t('Apply'))
+
+		def onAction(self, action):
+			if action.getId() in _BACK:
+				self.result = None if multi else -1
+				self.close()
+
+	try:
+		win = _Select('lucent_select.xml', path, 'Default', '1080i')
+		win.doModal()
+		result = win.result
+		del win
+		return result
+	except Exception as e:
+		_log('themed select failed, using Kodi dialog: %r' % e)
+		d = xbmcgui.Dialog()
+		return d.multiselect(heading, labels) if multi else d.select(heading, labels)
+
+
 # ───────────── Umbrella: RIGHT on the stream list opens a filter ─────────────
 _RIGHT, _BACK = 2, (9, 10, 13, 92)
 _Q_ORDER = ('4K', '1080P', '720P', 'SD', 'SCR', 'CAM')
@@ -353,14 +455,15 @@ def lucent_filter(window, action_id, list_id):
 						key=lambda q: _Q_ORDER.index(q) if q in _Q_ORDER else 99)
 		services = sorted({get(i, 'umbrella.debrid') for i in items} - {''})
 		sites = sorted({get(i, 'umbrella.provider') for i in items} - {''})
-		choices = [('Show %s only' % q, 'quality', q) for q in qualities]
-		choices += [('Show %s only' % d, 'debrid', d) for d in services]
-		choices += [('Source: %s' % p, 'site', p) for p in sites]
-		choices += [('Filter by title...', 'title', ''), ('Filter by info (HDR, Atmos ...)...', 'info', '')]
-		if full is not None: choices.insert(0, ('Show all results', 'all', ''))
-		pick = dialog.select('Filter results', [c[0] for c in choices])
+		count = lambda key, v: sum(1 for i in items if get(i, key).upper() == v.upper())
+		choices = [(_t('Show %s only') % q, 'quality', q, count('umbrella.quality', q)) for q in qualities]
+		choices += [(_t('Show %s only') % d, 'debrid', d, count('umbrella.debrid', d)) for d in services]
+		choices += [(_t('Source: %s') % p, 'site', p, count('umbrella.provider', p)) for p in sites]
+		choices += [(_t('Filter by title...'), 'title', '', None), (_t('Filter by info (HDR, Atmos ...)...'), 'info', '', None)]
+		if full is not None: choices.insert(0, (_t('Show all results'), 'all', '', len(full)))
+		pick = lucent_select(_t('Filter results'), [c[0] for c in choices], _t('%s results') % len(window.item_list), counts=[c[3] for c in choices])
 		if pick < 0: return True
-		label, kind, value = choices[pick]
+		label, kind, value = choices[pick][:3]
 		if kind == 'all':
 			window._lucent_full = None
 			_apply_filter(window, list_id, items, '')
@@ -370,11 +473,11 @@ def lucent_filter(window, action_id, list_id):
 		elif kind == 'debrid': result = [i for i in items if get(i, 'umbrella.debrid') == value]
 		elif kind == 'site': result = [i for i in items if get(i, 'umbrella.provider') == value]
 		elif kind == 'title':
-			text = dialog.input('Keywords (comma separated)')
+			text = dialog.input(_t('Keywords (comma separated)'))
 			words = [w.strip().upper() for w in (text or '').split(',') if w.strip()]
 			if not words: return True
 			result = [i for i in items if all(w in get(i, 'umbrella.name').upper() for w in words)]
-			label = 'Title: ' + ', '.join(words)
+			label = _t('Title: %s') % ', '.join(words)
 		else:
 			present = []
 			for i in items:
@@ -383,13 +486,14 @@ def lucent_filter(window, action_id, list_id):
 					if b and b not in present: present.append(b)
 			present.sort(key=lambda b: _RANK.get(b, 999))
 			if not present: return True
-			sel = dialog.multiselect('Filter by info', present)
+			sel = lucent_select(_t('Filter by info'), present, multi=True,
+								counts=[sum(1 for i in items if b in [i.getProperty('lucent.badge_%d' % n) for n in range(1, _MAX_BADGES + 1)]) for b in present])
 			if not sel: return True
 			want = [present[n] for n in sel]
 			result = [i for i in items if all(w in [i.getProperty('lucent.badge_%d' % n) for n in range(1, _MAX_BADGES + 1)] for w in want)]
 			label = ' + '.join(want)
 		if not result:
-			dialog.ok('Filter results', 'No results')
+			dialog.ok(_t('Filter results'), _t('No results'))
 			return True
 		window._lucent_full = items
 		_apply_filter(window, list_id, result, label)
@@ -418,9 +522,10 @@ def lucent_fen_filter(window):
 		labels = [li.getProperty('label') for li in items]
 		offset = 0
 		if getattr(window, 'filter_applied', False):
-			labels.insert(0, 'Show all results')
+			labels.insert(0, _t('Show all results'))
 			offset = 1
-		pick = xbmcgui.Dialog().select('Filter results', labels)
+		total = window.getProperty('total_results')
+		pick = lucent_select(_t('Filter results'), labels, (_t('%s results') % total) if total else '')
 		if pick < 0: return
 		if offset and pick == 0:
 			window.clear_filter()

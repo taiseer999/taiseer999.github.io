@@ -266,6 +266,12 @@ def apply(addon_path, profile):
                 dst = os.path.join(addon_path, _SKIN, 'media', os.path.relpath(src, media_src))
                 if _copy_if_changed(src, dst):
                     written += 1
+        # 2b. themed filter menu - a new file (no stock version), used by the
+        #     helper's lucent_select(); harmless and unused once hooks are removed
+        if profile in ('fenlight', 'redlight', 'umbrella'):
+            if _copy_if_changed(os.path.join(_SRC, 'xml', 'shared', 'lucent_select.xml'),
+                                os.path.join(addon_path, _SKIN, '1080i', 'lucent_select.xml')):
+                written += 1
         # 3. window XMLs (stock copy backed up first)
         bdir = os.path.join(_BACKUP, aid)
         for name in spec['xml']:

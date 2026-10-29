@@ -1086,6 +1086,248 @@ def resume_buttons_redlight():
     ], 160, visible=vis, gid='3001')
 
 
+
+SEL_W, SEL_ROW, SEL_HEAD, SEL_PAD, SEL_MAX = 900, 76, 148, 24, 8
+
+
+def _sel_h(n):
+    return SEL_HEAD + SEL_ROW * n + SEL_PAD
+
+
+def lucent_select():
+    """Themed select / multi-select used by the helper's filter menus
+    (Fen Light / Red Light RIGHT, Umbrella filter). Contract (lucent_theme.py):
+    list 5000; Window props lucent.heading, lucent.subtitle, lucent.multi,
+    lucent.rows (1..8); ListItem label / label2 (count), props lucent.checked,
+    lucent.kind=apply (first row of a multi-select)."""
+    L = SEL_W
+    left = (1920 - L) // 2
+    top8 = (1080 - _sel_h(SEL_MAX)) // 2
+    rows = 'Window.Property(lucent.rows)'
+    multi = 'String.IsEqual(Window.Property(lucent.multi),true)'
+    panels, shifts = [], []
+    for n in range(1, SEL_MAX + 1):
+        h = _sel_h(n)
+        t = (1080 - h) // 2
+        cond = 'String.IsEqual(%s,%d)' % (rows, n)
+        panels.append("""
+            <control type="group">
+                <top>%(t)d</top>
+                <visible>%(c)s</visible>
+                <control type="image">
+                    <left>-40</left>
+                    <top>-40</top>
+                    <width>%(sw)d</width>
+                    <height>%(sh)d</height>
+                    <texture border="88">lucent/panel_shadow.png</texture>
+                    <colordiffuse>B3000000</colordiffuse>
+                </control>
+                <control type="image">
+                    <width>%(w)d</width>
+                    <height>%(h)d</height>
+                    <texture border="48">lucent/panel.png</texture>
+                    <colordiffuse>F5162532</colordiffuse>
+                </control>
+                <control type="image">
+                    <width>%(w)d</width>
+                    <height>%(h)d</height>
+                    <texture border="48">lucent/panel_edge.png</texture>
+                    <colordiffuse>2EFFFFFF</colordiffuse>
+                </control>
+            </control>""" % {'t': t, 'c': cond, 'w': L, 'h': h, 'sw': L + 80, 'sh': h + 80})
+        if n < SEL_MAX:
+            shifts.append('\n            <animation effect="slide" end="0,%d" time="0" condition="%s">Conditional</animation>'
+                          % (t - top8, cond))
+
+    def row(focused):
+        pill = ''
+        if focused:
+            pill = """
+                        <control type="image">
+                            <width>%d</width>
+                            <height>64</height>
+                            <texture border="32">lucent/pill64.png</texture>
+                            <colordiffuse>FFFFFFFF</colordiffuse>
+                        </control>""" % (L - 40)
+        txt = 'FF%s' % BG if focused else 'FFDCE2E7'
+        cnt_bg = '1F%s' % BG if focused else '1AFFFFFF'
+        cnt_txt = 'FF%s' % BG if focused else 'FFBDC8D1'
+        circle_off = '66%s' % BG if focused else '40FFFFFF'
+        circle_on = 'FF%s' % BG if focused else 'FFFFFFFF'
+        dot_on = 'FFFFFFFF' if focused else 'FF%s' % BG
+        bold = '[B]%s[/B]' if focused else '%s'
+        not_apply = 'String.IsEmpty(ListItem.Property(lucent.kind))'
+        return """
+                    <control type="group">%(pill)s
+                        <!-- multi-select check circle -->
+                        <control type="group">
+                            <visible>%(multi)s + %(na)s</visible>
+                            <control type="image">
+                                <left>28</left>
+                                <top>15</top>
+                                <width>34</width>
+                                <height>34</height>
+                                <texture border="17">lucent/pill42.png</texture>
+                                <colordiffuse>%(coff)s</colordiffuse>
+                                <visible>String.IsEmpty(ListItem.Property(lucent.checked))</visible>
+                            </control>
+                            <control type="image">
+                                <left>28</left>
+                                <top>15</top>
+                                <width>34</width>
+                                <height>34</height>
+                                <texture border="17">lucent/pill42.png</texture>
+                                <colordiffuse>%(con)s</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.checked))</visible>
+                            </control>
+                            <control type="image">
+                                <left>38</left>
+                                <top>25</top>
+                                <width>14</width>
+                                <height>14</height>
+                                <texture>lucent/dot.png</texture>
+                                <colordiffuse>%(don)s</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.checked))</visible>
+                            </control>
+                        </control>
+                        <!-- label: plain list -->
+                        <control type="label">
+                            <left>36</left>
+                            <width>%(lw)d</width>
+                            <height>64</height>
+                            <font>font12</font>
+                            <aligny>center</aligny>
+                            <textcolor>%(txt)s</textcolor>
+                            <label>%(lab)s</label>
+                            <visible>!%(multi)s</visible>
+                        </control>
+                        <!-- label: multi-select rows -->
+                        <control type="label">
+                            <left>84</left>
+                            <width>%(lw2)d</width>
+                            <height>64</height>
+                            <font>font12</font>
+                            <aligny>center</aligny>
+                            <textcolor>%(txt)s</textcolor>
+                            <label>%(lab)s</label>
+                            <visible>%(multi)s + %(na)s</visible>
+                        </control>
+                        <!-- label: Apply row -->
+                        <control type="label">
+                            <left>36</left>
+                            <width>%(lw)d</width>
+                            <height>64</height>
+                            <font>font12</font>
+                            <aligny>center</aligny>
+                            <textcolor>%(apc)s</textcolor>
+                            <label>[B]✓  $INFO[ListItem.Label][/B]</label>
+                            <visible>!%(na)s</visible>
+                        </control>
+                        <!-- count pill -->
+                        <control type="group">
+                            <left>%(cl)d</left>
+                            <top>11</top>
+                            <visible>!String.IsEmpty(ListItem.Label2)</visible>
+                            <control type="image">
+                                <width>150</width>
+                                <height>42</height>
+                                <texture border="21">lucent/pill42.png</texture>
+                                <colordiffuse>%(cbg)s</colordiffuse>
+                            </control>
+                            <control type="label">
+                                <width>150</width>
+                                <height>42</height>
+                                <font>font12</font>
+                                <align>center</align>
+                                <aligny>center</aligny>
+                                <textcolor>%(ctx)s</textcolor>
+                                <label>[B]$INFO[ListItem.Label2][/B]</label>
+                            </control>
+                        </control>
+                    </control>""" % {
+            'pill': pill, 'multi': multi, 'na': not_apply, 'coff': circle_off, 'con': circle_on, 'don': dot_on,
+            'lw': L - 40 - 36 - 190, 'lw2': L - 40 - 84 - 190, 'txt': txt,
+            'lab': bold % '$INFO[ListItem.Label]', 'apc': txt if focused else 'FFD6F0FF',
+            'cl': L - 40 - 150 - 22, 'cbg': cnt_bg, 'ctx': cnt_txt}
+
+    body = """
+        <control type="image">
+            <texture>lucent/white.png</texture>
+            <colordiffuse>C0000000</colordiffuse>
+            <animation effect="fade" start="0" end="100" time="200">WindowOpen</animation>
+            <animation effect="fade" end="0" time="150">WindowClose</animation>
+        </control>
+        <control type="group">
+            <animation effect="fade" start="0" end="100" time="220">WindowOpen</animation>
+            <animation effect="zoom" start="95" end="100" center="960,540" time="240" tween="cubic" easing="out">WindowOpen</animation>
+            <animation effect="fade" end="0" time="150">WindowClose</animation>
+            <left>%(left)d</left>
+            <width>%(w)d</width>%(panels)s
+            <control type="group">
+                <top>%(top8)d</top>%(shifts)s
+                <control type="label">
+                    <left>40</left>
+                    <top>32</top>
+                    <width>%(tw)d</width>
+                    <height>48</height>
+                    <font>font27</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>[B]$INFO[Window.Property(lucent.heading)][/B]</label>
+                </control>
+                <control type="label">
+                    <left>40</left>
+                    <top>80</top>
+                    <width>%(tw)d</width>
+                    <height>30</height>
+                    <font>font12</font>
+                    <textcolor>FF8F9BA6</textcolor>
+                    <label>[UPPERCASE]$INFO[Window.Property(lucent.subtitle)][/UPPERCASE]</label>
+                </control>
+                <control type="label">
+                    <right>40</right>
+                    <top>36</top>
+                    <width>200</width>
+                    <height>40</height>
+                    <font>font12</font>
+                    <align>right</align>
+                    <textcolor>FFBDC8D1</textcolor>
+                    <label>$INFO[Container(5000).CurrentItem]$INFO[Container(5000).NumItems, / ,]</label>
+                </control>
+                <control type="image">
+                    <left>40</left>
+                    <top>124</top>
+                    <width>%(tw)d</width>
+                    <height>1</height>
+                    <texture>lucent/white.png</texture>
+                    <colordiffuse>1AFFFFFF</colordiffuse>
+                </control>
+                <control type="list" id="5000">
+                    <left>20</left>
+                    <top>%(lt)d</top>
+                    <width>%(lw)d</width>
+                    <height>%(lh)d</height>
+                    <onup>5000</onup>
+                    <ondown>5000</ondown>
+                    <onleft>5000</onleft>
+                    <onright>5000</onright>
+                    <orientation>vertical</orientation>
+                    <scrolltime tween="cubic" easing="out">200</scrolltime>
+                    <itemlayout height="%(rh)d" width="%(lw)d">%(idle)s
+                    </itemlayout>
+                    <focusedlayout height="%(rh)d" width="%(lw)d">
+                        <control type="group">
+                            <animation effect="zoom" start="98" end="100" center="auto" time="160" tween="cubic" easing="out">Focus</animation>%(foc)s
+                        </control>
+                    </focusedlayout>
+                </control>
+            </control>
+        </control>""" % {
+        'left': left, 'w': L, 'panels': ''.join(panels), 'top8': top8, 'shifts': ''.join(shifts),
+        'tw': L - 80, 'lt': SEL_HEAD - 8, 'lw': L - 40, 'lh': SEL_ROW * SEL_MAX, 'rh': SEL_ROW,
+        'idle': row(False), 'foc': row(True)}
+    return window_shell('Fen Light / Red Light / Umbrella', 'filter menu', body, default='5000')
+
+
 def build():
     files = {}
     fen_counts = [('4K', 'Window.Property(results_4k)'), ('1080P', 'Window.Property(results_1080p)'),
@@ -1103,6 +1345,7 @@ def build():
     files['pov/sources_results.xml'] = results_window(pov_results_profile())
     files['pov/progress_media.xml'] = pov_progress()
     files['pov/contextmenu.xml'] = pov_contextmenu()
+    files['shared/lucent_select.xml'] = lucent_select()
     files['umbrella/source_results.xml'] = results_window(umbrella_results_profile('2000', 'results'))
     files['umbrella/uncached_results.xml'] = results_window(umbrella_results_profile('2001', 'uncached', buttons=False))
     files['umbrella/source_progress.xml'] = umbrella_progress()
