@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Lucent theme helper - injected by AB Tools (plugin.program.abukarimtools).
-# LUCENT_HELPER_VERSION = 11
+# LUCENT_HELPER_VERSION = 12
 #
 # Normalises each add-on's own source-list and meta properties into one shared
 # 'lucent.*' property set, so a single Lucent window layout works for Fen Light,
@@ -148,15 +148,20 @@ except Exception:
 	_COLORED_LOCK = None
 
 
-def _read_colored():
+def _read_state():
 	try:
 		import json, os, xbmcvfs
 		path = os.path.join(xbmcvfs.translatePath('special://profile/addon_data/'),
 							'plugin.program.abukarimtools', 'lucent.json')
 		with open(path, 'r', encoding='utf-8') as f:
-			return bool(json.load(f).get('colored', True))
+			data = json.load(f)
+		return data if isinstance(data, dict) else {}
 	except Exception:
-		return True
+		return {}
+
+
+def _read_colored():
+	return bool(_read_state().get('colored', True))
 
 
 def _colored():
@@ -350,7 +355,7 @@ def _split_count(label):
 	return (m.group(1).strip(), m.group(2)) if m else (label, '')
 
 
-def lucent_select(heading, labels, subtitle='', multi=False, counts=None, live=None):
+def lucent_select(heading, labels, subtitle='', multi=False, counts=None, live=None, icons=None, preselect=0):
 	"""Themed replacement for Dialog().select / multiselect. Returns the picked
 	index (-1 on Back) or, with multi=True, the list of picked indexes (None on
 	Back). Falls back to Kodi's own dialog if the window can't be shown.
@@ -376,6 +381,7 @@ def lucent_select(heading, labels, subtitle='', multi=False, counts=None, live=N
 			self.setProperty('lucent.heading', heading)
 			self.setProperty('lucent.subtitle', subtitle or (_t('Choose one or more, then Apply') if multi else ''))
 			self.setProperty('lucent.multi', 'true' if multi else '')
+			self.setProperty('lucent.icons', 'true' if icons else '')
 			self.setProperty('lucent.rows', str(max(1, min(8, len(rows) + (1 if multi else 0)))))
 			self.ctrl = self.getControl(5000)
 			items = []
@@ -383,10 +389,16 @@ def lucent_select(heading, labels, subtitle='', multi=False, counts=None, live=N
 				li = xbmcgui.ListItem(_t('Apply'), '', offscreen=True)
 				li.setProperty('lucent.kind', 'apply')
 				items.append(li)
-			for main, cnt in rows:
-				items.append(xbmcgui.ListItem(main, cnt, offscreen=True))
+			for n, (main, cnt) in enumerate(rows):
+				li = xbmcgui.ListItem(main, cnt, offscreen=True)
+				if icons and n < len(icons) and icons[n]:
+					li.setArt({'icon': icons[n][0] or '', 'thumb': icons[n][1] or ''})
+				items.append(li)
 			self.ctrl.addItems(items)
 			self._focus()
+			if preselect:
+				try: self.ctrl.selectItem(preselect)
+				except Exception: pass
 
 		def _has_focus(self):
 			try: return self.getFocusId() == 5000
@@ -645,3 +657,82 @@ def _themed_select_dialog(window, original, base=None):
 			_log('themed select_dialog failed, using the add-on dialog: %r' % e)
 			return original(function_list, **kwargs)
 	return themed
+
+
+
+# ───────────── Totals screen before the stream list (Fen Light / Red Light) ─────────────
+_GROUP_Q = ('4K', '1080P', '720P', 'SD', 'CAM/SCR/TELE')
+_PRETTY = {'ALLDEBRID': 'AllDebrid', 'REAL-DEBRID': 'Real-Debrid', 'REALDEBRID': 'Real-Debrid', 'TORBOX': 'TorBox',
+		'PREMIUMIZE': 'Premiumize', 'OFFCLOUD': 'Offcloud', 'EASYNEWS': 'Easynews', 'EASYDEBRID': 'EasyDebrid'}
+_AR.update({'All streams': 'كل المصادر', 'Choose what to show': 'اختر ما تريد عرضه'})
+
+
+def _layer1_on():
+	return bool(_read_state().get('layer1', True))
+
+
+def _group_key(li):
+	q = (li.getProperty('quality') or 'SD').upper()
+	if q in ('CAM', 'SCR', 'TELE'): q = 'CAM/SCR/TELE'
+	return q, (li.getProperty('provider') or '').upper()
+
+
+def lucent_layer1(window):
+	"""Show the totals (quality x service) and narrow the list to the pick.
+	Returns 'back' when the user leaves the totals screen, True when a group
+	(or all) was applied, False when the screen does not apply (off / one group)."""
+	try:
+		if not _layer1_on(): return False
+		every = list(getattr(window, 'item_list', None) or [])
+		extra = [li for li in every if li.getProperty('perform_full_search') == 'true']
+		rows = [li for li in every if li.getProperty('perform_full_search') != 'true']
+		groups = {}
+		for li in rows: groups.setdefault(_group_key(li), []).append(li)
+		if len(groups) < 2: return False
+		order = sorted(groups, key=lambda k: (_GROUP_Q.index(k[0]) if k[0] in _GROUP_Q else 9, -len(groups[k]), k[1]))
+		colored = _colored()
+		labels, counts, icons = [_t('All streams')], [len(rows)], [None]
+		for q, prov in order:
+			labels.append('[B]%s[/B]  ·  %s' % (q, _PRETTY.get(prov, prov.title()) if prov else '-'))
+			counts.append(len(groups[(q, prov)]))
+			res = '' if q == 'CAM/SCR/TELE' else _RES.get(q, '')
+			icons.append((('lucent/res/%s.png' % res) if (res and colored) else '',
+						_provider_icon(prov) if colored else ''))
+		title = window.getProperty('title') or _t('Filter results')
+		current = getattr(window, '_lucent_layer1_pick', 0)
+		pick = lucent_select(title, labels, _t('Choose what to show'), counts=counts,
+							icons=icons if colored else None, preselect=current)
+		window._lucent_layer1_shown = True
+		_log('totals screen: %s' % ('back' if pick is None or pick < 0 else labels[pick]))
+		if pick is None or pick < 0: return 'back'
+		window._lucent_layer1_pick = pick
+		if pick == 0:
+			window._lucent_current = None
+			if getattr(window, 'filter_applied', False): window.clear_filter()
+			return True
+		subset = groups[order[pick - 1]] + extra
+		window._lucent_current = list(subset)
+		window.set_filter(subset)
+		return True
+	except Exception as e:
+		_log('totals screen failed: %r' % e)
+		return False
+
+
+def lucent_layer1_open(window):
+	"""onInit hook: totals first; leaving it closes the stream list."""
+	if getattr(window, '_lucent_layer1_done', False): return
+	window._lucent_layer1_done = True
+	if lucent_layer1(window) == 'back':
+		window.selected = (None, '')
+		window.close()
+
+
+def lucent_layer1_back(window, action):
+	"""onAction hook: BACK on the stream list returns to the totals screen."""
+	if action not in getattr(window, 'closing_actions', ()): return False
+	if not getattr(window, '_lucent_layer1_shown', False): return False
+	if lucent_layer1(window) == 'back':
+		window.selected = (None, '')
+		window.close()
+	return True

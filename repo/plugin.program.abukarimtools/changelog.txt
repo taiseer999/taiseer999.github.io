@@ -1,3 +1,56 @@
+v3.4.49
+- Search All: Umbrella and POV added (tags UM / POV; play priority Red Light,
+  Fen Light, Umbrella, POV). Both get the "Search All bridge" patch
+  (lucent_sources.SPECS umbrella_search / pov_search), now one generic helper
+  abk_device_select.py v2 (xbmc* only) shared by Red Light, POV and Umbrella.
+  - POV: entry.py routes app_list_sources / app_play_source; source_select
+    hooks list the results or play the picked one (play_file).
+  - Umbrella: router action app_list_sources / app_play_source -> Sources.play
+    with the scrape progress dialog silenced (restored afterwards; Umbrella
+    may reuse its interpreter); the play hook hands the saved list to
+    playItem, so Umbrella resolves with failover as from its own window.
+  - TMDbHelper player passes imdb / tvdb / premiered too (Umbrella scrapes by
+    title + IMDb id); the focused item's title wins over the URL one, which a
+    title with "&" cuts short.
+
+v3.4.48
+- NEW Search All (resources/lib/ab_search.py, window ab_search.xml): one
+  stream list from every supported add-on, in the style of Dex Hub's source
+  browser. Started from TMDbHelper's player list ("AB Search All", players/
+  abukarim.search_all.json injected by the patcher).
+  - Each add-on scrapes with its own settings/scrapers/debrid accounts via
+    plugin://<add-on>/?mode=app_list_sources (JSON-RPC Files.GetDirectory, one
+    thread each) and saves its results to addon_data/<add-on>/device_select/.
+    Fen Light has this protocol natively; Red Light gets it back from the new
+    "Search All bridge" patch (router + 3 hooks in modules/sources.py, helper
+    abk_device_select.py; lucent_sources.SPECS['redlight_search']).
+  - Rows are merged by torrent hash (one row, add-on tags RL / FL), uncached
+    left out, sorted 4K > 1080p > 720p > SD then size. Chips: All, each add-on
+    (pulsing dot while it searches), each quality; add-on + quality stack.
+  - OK plays through the first add-on that found it (Red Light, then Fen
+    Light) with that add-on's resolver (mode=app_play_source); long-press /
+    context menu chooses the add-on.
+  - Switch: Toggles > Glass Theme > "Search All add-ons" (on by default).
+    Off removes the Red Light bridge and the TMDbHelper player.
+- Umbrella and POV are not in Search All yet.
+
+v3.4.47
+- Glass Theme: totals screen (layer 1) before the stream list, Red Light and
+  Fen Light. The add-on searches once as before (AB Scrapers, its own cache
+  check / playback); when the stream list opens, a themed screen lists "All
+  streams" + every quality x service group with its count, resolution badge
+  and service icon (plain when colored icons are off). Picking a group narrows
+  the list to it (set_filter; RIGHT filters then work inside the group); BACK
+  on the stream list returns to the totals with the last pick preselected;
+  BACK on the totals closes the search. Skipped when there is only one group.
+  "Perform full search" rows stay in every group.
+- New fenced hooks: onInit -> lucent_layer1_open(self); onAction ->
+  lucent_layer1_back(self, action). Switch row "Totals screen before the
+  stream list" in Toggles > Glass Theme (default on, key layer1 in
+  lucent.json). Strings 30811-30813.
+- Themed select gains an icon column (ListItem art icon / thumb) and
+  preselect. Helper v12.
+
 v3.4.46
 - FIX Glass Theme filter window "Apply did nothing / stuck": kodi.log showed
   "Control 5000 in window 1300x has been asked to focus, but it can't" every

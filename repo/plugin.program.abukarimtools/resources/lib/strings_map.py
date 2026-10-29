@@ -28,7 +28,8 @@ ID ranges:
   30760-30769  Installation Wizard - confirm before skipping a step
   30770-30779  Installation Wizard - setup-in-progress backdrop, final restart
   30780-30799  Maintenance - Clean Unused Items
-  30800-30810  Toggles - Glass Theme (internally 'Lucent', per add-on)
+  30800-30813  Toggles - Glass Theme (internally 'Lucent', per add-on)
+  30814-30829  Search All (one stream list from every add-on)
 """
 
 STRINGS = {
@@ -562,4 +563,24 @@ STRINGS = {
     30808: ('Colored resolution & service icons', 'شارات الدقة وأيقونات الخدمات الملوّنة'),
     30809: ('Colored resolution & service icons on', 'فُعِّلت شارات الدقة وأيقونات الخدمات الملوّنة'),
     30810: ('Original quality label & add-on icons', 'أُعيدت تسمية الجودة الأصلية وأيقونات الإضافة'),
+    30811: ('Totals screen before the stream list (Fen Light, Red Light)', 'شاشة المجاميع قبل قائمة المصادر (Fen Light وRed Light)'),
+    30812: ('Totals screen on', 'فُعِّلت شاشة المجاميع'),
+    30813: ('Totals screen off - the stream list opens directly', 'أُوقفت شاشة المجاميع، وستُفتح قائمة المصادر مباشرة'),
+    # ---- 3.4.48: Search All (streams from every add-on in one list) ----
+    30814: ('Search All add-ons (TMDbHelper player "AB Search All")', 'البحث في كل الإضافات (مشغّل TMDbHelper «AB Search All»)'),
+    30815: ('Search All on - pick "AB Search All" in TMDbHelper\'s player list', 'فُعِّل البحث في كل الإضافات، اختر «AB Search All» من قائمة مشغّلات TMDbHelper'),
+    30816: ('Search All off', 'أُوقف البحث في كل الإضافات'),
+    30817: ('All Streams', 'كل المصادر'),
+    30818: ('Add-ons', 'الإضافات'),
+    30819: ('Searching...', 'جارٍ البحث...'),
+    30820: ('%d streams', '%d مصدرًا'),
+    30821: ('Failed', 'تعذّر البحث'),
+    30822: ('Searching %d add-ons...', 'جارٍ البحث في %d إضافات...'),
+    30823: ('%d streams from %d add-ons  ·  %ds', '%d مصدرًا من %d إضافات  ·  %d ث'),
+    30824: ('No streams found', 'لم يُعثر على أي مصدر'),
+    30825: ('All', 'الكل'),
+    30826: ('Play with %s', 'تشغيل عبر %s'),
+    30827: ('None of the supported add-ons (Red Light, Fen Light, Umbrella, POV) is installed.', 'لا توجد أي إضافة مدعومة مثبّتة (Red Light أو Fen Light أو Umbrella أو POV).'),
+    30828: ('Finding streams in every add-on', 'جارٍ البحث عن المصادر في كل الإضافات'),
+    30829: ('Not supported by this version', 'هذا الإصدار غير مدعوم'),
 }

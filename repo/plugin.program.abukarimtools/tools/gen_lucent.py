@@ -1199,7 +1199,38 @@ def lucent_select():
                             <aligny>center</aligny>
                             <textcolor>%(txt)s</textcolor>
                             <label>%(lab)s</label>
-                            <visible>!%(multi)s</visible>
+                            <visible>!%(multi)s + !%(icons)s</visible>
+                        </control>
+                        <!-- icon rows (totals screen): resolution badge + service icon + label -->
+                        <control type="group">
+                            <visible>!%(multi)s + %(icons)s</visible>
+                            <control type="image">
+                                <left>24</left>
+                                <top>9</top>
+                                <width>110</width>
+                                <height>46</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>$INFO[ListItem.Art(icon)]</texture>
+                                <visible>!String.IsEmpty(ListItem.Art(icon))</visible>
+                            </control>
+                            <control type="image">
+                                <left>146</left>
+                                <top>10</top>
+                                <width>44</width>
+                                <height>44</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>$INFO[ListItem.Art(thumb)]</texture>
+                                <visible>!String.IsEmpty(ListItem.Art(thumb))</visible>
+                            </control>
+                            <control type="label">
+                                <left>206</left>
+                                <width>%(lw3)d</width>
+                                <height>64</height>
+                                <font>font12</font>
+                                <aligny>center</aligny>
+                                <textcolor>%(txt)s</textcolor>
+                                <label>%(lab)s</label>
+                            </control>
                         </control>
                         <!-- label: multi-select rows -->
                         <control type="label">
@@ -1246,7 +1277,8 @@ def lucent_select():
                         </control>
                     </control>""" % {
             'pill': pill, 'multi': multi, 'na': not_apply, 'coff': circle_off, 'con': circle_on, 'don': dot_on,
-            'lw': L - 40 - 36 - 190, 'lw2': L - 40 - 84 - 190, 'txt': txt,
+            'lw': L - 40 - 36 - 190, 'lw2': L - 40 - 84 - 190, 'lw3': L - 40 - 206 - 190, 'txt': txt,
+            'icons': 'String.IsEqual(Window.Property(lucent.icons),true)',
             'lab': bold % '$INFO[ListItem.Label]', 'apc': txt if focused else 'FFD6F0FF',
             'cl': L - 40 - 150 - 22, 'cbg': cnt_bg, 'ctx': cnt_txt}
 
@@ -1328,6 +1360,324 @@ def lucent_select():
     return window_shell('Fen Light / Red Light / Umbrella', 'filter menu', body, default='5000')
 
 
+# ───────────────────────── AB Tools "Search All" window ─────────────────────────
+# Lives in AB Tools' own skin folder; textures are read straight from
+# resources/lucent/media (absolute special:// paths, no second copy).
+
+AB_MEDIA = 'special://home/addons/plugin.program.abukarimtools/resources/lucent/media/'
+AB_ADDONS = (('rl', 'FFE5484D'), ('fl', 'FF3E9BFF'), ('umb', 'FF9B6BFF'), ('pov', 'FF2BC48A'))
+AB_TAGS = 4
+AB_TAG_W = 64
+
+
+def _ab_tags(active):
+    """Up to 4 add-on tags at the right end of the meta line (slot 1 rightmost);
+    the meta text is fitted shorter in Python to leave room for them."""
+    out = []
+    for n in range(1, AB_TAGS + 1):
+        left = 904 - 20 - n * (AB_TAG_W + 6) + 6
+        for key, color in AB_ADDONS:
+            out.append('''
+                        <control type="image">
+                            <left>%d</left>
+                            <top>49</top>
+                            <width>%d</width>
+                            <height>28</height>
+                            <texture border="14">lucent/pill42.png</texture>
+                            <colordiffuse>%s</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_%d),%s)</visible>
+                        </control>''' % (left, AB_TAG_W, color if active else 'A6' + color[2:], n, key))
+        out.append('''
+                        <control type="label">
+                            <left>%d</left>
+                            <top>49</top>
+                            <width>%d</width>
+                            <height>28</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.tagtxt_%d)][/B]</label>
+                        </control>''' % (left, AB_TAG_W, n))
+    return ''.join(out)
+
+
+def ab_card(state):
+    """Glass stream card (same as the add-ons' windows) + add-on tags."""
+    xml = card(state, {'full_prop': 'abs.never', 'full_label': ''})
+    marker = '\n                    <!-- Full search -->'
+    assert marker in xml
+    return xml.replace(marker, _ab_tags(state == 'active') + marker, 1)
+
+
+def ab_chip(focused):
+    if focused:
+        bg = '''
+                    <control type="image">
+                        <width>226</width>
+                        <height>52</height>
+                        <texture border="26">lucent/pill60.png</texture>
+                        <colordiffuse>FFFFFFFF</colordiffuse>
+                    </control>'''
+        tc, cc = 'FF%s' % BG, 'FF%s' % BG
+    else:
+        bg = '''
+                    <control type="image">
+                        <width>226</width>
+                        <height>52</height>
+                        <texture border="26">lucent/pill60.png</texture>
+                        <colordiffuse>1AFFFFFF</colordiffuse>
+                        <visible>String.IsEmpty(ListItem.Property(abs.active))</visible>
+                    </control>
+                    <control type="image">
+                        <width>226</width>
+                        <height>52</height>
+                        <texture border="26">lucent/pill60.png</texture>
+                        <colordiffuse>66D6F0FF</colordiffuse>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.active))</visible>
+                    </control>'''
+        tc, cc = 'FFFFFFFF', 'FFBDC8D1'
+    dots = ''.join('''
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>lucent/dot.png</texture>
+                        <colordiffuse>%s</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),%s) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>''' % (color, key) for key, color in AB_ADDONS)
+    return '''%(bg)s%(dots)s
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>lucent/dot.png</texture>
+                        <colordiffuse>%(cc)s</colordiffuse>
+                        <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="label">
+                        <left>30</left>
+                        <width>190</width>
+                        <height>52</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>%(tc)s</textcolor>
+                        <label>[B]$INFO[ListItem.Label][/B]$INFO[ListItem.Label2,  ,]</label>
+                    </control>''' % {'bg': bg, 'dots': dots, 'tc': tc, 'cc': cc}
+
+
+def ab_search_window():
+    W = 'Window.Property(abs.%s)'
+    slots = []
+    for n in range(1, 5):
+        top = (n - 1) * 54
+        dots = ''.join('''
+                <control type="image">
+                    <left>0</left>
+                    <top>%(t)d</top>
+                    <width>16</width>
+                    <height>16</height>
+                    <texture>lucent/dot.png</texture>
+                    <colordiffuse>%(c)s</colordiffuse>
+                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s%(n)d.state),searching)">Conditional</animation>
+                    <visible>String.IsEqual(Window.Property(abs.s%(n)d.key),%(k)s)</visible>
+                </control>''' % {'t': top + 17, 'c': color, 'n': n, 'k': key} for key, color in AB_ADDONS)
+        slots.append('''%(dots)s
+                <control type="label">
+                    <left>32</left>
+                    <top>%(t)d</top>
+                    <width>360</width>
+                    <height>50</height>
+                    <font>font12</font>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>[B]$INFO[Window.Property(abs.s%(n)d.name)][/B]</label>
+                </control>
+                <control type="label">
+                    <left>392</left>
+                    <top>%(t)d</top>
+                    <width>308</width>
+                    <height>50</height>
+                    <font>font12</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFBDC8D1</textcolor>
+                    <label>$INFO[Window.Property(abs.s%(n)d.status)]</label>
+                </control>''' % {'dots': dots, 't': top, 'n': n})
+    status = '''
+        <!-- ============ Left: one line per add-on (searching / N streams) ============ -->
+        <control type="group">
+            <animation effect="fade" start="0" end="100" time="350" delay="200">WindowOpen</animation>
+            <animation effect="fade" end="0" time="250">WindowClose</animation>
+            <left>96</left>
+            <top>736</top>
+            <width>700</width>
+            <control type="label">
+                <width>700</width>
+                <height>40</height>
+                <font>font12</font>
+                <textcolor>FF8F9BA6</textcolor>
+                <label>[B][UPPERCASE]$INFO[%(heading)s][/UPPERCASE][/B]</label>
+            </control>
+            <control type="image">
+                <top>44</top>
+                <width>700</width>
+                <height>1</height>
+                <texture>lucent/white.png</texture>
+                <colordiffuse>1AFFFFFF</colordiffuse>
+            </control>
+            <control type="group">
+                <top>56</top>%(slots)s
+            </control>
+        </control>''' % {'heading': W % 'addons_heading', 'slots': ''.join(slots)}
+    body = '''
+        <!-- ============ Right: glass stream panel ============ -->
+        <control type="group">
+            <animation effect="fade" start="0" end="100" time="350" delay="150">WindowOpen</animation>
+            <animation effect="slide" start="120,0" end="0,0" time="400" delay="150" tween="cubic" easing="out">WindowOpen</animation>
+            <animation effect="slide" end="200,0" time="300" tween="cubic" easing="in">WindowClose</animation>
+            <animation effect="fade" end="0" time="300">WindowClose</animation>
+            <left>880</left>
+            <top>56</top>
+            <width>984</width>
+            <height>968</height>%(glass)s
+            <control type="label">
+                <left>40</left>
+                <top>26</top>
+                <width>600</width>
+                <height>50</height>
+                <font>font27</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>[B]$INFO[%(head)s][/B]</label>
+            </control>
+            <control type="label">
+                <left>624</left>
+                <top>26</top>
+                <width>320</width>
+                <height>50</height>
+                <font>font12</font>
+                <align>right</align>
+                <aligny>center</aligny>
+                <textcolor>FFBDC8D1</textcolor>
+                <label>$INFO[Container(2000).CurrentItem]$INFO[Container(2000).NumItems, / ,]</label>
+                <visible>Integer.IsGreater(Container(2000).NumItems,0)</visible>
+            </control>
+            <control type="label">
+                <left>40</left>
+                <top>70</top>
+                <width>904</width>
+                <height>26</height>
+                <font>font12</font>
+                <textcolor>FF8F9BA6</textcolor>
+                <label>$INFO[%(sub)s]</label>
+            </control>
+            <!-- Filter chips: All, each add-on, each quality -->
+            <control type="list" id="2300">
+                <left>40</left>
+                <top>110</top>
+                <width>904</width>
+                <height>52</height>
+                <orientation>horizontal</orientation>
+                <scrolltime tween="cubic" easing="out">200</scrolltime>
+                <ondown>2000</ondown>
+                <itemlayout height="52" width="238">%(chip)s
+                </itemlayout>
+                <focusedlayout height="52" width="238" condition="!Control.HasFocus(2300)">%(chip)s
+                </focusedlayout>
+                <focusedlayout height="52" width="238" condition="Control.HasFocus(2300)">%(chipf)s
+                </focusedlayout>
+            </control>
+            <control type="image">
+                <left>40</left>
+                <top>178</top>
+                <width>904</width>
+                <height>1</height>
+                <texture>lucent/white.png</texture>
+                <colordiffuse>1AFFFFFF</colordiffuse>
+            </control>
+            <control type="scrollbar" id="2001">
+                <left>962</left>
+                <top>196</top>
+                <width>6</width>
+                <height>740</height>
+                <onleft>2000</onleft>
+                <showonepage>false</showonepage>
+                <orientation>vertical</orientation>
+                <texturesliderbackground colordiffuse="14FFFFFF" border="3">lucent/pill6.png</texturesliderbackground>
+                <texturesliderbar colordiffuse="4DFFFFFF" border="3">lucent/pill6.png</texturesliderbar>
+                <texturesliderbarfocus colordiffuse="FFFFFFFF" border="3">lucent/pill6.png</texturesliderbarfocus>
+            </control>
+            <control type="list" id="2000">
+                <left>24</left>
+                <top>184</top>
+                <width>936</width>
+                <height>768</height>
+                <orientation>vertical</orientation>
+                <pagecontrol>2001</pagecontrol>
+                <scrolltime tween="cubic" easing="out">250</scrolltime>
+                <focusposition>1</focusposition>
+                <movement>2</movement>
+                <onup>2300</onup>
+                <itemlayout height="148" width="936">%(idle)s
+                </itemlayout>
+                <focusedlayout height="148" width="936" condition="!Control.HasFocus(2000)">%(dim)s
+                </focusedlayout>
+                <focusedlayout height="148" width="936" condition="Control.HasFocus(2000)">%(active)s
+                </focusedlayout>
+            </control>
+            <!-- Still searching / nothing found -->
+            <control type="group">
+                <top>420</top>
+                <visible>!Integer.IsGreater(Container(2000).NumItems,0)</visible>
+                <control type="image">
+                    <left>476</left>
+                    <width>32</width>
+                    <height>32</height>
+                    <texture>lucent/dot.png</texture>
+                    <colordiffuse>FFFFFFFF</colordiffuse>
+                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="true">Conditional</animation>
+                    <visible>String.IsEmpty(%(empty)s)</visible>
+                </control>
+                <control type="label">
+                    <left>40</left>
+                    <top>56</top>
+                    <width>904</width>
+                    <height>50</height>
+                    <font>font27</font>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFDCE2E7</textcolor>
+                    <label>$INFO[%(waitmsg)s]</label>
+                </control>
+            </control>
+        </control>''' % {'glass': glass(0, 0, 984, 968), 'head': W % 'heading', 'sub': W % 'subhead',
+                          'chip': ab_chip(False), 'chipf': ab_chip(True), 'empty': W % 'empty', 'waitmsg': W % 'waitmsg',
+                          'idle': ab_card('idle'), 'dim': ab_card('dim'), 'active': ab_card('active')}
+    xml = '''<?xml version="1.0" encoding="UTF-8"?>
+<!-- AB Tools - Search All (streams from every add-on). Generated by tools/gen_lucent.py. -->
+<!-- Look and textures: Lucent theme for Seren by djdirty60 (github.com/djdirty60/Seren-Thema). -->
+<window type="dialog">
+    <coordinates>
+        <left>0</left>
+        <top>0</top>
+        <width>1920</width>
+        <height>1080</height>
+    </coordinates>
+    <defaultcontrol always="true">2300</defaultcontrol>
+    <controls>%(bg)s%(title)s%(plot)s%(status)s%(body)s
+    </controls>
+</window>
+''' % {'bg': backdrop('$INFO[Window.Property(lucent.fanart)]'), 'title': title_block(),
+       'plot': plot_block('$INFO[Window.Property(lucent.plot)]', height=220),
+       'status': status, 'body': body}
+    import re as _re
+    return _re.sub(r'(<texture[a-z]*(?: [^>]*)?>)lucent/', lambda m: m.group(1) + AB_MEDIA + 'lucent/', xml)
+
+
 def build():
     files = {}
     fen_counts = [('4K', 'Window.Property(results_4k)'), ('1080P', 'Window.Property(results_1080p)'),
@@ -1349,6 +1699,9 @@ def build():
     files['umbrella/source_results.xml'] = results_window(umbrella_results_profile('2000', 'results'))
     files['umbrella/uncached_results.xml'] = results_window(umbrella_results_profile('2001', 'uncached', buttons=False))
     files['umbrella/source_progress.xml'] = umbrella_progress()
+    ab_path = os.path.join(ROOT, 'resources', 'skins', 'Default', '1080i', 'ab_search.xml')
+    with open(ab_path, 'w', encoding='utf-8') as f:
+        f.write(ab_search_window())
     for rel, xml in files.items():
         path = os.path.join(OUT, rel)
         os.makedirs(os.path.dirname(path), exist_ok=True)

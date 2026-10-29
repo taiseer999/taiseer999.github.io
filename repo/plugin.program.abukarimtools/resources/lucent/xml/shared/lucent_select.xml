@@ -312,7 +312,38 @@
                             <aligny>center</aligny>
                             <textcolor>FFDCE2E7</textcolor>
                             <label>$INFO[ListItem.Label]</label>
-                            <visible>!String.IsEqual(Window.Property(lucent.multi),true)</visible>
+                            <visible>!String.IsEqual(Window.Property(lucent.multi),true) + !String.IsEqual(Window.Property(lucent.icons),true)</visible>
+                        </control>
+                        <!-- icon rows (totals screen): resolution badge + service icon + label -->
+                        <control type="group">
+                            <visible>!String.IsEqual(Window.Property(lucent.multi),true) + String.IsEqual(Window.Property(lucent.icons),true)</visible>
+                            <control type="image">
+                                <left>24</left>
+                                <top>9</top>
+                                <width>110</width>
+                                <height>46</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>$INFO[ListItem.Art(icon)]</texture>
+                                <visible>!String.IsEmpty(ListItem.Art(icon))</visible>
+                            </control>
+                            <control type="image">
+                                <left>146</left>
+                                <top>10</top>
+                                <width>44</width>
+                                <height>44</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>$INFO[ListItem.Art(thumb)]</texture>
+                                <visible>!String.IsEmpty(ListItem.Art(thumb))</visible>
+                            </control>
+                            <control type="label">
+                                <left>206</left>
+                                <width>464</width>
+                                <height>64</height>
+                                <font>font12</font>
+                                <aligny>center</aligny>
+                                <textcolor>FFDCE2E7</textcolor>
+                                <label>$INFO[ListItem.Label]</label>
+                            </control>
                         </control>
                         <!-- label: multi-select rows -->
                         <control type="label">
@@ -409,7 +440,38 @@
                             <aligny>center</aligny>
                             <textcolor>FF0B1119</textcolor>
                             <label>[B]$INFO[ListItem.Label][/B]</label>
-                            <visible>!String.IsEqual(Window.Property(lucent.multi),true)</visible>
+                            <visible>!String.IsEqual(Window.Property(lucent.multi),true) + !String.IsEqual(Window.Property(lucent.icons),true)</visible>
+                        </control>
+                        <!-- icon rows (totals screen): resolution badge + service icon + label -->
+                        <control type="group">
+                            <visible>!String.IsEqual(Window.Property(lucent.multi),true) + String.IsEqual(Window.Property(lucent.icons),true)</visible>
+                            <control type="image">
+                                <left>24</left>
+                                <top>9</top>
+                                <width>110</width>
+                                <height>46</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>$INFO[ListItem.Art(icon)]</texture>
+                                <visible>!String.IsEmpty(ListItem.Art(icon))</visible>
+                            </control>
+                            <control type="image">
+                                <left>146</left>
+                                <top>10</top>
+                                <width>44</width>
+                                <height>44</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>$INFO[ListItem.Art(thumb)]</texture>
+                                <visible>!String.IsEmpty(ListItem.Art(thumb))</visible>
+                            </control>
+                            <control type="label">
+                                <left>206</left>
+                                <width>464</width>
+                                <height>64</height>
+                                <font>font12</font>
+                                <aligny>center</aligny>
+                                <textcolor>FF0B1119</textcolor>
+                                <label>[B]$INFO[ListItem.Label][/B]</label>
+                            </control>
                         </control>
                         <!-- label: multi-select rows -->
                         <control type="label">

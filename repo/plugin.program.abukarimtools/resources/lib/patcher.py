@@ -210,6 +210,9 @@ _REDLIGHT_VOLCHECKER_OLD_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAwJSA9PSAtNjBk
 _REDLIGHT_VOLCHECKER_NEW_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAtLSBSZWRMaWdodCB2b2x1bWUgYXV0by1kcm9wIGRpc2FibGVkIChieSBBQlVLQVJJTSBUT09MUykgLS0NCglyZXR1cm4NCg=='
 
 # ── TMDbHelper Fenlight player (3.2.55) ──
+# 3.4.48: "Search All" - one stream list from every add-on (resources/lib/ab_search.py)
+_AB_SEARCH_PLAYER_JSON = '{\n    "name": "AB Search All",\n    "plugin": "plugin.program.abukarimtools",\n    "priority": 30,\n    "is_resolvable": false,\n    "play_movie": "executebuiltin://RunPlugin(\\"plugin://plugin.program.abukarimtools/?mode=ab_search&media_type=movie&tmdb_id={id}&imdb={imdb}&year={year}&premiered={premiered}&title={title}\\")",\n    "play_episode": "executebuiltin://RunPlugin(\\"plugin://plugin.program.abukarimtools/?mode=ab_search&media_type=episode&tmdb_id={tmdb}&imdb={imdb}&tvdb={tvdb}&season={season}&episode={episode}&year={year}&premiered={firstaired}&showname={showname}&title={title}\\")"\n}\n'
+AB_SEARCH_PLAYER = os.path.join('players', 'abukarim.search_all.json')
 _FENLIGHT_PLAYER_JSON = '{\n    "name": "Fenlight",\n    "plugin": "plugin.video.fenlight",\n    "priority": 40,\n    "is_resolvable": false,\n    "play_movie": "executebuiltin://RunPlugin(\\"plugin://plugin.video.fenlight/?mode=playback.media&media_type=movie&query={name}&year={year}&poster={poster}&title={title}&tmdb_id={id}&autoplay=false\\")",\n    "play_episode": "executebuiltin://RunPlugin(\\"plugin://plugin.video.fenlight/?mode=playback.media&media_type=episode&query={showname}&year={year}&season={season}&episode={episode}&ep_name={title}&tmdb_id={tmdb}&premiered={firstaired}&autoplay=false\\")"\n}\n'
 
 # ── Fenlight resolve handoff block (3.2.54, v2) ──
@@ -1569,6 +1572,22 @@ PATCHES = [
     {'addon_id': 'plugin.video.umbrella', 'lucent': 'umbrella', 'feature': 'lucent_umbrella', 'not_found_ok': True,
      'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'source_results.xml'),
      'old': '', 'new': '', 'description': 'Umbrella - Glass theme source windows'},
+    # ── Search All (3.4.48): Toggles > Glass Theme > "Search All add-ons" ──
+    # Red Light gets Fen Light's device-select modes back (Fen Light has them);
+    # TMDbHelper gets the "AB Search All" player that opens resources/lib/ab_search.py.
+    {'addon_id': 'plugin.video.redlight', 'lucent': 'redlight_search', 'feature': 'ab_search', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'lib', 'modules', 'router.py'),
+     'old': '', 'new': '', 'description': 'Red Light - Search All bridge (app_list_sources / app_play_source)'},
+    {'addon_id': 'plugin.video.pov', 'lucent': 'pov_search', 'feature': 'ab_search', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'lib', 'modules', 'entry.py'),
+     'old': '', 'new': '', 'description': 'POV - Search All bridge (app_list_sources / app_play_source)'},
+    {'addon_id': 'plugin.video.umbrella', 'lucent': 'umbrella_search', 'feature': 'ab_search', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'lib', 'modules', 'router.py'),
+     'old': '', 'new': '', 'description': 'Umbrella - Search All bridge (app_list_sources / app_play_source)'},
+    {'addon_id': 'plugin.video.themoviedb.helper', 'base': 'addon_data', 'feature': 'ab_search', 'not_found_ok': True,
+     'rel_path': AB_SEARCH_PLAYER, 'inject_file': True, 'old': '', 'new': '',
+     'inject_content': _AB_SEARCH_PLAYER_JSON,
+     'description': 'TMDbHelper players/abukarim.search_all.json - AB Search All (every add-on in one list)'},
 ]
 
 
@@ -2339,6 +2358,12 @@ def _feature_on(name):
             return lucent_toggle.enabled(name[len('lucent_'):])
         except Exception:
             return False
+    if name == 'ab_search':
+        try:
+            from resources.lib import lucent_toggle
+            return lucent_toggle.search_on()
+        except Exception:
+            return False
     if name == 'af3_trailers':
         try:
             from resources.lib.af3_trailers import config as _trailers_config
@@ -2976,6 +3001,31 @@ def reload_skin_if_pending():
         return False
 
 
+def _revert_search(wanted=None):
+    from resources.lib import lucent_sources
+    for profile in ('redlight_search', 'pov_search', 'umbrella_search'):
+        aid = lucent_sources.SPECS[profile]['addon_id']
+        if wanted is not None and aid not in wanted:
+            continue
+        addon_path = _resolve_addon_dir(aid)
+        if addon_path:
+            try:
+                res = lucent_sources.revert(addon_path, profile)
+            except Exception as e:
+                res = (False, '[%s] Search All bridge revert failed: %s' % (aid, e))
+            if res:
+                yield res
+    if wanted is None or 'plugin.video.themoviedb.helper' in wanted:
+        player = os.path.join(xbmcvfs.translatePath('special://profile/addon_data/'),
+                              'plugin.video.themoviedb.helper', AB_SEARCH_PLAYER)
+        if os.path.isfile(player):
+            try:
+                os.remove(player)
+                yield True, '[plugin.video.themoviedb.helper] Patched OK (reverted, toggle off): AB Search All player removed'
+            except Exception as e:
+                yield False, '[plugin.video.themoviedb.helper] could not remove %s: %s' % (AB_SEARCH_PLAYER, e)
+
+
 def _revert_disabled(addon_ids=None):
     """Undo entries that carry 'revert_when_off' = (patched, stock) when their
     toggle is DISABLED. Plain one-shot string swap; yields (ok, msg)."""
@@ -2996,6 +3046,10 @@ def _revert_disabled(addon_ids=None):
         except Exception as e:
             res = (False, '[%s] Glass theme revert failed: %s' % (aid, e))
         if res:
+            yield res
+    # Search All off: Red Light bridge out, TMDbHelper player file removed
+    if not _feature_on('ab_search'):
+        for res in _revert_search(wanted):
             yield res
     disabled = _load_disabled()
     if not disabled:

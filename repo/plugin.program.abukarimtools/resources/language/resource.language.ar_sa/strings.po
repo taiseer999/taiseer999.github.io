@@ -1524,3 +1524,79 @@ msgctxt "#30810"
 msgid "Original quality label & add-on icons"
 msgstr "أُعيدت تسمية الجودة الأصلية وأيقونات الإضافة"
 
+msgctxt "#30811"
+msgid "Totals screen before the stream list (Fen Light, Red Light)"
+msgstr "شاشة المجاميع قبل قائمة المصادر (Fen Light وRed Light)"
+
+msgctxt "#30812"
+msgid "Totals screen on"
+msgstr "فُعِّلت شاشة المجاميع"
+
+msgctxt "#30813"
+msgid "Totals screen off - the stream list opens directly"
+msgstr "أُوقفت شاشة المجاميع، وستُفتح قائمة المصادر مباشرة"
+
+msgctxt "#30814"
+msgid "Search All add-ons (TMDbHelper player \\"AB Search All\\")"
+msgstr "البحث في كل الإضافات (مشغّل TMDbHelper «AB Search All»)"
+
+msgctxt "#30815"
+msgid "Search All on - pick \\"AB Search All\\" in TMDbHelper's player list"
+msgstr "فُعِّل البحث في كل الإضافات، اختر «AB Search All» من قائمة مشغّلات TMDbHelper"
+
+msgctxt "#30816"
+msgid "Search All off"
+msgstr "أُوقف البحث في كل الإضافات"
+
+msgctxt "#30817"
+msgid "All Streams"
+msgstr "كل المصادر"
+
+msgctxt "#30818"
+msgid "Add-ons"
+msgstr "الإضافات"
+
+msgctxt "#30819"
+msgid "Searching..."
+msgstr "جارٍ البحث..."
+
+msgctxt "#30820"
+msgid "%d streams"
+msgstr "%d مصدرًا"
+
+msgctxt "#30821"
+msgid "Failed"
+msgstr "تعذّر البحث"
+
+msgctxt "#30822"
+msgid "Searching %d add-ons..."
+msgstr "جارٍ البحث في %d إضافات..."
+
+msgctxt "#30823"
+msgid "%d streams from %d add-ons  ·  %ds"
+msgstr "%d مصدرًا من %d إضافات  ·  %d ث"
+
+msgctxt "#30824"
+msgid "No streams found"
+msgstr "لم يُعثر على أي مصدر"
+
+msgctxt "#30825"
+msgid "All"
+msgstr "الكل"
+
+msgctxt "#30826"
+msgid "Play with %s"
+msgstr "تشغيل عبر %s"
+
+msgctxt "#30827"
+msgid "None of the supported add-ons (Red Light, Fen Light, Umbrella, POV) is installed."
+msgstr "لا توجد أي إضافة مدعومة مثبّتة (Red Light أو Fen Light أو Umbrella أو POV)."
+
+msgctxt "#30828"
+msgid "Finding streams in every add-on"
+msgstr "جارٍ البحث عن المصادر في كل الإضافات"
+
+msgctxt "#30829"
+msgid "Not supported by this version"
+msgstr "هذا الإصدار غير مدعوم"
+

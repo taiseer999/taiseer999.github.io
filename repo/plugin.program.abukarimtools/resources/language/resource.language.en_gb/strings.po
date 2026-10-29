@@ -1524,3 +1524,79 @@ msgctxt "#30810"
 msgid "Original quality label & add-on icons"
 msgstr ""
 
+msgctxt "#30811"
+msgid "Totals screen before the stream list (Fen Light, Red Light)"
+msgstr ""
+
+msgctxt "#30812"
+msgid "Totals screen on"
+msgstr ""
+
+msgctxt "#30813"
+msgid "Totals screen off - the stream list opens directly"
+msgstr ""
+
+msgctxt "#30814"
+msgid "Search All add-ons (TMDbHelper player \\"AB Search All\\")"
+msgstr ""
+
+msgctxt "#30815"
+msgid "Search All on - pick \\"AB Search All\\" in TMDbHelper's player list"
+msgstr ""
+
+msgctxt "#30816"
+msgid "Search All off"
+msgstr ""
+
+msgctxt "#30817"
+msgid "All Streams"
+msgstr ""
+
+msgctxt "#30818"
+msgid "Add-ons"
+msgstr ""
+
+msgctxt "#30819"
+msgid "Searching..."
+msgstr ""
+
+msgctxt "#30820"
+msgid "%d streams"
+msgstr ""
+
+msgctxt "#30821"
+msgid "Failed"
+msgstr ""
+
+msgctxt "#30822"
+msgid "Searching %d add-ons..."
+msgstr ""
+
+msgctxt "#30823"
+msgid "%d streams from %d add-ons  ·  %ds"
+msgstr ""
+
+msgctxt "#30824"
+msgid "No streams found"
+msgstr ""
+
+msgctxt "#30825"
+msgid "All"
+msgstr ""
+
+msgctxt "#30826"
+msgid "Play with %s"
+msgstr ""
+
+msgctxt "#30827"
+msgid "None of the supported add-ons (Red Light, Fen Light, Umbrella, POV) is installed."
+msgstr ""
+
+msgctxt "#30828"
+msgid "Finding streams in every add-on"
+msgstr ""
+
+msgctxt "#30829"
+msgid "Not supported by this version"
+msgstr ""
+

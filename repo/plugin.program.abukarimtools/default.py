@@ -547,6 +547,9 @@ def router():
     elif mode == 'lucent_theme':
         from resources.lib import lucent_toggle
         lucent_toggle.run()
+    elif mode == 'ab_search':
+        from resources.lib import ab_search
+        ab_search.run(params)
     elif mode == 'font_scale':
         from resources.lib import font_scale
         font_scale.run()

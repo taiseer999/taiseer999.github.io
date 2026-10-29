@@ -69,6 +69,31 @@ def _legacy_default():
 
 
 COLORED = 'colored'     # state key: colored resolution badges + service icons
+LAYER1 = 'layer1'       # state key: totals screen before the stream list (Fen Light / Red Light)
+SEARCH = 'search'       # state key: Search All (one stream list from every add-on, 3.4.48)
+
+
+def search_on():
+    return bool(_load().get(SEARCH, True))
+
+
+def _set_search(on):
+    """Red Light bridge + TMDbHelper "AB Search All" player, in or out right now."""
+    from resources.lib import patcher
+    msgs = []
+    if on:
+        for p in patcher._all_patches():
+            if p.get('feature') == 'ab_search':
+                try:
+                    ok, msg = patcher._apply_patch(p)
+                except Exception as e:
+                    ok, msg = False, str(e)
+                msgs.append((ok, msg))
+    else:
+        msgs = list(patcher._revert_search())
+    for ok, msg in msgs:
+        _log('Search All %s: %s' % ('ON' if on else 'OFF', msg))
+    return all(ok for ok, _m in msgs)
 
 
 def colored_on():
@@ -115,12 +140,15 @@ def run():
         return
     current = {p: enabled(p) for p, _a, _l in rows}
     colored_was = colored_on()
+    layer1_was = bool(_load().get(LAYER1, True))
+    search_was = search_on()
     picked = None
     try:
         from resources.lib import toggle_ui
         picked = toggle_ui.switch_list(
             T(30801), [(p, l, current[p]) for p, _a, l in rows]
-            + [(COLORED, T(30808), colored_was)],
+            + [(COLORED, T(30808), colored_was), (LAYER1, T(30811), layer1_was),
+               (SEARCH, T(30814), search_was)],
             confirm_back=(T(30750), T(30751), T(30752)))
     except Exception as e:
         _log('switch list failed: %s' % e)
@@ -144,9 +172,17 @@ def run():
             (turned_on if on else turned_off).append(label)
     colored_now = bool(picked.get(COLORED, colored_was))
     states[COLORED] = colored_now
+    layer1_now = bool(picked.get(LAYER1, layer1_was))
+    states[LAYER1] = layer1_now
+    if layer1_now != layer1_was:
+        _log('totals screen -> %s' % ('ON' if layer1_now else 'OFF'))
     if colored_now != colored_was:
         _log('colored resolution & service icons -> %s' % ('ON' if colored_now else 'OFF'))
-    _save(states)
+    search_now = bool(picked.get(SEARCH, search_was))
+    states[SEARCH] = search_now
+    _save(states)                       # before _set_search: the patcher reads the feature state
+    if search_now != search_was and not _set_search(search_now):
+        failed.append(T(30814))
     lines = []
     if turned_on:
         lines.append(T(30804) % ', '.join(turned_on))
@@ -156,7 +192,11 @@ def run():
         lines.append(T(30806) % ', '.join(failed))
     if colored_now != colored_was:
         lines.append(T(30809) if colored_now else T(30810))
-    changed = turned_on or turned_off or colored_now != colored_was
+    if layer1_now != layer1_was:
+        lines.append(T(30812) if layer1_now else T(30813))
+    if search_now != search_was:
+        lines.append(T(30815) if search_now else T(30816))
+    changed = turned_on or turned_off or colored_now != colored_was or layer1_now != layer1_was or search_now != search_was
     if changed:
         lines.append(T(30807))
     if failed:

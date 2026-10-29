@@ -40,8 +40,8 @@ _SKIN = os.path.join('resources', 'skins', 'Default')
 _WIN = os.path.join('resources', 'lib', 'windows')
 _HELPER_REL = os.path.join('resources', 'lib', 'modules', 'lucent_theme.py')
 
-_FEN_IMPORT = ('try: from modules.lucent_theme import lucent_item, lucent_window, lucent_progress, lucent_fen_filter\n'
-               'except Exception: lucent_item = lucent_window = lucent_fen_filter = lambda *a, **k: None; lucent_progress = lambda w, c, p=0: c\n')
+_FEN_IMPORT = ('try: from modules.lucent_theme import lucent_item, lucent_window, lucent_progress, lucent_fen_filter, lucent_layer1_open, lucent_layer1_back\n'
+               'except Exception: lucent_item = lucent_window = lucent_fen_filter = lucent_layer1_open = lambda *a, **k: None; lucent_progress = lambda w, c, p=0: c; lucent_layer1_back = lambda *a: False\n')
 _UMB_IMPORT = ('try: from resources.lib.modules.lucent_theme import lucent_item, lucent_window, lucent_progress, lucent_filter\n'
                'except Exception: lucent_item = lucent_window = lambda *a, **k: None; lucent_progress = lambda w, c, p=0: c; lucent_filter = lambda *a: False\n')
 
@@ -54,12 +54,19 @@ SPECS = {
         'xml': ('sources_results.xml', 'sources_playback.xml'),
         'hooks': [
             (os.path.join(_WIN, 'sources.py'), 'from modules import kodi_utils\n', _FEN_IMPORT, 'after'),
+            # totals screen first (Glass Theme > "Totals screen before the stream list")
+            (os.path.join(_WIN, 'sources.py'),
+             '\t\tself.add_items(self.filter_window_id, self.filter_list)\n\t\tself.setFocusId(self.window_id)\n',
+             'lucent_layer1_open(self)\n', 'after'),
             # RIGHT on the stream list -> the add-on's own filter entries as a menu,
             # applied through its own filter_action (no focus moves: the XML
             # <onright> route bounced, and focusing the hidden list was unreliable).
             (os.path.join(_WIN, 'sources.py'),
              "\t\tif self.get_visibility('Control.HasFocus(%s)' % self.filter_window_id): return self.filter_action(action)\n",
              'if action == self.right_action: return lucent_fen_filter(self)\n', 'after'),
+            (os.path.join(_WIN, 'sources.py'),
+             "\t\tif self.get_visibility('Control.HasFocus(%s)' % self.filter_window_id): return self.filter_action(action)\n",
+             'if lucent_layer1_back(self, action): return\n', 'after'),
             (os.path.join(_WIN, 'sources.py'), '\t\t\t\t\tyield listitem\n\t\t\t\texcept: pass\n',
              "lucent_item(listitem, 'fen')\n", 'before'),
             (os.path.join(_WIN, 'sources.py'),
@@ -74,12 +81,18 @@ SPECS = {
         'xml': ('sources_results.xml', 'sources_playback.xml'),
         'hooks': [
             (os.path.join(_WIN, 'sources.py'), 'from modules.utils import TaskPool\n', _FEN_IMPORT, 'after'),
+            (os.path.join(_WIN, 'sources.py'),
+             '\t\tself.add_items(self.filter_window_id, self.filter_list)\n\t\tself._focus_results_list()\n',
+             'lucent_layer1_open(self)\n', 'after'),
             # RIGHT on the stream list -> the add-on's own filter entries as a menu,
             # applied through its own filter_action (no focus moves: the XML
             # <onright> route bounced, and focusing the hidden list was unreliable).
             (os.path.join(_WIN, 'sources.py'),
              "\t\tif self.get_visibility('Control.HasFocus(%s)' % self.filter_window_id): return self.filter_action(action)\n",
              'if action == self.right_action: return lucent_fen_filter(self)\n', 'after'),
+            (os.path.join(_WIN, 'sources.py'),
+             "\t\tif self.get_visibility('Control.HasFocus(%s)' % self.filter_window_id): return self.filter_action(action)\n",
+             'if lucent_layer1_back(self, action): return\n', 'after'),
             (os.path.join(_WIN, 'sources.py'), '\t\t\t\titem_list.append((listitem, count))\n',
              "lucent_item(listitem, 'fen')\n", 'before'),
             (os.path.join(_WIN, 'sources.py'),
@@ -136,7 +149,68 @@ SPECS['umbrella']['hooks'] += [
      'content = lucent_progress(self, content, percent)\n', 'before'),
 ]
 
-PROFILE_OF = {spec['addon_id']: key for key, spec in SPECS.items()}
+# AB Tools "Search All" (3.4.48): Red Light gets back Fen Light's device-select
+# modes (app_list_sources / app_play_source) so AB Tools can collect and play its
+# sources. Separate from the Glass theme switch: own helper, no windows, hooks
+# only in files the theme never touches (router.py, modules/sources.py).
+_MOD = os.path.join('resources', 'lib', 'modules')
+SPECS['redlight_search'] = {
+    'addon_id': 'plugin.video.redlight', 'label': 'Red Light', 'search': True,
+    'xml': (), 'media': False,
+    'helper': ('abk_device_select.py', os.path.join(_MOD, 'abk_device_select.py')),
+    'hooks': [
+        (os.path.join(_MOD, 'router.py'), "\tif 'navigator.' in mode:\n\t\tfrom indexers.navigator import Navigator\n",
+         "if mode in ('app_list_sources', 'app_play_source'):\n\tfrom modules.abk_device_select import app_mode\n\treturn app_mode(mode, params)\n",
+         'before'),
+        (os.path.join(_MOD, 'sources.py'), "\tdef get_sources(self):\n\t\tdepth = getattr(self, '_get_sources_depth', 0)\n",
+         "if self.params.get('play_selected'):\n\tfrom modules.abk_device_select import play_selected_source\n\treturn play_selected_source(self)\n",
+         'after'),
+        (os.path.join(_MOD, 'sources.py'), '\t\t\tif not results:\n\t\t\t\treturn self._process_post_results()\n',
+         "if self.params.get('device_list') == 'true':\n\tfrom modules.abk_device_select import output_sources_directory\n\treturn output_sources_directory(self, results)\n",
+         'before'),
+        (os.path.join(_MOD, 'sources.py'),
+         '\t\tself.sleep_time, self.provider_sort_ranks, self.scraper_settings = 100, settings.provider_sort_ranks(), settings.scraping_settings()\n',
+         "if self.params.get('device_list') == 'true': self.prescrape = self.autoscrape = False\n", 'after'),
+    ],
+}
+
+_HELPER_SEARCH = ('abk_device_select.py', os.path.join(_MOD, 'abk_device_select.py'))
+SPECS['pov_search'] = {
+    'addon_id': 'plugin.video.pov', 'label': 'POV', 'search': True,
+    'xml': (), 'media': False, 'helper': _HELPER_SEARCH,
+    'hooks': [
+        (os.path.join(_MOD, 'entry.py'), '\tif mode in POV_ROUTES: return POV_ROUTES[mode](params)\n',
+         "if mode in ('app_list_sources', 'app_play_source'):\n\tfrom modules.abk_device_select import app_mode\n\treturn app_mode(mode, params)\n",
+         'before'),
+        # play: POV's play_file needs the progress object get_sources would have made
+        (os.path.join(_MOD, 'sources.py'), '\t\tresults = self.get_sources()\n\t\tif not results: return self._process_post_results()\n',
+         "if self.params.get('play_selected'):\n\tself.progress_dialog = DialogProgress(getattr(self, 'full_screen', False))\n"
+         "\tfrom modules.abk_device_select import play_selected_source\n\treturn play_selected_source(self)\n", 'before'),
+        (os.path.join(_MOD, 'sources.py'), '\t\tresults = self.get_sources()\n',
+         "if self.params.get('device_list') == 'true':\n\tfrom modules.abk_device_select import output_sources_directory\n\treturn output_sources_directory(self, results)\n",
+         'after'),
+    ],
+}
+SPECS['umbrella_search'] = {
+    'addon_id': 'plugin.video.umbrella', 'label': 'Umbrella', 'search': True,
+    'xml': (), 'media': False, 'helper': _HELPER_SEARCH,
+    'hooks': [
+        (os.path.join(_MOD, 'router.py'), "\tdecade = params.get('decades')\n",
+         "if action in ('app_list_sources', 'app_play_source'):\n\tfrom resources.lib.modules.abk_device_select import app_mode\n\treturn app_mode(action, params)\n",
+         'after'),
+        (os.path.join(_MOD, 'sources.py'),
+         '\t\t\titems = providerscache.get(self.getSources, self.providercache_hours, title, year, imdb, tmdb, tvdb, season, episode, tvshowtitle, premiered)\n',
+         "if getattr(self, 'abk_mode', None) == 'play':\n\tfrom resources.lib.modules.abk_device_select import play_selected_source\n"
+         "\treturn play_selected_source(self, tvshowtitle if tvshowtitle is not None else title)\n", 'before'),
+        (os.path.join(_MOD, 'sources.py'),
+         '\t\t\titems = providerscache.get(self.getSources, self.providercache_hours, title, year, imdb, tmdb, tvdb, season, episode, tvshowtitle, premiered)\n',
+         "if getattr(self, 'abk_mode', None) == 'list':\n\tfrom resources.lib.modules.abk_device_select import output_sources_directory\n\treturn output_sources_directory(self, items)\n",
+         'after'),
+    ],
+}
+
+# Glass theme profiles only (the search bridge is switched on its own)
+PROFILE_OF = {spec['addon_id']: key for key, spec in SPECS.items() if not spec.get('search')}
 
 
 # ───────────────────────── file helpers ─────────────────────────
@@ -257,10 +331,11 @@ def apply(addon_path, profile):
 
         written = 0
         # 2. helper module + textures
-        if _copy_if_changed(os.path.join(_SRC, 'lucent_theme.py'), os.path.join(addon_path, _HELPER_REL)):
+        helper_src, helper_rel = spec.get('helper', ('lucent_theme.py', _HELPER_REL))
+        if _copy_if_changed(os.path.join(_SRC, helper_src), os.path.join(addon_path, helper_rel)):
             written += 1
         media_src = os.path.join(_SRC, 'media')
-        for root, _dirs, files in os.walk(media_src):
+        for root, _dirs, files in (os.walk(media_src) if spec.get('media', True) else ()):
             for name in files:
                 src = os.path.join(root, name)
                 dst = os.path.join(addon_path, _SKIN, 'media', os.path.relpath(src, media_src))
@@ -290,8 +365,9 @@ def apply(addon_path, profile):
             if new != old:
                 _save_py(path, new, crlf)
                 written += 1
+        what = 'Search All bridge' if spec.get('search') else 'Glass theme'
         if written:
-            return True, '[%s] Patched OK: Glass theme for %s (%d files)' % (aid, label, written)
+            return True, '[%s] Patched OK: %s for %s (%d files)' % (aid, what, label, written)
         return True, '[%s] Already patched – skipping.' % aid
     except Exception as e:
         return False, '[%s] Glass theme: %s' % (aid, e)
@@ -326,5 +402,6 @@ def revert(addon_path, profile):
         return False, ('[%s] Glass theme: no stock copy of %s – reinstall %s to restore it'
                        % (aid, ', '.join(problems), label))
     if changed:
-        return True, '[%s] Patched OK (reverted, toggle off): Glass theme for %s' % (aid, label)
+        return True, '[%s] Patched OK (reverted, toggle off): %s for %s' % (
+            aid, 'Search All bridge' if spec.get('search') else 'Glass theme', label)
     return None
