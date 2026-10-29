@@ -1,3 +1,21 @@
+v4.5.0
+- Release of 3.4.32 - 3.4.50 (Glass Theme for Fen Light / Red Light / POV /
+  Umbrella source windows, Search All across the four add-ons). Version
+  number only; no code change from 3.4.50.
+
+v3.4.50
+- Search All: filter menu in the Glass select window (AB Tools copy of
+  lucent_select.xml with absolute texture paths): RIGHT on the stream list or
+  the "Filter" chip (last chip, shows how many filters are on). Entries, each
+  with the count it would leave: Show <service> only, size buckets (under 5 /
+  5-15 / 15-40 / over 40 GB; unknown size in none), Source: <site> (top 12),
+  Filter by title (comma-separated words), Filter by info (multi-select, live
+  counts). Filters stack with each other and with the add-on / quality chips;
+  only entries that narrow the list are offered; a combination with no result
+  is refused with a notice. Subhead shows "Filter: a + b". BACK clears them.
+- FIX: "Control 2300 ... can't focus" when Search All opened (no
+  defaultcontrol; chips focused after onInit fills them, with retries).
+
 v3.4.49
 - Search All: Umbrella and POV added (tags UM / POV; play priority Red Light,
   Fen Light, Umbrella, POV). Both get the "Search All bridge" patch

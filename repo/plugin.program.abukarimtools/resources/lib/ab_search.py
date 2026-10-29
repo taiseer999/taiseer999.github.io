@@ -56,6 +56,7 @@ _QUALITIES = ('4K', '1080P', '720P', 'SD')
 _QRANK = {'4K': 0, '1080P': 1, '720P': 2, 'SD': 3}
 _ACTION_BACK = (9, 10, 92, 216, 247, 257, 275, 61467, 61448)
 _ACTION_MENU = (101, 117)            # long press / context menu: "Play with ..."
+_ACTION_RIGHT = 2                    # RIGHT on the stream list: filter menu
 _SCRAPE_TIMEOUT = 240                # a listing that never answers stops counting after this
 
 
@@ -241,6 +242,24 @@ def _provider(item):
     return _clean(sp or get('source', ''))
 
 
+def _site(item):
+    return _clean(item.get('abk_site') or ((item.get('source') or item.get('provider'))
+                                           if item.get('scrape_provider') == 'external' else ''))
+
+
+_PRETTY = {'ALLDEBRID': 'AllDebrid', 'REAL-DEBRID': 'Real-Debrid', 'REALDEBRID': 'Real-Debrid', 'TORBOX': 'TorBox',
+           'PREMIUMIZE': 'Premiumize', 'OFFCLOUD': 'Offcloud', 'EASYNEWS': 'Easynews', 'EASYDEBRID': 'EasyDebrid',
+           'DEBRID-LINK': 'Debrid-Link', 'DEBRIDLINK': 'Debrid-Link'}
+
+
+def _pretty(name):
+    return _PRETTY.get(name.upper(), name.title() if name.isupper() else name)
+
+
+# size buckets in the filter menu (GB, string id)
+_SIZES = ((0, 5, 30830), (5, 15, 30831), (15, 40, 30832), (40, 1e9, 30833))
+
+
 def _size(item):
     try:
         return float(item.get('size') or 0)
@@ -294,6 +313,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         self.ui_lock = threading.RLock()
         self.ready = False
         self.focused_key = None
+        self.filters = []            # filter menu (RIGHT / "Filter" chip): [{'kind', 'value', 'label'}]
+        self._badge_cache = {}
 
     # ---- life cycle ----
     def onInit(self):
@@ -308,6 +329,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         self.ready = True
         self.session.listener = self.refresh
         self.refresh()
+        self._focus(CHIPS)
         if not self.session.started_threads:
             self.session.started_threads = True
             self.session.start()
@@ -315,6 +337,18 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
     def close(self):
         self.session.closed = True
         super().close()
+
+    def _focus(self, cid):
+        # no <defaultcontrol>: the chips are empty until onInit fills them, and
+        # Kodi then logs "Control 2300 ... can't focus". Focus once they exist.
+        for _ in range(40):
+            try:
+                self.setFocusId(cid)
+                if self.getFocusId() == cid:
+                    return
+            except Exception:
+                pass
+            xbmc.sleep(25)
 
     # ---- building ----
     def refresh(self):
@@ -351,7 +385,10 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             self.setProperty('abs.waitmsg', T(30828))
             self.setProperty('abs.empty', '')
         else:
-            self.setProperty('abs.subhead', T(30823) % (len(self.rows), active, int(time.time() - self.session.started)))
+            sub = T(30823) % (len(self.rows), active, int(time.time() - self.session.started))
+            if self.filters:
+                sub += '  ·  ' + T(30836) % ' + '.join(f['label'] for f in self.filters)
+            self.setProperty('abs.subhead', sub)
             self.setProperty('abs.waitmsg', T(30824))
             self.setProperty('abs.empty', 'true')
 
@@ -367,6 +404,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             count = sum(1 for r in self.rows if r['group'] == q)
             if count:
                 chips.append(('quality', q, q.replace('P', 'p'), count, '', False))
+        if self.rows:
+            chips.append(('filter', None, T(30835), len(self.filters) or '', '', False))
         return chips
 
     def _chips(self):
@@ -387,11 +426,12 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             li.setLabel2('' if loading else str(count))
             li.setProperty('abs.key', key)
             li.setProperty('abs.loading', 'true' if loading else '')
-            active = (kind == 'all' and not self.f_addon and not self.f_quality) or \
-                     (kind == 'addon' and value == self.f_addon) or (kind == 'quality' and value == self.f_quality)
+            active = (kind == 'all' and not self.f_addon and not self.f_quality and not self.filters) or \
+                     (kind == 'addon' and value == self.f_addon) or (kind == 'quality' and value == self.f_quality) or \
+                     (kind == 'filter' and bool(self.filters))
             li.setProperty('abs.active', 'true' if active else '')
 
-    def _visible_rows(self):
+    def _chip_rows(self):
         out = []
         for r in self.rows:
             if self.f_addon and all(k != self.f_addon for k, _i in r['refs']):
@@ -400,6 +440,131 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 continue
             out.append(r)
         return out
+
+    def _visible_rows(self):
+        return [r for r in self._chip_rows() if all(self._match(r, f) for f in self.filters)]
+
+    # ---- filter menu ----
+    def _badges(self, row):
+        item = row['item']
+        found = self._badge_cache.get(id(item))
+        if found is None:
+            th = _theme()
+            try:
+                found = th.badges(item.get('extraInfo', ''), row['q']) if th else []
+            except Exception:
+                found = []
+            self._badge_cache[id(item)] = found
+        return found
+
+    def _match(self, row, f):
+        kind, value, item = f['kind'], f['value'], row['item']
+        if kind == 'service':
+            return _provider(item).upper() == value
+        if kind == 'site':
+            return _site(item).upper() == value
+        if kind == 'size':
+            lo, hi = value
+            return row['size'] > 0 and lo <= row['size'] < hi       # unknown size fits no bucket
+        if kind == 'title':
+            name = _clean(item.get('display_name') or item.get('name')).upper()
+            return all(w in name for w in value)
+        if kind == 'info':
+            have = self._badges(row)
+            return all(w in have for w in value)
+        return True
+
+    def _filter_menu(self):
+        th = _theme()
+        if not th:
+            return
+        th._addon_root = lambda: ADDON_PATH.rstrip('/\\')       # AB Tools' own lucent_select.xml
+        _t = th._t
+        base = self._visible_rows()
+        if not base and not self.filters:
+            return
+        choices = []                    # (label, kind, value, count)
+        if self.filters:
+            choices.append((_t('Show all results'), 'clear', None, len(self._chip_rows())))
+        def counted(kind, value, label):
+            n = sum(1 for r in base if self._match(r, {'kind': kind, 'value': value}))
+            if 0 < n < len(base):       # a filter that keeps everything (or nothing) is no filter
+                choices.append((label, kind, value, n))
+        services = sorted({_provider(r['item']).upper() for r in base} - {''})
+        for s in services:
+            counted('service', s, _t('Show %s only') % _pretty(s))
+        for lo, hi, sid in _SIZES:
+            counted('size', (lo, hi), T(sid))
+        sites = {}
+        for r in base:
+            s = _site(r['item']).upper()
+            if s:
+                sites[s] = sites.get(s, 0) + 1
+        for s in sorted(sites, key=lambda k: -sites[k])[:12]:
+            counted('site', s, _t('Source: %s') % s.title())
+        choices.append((_t('Filter by title...'), 'title', None, None))
+        choices.append((_t('Filter by info (HDR, Atmos ...)...'), 'info', None, None))
+        pick = th.lucent_select(_t('Filter results'), [c[0] for c in choices], _t('%s results') % len(base),
+                                counts=[c[3] for c in choices])
+        if pick is None or pick < 0:
+            return
+        label, kind, value, _n = choices[pick]
+        if kind == 'clear':
+            self.filters = []
+            return self._apply_filters()
+        if kind == 'title':
+            text = xbmcgui.Dialog().input(_t('Keywords (comma separated)'))
+            words = [w.strip().upper() for w in (text or '').split(',') if w.strip()]
+            if not words:
+                return
+            value, label = words, _t('Title: %s') % ', '.join(words)
+        elif kind == 'info':
+            present = []
+            for r in base:
+                for b in self._badges(r):
+                    if b not in present:
+                        present.append(b)
+            present.sort(key=lambda b: th._RANK.get(b, 999))
+            if not present:
+                return
+            sets = [set(self._badges(r)) for r in base]
+            def live(checked):
+                want = [present[c] for c in checked]
+                pool = [s for s in sets if all(w in s for w in want)]
+                out = {None: len(pool)}
+                for i, b in enumerate(present):
+                    out[i] = len(pool) if i in checked else sum(1 for s in pool if b in s)
+                return out
+            sel = th.lucent_select(_t('Filter by info'), present, multi=True,
+                                   counts=[sum(1 for s in sets if b in s) for b in present], live=live)
+            if not sel:
+                return
+            value = [present[n] for n in sel]
+            label = ' + '.join(value)
+        elif kind == 'service':
+            label = _pretty(value)
+        elif kind == 'site':
+            label = value.title()
+        new = self.filters + [{'kind': kind, 'value': value, 'label': label}]
+        if not any(all(self._match(r, f) for f in new) for r in self._chip_rows()):
+            xbmcgui.Dialog().notification(_t('Filter results'), _t('No results'), xbmcgui.NOTIFICATION_INFO, 2500)
+            return
+        self.filters = new
+        _log('filter: %s' % ' + '.join(f['label'] for f in self.filters))
+        self._apply_filters()
+
+    def _apply_filters(self):
+        with self.ui_lock:
+            self.focused_key = None
+            self._status()
+            self._chips()
+            self._rows()
+        if self.shown:
+            self._focus(LIST)
+            try:
+                self.getControl(LIST).selectItem(0)
+            except Exception:
+                pass
 
     def _rows(self):
         ctl = self.getControl(LIST)
@@ -431,8 +596,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         item, q = row['item'], row['q']
         li = xbmcgui.ListItem(_clean(item.get('display_name') or item.get('name')))
         provider = _provider(item)
-        site = _clean(item.get('abk_site') or ((item.get('source') or item.get('provider'))
-                                               if item.get('scrape_provider') == 'external' else ''))
+        site = _site(item)
         size = _clean(item.get('size_label'))
         meta = []
         for part in (provider, size, site):
@@ -455,7 +619,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                         props['lucent.res'] = th._RES.get(q, '')
                     icon = th._provider_icon(provider, site)
                     props['lucent.icon'] = (MEDIA + icon) if icon else ''
-                found = th.badges(item.get('extraInfo', ''), q)
+                found = self._badges(row)
             except Exception:
                 found = []
         else:
@@ -475,6 +639,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             pos = self.getControl(CHIPS).getSelectedPosition()
             if 0 <= pos < len(self.chips):
                 kind, value = self.chips[pos][0], self.chips[pos][1]
+                if kind == 'filter':
+                    return self._filter_menu()
                 with self.ui_lock:
                     if kind == 'all':
                         self.f_addon = self.f_quality = None
@@ -493,6 +659,9 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
     def onAction(self, action):
         aid = action.getId()
         if aid in _ACTION_BACK:
+            if self.filters:                    # Back first drops the filter-menu filters
+                self.filters = []
+                return self._apply_filters()
             if self.getFocusId() == LIST and (self.f_addon or self.f_quality):
                 self.setFocusId(CHIPS)          # first Back from a filtered list: back to the chips
                 return
@@ -500,6 +669,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             return
         if aid in _ACTION_MENU and self.getFocusId() == LIST:
             self._play(choose=True)
+        elif aid == _ACTION_RIGHT and self.getFocusId() == LIST:
+            self._filter_menu()
 
     def _current(self):
         pos = self.getControl(LIST).getSelectedPosition()

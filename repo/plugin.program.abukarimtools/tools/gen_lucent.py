@@ -1667,13 +1667,17 @@ def ab_search_window():
         <width>1920</width>
         <height>1080</height>
     </coordinates>
-    <defaultcontrol always="true">2300</defaultcontrol>
     <controls>%(bg)s%(title)s%(plot)s%(status)s%(body)s
     </controls>
 </window>
 ''' % {'bg': backdrop('$INFO[Window.Property(lucent.fanart)]'), 'title': title_block(),
        'plot': plot_block('$INFO[Window.Property(lucent.plot)]', height=220),
        'status': status, 'body': body}
+    return ab_paths(xml)
+
+
+def ab_paths(xml):
+    """Textures straight from resources/lucent/media (AB Tools' own windows)."""
     import re as _re
     return _re.sub(r'(<texture[a-z]*(?: [^>]*)?>)lucent/', lambda m: m.group(1) + AB_MEDIA + 'lucent/', xml)
 
@@ -1702,6 +1706,9 @@ def build():
     ab_path = os.path.join(ROOT, 'resources', 'skins', 'Default', '1080i', 'ab_search.xml')
     with open(ab_path, 'w', encoding='utf-8') as f:
         f.write(ab_search_window())
+    # Search All's filter menu: the same themed select window
+    with open(os.path.join(os.path.dirname(ab_path), 'lucent_select.xml'), 'w', encoding='utf-8') as f:
+        f.write(ab_paths(files['shared/lucent_select.xml']))
     for rel, xml in files.items():
         path = os.path.join(OUT, rel)
         os.makedirs(os.path.dirname(path), exist_ok=True)

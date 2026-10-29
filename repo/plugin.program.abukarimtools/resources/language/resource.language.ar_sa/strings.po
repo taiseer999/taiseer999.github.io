@@ -1600,3 +1600,27 @@ msgctxt "#30829"
 msgid "Not supported by this version"
 msgstr "هذا الإصدار غير مدعوم"
 
+msgctxt "#30830"
+msgid "Size: under 5 GB"
+msgstr "الحجم: أقل من 5 غيغابايت"
+
+msgctxt "#30831"
+msgid "Size: 5 - 15 GB"
+msgstr "الحجم: من 5 إلى 15 غيغابايت"
+
+msgctxt "#30832"
+msgid "Size: 15 - 40 GB"
+msgstr "الحجم: من 15 إلى 40 غيغابايت"
+
+msgctxt "#30833"
+msgid "Size: over 40 GB"
+msgstr "الحجم: أكثر من 40 غيغابايت"
+
+msgctxt "#30835"
+msgid "Filter"
+msgstr "تصفية"
+
+msgctxt "#30836"
+msgid "Filter: %s"
+msgstr "التصفية: %s"
+

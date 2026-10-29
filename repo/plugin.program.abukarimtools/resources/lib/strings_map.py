@@ -29,7 +29,7 @@ ID ranges:
   30770-30779  Installation Wizard - setup-in-progress backdrop, final restart
   30780-30799  Maintenance - Clean Unused Items
   30800-30813  Toggles - Glass Theme (internally 'Lucent', per add-on)
-  30814-30829  Search All (one stream list from every add-on)
+  30814-30836  Search All (one stream list from every add-on)
 """
 
 STRINGS = {
@@ -583,4 +583,10 @@ STRINGS = {
     30827: ('None of the supported add-ons (Red Light, Fen Light, Umbrella, POV) is installed.', 'لا توجد أي إضافة مدعومة مثبّتة (Red Light أو Fen Light أو Umbrella أو POV).'),
     30828: ('Finding streams in every add-on', 'جارٍ البحث عن المصادر في كل الإضافات'),
     30829: ('Not supported by this version', 'هذا الإصدار غير مدعوم'),
+    30830: ('Size: under 5 GB', 'الحجم: أقل من 5 غيغابايت'),
+    30831: ('Size: 5 - 15 GB', 'الحجم: من 5 إلى 15 غيغابايت'),
+    30832: ('Size: 15 - 40 GB', 'الحجم: من 15 إلى 40 غيغابايت'),
+    30833: ('Size: over 40 GB', 'الحجم: أكثر من 40 غيغابايت'),
+    30835: ('Filter', 'تصفية'),
+    30836: ('Filter: %s', 'التصفية: %s'),
 }
