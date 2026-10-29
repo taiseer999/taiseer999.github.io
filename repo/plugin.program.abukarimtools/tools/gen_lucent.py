@@ -1415,16 +1415,27 @@ def ab_card(state):
     xml = xml.replace(' + String.IsEmpty(ListItem.Property(lucent.res))', '')
     marker = '\n                    <!-- Full search -->'
     assert marker in xml
-    # 4.5.8: service code (RD / AD / PM / TB ...) as a plain pill under the quality
+    # 4.6.1: service icon (RD / AD / PM ..., AB Wizard artwork) under the quality;
+    #        the plain code pill only when no icon exists for the service
     svc = '''
+                        <control type="image">
+                            <left>60</left>
+                            <top>68</top>
+                            <width>44</width>
+                            <height>44</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(abs.svcicon)]</texture>
+                            <colordiffuse>%(icon)s</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
+                        </control>
                         <control type="image">
                             <left>20</left>
                             <top>70</top>
                             <width>124</width>
                             <height>36</height>
                             <texture border="18">lucent/pill42.png</texture>
-                            <colordiffuse>%s</colordiffuse>
-                            <visible>!String.IsEmpty(ListItem.Property(abs.svc))</visible>
+                            <colordiffuse>%(pill)s</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc)) + String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
                         </control>
                         <control type="label">
                             <left>20</left>
@@ -1436,8 +1447,9 @@ def ab_card(state):
                             <aligny>center</aligny>
                             <textcolor>FFDCE2E7</textcolor>
                             <label>[B]$INFO[ListItem.Property(abs.svc)][/B]</label>
-                            <visible>!String.IsEmpty(ListItem.Property(abs.svc))</visible>
-                        </control>''' % ('2EFFFFFF' if state == 'active' else '14FFFFFF')
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc)) + String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
+                        </control>''' % ({'icon': 'FFFFFFFF', 'pill': '2EFFFFFF'} if state == 'active'
+                           else {'icon': 'E6FFFFFF', 'pill': '14FFFFFF'})
     return xml.replace(marker, svc + _ab_tags(state == 'active') + marker, 1)
 
 
@@ -1478,6 +1490,17 @@ def ab_chip(focused):
                         <colordiffuse>%s</colordiffuse>
                         <visible>String.IsEqual(ListItem.Property(abs.key),%s) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>''' % (color, key) for key, color in AB_ADDONS)
+    # 4.6.1: service chips carry the service icon in place of the dot
+    dots += '''
+                    <control type="image">
+                        <left>10</left>
+                        <top>12</top>
+                        <width>28</width>
+                        <height>28</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture>$INFO[ListItem.Property(abs.chipicon)]</texture>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.chipicon))</visible>
+                    </control>'''
     return '''%(bg)s%(dots)s
                     <control type="image">
                         <left>16</left>

@@ -97,7 +97,7 @@ def _set_search(on):
 
 
 def colored_on():
-    return bool(_load().get(COLORED, True))
+    return False                        # 4.6.0: option removed, always plain
 
 
 def enabled(profile):
@@ -139,7 +139,6 @@ def run():
         xbmcgui.Dialog().ok(TITLE, T(30803))
         return
     current = {p: enabled(p) for p, _a, _l in rows}
-    colored_was = colored_on()
     layer1_was = bool(_load().get(LAYER1, True))
     search_was = search_on()
     picked = None
@@ -147,7 +146,7 @@ def run():
         from resources.lib import toggle_ui
         picked = toggle_ui.switch_list(
             T(30801), [(p, l, current[p]) for p, _a, l in rows]
-            + [(COLORED, T(30808), colored_was), (LAYER1, T(30811), layer1_was),
+            + [(LAYER1, T(30811), layer1_was),
                (SEARCH, T(30814), search_was)],
             confirm_back=(T(30750), T(30751), T(30752)))
     except Exception as e:
@@ -170,14 +169,11 @@ def run():
             failed.append(label)
         elif 'Patched OK' in msg:           # something was actually written
             (turned_on if on else turned_off).append(label)
-    colored_now = bool(picked.get(COLORED, colored_was))
-    states[COLORED] = colored_now
+    states[COLORED] = False             # 4.6.0: coloured icons removed
     layer1_now = bool(picked.get(LAYER1, layer1_was))
     states[LAYER1] = layer1_now
     if layer1_now != layer1_was:
         _log('totals screen -> %s' % ('ON' if layer1_now else 'OFF'))
-    if colored_now != colored_was:
-        _log('colored resolution & service icons -> %s' % ('ON' if colored_now else 'OFF'))
     search_now = bool(picked.get(SEARCH, search_was))
     states[SEARCH] = search_now
     _save(states)                       # before _set_search: the patcher reads the feature state
@@ -190,13 +186,11 @@ def run():
         lines.append(T(30805) % ', '.join(turned_off))
     if failed:
         lines.append(T(30806) % ', '.join(failed))
-    if colored_now != colored_was:
-        lines.append(T(30809) if colored_now else T(30810))
     if layer1_now != layer1_was:
         lines.append(T(30812) if layer1_now else T(30813))
     if search_now != search_was:
         lines.append(T(30815) if search_now else T(30816))
-    changed = turned_on or turned_off or colored_now != colored_was or layer1_now != layer1_was or search_now != search_was
+    changed = turned_on or turned_off or layer1_now != layer1_was or search_now != search_was
     if changed:
         lines.append(T(30807))
     if failed:

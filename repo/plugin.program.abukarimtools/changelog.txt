@@ -1,3 +1,19 @@
+v4.6.1
+- Service icons restored, unchanged (media/lucent/providers, AB Wizard account
+  manager artwork, same files as 3.4.34+), shown on every card: Search All
+  (abs.svcicon; the RD/AD code pill only for a service without an icon) and
+  the four add-ons' Glass windows (lucent_theme: lucent.icon always set,
+  lucent.res never) and the totals screen. Resolution flags stay removed.
+- Search All service chips: shown from one service on, with the service icon
+  (abs.chipicon); pick one to list only that service's links.
+
+v4.6.0
+- Removed the "Colored resolution & service icons" switch (string 30808)
+  from Toggles > Glass Theme. lucent_theme._read_colored() always returns
+  False, so the four add-ons' Glass windows and the themed filter menu show
+  no coloured resolution flags / service icons. The updated helper reaches
+  the add-ons on the next patch sweep (boot or 30-min verify).
+
 v4.5.9
 - Search All: service chips (RD / AD / PM / TB / OC / EN / ED / DL) after the
   quality chips, only when 2+ services are present. self.f_service, toggles

@@ -161,7 +161,9 @@ def _read_state():
 
 
 def _read_colored():
-	return bool(_read_state().get('colored', True))
+	# AB Tools 4.6.0: coloured resolution flags / service icons removed - the
+	# option is gone from Toggles > Glass Theme, always plain now
+	return False
 
 
 def _colored():
@@ -203,10 +205,10 @@ def lucent_item(listitem, profile):
 				'lucent.lowq': 'true' if quality in _LOWQ else '',
 				'lucent.uncached': 'true' if 'UNCACHED' in source_type.upper() else '',
 				'lucent.res': '', 'lucent.icon': ''}
-		if _colored():
-			props['lucent.res'] = '' if quality in _LOWQ else _RES.get(quality, '')
-			props['lucent.icon'] = _provider_icon(provider, site)
-		elif keys['icon']:
+		# AB Tools 4.6.1: monochrome service icon (RD / AD / PM ...), never a
+		# coloured resolution flag
+		props['lucent.icon'] = _provider_icon(provider, site)
+		if not props['lucent.icon'] and keys['icon']:
 			props['lucent.icon'] = get(keys['icon'])     # the add-on's own provider icon
 		found = badges(get(keys['info']), quality)
 		for n in range(_MAX_BADGES):
@@ -696,12 +698,11 @@ def lucent_layer1(window):
 			labels.append('[B]%s[/B]  ·  %s' % (q, _PRETTY.get(prov, prov.title()) if prov else '-'))
 			counts.append(len(groups[(q, prov)]))
 			res = '' if q == 'CAM/SCR/TELE' else _RES.get(q, '')
-			icons.append((('lucent/res/%s.png' % res) if (res and colored) else '',
-						_provider_icon(prov) if colored else ''))
+			icons.append(('', _provider_icon(prov)))
 		title = window.getProperty('title') or _t('Filter results')
 		current = getattr(window, '_lucent_layer1_pick', 0)
 		pick = lucent_select(title, labels, _t('Choose what to show'), counts=counts,
-							icons=icons if colored else None, preselect=current)
+							icons=icons if any(i and i[1] for i in icons) else None, preselect=current)
 		window._lucent_layer1_shown = True
 		_log('totals screen: %s' % ('back' if pick is None or pick < 0 else labels[pick]))
 		if pick is None or pick < 0: return 'back'

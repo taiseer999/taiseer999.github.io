@@ -561,6 +561,15 @@
                         <visible>String.IsEqual(ListItem.Property(abs.key),pov) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
                     <control type="image">
+                        <left>10</left>
+                        <top>12</top>
+                        <width>28</width>
+                        <height>28</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture>$INFO[ListItem.Property(abs.chipicon)]</texture>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.chipicon))</visible>
+                    </control>
+                    <control type="image">
                         <left>16</left>
                         <top>19</top>
                         <width>14</width>
@@ -645,6 +654,15 @@
                         <visible>String.IsEqual(ListItem.Property(abs.key),pov) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
                     <control type="image">
+                        <left>10</left>
+                        <top>12</top>
+                        <width>28</width>
+                        <height>28</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture>$INFO[ListItem.Property(abs.chipicon)]</texture>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.chipicon))</visible>
+                    </control>
+                    <control type="image">
                         <left>16</left>
                         <top>19</top>
                         <width>14</width>
@@ -719,6 +737,15 @@
                         <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                         <colordiffuse>FF2BC48A</colordiffuse>
                         <visible>String.IsEqual(ListItem.Property(abs.key),pov) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>10</left>
+                        <top>12</top>
+                        <width>28</width>
+                        <height>28</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture>$INFO[ListItem.Property(abs.chipicon)]</texture>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.chipicon))</visible>
                     </control>
                     <control type="image">
                         <left>16</left>
@@ -929,13 +956,23 @@
                         </control>
                     </control>
                         <control type="image">
+                            <left>60</left>
+                            <top>68</top>
+                            <width>44</width>
+                            <height>44</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(abs.svcicon)]</texture>
+                            <colordiffuse>E6FFFFFF</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
+                        </control>
+                        <control type="image">
                             <left>20</left>
                             <top>70</top>
                             <width>124</width>
                             <height>36</height>
                             <texture border="18">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>14FFFFFF</colordiffuse>
-                            <visible>!String.IsEmpty(ListItem.Property(abs.svc))</visible>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc)) + String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
                         </control>
                         <control type="label">
                             <left>20</left>
@@ -947,7 +984,7 @@
                             <aligny>center</aligny>
                             <textcolor>FFDCE2E7</textcolor>
                             <label>[B]$INFO[ListItem.Property(abs.svc)][/B]</label>
-                            <visible>!String.IsEmpty(ListItem.Property(abs.svc))</visible>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc)) + String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
                         </control>
                         <control type="image">
                             <left>820</left>
@@ -1299,13 +1336,23 @@
                         </control>
                     </control>
                         <control type="image">
+                            <left>60</left>
+                            <top>68</top>
+                            <width>44</width>
+                            <height>44</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(abs.svcicon)]</texture>
+                            <colordiffuse>E6FFFFFF</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
+                        </control>
+                        <control type="image">
                             <left>20</left>
                             <top>70</top>
                             <width>124</width>
                             <height>36</height>
                             <texture border="18">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>14FFFFFF</colordiffuse>
-                            <visible>!String.IsEmpty(ListItem.Property(abs.svc))</visible>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc)) + String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
                         </control>
                         <control type="label">
                             <left>20</left>
@@ -1317,7 +1364,7 @@
                             <aligny>center</aligny>
                             <textcolor>FFDCE2E7</textcolor>
                             <label>[B]$INFO[ListItem.Property(abs.svc)][/B]</label>
-                            <visible>!String.IsEmpty(ListItem.Property(abs.svc))</visible>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc)) + String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
                         </control>
                         <control type="image">
                             <left>820</left>
@@ -1678,13 +1725,23 @@
                         </control>
                     </control>
                         <control type="image">
+                            <left>60</left>
+                            <top>68</top>
+                            <width>44</width>
+                            <height>44</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(abs.svcicon)]</texture>
+                            <colordiffuse>FFFFFFFF</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
+                        </control>
+                        <control type="image">
                             <left>20</left>
                             <top>70</top>
                             <width>124</width>
                             <height>36</height>
                             <texture border="18">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>2EFFFFFF</colordiffuse>
-                            <visible>!String.IsEmpty(ListItem.Property(abs.svc))</visible>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc)) + String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
                         </control>
                         <control type="label">
                             <left>20</left>
@@ -1696,7 +1753,7 @@
                             <aligny>center</aligny>
                             <textcolor>FFDCE2E7</textcolor>
                             <label>[B]$INFO[ListItem.Property(abs.svc)][/B]</label>
-                            <visible>!String.IsEmpty(ListItem.Property(abs.svc))</visible>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc)) + String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
                         </control>
                         <control type="image">
                             <left>820</left>

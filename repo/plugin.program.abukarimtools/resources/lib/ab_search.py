@@ -405,6 +405,15 @@ def _service_code(provider):
 _SERVICE_ORDER = ('RD', 'AD', 'PM', 'TB', 'OC', 'EN', 'ED', 'DL')
 
 
+_SERVICE_ICON = {'RD': 'realdebrid', 'AD': 'alldebrid', 'PM': 'premiumize', 'TB': 'torbox',
+                 'OC': 'offcloud', 'EN': 'easynews', 'ED': 'easydebrid'}
+
+
+def _service_icon(code):
+    name = _SERVICE_ICON.get(code or '')
+    return (MEDIA + 'lucent/providers/%s.png' % name) if name else ''
+
+
 def _row_service(row):
     code = row.get('svc')
     if code is None:
@@ -602,13 +611,13 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             count = sum(1 for r in self.rows if r['group'] == q)
             if count:
                 chips.append(('quality', q, q.replace('P', 'p'), count, '', False))
-        # 4.5.9: one chip per debrid service, only when there are two or more
+        # 4.5.9: one chip per debrid service (4.6.1: shown from one service on)
         svc = {}
         for r in self.rows:
             code = _row_service(r)
             if code:
                 svc[code] = svc.get(code, 0) + 1
-        if len(svc) > 1:
+        if svc:
             for code in _SERVICE_ORDER:
                 if code in svc:
                     chips.append(('service', code, code, svc[code], '', False))
@@ -634,6 +643,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             li.setLabel2('' if loading else str(count))
             li.setProperty('abs.key', key)
             li.setProperty('abs.loading', 'true' if loading else '')
+            li.setProperty('abs.chipicon', _service_icon(value) if kind == 'service' else '')
             active = (kind == 'all' and not self.f_addon and not self.f_quality and not self.f_service
                       and not self.filters) or \
                      (kind == 'addon' and value == self.f_addon) or (kind == 'quality' and value == self.f_quality) or \
@@ -839,7 +849,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         title = _clean(item.get('display_name') or item.get('name'))
         props = {'lucent.quality': q, 'lucent.lowq': 'true' if q in ('CAM', 'SCR', 'TELE', 'HC') else '',
                  'lucent.uncached': '', 'lucent.res': '', 'lucent.icon': '',
-                 'abs.svc': _service_code(provider)}
+                 'abs.svc': _service_code(provider), 'abs.svcicon': ''}
         if th:
             try:
                 # too long: drop the site first, then the service name, keep
@@ -853,10 +863,10 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                     meta.pop()
                 props['lucent.title'] = th._fit(title, _TITLE_PX)
                 props['lucent.meta'] = th._fit('  ·  '.join(meta), meta_px)
-                # 4.5.7: Search All shows no coloured resolution flags and no
-                # service/source icons - plain quality pill only (lucent.res /
-                # lucent.icon stay empty). The Glass Theme of the four add-ons'
-                # own source windows is unchanged.
+                # 4.6.1: no resolution flags; service icon (AB Wizard
+                # artwork, lucent/providers) under the quality pill
+                icon = th._provider_icon(provider, site)
+                props['abs.svcicon'] = (MEDIA + icon) if icon else ''
                 found = self._badges(row)
             except Exception:
                 found = []
