@@ -1364,15 +1364,3 @@ msgstr "تعذّر الوصول إلى الخادم. تحقّق من اتصال�
 msgctxt "#30997"
 msgid "Auto Clean: removed %s items (%s)"
 msgstr "التنظيف التلقائي: حُذف %s عنصرًا (%s)"
-
-msgctxt "#30998"
-msgid "The build is installed.[CR][CR]Run the ABUKARIM TOOLS Installation Wizard now to finish setting up this box (skin, restore, add-ons, lists and patches)?"
-msgstr "اكتمل تثبيت البناء.[CR][CR]هل تريد تشغيل معالج التثبيت في ABUKARIM TOOLS الآن لإكمال إعداد الجهاز (الواجهة، والاستعادة، والإضافات، والقوائم، والتعديلات)؟"
-
-msgctxt "#30999"
-msgid "Run now"
-msgstr "تشغيل الآن"
-
-msgctxt "#31000"
-msgid "Later"
-msgstr "لاحقًا"

@@ -1,3 +1,7 @@
+v3.9.48
+- Removed the 3.9.47 prompt to run the ABUKARIM TOOLS Installation Wizard
+  after a build install + restart.
+
 v3.9.47
 - After a build is installed and Kodi restarts, the wizard waits for Home to
   settle and asks to run the ABUKARIM TOOLS Installation Wizard ("Run now" /
