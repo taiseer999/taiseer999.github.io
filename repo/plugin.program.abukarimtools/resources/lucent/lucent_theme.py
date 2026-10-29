@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Lucent theme helper - injected by AB Tools (plugin.program.abukarimtools).
-# LUCENT_HELPER_VERSION = 6
+# LUCENT_HELPER_VERSION = 7
 #
 # Normalises each add-on's own source-list and meta properties into one shared
 # 'lucent.*' property set, so a single Lucent window layout works for Fen Light,
@@ -139,23 +139,40 @@ def _provider_icon(*names):
 
 # AB Tools > Toggles > Lucent Theme: "Colored resolution & service icons".
 # Read from AB Tools' own state file (re-read at most every 5 s).
-_COLORED = {'at': 0.0, 'on': True}
+_COLORED = {'at': -99.0, 'on': True}
+try:
+	import threading
+	_COLORED_LOCK = threading.Lock()
+except Exception:
+	_COLORED_LOCK = None
 
 
-def _colored():
-	import time
-	now = time.monotonic()
-	if now - _COLORED['at'] < 5: return _COLORED['on']
-	_COLORED['at'] = now
+def _read_colored():
 	try:
 		import json, os, xbmcvfs
 		path = os.path.join(xbmcvfs.translatePath('special://profile/addon_data/'),
 							'plugin.program.abukarimtools', 'lucent.json')
 		with open(path, 'r', encoding='utf-8') as f:
-			_COLORED['on'] = bool(json.load(f).get('colored', True))
+			return bool(json.load(f).get('colored', True))
 	except Exception:
-		_COLORED['on'] = True
-	return _COLORED['on']
+		return True
+
+
+def _colored():
+	"""Red Light builds its list items on several threads at once: the setting
+	is read under a lock and the timestamp only moves AFTER the read, so no
+	thread can see a fresh timestamp with a stale value (helper v6 bug: the
+	first rows built in parallel kept the colored icons)."""
+	import time
+	if time.monotonic() - _COLORED['at'] < 5: return _COLORED['on']
+	if _COLORED_LOCK is None:
+		_COLORED['on'] = _read_colored(); _COLORED['at'] = time.monotonic()
+		return _COLORED['on']
+	with _COLORED_LOCK:
+		if time.monotonic() - _COLORED['at'] >= 5:
+			_COLORED['on'] = _read_colored()
+			_COLORED['at'] = time.monotonic()
+		return _COLORED['on']
 
 
 def lucent_item(listitem, profile):

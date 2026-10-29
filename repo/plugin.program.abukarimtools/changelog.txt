@@ -1,3 +1,12 @@
+v3.4.42
+- FIX Glass Theme: with "Colored resolution & service icons" OFF, random Red
+  Light rows still had the colored resolution badge + service icon (not related
+  to the stream having been played). Red Light builds its rows on several
+  threads; helper v6 moved the 5 s cache timestamp BEFORE reading lucent.json,
+  so rows built in that window got the default (colored = on). v7 reads under
+  a lock and stamps the cache only after the read. Repro: 40 parallel rows x
+  20 lists -> 25 wrong rows with v6, 0 with v7.
+
 v3.4.41
 - "Lucent Theme" renamed "Glass Theme" everywhere the user sees it: Toggles
   entry, switch-list title, notifications, Apply Patches / log results
