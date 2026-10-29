@@ -1,3 +1,14 @@
+v4.5.6
+- FIX: boot freeze with "Can't update database Addons33 from version 0 - it's
+  too old". origin_fix._connect used sqlite3.connect(path), which silently
+  CREATES a missing database; opened while Kodi was rebuilding Addons33.db (or
+  right after the rebuild tool deleted it) it left a schema-less file Kodi then
+  rejected forever and hung in FindAddons. Now: URI mode=rw (never creates),
+  db_ready() requires a version row (idVersion > 0) checked read-only, 0-byte
+  AddonsNN.db files are ignored, and the boot linking / post-rebuild relink
+  wait (wait_db_ready) for Kodi to finish the database first. icons_toggle
+  opens Textures DB the same way.
+
 v4.5.5
 - Search All: estimated average bitrate per stream on the card's info line
   ("~80 Mbps"): size (GB) x 8000 / running time (s). Running time from TMDb

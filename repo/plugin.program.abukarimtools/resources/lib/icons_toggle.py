@@ -131,7 +131,9 @@ def _bust_texture_cache(live_dir):
         return
     db = dbs[-1]
     try:
-        con = sqlite3.connect(db)
+        # 4.5.6: open existing DB only - never create a stub Textures DB
+        import pathlib
+        con = sqlite3.connect(pathlib.Path(db).resolve().as_uri() + '?mode=rw', uri=True, timeout=5.0)
         cur = con.cursor()
         for u in urls:
             cur.execute("SELECT id, cachedurl FROM texture WHERE url = ?", (u,))

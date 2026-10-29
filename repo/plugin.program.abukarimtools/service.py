@@ -1047,6 +1047,9 @@ def _recommend_restart_if_updated(monitor):
 
 def _relink_after_rebuild(monitor):
     from resources.lib import addons33_rebuild, origin_fix
+    if origin_fix.wait_db_ready(monitor, timeout=90) is None:
+        _log('Relink skipped: Addons DB not initialised by Kodi.')
+        return
     pending = addons33_rebuild.relink_pending()
     if not pending and not origin_fix.repo_cache_empty():
         # 3.1.11: still refresh+retry when something is linked only to an
@@ -1251,7 +1254,13 @@ def main():
     # fenced. No-op when everything is already linked.
     try:
         from resources.lib import origin_fix
-        res = origin_fix.fix_addons(None)
+        # 4.5.6: never link while Kodi is still creating / scanning the
+        # Addons database - wait for its version row first, skip otherwise.
+        if origin_fix.wait_db_ready(monitor, timeout=60) is None:
+            _log('Boot-time repo linking skipped: Addons DB not ready.')
+            res = {}
+        else:
+            res = origin_fix.fix_addons(None)
         if res.get('fixed'):
             _log('Repo linking applied on boot for: %s'
                  % ', '.join(sorted(res['fixed'])))
