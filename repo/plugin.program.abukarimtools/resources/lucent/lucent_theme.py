@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Lucent theme helper - injected by AB Tools (plugin.program.abukarimtools).
-# LUCENT_HELPER_VERSION = 8
+# LUCENT_HELPER_VERSION = 9
 #
 # Normalises each add-on's own source-list and meta properties into one shared
 # 'lucent.*' property set, so a single Lucent window layout works for Fen Light,
@@ -531,6 +531,49 @@ def lucent_fen_filter(window):
 			window.clear_filter()
 			return
 		window.select_item(window.filter_window_id, pick - offset)
-		window.filter_action(window.selection_actions[0])
+		# The second step ("Filter by Info...") opens the add-on's own
+		# select_dialog; swap in the themed one for the length of this call.
+		import sys
+		mod = sys.modules.get(type(window).__module__)
+		original = getattr(mod, 'select_dialog', None) if mod else None
+		if original is not None:
+			mod.select_dialog = _themed_select_dialog(window, original)
+		try:
+			window.filter_action(window.selection_actions[0])
+		finally:
+			if original is not None:
+				mod.select_dialog = original
 	except Exception as e:
 		_log('filter menu failed: %r' % e)
+
+
+def _themed_select_dialog(window, original):
+	"""Drop-in for Fen Light / Red Light select_dialog(function_list, **kwargs):
+	same return values (an entry of function_list, a list of them for
+	multi_choice, None on Back). Info filters show how many streams match."""
+	def themed(function_list, **kwargs):
+		try:
+			import json
+			items = json.loads(kwargs.get('items') or '[]')
+			labels = [i.get('line1', '') for i in items]
+			multi = kwargs.get('multi_choice', 'false') == 'true'
+			counts = None
+			if multi:
+				extras = [li.getProperty('extraInfo') or '' for li in (getattr(window, 'item_list', None) or [])]
+				counts = []
+				for entry in function_list:
+					tag = entry[1] if isinstance(entry, (tuple, list)) and len(entry) > 1 else None
+					ok_tag = isinstance(tag, str) and tag != 'ENG-OR-UNTAGGED' and extras
+					counts.append(sum(1 for e in extras if tag in e) if ok_tag else None)
+			# hide info options no stream has; keep the map back to function_list
+			shown = [n for n in range(len(labels)) if not counts or counts[n] is None or counts[n] > 0]
+			heading = _t('Filter by info') if multi else (kwargs.get('heading') or _t('Filter results'))
+			r = lucent_select(heading, [labels[n] for n in shown], multi=multi,
+							counts=[counts[n] for n in shown] if counts else None)
+			if multi:
+				return [function_list[shown[n]] for n in r] if r else None
+			return function_list[shown[r]] if r is not None and r >= 0 else None
+		except Exception as e:
+			_log('themed select_dialog failed, using the add-on dialog: %r' % e)
+			return original(function_list, **kwargs)
+	return themed
