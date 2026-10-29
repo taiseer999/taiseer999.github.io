@@ -1,3 +1,14 @@
+v4.5.5
+- Search All: estimated average bitrate per stream on the card's info line
+  ("~80 Mbps"): size (GB) x 8000 / running time (s). Running time from TMDb
+  (movie runtime; episode runtime, else the show's episode_run_time), fetched
+  every time the window opens (the meta thread now always runs). No estimate
+  for season / show packs or unknown size. When the line is too long the
+  source site goes first, then the service name (its icon stays), so size and
+  bitrate stay longest.
+- Filter menu: Bitrate over 40 / 20-40 / 10-20 / under 10 Mbps (estimated),
+  offered once the running time is known.
+
 v4.5.4
 - FIX POV, root cause (kodi.log 2026-10-29 11:26, 4.5.2: "argument of type
   'int' is not a container or iterable" in metadata.get_title): the box's

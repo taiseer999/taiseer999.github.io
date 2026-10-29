@@ -29,7 +29,7 @@ ID ranges:
   30770-30779  Installation Wizard - setup-in-progress backdrop, final restart
   30780-30799  Maintenance - Clean Unused Items
   30800-30813  Toggles - Glass Theme (internally 'Lucent', per add-on)
-  30814-30836  Search All (one stream list from every add-on)
+  30814-30840  Search All (one stream list from every add-on)
 """
 
 STRINGS = {
@@ -589,4 +589,8 @@ STRINGS = {
     30833: ('Size: over 40 GB', 'الحجم: أكثر من 40 غيغابايت'),
     30835: ('Filter', 'تصفية'),
     30836: ('Filter: %s', 'التصفية: %s'),
+    30837: ('Bitrate: over 40 Mbps (estimated)', 'معدل البت: أكثر من 40 ميغابت/ث (تقديري)'),
+    30838: ('Bitrate: 20 - 40 Mbps (estimated)', 'معدل البت: من 20 إلى 40 ميغابت/ث (تقديري)'),
+    30839: ('Bitrate: 10 - 20 Mbps (estimated)', 'معدل البت: من 10 إلى 20 ميغابت/ث (تقديري)'),
+    30840: ('Bitrate: under 10 Mbps (estimated)', 'معدل البت: أقل من 10 ميغابت/ث (تقديري)'),
 }

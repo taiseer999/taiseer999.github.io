@@ -1624,3 +1624,19 @@ msgctxt "#30836"
 msgid "Filter: %s"
 msgstr ""
 
+msgctxt "#30837"
+msgid "Bitrate: over 40 Mbps (estimated)"
+msgstr ""
+
+msgctxt "#30838"
+msgid "Bitrate: 20 - 40 Mbps (estimated)"
+msgstr ""
+
+msgctxt "#30839"
+msgid "Bitrate: 10 - 20 Mbps (estimated)"
+msgstr ""
+
+msgctxt "#30840"
+msgid "Bitrate: under 10 Mbps (estimated)"
+msgstr ""
+

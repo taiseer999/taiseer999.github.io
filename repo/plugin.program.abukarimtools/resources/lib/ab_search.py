@@ -318,6 +318,7 @@ def tmdb_window_meta(media):
             try:
                 e = _tmdb('tv/%s/season/%s/episode/%s' % (media['tmdb_id'], media['season'], media['episode']), tag)
                 out['ep_plot'] = e.get('overview') or ''
+                out['ep_runtime'] = e.get('runtime') or 0
                 out['ep_name_tmdb'] = e.get('name') or ''
             except Exception:
                 pass
@@ -334,6 +335,11 @@ def tmdb_window_meta(media):
         if d.get('vote_average'):
             out['rating'] = d['vote_average']
         out['genre'] = ', '.join(g.get('name', '') for g in (d.get('genres') or [])[:3])
+        # running time (minutes) for the bitrate estimate
+        if media['media_type'] == 'movie':
+            out['runtime'] = d.get('runtime') or 0
+        else:
+            out['runtime'] = out.pop('ep_runtime', 0) or ((d.get('episode_run_time') or [0])[0])
     except Exception as e:
         _log('window meta from TMDb failed: %s' % e, xbmc.LOGWARNING)
         return {}
@@ -391,6 +397,8 @@ _TITLE_PX = 600
 
 # size buckets in the filter menu (GB, string id)
 _SIZES = ((0, 5, 30830), (5, 15, 30831), (15, 40, 30832), (40, 1e9, 30833))
+# estimated bitrate buckets (Mbit/s, string id)
+_BITRATES = ((40, 1e9, 30837), (20, 40, 30838), (10, 20, 30839), (0, 10, 30840))
 
 
 def _size(item):
@@ -446,6 +454,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         self.ui_lock = threading.RLock()
         self.ready = False
         self.focused_key = None
+        self.runtime = 0              # minutes, from TMDb: bitrate = size / running time
         self.filters = []            # filter menu (RIGHT / "Filter" chip): [{'kind', 'value', 'label'}]
         self._badge_cache = {}
 
@@ -459,8 +468,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 _log('window meta: %s' % e)
         self.setProperty('abs.heading', T(30817))
         self.setProperty('abs.addons_heading', T(30818))
-        if not all(self.meta.get(k) for k in ('fanart', 'clearlogo', 'plot')):
-            threading.Thread(target=self._fill_meta, name='abs_meta').start()
+        # always: besides any missing art / plot it brings the running time
+        threading.Thread(target=self._fill_meta, name='abs_meta').start()
         self.ready = True
         self.session.listener = self.refresh
         self.refresh()
@@ -477,6 +486,17 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         extra = tmdb_window_meta(self.session.media)
         if not extra or self.session.closed:
             return
+        try:
+            runtime = int(extra.pop('runtime', 0) or 0)
+        except Exception:
+            runtime = 0
+        if runtime > 0 and not self.runtime:
+            self.runtime = runtime
+            _log('running time %d min - bitrate estimates on' % runtime)
+            with self.ui_lock:
+                self.shown = []               # rebuild the cards with the estimate
+                self._chips()
+                self._rows()
         meta = dict(self.meta)
         for k, v in extra.items():
             if not meta.get(k):
@@ -608,8 +628,22 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             self._badge_cache[id(item)] = found
         return found
 
+    def _mbps(self, row):
+        """Average bitrate estimate in Mbit/s: size x 8 / running time. None for
+        season / show packs (one size for many episodes) or unknown size."""
+        item = row['item']
+        if not self.runtime or row['size'] <= 0:
+            return None
+        if item.get('package') or item.get('pack') or item.get('last_season'):
+            return None
+        return row['size'] * 8000.0 / (self.runtime * 60.0)
+
     def _match(self, row, f):
         kind, value, item = f['kind'], f['value'], row['item']
+        if kind == 'bitrate':
+            lo, hi = value
+            rate = self._mbps(row)
+            return rate is not None and lo <= rate < hi
         if kind == 'service':
             return _provider(item).upper() == value
         if kind == 'site':
@@ -646,6 +680,9 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             counted('service', s, _t('Show %s only') % _pretty(s))
         for lo, hi, sid in _SIZES:
             counted('size', (lo, hi), T(sid))
+        if self.runtime:
+            for lo, hi, sid in _BITRATES:
+                counted('bitrate', (lo, hi), T(sid))
         sites = {}
         for r in base:
             s = _site(r['item']).upper()
@@ -750,7 +787,9 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         site = _site(item)
         size = _clean(item.get('size_label'))
         meta = []
-        for part in (provider, size, site):
+        rate = self._mbps(row)
+        rate = ('~%d Mbps' % round(rate)) if rate else ''
+        for part in (provider, size, rate, site):
             if part and part.upper() not in ('N/A', 'NA', 'NONE') and \
                     not any(part.upper() in m.upper() or m.upper() in part.upper() for m in meta):
                 meta.append(part)
@@ -761,6 +800,13 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                  'lucent.uncached': '', 'lucent.res': '', 'lucent.icon': ''}
         if th:
             try:
+                # too long: drop the site first, then the service name (its icon
+                # is on the card), keep size and the bitrate estimate longest
+                for drop in (site, provider, rate):
+                    if len(meta) <= 1 or th._px('  ·  '.join(meta).upper()) <= meta_px:
+                        break
+                    if drop in meta:
+                        meta.remove(drop)
                 while len(meta) > 1 and th._px('  ·  '.join(meta).upper()) > meta_px:
                     meta.pop()
                 props['lucent.title'] = th._fit(title, _TITLE_PX)
