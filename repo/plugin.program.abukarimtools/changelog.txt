@@ -1,3 +1,15 @@
+v4.5.4
+- FIX POV, root cause (kodi.log 2026-10-29 11:26, 4.5.2: "argument of type
+  'int' is not a container or iterable" in metadata.get_title): the box's
+  metacache.db was created by an older POV with columns (... meta, expires);
+  current POV inserts positionally as (... expires, meta), so the timestamp
+  lands in "meta" and the JSON in "expires" (also the earlier "'<' not
+  supported between str and int"). Reproduced with SQLite. Three always-on
+  patches to caches/meta_cache.py: INSERTs name their columns (seasons also
+  OR REPLACE); a metadata row that is not dict/list or whose expiry is not a
+  number is a cache miss (POV fetches again and rewrites it correctly); same
+  for function_cache rows.
+
 v4.5.3
 - FIX Search All left column empty except title + year (screenshot
   2026-10-29): TMDbHelper's player URL has ids/names only and the focused item

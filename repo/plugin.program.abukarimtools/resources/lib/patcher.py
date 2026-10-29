@@ -1584,6 +1584,31 @@ PATCHES = [
      'new': "\t\texpiry, meta = self.jsloads(cache_data)\n\t\ttry:\n\t\t\tif int(expiry) < current_time: return None\n\t\texcept (TypeError, ValueError): return None  # ABK: text expiry from metacache.db\n",
      'already_patched_check': '# ABK: text expiry from metacache.db',
      'description': 'POV meta_cache.py - text expiry in the memory cache no longer breaks source search'},
+    # 4.5.4: the real cause - a metacache.db made by an older POV has its
+    # columns in another order (... meta, expires instead of ... expires, meta).
+    # POV inserts by position, so meta lands in "expires" and the timestamp in
+    # "meta"; reading back gives a number as meta ("argument of type 'int' is
+    # not a container or iterable" in get_title) or text as expiry. Insert by
+    # column name, and treat a row that is not a meta dict as a cache miss so
+    # POV fetches it again and the row is rewritten correctly.
+    {'addon_id': 'plugin.video.pov', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'lib', 'caches', 'meta_cache.py'),
+     'old': "SET_MOVIE_SHOW = 'INSERT OR REPLACE INTO metadata VALUES (?, ?, ?, ?, ?, ?)'\nSET_SEASON = 'INSERT INTO season_metadata VALUES (?, ?, ?)'\nSET_FUNCTION = 'INSERT INTO function_cache VALUES (?, ?, ?)'\n",
+     'new': "SET_MOVIE_SHOW = 'INSERT OR REPLACE INTO metadata (db_type, tmdb_id, imdb_id, tvdb_id, expires, meta) VALUES (?, ?, ?, ?, ?, ?)'  # ABK: by column name\nSET_SEASON = 'INSERT OR REPLACE INTO season_metadata (tmdb_id, expires, meta) VALUES (?, ?, ?)'\nSET_FUNCTION = 'INSERT INTO function_cache (string_id, expires, data) VALUES (?, ?, ?)'\n",
+     'already_patched_check': '# ABK: by column name',
+     'description': 'POV meta_cache.py - write by column name (metacache.db from an older POV has another column order)'},
+    {'addon_id': 'plugin.video.pov', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'lib', 'caches', 'meta_cache.py'),
+     'old': "\t\tif not data: return None\n\t\tmeta, expiry = self.jsloads(data[0]), data[1]\n",
+     'new': "\t\tif not data: return None\n\t\ttry: meta, expiry = self.jsloads(data[0]), int(data[1])\n\t\texcept (TypeError, ValueError): return None  # ABK: row written in the wrong columns\n\t\tif not isinstance(meta, (dict, list)): return None\n",
+     'already_patched_check': '# ABK: row written in the wrong columns',
+     'description': 'POV meta_cache.py - a row written in the wrong columns is a cache miss, not a crash'},
+    {'addon_id': 'plugin.video.pov', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'lib', 'caches', 'meta_cache.py'),
+     'old': "\t\tif not cache_data: return None\n\t\treturn self.jsloads(cache_data[0])\n",
+     'new': "\t\tif not cache_data: return None\n\t\ttry: int(cache_data[1])\n\t\texcept (TypeError, ValueError): return None  # ABK: function row in the wrong columns\n\t\treturn self.jsloads(cache_data[0])\n",
+     'already_patched_check': '# ABK: function row in the wrong columns',
+     'description': 'POV meta_cache.py - function cache row written in the wrong columns is a miss'},
     # ── Search All (3.4.48): Toggles > Glass Theme > "Search All add-ons" ──
     # Red Light gets Fen Light's device-select modes back (Fen Light has them);
     # TMDbHelper gets the "AB Search All" player that opens resources/lib/ab_search.py.
