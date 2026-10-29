@@ -1405,9 +1405,40 @@ def _ab_tags(active):
 def ab_card(state):
     """Glass stream card (same as the add-ons' windows) + add-on tags."""
     xml = card(state, {'full_prop': 'abs.never', 'full_label': ''})
+    # 4.5.7: no coloured resolution flag and no service icon in Search All
+    import re as _re
+    xml, a = _re.subn(r'[ \t]*<!-- Resolution flag \(Arctic Fuse 3 colour flags\) -->\n'
+                      r'[ \t]*<control type="image">(?:(?!</control>).)*?</control>\n', '', xml, flags=_re.S)
+    xml, b = _re.subn(r'[ \t]*<!-- Debrid / service icon \(AB Wizard account manager artwork\) -->\n'
+                      r'[ \t]*<control type="image">(?:(?!</control>).)*?</control>\n', '', xml, flags=_re.S)
+    assert a == 1 and b == 1, (a, b)
+    xml = xml.replace(' + String.IsEmpty(ListItem.Property(lucent.res))', '')
     marker = '\n                    <!-- Full search -->'
     assert marker in xml
-    return xml.replace(marker, _ab_tags(state == 'active') + marker, 1)
+    # 4.5.8: service code (RD / AD / PM / TB ...) as a plain pill under the quality
+    svc = '''
+                        <control type="image">
+                            <left>20</left>
+                            <top>70</top>
+                            <width>124</width>
+                            <height>36</height>
+                            <texture border="18">lucent/pill42.png</texture>
+                            <colordiffuse>%s</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc))</visible>
+                        </control>
+                        <control type="label">
+                            <left>20</left>
+                            <top>70</top>
+                            <width>124</width>
+                            <height>36</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFDCE2E7</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.svc)][/B]</label>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc))</visible>
+                        </control>''' % ('2EFFFFFF' if state == 'active' else '14FFFFFF')
+    return xml.replace(marker, svc + _ab_tags(state == 'active') + marker, 1)
 
 
 def ab_chip(focused):

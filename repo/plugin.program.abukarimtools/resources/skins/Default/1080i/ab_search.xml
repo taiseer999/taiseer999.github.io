@@ -805,7 +805,7 @@
                             <height>42</height>
                             <texture border="21">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>1AFFFFFF</colordiffuse>
-                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq)) + String.IsEmpty(ListItem.Property(lucent.res))</visible>
+                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
                         </control>
                         <control type="image">
                             <left>20</left>
@@ -826,18 +826,7 @@
                             <aligny>center</aligny>
                             <textcolor>FFDCE2E7</textcolor>
                             <label>[B]$INFO[ListItem.Property(lucent.quality)][/B]</label>
-                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq)) + String.IsEmpty(ListItem.Property(lucent.res))</visible>
-                        </control>
-                        <!-- Resolution flag (Arctic Fuse 3 colour flags) -->
-                        <control type="image">
-                            <left>20</left>
-                            <top>14</top>
-                            <width>124</width>
-                            <height>46</height>
-                            <aspectratio>keep</aspectratio>
-                            <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/res/$INFO[ListItem.Property(lucent.res)].png</texture>
-                            <colordiffuse>D9FFFFFF</colordiffuse>
-                            <visible>!String.IsEmpty(ListItem.Property(lucent.res))</visible>
+                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
                         </control>
                         <control type="label">
                             <left>20</left>
@@ -850,17 +839,6 @@
                             <textcolor>FFFFFFFF</textcolor>
                             <label>[B]$INFO[ListItem.Property(lucent.quality)][/B]</label>
                             <visible>!String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
-                        </control>
-                        <!-- Debrid / service icon (AB Wizard account manager artwork) -->
-                        <control type="image">
-                            <left>58</left>
-                            <top>66</top>
-                            <width>48</width>
-                            <height>48</height>
-                            <aspectratio>keep</aspectratio>
-                            <texture>$INFO[ListItem.Property(lucent.icon)]</texture>
-                            <colordiffuse>D9FFFFFF</colordiffuse>
-                            <visible>!String.IsEmpty(ListItem.Property(lucent.icon))</visible>
                         </control>
                         <control type="label">
                             <left>168</left>
@@ -950,6 +928,27 @@
                             </control>
                         </control>
                     </control>
+                        <control type="image">
+                            <left>20</left>
+                            <top>70</top>
+                            <width>124</width>
+                            <height>36</height>
+                            <texture border="18">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>14FFFFFF</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc))</visible>
+                        </control>
+                        <control type="label">
+                            <left>20</left>
+                            <top>70</top>
+                            <width>124</width>
+                            <height>36</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFDCE2E7</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.svc)][/B]</label>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc))</visible>
+                        </control>
                         <control type="image">
                             <left>820</left>
                             <top>49</top>
@@ -1176,7 +1175,7 @@
                             <height>42</height>
                             <texture border="21">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>1AFFFFFF</colordiffuse>
-                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq)) + String.IsEmpty(ListItem.Property(lucent.res))</visible>
+                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
                         </control>
                         <control type="image">
                             <left>20</left>
@@ -1197,18 +1196,7 @@
                             <aligny>center</aligny>
                             <textcolor>FFDCE2E7</textcolor>
                             <label>[B]$INFO[ListItem.Property(lucent.quality)][/B]</label>
-                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq)) + String.IsEmpty(ListItem.Property(lucent.res))</visible>
-                        </control>
-                        <!-- Resolution flag (Arctic Fuse 3 colour flags) -->
-                        <control type="image">
-                            <left>20</left>
-                            <top>14</top>
-                            <width>124</width>
-                            <height>46</height>
-                            <aspectratio>keep</aspectratio>
-                            <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/res/$INFO[ListItem.Property(lucent.res)].png</texture>
-                            <colordiffuse>D9FFFFFF</colordiffuse>
-                            <visible>!String.IsEmpty(ListItem.Property(lucent.res))</visible>
+                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
                         </control>
                         <control type="label">
                             <left>20</left>
@@ -1221,17 +1209,6 @@
                             <textcolor>FFFFFFFF</textcolor>
                             <label>[B]$INFO[ListItem.Property(lucent.quality)][/B]</label>
                             <visible>!String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
-                        </control>
-                        <!-- Debrid / service icon (AB Wizard account manager artwork) -->
-                        <control type="image">
-                            <left>58</left>
-                            <top>66</top>
-                            <width>48</width>
-                            <height>48</height>
-                            <aspectratio>keep</aspectratio>
-                            <texture>$INFO[ListItem.Property(lucent.icon)]</texture>
-                            <colordiffuse>D9FFFFFF</colordiffuse>
-                            <visible>!String.IsEmpty(ListItem.Property(lucent.icon))</visible>
                         </control>
                         <control type="label">
                             <left>168</left>
@@ -1321,6 +1298,27 @@
                             </control>
                         </control>
                     </control>
+                        <control type="image">
+                            <left>20</left>
+                            <top>70</top>
+                            <width>124</width>
+                            <height>36</height>
+                            <texture border="18">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>14FFFFFF</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc))</visible>
+                        </control>
+                        <control type="label">
+                            <left>20</left>
+                            <top>70</top>
+                            <width>124</width>
+                            <height>36</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFDCE2E7</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.svc)][/B]</label>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc))</visible>
+                        </control>
                         <control type="image">
                             <left>820</left>
                             <top>49</top>
@@ -1556,7 +1554,7 @@
                             <height>42</height>
                             <texture border="21">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>FFFFFFFF</colordiffuse>
-                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq)) + String.IsEmpty(ListItem.Property(lucent.res))</visible>
+                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
                         </control>
                         <control type="image">
                             <left>20</left>
@@ -1577,18 +1575,7 @@
                             <aligny>center</aligny>
                             <textcolor>FF0B1119</textcolor>
                             <label>[B]$INFO[ListItem.Property(lucent.quality)][/B]</label>
-                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq)) + String.IsEmpty(ListItem.Property(lucent.res))</visible>
-                        </control>
-                        <!-- Resolution flag (Arctic Fuse 3 colour flags) -->
-                        <control type="image">
-                            <left>20</left>
-                            <top>14</top>
-                            <width>124</width>
-                            <height>46</height>
-                            <aspectratio>keep</aspectratio>
-                            <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/res/$INFO[ListItem.Property(lucent.res)].png</texture>
-                            <colordiffuse>FFFFFFFF</colordiffuse>
-                            <visible>!String.IsEmpty(ListItem.Property(lucent.res))</visible>
+                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
                         </control>
                         <control type="label">
                             <left>20</left>
@@ -1601,17 +1588,6 @@
                             <textcolor>FFFFFFFF</textcolor>
                             <label>[B]$INFO[ListItem.Property(lucent.quality)][/B]</label>
                             <visible>!String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
-                        </control>
-                        <!-- Debrid / service icon (AB Wizard account manager artwork) -->
-                        <control type="image">
-                            <left>58</left>
-                            <top>66</top>
-                            <width>48</width>
-                            <height>48</height>
-                            <aspectratio>keep</aspectratio>
-                            <texture>$INFO[ListItem.Property(lucent.icon)]</texture>
-                            <colordiffuse>FFFFFFFF</colordiffuse>
-                            <visible>!String.IsEmpty(ListItem.Property(lucent.icon))</visible>
                         </control>
                         <control type="label">
                             <left>168</left>
@@ -1701,6 +1677,27 @@
                             </control>
                         </control>
                     </control>
+                        <control type="image">
+                            <left>20</left>
+                            <top>70</top>
+                            <width>124</width>
+                            <height>36</height>
+                            <texture border="18">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>2EFFFFFF</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc))</visible>
+                        </control>
+                        <control type="label">
+                            <left>20</left>
+                            <top>70</top>
+                            <width>124</width>
+                            <height>36</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFDCE2E7</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.svc)][/B]</label>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc))</visible>
+                        </control>
                         <control type="image">
                             <left>820</left>
                             <top>49</top>

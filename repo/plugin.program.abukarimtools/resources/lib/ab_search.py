@@ -386,6 +386,32 @@ _PRETTY = {'ALLDEBRID': 'AllDebrid', 'REAL-DEBRID': 'Real-Debrid', 'REALDEBRID':
            'DEBRID-LINK': 'Debrid-Link', 'DEBRIDLINK': 'Debrid-Link'}
 
 
+# 4.5.8: short service code on the card (replaces the coloured icon)
+_SHORT = (('REAL', 'RD'), ('ALLDEBRID', 'AD'), ('ALL-DEBRID', 'AD'), ('PREMIUMIZE', 'PM'),
+          ('TORBOX', 'TB'), ('OFFCLOUD', 'OC'), ('EASYNEWS', 'EN'), ('EASYDEBRID', 'ED'),
+          ('DEBRID-LINK', 'DL'), ('DEBRIDLINK', 'DL'))
+
+
+def _service_code(provider):
+    up = (provider or '').upper().replace(' ', '')
+    for key, code in _SHORT:
+        if up.startswith(key):
+            return code
+    if up in ('RD', 'AD', 'PM', 'TB', 'OC', 'EN', 'ED', 'DL'):
+        return up
+    return ''
+
+
+_SERVICE_ORDER = ('RD', 'AD', 'PM', 'TB', 'OC', 'EN', 'ED', 'DL')
+
+
+def _row_service(row):
+    code = row.get('svc')
+    if code is None:
+        code = row['svc'] = _service_code(_provider(row['item']))
+    return code
+
+
 def _pretty(name):
     return _PRETTY.get(name.upper(), name.title() if name.isupper() else name)
 
@@ -449,6 +475,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         self.tags = {key: (name, tag) for key, _a, name, tag, _ok in self.session.addons}
         self.rows, self.shown = [], []
         self.f_addon, self.f_quality = None, None
+        self.f_service = None         # 4.5.9: service chip (RD / AD / PM ...)
         self.chips = []
         self.picked = None
         self.ui_lock = threading.RLock()
@@ -575,6 +602,16 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             count = sum(1 for r in self.rows if r['group'] == q)
             if count:
                 chips.append(('quality', q, q.replace('P', 'p'), count, '', False))
+        # 4.5.9: one chip per debrid service, only when there are two or more
+        svc = {}
+        for r in self.rows:
+            code = _row_service(r)
+            if code:
+                svc[code] = svc.get(code, 0) + 1
+        if len(svc) > 1:
+            for code in _SERVICE_ORDER:
+                if code in svc:
+                    chips.append(('service', code, code, svc[code], '', False))
         if self.rows:
             chips.append(('filter', None, T(30835), len(self.filters) or '', '', False))
         return chips
@@ -597,8 +634,10 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             li.setLabel2('' if loading else str(count))
             li.setProperty('abs.key', key)
             li.setProperty('abs.loading', 'true' if loading else '')
-            active = (kind == 'all' and not self.f_addon and not self.f_quality and not self.filters) or \
+            active = (kind == 'all' and not self.f_addon and not self.f_quality and not self.f_service
+                      and not self.filters) or \
                      (kind == 'addon' and value == self.f_addon) or (kind == 'quality' and value == self.f_quality) or \
+                     (kind == 'service' and value == self.f_service) or \
                      (kind == 'filter' and bool(self.filters))
             li.setProperty('abs.active', 'true' if active else '')
 
@@ -608,6 +647,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             if self.f_addon and all(k != self.f_addon for k, _i in r['refs']):
                 continue
             if self.f_quality and r['group'] != self.f_quality:
+                continue
+            if self.f_service and _row_service(r) != self.f_service:
                 continue
             out.append(r)
         return out
@@ -797,11 +838,12 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         meta_px = 610 - ntags * 70
         title = _clean(item.get('display_name') or item.get('name'))
         props = {'lucent.quality': q, 'lucent.lowq': 'true' if q in ('CAM', 'SCR', 'TELE', 'HC') else '',
-                 'lucent.uncached': '', 'lucent.res': '', 'lucent.icon': ''}
+                 'lucent.uncached': '', 'lucent.res': '', 'lucent.icon': '',
+                 'abs.svc': _service_code(provider)}
         if th:
             try:
-                # too long: drop the site first, then the service name (its icon
-                # is on the card), keep size and the bitrate estimate longest
+                # too long: drop the site first, then the service name, keep
+                # size and the bitrate estimate longest
                 for drop in (site, provider, rate):
                     if len(meta) <= 1 or th._px('  ·  '.join(meta).upper()) <= meta_px:
                         break
@@ -811,11 +853,10 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                     meta.pop()
                 props['lucent.title'] = th._fit(title, _TITLE_PX)
                 props['lucent.meta'] = th._fit('  ·  '.join(meta), meta_px)
-                if th._colored():
-                    if not props['lucent.lowq']:
-                        props['lucent.res'] = th._RES.get(q, '')
-                    icon = th._provider_icon(provider, site)
-                    props['lucent.icon'] = (MEDIA + icon) if icon else ''
+                # 4.5.7: Search All shows no coloured resolution flags and no
+                # service/source icons - plain quality pill only (lucent.res /
+                # lucent.icon stay empty). The Glass Theme of the four add-ons'
+                # own source windows is unchanged.
                 found = self._badges(row)
             except Exception:
                 found = []
@@ -840,9 +881,11 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                     return self._filter_menu()
                 with self.ui_lock:
                     if kind == 'all':
-                        self.f_addon = self.f_quality = None
+                        self.f_addon = self.f_quality = self.f_service = None
                     elif kind == 'addon':
                         self.f_addon = None if self.f_addon == value else value
+                    elif kind == 'service':
+                        self.f_service = None if self.f_service == value else value
                     else:
                         self.f_quality = None if self.f_quality == value else value
                     self.focused_key = None
@@ -859,7 +902,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             if self.filters:                    # Back first drops the filter-menu filters
                 self.filters = []
                 return self._apply_filters()
-            if self.getFocusId() == LIST and (self.f_addon or self.f_quality):
+            if self.getFocusId() == LIST and (self.f_addon or self.f_quality or self.f_service):
                 self.setFocusId(CHIPS)          # first Back from a filtered list: back to the chips
                 return
             self.close()
