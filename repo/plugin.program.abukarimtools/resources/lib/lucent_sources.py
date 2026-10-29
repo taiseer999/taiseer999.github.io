@@ -252,7 +252,7 @@ def apply(addon_path, profile):
             missing += ['%s: %s' % (os.path.basename(rel), m) for m in miss]
             planned[path] = (text, new_text, crlf)
         if missing:
-            return False, ('[%s] Lucent: %s %s changed upstream, theme not applied (%s)'
+            return False, ('[%s] Glass theme: %s %s changed upstream, theme not applied (%s)'
                            % (aid, label, _version(addon_path), '; '.join(missing[:3])))
 
         written = 0
@@ -285,10 +285,10 @@ def apply(addon_path, profile):
                 _save_py(path, new, crlf)
                 written += 1
         if written:
-            return True, '[%s] Patched OK: Lucent theme for %s (%d files)' % (aid, label, written)
+            return True, '[%s] Patched OK: Glass theme for %s (%d files)' % (aid, label, written)
         return True, '[%s] Already patched – skipping.' % aid
     except Exception as e:
-        return False, '[%s] Lucent: %s' % (aid, e)
+        return False, '[%s] Glass theme: %s' % (aid, e)
 
 
 def revert(addon_path, profile):
@@ -317,8 +317,8 @@ def revert(addon_path, profile):
             _save_py(path, _strip_hooks(text), crlf)
             changed += 1
     if problems:
-        return False, ('[%s] Lucent: no stock copy of %s – reinstall %s to restore it'
+        return False, ('[%s] Glass theme: no stock copy of %s – reinstall %s to restore it'
                        % (aid, ', '.join(problems), label))
     if changed:
-        return True, '[%s] Patched OK (reverted, toggle off): Lucent theme for %s' % (aid, label)
+        return True, '[%s] Patched OK (reverted, toggle off): Glass theme for %s' % (aid, label)
     return None

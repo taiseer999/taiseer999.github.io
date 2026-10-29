@@ -1480,3 +1480,47 @@ msgctxt "#30799"
 msgid "%d item(s) could not be removed - see kodi.log."
 msgstr ""
 
+msgctxt "#30800"
+msgid "Glass Theme (Source Windows)"
+msgstr ""
+
+msgctxt "#30801"
+msgid "Glass Theme - choose the add-ons"
+msgstr ""
+
+msgctxt "#30802"
+msgid "%d / %d On"
+msgstr ""
+
+msgctxt "#30803"
+msgid "None of Fen Light, Red Light, POV or Umbrella is installed."
+msgstr ""
+
+msgctxt "#30804"
+msgid "Glass Theme on: %s"
+msgstr ""
+
+msgctxt "#30805"
+msgid "Original look restored: %s"
+msgstr ""
+
+msgctxt "#30806"
+msgid "Could not change: %s - see kodi.log."
+msgstr ""
+
+msgctxt "#30807"
+msgid "Shows the next time the source list opens."
+msgstr ""
+
+msgctxt "#30808"
+msgid "Colored resolution & service icons"
+msgstr ""
+
+msgctxt "#30809"
+msgid "Colored resolution & service icons on"
+msgstr ""
+
+msgctxt "#30810"
+msgid "Original quality label & add-on icons"
+msgstr ""
+

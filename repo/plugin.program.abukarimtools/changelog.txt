@@ -1,3 +1,37 @@
+v3.4.41
+- "Lucent Theme" renamed "Glass Theme" everywhere the user sees it: Toggles
+  entry, switch-list title, notifications, Apply Patches / log results
+  (Arabic: السمة الزجاجية). Internal names stay lucent_* (module, state file
+  lucent.json, lucent.* properties, media/lucent/, XML markers), so installed
+  add-ons and saved switches are untouched. Behaviour unchanged from 3.4.40.
+
+v3.4.40
+- Lucent Theme switch list gains a row "Colored resolution & service icons"
+  (all add-ons, default On). Off = the original look: text quality pill
+  (4K / 1080P ...) and each add-on's own provider icon (Umbrella has none).
+  No re-patching: the helper (version 6) reads "colored" from
+  addon_data/plugin.program.abukarimtools/lucent.json (cached 5 s) when it
+  builds the list; takes effect the next time the source list opens.
+- Strings 30808-30810 (en/ar).
+
+v3.4.39
+- Lucent Theme is now a Toggles-menu feature with one switch per add-on,
+  instead of a single entry in the Apply Patches checklist.
+  * Toggles > "Lucent Theme (Source Windows)" opens a switch list (Fen Light,
+    Red Light, POV, Umbrella - only installed ones shown; label2 shows
+    "2 / 4 On"). "Done" applies at once: switched on -> Lucent installed,
+    switched off -> original windows restored and hooks removed. Back after
+    flipping asks to save or discard. Notification names what changed.
+  * New lucent_toggle.py; state in addon_data/.../lucent.json.
+  * patcher: the four Lucent entries are gated by 'feature': 'lucent_<add-on>'
+    (same mechanism as the AF3 trailers), so boot sweeps and the update
+    watchdog re-apply only switched-on add-ons; _revert_disabled restores
+    switched-off ones (now runs even when no checklist toggle is off).
+  * 'lucent_sources' removed from the Apply Patches checklist. Migration: an
+    add-on with no saved switch follows the old checklist state (on, unless
+    it had been turned off there).
+- New icon resources/icons/lucent_theme.png; strings 30800-30807 (en/ar).
+
 v3.4.38
 - FIX Lucent Theme: RIGHT still did nothing in Red Light (debug log: five
   Right actions reached window 13005, Red Light ran a fresh interpreter so the

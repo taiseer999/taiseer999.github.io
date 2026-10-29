@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Lucent theme helper - injected by AB Tools (plugin.program.abukarimtools).
-# LUCENT_HELPER_VERSION = 5
+# LUCENT_HELPER_VERSION = 6
 #
 # Normalises each add-on's own source-list and meta properties into one shared
 # 'lucent.*' property set, so a single Lucent window layout works for Fen Light,
@@ -137,6 +137,27 @@ def _provider_icon(*names):
 	return ''
 
 
+# AB Tools > Toggles > Lucent Theme: "Colored resolution & service icons".
+# Read from AB Tools' own state file (re-read at most every 5 s).
+_COLORED = {'at': 0.0, 'on': True}
+
+
+def _colored():
+	import time
+	now = time.monotonic()
+	if now - _COLORED['at'] < 5: return _COLORED['on']
+	_COLORED['at'] = now
+	try:
+		import json, os, xbmcvfs
+		path = os.path.join(xbmcvfs.translatePath('special://profile/addon_data/'),
+							'plugin.program.abukarimtools', 'lucent.json')
+		with open(path, 'r', encoding='utf-8') as f:
+			_COLORED['on'] = bool(json.load(f).get('colored', True))
+	except Exception:
+		_COLORED['on'] = True
+	return _COLORED['on']
+
+
 def lucent_item(listitem, profile):
 	"""Add lucent.* properties to one source list item (reads the add-on's own ones)."""
 	try:
@@ -158,8 +179,12 @@ def lucent_item(listitem, profile):
 				'lucent.meta': _fit('  ·  '.join(meta), _META_PX),
 				'lucent.lowq': 'true' if quality in _LOWQ else '',
 				'lucent.uncached': 'true' if 'UNCACHED' in source_type.upper() else '',
-				'lucent.res': '' if quality in _LOWQ else _RES.get(quality, ''),
-				'lucent.icon': _provider_icon(provider, site)}
+				'lucent.res': '', 'lucent.icon': ''}
+		if _colored():
+			props['lucent.res'] = '' if quality in _LOWQ else _RES.get(quality, '')
+			props['lucent.icon'] = _provider_icon(provider, site)
+		elif keys['icon']:
+			props['lucent.icon'] = get(keys['icon'])     # the add-on's own provider icon
 		found = badges(get(keys['info']), quality)
 		for n in range(_MAX_BADGES):
 			props['lucent.badge_%d' % (n + 1)] = found[n] if n < len(found) else ''

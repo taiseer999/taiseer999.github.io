@@ -28,6 +28,7 @@ ICONS  = {
     'dplex_toggle':   ADDON_PATH + 'resources/icons/dplex_toggle.png',
     'korean_toggle':  ADDON_PATH + 'resources/icons/korean_toggle.png',
     'icons_toggle':   ADDON_PATH + 'resources/icons/icons_toggle.png',
+    'lucent_theme':   ADDON_PATH + 'resources/icons/lucent_theme.png',
     'af3_trailers':   ADDON_PATH + 'resources/icons/af3_trailers.png',
     'af3_waves':      ADDON_PATH + 'resources/icons/af3_waves.png',
     'font_scale':     ADDON_PATH + 'resources/icons/font_scale.png',
@@ -99,6 +100,7 @@ CATEGORIES = [
         ('dplex_toggle',   30010),
         ('korean_toggle',  30011),
         ('icons_toggle',   30020),
+        ('lucent_theme',   30800),
         ('af3_trailers',   30430),
         ('af3_waves',      30603),
         ('font_scale',     30740),
@@ -117,6 +119,8 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 # 3.1.19: an action, not a folder - as a folder its URL became
                 # the container path, so the skin reload re-ran it in a loop
                 'af3_trailers', 'af3_waves',
+                # 3.4.39: Lucent Theme per add-on (switch list dialog)
+                'lucent_theme',
                 # 3.4.6: Font Size (original / +5% / -5%)
                 'font_scale',
                 # 3.2 tools: dialogs only, never folders (same reason as above)
@@ -332,6 +336,12 @@ def _switch_state(mode):
 
 def _mode_label2(mode):
     """label2 for multi-state entries (3.4.6: Font Size shows its mode)."""
+    if mode == 'lucent_theme':
+        try:
+            from resources.lib import lucent_toggle
+            return lucent_toggle.summary()
+        except Exception:
+            return None
     if mode == 'font_scale':
         try:
             from resources.lib import font_scale
@@ -534,6 +544,9 @@ def router():
     elif mode == 'af3_waves':
         from resources.lib import af3_waves_toggle
         af3_waves_toggle.run()
+    elif mode == 'lucent_theme':
+        from resources.lib import lucent_toggle
+        lucent_toggle.run()
     elif mode == 'font_scale':
         from resources.lib import font_scale
         font_scale.run()

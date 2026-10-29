@@ -1550,23 +1550,25 @@ PATCHES = [
         'fallback_repl': _AF3_SUBTOOLS_POPUP_XML.replace('\\', '\\\\') + r'\1',
         'description': 'AF3 Subtitle Buttons - matching slots in OSD popups (no duplicate icons)',
     },
-    # ── Lucent theme for Fen Light, Red Light, POV & Umbrella (toggle 'lucent_sources') ──
+    # ── Lucent theme for Fen Light, Red Light, POV & Umbrella ──
+    # 3.4.39: a Toggles-menu feature with one switch per add-on (lucent_toggle.py),
+    # gated by 'feature': 'lucent_<profile>' - no longer in the Apply Patches list.
     # Source results + scraping/resolving windows restyled after the Lucent theme
     # for Seren (djdirty60/Seren-Thema). One entry per add-on; lucent_sources.py
     # copies the helper/textures/XMLs, adds fenced hooks, and backs up the stock
     # XMLs so switching the toggle off restores them (see _revert_disabled).
-    {'addon_id': 'plugin.video.fenlight', 'lucent': 'fenlight', 'toggle': 'lucent_sources', 'not_found_ok': True,
+    {'addon_id': 'plugin.video.fenlight', 'lucent': 'fenlight', 'feature': 'lucent_fenlight', 'not_found_ok': True,
      'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'sources_results.xml'),
-     'old': '', 'new': '', 'description': 'Fen Light - Lucent source windows'},
-    {'addon_id': 'plugin.video.redlight', 'lucent': 'redlight', 'toggle': 'lucent_sources', 'not_found_ok': True,
+     'old': '', 'new': '', 'description': 'Fen Light - Glass theme source windows'},
+    {'addon_id': 'plugin.video.redlight', 'lucent': 'redlight', 'feature': 'lucent_redlight', 'not_found_ok': True,
      'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'sources_playback.xml'),
-     'old': '', 'new': '', 'description': 'Red Light - Lucent source windows'},
-    {'addon_id': 'plugin.video.pov', 'lucent': 'pov', 'toggle': 'lucent_sources', 'not_found_ok': True,
+     'old': '', 'new': '', 'description': 'Red Light - Glass theme source windows'},
+    {'addon_id': 'plugin.video.pov', 'lucent': 'pov', 'feature': 'lucent_pov', 'not_found_ok': True,
      'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'sources_results.xml'),
-     'old': '', 'new': '', 'description': 'POV - Lucent source windows'},
-    {'addon_id': 'plugin.video.umbrella', 'lucent': 'umbrella', 'toggle': 'lucent_sources', 'not_found_ok': True,
+     'old': '', 'new': '', 'description': 'POV - Glass theme source windows'},
+    {'addon_id': 'plugin.video.umbrella', 'lucent': 'umbrella', 'feature': 'lucent_umbrella', 'not_found_ok': True,
      'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'source_results.xml'),
-     'old': '', 'new': '', 'description': 'Umbrella - Lucent source windows'},
+     'old': '', 'new': '', 'description': 'Umbrella - Glass theme source windows'},
 ]
 
 
@@ -2208,7 +2210,6 @@ TOGGLE_GROUPS = [
     ('a4ksubs_quiet',    'a4kSubtitles: Hide Account/API-Key Nags'),
     ('af3_subtools',     'AF3: Subtitle Buttons (DexSubtitles Sync & Cycler)'),
     ('dexhub_entry',     'DexHub: Plugin Entry Fix (Kodi 22)'),
-    ('lucent_sources',   'Lucent Theme: Fen Light, Red Light, POV & Umbrella'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
 
@@ -2332,6 +2333,12 @@ def _save_disabled(disabled_toggles):
 
 def _feature_on(name):
     """Is a Toggles-menu feature switched on? Unknown features count as off."""
+    if name.startswith('lucent_'):
+        try:
+            from resources.lib import lucent_toggle
+            return lucent_toggle.enabled(name[len('lucent_'):])
+        except Exception:
+            return False
     if name == 'af3_trailers':
         try:
             from resources.lib.af3_trailers import config as _trailers_config
@@ -2972,25 +2979,27 @@ def reload_skin_if_pending():
 def _revert_disabled(addon_ids=None):
     """Undo entries that carry 'revert_when_off' = (patched, stock) when their
     toggle is DISABLED. Plain one-shot string swap; yields (ok, msg)."""
+    wanted = set(addon_ids) if addon_ids else None
+    # Lucent theme (Toggles menu, per add-on): put the stock windows back and
+    # remove the hooks for every add-on whose switch is off.
+    from resources.lib import lucent_sources
+    for aid, profile in lucent_sources.PROFILE_OF.items():
+        if wanted is not None and aid not in wanted:
+            continue
+        if _feature_on('lucent_' + profile):
+            continue
+        addon_path = _resolve_addon_dir(aid)
+        if not addon_path:
+            continue
+        try:
+            res = lucent_sources.revert(addon_path, profile)
+        except Exception as e:
+            res = (False, '[%s] Glass theme revert failed: %s' % (aid, e))
+        if res:
+            yield res
     disabled = _load_disabled()
     if not disabled:
         return
-    wanted = set(addon_ids) if addon_ids else None
-    # Lucent theme: put the stock windows back and remove the hooks.
-    if 'lucent_sources' in disabled:
-        from resources.lib import lucent_sources
-        for aid, profile in lucent_sources.PROFILE_OF.items():
-            if wanted is not None and aid not in wanted:
-                continue
-            addon_path = _resolve_addon_dir(aid)
-            if not addon_path:
-                continue
-            try:
-                res = lucent_sources.revert(addon_path, profile)
-            except Exception as e:
-                res = (False, '[%s] Lucent revert failed: %s' % (aid, e))
-            if res:
-                yield res
     for patch in _all_patches():
         pair = patch.get('revert_when_off')
         if not pair or _toggle_of(patch) not in disabled:

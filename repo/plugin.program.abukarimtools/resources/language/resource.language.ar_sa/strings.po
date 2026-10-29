@@ -1480,3 +1480,47 @@ msgctxt "#30799"
 msgid "%d item(s) could not be removed - see kodi.log."
 msgstr "تعذّر حذف %d عنصر، راجع سجل Kodi."
 
+msgctxt "#30800"
+msgid "Glass Theme (Source Windows)"
+msgstr "السمة الزجاجية (نوافذ المصادر)"
+
+msgctxt "#30801"
+msgid "Glass Theme - choose the add-ons"
+msgstr "السمة الزجاجية - اختر الإضافات"
+
+msgctxt "#30802"
+msgid "%d / %d On"
+msgstr "مفعّلة: %d من %d"
+
+msgctxt "#30803"
+msgid "None of Fen Light, Red Light, POV or Umbrella is installed."
+msgstr "لم تُثبَّت أيٌّ من الإضافات Fen Light أو Red Light أو POV أو Umbrella."
+
+msgctxt "#30804"
+msgid "Glass Theme on: %s"
+msgstr "فُعِّلت السمة الزجاجية: %s"
+
+msgctxt "#30805"
+msgid "Original look restored: %s"
+msgstr "أُعيد الشكل الأصلي: %s"
+
+msgctxt "#30806"
+msgid "Could not change: %s - see kodi.log."
+msgstr "تعذّر التغيير: %s، راجع سجل Kodi."
+
+msgctxt "#30807"
+msgid "Shows the next time the source list opens."
+msgstr "يظهر التغيير عند فتح قائمة المصادر في المرة القادمة."
+
+msgctxt "#30808"
+msgid "Colored resolution & service icons"
+msgstr "شارات الدقة وأيقونات الخدمات الملوّنة"
+
+msgctxt "#30809"
+msgid "Colored resolution & service icons on"
+msgstr "فُعِّلت شارات الدقة وأيقونات الخدمات الملوّنة"
+
+msgctxt "#30810"
+msgid "Original quality label & add-on icons"
+msgstr "أُعيدت تسمية الجودة الأصلية وأيقونات الإضافة"
+

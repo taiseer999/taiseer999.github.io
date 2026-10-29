@@ -28,6 +28,7 @@ ID ranges:
   30760-30769  Installation Wizard - confirm before skipping a step
   30770-30779  Installation Wizard - setup-in-progress backdrop, final restart
   30780-30799  Maintenance - Clean Unused Items
+  30800-30810  Toggles - Glass Theme (internally 'Lucent', per add-on)
 """
 
 STRINGS = {
@@ -548,4 +549,17 @@ STRINGS = {
     30797: ('Skin leftover', 'بقايا واجهة'),
     30798: ('Old sources file', 'ملف مصادر قديم'),
     30799: ('%d item(s) could not be removed - see kodi.log.', 'تعذّر حذف %d عنصر، راجع سجل Kodi.'),
+    # ---- 3.4.39: Toggles - Lucent Theme per add-on (30800-30809) ----
+    30800: ('Glass Theme (Source Windows)', 'السمة الزجاجية (نوافذ المصادر)'),
+    30801: ('Glass Theme - choose the add-ons', 'السمة الزجاجية - اختر الإضافات'),
+    30802: ('%d / %d On', 'مفعّلة: %d من %d'),
+    30803: ('None of Fen Light, Red Light, POV or Umbrella is installed.',
+            'لم تُثبَّت أيٌّ من الإضافات Fen Light أو Red Light أو POV أو Umbrella.'),
+    30804: ('Glass Theme on: %s', 'فُعِّلت السمة الزجاجية: %s'),
+    30805: ('Original look restored: %s', 'أُعيد الشكل الأصلي: %s'),
+    30806: ('Could not change: %s - see kodi.log.', 'تعذّر التغيير: %s، راجع سجل Kodi.'),
+    30807: ('Shows the next time the source list opens.', 'يظهر التغيير عند فتح قائمة المصادر في المرة القادمة.'),
+    30808: ('Colored resolution & service icons', 'شارات الدقة وأيقونات الخدمات الملوّنة'),
+    30809: ('Colored resolution & service icons on', 'فُعِّلت شارات الدقة وأيقونات الخدمات الملوّنة'),
+    30810: ('Original quality label & add-on icons', 'أُعيدت تسمية الجودة الأصلية وأيقونات الإضافة'),
 }
