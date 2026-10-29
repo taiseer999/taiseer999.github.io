@@ -1,3 +1,19 @@
+v3.4.45
+- Glass Theme RIGHT filter (Red Light / Fen Light), from the 07:59 recording:
+  * Filters did not stack: DV+Atmos gave 64, then "Filter by Info > DV" gave
+    123 because the add-on always filters its full item_list. The helper now
+    remembers the list each filter produced (set_filter is wrapped for the
+    call) and runs filter_action on THAT list (item_list swapped for the call,
+    then restored). "Show all results" or BACK goes back to everything.
+  * Menu counts were the full-list numbers (409 / 959 ...) while 64 rows were
+    showing; they are now counted on the rows on screen, and entries that
+    would match nothing are hidden.
+  * "Filter by Info" -> "No Results" surprise (DV + Atmos + DTS-X, only 1
+    DTS-X stream): counts now update after every tick - each option shows how
+    many streams match it together with what is already ticked, and the Apply
+    row shows the current total.
+- Helper v10.
+
 v3.4.44
 - Glass Theme: the second step of the RIGHT filter menu ("Filter by Info..."
   in Red Light / Fen Light) still opened the add-on's own select.xml (OK /

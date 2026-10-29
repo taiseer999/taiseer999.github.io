@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Lucent theme helper - injected by AB Tools (plugin.program.abukarimtools).
-# LUCENT_HELPER_VERSION = 9
+# LUCENT_HELPER_VERSION = 10
 #
 # Normalises each add-on's own source-list and meta properties into one shared
 # 'lucent.*' property set, so a single Lucent window layout works for Fen Light,
@@ -350,10 +350,12 @@ def _split_count(label):
 	return (m.group(1).strip(), m.group(2)) if m else (label, '')
 
 
-def lucent_select(heading, labels, subtitle='', multi=False, counts=None):
+def lucent_select(heading, labels, subtitle='', multi=False, counts=None, live=None):
 	"""Themed replacement for Dialog().select / multiselect. Returns the picked
 	index (-1 on Back) or, with multi=True, the list of picked indexes (None on
-	Back). Falls back to Kodi's own dialog if the window can't be shown."""
+	Back). Falls back to Kodi's own dialog if the window can't be shown.
+	live(checked_set) -> {index: count, None: count_of_all_checked} refreshes
+	the multi-select counts after every tick."""
 	import xbmcgui
 	rows = []
 	for n, lab in enumerate(labels):
@@ -402,6 +404,14 @@ def lucent_select(heading, labels, subtitle='', multi=False, counts=None):
 			else:
 				self.checked.add(n); li.setProperty('lucent.checked', 'true')
 			self.ctrl.getListItem(0).setLabel('%s (%d)' % (_t('Apply'), len(self.checked)) if self.checked else _t('Apply'))
+			if live:
+				try:
+					fresh = live(set(self.checked))
+					for i in range(len(rows)):
+						if i in fresh: self.ctrl.getListItem(i + 1).setLabel2(str(fresh[i]))
+					self.ctrl.getListItem(0).setLabel2(str(fresh.get(None, '')) if self.checked else '')
+				except Exception as e:
+					_log('live counts failed: %r' % e)
 
 		def onAction(self, action):
 			if action.getId() in _BACK:
@@ -511,65 +521,101 @@ def _log(msg):
 		pass
 
 
+def _fen_base(window):
+	"""The rows currently shown: the last filtered list while a filter is
+	active, else the full list - so a new filter narrows what is on screen."""
+	if getattr(window, 'filter_applied', False):
+		cur = getattr(window, '_lucent_current', None)
+		if cur: return cur
+	return list(getattr(window, 'item_list', None) or [])
+
+
+def _fen_count(base, ftype, fvalue):
+	vals = fvalue.split('/') if '/' in fvalue else [fvalue]
+	return sum(1 for i in base if i.getProperty(ftype) in vals)
+
+
 def lucent_fen_filter(window):
-	"""Open the add-on's own filter entries (filter list 2100) as a menu and
-	apply the pick through its own filter_action - no focus moves involved."""
+	"""RIGHT on the Fen Light / Red Light stream list: the add-on's own filter
+	entries in the themed menu, applied through its own filter_action, but
+	(1) on top of the filter already active, (2) with counts for what is on
+	screen, (3) "Filter by Info" in the themed multi-select with live counts."""
 	try:
-		import xbmcgui
-		items = list(getattr(window, 'filter_list', None) or [])
-		_log('RIGHT -> filter menu (%d entries, filter applied=%s)' % (len(items), getattr(window, 'filter_applied', False)))
-		if not items: return
-		labels = [li.getProperty('label') for li in items]
-		offset = 0
-		if getattr(window, 'filter_applied', False):
-			labels.insert(0, _t('Show all results'))
-			offset = 1
-		total = window.getProperty('total_results')
-		pick = lucent_select(_t('Filter results'), labels, (_t('%s results') % total) if total else '')
-		if pick < 0: return
-		if offset and pick == 0:
+		import sys
+		entries = list(getattr(window, 'filter_list', None) or [])
+		applied = bool(getattr(window, 'filter_applied', False))
+		base = _fen_base(window)
+		_log('RIGHT -> filter menu (%d entries, filter applied=%s, %d rows on screen)' % (len(entries), applied, len(base)))
+		if not entries: return
+		labels, counts, index = [], [], []
+		if applied:
+			labels.append(_t('Show all results')); counts.append(len(getattr(window, 'item_list', []) or [])); index.append(-1)
+		for n, li in enumerate(entries):
+			ftype, fvalue = li.getProperty('filter_type'), li.getProperty('filter_value')
+			main = _split_count(li.getProperty('label'))[0]
+			cnt = _fen_count(base, ftype, fvalue) if ftype in ('quality', 'provider') else None
+			if cnt == 0: continue                    # nothing on screen would match
+			labels.append(main); counts.append(cnt); index.append(n)
+		pick = lucent_select(_t('Filter results'), labels, _t('%s results') % len(base), counts=counts)
+		if pick is None or pick < 0: return
+		if index[pick] == -1:
+			window._lucent_current = None
 			window.clear_filter()
 			return
-		window.select_item(window.filter_window_id, pick - offset)
-		# The second step ("Filter by Info...") opens the add-on's own
-		# select_dialog; swap in the themed one for the length of this call.
-		import sys
+		window.select_item(window.filter_window_id, index[pick])
 		mod = sys.modules.get(type(window).__module__)
 		original = getattr(mod, 'select_dialog', None) if mod else None
+		full, orig_set_filter = window.item_list, window.set_filter
+		def capture(filtered_list):
+			window._lucent_current = list(filtered_list)
+			return orig_set_filter(filtered_list)
 		if original is not None:
-			mod.select_dialog = _themed_select_dialog(window, original)
+			mod.select_dialog = _themed_select_dialog(window, original, base)
+		window.item_list = base                  # filter_action filters self.item_list
+		window.set_filter = capture
 		try:
 			window.filter_action(window.selection_actions[0])
 		finally:
+			window.item_list = full
+			del window.set_filter                # back to the class method
 			if original is not None:
 				mod.select_dialog = original
 	except Exception as e:
 		_log('filter menu failed: %r' % e)
 
 
-def _themed_select_dialog(window, original):
+def _themed_select_dialog(window, original, base=None):
 	"""Drop-in for Fen Light / Red Light select_dialog(function_list, **kwargs):
 	same return values (an entry of function_list, a list of them for
-	multi_choice, None on Back). Info filters show how many streams match."""
+	multi_choice, None on Back). Info filters count the rows on screen and the
+	counts follow the ticks (all ticked tags must match, as the add-on does)."""
 	def themed(function_list, **kwargs):
 		try:
 			import json
 			items = json.loads(kwargs.get('items') or '[]')
 			labels = [i.get('line1', '') for i in items]
 			multi = kwargs.get('multi_choice', 'false') == 'true'
-			counts = None
+			counts, tags, live = None, [], None
 			if multi:
-				extras = [li.getProperty('extraInfo') or '' for li in (getattr(window, 'item_list', None) or [])]
-				counts = []
+				rows = base if base is not None else (getattr(window, 'item_list', None) or [])
+				extras = [li.getProperty('extraInfo') or '' for li in rows]
 				for entry in function_list:
 					tag = entry[1] if isinstance(entry, (tuple, list)) and len(entry) > 1 else None
-					ok_tag = isinstance(tag, str) and tag != 'ENG-OR-UNTAGGED' and extras
-					counts.append(sum(1 for e in extras if tag in e) if ok_tag else None)
-			# hide info options no stream has; keep the map back to function_list
+					tags.append(tag if isinstance(tag, str) and tag != 'ENG-OR-UNTAGGED' else None)
+				counts = [sum(1 for e in extras if t in e) if t else None for t in tags]
 			shown = [n for n in range(len(labels)) if not counts or counts[n] is None or counts[n] > 0]
+			if multi:
+				def live(checked):
+					want = [tags[shown[c]] for c in checked if tags[shown[c]]]
+					pool = [e for e in extras if all(w in e for w in want)]
+					out = {None: len(pool)}
+					for i, n in enumerate(shown):
+						if tags[n] and i not in checked: out[i] = sum(1 for e in pool if tags[n] in e)
+						elif tags[n]: out[i] = len(pool)
+					return out
 			heading = _t('Filter by info') if multi else (kwargs.get('heading') or _t('Filter results'))
 			r = lucent_select(heading, [labels[n] for n in shown], multi=multi,
-							counts=[counts[n] for n in shown] if counts else None)
+							counts=[counts[n] for n in shown] if counts else None, live=live)
 			if multi:
 				return [function_list[shown[n]] for n in r] if r else None
 			return function_list[shown[r]] if r is not None and r >= 0 else None
