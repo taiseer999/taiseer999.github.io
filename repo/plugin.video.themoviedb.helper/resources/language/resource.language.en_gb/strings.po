@@ -78,7 +78,7 @@ msgstr ""
 
 #: /resources/settings.xml
 msgctxt "#32013"
-msgid "Get watched indicators, episode counts, and resume points"
+msgid "Sync watched and resume status"
 msgstr ""
 
 msgctxt "#30010"
@@ -195,7 +195,7 @@ msgctxt "#32040"
 msgid "All seasons"
 msgstr ""
 
-#: /resources/tmdbhelper/lib/items/directories/trakt/lists_sync.py
+#: /resources/tmdbhelper/lib/items/directories/sync/lists_standard.py
 msgctxt "#32041"
 msgid "Your In-Progress TV Shows"
 msgstr ""
@@ -212,7 +212,7 @@ msgctxt "#30028"
 msgid "Galician (Spain)"
 msgstr ""
 
-#: /resources/tmdbhelper/lib/items/directories/trakt/lists_sync.py
+#: /resources/tmdbhelper/lib/items/directories/sync/lists_standard.py
 msgctxt "#32045"
 msgid "Your In-Progress Movies"
 msgstr ""
@@ -227,7 +227,7 @@ msgctxt "#32047"
 msgid "Undrop TV show"
 msgstr ""
 
-#: /resources/tmdbhelper/lib/items/directories/trakt/lists_sync.py
+#: /resources/tmdbhelper/lib/items/directories/sync/lists_standard.py
 msgctxt "#32048"
 msgid "Dropped TV Shows"
 msgstr ""
@@ -2289,7 +2289,7 @@ msgstr ""
 
 #: /resources/tmdbhelper/lib/script/sync.py
 msgctxt "#32517"
-msgid "Add your personal MDbList API key in TMDbHelper settings."
+msgid "Add your personal MDbList API key in the MDbList module settings."
 msgstr ""
 
 #: /resources/tmdbhelper/lib/script/sync.py
@@ -2349,7 +2349,7 @@ msgstr ""
 
 #: /resources/settings.xml
 msgctxt "#32534"
-msgid "Trakt sync progress notifications"
+msgid "Sync progress notifications"
 msgstr ""
 
 #: /resources/tmdbhelper/lib/items/database/itemmeta_factories/concrete_classes/person.py
@@ -2655,7 +2655,7 @@ msgstr ""
 
 #: /resources/tmdbhelper/lib/script/sync/provider_setup.py
 msgctxt "#32550"
-msgid "Sync provider setup"
+msgid "TMDbHelper Sync Provider"
 msgstr ""
 
 #: /resources/tmdbhelper/lib/script/sync/provider_install.py
@@ -2680,7 +2680,7 @@ msgstr ""
 
 #: /resources/tmdbhelper/lib/script/sync/provider_setup.py
 msgctxt "#32555"
-msgid "This list requires a sync provider. Choose a provider to use, install or enable. Installation uses your installed repositories."
+msgid "{0} requires a sync provider. Choose a provider to use, install or enable. Installation uses your installed repositories."
 msgstr ""
 
 #: /resources/tmdbhelper/lib/script/sync/provider_setup.py
@@ -2721,4 +2721,209 @@ msgstr ""
 #: /resources/tmdbhelper/lib/script/method/sync_provider.py
 msgctxt "#32563"
 msgid "You are enabling {0}, a third-party sync service outside TMDbHelper's trusted list. Only continue if you trust this service and understand the risks, including sharing your viewing activity and account data."
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32564"
+msgid "Image cache size"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32565"
+msgid "Size limit per folder. Unlimited disables cleanup."
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32566"
+msgid "Unlimited"
+msgstr ""
+
+#: /resources/settings.xml /resources/tmdbhelper/lib/script/method/image_cache.py
+msgctxt "#32567"
+msgid "Clean image cache"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/method/image_cache.py
+msgctxt "#32568"
+msgid "Scanning {0}: {1} of {2} files"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/method/image_cache.py
+msgctxt "#32569"
+msgid "Cleaning {0}"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/method/image_cache.py
+msgctxt "#32570"
+msgid "Space reclaimed: {0}"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/method/image_cache.py
+msgctxt "#32571"
+msgid "Image cache cleanup finished. Space reclaimed: {0}."
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/method/image_cache.py
+msgctxt "#32572"
+msgid "Image cache cleanup cancelled. Space reclaimed: {0}."
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/method/image_cache.py
+msgctxt "#32573"
+msgid "Image cache cleanup is disabled while the target size is Unlimited."
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32574"
+msgid "Save settings and clean to the selected size limit."
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32575"
+msgid "32 MB"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32576"
+msgid "64 MB"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32577"
+msgid "128 MB"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32578"
+msgid "256 MB"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32579"
+msgid "512 MB"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/sync/provider_directory.py
+msgctxt "#32580"
+msgid "The route \"{0}\" is not available in TMDbHelper. It may be available in the {1} sync module. Install or enable this module?"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32581"
+msgid "Ratings providers"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32582"
+msgid "Select the installed providers to use for ratings. Cached ratings are retained."
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/ratings/providers.py
+msgctxt "#32583"
+msgid "{0}. {1} ({2})"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/ratings/providers.py
+msgctxt "#32584"
+msgid "Enabled"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/ratings/providers.py
+msgctxt "#32585"
+msgid "Disabled"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/ratings/providers.py
+msgctxt "#32586"
+msgid "Move up"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/ratings/providers.py
+msgctxt "#32587"
+msgid "Move down"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/ratings/providers.py
+msgctxt "#32588"
+msgid "No ratings providers are installed."
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32591"
+msgid "Priority"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32592"
+msgid "Arrange ratings providers in priority order. Providers higher in the list take precedence over lower providers. Cached ratings are retained."
+msgstr ""
+
+#: /resources/settings.xml /resources/tmdbhelper/lib/player/dialog/episode_groups.py
+msgctxt "#32593"
+msgid "Episode numbering"
+msgstr ""
+
+#: /resources/settings.xml /resources/tmdbhelper/lib/player/dialog/episode_groups.py
+msgctxt "#32594"
+msgid "Default"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32595"
+msgid "Select"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32596"
+msgid "Group"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32597"
+msgid "Choose which season and episode numbers to pass to players. Default always uses TMDb numbering. Select asks which episode group to use when groups are available. Group uses the current episode group's numbering when playback starts from a group, otherwise TMDb numbering. A player's episode_groups option overrides this setting."
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32598"
+msgid "Stats"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32599"
+msgid "Select the providers to scrobble playback to. Install or enable supported providers here, or clear all selections to disable scrobbling."
+msgstr ""
+
+#: /resources/tmdbhelper/lib/items/directories/base/basedir_sync.py
+msgctxt "#32600"
+msgid "Currently Watching"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/items/directories/base/basedir_sync.py
+msgctxt "#32602"
+msgid "Your Next Movies"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32603"
+msgid "Update movie collections in the background"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32604"
+msgid "After Your Next Movies is first used, discover new collections daily and refresh older collections within the daily request limit. Bundled collection data is refreshed with addon updates."
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32605"
+msgid "Daily movie collection request limit"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32606"
+msgid "Maximum collection-detail requests per day, including retries. New collections take priority over the oldest overdue entries. Higher limits help if bundled data has not been refreshed for a long time."
+msgstr ""
+
+#: /resources/tmdbhelper/lib/items/directories/sync/mapper_nextmovies.py
+msgctxt "#32607"
+msgid "Drop collection"
 msgstr ""

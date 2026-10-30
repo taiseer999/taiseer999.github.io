@@ -4,6 +4,7 @@ from jurialmunkey.ftools import cached_property
 from jurialmunkey.checks import has_arg_value
 from tmdbhelper.lib.items.database.database import ItemDetailsDatabase
 from tmdbhelper.lib.files.dbdata import DatabaseStatements
+from tmdbhelper.lib.files.sqlite_mutex import SQLiteMutex
 
 
 class SyncItemDetailsDatabase(ItemDetailsDatabase):
@@ -212,6 +213,26 @@ class SyncDataGetterAllItemsWatched(SyncDataGetterAllItems):
     clause_keys = ('last_watched_at', )
 
 
+class SyncDataGetterWatchedOn(SyncDataGetterAllItemsWatched):
+    query_clauses = (
+        'item_type=?',
+        "(? IS NULL OR STRFTIME('%Y', last_watched_at, 'localtime')=?)",
+        "(? IS NULL OR STRFTIME('%m', last_watched_at, 'localtime')=?)",
+        "(? IS NULL OR STRFTIME('%d', last_watched_at, 'localtime')=?)",
+        "(? IS NULL OR STRFTIME('%w', last_watched_at, 'localtime')=?)",
+    )
+
+    @property
+    def query_values(self):
+        return (
+            self.item_type,
+            self.watched_on.year, self.watched_on.year,
+            self.watched_on.month, self.watched_on.month,
+            self.watched_on.day, self.watched_on.day,
+            self.watched_on.weekday, self.watched_on.weekday,
+        )
+
+
 class SyncDataGetterWatchedHistoryStats(SyncDataGetterAllItemsWatched):
     days = 30
     query_clauses = (
@@ -263,6 +284,25 @@ class SyncDataGetterAllItemsPlayback(SyncDataGetterAllItems):
 
 class SyncDataGetterAllUnwatchedItemsPlayback(SyncDataGetterAllUnwatchedItems):
     clause_keys = ('playback_progress', )
+
+
+class SyncDataGetterCurrentlyWatchingPlayback(SyncDataGetterAllItemsPlayback):
+    query_clauses = (
+        'item_type=?',
+        'playback_progress > 0 AND playback_progress < 100',
+        'NOT EXISTS (SELECT 1 FROM simplecache AS parent '
+        'WHERE parent.item_type=? AND parent.tmdb_id=simplecache.tmdb_id '
+        'AND (parent.progress_watched_hidden_at IS NOT NULL OR parent.dropped_hidden_at IS NOT NULL))',
+    )
+    additional_keys = ('playback_paused_at', )
+
+    @property
+    def query_values(self):
+        return ('episode', 'show', )
+
+    def get_items(self):
+        self.instance_syncdata.sync('show', ('progress_watched_hidden_at', 'dropped_hidden_at'))
+        return super().get_items()
 
 
 class SyncDataGetterUnHiddenShowEpisodesUpNext(SyncDataGetterDroppedWatchedUnHidden):
@@ -352,6 +392,11 @@ class SyncDataGetters:
     def get_all_watched_getter(self, item_type):
         return self.get_item_type_getter(SyncDataGetterAllItemsWatched, item_type)
 
+    def get_watched_on_getter(self, item_type, watched_on):
+        sd = self.get_item_type_getter(SyncDataGetterWatchedOn, item_type)
+        sd.watched_on = watched_on
+        return sd
+
     def get_watched_history_stats_getter(self, item_type, days):
         sd = self.get_item_type_getter(SyncDataGetterWatchedHistoryStats, item_type)
         sd.days = days
@@ -367,6 +412,9 @@ class SyncDataGetters:
 
     def get_all_unwatched_playback_getter(self, item_type):
         return self.get_item_type_getter(SyncDataGetterAllUnwatchedItemsPlayback, item_type)
+
+    def get_currently_watching_playback_getter(self):
+        return self.get_item_type_getter(SyncDataGetterCurrentlyWatchingPlayback, 'episode')
 
     def get_tmdb_id_getter(self, sync_data_class, tmdb_id):
         sd = sync_data_class(self)
@@ -406,14 +454,6 @@ class SyncData(SyncDataGetters):
         self._registry = registry
 
     @cached_property
-    def core_sync(self):
-        return self.get_core_sync()
-
-    def get_core_sync(self):
-        from tmdbhelper.lib.sync.trakt.datasync import TraktSyncData
-        return TraktSyncData(self)
-
-    @cached_property
     def registry(self):
         return self.get_registry()
 
@@ -431,22 +471,20 @@ class SyncData(SyncDataGetters):
 
     def get_sync_provider(self, sync_type):
         from tmdbhelper.lib.sync.providers.features import SYNC_FEATURES
-        if sync_type in self.core_sync.sync_classes:
-            return
-        provider = self.registry.get_selected_provider(SYNC_FEATURES[sync_type])
+        from tmdbhelper.lib.sync.providers.services import SERVICE_SYNC_FEATURES
+        provider = (
+            self.registry.get_service_sync_provider(sync_type)
+            if sync_type in SERVICE_SYNC_FEATURES else
+            self.registry.get_selected_provider(SYNC_FEATURES[sync_type]))
         if provider is not None and provider.is_authorized():
             return provider
 
     def get_sync_class(self, sync_type):
-        if sync_type in self.core_sync.sync_classes:
-            return self.core_sync.get_sync_class(sync_type)
         provider = self.get_sync_provider(sync_type)
         if provider is not None:
             return provider.get_sync_class(sync_type)
 
     def create_sync(self, sync_type, item_type):
-        if sync_type in self.core_sync.sync_classes:
-            return self.core_sync.create_sync(sync_type, item_type)
         provider = self.get_sync_provider(sync_type)
         if provider is None:
             return
@@ -497,23 +535,29 @@ class SyncData(SyncDataGetters):
         return data[0] if data else None
 
     def sync(self, item_type, keys, forced=False):
+        from tmdbhelper.lib.sync.providers.services import SERVICE_SYNC_FEATURES
         sync_types = {self.routes[key] for key in keys if self.routes.get(key)}
         for sync_type in sync_types:
             sync_item = self.create_sync(sync_type, item_type)
             if sync_item is not None:
                 sync_item.sync(forced=forced)
-            elif sync_type not in self.disabled_sync_types:
+            elif sync_type not in SERVICE_SYNC_FEATURES and sync_type not in self.disabled_sync_types:
                 self.clear_disabled_sync_type(sync_type)
 
     def clear_disabled_sync_type(self, sync_type):
         from tmdbhelper.lib.sync.providers.features import SYNC_FEATURES
         keys = tuple(key for key, key_sync_type in self.routes.items() if key_sync_type == sync_type)
         self.cache.del_column_values(keys=keys)
-        if sync_type in self.core_sync.sync_classes:
-            self.core_sync.clear_activities((sync_type,))
-        else:
-            self.clear_unavailable_provider_activities(SYNC_FEATURES[sync_type])
+        self.clear_unavailable_provider_activities(SYNC_FEATURES[sync_type])
         self.disabled_sync_types.add(sync_type)
+
+    def invalidate_activity(self, item_id):
+        lockname = f'{self.cache._db_file}.datasync.{item_id}.lockfile'
+        with SQLiteMutex(lockname, timeout=300, kodi_log=self.cache.kodi_log) as mutex_lock:
+            if mutex_lock.lockstate == -1:  # Abort or Timeout
+                return
+            self.cache.del_item(table='lactivities', item_id=item_id)
+            self.window.get_property(f'syncdecorators.timerlock.sync_data.{item_id}', clear_property=True)
 
     def clear_unavailable_provider_activities(self, feature):
         provider_id = self.registry.get_selected_provider_id(feature)
@@ -524,8 +568,7 @@ class SyncData(SyncDataGetters):
             return  # An unsupported sync type must not invalidate the provider's supported data.
         from tmdbhelper.lib.sync.activity import SyncLastActivities
         for item_id in self.cache.get_provider_activity_ids(provider_id):
-            self.cache.del_item(table='lactivities', item_id=item_id)
-            self.window.get_property(f'syncdecorators.timerlock.sync_data.{item_id}', clear_property=True)
+            self.invalidate_activity(item_id)
         SyncLastActivities.clear_provider(self.window, provider_id)
         self.unavailable_providers.add(provider_id)
 
