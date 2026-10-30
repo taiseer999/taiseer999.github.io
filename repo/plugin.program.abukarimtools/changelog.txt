@@ -1,3 +1,122 @@
+v4.6.13
+- FIX Search All froze after the results were shown (kodi.log 2026-10-30
+  06:40 and 06:49, macOS, Kodi 22 / Python 3.14): all four add-ons had
+  returned (99 / 98 / 117 / 115 sources) and the window drew them, then
+  ignored every key until default.py was torn down 8 minutes later with
+  SwigDirector_WindowXMLDialog left in memory. The list was built from FIVE
+  background threads at once (one per add-on + the TMDb meta thread) -
+  the same class of freeze as 3.4.23 (window calls from a worker thread).
+- Every window call now happens on the dialog's own thread (the one in
+  doModal):
+  * provider threads and the meta thread only change data and post
+    JSONRPC.NotifyAll (sender plugin.program.abukarimtools, message
+    abs_refresh, data {rid});
+  * _Pump (xbmc.Monitor) is created on the dialog thread, so Kodi runs its
+    onNotification there (inside doModal's MakePendingCalls) and it calls
+    SearchWindow.pump() -> refresh();
+  * TMDb meta (running time, art, plot) is applied by the dialog thread too;
+  * no rebuild while a nested dialog is open (filter menu, "Play with"),
+    it catches up when that closes; any key press also catches up (fallback
+    if a notification were ever lost);
+  * stream rows are created offscreen (no GUI lock per row).
+- Tested with real worker threads and a thread-checking mock of Kodi:
+  4.6.12 made 1517 window calls from the worker threads, 4.6.13 makes 0;
+  results, bitrate estimate, Expand / Collapse, chips and play all work;
+  with notifications blocked a key press fills the list.
+
+v4.6.12
+- AF3: Lucent Look - the Lucent focus (4.6.11) is now optional. New last row
+  in the Toggles > "AF3: Lucent Look" picker: "Focus colour: Lucent white" /
+  "Focus colour: my own colour", flips the skin bool abk.lucent.ownfocus.
+  Live (the variables are read every frame), no skin reload. Default stays
+  Lucent white.
+- Includes_Colors.xml: the four focus values are now gated on
+  Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus).
+  The anchor now includes the start of AF3's next line, so it only matches an
+  unpatched skin; a skin patched by 4.6.11 is upgraded in place by the regex
+  fallback. Checked both paths on AF3 50.11.31: one Lucent line per variable,
+  second sweep "already patched".
+- Lucent components (glass OSD buttons, info-page pills) stay white either
+  way - they are part of the look, not the focus colour.
+- Strings 30858 / 30859 (EN + AR).
+
+v4.6.11
+- AF3: Lucent Look, phase 4 - Lucent focus across the whole skin (same
+  Toggles entry, same skin bool abk.lucent):
+  * Includes_Colors.xml: ColorHighlight ffffffff, ColorSelected ff0b1119,
+    ColorSelected_30 4d0b1119, ColorSelectedInverted ffffffff are inserted as
+    the FIRST value of each variable, gated on abk.lucent, so they win over
+    Skin.String(focuscolor.name) and RevertSelectedText while the look is on.
+  * This is AF3's own default pairing (white highlight, dark text), so every
+    AF3 view already supports it; the user's focus colour returns on Off.
+    Variables are evaluated live - no extra skin reload.
+  * af3_highlight (genre line / widget titles in the highlight colour) now
+    shows them white while the look is on.
+- Verified on AF3 50.11.31 with all 80 AF3 patcher entries: no failure,
+  Includes_Colors.xml valid, second sweep "already patched".
+
+v4.6.10
+- AF3: Lucent Look, phase 3 - the info page (same Toggles entry, same skin
+  bool abk.lucent; nothing changes with it off):
+  * Button_Underline_Switcher (Includes_Buttons.xml) - the action buttons
+    of the video info page (grouplists 9000: Play / Browse, Trailer, Trakt,
+    Versions ..., Options) and the plot window tabs - become Lucent pills:
+    56 px pill60, 10 % white when idle, solid white with dark text when
+    focused, 24 % white for the active tab (alt textures). Same first-tag-
+    wins method as phase 2: one gated include right after <nested />.
+  * The two info-page button rows use a 14 px gap instead of 40
+    (ABK_Lucent_PillGap before AF3's <itemgap>).
+  * New texture media/abk_lucent/pill60.png; the toggle checks it.
+- Verified on AF3 50.11.31 with all 76 AF3 patcher entries (PPI, trailers,
+  vertical plot, highlight, subtitle tools ...): no failure, 22 Lucent
+  entries, every gated include defined, XML valid (except the old PPI
+  dialog with its bare "&", unchanged).
+
+v4.6.9
+- AF3: Lucent Look, phase 2 - the player (same Toggles entry, same skin
+  bool abk.lucent; nothing changes with it off):
+  * thin glass progress bar in OSD_Progress_BarControls (DialogSeekBar,
+    VideoOSD, every window that uses it): 6 px pill track 15 % white, cache
+    25 % white, progress white; AF3's own cache line and bars 499 / 498 hide.
+    AF3's seek nib (control 401 / 402, driven by Kodi) is kept as is.
+  * glass OSD buttons (Defs_OSD_Button): 15 % white circle, solid white when
+    focused; the focused icon turns dark (OSD_Button_Icon_Overlay).
+  * play time bold white, total time dimmed (OSD_Progress_Labels).
+- How: our own resources/af3_lucent/Includes_ABK_Lucent.xml is installed in
+  1080i/ and registered in Includes.xml after Includes_OSD.xml; the AF3
+  edits only insert <include condition="Skin.HasSetting(abk.lucent)"> lines.
+  Kodi takes the FIRST texture / textcolor / font tag of a control, so an
+  include placed before AF3's tag wins only while the look is on. Include
+  conditions are read at skin load; every switch of the toggle changes the
+  skin colours, which reloads the skin, so they always match.
+- TinyPPI / PPI AF3 untouched (checked together: both register in
+  Includes.xml, different anchors). Verified on AF3 50.11.31: 24 entries OK,
+  second and third sweep all "already patched", every gated include defined.
+- Toggle checks the new files (Includes_ABK_Lucent.xml registered, pill6.png)
+  before switching on.
+
+v4.6.8
+- NEW Toggles > "AF3: Lucent Look" (af3_lucent_toggle.py) - phase 1 of the
+  Lucent port to Arctic Fuse 3 (design after the Lucent skin by djdirty60):
+  Off / Lucent Glass / Lucent Glass AMOLED.
+  * Two complete AF3 colour themes (all 57 AF3 tokens + panel_bg_100, which
+    AF3 uses but never defines) in resources/af3_lucent/colors/, generated
+    by tools/gen_af3_lucent.py, installed into skin.arctic.fuse.3/colors/.
+    The toggle switches lookandfeel.skincolors over JSON-RPC (Kodi reloads
+    the skin itself, so at most one reload per switch) and remembers the
+    previous colours in addon_data/<id>/af3_lucent.json for Off. Colours the
+    user picks by hand while it is on are kept on Off.
+  * Glass dialog frames: Part_Background in Dialog_Parts.xml (the frame of
+    ~30 AF3 dialogs and the Home / Search side panels) hides AF3's blur and
+    outline layers and draws the Lucent glass body (panel_shadow + panel +
+    panel_edge, the same textures as the Glass Theme windows, installed in
+    media/abk_lucent/) while the skin bool abk.lucent is set.
+  * All patcher entries are always-on and inert with the bool off: AF3 then
+    looks exactly as unpatched. Checked against AF3 50.11.31: one shared
+    file changed (Dialog_Parts.xml, XML valid), five files added, second
+    sweep "already patched".
+- Strings 30850-30857 (EN + AR). New icon resources/icons/af3_lucent.png.
+
 v4.6.7
 - Search All: Expand / Collapse button (2400, right end of the heading row;
   UP from the chips). Expand = window property abs.expanded: the left column

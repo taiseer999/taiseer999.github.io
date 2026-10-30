@@ -1648,3 +1648,43 @@ msgctxt "#30842"
 msgid "Collapse"
 msgstr "تصغير"
 
+msgctxt "#30850"
+msgid "AF3: Lucent Look"
+msgstr "AF3: مظهر Lucent"
+
+msgctxt "#30851"
+msgid "Off (Arctic Fuse 3 as it is)"
+msgstr "إيقاف (واجهة Arctic Fuse 3 كما هي)"
+
+msgctxt "#30852"
+msgid "Lucent Glass"
+msgstr "زجاج Lucent"
+
+msgctxt "#30853"
+msgid "Lucent Glass AMOLED (true black)"
+msgstr "زجاج Lucent بأسود AMOLED"
+
+msgctxt "#30854"
+msgid "Lucent Look turned on: %s"
+msgstr "تم تشغيل مظهر Lucent: %s"
+
+msgctxt "#30855"
+msgid "Lucent Look turned off - your previous colours are back"
+msgstr "تم إيقاف مظهر Lucent وأُعيدت ألوانك السابقة"
+
+msgctxt "#30856"
+msgid "Lucent Look: the files could not be installed into Arctic Fuse 3. Run Apply Patches and try again."
+msgstr "مظهر Lucent: تعذّر تثبيت الملفات في واجهة Arctic Fuse 3. شغّل تطبيق الترقيعات ثم أعد المحاولة."
+
+msgctxt "#30857"
+msgid "Off"
+msgstr "متوقف"
+
+msgctxt "#30858"
+msgid "Focus colour: Lucent white"
+msgstr "لون التركيز: أبيض Lucent"
+
+msgctxt "#30859"
+msgid "Focus colour: my own colour"
+msgstr "لون التركيز: لوني الخاص"
+

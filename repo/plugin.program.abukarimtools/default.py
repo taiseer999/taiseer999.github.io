@@ -31,6 +31,7 @@ ICONS  = {
     'lucent_theme':   ADDON_PATH + 'resources/icons/lucent_theme.png',
     'af3_trailers':   ADDON_PATH + 'resources/icons/af3_trailers.png',
     'af3_waves':      ADDON_PATH + 'resources/icons/af3_waves.png',
+    'af3_lucent':     ADDON_PATH + 'resources/icons/af3_lucent.png',
     'font_scale':     ADDON_PATH + 'resources/icons/font_scale.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/sources.png',
     'rebuild_addons33': ADDON_PATH + 'resources/icons/rebuild_addons33.png',
@@ -103,6 +104,7 @@ CATEGORIES = [
         ('lucent_theme',   30800),
         ('af3_trailers',   30430),
         ('af3_waves',      30603),
+        ('af3_lucent',     30850),
         ('font_scale',     30740),
     ]),
     ('profiles', 30598, 'cat_profiles', [
@@ -119,6 +121,8 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 # 3.1.19: an action, not a folder - as a folder its URL became
                 # the container path, so the skin reload re-ran it in a loop
                 'af3_trailers', 'af3_waves',
+                # 4.6.8: AF3 Lucent Look (Off / Glass / AMOLED picker)
+                'af3_lucent',
                 # 3.4.39: Lucent Theme per add-on (switch list dialog)
                 'lucent_theme',
                 # 3.4.6: Font Size (original / +5% / -5%)
@@ -348,6 +352,12 @@ def _mode_label2(mode):
             return font_scale.mode_label()
         except Exception:
             return None
+    if mode == 'af3_lucent':
+        try:
+            from resources.lib import af3_lucent_toggle
+            return af3_lucent_toggle.mode_label()
+        except Exception:
+            return None
     return None
 
 
@@ -550,6 +560,9 @@ def router():
     elif mode == 'af3_waves':
         from resources.lib import af3_waves_toggle
         af3_waves_toggle.run()
+    elif mode == 'af3_lucent':
+        from resources.lib import af3_lucent_toggle
+        af3_lucent_toggle.run()
     elif mode == 'lucent_theme':
         from resources.lib import lucent_toggle
         lucent_toggle.run()

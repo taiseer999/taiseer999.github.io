@@ -20,6 +20,16 @@ scrapers and debrid accounts, and plays with its own resolver:
 
 Started from TMDbHelper's player list ("AB Search All", players JSON injected
 by the patcher) as plugin://plugin.program.abukarimtools/?mode=ab_search&...
+
+4.6.13 - threads: every window call happens on the dialog's own thread (the
+one in doModal). The four provider threads and the TMDb meta thread only
+change data and post JSONRPC.NotifyAll; a Monitor created on the dialog
+thread receives it there (Kodi runs Monitor and window callbacks on the
+thread that created them, inside doModal's MakePendingCalls) and rebuilds
+the list. kodi.log 2026-10-30 06:40 / 06:49 (macOS, Kodi 22): the window
+stopped responding right after the last add-on's results were drawn from a
+worker thread - the same class of freeze as 3.4.23 (window calls from a
+background thread).
 """
 import json
 import os
@@ -515,6 +525,10 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         self.filters = []            # filter menu (RIGHT / "Filter" chip): [{'kind', 'value', 'label'}]
         self._badge_cache = {}
         self.expanded = _load_expanded()   # 4.6.7: last view is kept
+        self._dirty = False           # 4.6.13: new data waiting for the dialog thread
+        self._dirty_at = 0.0
+        self._pending_meta = None     # TMDb meta fetched by the meta thread
+        self._busy = 0                # nested dialog open (filter menu / "Play with")
 
     # ---- view (4.6.7) ----
     def _lid(self):
@@ -567,7 +581,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         # always: besides any missing art / plot it brings the running time
         threading.Thread(target=self._fill_meta, name='abs_meta').start()
         self.ready = True
-        self.session.listener = self.refresh
+        self.session.listener = self.request_refresh
         self.refresh()
         self._focus(self._cid())
         if not self.session.started_threads:
@@ -578,10 +592,44 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         self.session.closed = True
         super().close()
 
+    # ---- cross-thread (4.6.13): workers change data only, the dialog thread draws ----
+    def request_refresh(self):
+        """Any thread. Mark new data and wake the dialog thread; no window call here."""
+        if self.session.closed:
+            return
+        if not self._dirty:
+            self._dirty_at = time.time()
+        self._dirty = True
+        try:
+            xbmc.executeJSONRPC(json.dumps({
+                'jsonrpc': '2.0', 'id': 1, 'method': 'JSONRPC.NotifyAll',
+                'params': {'sender': ADDON_ID, 'message': 'abs_refresh', 'data': {'rid': self.session.rid}}}))
+        except Exception as e:
+            _log('refresh notify failed: %s' % e, xbmc.LOGWARNING)
+
+    def pump(self):
+        """Dialog thread only: Monitor.onNotification, onAction, after a nested dialog."""
+        if not self._dirty or self._busy or not self.ready or self.session.closed:
+            return
+        self._dirty = False
+        lag = time.time() - self._dirty_at
+        if lag > 2:
+            _log('refresh ran %.1fs after the data arrived' % lag, xbmc.LOGWARNING)
+        meta, self._pending_meta = self._pending_meta, None
+        if meta:
+            self._apply_meta(meta)
+        self.refresh()
+
     def _fill_meta(self):
+        """Meta thread: TMDb only, then hand the result to the dialog thread."""
         extra = tmdb_window_meta(self.session.media)
         if not extra or self.session.closed:
             return
+        self._pending_meta = extra
+        self.request_refresh()
+
+    def _apply_meta(self, extra):
+        """Dialog thread."""
         try:
             runtime = int(extra.pop('runtime', 0) or 0)
         except Exception:
@@ -589,10 +637,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         if runtime > 0 and not self.runtime:
             self.runtime = runtime
             _log('running time %d min - bitrate estimates on' % runtime)
-            with self.ui_lock:
-                self.shown = []               # rebuild the cards with the estimate
-                self._chips()
-                self._rows()
+            self.shown = []                   # rebuild the cards with the estimate (refresh follows)
         meta = dict(self.meta)
         for k, v in extra.items():
             if not meta.get(k):
@@ -893,7 +938,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
     def _listitem(self, row):
         th = _theme()
         item, q = row['item'], row['q']
-        li = xbmcgui.ListItem(_clean(item.get('display_name') or item.get('name')))
+        # offscreen: a new row, filled before addItems and never changed after
+        li = xbmcgui.ListItem(_clean(item.get('display_name') or item.get('name')), offscreen=True)
         provider = _provider(item)
         site = _site(item)
         size = _clean(item.get('size_label'))
@@ -950,7 +996,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             if 0 <= pos < len(self.chips):
                 kind, value = self.chips[pos][0], self.chips[pos][1]
                 if kind == 'filter':
-                    return self._filter_menu()
+                    return self._menu(self._filter_menu)
                 with self.ui_lock:
                     if kind == 'all':
                         self.f_addon = self.f_quality = self.f_service = None
@@ -968,7 +1014,17 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         elif cid in (LIST, LIST_X):
             self._play(None)
 
+    def _menu(self, fn, *args, **kwargs):
+        """A nested dialog: no list rebuild under it, catch up when it closes."""
+        self._busy += 1
+        try:
+            return fn(*args, **kwargs)
+        finally:
+            self._busy -= 1
+            self.pump()
+
     def onAction(self, action):
+        self.pump()                             # fallback: any key catches up
         aid = action.getId()
         if aid in _ACTION_BACK:
             if self.filters:                    # Back first drops the filter-menu filters
@@ -980,9 +1036,9 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             self.close()
             return
         if aid in _ACTION_MENU and self.getFocusId() == self._lid():
-            self._play(choose=True)
+            self._menu(self._play, choose=True)
         elif aid == _ACTION_RIGHT and self.getFocusId() == LIST:      # one column only: RIGHT moves in the panel
-            self._filter_menu()
+            self._menu(self._filter_menu)
 
     def _current(self):
         pos = self.getControl(self._lid()).getSelectedPosition()
@@ -1003,6 +1059,25 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
 
 
 # ───────────────────────── entry ─────────────────────────
+
+class _Pump(xbmc.Monitor):
+    """4.6.13: created on the dialog thread, so Kodi runs onNotification there too."""
+
+    def __init__(self, rid):
+        super().__init__()
+        self.rid = rid
+        self.win = None
+
+    def onNotification(self, sender, method, data):
+        if not str(method).endswith('abs_refresh') or self.rid not in str(data or ''):
+            return
+        win = self.win
+        if win is not None:
+            try:
+                win.pump()
+            except Exception as e:
+                _log('refresh failed: %s' % e, xbmc.LOGWARNING)
+
 
 def _focused_meta(tmdb_id):
     """Logo / fanart / plot of the item TMDbHelper was started from."""
@@ -1066,11 +1141,14 @@ def run(params):
             meta.setdefault('ep_name', meta.get('title', ''))
             meta['title'] = meta['tvshowtitle']
     session = Session(media, addons)
+    pump = _Pump(session.rid)
     win = SearchWindow('ab_search.xml', ADDON_PATH, 'Default', '1080i', session=session, meta=meta)
+    pump.win = win
     win.doModal()
-    picked = win.picked
-    del win
     session.closed = True
+    pump.win = None
+    picked = win.picked
+    del win, pump
     if not picked:
         return
     key, index = picked

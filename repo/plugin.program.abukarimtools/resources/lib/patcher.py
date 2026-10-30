@@ -1441,6 +1441,293 @@ PATCHES = [
         'description': 'AF3 busy loader - waves can be switched off (Toggles)',
     },
 
+    # ── AF3: Lucent Look (4.6.8) - colours + glass dialogs ──
+    # Phase 1 of the Lucent port to Arctic Fuse 3 (design after the Lucent skin
+    # by djdirty60). Always-on and inert until Toggles > "AF3: Lucent Look"
+    # sets the skin bool abk.lucent and picks one of the two colour themes:
+    #  - two complete colour themes (every AF3 token) in colors/,
+    #  - the glass panel textures (same files as the Glass Theme windows) in
+    #    media/abk_lucent/,
+    #  - Part_Background (the frame of ~30 AF3 dialogs and the Home / Search
+    #    side panels): while abk.lucent is set the blur/outline layers hide and
+    #    a Lucent glass body (shadow + panel + hairline edge) is drawn instead.
+    # With the bool off AF3 looks exactly as unpatched.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('colors', 'Lucent Glass.xml'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_lucent', 'colors', 'Lucent Glass.xml'),
+        'description': 'AF3 Lucent Look - colour theme Lucent Glass',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('colors', 'Lucent Glass AMOLED.xml'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_lucent', 'colors', 'Lucent Glass AMOLED.xml'),
+        'description': 'AF3 Lucent Look - colour theme Lucent Glass AMOLED',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lucent', 'panel.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'lucent', 'media', 'lucent', 'panel.png'),
+        'description': 'AF3 Lucent Look - texture panel.png',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lucent', 'panel_edge.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'lucent', 'media', 'lucent', 'panel_edge.png'),
+        'description': 'AF3 Lucent Look - texture panel_edge.png',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lucent', 'panel_shadow.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'lucent', 'media', 'lucent', 'panel_shadow.png'),
+        'description': 'AF3 Lucent Look - texture panel_shadow.png',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Dialog_Parts.xml'),
+        'not_found_ok': True,
+        'old': '                <control type="group">\n                    <include content="Part_Background_Blur" condition="$EXP[Exp_DialogTheme_IsAdaptive]">\n                        <param name="shadow">$PARAM[shadow]</param>\n                        <param name="transparency">$PARAM[transparency]</param>\n                    </include>\n                    <include content="Part_Background_Blur_Standard" condition="!$EXP[Exp_DialogTheme_IsAdaptive]">\n                        <param name="shadow">$PARAM[shadow]</param>\n                        <param name="transparency">$PARAM[transparency]</param>\n                    </include>\n                </control>\n                <include condition="$PARAM[include_glass]">Part_Background_Glass</include>',
+        'new': '                <control type="group">\n                    <visible>!Skin.HasSetting(abk.lucent)</visible>  <!-- ABUKARIM: Lucent glass dialogs -->\n                    <include content="Part_Background_Blur" condition="$EXP[Exp_DialogTheme_IsAdaptive]">\n                        <param name="shadow">$PARAM[shadow]</param>\n                        <param name="transparency">$PARAM[transparency]</param>\n                    </include>\n                    <include content="Part_Background_Blur_Standard" condition="!$EXP[Exp_DialogTheme_IsAdaptive]">\n                        <param name="shadow">$PARAM[shadow]</param>\n                        <param name="transparency">$PARAM[transparency]</param>\n                    </include>\n                </control>\n                <control type="group">\n                    <visible>Skin.HasSetting(abk.lucent)</visible>\n                    <control type="image">\n                        <left>-40</left>\n                        <top>-40</top>\n                        <right>-40</right>\n                        <bottom>-40</bottom>\n                        <texture border="88">abk_lucent/panel_shadow.png</texture>\n                        <colordiffuse>shadow_hard</colordiffuse>\n                    </control>\n                    <control type="image">\n                        <texture border="48">abk_lucent/panel.png</texture>\n                        <colordiffuse>dialog_overlay</colordiffuse>\n                    </control>\n                    <control type="image">\n                        <texture border="48">abk_lucent/panel_edge.png</texture>\n                        <colordiffuse>overlay_hard</colordiffuse>\n                    </control>\n                </control>\n                <include condition="$PARAM[include_glass]">Part_Background_Glass</include>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent glass dialogs -->',
+        'description': 'AF3 Lucent Look - glass dialog frame (Part_Background)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Dialog_Parts.xml'),
+        'not_found_ok': True,
+        'old': '            <visible>!Skin.String(Background.DialogImage,Onyx)</visible>\n            <texture colordiffuse="dialog_fg_06" border="20">common/dialog.png</texture>',
+        'new': '            <visible>!Skin.String(Background.DialogImage,Onyx) + !Skin.HasSetting(abk.lucent)</visible>\n            <texture colordiffuse="dialog_fg_06" border="20">common/dialog.png</texture>',
+        'already_patched_check': 'Onyx) + !Skin.HasSetting(abk.lucent)',
+        'description': 'AF3 Lucent Look - no AF3 glass sheen over the Lucent body',
+    },
+
+    # ── AF3: Lucent Look, phase 2 (4.6.9) - the player ──
+    # Thin glass progress bar, glass OSD buttons (white when focused, dark
+    # icon), bold time / dimmed duration. Definitions live in our own
+    # Includes_ABK_Lucent.xml; the AF3 edits below only insert includes that
+    # are gated on Skin.HasSetting(abk.lucent). Kodi uses the FIRST texture /
+    # textcolor / font tag of a control, so an include placed before AF3's own
+    # tag wins only while the Lucent Look is on. TinyPPI is not touched.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_ABK_Lucent.xml'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_lucent', 'Includes_ABK_Lucent.xml'),
+        'description': 'AF3 Lucent Look - player includes (Includes_ABK_Lucent.xml)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lucent', 'pill6.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'lucent', 'media', 'lucent', 'pill6.png'),
+        'description': 'AF3 Lucent Look - texture pill6.png',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes.xml'),
+        'not_found_ok': True,
+        'old': '    <include file="Includes_OSD.xml" />',
+        'new': '    <include file="Includes_OSD.xml" />\n    <include file="Includes_ABK_Lucent.xml" />  <!-- ABUKARIM: Lucent Look -->',
+        'already_patched_check': 'Includes_ABK_Lucent.xml',
+        'description': 'AF3 Lucent Look - register Includes_ABK_Lucent.xml',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Defaults.xml'),
+        'not_found_ok': True,
+        'old': '<include>Texture_Circle_Highlight_Focus_V</include>\n            <texturenofocus colordiffuse="$PARAM[back_colordiffuse]">common/circle.png</texturenofocus>',
+        'new': '<include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_OSD_Button_Textures</include>  <!-- ABUKARIM: Lucent OSD buttons -->\n            <include>Texture_Circle_Highlight_Focus_V</include>\n            <texturenofocus colordiffuse="$PARAM[back_colordiffuse]">common/circle.png</texturenofocus>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent OSD buttons -->',
+        'description': 'AF3 Lucent Look - glass OSD buttons',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '<texture colordiffuse="$VAR[ColorSelected]" flipx="$PARAM[flipx]">$PARAM[icon]</texture>',
+        'new': '<include content="ABK_Lucent_IconFocus" condition="Skin.HasSetting(abk.lucent)">  <!-- ABUKARIM: Lucent focused icon -->\n                            <param name="icon">$PARAM[icon]</param>\n                            <param name="flipx">$PARAM[flipx]</param>\n                        </include>\n                        <texture colordiffuse="$VAR[ColorSelected]" flipx="$PARAM[flipx]">$PARAM[icon]</texture>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent focused icon -->',
+        'description': 'AF3 Lucent Look - dark icon on the focused OSD button',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '<label>$VAR[Label_OSD_Time]</label>\n            <textcolor>panel_fg_100</textcolor>',
+        'new': '<label>$VAR[Label_OSD_Time]</label>\n            <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_TimeLabel</include>  <!-- ABUKARIM: Lucent time -->\n            <textcolor>panel_fg_100</textcolor>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent time -->',
+        'description': 'AF3 Lucent Look - bold play time',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '<label>$VAR[Label_OSD_Duration]</label>\n            <textcolor>panel_fg_100</textcolor>',
+        'new': '<label>$VAR[Label_OSD_Duration]</label>\n            <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_DurationLabel</include>  <!-- ABUKARIM: Lucent duration -->\n            <textcolor>panel_fg_100</textcolor>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent duration -->',
+        'description': 'AF3 Lucent Look - dimmed duration',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '<include name="OSD_Progress_BarControls">',
+        'new': '<include name="OSD_Progress_BarControls">\n        <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_Progress</include>  <!-- ABUKARIM: Lucent progress -->',
+        'already_patched_check': '<!-- ABUKARIM: Lucent progress -->',
+        'description': 'AF3 Lucent Look - thin glass progress bar',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '<!-- Cache Line -->\n        <control type="group">\n            <height>12</height>',
+        'new': '<!-- Cache Line -->\n        <control type="group">\n            <visible>!Skin.HasSetting(abk.lucent)</visible>  <!-- ABUKARIM: Lucent hides AF3 cache -->\n            <height>12</height>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent hides AF3 cache -->',
+        'description': 'AF3 Lucent Look - AF3 cache line off',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '<info>Player.Progress</info>\n            <visible>Player.HasMedia + !Pvr.IsPlayingTv</visible>',
+        'new': '<info>Player.Progress</info>\n            <visible>Player.HasMedia + !Pvr.IsPlayingTv + !Skin.HasSetting(abk.lucent)</visible>',
+        'already_patched_check': 'Player.HasMedia + !Pvr.IsPlayingTv + !Skin.HasSetting(abk.lucent)',
+        'description': 'AF3 Lucent Look - AF3 progress bar off',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '<info>PVR.EpgEventProgress</info>\n            <visible>Pvr.IsPlayingTv</visible>',
+        'new': '<info>PVR.EpgEventProgress</info>\n            <visible>Pvr.IsPlayingTv + !Skin.HasSetting(abk.lucent)</visible>',
+        'already_patched_check': '<visible>Pvr.IsPlayingTv + !Skin.HasSetting(abk.lucent)</visible>',
+        'description': 'AF3 Lucent Look - AF3 live TV bar off',
+    },
+
+    # ── AF3: Lucent Look, phase 3 (4.6.10) - the info page ──
+    # The action buttons of the video info page (Play, Trailer, Trakt, ...,
+    # Options - grouplists 9000 in Includes_DialogInfo.xml) and the plot
+    # dialog tabs all come from Button_Underline_Switcher. While abk.lucent is
+    # set they become Lucent pills (first tag wins, see phase 2) and the two
+    # info-page rows use a tighter gap. Definitions in Includes_ABK_Lucent.xml.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lucent', 'pill60.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'lucent', 'media', 'lucent', 'pill60.png'),
+        'description': 'AF3 Lucent Look - texture pill60.png',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Buttons.xml'),
+        'not_found_ok': True,
+        'old': '            <control type="$PARAM[control]" id="$PARAM[id]">\n                <nested />\n                <width>auto</width>',
+        'new': '            <control type="$PARAM[control]" id="$PARAM[id]">\n                <nested />\n                <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_PillButton</include>  <!-- ABUKARIM: Lucent pill buttons -->\n                <width>auto</width>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent pill buttons -->',
+        'description': 'AF3 Lucent Look - pill action buttons (info page, plot tabs)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_DialogInfo.xml'),
+        'not_found_ok': True,
+        'old': '<itemgap>40</itemgap>\n                    <ondown>90001</ondown>',
+        'new': '<include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_PillGap</include>  <!-- ABUKARIM: Lucent pill gap 90001 -->\n                    <itemgap>40</itemgap>\n                    <ondown>90001</ondown>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent pill gap 90001 -->',
+        'description': 'AF3 Lucent Look - tighter button row (info)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_DialogInfo.xml'),
+        'not_found_ok': True,
+        'old': '<itemgap>40</itemgap>\n                    <ondown>5000</ondown>',
+        'new': '<include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_PillGap</include>  <!-- ABUKARIM: Lucent pill gap 5000 -->\n                    <itemgap>40</itemgap>\n                    <ondown>5000</ondown>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent pill gap 5000 -->',
+        'description': 'AF3 Lucent Look - tighter button row (info, alt layout)',
+    },
+
+    # ── AF3: Lucent Look, phase 4 (4.6.11) - Lucent focus ──
+    # Lucent focuses with a solid white highlight and dark text. AF3's own
+    # default is the same (ColorHighlight ffffffff, ColorSelected ff272727),
+    # so every AF3 view already supports it; while abk.lucent is set the four
+    # focus variables take the Lucent values first, over the user's chosen
+    # focus colour / "revert selected text". Variables are live: no reload.
+    # 4.6.12: optional - skin bool abk.lucent.ownfocus (Toggles > AF3: Lucent
+    # Look > "Focus colour") keeps the user's own focus colour. The regex
+    # fallback upgrades a skin patched by 4.6.11 in place.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Colors.xml'),
+        'not_found_ok': True,
+        'old': '<variable name="ColorHighlight">\n        <value condition="!',
+        'new': '<variable name="ColorHighlight">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ffffffff</value>  <!-- ABUKARIM: Lucent focus -->\n        <value condition="!',
+        'already_patched_check': '<variable name="ColorHighlight">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ffffffff</value>  <!-- ABUKARIM: Lucent focus -->',
+        'fallback_pattern': '(<variable name="ColorHighlight">\\n)        <value condition="Skin\\.HasSetting\\(abk\\.lucent\\)">[0-9a-fA-F]{8}</value>  <!-- ABUKARIM: Lucent focus -->\\n',
+        'fallback_repl': '\\g<1>        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ffffffff</value>  <!-- ABUKARIM: Lucent focus -->\n',
+        'description': 'AF3 Lucent Look - Lucent focus (ColorHighlight)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Colors.xml'),
+        'not_found_ok': True,
+        'old': '<variable name="ColorSelected_30">\n        <value condition="!',
+        'new': '<variable name="ColorSelected_30">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">4d0b1119</value>  <!-- ABUKARIM: Lucent focus -->\n        <value condition="!',
+        'already_patched_check': '<variable name="ColorSelected_30">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">4d0b1119</value>  <!-- ABUKARIM: Lucent focus -->',
+        'fallback_pattern': '(<variable name="ColorSelected_30">\\n)        <value condition="Skin\\.HasSetting\\(abk\\.lucent\\)">[0-9a-fA-F]{8}</value>  <!-- ABUKARIM: Lucent focus -->\\n',
+        'fallback_repl': '\\g<1>        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">4d0b1119</value>  <!-- ABUKARIM: Lucent focus -->\n',
+        'description': 'AF3 Lucent Look - Lucent focus (ColorSelected_30)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Colors.xml'),
+        'not_found_ok': True,
+        'old': '<variable name="ColorSelected">\n        <value condition="!',
+        'new': '<variable name="ColorSelected">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ff0b1119</value>  <!-- ABUKARIM: Lucent focus -->\n        <value condition="!',
+        'already_patched_check': '<variable name="ColorSelected">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ff0b1119</value>  <!-- ABUKARIM: Lucent focus -->',
+        'fallback_pattern': '(<variable name="ColorSelected">\\n)        <value condition="Skin\\.HasSetting\\(abk\\.lucent\\)">[0-9a-fA-F]{8}</value>  <!-- ABUKARIM: Lucent focus -->\\n',
+        'fallback_repl': '\\g<1>        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ff0b1119</value>  <!-- ABUKARIM: Lucent focus -->\n',
+        'description': 'AF3 Lucent Look - Lucent focus (ColorSelected)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Colors.xml'),
+        'not_found_ok': True,
+        'old': '<variable name="ColorSelectedInverted">\n        <value condition="!',
+        'new': '<variable name="ColorSelectedInverted">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ffffffff</value>  <!-- ABUKARIM: Lucent focus -->\n        <value condition="!',
+        'already_patched_check': '<variable name="ColorSelectedInverted">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ffffffff</value>  <!-- ABUKARIM: Lucent focus -->',
+        'fallback_pattern': '(<variable name="ColorSelectedInverted">\\n)        <value condition="Skin\\.HasSetting\\(abk\\.lucent\\)">[0-9a-fA-F]{8}</value>  <!-- ABUKARIM: Lucent focus -->\\n',
+        'fallback_repl': '\\g<1>        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ffffffff</value>  <!-- ABUKARIM: Lucent focus -->\n',
+        'description': 'AF3 Lucent Look - Lucent focus (ColorSelectedInverted)',
+    },
+
     # ── AF3 auto-trailers, ARTWORK mode (3.2.48) - Dex Hub's way ──
     # The trailer plays inside the skin's own artwork frame (its 'FlixArt'
     # video frame), not behind the whole page and not full screen. The
