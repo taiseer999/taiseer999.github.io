@@ -513,6 +513,26 @@ _AF3_SUBSTYLE_POPUP_XML = (
 )
 
 
+
+# TMDbHelper dummy render gate (see the waiting.py entry in PATCHES).
+_TMDBH_RENDER_GATE = (
+    "        # -- TMDbHelper dummy render gate (by ABUKARIM TOOLS) --\n"
+    "        # Stopping before the renderer is configured costs a 5s\n"
+    "        # CRenderManager::Configure timeout on Amlogic. Wait for the clock\n"
+    "        # to run (first frame shown), at most 3s, then stop as before.\n"
+    "        _abk_waited = 0.0\n"
+    "        while not self.xbmc_monitor.abortRequested() and _abk_waited < 3.0:\n"
+    "            try:\n"
+    "                if not self.is_playing or not self.playing_file.endswith(self.fileext):\n"
+    "                    return True\n"
+    "                if self.xbmc_player.getTime() > 0:\n"
+    "                    break\n"
+    "            except RuntimeError:\n"
+    "                return True\n"
+    "            self.xbmc_monitor.waitForAbort(0.05)\n"
+    "            _abk_waited += 0.05\n"
+)
+
 PATCHES = [
     # ── TMDbHelper Trakt QR Auth (by ABUKARIM TOOLS) ──
     {
@@ -1838,6 +1858,37 @@ PATCHES = [
         'toggle': 'tmdbh_stability',
         'description': 'TMDbHelper player.py \u2013 dead-player guard (getPlayingFile RuntimeError)',
     },
+    # ── TMDbHelper: dummy render gate (4.6.15) ──
+    # For executebuiltin players TMDbHelper resolves a dummy.mp4 first, then
+    # stops it after dummy_duration. On Amlogic the stop routinely lands before
+    # the renderer is configured: the main thread sits in CloseFile waiting for
+    # the video thread, while the video thread waits for the main thread to
+    # configure the renderer -> CRenderManager::Configure times out after 5s
+    # ("timeout waiting for configure" / "failed to configure renderer"). Every
+    # AB Search / executebuiltin play therefore lost ~5s before its window.
+    # Fix: before stopping, wait (max 3s) until the player clock runs
+    # (getTime() > 0), which only happens once the first frame was rendered.
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'player', 'action', 'waiting.py'),
+        'toggle': 'tmdbh_stability',
+        'not_found_ok': True,
+        'old': (
+            "        self.xbmc_monitor.waitForAbort(self.suspend)\n"
+            "\n"
+            "        if not self.is_playing:\n"
+        ),
+        'new': (
+            "        self.xbmc_monitor.waitForAbort(self.suspend)\n"
+            + _TMDBH_RENDER_GATE +
+            "\n"
+            "        if not self.is_playing:\n"
+        ),
+        'already_patched_check': '# -- TMDbHelper dummy render gate (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r"(\n([ \t]+)self\.xbmc_monitor\.waitForAbort\(self\.suspend\)[ \t]*\r?\n)(?![ \t]*# -- TMDbHelper dummy render gate)",
+        'fallback_repl': r'\1' + _TMDBH_RENDER_GATE.replace('\\', '\\\\'),
+        'description': 'TMDbHelper waiting.py – stop dummy.mp4 only after it renders (kills the 5s renderer-configure stall)',
+    },
     # ── TMDbHelper: genres follow the language setting (3.4.4) ──
     # Genre names sit in ItemDetails.db with NO iso_language column (unlike
     # title/plot in the translation table), and later writes only fill NULLs
@@ -2824,6 +2875,9 @@ _TOGGLE_OF = {
     # TMDbHelper: Stability — dead-player guard (getPlayingFile RuntimeError on teardown)
     ('plugin.video.themoviedb.helper',
      os.path.join('resources', 'tmdbhelper', 'lib', 'monitor', 'player.py')): 'tmdbh_stability',
+    # TMDbHelper: Stability — dummy render gate (5s renderer-configure stall)
+    ('plugin.video.themoviedb.helper',
+     os.path.join('resources', 'tmdbhelper', 'lib', 'player', 'action', 'waiting.py')): 'tmdbh_stability',
     # TinyPPI: Codec Badges — the three HDR badge PNGs
     ('script.tinyppi',
      os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'SDR.png')):        'tinyppi_codecs',
