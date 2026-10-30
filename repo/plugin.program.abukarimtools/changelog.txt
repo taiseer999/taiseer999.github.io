@@ -1,3 +1,9 @@
+v4.6.14
+- FIX Search All: Premiumize results never appeared for users who also have
+  Real-Debrid / AllDebrid / TorBox. Rows were merged on the torrent hash alone,
+  so a release cached on RD and PM kept only the RD copy (and the PM chip never
+  showed). The debrid service is now part of the row key.
+
 v4.6.13
 - FIX Search All froze after the results were shown (kodi.log 2026-10-30
   06:40 and 06:49, macOS, Kodi 22 / Python 3.14): all four add-ons had
