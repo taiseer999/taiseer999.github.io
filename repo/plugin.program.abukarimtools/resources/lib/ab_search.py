@@ -52,6 +52,10 @@ _SUPPORT = {'fl': ('router.py', 'app_list_sources'), 'rl': ('router.py', 'abk_de
 _BRIDGE = {'rl': 'redlight_search', 'umb': 'umbrella_search', 'pov': 'pov_search'}
 
 LIST, CHIPS = 2000, 2300
+# 4.6.7: expanded view - the same streams over the whole page (two columns)
+LIST_X, CHIPS_X = 2002, 2310
+VIEW_BTN, VIEW_BTN_X = 2400, 2410
+_VIEW_FILE = os.path.join(_DATA, ADDON_ID, 'ab_search_view.json')
 _QUALITIES = ('4K', '1080P', '720P', 'SD')
 _QRANK = {'4K': 0, '1080P': 1, '720P': 2, 'SD': 3}
 _ACTION_BACK = (9, 10, 92, 216, 247, 257, 275, 61467, 61448)
@@ -475,6 +479,23 @@ def merge(session):
 
 # ───────────────────────── the window ─────────────────────────
 
+def _load_expanded():
+    try:
+        with open(_VIEW_FILE, 'r', encoding='utf-8') as f:
+            return bool(json.load(f).get('expanded'))
+    except Exception:
+        return False
+
+
+def _save_expanded(on):
+    try:
+        os.makedirs(os.path.dirname(_VIEW_FILE), exist_ok=True)
+        with open(_VIEW_FILE, 'w', encoding='utf-8') as f:
+            json.dump({'expanded': bool(on)}, f)
+    except Exception as e:
+        _log('view not saved: %s' % e, xbmc.LOGWARNING)
+
+
 class SearchWindow(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
@@ -493,6 +514,44 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         self.runtime = 0              # minutes, from TMDb: bitrate = size / running time
         self.filters = []            # filter menu (RIGHT / "Filter" chip): [{'kind', 'value', 'label'}]
         self._badge_cache = {}
+        self.expanded = _load_expanded()   # 4.6.7: last view is kept
+
+    # ---- view (4.6.7) ----
+    def _lid(self):
+        return LIST_X if self.expanded else LIST
+
+    def _cid(self):
+        return CHIPS_X if self.expanded else CHIPS
+
+    def _bid(self):
+        return VIEW_BTN_X if self.expanded else VIEW_BTN
+
+    def _view_props(self):
+        self.setProperty('abs.expanded', 'true' if self.expanded else '')
+        self.setProperty('abs.viewlabel', T(30842) if self.expanded else T(30841))
+
+    def _toggle_view(self):
+        with self.ui_lock:
+            try:
+                pos = self.getControl(self._lid()).getSelectedPosition()
+                if 0 <= pos < len(self.shown):
+                    self.focused_key = _row_key(self.shown[pos]['item'])
+            except Exception:
+                pass
+            old = (self._lid(), self._cid())
+            self.expanded = not self.expanded
+            self._view_props()
+            for cid in old:                     # the hidden view stays empty
+                try:
+                    self.getControl(cid).reset()
+                except Exception:
+                    pass
+            self.shown, self.chips = [], []     # rebuild in the other view
+            self._chips()
+            self._rows()
+        _save_expanded(self.expanded)
+        _log('view: %s' % ('expanded' if self.expanded else 'default'))
+        self._focus(self._bid())
 
     # ---- life cycle ----
     def onInit(self):
@@ -504,12 +563,13 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 _log('window meta: %s' % e)
         self.setProperty('abs.heading', T(30817))
         self.setProperty('abs.addons_heading', T(30818))
+        self._view_props()
         # always: besides any missing art / plot it brings the running time
         threading.Thread(target=self._fill_meta, name='abs_meta').start()
         self.ready = True
         self.session.listener = self.refresh
         self.refresh()
-        self._focus(CHIPS)
+        self._focus(self._cid())
         if not self.session.started_threads:
             self.session.started_threads = True
             self.session.start()
@@ -627,7 +687,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
 
     def _chips(self):
         defs = self._chip_defs()
-        ctl = self.getControl(CHIPS)
+        ctl = self.getControl(self._cid())
         same = [(d[0], d[1]) for d in defs] == [(d[0], d[1]) for d in self.chips]
         if not same:
             pos = ctl.getSelectedPosition()
@@ -799,14 +859,14 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             self._chips()
             self._rows()
         if self.shown:
-            self._focus(LIST)
+            self._focus(self._lid())
             try:
-                self.getControl(LIST).selectItem(0)
+                self.getControl(self._lid()).selectItem(0)
             except Exception:
                 pass
 
     def _rows(self):
-        ctl = self.getControl(LIST)
+        ctl = self.getControl(self._lid())
         try:
             pos = ctl.getSelectedPosition()
             if 0 <= pos < len(self.shown):
@@ -827,8 +887,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 if _row_key(r['item']) == self.focused_key:
                     ctl.selectItem(n)
                     break
-        if not shown and self.getFocusId() == LIST:
-            self.setFocusId(CHIPS)
+        if not shown and self.getFocusId() == self._lid():
+            self.setFocusId(self._cid())
 
     def _listitem(self, row):
         th = _theme()
@@ -883,8 +943,10 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
 
     # ---- input ----
     def onClick(self, cid):
-        if cid == CHIPS:
-            pos = self.getControl(CHIPS).getSelectedPosition()
+        if cid in (VIEW_BTN, VIEW_BTN_X):
+            return self._toggle_view()
+        if cid in (CHIPS, CHIPS_X):
+            pos = self.getControl(cid).getSelectedPosition()
             if 0 <= pos < len(self.chips):
                 kind, value = self.chips[pos][0], self.chips[pos][1]
                 if kind == 'filter':
@@ -902,8 +964,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                     self._chips()
                     self._rows()
                 if self.shown:
-                    self.setFocusId(LIST)
-        elif cid == LIST:
+                    self.setFocusId(self._lid())
+        elif cid in (LIST, LIST_X):
             self._play(None)
 
     def onAction(self, action):
@@ -912,18 +974,18 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             if self.filters:                    # Back first drops the filter-menu filters
                 self.filters = []
                 return self._apply_filters()
-            if self.getFocusId() == LIST and (self.f_addon or self.f_quality or self.f_service):
-                self.setFocusId(CHIPS)          # first Back from a filtered list: back to the chips
+            if self.getFocusId() == self._lid() and (self.f_addon or self.f_quality or self.f_service):
+                self.setFocusId(self._cid())    # first Back from a filtered list: back to the chips
                 return
             self.close()
             return
-        if aid in _ACTION_MENU and self.getFocusId() == LIST:
+        if aid in _ACTION_MENU and self.getFocusId() == self._lid():
             self._play(choose=True)
-        elif aid == _ACTION_RIGHT and self.getFocusId() == LIST:
+        elif aid == _ACTION_RIGHT and self.getFocusId() == LIST:      # one column only: RIGHT moves in the panel
             self._filter_menu()
 
     def _current(self):
-        pos = self.getControl(LIST).getSelectedPosition()
+        pos = self.getControl(self._lid()).getSelectedPosition()
         return self.shown[pos] if 0 <= pos < len(self.shown) else None
 
     def _play(self, choose=None):

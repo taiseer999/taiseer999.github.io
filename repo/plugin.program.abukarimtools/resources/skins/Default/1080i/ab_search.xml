@@ -42,6 +42,8 @@
             </control>
         </control>
 
+        <control type="group">
+            <visible>String.IsEmpty(Window.Property(abs.expanded))</visible>
         <!-- ============ Left column: logo / title / meta ============ -->
         <control type="group">
             <animation effect="fade" start="0" end="100" time="350" delay="100">WindowOpen</animation>
@@ -156,6 +158,9 @@
             </control>
         </control>
 
+        </control>
+        <control type="group">
+            <visible>String.IsEmpty(Window.Property(abs.expanded))</visible>
         <control type="group">
             <animation effect="fade" start="0" end="100" time="350" delay="150">WindowOpen</animation>
             <animation effect="fade" end="0" time="250">WindowClose</animation>
@@ -171,6 +176,9 @@
             </control>
         </control>
 
+        </control>
+        <control type="group">
+            <visible>String.IsEmpty(Window.Property(abs.expanded))</visible>
         <!-- ============ Left: one line per add-on (searching / N streams) ============ -->
         <control type="group">
             <animation effect="fade" start="0" end="100" time="350" delay="200">WindowOpen</animation>
@@ -440,8 +448,25 @@
                 </control>
             </control>
         </control>
+        </control>
+        <!-- ============ Expanded: title only, on top ============ -->
+        <control type="group">
+            <visible>!String.IsEmpty(Window.Property(abs.expanded))</visible>
+            <animation effect="fade" start="0" end="100" time="250">Visible</animation>
+            <control type="label">
+                <left>40</left>
+                <top>28</top>
+                <width>1840</width>
+                <height>64</height>
+                <font>font37</font>
+                <aligny>center</aligny>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>[B]$INFO[Window.Property(lucent.show_title)][/B]$INFO[Window.Property(lucent.ep_code),   [COLOR FFBDC8D1],[/COLOR]]</label>
+            </control>
+        </control>
         <!-- ============ Right: glass stream panel ============ -->
         <control type="group">
+            <visible>String.IsEmpty(Window.Property(abs.expanded))</visible>
             <animation effect="fade" start="0" end="100" time="350" delay="150">WindowOpen</animation>
             <animation effect="slide" start="120,0" end="0,0" time="400" delay="150" tween="cubic" easing="out">WindowOpen</animation>
             <animation effect="slide" end="200,0" time="300" tween="cubic" easing="in">WindowClose</animation>
@@ -473,14 +498,14 @@
             <control type="label">
                 <left>40</left>
                 <top>26</top>
-                <width>600</width>
+                <width>388</width>
                 <height>50</height>
                 <font>font27</font>
                 <textcolor>FFFFFFFF</textcolor>
                 <label>[B]$INFO[Window.Property(abs.heading)][/B]</label>
             </control>
             <control type="label">
-                <left>624</left>
+                <left>428</left>
                 <top>26</top>
                 <width>320</width>
                 <height>50</height>
@@ -500,6 +525,22 @@
                 <textcolor>FF8F9BA6</textcolor>
                 <label>$INFO[Window.Property(abs.subhead)]</label>
             </control>
+            <!-- 4.6.7: Expand / Collapse -->
+            <control type="button" id="2400">
+                <left>764</left>
+                <top>29</top>
+                <width>180</width>
+                <height>44</height>
+                <font>font12</font>
+                <align>center</align>
+                <aligny>center</aligny>
+                <textcolor>FFDCE2E7</textcolor>
+                <focusedcolor>FF0B1119</focusedcolor>
+                <texturenofocus border="22" colordiffuse="1AFFFFFF">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill44.png</texturenofocus>
+                <texturefocus border="22" colordiffuse="FFFFFFFF">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill44.png</texturefocus>
+                <label>[B]$INFO[Window.Property(abs.viewlabel)][/B]</label>
+                <ondown>2300</ondown>
+            </control>
             <!-- Filter chips: All, each add-on, each quality -->
             <control type="list" id="2300">
                 <left>40</left>
@@ -508,6 +549,7 @@
                 <height>52</height>
                 <orientation>horizontal</orientation>
                 <scrolltime tween="cubic" easing="out">200</scrolltime>
+                <onup>2400</onup>
                 <ondown>2000</ondown>
                 <itemlayout height="52" width="258">
                     <control type="image">
@@ -1975,6 +2017,1566 @@
                     <left>40</left>
                     <top>56</top>
                     <width>904</width>
+                    <height>50</height>
+                    <font>font27</font>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFDCE2E7</textcolor>
+                    <label>$INFO[Window.Property(abs.waitmsg)]</label>
+                </control>
+            </control>
+        </control>
+        <!-- ============ Expanded: streams over the whole page ============ -->
+        <control type="group">
+            <visible>!String.IsEmpty(Window.Property(abs.expanded))</visible>
+            <animation effect="fade" start="0" end="100" time="350" delay="150">WindowOpen</animation>
+            <animation effect="slide" start="120,0" end="0,0" time="400" delay="150" tween="cubic" easing="out">WindowOpen</animation>
+            <animation effect="slide" end="200,0" time="300" tween="cubic" easing="in">WindowClose</animation>
+            <animation effect="fade" end="0" time="300">WindowClose</animation>
+            <left>12</left>
+            <top>112</top>
+            <width>1896</width>
+            <height>952</height>
+            <control type="image">
+                <left>-40</left>
+                <top>-40</top>
+                <width>1976</width>
+                <height>1032</height>
+                <texture border="88">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/panel_shadow.png</texture>
+                <colordiffuse>99000000</colordiffuse>
+            </control>
+            <control type="image">
+                <width>1896</width>
+                <height>952</height>
+                <texture border="48">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/panel.png</texture>
+                <colordiffuse>E0162532</colordiffuse>
+            </control>
+            <control type="image">
+                <width>1896</width>
+                <height>952</height>
+                <texture border="48">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/panel_edge.png</texture>
+                <colordiffuse>2EFFFFFF</colordiffuse>
+            </control>
+            <control type="label">
+                <left>40</left>
+                <top>26</top>
+                <width>1300</width>
+                <height>50</height>
+                <font>font27</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>[B]$INFO[Window.Property(abs.heading)][/B]</label>
+            </control>
+            <control type="label">
+                <left>1340</left>
+                <top>26</top>
+                <width>320</width>
+                <height>50</height>
+                <font>font12</font>
+                <align>right</align>
+                <aligny>center</aligny>
+                <textcolor>FFBDC8D1</textcolor>
+                <label>$INFO[Container(2002).CurrentItem]$INFO[Container(2002).NumItems, / ,]</label>
+                <visible>Integer.IsGreater(Container(2002).NumItems,0)</visible>
+            </control>
+            <control type="label">
+                <left>40</left>
+                <top>70</top>
+                <width>1816</width>
+                <height>26</height>
+                <font>font12</font>
+                <textcolor>FF8F9BA6</textcolor>
+                <label>$INFO[Window.Property(abs.subhead)]</label>
+            </control>
+            <!-- 4.6.7: Expand / Collapse -->
+            <control type="button" id="2410">
+                <left>1676</left>
+                <top>29</top>
+                <width>180</width>
+                <height>44</height>
+                <font>font12</font>
+                <align>center</align>
+                <aligny>center</aligny>
+                <textcolor>FFDCE2E7</textcolor>
+                <focusedcolor>FF0B1119</focusedcolor>
+                <texturenofocus border="22" colordiffuse="1AFFFFFF">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill44.png</texturenofocus>
+                <texturefocus border="22" colordiffuse="FFFFFFFF">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill44.png</texturefocus>
+                <label>[B]$INFO[Window.Property(abs.viewlabel)][/B]</label>
+                <ondown>2310</ondown>
+            </control>
+            <!-- Filter chips: All, each add-on, each quality -->
+            <control type="list" id="2310">
+                <left>40</left>
+                <top>110</top>
+                <width>1816</width>
+                <height>52</height>
+                <orientation>horizontal</orientation>
+                <scrolltime tween="cubic" easing="out">200</scrolltime>
+                <onup>2410</onup>
+                <ondown>2002</ondown>
+                <itemlayout height="52" width="258">
+                    <control type="image">
+                        <width>246</width>
+                        <height>52</height>
+                        <texture border="26">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill60.png</texture>
+                        <colordiffuse>1AFFFFFF</colordiffuse>
+                        <visible>String.IsEmpty(ListItem.Property(abs.active))</visible>
+                    </control>
+                    <control type="image">
+                        <width>246</width>
+                        <height>52</height>
+                        <texture border="26">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill60.png</texture>
+                        <colordiffuse>66D6F0FF</colordiffuse>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.active))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FFE5484D</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),rl) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FF3E9BFF</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),fl) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FF9B6BFF</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),umb) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FF2BC48A</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),pov) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>10</left>
+                        <top>12</top>
+                        <width>28</width>
+                        <height>28</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture>$INFO[ListItem.Property(abs.chipicon)]</texture>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.chipicon))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FFBDC8D1</colordiffuse>
+                        <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <!-- name and count in separate labels: one mixed label was
+                         re-ordered and cut from the start with Kodi in Arabic -->
+                    <control type="label">
+                        <left>38</left>
+                        <width>148</width>
+                        <height>52</height>
+                        <font>font12</font>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[ListItem.Label][/B]</label>
+                    </control>
+                    <control type="label">
+                        <left>186</left>
+                        <width>50</width>
+                        <height>52</height>
+                        <font>font12</font>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                    </control>
+                </itemlayout>
+                <focusedlayout height="52" width="258" condition="!Control.HasFocus(2310)">
+                    <control type="image">
+                        <width>246</width>
+                        <height>52</height>
+                        <texture border="26">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill60.png</texture>
+                        <colordiffuse>1AFFFFFF</colordiffuse>
+                        <visible>String.IsEmpty(ListItem.Property(abs.active))</visible>
+                    </control>
+                    <control type="image">
+                        <width>246</width>
+                        <height>52</height>
+                        <texture border="26">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill60.png</texture>
+                        <colordiffuse>66D6F0FF</colordiffuse>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.active))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FFE5484D</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),rl) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FF3E9BFF</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),fl) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FF9B6BFF</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),umb) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FF2BC48A</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),pov) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>10</left>
+                        <top>12</top>
+                        <width>28</width>
+                        <height>28</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture>$INFO[ListItem.Property(abs.chipicon)]</texture>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.chipicon))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FFBDC8D1</colordiffuse>
+                        <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <!-- name and count in separate labels: one mixed label was
+                         re-ordered and cut from the start with Kodi in Arabic -->
+                    <control type="label">
+                        <left>38</left>
+                        <width>148</width>
+                        <height>52</height>
+                        <font>font12</font>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[ListItem.Label][/B]</label>
+                    </control>
+                    <control type="label">
+                        <left>186</left>
+                        <width>50</width>
+                        <height>52</height>
+                        <font>font12</font>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                    </control>
+                </focusedlayout>
+                <focusedlayout height="52" width="258" condition="Control.HasFocus(2310)">
+                    <control type="image">
+                        <width>246</width>
+                        <height>52</height>
+                        <texture border="26">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill60.png</texture>
+                        <colordiffuse>FFFFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FFE5484D</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),rl) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FF3E9BFF</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),fl) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FF9B6BFF</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),umb) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FF2BC48A</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),pov) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>10</left>
+                        <top>12</top>
+                        <width>28</width>
+                        <height>28</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture>$INFO[ListItem.Property(abs.chipicon)]</texture>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.chipicon))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FF0B1119</colordiffuse>
+                        <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <!-- name and count in separate labels: one mixed label was
+                         re-ordered and cut from the start with Kodi in Arabic -->
+                    <control type="label">
+                        <left>38</left>
+                        <width>148</width>
+                        <height>52</height>
+                        <font>font12</font>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF0B1119</textcolor>
+                        <label>[B]$INFO[ListItem.Label][/B]</label>
+                    </control>
+                    <control type="label">
+                        <left>186</left>
+                        <width>50</width>
+                        <height>52</height>
+                        <font>font12</font>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF0B1119</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                    </control>
+                </focusedlayout>
+            </control>
+            <control type="image">
+                <left>40</left>
+                <top>178</top>
+                <width>1816</width>
+                <height>1</height>
+                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/white.png</texture>
+                <colordiffuse>1AFFFFFF</colordiffuse>
+            </control>
+            <control type="scrollbar" id="2003">
+                <left>1880</left>
+                <top>196</top>
+                <width>6</width>
+                <height>740</height>
+                <onleft>2002</onleft>
+                <showonepage>false</showonepage>
+                <orientation>vertical</orientation>
+                <texturesliderbackground colordiffuse="14FFFFFF" border="3">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill6.png</texturesliderbackground>
+                <texturesliderbar colordiffuse="4DFFFFFF" border="3">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill6.png</texturesliderbar>
+                <texturesliderbarfocus colordiffuse="FFFFFFFF" border="3">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill6.png</texturesliderbarfocus>
+            </control>
+            <control type="panel" id="2002">
+                <left>12</left>
+                <top>184</top>
+                <width>1872</width>
+                <height>740</height>
+                <orientation>vertical</orientation>
+                <pagecontrol>2003</pagecontrol>
+                <scrolltime tween="cubic" easing="out">250</scrolltime>
+                <onup>2310</onup>
+                <itemlayout height="148" width="936">
+                <control type="group">
+                    <left>16</left>
+                    <top>12</top>
+                    <width>904</width>
+                    <height>124</height>
+                        <control type="image">
+                            <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card.png</texture>
+                            <colordiffuse>0FFFFFFF</colordiffuse>
+                        </control>
+                    <!-- Stream -->
+                    <control type="group">
+                        <visible>String.IsEmpty(ListItem.Property(abs.never))</visible>
+                        <control type="image">
+                            <left>20</left>
+                            <top>20</top>
+                            <width>124</width>
+                            <height>42</height>
+                            <texture border="21">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>1AFFFFFF</colordiffuse>
+                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
+                        </control>
+                        <control type="image">
+                            <left>20</left>
+                            <top>20</top>
+                            <width>124</width>
+                            <height>42</height>
+                            <texture border="21">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FFD9434B</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
+                        </control>
+                        <control type="label">
+                            <left>20</left>
+                            <top>20</top>
+                            <width>124</width>
+                            <height>42</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFDCE2E7</textcolor>
+                            <label>[B]$INFO[ListItem.Property(lucent.quality)][/B]</label>
+                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
+                        </control>
+                        <control type="label">
+                            <left>20</left>
+                            <top>20</top>
+                            <width>124</width>
+                            <height>42</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Property(lucent.quality)][/B]</label>
+                            <visible>!String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
+                        </control>
+                        <control type="label">
+                            <left>168</left>
+                            <top>12</top>
+                            <width>712</width>
+                            <height>40</height>
+                            <font>font12</font>
+                            <textcolor>CCFFFFFF</textcolor>
+                            <label>$INFO[ListItem.Property(lucent.title)]</label>
+                        </control>
+                        <control type="label">
+                            <left>168</left>
+                            <top>46</top>
+                            <width>712</width>
+                            <height>34</height>
+                            <font>font12</font>
+                            <textcolor>FF8F9BA6</textcolor>
+                            <label>[UPPERCASE]$INFO[ListItem.Property(lucent.meta)][/UPPERCASE]</label>
+                        </control>
+                        <control type="group">
+                            <left>168</left>
+                            <top>84</top>
+                            <width>712</width>
+                            <height>34</height>
+                            <control type="image">
+                                <left>0</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_1)].png</texture>
+                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_1))</visible>
+                            </control>
+                            <control type="image">
+                                <left>96</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_2)].png</texture>
+                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_2))</visible>
+                            </control>
+                            <control type="image">
+                                <left>192</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_3)].png</texture>
+                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_3))</visible>
+                            </control>
+                            <control type="image">
+                                <left>288</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_4)].png</texture>
+                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_4))</visible>
+                            </control>
+                            <control type="image">
+                                <left>384</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_5)].png</texture>
+                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_5))</visible>
+                            </control>
+                            <control type="image">
+                                <left>480</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_6)].png</texture>
+                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_6))</visible>
+                            </control>
+                            <control type="image">
+                                <left>576</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_7)].png</texture>
+                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_7))</visible>
+                            </control>
+                        </control>
+                    </control>
+                        <control type="image">
+                            <left>60</left>
+                            <top>68</top>
+                            <width>44</width>
+                            <height>44</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(abs.svcicon)]</texture>
+                            <colordiffuse>E6FFFFFF</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
+                        </control>
+                        <control type="image">
+                            <left>20</left>
+                            <top>70</top>
+                            <width>124</width>
+                            <height>36</height>
+                            <texture border="18">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>14FFFFFF</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc)) + String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
+                        </control>
+                        <control type="label">
+                            <left>20</left>
+                            <top>70</top>
+                            <width>124</width>
+                            <height>36</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFDCE2E7</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.svc)][/B]</label>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc)) + String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6E5484D</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),rl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A63E9BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),fl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A69B6BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),umb)</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A62BC48A</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),pov)</visible>
+                        </control>
+                        <control type="label">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.tagtxt_1)][/B]</label>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6E5484D</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),rl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A63E9BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),fl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A69B6BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),umb)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A62BC48A</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),pov)</visible>
+                        </control>
+                        <control type="label">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.tagtxt_2)][/B]</label>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6E5484D</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),rl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A63E9BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),fl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A69B6BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),umb)</visible>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A62BC48A</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),pov)</visible>
+                        </control>
+                        <control type="label">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.tagtxt_3)][/B]</label>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6E5484D</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),rl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A63E9BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),fl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A69B6BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),umb)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A62BC48A</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),pov)</visible>
+                        </control>
+                        <control type="label">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.tagtxt_4)][/B]</label>
+                        </control>
+                    <!-- Full search -->
+                    <control type="label">
+                        <left>40</left>
+                        <width>824</width>
+                        <height>124</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>CCFFFFFF</textcolor>
+                        <label>[B][UPPERCASE][/UPPERCASE][/B]</label>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.never))</visible>
+                    </control>
+                </control>
+                </itemlayout>
+                <focusedlayout height="148" width="936" condition="!Control.HasFocus(2002)">
+                <control type="group">
+                    <left>16</left>
+                    <top>12</top>
+                    <width>904</width>
+                    <height>124</height>
+                        <control type="image">
+                            <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card.png</texture>
+                            <colordiffuse>24FFFFFF</colordiffuse>
+                        </control>
+                        <control type="image">
+                            <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card_edge.png</texture>
+                            <colordiffuse>40FFFFFF</colordiffuse>
+                        </control>
+                    <!-- Stream -->
+                    <control type="group">
+                        <visible>String.IsEmpty(ListItem.Property(abs.never))</visible>
+                        <control type="image">
+                            <left>20</left>
+                            <top>20</top>
+                            <width>124</width>
+                            <height>42</height>
+                            <texture border="21">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>1AFFFFFF</colordiffuse>
+                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
+                        </control>
+                        <control type="image">
+                            <left>20</left>
+                            <top>20</top>
+                            <width>124</width>
+                            <height>42</height>
+                            <texture border="21">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FFD9434B</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
+                        </control>
+                        <control type="label">
+                            <left>20</left>
+                            <top>20</top>
+                            <width>124</width>
+                            <height>42</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFDCE2E7</textcolor>
+                            <label>[B]$INFO[ListItem.Property(lucent.quality)][/B]</label>
+                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
+                        </control>
+                        <control type="label">
+                            <left>20</left>
+                            <top>20</top>
+                            <width>124</width>
+                            <height>42</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Property(lucent.quality)][/B]</label>
+                            <visible>!String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
+                        </control>
+                        <control type="label">
+                            <left>168</left>
+                            <top>12</top>
+                            <width>712</width>
+                            <height>40</height>
+                            <font>font12</font>
+                            <textcolor>CCFFFFFF</textcolor>
+                            <label>$INFO[ListItem.Property(lucent.title)]</label>
+                        </control>
+                        <control type="label">
+                            <left>168</left>
+                            <top>46</top>
+                            <width>712</width>
+                            <height>34</height>
+                            <font>font12</font>
+                            <textcolor>FF8F9BA6</textcolor>
+                            <label>[UPPERCASE]$INFO[ListItem.Property(lucent.meta)][/UPPERCASE]</label>
+                        </control>
+                        <control type="group">
+                            <left>168</left>
+                            <top>84</top>
+                            <width>712</width>
+                            <height>34</height>
+                            <control type="image">
+                                <left>0</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_1)].png</texture>
+                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_1))</visible>
+                            </control>
+                            <control type="image">
+                                <left>96</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_2)].png</texture>
+                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_2))</visible>
+                            </control>
+                            <control type="image">
+                                <left>192</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_3)].png</texture>
+                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_3))</visible>
+                            </control>
+                            <control type="image">
+                                <left>288</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_4)].png</texture>
+                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_4))</visible>
+                            </control>
+                            <control type="image">
+                                <left>384</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_5)].png</texture>
+                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_5))</visible>
+                            </control>
+                            <control type="image">
+                                <left>480</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_6)].png</texture>
+                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_6))</visible>
+                            </control>
+                            <control type="image">
+                                <left>576</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_7)].png</texture>
+                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_7))</visible>
+                            </control>
+                        </control>
+                    </control>
+                        <control type="image">
+                            <left>60</left>
+                            <top>68</top>
+                            <width>44</width>
+                            <height>44</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(abs.svcicon)]</texture>
+                            <colordiffuse>E6FFFFFF</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
+                        </control>
+                        <control type="image">
+                            <left>20</left>
+                            <top>70</top>
+                            <width>124</width>
+                            <height>36</height>
+                            <texture border="18">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>14FFFFFF</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc)) + String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
+                        </control>
+                        <control type="label">
+                            <left>20</left>
+                            <top>70</top>
+                            <width>124</width>
+                            <height>36</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFDCE2E7</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.svc)][/B]</label>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc)) + String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6E5484D</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),rl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A63E9BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),fl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A69B6BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),umb)</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A62BC48A</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),pov)</visible>
+                        </control>
+                        <control type="label">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.tagtxt_1)][/B]</label>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6E5484D</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),rl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A63E9BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),fl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A69B6BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),umb)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A62BC48A</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),pov)</visible>
+                        </control>
+                        <control type="label">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.tagtxt_2)][/B]</label>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6E5484D</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),rl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A63E9BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),fl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A69B6BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),umb)</visible>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A62BC48A</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),pov)</visible>
+                        </control>
+                        <control type="label">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.tagtxt_3)][/B]</label>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6E5484D</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),rl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A63E9BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),fl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A69B6BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),umb)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A62BC48A</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),pov)</visible>
+                        </control>
+                        <control type="label">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.tagtxt_4)][/B]</label>
+                        </control>
+                    <!-- Full search -->
+                    <control type="label">
+                        <left>40</left>
+                        <width>824</width>
+                        <height>124</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>CCFFFFFF</textcolor>
+                        <label>[B][UPPERCASE][/UPPERCASE][/B]</label>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.never))</visible>
+                    </control>
+                </control>
+                </focusedlayout>
+                <focusedlayout height="148" width="936" condition="Control.HasFocus(2002)">
+                <control type="group">
+                    <left>16</left>
+                    <top>12</top>
+                    <width>904</width>
+                    <height>124</height>
+                    <animation effect="zoom" start="98" end="100" center="auto" time="180" tween="cubic" easing="out">Focus</animation>
+                        <control type="image">
+                            <left>-24</left>
+                            <top>-24</top>
+                            <width>952</width>
+                            <height>172</height>
+                            <texture border="56">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card_glow.png</texture>
+                            <colordiffuse>66D6F0FF</colordiffuse>
+                        </control>
+                        <control type="image">
+                            <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card.png</texture>
+                            <colordiffuse>FF2C3E4C</colordiffuse>
+                        </control>
+                        <control type="image">
+                            <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card_edge.png</texture>
+                            <colordiffuse>F2FFFFFF</colordiffuse>
+                        </control>
+                    <!-- Stream -->
+                    <control type="group">
+                        <visible>String.IsEmpty(ListItem.Property(abs.never))</visible>
+                        <control type="image">
+                            <left>20</left>
+                            <top>20</top>
+                            <width>124</width>
+                            <height>42</height>
+                            <texture border="21">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FFFFFFFF</colordiffuse>
+                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
+                        </control>
+                        <control type="image">
+                            <left>20</left>
+                            <top>20</top>
+                            <width>124</width>
+                            <height>42</height>
+                            <texture border="21">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FFD9434B</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
+                        </control>
+                        <control type="label">
+                            <left>20</left>
+                            <top>20</top>
+                            <width>124</width>
+                            <height>42</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FF0B1119</textcolor>
+                            <label>[B]$INFO[ListItem.Property(lucent.quality)][/B]</label>
+                            <visible>String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
+                        </control>
+                        <control type="label">
+                            <left>20</left>
+                            <top>20</top>
+                            <width>124</width>
+                            <height>42</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Property(lucent.quality)][/B]</label>
+                            <visible>!String.IsEmpty(ListItem.Property(lucent.lowq))</visible>
+                        </control>
+                        <control type="label">
+                            <left>168</left>
+                            <top>12</top>
+                            <width>712</width>
+                            <height>40</height>
+                            <font>font12</font>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Property(lucent.title)][/B]</label>
+                        </control>
+                        <control type="label">
+                            <left>168</left>
+                            <top>46</top>
+                            <width>712</width>
+                            <height>34</height>
+                            <font>font12</font>
+                            <textcolor>FFDCE2E7</textcolor>
+                            <label>[UPPERCASE]$INFO[ListItem.Property(lucent.meta)][/UPPERCASE]</label>
+                        </control>
+                        <control type="group">
+                            <left>168</left>
+                            <top>84</top>
+                            <width>712</width>
+                            <height>34</height>
+                            <control type="image">
+                                <left>0</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_1)].png</texture>
+                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_1))</visible>
+                            </control>
+                            <control type="image">
+                                <left>96</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_2)].png</texture>
+                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_2))</visible>
+                            </control>
+                            <control type="image">
+                                <left>192</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_3)].png</texture>
+                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_3))</visible>
+                            </control>
+                            <control type="image">
+                                <left>288</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_4)].png</texture>
+                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_4))</visible>
+                            </control>
+                            <control type="image">
+                                <left>384</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_5)].png</texture>
+                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_5))</visible>
+                            </control>
+                            <control type="image">
+                                <left>480</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_6)].png</texture>
+                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_6))</visible>
+                            </control>
+                            <control type="image">
+                                <left>576</left>
+                                <width>88</width>
+                                <height>34</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/flags/$INFO[ListItem.Property(lucent.badge_7)].png</texture>
+                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <visible>!String.IsEmpty(ListItem.Property(lucent.badge_7))</visible>
+                            </control>
+                        </control>
+                    </control>
+                        <control type="image">
+                            <left>60</left>
+                            <top>68</top>
+                            <width>44</width>
+                            <height>44</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(abs.svcicon)]</texture>
+                            <colordiffuse>FFFFFFFF</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
+                        </control>
+                        <control type="image">
+                            <left>20</left>
+                            <top>70</top>
+                            <width>124</width>
+                            <height>36</height>
+                            <texture border="18">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>2EFFFFFF</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc)) + String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
+                        </control>
+                        <control type="label">
+                            <left>20</left>
+                            <top>70</top>
+                            <width>124</width>
+                            <height>36</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFDCE2E7</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.svc)][/B]</label>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc)) + String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FFE5484D</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),rl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF3E9BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),fl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF9B6BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),umb)</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF2BC48A</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),pov)</visible>
+                        </control>
+                        <control type="label">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.tagtxt_1)][/B]</label>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FFE5484D</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),rl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF3E9BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),fl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF9B6BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),umb)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF2BC48A</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),pov)</visible>
+                        </control>
+                        <control type="label">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.tagtxt_2)][/B]</label>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FFE5484D</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),rl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF3E9BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),fl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF9B6BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),umb)</visible>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF2BC48A</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),pov)</visible>
+                        </control>
+                        <control type="label">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.tagtxt_3)][/B]</label>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FFE5484D</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),rl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF3E9BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),fl)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF9B6BFF</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),umb)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF2BC48A</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),pov)</visible>
+                        </control>
+                        <control type="label">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.tagtxt_4)][/B]</label>
+                        </control>
+                    <!-- Full search -->
+                    <control type="label">
+                        <left>40</left>
+                        <width>824</width>
+                        <height>124</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B][UPPERCASE][/UPPERCASE][/B]</label>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.never))</visible>
+                    </control>
+                </control>
+                </focusedlayout>
+            </control>
+            <!-- Still searching / nothing found -->
+            <control type="group">
+                <top>420</top>
+                <visible>!Integer.IsGreater(Container(2002).NumItems,0)</visible>
+                <control type="image">
+                    <left>932</left>
+                    <width>32</width>
+                    <height>32</height>
+                    <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                    <colordiffuse>FFFFFFFF</colordiffuse>
+                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="true">Conditional</animation>
+                    <visible>String.IsEmpty(Window.Property(abs.empty))</visible>
+                </control>
+                <control type="label">
+                    <left>40</left>
+                    <top>56</top>
+                    <width>1816</width>
                     <height>50</height>
                     <font>font27</font>
                     <align>center</align>

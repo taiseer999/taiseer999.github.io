@@ -1640,3 +1640,11 @@ msgctxt "#30840"
 msgid "Bitrate: under 10 Mbps (estimated)"
 msgstr ""
 
+msgctxt "#30841"
+msgid "Expand"
+msgstr ""
+
+msgctxt "#30842"
+msgid "Collapse"
+msgstr ""
+

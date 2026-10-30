@@ -1,3 +1,20 @@
+v4.6.7
+- Search All: Expand / Collapse button (2400, right end of the heading row;
+  UP from the chips). Expand = window property abs.expanded: the left column
+  (logo, pills, plot, add-on status) hides, the title (+ episode code) sits
+  alone on top, and the streams fill the page in a second panel - chips 2310,
+  panel container 2002 (two columns of the same 936 px cards, so the Python
+  text fitting is unchanged), scrollbar 2003, button 2410. Collapse = the
+  original look. Only the visible view is filled; the other is reset, so
+  the empty-state conditions keep working. Focused stream is kept across
+  the switch. Choice saved in addon_data/<id>/ab_search_view.json.
+- In the expanded view RIGHT moves between the two columns; the filter
+  menu stays on the "Filter" chip.
+- Strings 30841 Expand / 30842 Collapse (EN + AR). ab_search.xml from
+  tools/gen_lucent.py (ab_panel(expanded)); the add-ons' Glass windows are
+  unchanged.
+- addon.xml <news> trimmed to the last two versions (selftest limit).
+
 v4.6.6
 - TMDbHelper 7.x (tested on 7.0.8): new min_version 7.0.0 entries, the old
   ones capped at max_version 6.99.99 (skipped cleanly, no failures):
