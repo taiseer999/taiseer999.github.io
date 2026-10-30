@@ -20,6 +20,16 @@ scrapers and debrid accounts, and plays with its own resolver:
 
 Started from TMDbHelper's player list ("AB Search All", players JSON injected
 by the patcher) as plugin://plugin.program.abukarimtools/?mode=ab_search&...
+
+4.6.13 - threads: every window call happens on the dialog's own thread (the
+one in doModal). The four provider threads and the TMDb meta thread only
+change data and post JSONRPC.NotifyAll; a Monitor created on the dialog
+thread receives it there (Kodi runs Monitor and window callbacks on the
+thread that created them, inside doModal's MakePendingCalls) and rebuilds
+the list. kodi.log 2026-10-30 06:40 / 06:49 (macOS, Kodi 22): the window
+stopped responding right after the last add-on's results were drawn from a
+worker thread - the same class of freeze as 3.4.23 (window calls from a
+background thread).
 """
 import json
 import os
@@ -52,6 +62,10 @@ _SUPPORT = {'fl': ('router.py', 'app_list_sources'), 'rl': ('router.py', 'abk_de
 _BRIDGE = {'rl': 'redlight_search', 'umb': 'umbrella_search', 'pov': 'pov_search'}
 
 LIST, CHIPS = 2000, 2300
+# 4.6.7: expanded view - the same streams over the whole page (two columns)
+LIST_X, CHIPS_X = 2002, 2310
+VIEW_BTN, VIEW_BTN_X = 2400, 2410
+_VIEW_FILE = os.path.join(_DATA, ADDON_ID, 'ab_search_view.json')
 _QUALITIES = ('4K', '1080P', '720P', 'SD')
 _QRANK = {'4K': 0, '1080P': 1, '720P': 2, 'SD': 3}
 _ACTION_BACK = (9, 10, 92, 216, 247, 257, 275, 61467, 61448)
@@ -146,6 +160,8 @@ class Session(object):
     def url(self, key, aid, kind, index=None):
         """plugin:// URL of an add-on's list ('list') or play ('play') mode."""
         m = self.media
+        if key == 'umb':
+            m = getattr(self, 'umb_media', None) or m
         mode = 'app_list_sources' if kind == 'list' else 'app_play_source'
         if key == 'umb':                    # Umbrella: action=..., needs the names and the other ids
             params = {'action': mode, 'title': m.get('title', ''), 'year': m.get('year', ''),
@@ -174,6 +190,8 @@ class Session(object):
 
     def _run(self, key, aid, name):
         rid = self.request_id(key)
+        if key == 'umb':
+            self.umb_media = _english_names(self.media)
         url = self.url(key, aid, 'list')
         path = os.path.join(_DATA, aid, 'device_select', '%s.json' % rid)
         t0 = time.time()
@@ -210,6 +228,136 @@ class Session(object):
                 listener()
             except Exception as e:
                 _log('update failed: %s' % e, xbmc.LOGWARNING)
+
+
+# ───────────────────────── Umbrella: English names ─────────────────────────
+# Umbrella scrapes by title. With Kodi in Arabic, TMDbHelper (and the focused
+# item) give the Arabic title, and title-based scrapers then find nothing
+# (kodi.log 2026-10-29: "Koko" sent as "كوكو", 0 results). Ask TMDb for the
+# English names, with Umbrella's own TMDb key.
+
+_UMB_TMDB_KEY = 'edde6b5e41246ab79a2697cd125e1781'     # Umbrella's built-in default
+
+
+def _latin(text):
+    return all(ord(c) < 0x250 for c in str(text or ''))
+
+
+def _tmdb(path, lang='en-US'):
+    import urllib.request
+    key = ''
+    try:
+        import xbmcaddon
+        key = xbmcaddon.Addon('plugin.video.umbrella').getSetting('tmdb.apikey')
+    except Exception:
+        pass
+    url = 'https://api.themoviedb.org/3/%s%sapi_key=%s&language=%s' % (path, '&' if '?' in path else '?', key or _UMB_TMDB_KEY, lang)
+    with urllib.request.urlopen(url, timeout=6) as r:
+        return json.loads(r.read().decode('utf-8'))
+
+
+def _english_names(media):
+    m = dict(media)
+    if _latin(m.get('title')) and _latin(m.get('tvshowtitle')) and m.get('imdb'):
+        return m
+    try:
+        if m['media_type'] == 'movie':
+            d = _tmdb('movie/%s?append_to_response=external_ids' % m['tmdb_id'])
+            m['title'] = d.get('title') or m.get('title', '')
+            m['year'] = (d.get('release_date') or '')[:4] or m.get('year', '')
+            m['imdb'] = m.get('imdb') or d.get('imdb_id') or ''
+        else:
+            d = _tmdb('tv/%s?append_to_response=external_ids' % m['tmdb_id'])
+            ext = d.get('external_ids') or {}
+            m['tvshowtitle'] = d.get('name') or m.get('tvshowtitle', '')
+            m['year'] = (d.get('first_air_date') or '')[:4] or m.get('year', '')
+            m['imdb'] = m.get('imdb') or ext.get('imdb_id') or ''
+            m['tvdb'] = m.get('tvdb') or str(ext.get('tvdb_id') or '')
+            try:
+                e = _tmdb('tv/%s/season/%s/episode/%s' % (m['tmdb_id'], m['season'], m['episode']))
+                m['title'] = e.get('name') or m.get('title', '')
+            except Exception:
+                pass
+        _log('Umbrella names: %s / %s (%s) %s' % (m.get('title'), m.get('tvshowtitle'), m.get('year'), m.get('imdb')))
+    except Exception as e:
+        _log('Umbrella names from TMDb failed (%s) - using the ones given' % e, xbmc.LOGWARNING)
+    return m
+
+
+# ───────────────────────── window meta from TMDb ─────────────────────────
+# Logo, backdrop, plot, rating, certificate and genres for the left column.
+# TMDbHelper's player URL carries only ids and names, and the focused item is
+# often not the title any more by the time AB Tools runs (screenshot
+# 2026-10-29: title and year only). Kodi's language first, English fallback.
+
+_IMG = 'https://image.tmdb.org/t/p/%s%s'
+
+
+def _ui_lang():
+    try:
+        return xbmc.getLanguage(xbmc.ISO_639_1) or 'en'
+    except Exception:
+        return 'en'
+
+
+def _pick_logo(logos, lang):
+    for want in (lang, 'en', None):
+        for lg in logos or []:
+            if lg.get('iso_639_1') == want and lg.get('file_path', '').endswith('.png'):
+                return _IMG % ('w500', lg['file_path'])
+    return ''
+
+
+def tmdb_window_meta(media):
+    """{'fanart', 'clearlogo', 'plot', 'rating', 'mpaa', 'genre', 'year', ...} or {}."""
+    lang = _ui_lang()
+    tag = 'en-US' if lang == 'en' else lang
+    imgs = 'include_image_language=%s,en,null' % lang
+    out = {}
+    try:
+        if media['media_type'] == 'movie':
+            d = _tmdb('movie/%s?append_to_response=images,release_dates&%s' % (media['tmdb_id'], imgs), tag)
+            out['year'] = (d.get('release_date') or '')[:4]
+            for c in (d.get('release_dates') or {}).get('results', []):
+                if c.get('iso_3166_1') == 'US':
+                    cert = [r.get('certification') for r in c.get('release_dates', []) if r.get('certification')]
+                    if cert:
+                        out['mpaa'] = cert[0]
+        else:
+            d = _tmdb('tv/%s?append_to_response=images,content_ratings&%s' % (media['tmdb_id'], imgs), tag)
+            out['year'] = (d.get('first_air_date') or '')[:4]
+            for c in (d.get('content_ratings') or {}).get('results', []):
+                if c.get('iso_3166_1') == 'US' and c.get('rating'):
+                    out['mpaa'] = c['rating']
+            try:
+                e = _tmdb('tv/%s/season/%s/episode/%s' % (media['tmdb_id'], media['season'], media['episode']), tag)
+                out['ep_plot'] = e.get('overview') or ''
+                out['ep_runtime'] = e.get('runtime') or 0
+                out['ep_name_tmdb'] = e.get('name') or ''
+            except Exception:
+                pass
+        out['plot'] = out.pop('ep_plot', '') or d.get('overview') or ''
+        if not out['plot'] and tag != 'en-US':
+            try:
+                path = 'movie/%s' if media['media_type'] == 'movie' else 'tv/%s'
+                out['plot'] = _tmdb(path % media['tmdb_id']).get('overview') or ''
+            except Exception:
+                pass
+        if d.get('backdrop_path'):
+            out['fanart'] = _IMG % ('w1280', d['backdrop_path'])
+        out['clearlogo'] = _pick_logo((d.get('images') or {}).get('logos'), lang)
+        if d.get('vote_average'):
+            out['rating'] = d['vote_average']
+        out['genre'] = ', '.join(g.get('name', '') for g in (d.get('genres') or [])[:3])
+        # running time (minutes) for the bitrate estimate
+        if media['media_type'] == 'movie':
+            out['runtime'] = d.get('runtime') or 0
+        else:
+            out['runtime'] = out.pop('ep_runtime', 0) or ((d.get('episode_run_time') or [0])[0])
+    except Exception as e:
+        _log('window meta from TMDb failed: %s' % e, xbmc.LOGWARNING)
+        return {}
+    return {k: v for k, v in out.items() if v}
 
 
 # ───────────────────────── merging ─────────────────────────
@@ -252,12 +400,54 @@ _PRETTY = {'ALLDEBRID': 'AllDebrid', 'REAL-DEBRID': 'Real-Debrid', 'REALDEBRID':
            'DEBRID-LINK': 'Debrid-Link', 'DEBRIDLINK': 'Debrid-Link'}
 
 
+# 4.5.8: short service code on the card (replaces the coloured icon)
+_SHORT = (('REAL', 'RD'), ('ALLDEBRID', 'AD'), ('ALL-DEBRID', 'AD'), ('PREMIUMIZE', 'PM'),
+          ('TORBOX', 'TB'), ('OFFCLOUD', 'OC'), ('EASYNEWS', 'EN'), ('EASYDEBRID', 'ED'),
+          ('DEBRID-LINK', 'DL'), ('DEBRIDLINK', 'DL'))
+
+
+def _service_code(provider):
+    up = (provider or '').upper().replace(' ', '')
+    for key, code in _SHORT:
+        if up.startswith(key):
+            return code
+    if up in ('RD', 'AD', 'PM', 'TB', 'OC', 'EN', 'ED', 'DL'):
+        return up
+    return ''
+
+
+_SERVICE_ORDER = ('RD', 'AD', 'PM', 'TB', 'OC', 'EN', 'ED', 'DL')
+
+
+_SERVICE_ICON = {'RD': 'realdebrid', 'AD': 'alldebrid', 'PM': 'premiumize', 'TB': 'torbox',
+                 'OC': 'offcloud', 'EN': 'easynews', 'ED': 'easydebrid'}
+
+
+def _service_icon(code):
+    name = _SERVICE_ICON.get(code or '')
+    return (MEDIA + 'lucent/providers/%s.png' % name) if name else ''
+
+
+def _row_service(row):
+    code = row.get('svc')
+    if code is None:
+        code = row['svc'] = _service_code(_provider(row['item']))
+    return code
+
+
 def _pretty(name):
     return _PRETTY.get(name.upper(), name.title() if name.isupper() else name)
 
 
+# Title fit for the stream cards, narrower than the add-ons' windows: the
+# skin font here ran wider and Kodi in Arabic cut the overflow from the START
+# ("sion 2025 ..." for "Obsession 2025 ..."), screenshot 2026-10-29.
+_TITLE_PX = 600
+
 # size buckets in the filter menu (GB, string id)
 _SIZES = ((0, 5, 30830), (5, 15, 30831), (15, 40, 30832), (40, 1e9, 30833))
+# estimated bitrate buckets (Mbit/s, string id)
+_BITRATES = ((40, 1e9, 30837), (20, 40, 30838), (10, 20, 30839), (0, 10, 30840))
 
 
 def _size(item):
@@ -268,10 +458,16 @@ def _size(item):
 
 
 def _row_key(item):
+    # 4.6.14: the debrid service is part of the key. Keyed on the hash alone,
+    # a release cached on RD and on PM became one row: the first (RD) won and
+    # the PM copy was dropped - same add-on, so not even added as a ref.
+    # Users with RD/AD/TB + Premiumize never saw a PM result or the PM chip.
+    svc = _service_code(_provider(item)) or _clean(_provider(item)).upper()
     h = str(item.get('hash') or '').strip().lower()
     if h:
-        return 'h:' + h
-    return 'n:%s|%s' % (_clean(item.get('name') or item.get('display_name')).lower(), _clean(item.get('size_label')))
+        return 'h:%s|%s' % (h, svc)
+    return 'n:%s|%s|%s' % (_clean(item.get('name') or item.get('display_name')).lower(),
+                           _clean(item.get('size_label')), svc)
 
 
 def merge(session):
@@ -299,6 +495,23 @@ def merge(session):
 
 # ───────────────────────── the window ─────────────────────────
 
+def _load_expanded():
+    try:
+        with open(_VIEW_FILE, 'r', encoding='utf-8') as f:
+            return bool(json.load(f).get('expanded'))
+    except Exception:
+        return False
+
+
+def _save_expanded(on):
+    try:
+        os.makedirs(os.path.dirname(_VIEW_FILE), exist_ok=True)
+        with open(_VIEW_FILE, 'w', encoding='utf-8') as f:
+            json.dump({'expanded': bool(on)}, f)
+    except Exception as e:
+        _log('view not saved: %s' % e, xbmc.LOGWARNING)
+
+
 class SearchWindow(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
@@ -308,13 +521,57 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         self.tags = {key: (name, tag) for key, _a, name, tag, _ok in self.session.addons}
         self.rows, self.shown = [], []
         self.f_addon, self.f_quality = None, None
+        self.f_service = None         # 4.5.9: service chip (RD / AD / PM ...)
         self.chips = []
         self.picked = None
         self.ui_lock = threading.RLock()
         self.ready = False
         self.focused_key = None
+        self.runtime = 0              # minutes, from TMDb: bitrate = size / running time
         self.filters = []            # filter menu (RIGHT / "Filter" chip): [{'kind', 'value', 'label'}]
         self._badge_cache = {}
+        self.expanded = _load_expanded()   # 4.6.7: last view is kept
+        self._dirty = False           # 4.6.13: new data waiting for the dialog thread
+        self._dirty_at = 0.0
+        self._pending_meta = None     # TMDb meta fetched by the meta thread
+        self._busy = 0                # nested dialog open (filter menu / "Play with")
+
+    # ---- view (4.6.7) ----
+    def _lid(self):
+        return LIST_X if self.expanded else LIST
+
+    def _cid(self):
+        return CHIPS_X if self.expanded else CHIPS
+
+    def _bid(self):
+        return VIEW_BTN_X if self.expanded else VIEW_BTN
+
+    def _view_props(self):
+        self.setProperty('abs.expanded', 'true' if self.expanded else '')
+        self.setProperty('abs.viewlabel', T(30842) if self.expanded else T(30841))
+
+    def _toggle_view(self):
+        with self.ui_lock:
+            try:
+                pos = self.getControl(self._lid()).getSelectedPosition()
+                if 0 <= pos < len(self.shown):
+                    self.focused_key = _row_key(self.shown[pos]['item'])
+            except Exception:
+                pass
+            old = (self._lid(), self._cid())
+            self.expanded = not self.expanded
+            self._view_props()
+            for cid in old:                     # the hidden view stays empty
+                try:
+                    self.getControl(cid).reset()
+                except Exception:
+                    pass
+            self.shown, self.chips = [], []     # rebuild in the other view
+            self._chips()
+            self._rows()
+        _save_expanded(self.expanded)
+        _log('view: %s' % ('expanded' if self.expanded else 'default'))
+        self._focus(self._bid())
 
     # ---- life cycle ----
     def onInit(self):
@@ -326,10 +583,13 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 _log('window meta: %s' % e)
         self.setProperty('abs.heading', T(30817))
         self.setProperty('abs.addons_heading', T(30818))
+        self._view_props()
+        # always: besides any missing art / plot it brings the running time
+        threading.Thread(target=self._fill_meta, name='abs_meta').start()
         self.ready = True
-        self.session.listener = self.refresh
+        self.session.listener = self.request_refresh
         self.refresh()
-        self._focus(CHIPS)
+        self._focus(self._cid())
         if not self.session.started_threads:
             self.session.started_threads = True
             self.session.start()
@@ -337,6 +597,64 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
     def close(self):
         self.session.closed = True
         super().close()
+
+    # ---- cross-thread (4.6.13): workers change data only, the dialog thread draws ----
+    def request_refresh(self):
+        """Any thread. Mark new data and wake the dialog thread; no window call here."""
+        if self.session.closed:
+            return
+        if not self._dirty:
+            self._dirty_at = time.time()
+        self._dirty = True
+        try:
+            xbmc.executeJSONRPC(json.dumps({
+                'jsonrpc': '2.0', 'id': 1, 'method': 'JSONRPC.NotifyAll',
+                'params': {'sender': ADDON_ID, 'message': 'abs_refresh', 'data': {'rid': self.session.rid}}}))
+        except Exception as e:
+            _log('refresh notify failed: %s' % e, xbmc.LOGWARNING)
+
+    def pump(self):
+        """Dialog thread only: Monitor.onNotification, onAction, after a nested dialog."""
+        if not self._dirty or self._busy or not self.ready or self.session.closed:
+            return
+        self._dirty = False
+        lag = time.time() - self._dirty_at
+        if lag > 2:
+            _log('refresh ran %.1fs after the data arrived' % lag, xbmc.LOGWARNING)
+        meta, self._pending_meta = self._pending_meta, None
+        if meta:
+            self._apply_meta(meta)
+        self.refresh()
+
+    def _fill_meta(self):
+        """Meta thread: TMDb only, then hand the result to the dialog thread."""
+        extra = tmdb_window_meta(self.session.media)
+        if not extra or self.session.closed:
+            return
+        self._pending_meta = extra
+        self.request_refresh()
+
+    def _apply_meta(self, extra):
+        """Dialog thread."""
+        try:
+            runtime = int(extra.pop('runtime', 0) or 0)
+        except Exception:
+            runtime = 0
+        if runtime > 0 and not self.runtime:
+            self.runtime = runtime
+            _log('running time %d min - bitrate estimates on' % runtime)
+            self.shown = []                   # rebuild the cards with the estimate (refresh follows)
+        meta = dict(self.meta)
+        for k, v in extra.items():
+            if not meta.get(k):
+                meta[k] = v
+        self.meta = meta
+        th = _theme()
+        if th:
+            try:
+                th.lucent_window(self, meta, fanart=meta.get('fanart', ''), clearlogo=meta.get('clearlogo', ''))
+            except Exception as e:
+                _log('window meta: %s' % e)
 
     def _focus(self, cid):
         # no <defaultcontrol>: the chips are empty until onInit fills them, and
@@ -404,13 +722,23 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             count = sum(1 for r in self.rows if r['group'] == q)
             if count:
                 chips.append(('quality', q, q.replace('P', 'p'), count, '', False))
+        # 4.5.9: one chip per debrid service (4.6.1: shown from one service on)
+        svc = {}
+        for r in self.rows:
+            code = _row_service(r)
+            if code:
+                svc[code] = svc.get(code, 0) + 1
+        if svc:
+            for code in _SERVICE_ORDER:
+                if code in svc:
+                    chips.append(('service', code, code, svc[code], '', False))
         if self.rows:
             chips.append(('filter', None, T(30835), len(self.filters) or '', '', False))
         return chips
 
     def _chips(self):
         defs = self._chip_defs()
-        ctl = self.getControl(CHIPS)
+        ctl = self.getControl(self._cid())
         same = [(d[0], d[1]) for d in defs] == [(d[0], d[1]) for d in self.chips]
         if not same:
             pos = ctl.getSelectedPosition()
@@ -426,8 +754,11 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             li.setLabel2('' if loading else str(count))
             li.setProperty('abs.key', key)
             li.setProperty('abs.loading', 'true' if loading else '')
-            active = (kind == 'all' and not self.f_addon and not self.f_quality and not self.filters) or \
+            li.setProperty('abs.chipicon', _service_icon(value) if kind == 'service' else '')
+            active = (kind == 'all' and not self.f_addon and not self.f_quality and not self.f_service
+                      and not self.filters) or \
                      (kind == 'addon' and value == self.f_addon) or (kind == 'quality' and value == self.f_quality) or \
+                     (kind == 'service' and value == self.f_service) or \
                      (kind == 'filter' and bool(self.filters))
             li.setProperty('abs.active', 'true' if active else '')
 
@@ -437,6 +768,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             if self.f_addon and all(k != self.f_addon for k, _i in r['refs']):
                 continue
             if self.f_quality and r['group'] != self.f_quality:
+                continue
+            if self.f_service and _row_service(r) != self.f_service:
                 continue
             out.append(r)
         return out
@@ -457,8 +790,22 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             self._badge_cache[id(item)] = found
         return found
 
+    def _mbps(self, row):
+        """Average bitrate estimate in Mbit/s: size x 8 / running time. None for
+        season / show packs (one size for many episodes) or unknown size."""
+        item = row['item']
+        if not self.runtime or row['size'] <= 0:
+            return None
+        if item.get('package') or item.get('pack') or item.get('last_season'):
+            return None
+        return row['size'] * 8000.0 / (self.runtime * 60.0)
+
     def _match(self, row, f):
         kind, value, item = f['kind'], f['value'], row['item']
+        if kind == 'bitrate':
+            lo, hi = value
+            rate = self._mbps(row)
+            return rate is not None and lo <= rate < hi
         if kind == 'service':
             return _provider(item).upper() == value
         if kind == 'site':
@@ -495,6 +842,9 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             counted('service', s, _t('Show %s only') % _pretty(s))
         for lo, hi, sid in _SIZES:
             counted('size', (lo, hi), T(sid))
+        if self.runtime:
+            for lo, hi, sid in _BITRATES:
+                counted('bitrate', (lo, hi), T(sid))
         sites = {}
         for r in base:
             s = _site(r['item']).upper()
@@ -560,14 +910,14 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             self._chips()
             self._rows()
         if self.shown:
-            self._focus(LIST)
+            self._focus(self._lid())
             try:
-                self.getControl(LIST).selectItem(0)
+                self.getControl(self._lid()).selectItem(0)
             except Exception:
                 pass
 
     def _rows(self):
-        ctl = self.getControl(LIST)
+        ctl = self.getControl(self._lid())
         try:
             pos = ctl.getSelectedPosition()
             if 0 <= pos < len(self.shown):
@@ -588,37 +938,47 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 if _row_key(r['item']) == self.focused_key:
                     ctl.selectItem(n)
                     break
-        if not shown and self.getFocusId() == LIST:
-            self.setFocusId(CHIPS)
+        if not shown and self.getFocusId() == self._lid():
+            self.setFocusId(self._cid())
 
     def _listitem(self, row):
         th = _theme()
         item, q = row['item'], row['q']
-        li = xbmcgui.ListItem(_clean(item.get('display_name') or item.get('name')))
+        # offscreen: a new row, filled before addItems and never changed after
+        li = xbmcgui.ListItem(_clean(item.get('display_name') or item.get('name')), offscreen=True)
         provider = _provider(item)
         site = _site(item)
         size = _clean(item.get('size_label'))
         meta = []
-        for part in (provider, size, site):
+        rate = self._mbps(row)
+        rate = ('~%d Mbps' % round(rate)) if rate else ''
+        for part in (provider, size, rate, site):
             if part and part.upper() not in ('N/A', 'NA', 'NONE') and \
                     not any(part.upper() in m.upper() or m.upper() in part.upper() for m in meta):
                 meta.append(part)
         ntags = min(len(row['refs']), 4)
-        meta_px = 690 - ntags * 70
+        meta_px = 610 - ntags * 70
         title = _clean(item.get('display_name') or item.get('name'))
         props = {'lucent.quality': q, 'lucent.lowq': 'true' if q in ('CAM', 'SCR', 'TELE', 'HC') else '',
-                 'lucent.uncached': '', 'lucent.res': '', 'lucent.icon': ''}
+                 'lucent.uncached': '', 'lucent.res': '', 'lucent.icon': '',
+                 'abs.svc': _service_code(provider), 'abs.svcicon': ''}
         if th:
             try:
+                # too long: drop the site first, then the service name, keep
+                # size and the bitrate estimate longest
+                for drop in (site, provider, rate):
+                    if len(meta) <= 1 or th._px('  ·  '.join(meta).upper()) <= meta_px:
+                        break
+                    if drop in meta:
+                        meta.remove(drop)
                 while len(meta) > 1 and th._px('  ·  '.join(meta).upper()) > meta_px:
                     meta.pop()
-                props['lucent.title'] = th._fit(title, th._TITLE_PX)
+                props['lucent.title'] = th._fit(title, _TITLE_PX)
                 props['lucent.meta'] = th._fit('  ·  '.join(meta), meta_px)
-                if th._colored():
-                    if not props['lucent.lowq']:
-                        props['lucent.res'] = th._RES.get(q, '')
-                    icon = th._provider_icon(provider, site)
-                    props['lucent.icon'] = (MEDIA + icon) if icon else ''
+                # 4.6.1: no resolution flags; service icon (AB Wizard
+                # artwork, lucent/providers) under the quality pill
+                icon = th._provider_icon(provider, site)
+                props['abs.svcicon'] = (MEDIA + icon) if icon else ''
                 found = self._badges(row)
             except Exception:
                 found = []
@@ -635,45 +995,59 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
 
     # ---- input ----
     def onClick(self, cid):
-        if cid == CHIPS:
-            pos = self.getControl(CHIPS).getSelectedPosition()
+        if cid in (VIEW_BTN, VIEW_BTN_X):
+            return self._toggle_view()
+        if cid in (CHIPS, CHIPS_X):
+            pos = self.getControl(cid).getSelectedPosition()
             if 0 <= pos < len(self.chips):
                 kind, value = self.chips[pos][0], self.chips[pos][1]
                 if kind == 'filter':
-                    return self._filter_menu()
+                    return self._menu(self._filter_menu)
                 with self.ui_lock:
                     if kind == 'all':
-                        self.f_addon = self.f_quality = None
+                        self.f_addon = self.f_quality = self.f_service = None
                     elif kind == 'addon':
                         self.f_addon = None if self.f_addon == value else value
+                    elif kind == 'service':
+                        self.f_service = None if self.f_service == value else value
                     else:
                         self.f_quality = None if self.f_quality == value else value
                     self.focused_key = None
                     self._chips()
                     self._rows()
                 if self.shown:
-                    self.setFocusId(LIST)
-        elif cid == LIST:
+                    self.setFocusId(self._lid())
+        elif cid in (LIST, LIST_X):
             self._play(None)
 
+    def _menu(self, fn, *args, **kwargs):
+        """A nested dialog: no list rebuild under it, catch up when it closes."""
+        self._busy += 1
+        try:
+            return fn(*args, **kwargs)
+        finally:
+            self._busy -= 1
+            self.pump()
+
     def onAction(self, action):
+        self.pump()                             # fallback: any key catches up
         aid = action.getId()
         if aid in _ACTION_BACK:
             if self.filters:                    # Back first drops the filter-menu filters
                 self.filters = []
                 return self._apply_filters()
-            if self.getFocusId() == LIST and (self.f_addon or self.f_quality):
-                self.setFocusId(CHIPS)          # first Back from a filtered list: back to the chips
+            if self.getFocusId() == self._lid() and (self.f_addon or self.f_quality or self.f_service):
+                self.setFocusId(self._cid())    # first Back from a filtered list: back to the chips
                 return
             self.close()
             return
-        if aid in _ACTION_MENU and self.getFocusId() == LIST:
-            self._play(choose=True)
-        elif aid == _ACTION_RIGHT and self.getFocusId() == LIST:
-            self._filter_menu()
+        if aid in _ACTION_MENU and self.getFocusId() == self._lid():
+            self._menu(self._play, choose=True)
+        elif aid == _ACTION_RIGHT and self.getFocusId() == LIST:      # one column only: RIGHT moves in the panel
+            self._menu(self._filter_menu)
 
     def _current(self):
-        pos = self.getControl(LIST).getSelectedPosition()
+        pos = self.getControl(self._lid()).getSelectedPosition()
         return self.shown[pos] if 0 <= pos < len(self.shown) else None
 
     def _play(self, choose=None):
@@ -691,6 +1065,25 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
 
 
 # ───────────────────────── entry ─────────────────────────
+
+class _Pump(xbmc.Monitor):
+    """4.6.13: created on the dialog thread, so Kodi runs onNotification there too."""
+
+    def __init__(self, rid):
+        super().__init__()
+        self.rid = rid
+        self.win = None
+
+    def onNotification(self, sender, method, data):
+        if not str(method).endswith('abs_refresh') or self.rid not in str(data or ''):
+            return
+        win = self.win
+        if win is not None:
+            try:
+                win.pump()
+            except Exception as e:
+                _log('refresh failed: %s' % e, xbmc.LOGWARNING)
+
 
 def _focused_meta(tmdb_id):
     """Logo / fanart / plot of the item TMDbHelper was started from."""
@@ -754,11 +1147,14 @@ def run(params):
             meta.setdefault('ep_name', meta.get('title', ''))
             meta['title'] = meta['tvshowtitle']
     session = Session(media, addons)
+    pump = _Pump(session.rid)
     win = SearchWindow('ab_search.xml', ADDON_PATH, 'Default', '1080i', session=session, meta=meta)
+    pump.win = win
     win.doModal()
-    picked = win.picked
-    del win
     session.closed = True
+    pump.win = None
+    picked = win.picked
+    del win, pump
     if not picked:
         return
     key, index = picked

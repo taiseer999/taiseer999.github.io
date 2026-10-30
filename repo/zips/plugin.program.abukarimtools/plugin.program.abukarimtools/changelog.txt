@@ -1,3 +1,291 @@
+v4.6.14
+- FIX Search All: Premiumize results never appeared for users who also have
+  Real-Debrid / AllDebrid / TorBox. Rows were merged on the torrent hash alone,
+  so a release cached on RD and PM kept only the RD copy (and the PM chip never
+  showed). The debrid service is now part of the row key.
+
+v4.6.13
+- FIX Search All froze after the results were shown (kodi.log 2026-10-30
+  06:40 and 06:49, macOS, Kodi 22 / Python 3.14): all four add-ons had
+  returned (99 / 98 / 117 / 115 sources) and the window drew them, then
+  ignored every key until default.py was torn down 8 minutes later with
+  SwigDirector_WindowXMLDialog left in memory. The list was built from FIVE
+  background threads at once (one per add-on + the TMDb meta thread) -
+  the same class of freeze as 3.4.23 (window calls from a worker thread).
+- Every window call now happens on the dialog's own thread (the one in
+  doModal):
+  * provider threads and the meta thread only change data and post
+    JSONRPC.NotifyAll (sender plugin.program.abukarimtools, message
+    abs_refresh, data {rid});
+  * _Pump (xbmc.Monitor) is created on the dialog thread, so Kodi runs its
+    onNotification there (inside doModal's MakePendingCalls) and it calls
+    SearchWindow.pump() -> refresh();
+  * TMDb meta (running time, art, plot) is applied by the dialog thread too;
+  * no rebuild while a nested dialog is open (filter menu, "Play with"),
+    it catches up when that closes; any key press also catches up (fallback
+    if a notification were ever lost);
+  * stream rows are created offscreen (no GUI lock per row).
+- Tested with real worker threads and a thread-checking mock of Kodi:
+  4.6.12 made 1517 window calls from the worker threads, 4.6.13 makes 0;
+  results, bitrate estimate, Expand / Collapse, chips and play all work;
+  with notifications blocked a key press fills the list.
+
+v4.6.12
+- AF3: Lucent Look - the Lucent focus (4.6.11) is now optional. New last row
+  in the Toggles > "AF3: Lucent Look" picker: "Focus colour: Lucent white" /
+  "Focus colour: my own colour", flips the skin bool abk.lucent.ownfocus.
+  Live (the variables are read every frame), no skin reload. Default stays
+  Lucent white.
+- Includes_Colors.xml: the four focus values are now gated on
+  Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus).
+  The anchor now includes the start of AF3's next line, so it only matches an
+  unpatched skin; a skin patched by 4.6.11 is upgraded in place by the regex
+  fallback. Checked both paths on AF3 50.11.31: one Lucent line per variable,
+  second sweep "already patched".
+- Lucent components (glass OSD buttons, info-page pills) stay white either
+  way - they are part of the look, not the focus colour.
+- Strings 30858 / 30859 (EN + AR).
+
+v4.6.11
+- AF3: Lucent Look, phase 4 - Lucent focus across the whole skin (same
+  Toggles entry, same skin bool abk.lucent):
+  * Includes_Colors.xml: ColorHighlight ffffffff, ColorSelected ff0b1119,
+    ColorSelected_30 4d0b1119, ColorSelectedInverted ffffffff are inserted as
+    the FIRST value of each variable, gated on abk.lucent, so they win over
+    Skin.String(focuscolor.name) and RevertSelectedText while the look is on.
+  * This is AF3's own default pairing (white highlight, dark text), so every
+    AF3 view already supports it; the user's focus colour returns on Off.
+    Variables are evaluated live - no extra skin reload.
+  * af3_highlight (genre line / widget titles in the highlight colour) now
+    shows them white while the look is on.
+- Verified on AF3 50.11.31 with all 80 AF3 patcher entries: no failure,
+  Includes_Colors.xml valid, second sweep "already patched".
+
+v4.6.10
+- AF3: Lucent Look, phase 3 - the info page (same Toggles entry, same skin
+  bool abk.lucent; nothing changes with it off):
+  * Button_Underline_Switcher (Includes_Buttons.xml) - the action buttons
+    of the video info page (grouplists 9000: Play / Browse, Trailer, Trakt,
+    Versions ..., Options) and the plot window tabs - become Lucent pills:
+    56 px pill60, 10 % white when idle, solid white with dark text when
+    focused, 24 % white for the active tab (alt textures). Same first-tag-
+    wins method as phase 2: one gated include right after <nested />.
+  * The two info-page button rows use a 14 px gap instead of 40
+    (ABK_Lucent_PillGap before AF3's <itemgap>).
+  * New texture media/abk_lucent/pill60.png; the toggle checks it.
+- Verified on AF3 50.11.31 with all 76 AF3 patcher entries (PPI, trailers,
+  vertical plot, highlight, subtitle tools ...): no failure, 22 Lucent
+  entries, every gated include defined, XML valid (except the old PPI
+  dialog with its bare "&", unchanged).
+
+v4.6.9
+- AF3: Lucent Look, phase 2 - the player (same Toggles entry, same skin
+  bool abk.lucent; nothing changes with it off):
+  * thin glass progress bar in OSD_Progress_BarControls (DialogSeekBar,
+    VideoOSD, every window that uses it): 6 px pill track 15 % white, cache
+    25 % white, progress white; AF3's own cache line and bars 499 / 498 hide.
+    AF3's seek nib (control 401 / 402, driven by Kodi) is kept as is.
+  * glass OSD buttons (Defs_OSD_Button): 15 % white circle, solid white when
+    focused; the focused icon turns dark (OSD_Button_Icon_Overlay).
+  * play time bold white, total time dimmed (OSD_Progress_Labels).
+- How: our own resources/af3_lucent/Includes_ABK_Lucent.xml is installed in
+  1080i/ and registered in Includes.xml after Includes_OSD.xml; the AF3
+  edits only insert <include condition="Skin.HasSetting(abk.lucent)"> lines.
+  Kodi takes the FIRST texture / textcolor / font tag of a control, so an
+  include placed before AF3's tag wins only while the look is on. Include
+  conditions are read at skin load; every switch of the toggle changes the
+  skin colours, which reloads the skin, so they always match.
+- TinyPPI / PPI AF3 untouched (checked together: both register in
+  Includes.xml, different anchors). Verified on AF3 50.11.31: 24 entries OK,
+  second and third sweep all "already patched", every gated include defined.
+- Toggle checks the new files (Includes_ABK_Lucent.xml registered, pill6.png)
+  before switching on.
+
+v4.6.8
+- NEW Toggles > "AF3: Lucent Look" (af3_lucent_toggle.py) - phase 1 of the
+  Lucent port to Arctic Fuse 3 (design after the Lucent skin by djdirty60):
+  Off / Lucent Glass / Lucent Glass AMOLED.
+  * Two complete AF3 colour themes (all 57 AF3 tokens + panel_bg_100, which
+    AF3 uses but never defines) in resources/af3_lucent/colors/, generated
+    by tools/gen_af3_lucent.py, installed into skin.arctic.fuse.3/colors/.
+    The toggle switches lookandfeel.skincolors over JSON-RPC (Kodi reloads
+    the skin itself, so at most one reload per switch) and remembers the
+    previous colours in addon_data/<id>/af3_lucent.json for Off. Colours the
+    user picks by hand while it is on are kept on Off.
+  * Glass dialog frames: Part_Background in Dialog_Parts.xml (the frame of
+    ~30 AF3 dialogs and the Home / Search side panels) hides AF3's blur and
+    outline layers and draws the Lucent glass body (panel_shadow + panel +
+    panel_edge, the same textures as the Glass Theme windows, installed in
+    media/abk_lucent/) while the skin bool abk.lucent is set.
+  * All patcher entries are always-on and inert with the bool off: AF3 then
+    looks exactly as unpatched. Checked against AF3 50.11.31: one shared
+    file changed (Dialog_Parts.xml, XML valid), five files added, second
+    sweep "already patched".
+- Strings 30850-30857 (EN + AR). New icon resources/icons/af3_lucent.png.
+
+v4.6.7
+- Search All: Expand / Collapse button (2400, right end of the heading row;
+  UP from the chips). Expand = window property abs.expanded: the left column
+  (logo, pills, plot, add-on status) hides, the title (+ episode code) sits
+  alone on top, and the streams fill the page in a second panel - chips 2310,
+  panel container 2002 (two columns of the same 936 px cards, so the Python
+  text fitting is unchanged), scrollbar 2003, button 2410. Collapse = the
+  original look. Only the visible view is filled; the other is reset, so
+  the empty-state conditions keep working. Focused stream is kept across
+  the switch. Choice saved in addon_data/<id>/ab_search_view.json.
+- In the expanded view RIGHT moves between the two columns; the filter
+  menu stays on the "Filter" chip.
+- Strings 30841 Expand / 30842 Collapse (EN + AR). ab_search.xml from
+  tools/gen_lucent.py (ab_panel(expanded)); the add-ons' Glass windows are
+  unchanged.
+- addon.xml <news> trimmed to the last two versions (selftest limit).
+
+v4.6.6
+- TMDbHelper 7.x (tested on 7.0.8): new min_version 7.0.0 entries, the old
+  ones capped at max_version 6.99.99 (skipped cleanly, no failures):
+  * tmdbh_trakt_auth: api/trakt/api.py TraktAPI.login -> _abk_qr_login()
+    (QR window, same device/token polling; stock dialog if it errors).
+  * tmdbh_mpaa_ksa: items/database/tmdbdata.py
+    CertificationDetailsDataBaseCache - iso_country IN (?, "US"), own
+    country first, empty names skipped.
+  * tmdbh_genre_lang: items/database/database.py ItemDetailsDataBase -
+    after check_database_initialization (7.x calls create_database only for
+    a new file), once per session + language (window property).
+  * query/database/database.py: no 7.x entry - 7.x caches the genre list
+    per language already (TMDbGenres.db, GenreLookup.<lang>).
+
+v4.6.5
+- Subtitle Look height = subtitles.marginvertical (Kodi 0..50 %, clamped
+  1..50, step 1 %) with subtitles.align = Bottom (1). Kodi reloads the
+  subtitle style on any settings change (CRenderer::UpdateSubtitleStyle ->
+  LoadSettings + ResetSubtitlePosition), so it is live and absolute. JSON-RPC
+  SetSettingValue only checks visibility, so the setting's "disabled while
+  playing" dependency does not block it. SubtitleShiftUp/Down dropped: their
+  distance accelerates (CMovingSpeed 100 px/s^2, max 300) and is 0 within one
+  frame, so a press never moved a known amount. OK on Height = 4.95 %.
+  addon_data/subtitle_look.json no longer used.
+
+v4.6.4
+- Subtitle Look: slider nibs are images moved with setPosition (the progress
+  righttexture stayed at the left end).
+- Height is absolute: calibrate() = 1400 SubtitleShiftDown (Kodi clamps at
+  its lowest) + POS_BASE 60 up = level 0. Range 0..40 presses (10 steps
+  each), no going below 0 / off screen. Calibrated on first use and on OK on
+  the Height row. State: subtitle_look.json {level, calibrated}.
+
+v4.6.3
+- Subtitle Look height: one press = 10 Kodi SubtitleShift actions
+  (POS_ACTIONS), bar span 30 presses each way. subtitles.align is always set
+  to Manual (0) - "Below picture" (2) capped the shift near the bottom.
+  Saved offset key renamed (position_presses), so the counter starts at 0.
+
+v4.6.2
+- NEW toggle af3_substyle "AF3: Subtitle Look Button (Height, Size & Font)":
+  icon extras/icons/substyle.png, button 6012 before Video settings (6008)
+  in VideoOSD.xml, and a matching empty slot in the OSD popups
+  (Includes_OSD.xml). Both XML parts carry revert_when_off.
+- The button runs RunPlugin(?mode=subtitle_style) -> sub_quick.py, window
+  abk_subquick.xml (top right, so the subtitle line is the live preview):
+  Height = SubtitleShiftUp/Down (sets subtitles.align to Manual first when
+  needed; the bar shows steps moved, kept in addon_data/subtitle_look.json),
+  Font size = subtitles.fontsize (step 2, Kodi's min/max), Font =
+  subtitles.fontname next/previous, wrapping around.
+
+v4.6.1
+- Service icons restored, unchanged (media/lucent/providers, AB Wizard account
+  manager artwork, same files as 3.4.34+), shown on every card: Search All
+  (abs.svcicon; the RD/AD code pill only for a service without an icon) and
+  the four add-ons' Glass windows (lucent_theme: lucent.icon always set,
+  lucent.res never) and the totals screen. Resolution flags stay removed.
+- Search All service chips: shown from one service on, with the service icon
+  (abs.chipicon); pick one to list only that service's links.
+
+v4.6.0
+- Removed the "Colored resolution & service icons" switch (string 30808)
+  from Toggles > Glass Theme. lucent_theme._read_colored() always returns
+  False, so the four add-ons' Glass windows and the themed filter menu show
+  no coloured resolution flags / service icons. The updated helper reaches
+  the add-ons on the next patch sweep (boot or 30-min verify).
+
+v4.5.9
+- Search All: service chips (RD / AD / PM / TB / OC / EN / ED / DL) after the
+  quality chips, only when 2+ services are present. self.f_service, toggles
+  like the other chips, combines with add-on / quality chips and the filter
+  menu; All and Back clear it.
+
+v4.5.8
+- Search All: service code pill under the quality pill (RD / AD / PM / TB /
+  OC / EN / ED / DL), neutral colour, in place of the removed service icon.
+  New list property abs.svc (ab_search._service_code); generated by
+  gen_lucent.ab_card().
+
+v4.5.7
+- Search All: no coloured resolution flags (lucent/res/*.png) and no service /
+  debrid icons on the stream cards - the plain quality pill shows instead.
+  ab_search.py no longer sets lucent.res / lucent.icon; gen_lucent.ab_card()
+  strips both image controls, so a regenerated ab_search.xml stays the same.
+  Glass Theme windows of Red Light / Fen Light / Umbrella / POV unchanged.
+
+v4.5.6
+- FIX: boot freeze with "Can't update database Addons33 from version 0 - it's
+  too old". origin_fix._connect used sqlite3.connect(path), which silently
+  CREATES a missing database; opened while Kodi was rebuilding Addons33.db (or
+  right after the rebuild tool deleted it) it left a schema-less file Kodi then
+  rejected forever and hung in FindAddons. Now: URI mode=rw (never creates),
+  db_ready() requires a version row (idVersion > 0) checked read-only, 0-byte
+  AddonsNN.db files are ignored, and the boot linking / post-rebuild relink
+  wait (wait_db_ready) for Kodi to finish the database first. icons_toggle
+  opens Textures DB the same way.
+
+v4.5.5
+- Search All: estimated average bitrate per stream on the card's info line
+  ("~80 Mbps"): size (GB) x 8000 / running time (s). Running time from TMDb
+  (movie runtime; episode runtime, else the show's episode_run_time), fetched
+  every time the window opens (the meta thread now always runs). No estimate
+  for season / show packs or unknown size. When the line is too long the
+  source site goes first, then the service name (its icon stays), so size and
+  bitrate stay longest.
+- Filter menu: Bitrate over 40 / 20-40 / 10-20 / under 10 Mbps (estimated),
+  offered once the running time is known.
+
+v4.5.4
+- FIX POV, root cause (kodi.log 2026-10-29 11:26, 4.5.2: "argument of type
+  'int' is not a container or iterable" in metadata.get_title): the box's
+  metacache.db was created by an older POV with columns (... meta, expires);
+  current POV inserts positionally as (... expires, meta), so the timestamp
+  lands in "meta" and the JSON in "expires" (also the earlier "'<' not
+  supported between str and int"). Reproduced with SQLite. Three always-on
+  patches to caches/meta_cache.py: INSERTs name their columns (seasons also
+  OR REPLACE); a metadata row that is not dict/list or whose expiry is not a
+  number is a cache miss (POV fetches again and rewrites it correctly); same
+  for function_cache rows.
+
+v4.5.3
+- FIX Search All left column empty except title + year (screenshot
+  2026-10-29): TMDbHelper's player URL has ids/names only and the focused item
+  often no longer matches. tmdb_window_meta() fetches logo (png, Kodi
+  language > en > none), w1280 backdrop, plot (Kodi language, English
+  fallback), rating, US certificate, genres; episodes use the episode plot.
+  Runs in a thread after the window opens, fills only what is missing.
+- FIX chips in Arabic: "Red Light  528" was one label, bidi-reordered and
+  cut from the start ("ight 528 Rec"). Name and count are now separate labels;
+  chips 20px wider.
+- FIX stream titles cut from the start in Arabic ("sion 2025 ..."): titles
+  fitted to 600px (was 690), meta line to 610px minus the add-on tags.
+
+v4.5.2
+- FIX POV (real cause of "list failed: '<' not supported between instances
+  of 'str' and 'int'", traceback in kodi.log 2026-10-29 11:07): POV's
+  caches/meta_cache.py get_memory_cache compares the expiry read back from
+  metacache.db (text) with an int timestamp. New always-on patch casts it
+  (fallback: database lookup). Bridge helper v4 also guards it in memory for
+  a POV updated since. 4.5.1's results clean-up stays as a second guard.
+- FIX Search All / Umbrella: Umbrella scrapes by title; with Kodi in Arabic
+  the title was Arabic ("Koko" -> "كوكو", 0 results). For Umbrella only, the
+  English title / show name / episode name (+ year, IMDb, TVDb ids if
+  missing) are read from TMDb (en-US, Umbrella's TMDb key) when the given
+  names are not Latin script.
+
 v4.5.1
 - FIX Search All / POV: "list failed: argument of type 'int' is not a
   container or iterable" and "'<' not supported between instances of 'str'

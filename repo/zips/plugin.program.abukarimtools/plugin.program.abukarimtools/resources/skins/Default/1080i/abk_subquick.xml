@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AB Tools: subtitle quick panel (AF3 OSD button). sub_quick.py drives it:
+     101 height (Left/Right), 102 font size (Left/Right), 103 font (OK = next, loops).
+     Sits top-right so the subtitle line at the bottom stays visible as the preview. -->
+<window type="dialog">
+    <defaultcontrol always="true">101</defaultcontrol>
+    <coordinates>
+        <left>0</left>
+        <top>0</top>
+        <width>1920</width>
+        <height>1080</height>
+    </coordinates>
+    <controls>
+        <control type="group">
+            <left>1236</left>
+            <top>60</top>
+            <width>624</width>
+            <animation effect="fade" start="0" end="100" time="180">WindowOpen</animation>
+            <animation effect="slide" start="40,0" end="0,0" time="220" tween="cubic" easing="out">WindowOpen</animation>
+            <animation effect="fade" end="0" time="140">WindowClose</animation>
+
+            <!-- panel -->
+            <control type="image">
+                <left>-40</left>
+                <top>-40</top>
+                <width>704</width>
+                <height>640</height>
+                <texture border="88">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/panel_shadow.png</texture>
+                <colordiffuse>B3000000</colordiffuse>
+            </control>
+            <control type="image">
+                <width>624</width>
+                <height>560</height>
+                <texture border="48">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/panel.png</texture>
+                <colordiffuse>EE12151C</colordiffuse>
+            </control>
+            <control type="image">
+                <width>624</width>
+                <height>560</height>
+                <texture border="48">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/panel_edge.png</texture>
+                <colordiffuse>2EFFFFFF</colordiffuse>
+            </control>
+
+            <!-- title + hint -->
+            <control type="label">
+                <left>44</left>
+                <right>44</right>
+                <top>30</top>
+                <height>50</height>
+                <font>font_main_bold</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>$INFO[Window.Property(sq.title)]</label>
+            </control>
+            <control type="label">
+                <left>44</left>
+                <right>44</right>
+                <top>78</top>
+                <height>34</height>
+                <font>font_tiny</font>
+                <textcolor>80FFFFFF</textcolor>
+                <label>$INFO[Window.Property(sq.hint)]</label>
+            </control>
+
+            <!-- 101: height -->
+            <control type="group">
+                <left>16</left>
+                <top>124</top>
+                <width>592</width>
+                <height>124</height>
+                <control type="button" id="101">
+                    <texturefocus border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card.png</texturefocus>
+                    <texturenofocus />
+                    <colordiffuse>24FFFFFF</colordiffuse>
+                    <label />
+                    <font />
+                    <onup>103</onup>
+                    <ondown>102</ondown>
+                    <onleft>101</onleft>
+                    <onright>101</onright>
+                </control>
+                <control type="label">
+                    <left>28</left>
+                    <top>20</top>
+                    <width>400</width>
+                    <height>40</height>
+                    <font>font_mini_bold</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>$INFO[Window.Property(sq.pos.label)]</label>
+                </control>
+                <control type="label">
+                    <right>28</right>
+                    <top>20</top>
+                    <width>160</width>
+                    <height>40</height>
+                    <align>right</align>
+                    <font>font_mini_bold</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>$INFO[Window.Property(sq.pos.value)]</label>
+                </control>
+                <control type="progress" id="201">
+                    <left>28</left>
+                    <right>28</right>
+                    <top>80</top>
+                    <height>8</height>
+                    <texturebg border="4" colordiffuse="33FFFFFF">abk_sq_bar.png</texturebg>
+                    <lefttexture />
+                    <midtexture border="4" colordiffuse="EEFFFFFF">abk_sq_bar.png</midtexture>
+                    <righttexture />
+                </control>
+                <control type="label">
+                    <left>28</left>
+                    <right>28</right>
+                    <top>94</top>
+                    <height>28</height>
+                    <font>font_tiny</font>
+                    <textcolor>80FFFFFF</textcolor>
+                    <label>$INFO[Window.Property(sq.pos.hint)]</label>
+                    <visible>Control.HasFocus(101)</visible>
+                </control>
+                <control type="image" id="211">
+                    <left>15</left>
+                    <top>71</top>
+                    <width>26</width>
+                    <height>26</height>
+                    <texture>abk_sq_nib.png</texture>
+                    <visible>Control.HasFocus(101)</visible>
+                </control>
+            </control>
+
+            <!-- 102: font size -->
+            <control type="group">
+                <left>16</left>
+                <top>252</top>
+                <width>592</width>
+                <height>124</height>
+                <control type="button" id="102">
+                    <texturefocus border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card.png</texturefocus>
+                    <texturenofocus />
+                    <colordiffuse>24FFFFFF</colordiffuse>
+                    <label />
+                    <font />
+                    <onup>101</onup>
+                    <ondown>103</ondown>
+                    <onleft>102</onleft>
+                    <onright>102</onright>
+                </control>
+                <control type="label">
+                    <left>28</left>
+                    <top>20</top>
+                    <width>400</width>
+                    <height>40</height>
+                    <font>font_mini_bold</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>$INFO[Window.Property(sq.size.label)]</label>
+                </control>
+                <control type="label">
+                    <right>28</right>
+                    <top>20</top>
+                    <width>160</width>
+                    <height>40</height>
+                    <align>right</align>
+                    <font>font_mini_bold</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>$INFO[Window.Property(sq.size.value)]</label>
+                </control>
+                <control type="progress" id="202">
+                    <left>28</left>
+                    <right>28</right>
+                    <top>80</top>
+                    <height>8</height>
+                    <texturebg border="4" colordiffuse="33FFFFFF">abk_sq_bar.png</texturebg>
+                    <lefttexture />
+                    <midtexture border="4" colordiffuse="EEFFFFFF">abk_sq_bar.png</midtexture>
+                    <righttexture />
+                </control>
+                <control type="image" id="212">
+                    <left>15</left>
+                    <top>71</top>
+                    <width>26</width>
+                    <height>26</height>
+                    <texture>abk_sq_nib.png</texture>
+                    <visible>Control.HasFocus(102)</visible>
+                </control>
+            </control>
+
+            <!-- 103: font (OK = next font, loops) -->
+            <control type="group">
+                <left>16</left>
+                <top>380</top>
+                <width>592</width>
+                <height>110</height>
+                <control type="button" id="103">
+                    <texturefocus border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card.png</texturefocus>
+                    <texturenofocus />
+                    <colordiffuse>24FFFFFF</colordiffuse>
+                    <label />
+                    <font />
+                    <onup>102</onup>
+                    <ondown>101</ondown>
+                    <onleft>103</onleft>
+                    <onright>103</onright>
+                </control>
+                <control type="label">
+                    <left>28</left>
+                    <top>18</top>
+                    <width>200</width>
+                    <height>40</height>
+                    <font>font_mini_bold</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>$INFO[Window.Property(sq.font.label)]</label>
+                </control>
+                <control type="label">
+                    <left>220</left>
+                    <right>28</right>
+                    <top>18</top>
+                    <height>40</height>
+                    <align>right</align>
+                    <font>font_mini_bold</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <scroll>true</scroll>
+                    <label>$INFO[Window.Property(sq.font.value)]</label>
+                </control>
+                <control type="label">
+                    <left>28</left>
+                    <right>28</right>
+                    <top>60</top>
+                    <height>32</height>
+                    <font>font_tiny</font>
+                    <textcolor>80FFFFFF</textcolor>
+                    <label>$INFO[Window.Property(sq.font.hint)]</label>
+                </control>
+            </control>
+
+            <!-- subtitles off: nothing to preview -->
+            <control type="label">
+                <left>44</left>
+                <right>44</right>
+                <top>500</top>
+                <height>34</height>
+                <font>font_tiny</font>
+                <textcolor>FFFFC857</textcolor>
+                <label>$INFO[Window.Property(sq.nosubs)]</label>
+                <visible>!VideoPlayer.SubtitlesEnabled</visible>
+            </control>
+        </control>
+    </controls>
+</window>

@@ -1624,3 +1624,67 @@ msgctxt "#30836"
 msgid "Filter: %s"
 msgstr "التصفية: %s"
 
+msgctxt "#30837"
+msgid "Bitrate: over 40 Mbps (estimated)"
+msgstr "معدل البت: أكثر من 40 ميغابت/ث (تقديري)"
+
+msgctxt "#30838"
+msgid "Bitrate: 20 - 40 Mbps (estimated)"
+msgstr "معدل البت: من 20 إلى 40 ميغابت/ث (تقديري)"
+
+msgctxt "#30839"
+msgid "Bitrate: 10 - 20 Mbps (estimated)"
+msgstr "معدل البت: من 10 إلى 20 ميغابت/ث (تقديري)"
+
+msgctxt "#30840"
+msgid "Bitrate: under 10 Mbps (estimated)"
+msgstr "معدل البت: أقل من 10 ميغابت/ث (تقديري)"
+
+msgctxt "#30841"
+msgid "Expand"
+msgstr "توسيع"
+
+msgctxt "#30842"
+msgid "Collapse"
+msgstr "تصغير"
+
+msgctxt "#30850"
+msgid "AF3: Lucent Look"
+msgstr "AF3: مظهر Lucent"
+
+msgctxt "#30851"
+msgid "Off (Arctic Fuse 3 as it is)"
+msgstr "إيقاف (واجهة Arctic Fuse 3 كما هي)"
+
+msgctxt "#30852"
+msgid "Lucent Glass"
+msgstr "زجاج Lucent"
+
+msgctxt "#30853"
+msgid "Lucent Glass AMOLED (true black)"
+msgstr "زجاج Lucent بأسود AMOLED"
+
+msgctxt "#30854"
+msgid "Lucent Look turned on: %s"
+msgstr "تم تشغيل مظهر Lucent: %s"
+
+msgctxt "#30855"
+msgid "Lucent Look turned off - your previous colours are back"
+msgstr "تم إيقاف مظهر Lucent وأُعيدت ألوانك السابقة"
+
+msgctxt "#30856"
+msgid "Lucent Look: the files could not be installed into Arctic Fuse 3. Run Apply Patches and try again."
+msgstr "مظهر Lucent: تعذّر تثبيت الملفات في واجهة Arctic Fuse 3. شغّل تطبيق الترقيعات ثم أعد المحاولة."
+
+msgctxt "#30857"
+msgid "Off"
+msgstr "متوقف"
+
+msgctxt "#30858"
+msgid "Focus colour: Lucent white"
+msgstr "لون التركيز: أبيض Lucent"
+
+msgctxt "#30859"
+msgid "Focus colour: my own colour"
+msgstr "لون التركيز: لوني الخاص"
+

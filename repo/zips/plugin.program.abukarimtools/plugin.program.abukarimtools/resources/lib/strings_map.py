@@ -29,7 +29,8 @@ ID ranges:
   30770-30779  Installation Wizard - setup-in-progress backdrop, final restart
   30780-30799  Maintenance - Clean Unused Items
   30800-30813  Toggles - Glass Theme (internally 'Lucent', per add-on)
-  30814-30836  Search All (one stream list from every add-on)
+  30814-30842  Search All (one stream list from every add-on)
+  30850-30859  AF3 Lucent Look (Toggles)
 """
 
 STRINGS = {
@@ -589,4 +590,22 @@ STRINGS = {
     30833: ('Size: over 40 GB', 'الحجم: أكثر من 40 غيغابايت'),
     30835: ('Filter', 'تصفية'),
     30836: ('Filter: %s', 'التصفية: %s'),
+    30837: ('Bitrate: over 40 Mbps (estimated)', 'معدل البت: أكثر من 40 ميغابت/ث (تقديري)'),
+    30838: ('Bitrate: 20 - 40 Mbps (estimated)', 'معدل البت: من 20 إلى 40 ميغابت/ث (تقديري)'),
+    30839: ('Bitrate: 10 - 20 Mbps (estimated)', 'معدل البت: من 10 إلى 20 ميغابت/ث (تقديري)'),
+    30840: ('Bitrate: under 10 Mbps (estimated)', 'معدل البت: أقل من 10 ميغابت/ث (تقديري)'),
+    30841: ('Expand', 'توسيع'),
+    30842: ('Collapse', 'تصغير'),
+    # ---- 4.6.8: AF3 Lucent Look (30850-30859) ----
+    30850: ('AF3: Lucent Look', 'AF3: مظهر Lucent'),
+    30851: ('Off (Arctic Fuse 3 as it is)', 'إيقاف (واجهة Arctic Fuse 3 كما هي)'),
+    30852: ('Lucent Glass', 'زجاج Lucent'),
+    30853: ('Lucent Glass AMOLED (true black)', 'زجاج Lucent بأسود AMOLED'),
+    30854: ('Lucent Look turned on: %s', 'تم تشغيل مظهر Lucent: %s'),
+    30855: ('Lucent Look turned off - your previous colours are back', 'تم إيقاف مظهر Lucent وأُعيدت ألوانك السابقة'),
+    30856: ('Lucent Look: the files could not be installed into Arctic Fuse 3. Run Apply Patches and try again.',
+            'مظهر Lucent: تعذّر تثبيت الملفات في واجهة Arctic Fuse 3. شغّل تطبيق الترقيعات ثم أعد المحاولة.'),
+    30857: ('Off', 'متوقف'),
+    30858: ('Focus colour: Lucent white', 'لون التركيز: أبيض Lucent'),
+    30859: ('Focus colour: my own colour', 'لون التركيز: لوني الخاص'),
 }

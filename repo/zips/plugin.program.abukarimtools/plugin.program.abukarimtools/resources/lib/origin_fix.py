@@ -96,23 +96,101 @@ def _log(msg):
 # ---------------------------------------------------------------------------
 
 def _find_addons_db():
-    """Return the path of the newest AddonsNN.db, or None."""
+    """Return the path of the newest non-empty AddonsNN.db, or None.
+
+    4.5.6: a 0-byte file is skipped - it is either Kodi in the middle of
+    creating the database or a stub some earlier open left behind; neither
+    may be touched."""
     best_ver, best_path = -1, None
     try:
         for name in os.listdir(DATABASE_PATH):
             m = re.fullmatch(r'Addons(\d+)\.db', name)
-            if m and int(m.group(1)) > best_ver:
-                best_ver = int(m.group(1))
-                best_path = os.path.join(DATABASE_PATH, name)
+            if not m or int(m.group(1)) <= best_ver:
+                continue
+            path = os.path.join(DATABASE_PATH, name)
+            try:
+                if os.path.getsize(path) == 0:
+                    continue
+            except OSError:
+                continue
+            best_ver = int(m.group(1))
+            best_path = path
     except OSError as e:
         _log('cannot list Database dir: %s' % e)
     return best_path
 
 
+class DatabaseNotReady(sqlite3.OperationalError):
+    """The Addons DB is missing or Kodi has not finished initialising it."""
+
+
+def _db_uri(db_path, mode):
+    # pathlib percent-encodes spaces etc. ("Application Support" on macOS)
+    import pathlib
+    return '%s?mode=%s' % (pathlib.Path(db_path).resolve().as_uri(), mode)
+
+
+def db_ready(db_path):
+    """True only when db_path is a database Kodi has fully initialised:
+    the file exists, is non-empty and its `version` table carries a row with
+    idVersion > 0. Opened READ-ONLY - can never create or modify the file."""
+    try:
+        if not db_path or not os.path.isfile(db_path) or os.path.getsize(db_path) == 0:
+            return False
+    except OSError:
+        return False
+    conn = None
+    try:
+        conn = sqlite3.connect(_db_uri(db_path, 'ro'), uri=True, timeout=5.0)
+        row = conn.execute('SELECT idVersion FROM version').fetchone()
+        return bool(row and row[0] and int(row[0]) > 0)
+    except (sqlite3.Error, ValueError, TypeError):
+        return False
+    finally:
+        try:
+            if conn:
+                conn.close()
+        except sqlite3.Error:
+            pass
+
+
 def _connect(db_path):
-    conn = sqlite3.connect(db_path, timeout=5.0)
+    """Open an EXISTING, Kodi-initialised Addons database read/write.
+
+    4.5.6: never creates the file. sqlite3.connect(path) silently creates a
+    missing database; if that happened while Kodi was rebuilding Addons33.db
+    (or right after the rebuild tool deleted it) the result was a schema-less
+    file Kodi then rejected forever with "Can't update database Addons33 from
+    version 0 - it's too old" and hung in FindAddons on every boot. mode=rw
+    fails instead of creating, and db_ready() refuses a file whose version
+    row Kodi has not written yet. Raises DatabaseNotReady (a sqlite3 error, so
+    every existing caller's except-block already handles it).
+    """
+    if not db_ready(db_path):
+        raise DatabaseNotReady('Addons database not initialised by Kodi yet: %s'
+                               % db_path)
+    conn = sqlite3.connect(_db_uri(db_path, 'rw'), uri=True, timeout=5.0)
     conn.execute('PRAGMA busy_timeout=5000')
     return conn
+
+
+def wait_db_ready(monitor=None, timeout=60, step=2):
+    """Block until Kodi has initialised the Addons database (or timeout).
+    Returns the db path, or None. Used by the boot-time linking so it never
+    runs in parallel with Kodi's own database creation / FindAddons scan."""
+    waited = 0
+    while True:
+        db = _find_addons_db()
+        if db and db_ready(db):
+            return db
+        if waited >= timeout:
+            return None
+        if monitor is not None:
+            if monitor.waitForAbort(step):
+                return None
+        else:
+            xbmc.sleep(step * 1000)
+        waited += step
 
 
 def _tables(cur):

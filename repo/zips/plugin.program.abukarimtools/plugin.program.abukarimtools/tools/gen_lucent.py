@@ -1405,16 +1405,59 @@ def _ab_tags(active):
 def ab_card(state):
     """Glass stream card (same as the add-ons' windows) + add-on tags."""
     xml = card(state, {'full_prop': 'abs.never', 'full_label': ''})
+    # 4.5.7: no coloured resolution flag and no service icon in Search All
+    import re as _re
+    xml, a = _re.subn(r'[ \t]*<!-- Resolution flag \(Arctic Fuse 3 colour flags\) -->\n'
+                      r'[ \t]*<control type="image">(?:(?!</control>).)*?</control>\n', '', xml, flags=_re.S)
+    xml, b = _re.subn(r'[ \t]*<!-- Debrid / service icon \(AB Wizard account manager artwork\) -->\n'
+                      r'[ \t]*<control type="image">(?:(?!</control>).)*?</control>\n', '', xml, flags=_re.S)
+    assert a == 1 and b == 1, (a, b)
+    xml = xml.replace(' + String.IsEmpty(ListItem.Property(lucent.res))', '')
     marker = '\n                    <!-- Full search -->'
     assert marker in xml
-    return xml.replace(marker, _ab_tags(state == 'active') + marker, 1)
+    # 4.6.1: service icon (RD / AD / PM ..., AB Wizard artwork) under the quality;
+    #        the plain code pill only when no icon exists for the service
+    svc = '''
+                        <control type="image">
+                            <left>60</left>
+                            <top>68</top>
+                            <width>44</width>
+                            <height>44</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(abs.svcicon)]</texture>
+                            <colordiffuse>%(icon)s</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
+                        </control>
+                        <control type="image">
+                            <left>20</left>
+                            <top>70</top>
+                            <width>124</width>
+                            <height>36</height>
+                            <texture border="18">lucent/pill42.png</texture>
+                            <colordiffuse>%(pill)s</colordiffuse>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc)) + String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
+                        </control>
+                        <control type="label">
+                            <left>20</left>
+                            <top>70</top>
+                            <width>124</width>
+                            <height>36</height>
+                            <font>font12</font>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFDCE2E7</textcolor>
+                            <label>[B]$INFO[ListItem.Property(abs.svc)][/B]</label>
+                            <visible>!String.IsEmpty(ListItem.Property(abs.svc)) + String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
+                        </control>''' % ({'icon': 'FFFFFFFF', 'pill': '2EFFFFFF'} if state == 'active'
+                           else {'icon': 'E6FFFFFF', 'pill': '14FFFFFF'})
+    return xml.replace(marker, svc + _ab_tags(state == 'active') + marker, 1)
 
 
 def ab_chip(focused):
     if focused:
         bg = '''
                     <control type="image">
-                        <width>226</width>
+                        <width>246</width>
                         <height>52</height>
                         <texture border="26">lucent/pill60.png</texture>
                         <colordiffuse>FFFFFFFF</colordiffuse>
@@ -1423,14 +1466,14 @@ def ab_chip(focused):
     else:
         bg = '''
                     <control type="image">
-                        <width>226</width>
+                        <width>246</width>
                         <height>52</height>
                         <texture border="26">lucent/pill60.png</texture>
                         <colordiffuse>1AFFFFFF</colordiffuse>
                         <visible>String.IsEmpty(ListItem.Property(abs.active))</visible>
                     </control>
                     <control type="image">
-                        <width>226</width>
+                        <width>246</width>
                         <height>52</height>
                         <texture border="26">lucent/pill60.png</texture>
                         <colordiffuse>66D6F0FF</colordiffuse>
@@ -1447,6 +1490,17 @@ def ab_chip(focused):
                         <colordiffuse>%s</colordiffuse>
                         <visible>String.IsEqual(ListItem.Property(abs.key),%s) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>''' % (color, key) for key, color in AB_ADDONS)
+    # 4.6.1: service chips carry the service icon in place of the dot
+    dots += '''
+                    <control type="image">
+                        <left>10</left>
+                        <top>12</top>
+                        <width>28</width>
+                        <height>28</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture>$INFO[ListItem.Property(abs.chipicon)]</texture>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.chipicon))</visible>
+                    </control>'''
     return '''%(bg)s%(dots)s
                     <control type="image">
                         <left>16</left>
@@ -1458,16 +1512,191 @@ def ab_chip(focused):
                         <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="true">Conditional</animation>
                         <visible>!String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
+                    <!-- name and count in separate labels: one mixed label was
+                         re-ordered and cut from the start with Kodi in Arabic -->
                     <control type="label">
-                        <left>30</left>
-                        <width>190</width>
+                        <left>38</left>
+                        <width>148</width>
                         <height>52</height>
                         <font>font12</font>
-                        <align>center</align>
+                        <align>left</align>
                         <aligny>center</aligny>
                         <textcolor>%(tc)s</textcolor>
-                        <label>[B]$INFO[ListItem.Label][/B]$INFO[ListItem.Label2,  ,]</label>
+                        <label>[B]$INFO[ListItem.Label][/B]</label>
+                    </control>
+                    <control type="label">
+                        <left>186</left>
+                        <width>50</width>
+                        <height>52</height>
+                        <font>font12</font>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <textcolor>%(tc)s</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
                     </control>''' % {'bg': bg, 'dots': dots, 'tc': tc, 'cc': cc}
+
+
+def ab_panel(expanded, visible, W):
+    """Glass stream panel. Default: right half, one column (ids 2400 / 2300 /
+    2000 / 2001). Expanded (4.6.7): the whole page under the title, the same
+    cards in two columns (ids 2410 / 2310 / 2002 / 2003)."""
+    if expanded:
+        gl, gt, gw, gh = 12, 112, 1896, 952
+        geo = {'what': 'Expanded: streams over the whole page', 'cid': '2310', 'lid': '2002', 'sid': '2003',
+               'bid': '2410', 'ltype': 'panel', 'll': 12, 'lw': 1872, 'lh': 740, 'lextra': '', 'sbl': 1880}
+    else:
+        gl, gt, gw, gh = 880, 56, 984, 968
+        geo = {'what': 'Right: glass stream panel', 'cid': '2300', 'lid': '2000', 'sid': '2001',
+               'bid': '2400', 'ltype': 'list', 'll': 24, 'lw': 936, 'lh': 768,
+               'lextra': '\n                <focusposition>1</focusposition>\n                <movement>2</movement>',
+               'sbl': 962}
+    iw = gw - 80                                   # inner width (40 px margins)
+    bw = 180                                       # Expand / Collapse button
+    geo.update({'vis': visible, 'gl': gl, 'gt': gt, 'gw': gw, 'gh': gh, 'iw': iw,
+                'bw': bw, 'bl': 40 + iw - bw, 'cntl': 40 + iw - bw - 16 - 320,
+                'headw': iw - bw - 16 - 320, 'dotl': 40 + iw // 2 - 16,
+                'vlabel': W % 'viewlabel', 'bgc': BG,
+                'glass': glass(0, 0, gw, gh), 'head': W % 'heading', 'sub': W % 'subhead',
+                'chip': ab_chip(False), 'chipf': ab_chip(True), 'empty': W % 'empty', 'waitmsg': W % 'waitmsg',
+                'idle': ab_card('idle'), 'dim': ab_card('dim'), 'active': ab_card('active')})
+    xml = '''
+        <!-- ============ %(what)s ============ -->
+        <control type="group">
+            <visible>%(vis)s</visible>
+            <animation effect="fade" start="0" end="100" time="350" delay="150">WindowOpen</animation>
+            <animation effect="slide" start="120,0" end="0,0" time="400" delay="150" tween="cubic" easing="out">WindowOpen</animation>
+            <animation effect="slide" end="200,0" time="300" tween="cubic" easing="in">WindowClose</animation>
+            <animation effect="fade" end="0" time="300">WindowClose</animation>
+            <left>%(gl)d</left>
+            <top>%(gt)d</top>
+            <width>%(gw)d</width>
+            <height>%(gh)d</height>%(glass)s
+            <control type="label">
+                <left>40</left>
+                <top>26</top>
+                <width>%(headw)d</width>
+                <height>50</height>
+                <font>font27</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>[B]$INFO[%(head)s][/B]</label>
+            </control>
+            <control type="label">
+                <left>%(cntl)d</left>
+                <top>26</top>
+                <width>320</width>
+                <height>50</height>
+                <font>font12</font>
+                <align>right</align>
+                <aligny>center</aligny>
+                <textcolor>FFBDC8D1</textcolor>
+                <label>$INFO[Container(%(lid)s).CurrentItem]$INFO[Container(%(lid)s).NumItems, / ,]</label>
+                <visible>Integer.IsGreater(Container(%(lid)s).NumItems,0)</visible>
+            </control>
+            <control type="label">
+                <left>40</left>
+                <top>70</top>
+                <width>%(iw)d</width>
+                <height>26</height>
+                <font>font12</font>
+                <textcolor>FF8F9BA6</textcolor>
+                <label>$INFO[%(sub)s]</label>
+            </control>
+            <!-- 4.6.7: Expand / Collapse -->
+            <control type="button" id="%(bid)s">
+                <left>%(bl)d</left>
+                <top>29</top>
+                <width>%(bw)d</width>
+                <height>44</height>
+                <font>font12</font>
+                <align>center</align>
+                <aligny>center</aligny>
+                <textcolor>FFDCE2E7</textcolor>
+                <focusedcolor>FF%(bgc)s</focusedcolor>
+                <texturenofocus border="22" colordiffuse="1AFFFFFF">lucent/pill44.png</texturenofocus>
+                <texturefocus border="22" colordiffuse="FFFFFFFF">lucent/pill44.png</texturefocus>
+                <label>[B]$INFO[%(vlabel)s][/B]</label>
+                <ondown>%(cid)s</ondown>
+            </control>
+            <!-- Filter chips: All, each add-on, each quality -->
+            <control type="list" id="%(cid)s">
+                <left>40</left>
+                <top>110</top>
+                <width>%(iw)d</width>
+                <height>52</height>
+                <orientation>horizontal</orientation>
+                <scrolltime tween="cubic" easing="out">200</scrolltime>
+                <onup>%(bid)s</onup>
+                <ondown>%(lid)s</ondown>
+                <itemlayout height="52" width="258">%(chip)s
+                </itemlayout>
+                <focusedlayout height="52" width="258" condition="!Control.HasFocus(%(cid)s)">%(chip)s
+                </focusedlayout>
+                <focusedlayout height="52" width="258" condition="Control.HasFocus(%(cid)s)">%(chipf)s
+                </focusedlayout>
+            </control>
+            <control type="image">
+                <left>40</left>
+                <top>178</top>
+                <width>%(iw)d</width>
+                <height>1</height>
+                <texture>lucent/white.png</texture>
+                <colordiffuse>1AFFFFFF</colordiffuse>
+            </control>
+            <control type="scrollbar" id="%(sid)s">
+                <left>%(sbl)d</left>
+                <top>196</top>
+                <width>6</width>
+                <height>740</height>
+                <onleft>%(lid)s</onleft>
+                <showonepage>false</showonepage>
+                <orientation>vertical</orientation>
+                <texturesliderbackground colordiffuse="14FFFFFF" border="3">lucent/pill6.png</texturesliderbackground>
+                <texturesliderbar colordiffuse="4DFFFFFF" border="3">lucent/pill6.png</texturesliderbar>
+                <texturesliderbarfocus colordiffuse="FFFFFFFF" border="3">lucent/pill6.png</texturesliderbarfocus>
+            </control>
+            <control type="%(ltype)s" id="%(lid)s">
+                <left>%(ll)d</left>
+                <top>184</top>
+                <width>%(lw)d</width>
+                <height>%(lh)d</height>
+                <orientation>vertical</orientation>
+                <pagecontrol>%(sid)s</pagecontrol>
+                <scrolltime tween="cubic" easing="out">250</scrolltime>%(lextra)s
+                <onup>%(cid)s</onup>
+                <itemlayout height="148" width="936">%(idle)s
+                </itemlayout>
+                <focusedlayout height="148" width="936" condition="!Control.HasFocus(%(lid)s)">%(dim)s
+                </focusedlayout>
+                <focusedlayout height="148" width="936" condition="Control.HasFocus(%(lid)s)">%(active)s
+                </focusedlayout>
+            </control>
+            <!-- Still searching / nothing found -->
+            <control type="group">
+                <top>420</top>
+                <visible>!Integer.IsGreater(Container(%(lid)s).NumItems,0)</visible>
+                <control type="image">
+                    <left>%(dotl)d</left>
+                    <width>32</width>
+                    <height>32</height>
+                    <texture>lucent/dot.png</texture>
+                    <colordiffuse>FFFFFFFF</colordiffuse>
+                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="true">Conditional</animation>
+                    <visible>String.IsEmpty(%(empty)s)</visible>
+                </control>
+                <control type="label">
+                    <left>40</left>
+                    <top>56</top>
+                    <width>%(iw)d</width>
+                    <height>50</height>
+                    <font>font27</font>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFDCE2E7</textcolor>
+                    <label>$INFO[%(waitmsg)s]</label>
+                </control>
+            </control>
+        </control>''' % geo
+    return xml
 
 
 def ab_search_window():
@@ -1534,129 +1763,32 @@ def ab_search_window():
                 <top>56</top>%(slots)s
             </control>
         </control>''' % {'heading': W % 'addons_heading', 'slots': ''.join(slots)}
-    body = '''
-        <!-- ============ Right: glass stream panel ============ -->
+    xp = 'String.IsEmpty(%s)' % (W % 'expanded')       # default look
+    xx = '!String.IsEmpty(%s)' % (W % 'expanded')      # expanded: streams over the whole page
+
+    def hide_left(xml):
+        return '''
         <control type="group">
-            <animation effect="fade" start="0" end="100" time="350" delay="150">WindowOpen</animation>
-            <animation effect="slide" start="120,0" end="0,0" time="400" delay="150" tween="cubic" easing="out">WindowOpen</animation>
-            <animation effect="slide" end="200,0" time="300" tween="cubic" easing="in">WindowClose</animation>
-            <animation effect="fade" end="0" time="300">WindowClose</animation>
-            <left>880</left>
-            <top>56</top>
-            <width>984</width>
-            <height>968</height>%(glass)s
+            <visible>%s</visible>%s
+        </control>''' % (xp, xml)
+    top_title = '''
+        <!-- ============ Expanded: title only, on top ============ -->
+        <control type="group">
+            <visible>%(xx)s</visible>
+            <animation effect="fade" start="0" end="100" time="250">Visible</animation>
             <control type="label">
                 <left>40</left>
-                <top>26</top>
-                <width>600</width>
-                <height>50</height>
-                <font>font27</font>
-                <textcolor>FFFFFFFF</textcolor>
-                <label>[B]$INFO[%(head)s][/B]</label>
-            </control>
-            <control type="label">
-                <left>624</left>
-                <top>26</top>
-                <width>320</width>
-                <height>50</height>
-                <font>font12</font>
-                <align>right</align>
+                <top>28</top>
+                <width>1840</width>
+                <height>64</height>
+                <font>font37</font>
                 <aligny>center</aligny>
-                <textcolor>FFBDC8D1</textcolor>
-                <label>$INFO[Container(2000).CurrentItem]$INFO[Container(2000).NumItems, / ,]</label>
-                <visible>Integer.IsGreater(Container(2000).NumItems,0)</visible>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>[B]$INFO[%(show)s][/B]$INFO[%(ep)s,   [COLOR FFBDC8D1],[/COLOR]]</label>
             </control>
-            <control type="label">
-                <left>40</left>
-                <top>70</top>
-                <width>904</width>
-                <height>26</height>
-                <font>font12</font>
-                <textcolor>FF8F9BA6</textcolor>
-                <label>$INFO[%(sub)s]</label>
-            </control>
-            <!-- Filter chips: All, each add-on, each quality -->
-            <control type="list" id="2300">
-                <left>40</left>
-                <top>110</top>
-                <width>904</width>
-                <height>52</height>
-                <orientation>horizontal</orientation>
-                <scrolltime tween="cubic" easing="out">200</scrolltime>
-                <ondown>2000</ondown>
-                <itemlayout height="52" width="238">%(chip)s
-                </itemlayout>
-                <focusedlayout height="52" width="238" condition="!Control.HasFocus(2300)">%(chip)s
-                </focusedlayout>
-                <focusedlayout height="52" width="238" condition="Control.HasFocus(2300)">%(chipf)s
-                </focusedlayout>
-            </control>
-            <control type="image">
-                <left>40</left>
-                <top>178</top>
-                <width>904</width>
-                <height>1</height>
-                <texture>lucent/white.png</texture>
-                <colordiffuse>1AFFFFFF</colordiffuse>
-            </control>
-            <control type="scrollbar" id="2001">
-                <left>962</left>
-                <top>196</top>
-                <width>6</width>
-                <height>740</height>
-                <onleft>2000</onleft>
-                <showonepage>false</showonepage>
-                <orientation>vertical</orientation>
-                <texturesliderbackground colordiffuse="14FFFFFF" border="3">lucent/pill6.png</texturesliderbackground>
-                <texturesliderbar colordiffuse="4DFFFFFF" border="3">lucent/pill6.png</texturesliderbar>
-                <texturesliderbarfocus colordiffuse="FFFFFFFF" border="3">lucent/pill6.png</texturesliderbarfocus>
-            </control>
-            <control type="list" id="2000">
-                <left>24</left>
-                <top>184</top>
-                <width>936</width>
-                <height>768</height>
-                <orientation>vertical</orientation>
-                <pagecontrol>2001</pagecontrol>
-                <scrolltime tween="cubic" easing="out">250</scrolltime>
-                <focusposition>1</focusposition>
-                <movement>2</movement>
-                <onup>2300</onup>
-                <itemlayout height="148" width="936">%(idle)s
-                </itemlayout>
-                <focusedlayout height="148" width="936" condition="!Control.HasFocus(2000)">%(dim)s
-                </focusedlayout>
-                <focusedlayout height="148" width="936" condition="Control.HasFocus(2000)">%(active)s
-                </focusedlayout>
-            </control>
-            <!-- Still searching / nothing found -->
-            <control type="group">
-                <top>420</top>
-                <visible>!Integer.IsGreater(Container(2000).NumItems,0)</visible>
-                <control type="image">
-                    <left>476</left>
-                    <width>32</width>
-                    <height>32</height>
-                    <texture>lucent/dot.png</texture>
-                    <colordiffuse>FFFFFFFF</colordiffuse>
-                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="true">Conditional</animation>
-                    <visible>String.IsEmpty(%(empty)s)</visible>
-                </control>
-                <control type="label">
-                    <left>40</left>
-                    <top>56</top>
-                    <width>904</width>
-                    <height>50</height>
-                    <font>font27</font>
-                    <align>center</align>
-                    <aligny>center</aligny>
-                    <textcolor>FFDCE2E7</textcolor>
-                    <label>$INFO[%(waitmsg)s]</label>
-                </control>
-            </control>
-        </control>''' % {'glass': glass(0, 0, 984, 968), 'head': W % 'heading', 'sub': W % 'subhead',
-                          'chip': ab_chip(False), 'chipf': ab_chip(True), 'empty': W % 'empty', 'waitmsg': W % 'waitmsg',
-                          'idle': ab_card('idle'), 'dim': ab_card('dim'), 'active': ab_card('active')}
+        </control>''' % {'xx': xx, 'show': 'Window.Property(lucent.show_title)',
+                          'ep': 'Window.Property(lucent.ep_code)'}
+    body = ab_panel(False, xp, W) + ab_panel(True, xx, W)
     xml = '''<?xml version="1.0" encoding="UTF-8"?>
 <!-- AB Tools - Search All (streams from every add-on). Generated by tools/gen_lucent.py. -->
 <!-- Look and textures: Lucent theme for Seren by djdirty60 (github.com/djdirty60/Seren-Thema). -->
@@ -1667,12 +1799,12 @@ def ab_search_window():
         <width>1920</width>
         <height>1080</height>
     </coordinates>
-    <controls>%(bg)s%(title)s%(plot)s%(status)s%(body)s
+    <controls>%(bg)s%(title)s%(plot)s%(status)s%(top)s%(body)s
     </controls>
 </window>
-''' % {'bg': backdrop('$INFO[Window.Property(lucent.fanart)]'), 'title': title_block(),
-       'plot': plot_block('$INFO[Window.Property(lucent.plot)]', height=220),
-       'status': status, 'body': body}
+''' % {'bg': backdrop('$INFO[Window.Property(lucent.fanart)]'), 'title': hide_left(title_block()),
+       'plot': hide_left(plot_block('$INFO[Window.Property(lucent.plot)]', height=220)),
+       'status': hide_left(status), 'top': top_title, 'body': body}
     return ab_paths(xml)
 
 

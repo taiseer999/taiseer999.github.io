@@ -337,6 +337,182 @@ _AF3_SUBTOOLS_POPUP_XML = (
     '                <!-- /ABUKARIM: AF3 subtitle buttons (popup slots) -->\n\n'
 )
 
+# ── TMDbHelper 7.x (4.6.5): the 7.0 rewrite moved what four patches hook ──
+# Trakt login now lives in api/trakt/api.py (TraktAPI.login -> poller, a
+# DialogProgress), the certification query in items/database/tmdbdata.py,
+# and the item database class (ItemDetailsDataBase) only calls
+# create_database() when the file is new. The global genre list is already
+# cached per language in 7.x (TMDbGenres.db, cache_name GenreLookup.<lang>),
+# so the old query/database.py patch has no 7.x counterpart.
+_TMDBH7_LOGIN_OLD = (
+    "        self.auth_dialog = DialogProgress()\n"
+    "        self.auth_dialog.create(get_localized(32097), f'{get_localized(32096)}\\n{get_localized(32095)}: [B]{self.code.get(\"user_code\")}[/B]')\n"
+    "        self.poller()\n"
+    "\n"
+    "    def refresh_token(self):\n"
+)
+_TMDBH7_LOGIN_NEW = (
+    "        # -- TMDbHelper Trakt QR Auth patch v7 (by ABUKARIM TOOLS) --\n"
+    "        try:\n"
+    "            if self._abk_qr_login():\n"
+    "                return\n"
+    "        except Exception as exc:\n"
+    "            kodi_log(f'Trakt QR login failed, using the stock dialog: {exc}', 1)\n"
+    "        self.auth_dialog = DialogProgress()\n"
+    "        self.auth_dialog.create(get_localized(32097), f'{get_localized(32096)}\\n{get_localized(32095)}: [B]{self.code.get(\"user_code\")}[/B]')\n"
+    "        self.poller()\n"
+    "\n"
+    "    def _abk_qr_login(self):\n"
+    "        \"\"\"Device login in AB Tools' QR window (trakt_auth_qr.xml) instead of\n"
+    "        the progress dialog; same polling as poller(). True when it ran.\"\"\"\n"
+    "        import xbmcaddon as _xbmcaddon\n"
+    "        from xbmc import Monitor\n"
+    "        from tmdbhelper.lib.api.trakt.qr_utils import make_qr, remove_qr, get_qr_dialog\n"
+    "        user_code = str(self.code.get('user_code'))\n"
+    "        qr_path = make_qr('https://trakt.tv/activate/' + user_code)\n"
+    "        addon_path = _xbmcaddon.Addon('plugin.video.themoviedb.helper').getAddonInfo('path')\n"
+    "        expires_in = int(self.expires_in or 0)\n"
+    "        qr_dialog = get_qr_dialog(addon_path)\n"
+    "        qr_dialog.show()\n"
+    "        qr_dialog.setProperty('user_code', user_code)\n"
+    "        qr_dialog.setProperty('qr_image', qr_path)\n"
+    "        qr_dialog.setProperty('progress_width', '530')\n"
+    "        qr_dialog.setProperty('expires_label', 'Expires in %ss' % expires_in)\n"
+    "        monitor = Monitor()\n"
+    "        try:\n"
+    "            while not monitor.abortRequested():\n"
+    "                if getattr(qr_dialog, 'is_canceled', False):\n"
+    "                    kodi_log(u'Trakt authentication aborted!', 1)\n"
+    "                    break\n"
+    "                self.progress += self.interval\n"
+    "                remaining = max(expires_in - self.progress, 0)\n"
+    "                width = int(float(remaining * 530) / expires_in) if expires_in else 0\n"
+    "                qr_dialog.setProperty('progress_width', str(width))\n"
+    "                qr_dialog.setProperty('expires_label', 'Expires in %ss' % remaining)\n"
+    "                if expires_in <= self.progress:\n"
+    "                    kodi_log(u'Trakt authentication expired!', 1)\n"
+    "                    break\n"
+    "                self.authorization = self.get_api_request_json('https://api.trakt.tv/oauth/device/token', postdata={'code': self.code.get('device_code'), 'client_id': self.client_id, 'client_secret': self.client_secret})\n"
+    "                if self.authorization:\n"
+    "                    self.on_authenticated(auth_dialog=False)\n"
+    "                    break\n"
+    "                monitor.waitForAbort(self.interval)\n"
+    "        finally:\n"
+    "            try:\n"
+    "                qr_dialog.close()\n"
+    "            except Exception:\n"
+    "                pass\n"
+    "            del qr_dialog\n"
+    "            remove_qr(qr_path)\n"
+    "        return True\n"
+    "        # -- end TMDbHelper Trakt QR Auth patch v7 --\n"
+    "\n"
+    "    def refresh_token(self):\n"
+)
+
+_TMDBH7_CERT_OLD = (
+    "class CertificationDetailsDataBaseCache(ItemDetailsListDataBaseCache):\n"
+    "    table = 'certification'\n"
+    "    keys = ('name', 'iso_country', 'iso_language', 'release_date', 'release_type', 'parent_id', )\n"
+    "    conditions = 'parent_id=? AND iso_country=? ORDER BY release_date ASC LIMIT 1'  # WHERE conditions\n"
+    "\n"
+    "    @property\n"
+    "    def values(self):  # WHERE conditions values for ?\n"
+    "        return (self.item_id, self.tmdb_api.iso_country)\n"
+)
+_TMDBH7_CERT_NEW = (
+    "class CertificationDetailsDataBaseCache(ItemDetailsListDataBaseCache):\n"
+    "    # -- USA certification fallback v7 (by ABUKARIM TOOLS) --\n"
+    "    table = 'certification'\n"
+    "    keys = ('name', 'iso_country', 'iso_language', 'release_date', 'release_type', 'parent_id', )\n"
+    "    conditions = 'parent_id=? AND iso_country IN (?, \"US\") AND name IS NOT NULL AND name != \"\" ORDER BY iso_country=? DESC, IFNULL(release_date, \"9999-99-99\") ASC LIMIT 1'  # WHERE conditions\n"
+    "\n"
+    "    @property\n"
+    "    def values(self):  # WHERE conditions values for ?\n"
+    "        iso_country = self.tmdb_api.iso_country\n"
+    "        return (self.item_id, iso_country, iso_country)\n"
+)
+
+_TMDBH7_GENRE_ANCHOR = "class ItemDetailsDataBase(DataBase):\n"
+_TMDBH7_GENRE_BLOCK = (
+    "\n"
+    "    # -- TMDbHelper genre language refresh v7 (by ABUKARIM TOOLS) --\n"
+    "    # Genre rows carry no language and are never overwritten, so after a\n"
+    "    # language change they stay in the old language. Once per Kodi session\n"
+    "    # (and language): clear them and expire their items so they are\n"
+    "    # refetched in the current language. 7.x only calls create_database()\n"
+    "    # for a new file, so this runs after the initialisation check instead.\n"
+    "    def check_database_initialization(self):\n"
+    "        super().check_database_initialization()\n"
+    "        try:\n"
+    "            self._abk_genre_language_refresh()\n"
+    "        except Exception as error:\n"
+    "            self.kodi_log(f'CACHE: ABK genre language refresh failed: {error}', 1)\n"
+    "\n"
+    "    def _abk_genre_language_refresh(self):\n"
+    "        import sqlite3\n"
+    "        import xbmcvfs\n"
+    "        from tmdbhelper.lib.addon.plugin import get_language\n"
+    "        language = get_language() or 'en-US'\n"
+    "        prop = 'ABK.GenreLanguage.Checked'\n"
+    "        if self.get_window_property(prop) == language:\n"
+    "            return\n"
+    "        if not xbmcvfs.exists(self._db_file):\n"
+    "            return\n"
+    "        cleared = 0\n"
+    "        con = sqlite3.connect(self._db_file, timeout=self._db_timeout)\n"
+    "        try:\n"
+    "            with con:\n"
+    "                con.execute('CREATE TABLE IF NOT EXISTS abk_meta(key TEXT PRIMARY KEY, value TEXT)')\n"
+    "                row = con.execute(\"SELECT value FROM abk_meta WHERE key='genre_language_v2'\").fetchone()\n"
+    "                if not row or row[0] != language:\n"
+    "                    con.execute('UPDATE baseitem SET expiry=0 WHERE id IN (SELECT parent_id FROM genre)')\n"
+    "                    cleared = con.execute('DELETE FROM genre').rowcount\n"
+    "                    con.execute(\"INSERT OR REPLACE INTO abk_meta(key, value) VALUES ('genre_language_v2', ?)\", (language, ))\n"
+    "        finally:\n"
+    "            con.close()\n"
+    "        self.set_window_property(prop, language)\n"
+    "        if cleared:\n"
+    "            self.kodi_log(f'CACHE: ABK genre language refresh -> {language} ({cleared} genre rows cleared)', 1)\n"
+    "\n"
+)
+
+# ── AF3: Subtitle Look button (4.6.2, toggle 'af3_substyle') ──
+# One OSD button just before Video settings (6008): opens AB Tools' subtitle
+# panel (sub_quick.py) - height and font size sliders, font cycler.
+_AF3_SUBSTYLE_ANCHOR = '                        <control type="button" id="6008">'
+_AF3_SUBSTYLE_XML = (
+    '                        <!-- ABUKARIM: AF3 subtitle look button -->\n'
+    '                        <control type="button" id="6012">\n'
+    '                            <include>Defs_OSD_Button</include>\n'
+    '                            <onclick>CancelAlarm(osd_timeout,true)</onclick>\n'
+    '                            <onclick>RunPlugin(plugin://plugin.program.abukarimtools/?mode=subtitle_style)</onclick>\n'
+    '                        </control>\n'
+    '                        <include content="OSD_Button_Icon_Overlay">\n'
+    '                            <param name="icon">special://skin/extras/icons/substyle.png</param>\n'
+    '                            <param name="id">6012</param>\n'
+    '                            <param name="groupid">6112</param>\n'
+    '                            <param name="itemgap">osd_itemgap</param>\n'
+    '                        </include>\n'
+    '                        <!-- /ABUKARIM: AF3 subtitle look button -->\n\n\n'
+)
+# Matching empty slot in the OSD popups (1143-1159), so their redrawn bar
+# keeps the same number of slots as VideoOSD (no shifted duplicate icon).
+_AF3_SUBSTYLE_POPUP_XML = (
+    '                <!-- ABUKARIM: AF3 subtitle look button (popup slot) -->\n'
+    '                <control type="button" id="6012">\n'
+    '                    <width>80</width>\n'
+    '                    <texturefocus />\n'
+    '                    <texturenofocus />\n'
+    '                    <font />\n'
+    '                    <label />\n'
+    '                    <onfocus>Close</onfocus>\n'
+    '                    <onfocus>SetFocus(6012)</onfocus>\n'
+    '                </control>\n'
+    '                <!-- /ABUKARIM: AF3 subtitle look button (popup slot) -->\n\n'
+)
+
+
 PATCHES = [
     # ── TMDbHelper Trakt QR Auth (by ABUKARIM TOOLS) ──
     {
@@ -382,11 +558,22 @@ PATCHES = [
         'old': base64.b64decode(_TMDBH_POLLER_OLD_B64).decode('utf-8'),
         'new': base64.b64decode(_TMDBH_POLLER_NEW_B64).decode('utf-8'),
         'description': 'TMDbHelper authenticator.py - Trakt QR auth dialog',
+        'max_version': '6.99.99',          # 7.x: see the v7 entry below
         'already_patched_check': '# -- TMDbHelper Trakt QR Auth patch (by ABUKARIM TOOLS) --',
         # Version-resilient fallback: replace the whole poller() method by anchor,
         # regardless of minor whitespace/line drift between TMDbHelper releases.
         'fallback_pattern': r'    def poller\(self\):\n[\s\S]*?\n(?=    mutex_lockname)',
         'fallback_repl': (lambda _b: (lambda m: base64.b64decode(_b).decode('utf-8') + '\n'))(_TMDBH_POLLER_NEW_B64),
+    },
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'api', 'trakt', 'api.py'),
+        'toggle': 'tmdbh_trakt_auth',
+        'min_version': '7.0.0',
+        'old': _TMDBH7_LOGIN_OLD,
+        'new': _TMDBH7_LOGIN_NEW,
+        'already_patched_check': '# -- TMDbHelper Trakt QR Auth patch v7 (by ABUKARIM TOOLS) --',
+        'description': 'TMDbHelper 7 api.py - Trakt QR auth dialog',
     },
     # ── TMDbHelper – fall back to the USA certification (MPAA) ──
     # Applies to movies AND tv: release_dates (movies) and content_ratings (tv) are both
@@ -402,11 +589,22 @@ PATCHES = [
         'old': base64.b64decode(_TMDBH_CERTFALLBACK_OLD_B64).decode('utf-8'),
         'new': base64.b64decode(_TMDBH_CERTFALLBACK_NEW_B64).decode('utf-8'),
         'description': 'TMDbHelper info.py - use the USA certification when the configured country (e.g. SA) has none',
+        'max_version': '6.99.99',          # 7.x: see the v7 entry below
         'already_patched_check': '# -- USA certification fallback (by ABUKARIM TOOLS) --',
         'fallback_pattern': r"conditions = 'parent_id=\? AND iso_country=\? AND name IS NOT NULL",
         'fallback_repl': (
             'conditions = \'parent_id=? AND iso_country IN (?, \"US\") AND name IS NOT NULL'
         ),
+    },
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'items', 'database', 'tmdbdata.py'),
+        'toggle': 'tmdbh_mpaa_ksa',
+        'min_version': '7.0.0',
+        'old': _TMDBH7_CERT_OLD,
+        'new': _TMDBH7_CERT_NEW,
+        'already_patched_check': '# -- USA certification fallback v7 (by ABUKARIM TOOLS) --',
+        'description': 'TMDbHelper 7 tmdbdata.py - use the USA certification when the configured country (e.g. SA) has none',
     },
     # ── RedLight – kill automatic volume drop to -30 dB on playback start ──
     {
@@ -1243,6 +1441,293 @@ PATCHES = [
         'description': 'AF3 busy loader - waves can be switched off (Toggles)',
     },
 
+    # ── AF3: Lucent Look (4.6.8) - colours + glass dialogs ──
+    # Phase 1 of the Lucent port to Arctic Fuse 3 (design after the Lucent skin
+    # by djdirty60). Always-on and inert until Toggles > "AF3: Lucent Look"
+    # sets the skin bool abk.lucent and picks one of the two colour themes:
+    #  - two complete colour themes (every AF3 token) in colors/,
+    #  - the glass panel textures (same files as the Glass Theme windows) in
+    #    media/abk_lucent/,
+    #  - Part_Background (the frame of ~30 AF3 dialogs and the Home / Search
+    #    side panels): while abk.lucent is set the blur/outline layers hide and
+    #    a Lucent glass body (shadow + panel + hairline edge) is drawn instead.
+    # With the bool off AF3 looks exactly as unpatched.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('colors', 'Lucent Glass.xml'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_lucent', 'colors', 'Lucent Glass.xml'),
+        'description': 'AF3 Lucent Look - colour theme Lucent Glass',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('colors', 'Lucent Glass AMOLED.xml'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_lucent', 'colors', 'Lucent Glass AMOLED.xml'),
+        'description': 'AF3 Lucent Look - colour theme Lucent Glass AMOLED',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lucent', 'panel.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'lucent', 'media', 'lucent', 'panel.png'),
+        'description': 'AF3 Lucent Look - texture panel.png',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lucent', 'panel_edge.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'lucent', 'media', 'lucent', 'panel_edge.png'),
+        'description': 'AF3 Lucent Look - texture panel_edge.png',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lucent', 'panel_shadow.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'lucent', 'media', 'lucent', 'panel_shadow.png'),
+        'description': 'AF3 Lucent Look - texture panel_shadow.png',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Dialog_Parts.xml'),
+        'not_found_ok': True,
+        'old': '                <control type="group">\n                    <include content="Part_Background_Blur" condition="$EXP[Exp_DialogTheme_IsAdaptive]">\n                        <param name="shadow">$PARAM[shadow]</param>\n                        <param name="transparency">$PARAM[transparency]</param>\n                    </include>\n                    <include content="Part_Background_Blur_Standard" condition="!$EXP[Exp_DialogTheme_IsAdaptive]">\n                        <param name="shadow">$PARAM[shadow]</param>\n                        <param name="transparency">$PARAM[transparency]</param>\n                    </include>\n                </control>\n                <include condition="$PARAM[include_glass]">Part_Background_Glass</include>',
+        'new': '                <control type="group">\n                    <visible>!Skin.HasSetting(abk.lucent)</visible>  <!-- ABUKARIM: Lucent glass dialogs -->\n                    <include content="Part_Background_Blur" condition="$EXP[Exp_DialogTheme_IsAdaptive]">\n                        <param name="shadow">$PARAM[shadow]</param>\n                        <param name="transparency">$PARAM[transparency]</param>\n                    </include>\n                    <include content="Part_Background_Blur_Standard" condition="!$EXP[Exp_DialogTheme_IsAdaptive]">\n                        <param name="shadow">$PARAM[shadow]</param>\n                        <param name="transparency">$PARAM[transparency]</param>\n                    </include>\n                </control>\n                <control type="group">\n                    <visible>Skin.HasSetting(abk.lucent)</visible>\n                    <control type="image">\n                        <left>-40</left>\n                        <top>-40</top>\n                        <right>-40</right>\n                        <bottom>-40</bottom>\n                        <texture border="88">abk_lucent/panel_shadow.png</texture>\n                        <colordiffuse>shadow_hard</colordiffuse>\n                    </control>\n                    <control type="image">\n                        <texture border="48">abk_lucent/panel.png</texture>\n                        <colordiffuse>dialog_overlay</colordiffuse>\n                    </control>\n                    <control type="image">\n                        <texture border="48">abk_lucent/panel_edge.png</texture>\n                        <colordiffuse>overlay_hard</colordiffuse>\n                    </control>\n                </control>\n                <include condition="$PARAM[include_glass]">Part_Background_Glass</include>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent glass dialogs -->',
+        'description': 'AF3 Lucent Look - glass dialog frame (Part_Background)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Dialog_Parts.xml'),
+        'not_found_ok': True,
+        'old': '            <visible>!Skin.String(Background.DialogImage,Onyx)</visible>\n            <texture colordiffuse="dialog_fg_06" border="20">common/dialog.png</texture>',
+        'new': '            <visible>!Skin.String(Background.DialogImage,Onyx) + !Skin.HasSetting(abk.lucent)</visible>\n            <texture colordiffuse="dialog_fg_06" border="20">common/dialog.png</texture>',
+        'already_patched_check': 'Onyx) + !Skin.HasSetting(abk.lucent)',
+        'description': 'AF3 Lucent Look - no AF3 glass sheen over the Lucent body',
+    },
+
+    # ── AF3: Lucent Look, phase 2 (4.6.9) - the player ──
+    # Thin glass progress bar, glass OSD buttons (white when focused, dark
+    # icon), bold time / dimmed duration. Definitions live in our own
+    # Includes_ABK_Lucent.xml; the AF3 edits below only insert includes that
+    # are gated on Skin.HasSetting(abk.lucent). Kodi uses the FIRST texture /
+    # textcolor / font tag of a control, so an include placed before AF3's own
+    # tag wins only while the Lucent Look is on. TinyPPI is not touched.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_ABK_Lucent.xml'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_lucent', 'Includes_ABK_Lucent.xml'),
+        'description': 'AF3 Lucent Look - player includes (Includes_ABK_Lucent.xml)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lucent', 'pill6.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'lucent', 'media', 'lucent', 'pill6.png'),
+        'description': 'AF3 Lucent Look - texture pill6.png',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes.xml'),
+        'not_found_ok': True,
+        'old': '    <include file="Includes_OSD.xml" />',
+        'new': '    <include file="Includes_OSD.xml" />\n    <include file="Includes_ABK_Lucent.xml" />  <!-- ABUKARIM: Lucent Look -->',
+        'already_patched_check': 'Includes_ABK_Lucent.xml',
+        'description': 'AF3 Lucent Look - register Includes_ABK_Lucent.xml',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Defaults.xml'),
+        'not_found_ok': True,
+        'old': '<include>Texture_Circle_Highlight_Focus_V</include>\n            <texturenofocus colordiffuse="$PARAM[back_colordiffuse]">common/circle.png</texturenofocus>',
+        'new': '<include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_OSD_Button_Textures</include>  <!-- ABUKARIM: Lucent OSD buttons -->\n            <include>Texture_Circle_Highlight_Focus_V</include>\n            <texturenofocus colordiffuse="$PARAM[back_colordiffuse]">common/circle.png</texturenofocus>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent OSD buttons -->',
+        'description': 'AF3 Lucent Look - glass OSD buttons',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '<texture colordiffuse="$VAR[ColorSelected]" flipx="$PARAM[flipx]">$PARAM[icon]</texture>',
+        'new': '<include content="ABK_Lucent_IconFocus" condition="Skin.HasSetting(abk.lucent)">  <!-- ABUKARIM: Lucent focused icon -->\n                            <param name="icon">$PARAM[icon]</param>\n                            <param name="flipx">$PARAM[flipx]</param>\n                        </include>\n                        <texture colordiffuse="$VAR[ColorSelected]" flipx="$PARAM[flipx]">$PARAM[icon]</texture>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent focused icon -->',
+        'description': 'AF3 Lucent Look - dark icon on the focused OSD button',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '<label>$VAR[Label_OSD_Time]</label>\n            <textcolor>panel_fg_100</textcolor>',
+        'new': '<label>$VAR[Label_OSD_Time]</label>\n            <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_TimeLabel</include>  <!-- ABUKARIM: Lucent time -->\n            <textcolor>panel_fg_100</textcolor>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent time -->',
+        'description': 'AF3 Lucent Look - bold play time',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '<label>$VAR[Label_OSD_Duration]</label>\n            <textcolor>panel_fg_100</textcolor>',
+        'new': '<label>$VAR[Label_OSD_Duration]</label>\n            <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_DurationLabel</include>  <!-- ABUKARIM: Lucent duration -->\n            <textcolor>panel_fg_100</textcolor>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent duration -->',
+        'description': 'AF3 Lucent Look - dimmed duration',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '<include name="OSD_Progress_BarControls">',
+        'new': '<include name="OSD_Progress_BarControls">\n        <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_Progress</include>  <!-- ABUKARIM: Lucent progress -->',
+        'already_patched_check': '<!-- ABUKARIM: Lucent progress -->',
+        'description': 'AF3 Lucent Look - thin glass progress bar',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '<!-- Cache Line -->\n        <control type="group">\n            <height>12</height>',
+        'new': '<!-- Cache Line -->\n        <control type="group">\n            <visible>!Skin.HasSetting(abk.lucent)</visible>  <!-- ABUKARIM: Lucent hides AF3 cache -->\n            <height>12</height>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent hides AF3 cache -->',
+        'description': 'AF3 Lucent Look - AF3 cache line off',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '<info>Player.Progress</info>\n            <visible>Player.HasMedia + !Pvr.IsPlayingTv</visible>',
+        'new': '<info>Player.Progress</info>\n            <visible>Player.HasMedia + !Pvr.IsPlayingTv + !Skin.HasSetting(abk.lucent)</visible>',
+        'already_patched_check': 'Player.HasMedia + !Pvr.IsPlayingTv + !Skin.HasSetting(abk.lucent)',
+        'description': 'AF3 Lucent Look - AF3 progress bar off',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '<info>PVR.EpgEventProgress</info>\n            <visible>Pvr.IsPlayingTv</visible>',
+        'new': '<info>PVR.EpgEventProgress</info>\n            <visible>Pvr.IsPlayingTv + !Skin.HasSetting(abk.lucent)</visible>',
+        'already_patched_check': '<visible>Pvr.IsPlayingTv + !Skin.HasSetting(abk.lucent)</visible>',
+        'description': 'AF3 Lucent Look - AF3 live TV bar off',
+    },
+
+    # ── AF3: Lucent Look, phase 3 (4.6.10) - the info page ──
+    # The action buttons of the video info page (Play, Trailer, Trakt, ...,
+    # Options - grouplists 9000 in Includes_DialogInfo.xml) and the plot
+    # dialog tabs all come from Button_Underline_Switcher. While abk.lucent is
+    # set they become Lucent pills (first tag wins, see phase 2) and the two
+    # info-page rows use a tighter gap. Definitions in Includes_ABK_Lucent.xml.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lucent', 'pill60.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'lucent', 'media', 'lucent', 'pill60.png'),
+        'description': 'AF3 Lucent Look - texture pill60.png',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Buttons.xml'),
+        'not_found_ok': True,
+        'old': '            <control type="$PARAM[control]" id="$PARAM[id]">\n                <nested />\n                <width>auto</width>',
+        'new': '            <control type="$PARAM[control]" id="$PARAM[id]">\n                <nested />\n                <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_PillButton</include>  <!-- ABUKARIM: Lucent pill buttons -->\n                <width>auto</width>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent pill buttons -->',
+        'description': 'AF3 Lucent Look - pill action buttons (info page, plot tabs)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_DialogInfo.xml'),
+        'not_found_ok': True,
+        'old': '<itemgap>40</itemgap>\n                    <ondown>90001</ondown>',
+        'new': '<include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_PillGap</include>  <!-- ABUKARIM: Lucent pill gap 90001 -->\n                    <itemgap>40</itemgap>\n                    <ondown>90001</ondown>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent pill gap 90001 -->',
+        'description': 'AF3 Lucent Look - tighter button row (info)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_DialogInfo.xml'),
+        'not_found_ok': True,
+        'old': '<itemgap>40</itemgap>\n                    <ondown>5000</ondown>',
+        'new': '<include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_PillGap</include>  <!-- ABUKARIM: Lucent pill gap 5000 -->\n                    <itemgap>40</itemgap>\n                    <ondown>5000</ondown>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent pill gap 5000 -->',
+        'description': 'AF3 Lucent Look - tighter button row (info, alt layout)',
+    },
+
+    # ── AF3: Lucent Look, phase 4 (4.6.11) - Lucent focus ──
+    # Lucent focuses with a solid white highlight and dark text. AF3's own
+    # default is the same (ColorHighlight ffffffff, ColorSelected ff272727),
+    # so every AF3 view already supports it; while abk.lucent is set the four
+    # focus variables take the Lucent values first, over the user's chosen
+    # focus colour / "revert selected text". Variables are live: no reload.
+    # 4.6.12: optional - skin bool abk.lucent.ownfocus (Toggles > AF3: Lucent
+    # Look > "Focus colour") keeps the user's own focus colour. The regex
+    # fallback upgrades a skin patched by 4.6.11 in place.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Colors.xml'),
+        'not_found_ok': True,
+        'old': '<variable name="ColorHighlight">\n        <value condition="!',
+        'new': '<variable name="ColorHighlight">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ffffffff</value>  <!-- ABUKARIM: Lucent focus -->\n        <value condition="!',
+        'already_patched_check': '<variable name="ColorHighlight">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ffffffff</value>  <!-- ABUKARIM: Lucent focus -->',
+        'fallback_pattern': '(<variable name="ColorHighlight">\\n)        <value condition="Skin\\.HasSetting\\(abk\\.lucent\\)">[0-9a-fA-F]{8}</value>  <!-- ABUKARIM: Lucent focus -->\\n',
+        'fallback_repl': '\\g<1>        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ffffffff</value>  <!-- ABUKARIM: Lucent focus -->\n',
+        'description': 'AF3 Lucent Look - Lucent focus (ColorHighlight)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Colors.xml'),
+        'not_found_ok': True,
+        'old': '<variable name="ColorSelected_30">\n        <value condition="!',
+        'new': '<variable name="ColorSelected_30">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">4d0b1119</value>  <!-- ABUKARIM: Lucent focus -->\n        <value condition="!',
+        'already_patched_check': '<variable name="ColorSelected_30">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">4d0b1119</value>  <!-- ABUKARIM: Lucent focus -->',
+        'fallback_pattern': '(<variable name="ColorSelected_30">\\n)        <value condition="Skin\\.HasSetting\\(abk\\.lucent\\)">[0-9a-fA-F]{8}</value>  <!-- ABUKARIM: Lucent focus -->\\n',
+        'fallback_repl': '\\g<1>        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">4d0b1119</value>  <!-- ABUKARIM: Lucent focus -->\n',
+        'description': 'AF3 Lucent Look - Lucent focus (ColorSelected_30)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Colors.xml'),
+        'not_found_ok': True,
+        'old': '<variable name="ColorSelected">\n        <value condition="!',
+        'new': '<variable name="ColorSelected">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ff0b1119</value>  <!-- ABUKARIM: Lucent focus -->\n        <value condition="!',
+        'already_patched_check': '<variable name="ColorSelected">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ff0b1119</value>  <!-- ABUKARIM: Lucent focus -->',
+        'fallback_pattern': '(<variable name="ColorSelected">\\n)        <value condition="Skin\\.HasSetting\\(abk\\.lucent\\)">[0-9a-fA-F]{8}</value>  <!-- ABUKARIM: Lucent focus -->\\n',
+        'fallback_repl': '\\g<1>        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ff0b1119</value>  <!-- ABUKARIM: Lucent focus -->\n',
+        'description': 'AF3 Lucent Look - Lucent focus (ColorSelected)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Colors.xml'),
+        'not_found_ok': True,
+        'old': '<variable name="ColorSelectedInverted">\n        <value condition="!',
+        'new': '<variable name="ColorSelectedInverted">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ffffffff</value>  <!-- ABUKARIM: Lucent focus -->\n        <value condition="!',
+        'already_patched_check': '<variable name="ColorSelectedInverted">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ffffffff</value>  <!-- ABUKARIM: Lucent focus -->',
+        'fallback_pattern': '(<variable name="ColorSelectedInverted">\\n)        <value condition="Skin\\.HasSetting\\(abk\\.lucent\\)">[0-9a-fA-F]{8}</value>  <!-- ABUKARIM: Lucent focus -->\\n',
+        'fallback_repl': '\\g<1>        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ffffffff</value>  <!-- ABUKARIM: Lucent focus -->\n',
+        'description': 'AF3 Lucent Look - Lucent focus (ColorSelectedInverted)',
+    },
+
     # ── AF3 auto-trailers, ARTWORK mode (3.2.48) - Dex Hub's way ──
     # The trailer plays inside the skin's own artwork frame (its 'FlixArt'
     # video frame), not behind the whole page and not full screen. The
@@ -1374,6 +1859,7 @@ PATCHES = [
         'fallback_pattern': r"    cache_filename = [\"']ItemDetails\.db[\"'][ \t]*\r?\n(?!\r?\n    # -- TMDbHelper genre language refresh)",
         'fallback_repl': r'\g<0>' + _TMDBH_GENRE_LANG_BLOCK,
         'description': 'TMDbHelper database.py – refresh cached genres when the language changes',
+        'max_version': '6.99.99',          # 7.x: see the v7 entry below
     },
     {
         'addon_id': 'plugin.video.themoviedb.helper',
@@ -1385,6 +1871,17 @@ PATCHES = [
         'fallback_pattern': r"    cache_filename = [\"']ItemQueries\.db[\"'][ \t]*\r?\n",
         'fallback_repl': r'\g<0>' + _TMDBH_GENRE_LIST_LANG_BLOCK,
         'description': 'TMDbHelper query database.py \u2013 refresh the global genre list when the language changes',
+        'max_version': '6.99.99',          # 7.x: see the v7 entry below
+    },
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'items', 'database', 'database.py'),
+        'toggle': 'tmdbh_genre_lang',
+        'min_version': '7.0.0',
+        'old': _TMDBH7_GENRE_ANCHOR,
+        'new': _TMDBH7_GENRE_ANCHOR + _TMDBH7_GENRE_BLOCK,
+        'already_patched_check': '# -- TMDbHelper genre language refresh v7 (by ABUKARIM TOOLS) --',
+        'description': 'TMDbHelper 7 database.py - refresh cached genres when the language changes',
     },
     # ── TMDbHelper: thread cap (3.3.3); invoker reuse removed (3.4.14) ──
     # 2026-10-13 OOM kill on the AM9 (4 GB, no swap): kodi.bin reached 2.08 GB
@@ -1553,6 +2050,43 @@ PATCHES = [
         'fallback_repl': _AF3_SUBTOOLS_POPUP_XML.replace('\\', '\\\\') + r'\1',
         'description': 'AF3 Subtitle Buttons - matching slots in OSD popups (no duplicate icons)',
     },
+    # ── AF3: Subtitle Look button (4.6.2, toggle 'af3_substyle') ──
+    # Icon into extras/icons, the button before Video settings in VideoOSD,
+    # and a matching popup slot. revert_when_off takes both XML parts out
+    # again when the switch is turned off.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('extras', 'icons', 'substyle.png'),
+        'toggle': 'af3_substyle',
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_substyle', 'substyle.png'),
+        'description': 'AF3 Subtitle Look - OSD icon',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'toggle': 'af3_substyle',
+        'not_found_ok': True,
+        'old': _AF3_SUBSTYLE_ANCHOR,
+        'new': _AF3_SUBSTYLE_XML + _AF3_SUBSTYLE_ANCHOR,
+        'already_patched_check': '<!-- ABUKARIM: AF3 subtitle look button -->',
+        'revert_when_off': (_AF3_SUBSTYLE_XML + _AF3_SUBSTYLE_ANCHOR, _AF3_SUBSTYLE_ANCHOR),
+        'description': 'AF3 Subtitle Look - OSD button (height, size, font)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'toggle': 'af3_substyle',
+        'not_found_ok': True,
+        'old': _AF3_SUBTOOLS_POPUP_ANCHOR,
+        'new': _AF3_SUBSTYLE_POPUP_XML + _AF3_SUBTOOLS_POPUP_ANCHOR,
+        'already_patched_check': '<!-- ABUKARIM: AF3 subtitle look button (popup slot) -->',
+        'revert_when_off': (_AF3_SUBSTYLE_POPUP_XML + _AF3_SUBTOOLS_POPUP_ANCHOR, _AF3_SUBTOOLS_POPUP_ANCHOR),
+        'description': 'AF3 Subtitle Look - matching slot in OSD popups',
+    },
     # ── Lucent theme for Fen Light, Red Light, POV & Umbrella ──
     # 3.4.39: a Toggles-menu feature with one switch per add-on (lucent_toggle.py),
     # gated by 'feature': 'lucent_<profile>' - no longer in the Apply Patches list.
@@ -1572,6 +2106,43 @@ PATCHES = [
     {'addon_id': 'plugin.video.umbrella', 'lucent': 'umbrella', 'feature': 'lucent_umbrella', 'not_found_ok': True,
      'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'source_results.xml'),
      'old': '', 'new': '', 'description': 'Umbrella - Glass theme source windows'},
+    # ── POV: metadata memory cache compares a text expiry with a number (4.5.2) ──
+    # A movie's meta read back from metacache.db keeps its "expires" column as
+    # text, is put in the memory cache (window property) that way, and the next
+    # lookup of that title in the session raises TypeError "'<' not supported
+    # between instances of 'str' and 'int'" in get_memory_cache - POV then
+    # cannot open sources for it (CoreELEC report, kodi.log 2026-10-29).
+    {'addon_id': 'plugin.video.pov', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'lib', 'caches', 'meta_cache.py'),
+     'old': "\t\texpiry, meta = self.jsloads(cache_data)\n\t\tif expiry < current_time: return None\n",
+     'new': "\t\texpiry, meta = self.jsloads(cache_data)\n\t\ttry:\n\t\t\tif int(expiry) < current_time: return None\n\t\texcept (TypeError, ValueError): return None  # ABK: text expiry from metacache.db\n",
+     'already_patched_check': '# ABK: text expiry from metacache.db',
+     'description': 'POV meta_cache.py - text expiry in the memory cache no longer breaks source search'},
+    # 4.5.4: the real cause - a metacache.db made by an older POV has its
+    # columns in another order (... meta, expires instead of ... expires, meta).
+    # POV inserts by position, so meta lands in "expires" and the timestamp in
+    # "meta"; reading back gives a number as meta ("argument of type 'int' is
+    # not a container or iterable" in get_title) or text as expiry. Insert by
+    # column name, and treat a row that is not a meta dict as a cache miss so
+    # POV fetches it again and the row is rewritten correctly.
+    {'addon_id': 'plugin.video.pov', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'lib', 'caches', 'meta_cache.py'),
+     'old': "SET_MOVIE_SHOW = 'INSERT OR REPLACE INTO metadata VALUES (?, ?, ?, ?, ?, ?)'\nSET_SEASON = 'INSERT INTO season_metadata VALUES (?, ?, ?)'\nSET_FUNCTION = 'INSERT INTO function_cache VALUES (?, ?, ?)'\n",
+     'new': "SET_MOVIE_SHOW = 'INSERT OR REPLACE INTO metadata (db_type, tmdb_id, imdb_id, tvdb_id, expires, meta) VALUES (?, ?, ?, ?, ?, ?)'  # ABK: by column name\nSET_SEASON = 'INSERT OR REPLACE INTO season_metadata (tmdb_id, expires, meta) VALUES (?, ?, ?)'\nSET_FUNCTION = 'INSERT INTO function_cache (string_id, expires, data) VALUES (?, ?, ?)'\n",
+     'already_patched_check': '# ABK: by column name',
+     'description': 'POV meta_cache.py - write by column name (metacache.db from an older POV has another column order)'},
+    {'addon_id': 'plugin.video.pov', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'lib', 'caches', 'meta_cache.py'),
+     'old': "\t\tif not data: return None\n\t\tmeta, expiry = self.jsloads(data[0]), data[1]\n",
+     'new': "\t\tif not data: return None\n\t\ttry: meta, expiry = self.jsloads(data[0]), int(data[1])\n\t\texcept (TypeError, ValueError): return None  # ABK: row written in the wrong columns\n\t\tif not isinstance(meta, (dict, list)): return None\n",
+     'already_patched_check': '# ABK: row written in the wrong columns',
+     'description': 'POV meta_cache.py - a row written in the wrong columns is a cache miss, not a crash'},
+    {'addon_id': 'plugin.video.pov', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'lib', 'caches', 'meta_cache.py'),
+     'old': "\t\tif not cache_data: return None\n\t\treturn self.jsloads(cache_data[0])\n",
+     'new': "\t\tif not cache_data: return None\n\t\ttry: int(cache_data[1])\n\t\texcept (TypeError, ValueError): return None  # ABK: function row in the wrong columns\n\t\treturn self.jsloads(cache_data[0])\n",
+     'already_patched_check': '# ABK: function row in the wrong columns',
+     'description': 'POV meta_cache.py - function cache row written in the wrong columns is a miss'},
     # ── Search All (3.4.48): Toggles > Glass Theme > "Search All add-ons" ──
     # Red Light gets Fen Light's device-select modes back (Fen Light has them);
     # TMDbHelper gets the "AB Search All" player that opens resources/lib/ab_search.py.
@@ -2228,6 +2799,7 @@ TOGGLE_GROUPS = [
     ('a4ksubs_utf8',     'a4kSubtitles: UTF-8 Subtitles Fix'),
     ('a4ksubs_quiet',    'a4kSubtitles: Hide Account/API-Key Nags'),
     ('af3_subtools',     'AF3: Subtitle Buttons (DexSubtitles Sync & Cycler)'),
+    ('af3_substyle',     'AF3: Subtitle Look Button (Height, Size & Font)'),
     ('dexhub_entry',     'DexHub: Plugin Entry Fix (Kodi 22)'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)

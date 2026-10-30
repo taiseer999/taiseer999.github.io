@@ -1624,3 +1624,67 @@ msgctxt "#30836"
 msgid "Filter: %s"
 msgstr ""
 
+msgctxt "#30837"
+msgid "Bitrate: over 40 Mbps (estimated)"
+msgstr ""
+
+msgctxt "#30838"
+msgid "Bitrate: 20 - 40 Mbps (estimated)"
+msgstr ""
+
+msgctxt "#30839"
+msgid "Bitrate: 10 - 20 Mbps (estimated)"
+msgstr ""
+
+msgctxt "#30840"
+msgid "Bitrate: under 10 Mbps (estimated)"
+msgstr ""
+
+msgctxt "#30841"
+msgid "Expand"
+msgstr ""
+
+msgctxt "#30842"
+msgid "Collapse"
+msgstr ""
+
+msgctxt "#30850"
+msgid "AF3: Lucent Look"
+msgstr ""
+
+msgctxt "#30851"
+msgid "Off (Arctic Fuse 3 as it is)"
+msgstr ""
+
+msgctxt "#30852"
+msgid "Lucent Glass"
+msgstr ""
+
+msgctxt "#30853"
+msgid "Lucent Glass AMOLED (true black)"
+msgstr ""
+
+msgctxt "#30854"
+msgid "Lucent Look turned on: %s"
+msgstr ""
+
+msgctxt "#30855"
+msgid "Lucent Look turned off - your previous colours are back"
+msgstr ""
+
+msgctxt "#30856"
+msgid "Lucent Look: the files could not be installed into Arctic Fuse 3. Run Apply Patches and try again."
+msgstr ""
+
+msgctxt "#30857"
+msgid "Off"
+msgstr ""
+
+msgctxt "#30858"
+msgid "Focus colour: Lucent white"
+msgstr ""
+
+msgctxt "#30859"
+msgid "Focus colour: my own colour"
+msgstr ""
+
