@@ -513,6 +513,37 @@ _AF3_SUBSTYLE_POPUP_XML = (
 )
 
 
+
+
+# RedLight safe retry (see the sources.py entry in PATCHES). Inserted at the
+# top of every queued attempt after the first (next source / easynews RETRYx).
+_REDLIGHT_RETRY_SETTLE = (
+    "\t\t\t\t\t\t# -- RedLight safe retry (by ABUKARIM TOOLS) --\n"
+    "\t\t\t\t\t\t# A stalled open (easynews / debrid) leaves Kodi closing the old file and\n"
+    "\t\t\t\t\t\t# its playlist player half-reset; starting the next attempt into that\n"
+    "\t\t\t\t\t\t# state crashed Kodi (SIGSEGV in CPlayListPlayer::OnApplicationMessage,\n"
+    "\t\t\t\t\t\t# 'item that's out of range'). Wait for the player to go idle, clear the\n"
+    "\t\t\t\t\t\t# video playlist on Kodi's main thread (JSON-RPC), then let it settle.\n"
+    "\t\t\t\t\t\ttry:\n"
+    "\t\t\t\t\t\t\t_abk_mon = kodi_utils.xbmc.Monitor()\n"
+    "\t\t\t\t\t\t\t_abk_idle, _abk_ms = 0, 0\n"
+    "\t\t\t\t\t\t\twhile _abk_ms < 30000 and not _abk_mon.abortRequested():\n"
+    "\t\t\t\t\t\t\t\tif self._user_cancelled_resolve():\n"
+    "\t\t\t\t\t\t\t\t\tbreak\n"
+    "\t\t\t\t\t\t\t\tif kodi_utils.get_visibility('Player.HasMedia | Window.IsActive(busydialog) | Window.IsActive(busydialognocancel)'):\n"
+    "\t\t\t\t\t\t\t\t\t_abk_idle = 0\n"
+    "\t\t\t\t\t\t\t\telse:\n"
+    "\t\t\t\t\t\t\t\t\t_abk_idle += 1\n"
+    "\t\t\t\t\t\t\t\t\tif _abk_idle >= 5:\n"
+    "\t\t\t\t\t\t\t\t\t\tbreak\n"
+    "\t\t\t\t\t\t\t\tkodi_utils.sleep(100)\n"
+    "\t\t\t\t\t\t\t\t_abk_ms += 100\n"
+    "\t\t\t\t\t\t\tkodi_utils.xbmc.executeJSONRPC('{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"Playlist.Clear\",\"params\":{\"playlistid\":1}}')\n"
+    "\t\t\t\t\t\t\tkodi_utils.sleep(1000)\n"
+    "\t\t\t\t\t\texcept Exception:\n"
+    "\t\t\t\t\t\t\tpass\n"
+)
+
 PATCHES = [
     # ── TMDbHelper Trakt QR Auth (by ABUKARIM TOOLS) ──
     {
@@ -618,6 +649,27 @@ PATCHES = [
         'fallback_repl': ("def volume_checker():\r\n"
                           "\t# -- RedLight volume auto-drop disabled (by ABUKARIM TOOLS) --\r\n"
                           "\treturn"),
+    },
+    # ── RedLight – safe retry after a stalled source (4.6.17) ──
+    # kodi.log/crashlog 2026-10-30 (3x SIGSEGV): an easynews source stalled ~20s
+    # in the demuxer, RedLight gave up and stopped it, then play_file started the
+    # next queued attempt (RETRYx of the same link) while Kodi was still tearing
+    # the old one down -> "Error trying to retrieve an item that's out of range"
+    # -> crash in CPlayListPlayer::OnApplicationMessage. Wait for idle + clear the
+    # video playlist via JSON-RPC before every attempt after the first.
+    {
+        'addon_id': 'plugin.video.redlight',
+        'rel_path': os.path.join('resources', 'lib', 'modules', 'sources.py'),
+        'toggle': 'redlight_safe_retry',
+        'not_found_ok': True,
+        'old': ("\t\t\t\t\tif count > 1:\n"
+                "\t\t\t\t\t\tkodi_utils.sleep(200)\n"),
+        'new': ("\t\t\t\t\tif count > 1:\n"
+                "\t\t\t\t\t\tkodi_utils.sleep(200)\n" + _REDLIGHT_RETRY_SETTLE),
+        'already_patched_check': '# -- RedLight safe retry (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r"(\n\t+if count > 1:\r?\n\t+kodi_utils\.sleep\(200\)\r?\n)(?!\t*# -- RedLight safe retry)",
+        'fallback_repl': lambda _m: _m.group(1) + _REDLIGHT_RETRY_SETTLE,
+        'description': 'RedLight sources.py - wait for Kodi to finish a stalled close before the next/retry attempt (playlist-player crash)',
     },
     # ── Fenlight – kill automatic volume drop to -30 dB on playback start ──
     {
@@ -2793,6 +2845,7 @@ TOGGLE_GROUPS = [
     ('af3_vplot',        'AF3: Vertical Plot (Home, OSD & Views)'),
     ('af3_highlight',    'AF3: Highlight Genre & Widget Titles'),
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
+    ('redlight_safe_retry', 'RedLight: Safe Retry After a Stalled Source'),
     ('fenlight_volume',  'Fenlight: Kill Volume Auto-Drop'),
     ('fenlight_tmdbh',   'Fenlight: TMDbHelper Playback Fix'),
     ('abscrapers_support', 'AB Scrapers: Fenlight & Umbrella Support'),
