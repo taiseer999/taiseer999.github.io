@@ -2212,9 +2212,9 @@ PATCHES = [
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
         'not_found_ok': True,
-        'old': '                    <param name="plotboxh">$PARAM[plotboxh]</param>\n                </include>\n\n                <!-- Meta -->',
-        'new': '                    <param name="plotboxh">$PARAM[plotboxh]</param>\n                </include>\n\n                <!-- ABUKARIM: genre line while the plot is on the right (it rides on the plot block otherwise) -->\n                <control type="group">\n                    <visible>$PARAM[plotright_genre] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Genre)</visible>\n                    <height>24</height>\n                    <control type="label">\n                        <left>40</left>\n                        <top>-11</top>\n                        <height>40</height>\n                        <width>$PARAM[plotwidth]</width>\n                        <font>font_main_bold</font>\n                        <textcolor>$PARAM[colordiffuse]_90</textcolor>\n                        <label>$INFO[$PARAM[container]$PARAM[listitem].Genre]</label>\n                    </control>\n                </control>\n\n                <!-- Meta -->',
-        'already_patched_check': '<!-- ABUKARIM: genre line while the plot is on the right',
+        'old': '                <!-- Info -->\n                <include content="Info_Line" condition="$PARAM[include_details]">\n',
+        'new': '                <!-- ABUKARIM: genre under the title (plot on the right) -->\n                <control type="group">\n                    <visible>$PARAM[plotright_genre] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Genre)</visible>\n                    <height>39</height>\n                    <control type="label">\n                        <left>40</left>\n                        <top>6</top>\n                        <height>40</height>\n                        <width>$PARAM[plotwidth]</width>\n                        <font>font_main_bold</font>\n                        <textcolor>$PARAM[colordiffuse]_90</textcolor>\n                        <label>$INFO[$PARAM[container]$PARAM[listitem].Genre]</label>\n                    </control>\n                </control>\n\n                <!-- Info -->\n                <include content="Info_Line" condition="$PARAM[include_details]">\n',
+        'already_patched_check': '<!-- ABUKARIM: genre under the title (plot on the right) -->',
         'description': 'AF3 Plot on the Right - Info_Panel genre line',
     },
     {
@@ -2404,7 +2404,7 @@ PATCHES = [
         'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
         'not_found_ok': True,
         'old': '                <itemgap>0</itemgap>\n\n                <control type="group" description="Avoid grouplist chop with spacer">\n                    <height>20</height>\n                </control>\n',
-        'new': '                <itemgap>0</itemgap>\n\n                <control type="group" description="Avoid grouplist chop with spacer">\n                    <height>20</height>\n                </control>\n                <!-- ABUKARIM: plot on the right - the info column moves down to sit above the row title -->\n                <control type="group">\n                    <visible>$PARAM[plotright_genre]</visible>\n                    <height>64</height>\n                </control>\n',
+        'new': '                <itemgap>0</itemgap>\n\n                <control type="group" description="Avoid grouplist chop with spacer">\n                    <height>20</height>\n                </control>\n                <!-- ABUKARIM: plot on the right - the info column moves down to sit above the row title -->\n                <control type="group">\n                    <visible>$PARAM[plotright_genre]</visible>\n                    <height>49</height>\n                </control>\n',
         'already_patched_check': '<!-- ABUKARIM: plot on the right - the info column moves down',
         'description': 'AF3 Plot on the Right - info column moves down',
     },
@@ -2427,6 +2427,129 @@ PATCHES = [
         'new': '<param name="visible">!String.IsEmpty($PARAM[container]$PARAM[listitem].Duration) + Integer.IsEqual($PARAM[container]$PARAM[listitem].Duration(h),0) + !Integer.IsEqual($PARAM[container]$PARAM[listitem].Duration(m),0) + ',
         'already_patched_check': '<param name="visible">!String.IsEmpty($PARAM[container]$PARAM[listitem].Duration) + Integer.IsEqual($PARAM[container]$PARAM[listitem].Duration(h),0) + !Integer.IsEqual($PARAM[container]$PARAM[listitem].Duration(m),0) + ',
         'description': 'AF3 - info line: no "0 minutes" (two-row)',
+    },
+
+    # 4.6.23: genre directly under the title (logo), then the info rows; a
+    # little more air between the lines on Home while the plot is on the
+    # right: the two-line bar's second row 8 px lower (48 px rhythm: badges -
+    # date line - ratings), the top spacer 49 px so the column keeps its
+    # bottom above the row title. The genre block of 4.6.16 - 4.6.22 (between
+    # the info line and the ratings) is taken out.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'not_found_ok': True,
+        'old': '                <!-- ABUKARIM: genre line while the plot is on the right (it rides on the plot block otherwise) -->\n                <control type="group">\n                    <visible>$PARAM[plotright_genre] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Genre)</visible>\n                    <height>24</height>\n                    <control type="label">\n                        <left>40</left>\n                        <top>-11</top>\n                        <height>40</height>\n                        <width>$PARAM[plotwidth]</width>\n                        <font>font_main_bold</font>\n                        <textcolor>$PARAM[colordiffuse]_90</textcolor>\n                        <label>$INFO[$PARAM[container]$PARAM[listitem].Genre]</label>\n                    </control>\n                </control>\n\n',
+        'new': '',
+        # no "done" marker can exist for a removal: the entry just finds
+        # nothing to do once the old block is gone (not_found_ok)
+        'already_patched_check': '<!-- ABUKARIM: (no marker) -->',
+        'fallback_pattern': r'[ \t]*<!-- ABUKARIM: genre line while the plot is on the right[^\n]*-->\n[ \t]*<control type="group">\n(?:(?![ \t]*<!-- ).*\n)*?[ \t]*</control>\n[ \t]*</control>\n\n',
+        'fallback_repl': '',
+        'description': 'AF3 Plot on the Right - old genre line out (moved under the title)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'not_found_ok': True,
+        'old': '                <!-- ABUKARIM: plot on the right - the info column moves down to sit above the row title -->\n                <control type="group">\n                    <visible>$PARAM[plotright_genre]</visible>\n                    <height>64</height>\n                </control>\n',
+        'new': '                <!-- ABUKARIM: plot on the right - the info column moves down to sit above the row title -->\n                <control type="group">\n                    <visible>$PARAM[plotright_genre]</visible>\n                    <height>49</height>\n                </control>\n',
+        'already_patched_check': '                <!-- ABUKARIM: plot on the right - the info column moves down to sit above the row title -->\n                <control type="group">\n                    <visible>$PARAM[plotright_genre]</visible>\n                    <height>49</height>\n                </control>\n',
+        'description': 'AF3 Plot on the Right - info column spacer 49 (upgrade)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_u3k.xml'),
+        'not_found_ok': True,
+        # 4.6.24: exact old = the 4.6.23 line pair (replaced in one go); a stock
+        # skin goes through the regex fallback (the centertop 75 line)
+        'old': '\t\t\t\t\t<centertop>75</centertop>\n\t\t\t\t\t<animation effect="slide" end="0,8" time="0" condition="Skin.HasSetting(abk.plotright) + Window.IsActive(Home)">Conditional</animation>  <!-- ABUKARIM: plot on the right - airier rows -->\n',
+        'new': '\t\t\t\t\t<centertop>75</centertop>\n\t\t\t\t\t<animation effect="slide" end="0,-40" time="0" condition="$PARAM[plotright]">Conditional</animation>  <!-- ABUKARIM: plot on the right - date line first -->\n',
+        'already_patched_check': '<!-- ABUKARIM: plot on the right - date line first -->',
+        'fallback_pattern': r'(\t*<centertop>75</centertop>\n)',
+        'fallback_repl': '\\1' + '\t\t\t\t\t<animation effect="slide" end="0,-40" time="0" condition="$PARAM[plotright]">Conditional</animation>  <!-- ABUKARIM: plot on the right - date line first -->\n',
+        'description': 'AF3 Plot on the Right - airier two-line info bar',
+    },
+
+    # 4.6.24 (screenshot 2026-10-31 10:10): the quality badges (SD / SDR /
+    # AAC / 1.0) move to the bottom of the info column: title, genre, date
+    # line, ratings, badges - 48 px apart. Done with conditional slides that
+    # only run for the Info_Panel of a hub with the plot on the right: the
+    # panel passes its plotright_genre condition down as a "plotright" param
+    # (Info_Line -> Info_Line_TwoRow_U3k, Info_Meta; default false, so every
+    # other use of those includes is untouched). Date line up 40, ratings
+    # (Info_Meta) up 52, badges row down 96.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'not_found_ok': True,
+        'old': '<param name="visible">$PARAM[visible_line]</param>\n                </include>',
+        'new': '<param name="visible">$PARAM[visible_line]</param>\n                    <param name="plotright">$PARAM[plotright_genre]</param>  <!-- ABUKARIM: plot right order -->\n                </include>',
+        'already_patched_check': '<param name="visible">$PARAM[visible_line]</param>\n                    <param name="plotright">$PARAM[plotright_genre]</param>  <!-- ABUKARIM: plot right order -->\n                </include>',
+        'description': 'AF3 Plot on the Right - Info_Panel -> Info_Line param',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'not_found_ok': True,
+        'old': '<param name="visible">$PARAM[visible_meta]</param>\n                </include>',
+        'new': '<param name="visible">$PARAM[visible_meta]</param>\n                    <param name="plotright">$PARAM[plotright_genre]</param>  <!-- ABUKARIM: plot right order -->\n                </include>',
+        'already_patched_check': '<param name="visible">$PARAM[visible_meta]</param>\n                    <param name="plotright">$PARAM[plotright_genre]</param>  <!-- ABUKARIM: plot right order -->\n                </include>',
+        'description': 'AF3 Plot on the Right - Info_Panel -> Info_Meta param',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'not_found_ok': True,
+        'old': '<param name="override">false</param>\n        <definition>\n            <control type="group">\n                <visible>$PARAM[visible] + !Skin.HasSetting(InfoBar.TwoRow)</visible>',
+        'new': '<param name="override">false</param>\n        <param name="plotright">false</param>  <!-- ABUKARIM: plot right order -->\n        <definition>\n            <control type="group">\n                <visible>$PARAM[visible] + !Skin.HasSetting(InfoBar.TwoRow)</visible>',
+        'already_patched_check': '<param name="override">false</param>\n        <param name="plotright">false</param>  <!-- ABUKARIM: plot right order -->\n        <definition>\n            <control type="group">\n                <visible>$PARAM[visible] + !Skin.HasSetting(InfoBar.TwoRow)</visible>',
+        'description': 'AF3 Plot on the Right - Info_Line default param',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'not_found_ok': True,
+        'old': '                <param name="override">$PARAM[override]</param>\n                <param name="colordiffuse">$PARAM[colordiffuse]</param>\n            </include>\n        </definition>',
+        'new': '                <param name="override">$PARAM[override]</param>\n                <param name="colordiffuse">$PARAM[colordiffuse]</param>\n                <param name="plotright">$PARAM[plotright]</param>  <!-- ABUKARIM: plot right order -->\n            </include>\n        </definition>',
+        'already_patched_check': '                <param name="override">$PARAM[override]</param>\n                <param name="colordiffuse">$PARAM[colordiffuse]</param>\n                <param name="plotright">$PARAM[plotright]</param>  <!-- ABUKARIM: plot right order -->\n            </include>\n        </definition>',
+        'description': 'AF3 Plot on the Right - Info_Line -> two-line bar param',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_u3k.xml'),
+        'not_found_ok': True,
+        'old': '<param name="override">false</param>\n        <definition>\n            <control type="group">\n                <visible>$PARAM[visible] + Skin.HasSetting(InfoBar.TwoRow)</visible>',
+        'new': '<param name="override">false</param>\n        <param name="plotright">false</param>  <!-- ABUKARIM: plot right order -->\n        <definition>\n            <control type="group">\n                <visible>$PARAM[visible] + Skin.HasSetting(InfoBar.TwoRow)</visible>',
+        'already_patched_check': '<param name="override">false</param>\n        <param name="plotright">false</param>  <!-- ABUKARIM: plot right order -->\n        <definition>\n            <control type="group">\n                <visible>$PARAM[visible] + Skin.HasSetting(InfoBar.TwoRow)</visible>',
+        'description': 'AF3 Plot on the Right - two-line bar default param',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_u3k.xml'),
+        'not_found_ok': True,
+        'old': '                    <centertop>35</centertop>\n',
+        'new': '                    <centertop>35</centertop>\n                    <animation effect="slide" end="0,96" time="0" condition="$PARAM[plotright]">Conditional</animation>  <!-- ABUKARIM: plot on the right - badges last -->\n',
+        'already_patched_check': '<!-- ABUKARIM: plot on the right - badges last -->',
+        'description': 'AF3 Plot on the Right - badges row to the bottom',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'not_found_ok': True,
+        'old': '<param name="ratings_visible">true</param>\n        <definition>',
+        'new': '<param name="ratings_visible">true</param>\n        <param name="plotright">false</param>  <!-- ABUKARIM: plot right order -->\n        <definition>',
+        'already_patched_check': '<param name="ratings_visible">true</param>\n        <param name="plotright">false</param>  <!-- ABUKARIM: plot right order -->\n        <definition>',
+        'description': 'AF3 Plot on the Right - Info_Meta default param',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'not_found_ok': True,
+        'old': '                <left>40</left>\n                <include>Info_Line_Height_U3k</include>\n                <visible>$PARAM[visible]</visible>\n',
+        'new': '                <left>40</left>\n                <include>Info_Line_Height_U3k</include>\n                <visible>$PARAM[visible]</visible>\n                <animation effect="slide" end="0,-52" time="0" condition="$PARAM[plotright]">Conditional</animation>  <!-- ABUKARIM: plot on the right - ratings up -->\n',
+        'already_patched_check': '<!-- ABUKARIM: plot on the right - ratings up -->',
+        'description': 'AF3 Plot on the Right - ratings row up',
     },
 
     # ── AF3 auto-trailers, ARTWORK mode (3.2.48) - Dex Hub's way ──

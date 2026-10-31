@@ -1,3 +1,20 @@
+v4.6.24
+- AF3 Plot on the Right (screenshot 2026-10-31 10:10): the quality badges
+  row (SD / SDR / AAC / 1.0) moves to the bottom of the info column -
+  title, genre, date line, ratings, badges, 48 px apart. Conditional slides
+  driven by a "plotright" param that only the hub Info_Panel sets (Info_Line
+  -> Info_Line_TwoRow_U3k, Info_Meta; default false), so the info bar
+  everywhere else is unchanged.
+
+v4.6.23
+- AF3 Plot on the Right: the genre line moves directly under the title
+  (logo) - title, genre, info bar, ratings. The old genre line between the
+  info line and the ratings (4.6.16 - 4.6.22) is taken out.
+- A little more space between the lines on Home while the plot is on the
+  right: the second row of the two-line information bar sits 8 px lower
+  (48 px rhythm instead of 40); the top spacer is 49 px so the column still
+  ends above the row title and the plot box stays centred on it.
+
 v4.6.22
 - AF3 Lucent Look, player bar icons (screen recording 2026-10-31 08:50):
   - new Lucent line icons (white on the glass circle, dark on the white
