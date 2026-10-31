@@ -1,3 +1,14 @@
+v4.6.21
+- (4.6.20 - AB Tools Lucent look - withdrawn.)
+- AF3 Plot on the Right, layout (screenshot 2026-10-31 08:09):
+  - the info column (logo .. ratings) moves down 64 px while the plot is on
+    the right, so it ends one gap above the row title - no empty band;
+  - the plot glass keeps inside the page margin (right edge 80 px from the
+    screen edge, mirroring the left text margin; it hung 40 px past it) and
+    is centred on the info column again.
+- AF3 info line: a running time of 0 (titles not out yet) no longer shows
+  "0 minutes" (one-row and two-row bars).
+
 v4.6.19
 - AF3 Plot on the Right, tidier layout (screenshot 2026-10-31 07:11):
   - the plot box is centred on the info column (logo to the ratings row) and
