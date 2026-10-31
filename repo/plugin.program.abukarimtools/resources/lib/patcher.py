@@ -214,6 +214,23 @@ _REDLIGHT_VOLCHECKER_NEW_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAtLSBSZWRMaWdo
 _AB_SEARCH_PLAYER_JSON = '{\n    "name": "AB Search All",\n    "plugin": "plugin.program.abukarimtools",\n    "priority": 30,\n    "is_resolvable": false,\n    "play_movie": "executebuiltin://RunPlugin(\\"plugin://plugin.program.abukarimtools/?mode=ab_search&media_type=movie&tmdb_id={id}&imdb={imdb}&year={year}&premiered={premiered}&title={title}\\")",\n    "play_episode": "executebuiltin://RunPlugin(\\"plugin://plugin.program.abukarimtools/?mode=ab_search&media_type=episode&tmdb_id={tmdb}&imdb={imdb}&tvdb={tvdb}&season={season}&episode={episode}&year={year}&premiered={firstaired}&showname={showname}&title={title}\\")"\n}\n'
 AB_SEARCH_PLAYER = os.path.join('players', 'abukarim.search_all.json')
 _FENLIGHT_PLAYER_JSON = '{\n    "name": "Fenlight",\n    "plugin": "plugin.video.fenlight",\n    "priority": 40,\n    "is_resolvable": false,\n    "play_movie": "executebuiltin://RunPlugin(\\"plugin://plugin.video.fenlight/?mode=playback.media&media_type=movie&query={name}&year={year}&poster={poster}&title={title}&tmdb_id={id}&autoplay=false\\")",\n    "play_episode": "executebuiltin://RunPlugin(\\"plugin://plugin.video.fenlight/?mode=playback.media&media_type=episode&query={showname}&year={year}&season={season}&episode={episode}&ep_name={title}&tmdb_id={tmdb}&premiered={firstaired}&autoplay=false\\")"\n}\n'
+# 4.6.29: AB Scrapers' own TMDbHelper player (script.module.abscrapers
+# resources/abscrapers.select.json, 1.1.2): AIOStreams via action=MediaPlay.
+_ABSCRAPERS_PLAYER_JSON = (
+    '{\n'
+    '  "name": "AB Scrapers (AIOStreams)",\n'
+    '  "plugin": "script.module.abscrapers",\n'
+    '  "api_language": "en-US",\n'
+    '  "priority": 100,\n'
+    '  "is_resolvable": "false",\n'
+    '  "assert": {\n'
+    '    "search_movie": ["imdb"],\n'
+    '    "search_episode": ["imdb", "season", "episode"]\n'
+    '  },\n'
+    '  "play_movie": "executebuiltin://RunPlugin(plugin://script.module.abscrapers/?action=MediaPlay&mediatype=movie&imdb_id={imdb})",\n'
+    '  "play_episode": "executebuiltin://RunPlugin(plugin://script.module.abscrapers/?action=MediaPlay&mediatype=episode&imdb_id={imdb}&season={season}&episode={episode})"\n'
+    '}\n'
+)
 
 # ── Fenlight resolve handoff block (3.2.54, v2) ──
 # The "already resolved" set lives in the player module's globals: Kodi's
@@ -3282,6 +3299,22 @@ PATCHES += [
         'already_patched_check': '# -- AB Scrapers default external module (by ABUKARIM TOOLS) --',
         'description': 'Umbrella sources.py - use AB Scrapers when no external module is chosen',
     },
+    # 4.6.29: AB Scrapers' AIOStreams player in TMDbHelper (the same file its
+    # "Install TMDbHelper player" menu writes), only while AB Scrapers is
+    # installed. Content-compared inject: rewritten only if it changes.
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'base': 'addon_data',
+        'rel_path': os.path.join('players', 'abscrapers.select.json'),
+        'toggle': 'abscrapers_support',
+        'requires_addon': 'script.module.abscrapers',
+        'inject_file': True,
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'inject_content': _ABSCRAPERS_PLAYER_JSON,
+        'description': 'TMDbHelper players/abscrapers.select.json - AB Scrapers (AIOStreams) player',
+    },
 ]
 
 
@@ -3406,6 +3439,12 @@ def _apply_patch(patch):
             if patch.get('not_found_ok'):
                 return True, '[%s] Addon not present – skipping (optional).' % patch['addon_id']
             return False, '[%s] Addon not found: %s' % (patch['addon_id'], addon_path)
+
+    # requires_addon (4.6.29): the entry only makes sense next to another add-on
+    # (a TMDbHelper player JSON for AB Scrapers): skip cleanly while it is missing.
+    _need = patch.get('requires_addon')
+    if _need and not (_resolve_addon_dir(_need) or os.path.isdir(os.path.join(ADDONS_DIR, _need))):
+        return True, '[%s] %s not installed - skipping.' % (patch['addon_id'], _need)
 
     # Lucent theme entries are whole-feature installs handled by their own module.
     if patch.get('lucent'):
@@ -3619,7 +3658,7 @@ TOGGLE_GROUPS = [
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
     ('fenlight_volume',  'Fenlight: Kill Volume Auto-Drop'),
     ('fenlight_tmdbh',   'Fenlight: TMDbHelper Playback Fix'),
-    ('abscrapers_support', 'AB Scrapers: Fenlight & Umbrella Support'),
+    ('abscrapers_support', 'AB Scrapers: Fenlight & Umbrella Support + AIOStreams Player'),
     ('a4ksubs_utf8',     'a4kSubtitles: UTF-8 Subtitles Fix'),
     ('a4ksubs_quiet',    'a4kSubtitles: Hide Account/API-Key Nags'),
     ('af3_subtools',     'AF3: Subtitle Buttons (DexSubtitles Sync & Cycler)'),

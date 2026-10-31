@@ -643,6 +643,11 @@ def main():
         store.migrate_old()
     except Exception as ex:
         store.log('migration failed: %r' % ex, xbmc.LOGWARNING)
+    for fn in (store.repair_ids, store.purge_tmdbh_identifiers):
+        try:
+            fn()
+        except Exception as ex:
+            store.log('%s failed: %r' % (fn.__name__, ex), xbmc.LOGWARNING)
     rec = Recorder()
     mon = Monitor(rec)
     player = Player(rec)

@@ -342,6 +342,7 @@ def show_list(which, limit):
     xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_LASTPLAYED)
     xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_TITLE)
     xbmcplugin.endOfDirectory(HANDLE, cacheToDisc=False)
+    store.log('list built: %s (%d items)' % (which or 'all', len(items)))
 
 
 def root():

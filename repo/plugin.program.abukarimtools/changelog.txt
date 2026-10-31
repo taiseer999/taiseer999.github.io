@@ -1,3 +1,13 @@
+v4.6.29
+- AB Scrapers patch (toggle abscrapers_support) now also installs AB Scrapers'
+  TMDbHelper player, players/abscrapers.select.json - "AB Scrapers
+  (AIOStreams)", play via script.module.abscrapers action=MediaPlay (the same
+  file as AB Scrapers' "Install TMDbHelper player" menu, 1.1.2). Written only
+  while AB Scrapers is installed; content-compared, so it is rewritten only
+  if it changes. Toggle label: "... + AIOStreams Player".
+- Patcher: new entry key requires_addon - skip cleanly while that add-on is
+  not installed.
+
 v4.6.28
 - AF3 Subtitle Look panel: the "Look" row (ready looks Dex Hub / Cinema /
   Box / Large) is taken out; every other row unchanged.

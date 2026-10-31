@@ -138,6 +138,57 @@ def clean_ids(ids, path=''):
     return out
 
 
+def repair_ids():
+    """Once per start: fix ids already saved in history.json (v1.0.9 and older
+    could store an IMDb id in the tmdb slot)."""
+    fixed = 0
+    with _Lock():
+        items = load()
+        for it in items:
+            new = clean_ids(it.get('ids'), it.get('path') or '')
+            if new != (it.get('ids') or {}):
+                it['ids'] = new
+                fixed += 1
+        if fixed:
+            save(items)
+    if fixed:
+        log('repaired ids in %d history entries' % fixed)
+    return fixed
+
+
+def purge_tmdbh_identifiers():
+    """TMDbHelper caches item -> tmdb_id in ItemQueries.db (table identifier).
+    A tt... id cached there from an old list item crashes it with
+    int('tt...') every time that item is focused - delete those rows."""
+    import sqlite3
+    root = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.themoviedb.helper/')
+    if not os.path.isdir(root):
+        return 0
+    total = 0
+    for base, dirs, files in os.walk(root):
+        if base[len(root):].count(os.sep) > 3:
+            dirs[:] = []
+            continue
+        if 'ItemQueries.db' not in files:
+            continue
+        fn = os.path.join(base, 'ItemQueries.db')
+        try:
+            con = sqlite3.connect(fn, timeout=5)
+            try:
+                cur = con.execute(
+                    "DELETE FROM identifier WHERE typeof(tmdb_id)='text' "
+                    "AND tmdb_id GLOB '*[^0-9]*'")
+                con.commit()
+                total += cur.rowcount or 0
+            finally:
+                con.close()
+        except Exception as ex:
+            log('TMDbHelper identifier purge skipped (%s): %r' % (fn, ex), xbmc.LOGWARNING)
+    if total:
+        log('removed %d bad TMDbHelper identifier rows' % total)
+    return total
+
+
 def upsert(entry, limit=100):
     """Put entry at the top, replacing an older copy of the same title."""
     with _Lock():

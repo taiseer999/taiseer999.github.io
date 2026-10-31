@@ -621,7 +621,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.6.28" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.6.29" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -652,7 +652,7 @@ updated YouTube addon URL
     <description lang="en_GB">ABUKARIM TOOLS is an all-in-one utility for managing your Kodi setup. It bundles a Skin Installer and Skin Switcher, full backup and restore of your userdata, and quick access to the ABUKARIM Wizard and its maintenance tools (Total Clean and old thumbnail cleanup). A built-in patcher keeps popular add-ons (Seren, Prism, TinyPPI, Arctic Fuse 3, TMDbHelper, RedLight and more) working correctly on CoreELEC and Kodi, and re-applies its fixes automatically after those add-ons update. Also includes handy maintenance tools such as a speed test, a CPU benchmark and an add-on database rebuild.</description>
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، ووصولاً سريعاً إلى معالج أبوكريم وأدوات الصيانة فيه (التنظيف الشامل وحذف الصور المصغّرة القديمة). كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة واختبار أداء المعالج وإعادة بناء قاعدة بيانات الإضافات.</description>
-    <news>v4.6.28 - Subtitle Look panel: the ready looks row is taken out. v4.6.27 - AF3 Subtitle Look button: the panel now has everything in Dex Hub's subtitle look - show/hide, delay, auto sync height, font, size, style, colour with shades, opacity, border, background, shadow, blur, line spacing and position, all previewed live. v4.6.24 - AF3 Plot on the Right: the quality badges (SD / SDR / AAC / 1.0) move to the bottom of the info column - title, genre, date line, ratings, badges. Older versions: see changelog.txt.</news>
+    <news>v4.6.29 - AB Scrapers patch: also adds the AB Scrapers (AIOStreams) player to TMDbHelper when AB Scrapers is installed. v4.6.28 - Subtitle Look panel: the ready looks row is taken out. v4.6.27 - AF3 Subtitle Look button: the panel now has everything in Dex Hub's subtitle look - show/hide, delay, auto sync height, font, size, style, colour with shades, opacity, border, background, shadow, blur, line spacing and position, all previewed live. v4.6.24 - AF3 Plot on the Right: the quality badges (SD / SDR / AAC / 1.0) move to the bottom of the info column - title, genre, date line, ratings, badges. Older versions: see changelog.txt.</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>
@@ -687,7 +687,7 @@ updated YouTube addon URL
             <screenshot>resources/screenshot-03.jpg</screenshot>
         </assets>
     </extension>
-</addon><addon id="plugin.video.abukarim.lastplayed" name="AB Last Played" version="1.0.10" provider-name="ABUKARIM">
+</addon><addon id="plugin.video.abukarim.lastplayed" name="AB Last Played" version="1.0.11" provider-name="ABUKARIM">
     <requires>
         <import addon="xbmc.python" version="3.0.1" />
     </requires>
@@ -708,7 +708,7 @@ updated YouTube addon URL
             <banner>resources/media/banner.jpg</banner>
             <clearlogo>resources/media/clearlogo.png</clearlogo>
         </assets>
-        <news>v1.0.10 - TMDbHelper fix: an IMDb id (tt...) stored in the tmdb slot is moved to imdb, and the TMDb id is recovered from the TMDbHelper link; fixes "invalid literal for int()" in TMDbHelper on focus and on replay. Old history entries are fixed when listed. v1.0.9 - Renamed to "AB Last Played"; icon without the ABUKARIM text with a larger emblem; clearlogo, banner and fanart updated. v1.0.8 - New add-on artwork matching NewPipe: clearlogo, banner and fanart with the emblem on the right. v1.0.7 - Crash fix: focused-item tracking no longer reads list labels inside dialogs, the Add-on Browser, File Browser or while a list is rebuilding, and pauses for 10s after playback ends (return-to-Home skin rebuild). One gated check per second, labels re-read only when focus changes. v1.0.6 - Records Fen Light / debrid streams that start without metadata: waits for the info tag, then falls back to script.trakt.ids, the TMDbHelper launcher and the focused item. v1.0.5 - Replay choice: play the saved stream link (instant, like the old Last Played) or play again from sources; setting for Ask / Saved first / Sources only, expired links fall back to sources. v1.0.2 - New ABUKARIM-style icons and fanart on a solid dark background; new "Buy Me a Coffee" entry opens a QR code. v1.0.1 - heartbeat so ABUKARIM TOOLS can start the service when Kodi skips it at boot. v1.0.0 - first release (replaces plugin.video.last_played)</news>
+        <news>v1.0.11 - On start: repairs ids already saved in the history and removes cached tt... rows from the TMDbHelper identifier table (ItemQueries.db) that kept the int() error alive. v1.0.10 - TMDbHelper fix: an IMDb id (tt...) stored in the tmdb slot is moved to imdb, and the TMDb id is recovered from the TMDbHelper link; fixes "invalid literal for int()" in TMDbHelper on focus and on replay. Old history entries are fixed when listed. v1.0.9 - Renamed to "AB Last Played"; icon without the ABUKARIM text with a larger emblem; clearlogo, banner and fanart updated. v1.0.8 - New add-on artwork matching NewPipe: clearlogo, banner and fanart with the emblem on the right. v1.0.7 - Crash fix: focused-item tracking no longer reads list labels inside dialogs, the Add-on Browser, File Browser or while a list is rebuilding, and pauses for 10s after playback ends (return-to-Home skin rebuild). One gated check per second, labels re-read only when focus changes. v1.0.6 - Records Fen Light / debrid streams that start without metadata: waits for the info tag, then falls back to script.trakt.ids, the TMDbHelper launcher and the focused item. v1.0.5 - Replay choice: play the saved stream link (instant, like the old Last Played) or play again from sources; setting for Ask / Saved first / Sources only, expired links fall back to sources. v1.0.2 - New ABUKARIM-style icons and fanart on a solid dark background; new "Buy Me a Coffee" entry opens a QR code. v1.0.1 - heartbeat so ABUKARIM TOOLS can start the service when Kodi skips it at boot. v1.0.0 - first release (replaces plugin.video.last_played)</news>
     </extension>
 </addon><addon id="plugin.video.fenlight" name="Fen Light+" provider-name="Tikipeter/thejason40" version="2.5.3">
     <requires>
