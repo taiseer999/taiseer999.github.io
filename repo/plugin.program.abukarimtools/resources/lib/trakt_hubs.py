@@ -995,6 +995,11 @@ def ensure(rebuild=True):
     """Boot / end of setup: put saved picks back into a hub or home file
     that lost them wholesale. No network. Returns files written."""
     written = _ensure_hubs() + _ensure_anime()
+    try:                                  # 4.6.14: AF3 streaming service rows
+        from resources.lib import streaming_rows
+        written += [w for w in streaming_rows.ensure() if w not in written]
+    except Exception as e:
+        _log('streaming rows check failed: %s' % e, xbmc.LOGWARNING)
     if written:
         _log('picks re-applied to %s' % ', '.join(written))
         if rebuild:

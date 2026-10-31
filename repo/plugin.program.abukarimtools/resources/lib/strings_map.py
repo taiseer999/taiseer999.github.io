@@ -31,6 +31,9 @@ ID ranges:
   30800-30813  Toggles - Glass Theme (internally 'Lucent', per add-on)
   30814-30842  Search All (one stream list from every add-on)
   30850-30859  AF3 Lucent Look (Toggles)
+  30860-30874  AF3 Streaming Services (Setup)
+  30880-30889  AF3 subtitle list (OSD, Lucent Look)
+  30890-30893  AF3 Plot on the Right (Toggles)
 """
 
 STRINGS = {
@@ -608,4 +611,38 @@ STRINGS = {
     30857: ('Off', 'متوقف'),
     30858: ('Focus colour: Lucent white', 'لون التركيز: أبيض Lucent'),
     30859: ('Focus colour: my own colour', 'لون التركيز: لوني الخاص'),
+    # ---- 4.6.14: AF3 Streaming Services (30860-30874) ----
+    30860: ('AF3: Streaming Services', 'AF3: خدمات البث'),
+    30861: ('Country of the streaming services', 'بلد خدمات البث'),
+    30862: ('Pick your streaming services (none = remove the rows)', 'اختر خدمات البث (عدم الاختيار يزيل الصفوف)'),
+    30863: ('Rows for each service', 'الصفوف لكل خدمة'),
+    30864: ('Movies and series', 'الأفلام والمسلسلات'),
+    30865: ('Movies only', 'الأفلام فقط'),
+    30866: ('Series only', 'المسلسلات فقط'),
+    30867: ('Streaming services', 'خدمات البث'),
+    30868: ('%s · Movies', '%s · أفلام'),
+    30869: ('%s · Series', '%s · مسلسلات'),
+    30870: ('%d streaming rows on Home', 'صفوف البث في الرئيسية: %d'),
+    30871: ('Streaming rows removed from Home', 'أُزيلت صفوف البث من الرئيسية'),
+    30872: ('Could not get the streaming services from TMDb. Check the internet connection.',
+            'تعذّر جلب خدمات البث من TMDb. تحقّق من الاتصال بالإنترنت.'),
+    30873: ('The Arctic Fuse 3 Home widgets file was not found.', 'لم يُعثر على ملف ودجات الرئيسية في واجهة Arctic Fuse 3.'),
+    30874: ('TMDb Helper is not installed.', 'إضافة TMDb Helper غير مثبّتة.'),
+    # ---- 4.6.14: AF3 subtitle list (30880-30889) ----
+    30880: ('Subtitles', 'الترجمة'),
+    30881: ('Subtitles: on (press to turn off)', 'الترجمة: مفعّلة (اضغط للإيقاف)'),
+    30882: ('Subtitles: off (press to turn on)', 'الترجمة: متوقفة (اضغط للتفعيل)'),
+    30883: ('Other languages', 'لغات أخرى'),
+    30884: ('Search online...', 'البحث عبر الإنترنت...'),
+    30885: ('Unknown language', 'لغة غير معروفة'),
+    30886: ('forced', 'إجبارية'),
+    30887: ('hearing impaired', 'لضعاف السمع'),
+    30888: ('Subtitle look...', 'مظهر الترجمة...'),
+    30889: ('none in the video', 'لا توجد في الفيديو'),
+    # ---- 4.6.15: AF3 Plot on the Right (30890-30893) ----
+    30890: ('AF3: Plot on the Right', 'AF3: القصة على اليمين'),
+    30891: ('The plot now shows on the right', 'أصبحت القصة تظهر على اليمين'),
+    30892: ('The plot is back on the left', 'عادت القصة إلى اليسار'),
+    30893: ('Plot on the right: Arctic Fuse 3 could not be patched. Run Apply Patches and try again.',
+            'القصة على اليمين: تعذّر ترقيع واجهة Arctic Fuse 3. شغّل تطبيق الترقيعات ثم أعد المحاولة.'),
 }

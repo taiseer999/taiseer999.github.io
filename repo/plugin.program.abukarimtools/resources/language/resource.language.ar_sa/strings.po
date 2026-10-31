@@ -1688,3 +1688,119 @@ msgctxt "#30859"
 msgid "Focus colour: my own colour"
 msgstr "لون التركيز: لوني الخاص"
 
+msgctxt "#30860"
+msgid "AF3: Streaming Services"
+msgstr "AF3: خدمات البث"
+
+msgctxt "#30861"
+msgid "Country of the streaming services"
+msgstr "بلد خدمات البث"
+
+msgctxt "#30862"
+msgid "Pick your streaming services (none = remove the rows)"
+msgstr "اختر خدمات البث (عدم الاختيار يزيل الصفوف)"
+
+msgctxt "#30863"
+msgid "Rows for each service"
+msgstr "الصفوف لكل خدمة"
+
+msgctxt "#30864"
+msgid "Movies and series"
+msgstr "الأفلام والمسلسلات"
+
+msgctxt "#30865"
+msgid "Movies only"
+msgstr "الأفلام فقط"
+
+msgctxt "#30866"
+msgid "Series only"
+msgstr "المسلسلات فقط"
+
+msgctxt "#30867"
+msgid "Streaming services"
+msgstr "خدمات البث"
+
+msgctxt "#30868"
+msgid "%s · Movies"
+msgstr "%s · أفلام"
+
+msgctxt "#30869"
+msgid "%s · Series"
+msgstr "%s · مسلسلات"
+
+msgctxt "#30870"
+msgid "%d streaming rows on Home"
+msgstr "صفوف البث في الرئيسية: %d"
+
+msgctxt "#30871"
+msgid "Streaming rows removed from Home"
+msgstr "أُزيلت صفوف البث من الرئيسية"
+
+msgctxt "#30872"
+msgid "Could not get the streaming services from TMDb. Check the internet connection."
+msgstr "تعذّر جلب خدمات البث من TMDb. تحقّق من الاتصال بالإنترنت."
+
+msgctxt "#30873"
+msgid "The Arctic Fuse 3 Home widgets file was not found."
+msgstr "لم يُعثر على ملف ودجات الرئيسية في واجهة Arctic Fuse 3."
+
+msgctxt "#30874"
+msgid "TMDb Helper is not installed."
+msgstr "إضافة TMDb Helper غير مثبّتة."
+
+msgctxt "#30880"
+msgid "Subtitles"
+msgstr "الترجمة"
+
+msgctxt "#30881"
+msgid "Subtitles: on (press to turn off)"
+msgstr "الترجمة: مفعّلة (اضغط للإيقاف)"
+
+msgctxt "#30882"
+msgid "Subtitles: off (press to turn on)"
+msgstr "الترجمة: متوقفة (اضغط للتفعيل)"
+
+msgctxt "#30883"
+msgid "Other languages"
+msgstr "لغات أخرى"
+
+msgctxt "#30884"
+msgid "Search online..."
+msgstr "البحث عبر الإنترنت..."
+
+msgctxt "#30885"
+msgid "Unknown language"
+msgstr "لغة غير معروفة"
+
+msgctxt "#30886"
+msgid "forced"
+msgstr "إجبارية"
+
+msgctxt "#30887"
+msgid "hearing impaired"
+msgstr "لضعاف السمع"
+
+msgctxt "#30888"
+msgid "Subtitle look..."
+msgstr "مظهر الترجمة..."
+
+msgctxt "#30889"
+msgid "none in the video"
+msgstr "لا توجد في الفيديو"
+
+msgctxt "#30890"
+msgid "AF3: Plot on the Right"
+msgstr "AF3: القصة على اليمين"
+
+msgctxt "#30891"
+msgid "The plot now shows on the right"
+msgstr "أصبحت القصة تظهر على اليمين"
+
+msgctxt "#30892"
+msgid "The plot is back on the left"
+msgstr "عادت القصة إلى اليسار"
+
+msgctxt "#30893"
+msgid "Plot on the right: Arctic Fuse 3 could not be patched. Run Apply Patches and try again."
+msgstr "القصة على اليمين: تعذّر ترقيع واجهة Arctic Fuse 3. شغّل تطبيق الترقيعات ثم أعد المحاولة."
+

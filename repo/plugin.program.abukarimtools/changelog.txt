@@ -1,17 +1,120 @@
+v4.6.19
+- AF3 Plot on the Right, tidier layout (screenshot 2026-10-31 07:11):
+  - the plot box is centred on the info column (logo to the ratings row) and
+    grows / shrinks around that centre instead of hanging from a fixed top;
+  - the box sizes are whole lines of the plot font (35 px), so the glass hugs
+    the text with even padding (40 at the sides, 30 above and below);
+  - the genre line follows the 40 px rhythm of the two-line information bar:
+    info line, genre and ratings are evenly spaced.
+- AF3 two-line information bar: no stray dot before the stars that open the
+  second row (Info_Line_StarRating gets a divider param, default unchanged).
+- AF3 info line: a running time of whole hours reads "2 hours", not
+  "2 hours 0 minutes" (one-row and two-row bars).
+
+v4.6.18
+- AF3: Plot on the Right - the glass box fits the plot: invisible probe copies of
+  the plot at stepped heights tell (Container(id).NumPages) the smallest height
+  that holds the whole plot, so a short plot gets a small box; long plots keep
+  the full height and scroll. Lighter, more transparent glass (panel_bg_50,
+  soft edge). Spotlight box back up at the logo, up to 300 px high.
+- Switching "AF3: Plot on the Right" on also turns on AF3's "Two-line
+  information bar" (InfoBar.TwoRow) when it is off; switching off resets it
+  only if AB Tools turned it on. That setting needs a skin reload (done).
+- Skins patched by 4.6.15 / 4.6.16 / 4.6.17 are upgraded to the new box.
+
 v4.6.17
-- FIX Red Light crash (3 core dumps 2026-10-30, SIGSEGV in CPlayListPlayer::OnApplicationMessage after
-  "Error trying to retrieve an item that's out of range"): a stalled easynews/debrid source was
-  stopped and the next queued attempt (RETRYx / next source) started while Kodi was still tearing
-  the old one down. New toggle "RedLight: Safe Retry After a Stalled Source" patches
-  resources/lib/modules/sources.py: before every attempt after the first, wait for the player to
-  go idle (max 30s), clear the video playlist via JSON-RPC, settle 1s.
-- REMOVED the TMDbHelper dummy render-gate patch (waiting.py) from 4.6.15.
+- AF3 Plot on the Right: the Spotlight box started level with the logo and
+  covered the end of a long info line (SD / SDR / AAC / 1.0 flags, stars,
+  date, duration - screenshot 2026-10-31 06:48). Measured on that
+  screenshot: info line ends at 363, row title starts at 636 (2000 px
+  scale), the old glass 237-660 = 408 units. The box now starts under the
+  info line and ends above the widget heading: top 431, height 178 (episode
+  plot textbox 124), glass padding 22 instead of 34 (both boxes). The plot
+  still scrolls when longer than the box.
+- Upgrade entries move a box written by 4.6.15 / 4.6.16 in place (their
+  insert entries were already "patched"). Checked: fresh AF3 50.11.31 and
+  a 4.6.16-patched copy both end with one box per panel at the new size,
+  all AF3 entries OK, second sweep "already patched".
+
+v4.6.16
+- FIX AF3 Plot on the Right: the genre line disappeared with the plot
+  (screenshot + kodi.log 2026-10-31 06:40: patches OK, switch ON). AF3 draws
+  the "Plotline" (Skin.String(Plotline.<type>) = Genre / Director / Tagline
+  / Episodes) INSIDE the plot block (Info_Plot_Main_Plotline_Content), so
+  visible_plot=false took it away as well.
+  * Info_Panel: new param plotright_genre (default false) and, right after
+    the plot include in its vertical grouplist, a 54 px group with the genre
+    (font_main_bold, colordiffuse_90, left 40) shown when the param is true
+    and the item has a genre - it sits where the plotline sat.
+  * Hub_Spotlight_Info / Hub_Combined_Info pass Skin.HasSetting(abk.plotright)
+    (+ the Spotlight's ShowOverlay rule). With the switch off nothing changes.
+- Verified on AF3 50.11.31 with all 114 AF3 entries: no failure, both files
+  valid, second sweep "already patched".
+
+v4.6.15
+- NEW Toggles > "AF3: Plot on the Right" (af3_plotright_toggle.py, skin
+  bool abk.plotright; switch with on / off icons). From a screenshot of the
+  Home Spotlight: the plot box on the left showed two lines cut at the top.
+  * Left: Info_Plot is one item of Info_Panel's vertical grouplist; its
+    visible_plot param now also needs !abk.plotright in the two Home callers
+    (Hub_Spotlight_Info, Hub_Combined_Info) - the grouplist closes up, the
+    ratings / meta lines move under the genre line, no gap.
+  * Right: a glass box (abk_lucent panel + hairline edge, panel_bg_70 /
+    overlay_hard - follows the skin colours) placed as a sibling of each
+    info group in screen coordinates, right-anchored (right view_pad, width
+    700) so it fits every AF3 aspect: Spotlight top 300 / height 340 (lined
+    up with the logo and the last meta line of the screenshot), hub info
+    top 200 / height 300. Episode heading (S1E2 · title), the plot as a
+    textbox right-aligned when Kodi is in Arabic, auto-scroll when long.
+    Same visibility / animations as the panel it replaces.
+  * Font: font_mini_plot for now - one value (FONT) in the patch entry, to
+    be tuned next.
+- Always-on patcher entries, inert with the bool off (AF3 unchanged).
+  Verified on AF3 50.11.31 with all 110 AF3 entries: no failure,
+  Includes_Hubs.xml valid, second sweep "already patched".
+- Strings 30890-30893 (EN + AR). Icons af3_plotright(.png/_on/_off).
 
 v4.6.14
-- FIX Search All: Premiumize results never appeared for users who also have
-  Real-Debrid / AllDebrid / TorBox. Rows were merged on the torrent hash alone,
-  so a release cached on RD and PM kept only the RD copy (and the PM chip never
-  showed). The debrid service is now part of the row key.
+- Checked the Lucent skin by djdirty60 from 1.31.37 to 1.31.44 (7 commits,
+  2026-10-30): no change to its look layer (colours, textures, glass panel,
+  seek bar look, dialogs, info page), so the AF3 Lucent Look needs no update.
+  Its new features need Lucent's own add-ons (service.subtitles.lucent,
+  script.lucent.library); two of them are rebuilt here with Kodi / TMDb
+  Helper only:
+- NEW AF3: Lucent Look, phase 5 - player icons. Thin rounded line icons in
+  the Lucent style, OUR OWN drawings (tools/gen_af3_lucent_icons.py; the
+  Lucent repository states no licence and calls its icons original designs,
+  so its PNGs are not copied): play, pause, forward, rewind, previous, next,
+  stop, info, audio, subtitles, video settings, list, live. Installed in
+  media/abk_lucent/icons/. Image_OSD_PausePlay / PlayPause / SkipPrev /
+  SkipNext take a gated Lucent value first; the buttons with a fixed icon
+  read $VAR[ABK_LucentIcon_<key>] (block at the top of Includes_Images.xml,
+  AF3's own icon as the fallback value). AB Tools' own three subtitle
+  buttons (DexSubtitles, Subtitle Cycler, Subtitle Look) keep their icons:
+  af3_substyle removes its button by exact text when switched off.
+- NEW subtitle list (sub_list.py, after Lucent 1.31.39 / 1.31.40): while the
+  Lucent Look is on, the AF3 OSD subtitle button (6007) runs
+  ?mode=subtitle_list instead of Kodi's subtitle settings - one glass list:
+  on / off, the video's subtitles in your languages first (preferred
+  subtitle language, GUI language, English; current one ticked), "Other
+  languages" (count) in a second list, "Search online..." (Kodi's
+  subtitlesearch window = your installed subtitle services) and "Subtitle
+  look..." (sub_quick). Kodi JSON-RPC Player.GetProperties / SetSubtitle.
+- NEW Setup & Install > "AF3: Streaming Services" (streaming_rows.py, after
+  Lucent 1.31.42 / 1.31.43): pick a country (default: TMDb Helper's own),
+  the services (TMDb watch providers, logos) and movies / series / both.
+  Home gets a row of service logos (TMDb Helper info=watch_providers, its
+  provider_allowlist set to the picks - the old value is kept and restored)
+  and per service a row of its popular titles (info=discover
+  &with_watch_providers=<id>&watch_region=<country>). Rows carry guid
+  "guid-abks" in the AF3 homewidgets file; no service = rows removed.
+  trakt_hubs.ensure() re-appends them at boot when the file was replaced.
+- Strings 30860-30874, 30880-30889 (EN + AR). Icon streaming_rows.png.
+- Verified: 106 AF3 patcher entries on AF3 50.11.31, no failure, second
+  sweep "already patched", every ABK include / variable defined; streaming
+  rows add / re-run / boot ensure / unsafe label / remove + allowlist
+  restore; subtitle list rows and every action; Search All thread test
+  still 0 off-thread window calls.
 
 v4.6.13
 - FIX Search All froze after the results were shown (kodi.log 2026-10-30

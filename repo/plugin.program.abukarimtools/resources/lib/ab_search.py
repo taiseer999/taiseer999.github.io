@@ -458,16 +458,10 @@ def _size(item):
 
 
 def _row_key(item):
-    # 4.6.14: the debrid service is part of the key. Keyed on the hash alone,
-    # a release cached on RD and on PM became one row: the first (RD) won and
-    # the PM copy was dropped - same add-on, so not even added as a ref.
-    # Users with RD/AD/TB + Premiumize never saw a PM result or the PM chip.
-    svc = _service_code(_provider(item)) or _clean(_provider(item)).upper()
     h = str(item.get('hash') or '').strip().lower()
     if h:
-        return 'h:%s|%s' % (h, svc)
-    return 'n:%s|%s|%s' % (_clean(item.get('name') or item.get('display_name')).lower(),
-                           _clean(item.get('size_label')), svc)
+        return 'h:' + h
+    return 'n:%s|%s' % (_clean(item.get('name') or item.get('display_name')).lower(), _clean(item.get('size_label')))
 
 
 def merge(session):

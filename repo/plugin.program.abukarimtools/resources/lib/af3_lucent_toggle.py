@@ -122,11 +122,15 @@ def _files_present():
     need = [os.path.join(skin, 'colors', c + '.xml') for c in OURS] + \
            [os.path.join(skin, 'media', 'abk_lucent', t)
             for t in ('panel.png', 'panel_edge.png', 'panel_shadow.png', 'pill6.png', 'pill60.png')] + \
-           [os.path.join(skin, '1080i', 'Includes_ABK_Lucent.xml')]
+           [os.path.join(skin, '1080i', 'Includes_ABK_Lucent.xml')] + \
+           [os.path.join(skin, 'media', 'abk_lucent', 'icons', i + '.png')          # 4.6.14
+            for i in ('play', 'pause', 'forward', 'rewind', 'prev', 'next', 'stop', 'info',
+                      'audio', 'subtitles', 'video', 'list', 'record')]
     # 4.6.9: the player include file must also be registered, or the
     # Lucent player includes would be missing once the bool is set
     marks = (('Dialog_Parts.xml', '<!-- ABUKARIM: Lucent glass dialogs -->'),
-             ('Includes.xml', 'Includes_ABK_Lucent.xml'))
+             ('Includes.xml', 'Includes_ABK_Lucent.xml'),
+             ('Includes_Images.xml', '<!-- ABUKARIM: Lucent icons'))
     for name, mark in marks:
         try:
             with open(os.path.join(skin, '1080i', name), 'r', encoding='utf-8') as f:

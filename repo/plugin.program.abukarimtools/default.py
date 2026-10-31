@@ -32,6 +32,7 @@ ICONS  = {
     'af3_trailers':   ADDON_PATH + 'resources/icons/af3_trailers.png',
     'af3_waves':      ADDON_PATH + 'resources/icons/af3_waves.png',
     'af3_lucent':     ADDON_PATH + 'resources/icons/af3_lucent.png',
+    'af3_plotright':  ADDON_PATH + 'resources/icons/af3_plotright.png',
     'font_scale':     ADDON_PATH + 'resources/icons/font_scale.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/sources.png',
     'rebuild_addons33': ADDON_PATH + 'resources/icons/rebuild_addons33.png',
@@ -43,6 +44,7 @@ ICONS  = {
     'addon_portal':   ADDON_PATH + 'resources/icons/addon_portal.png',
     'af3_shortcuts':  ADDON_PATH + 'resources/icons/af3_shortcuts.png',
     'trakt_hubs':     ADDON_PATH + 'resources/icons/trakt_hubs.png',
+    'streaming_rows': ADDON_PATH + 'resources/icons/streaming_rows.png',
     'phone_setup':    ADDON_PATH + 'resources/icons/phone_setup.png',
     # 3.2
     'bootstrap':      ADDON_PATH + 'resources/icons/bootstrap.png',
@@ -75,6 +77,7 @@ CATEGORIES = [
         ('addon_portal',   30021),
         ('af3_shortcuts',  30630),
         ('trakt_hubs',     30660),
+        ('streaming_rows', 30860),
         ('binary_install', 30004),
         ('bootstrap',      30590),
         ('hw_tuning',      30591),
@@ -105,6 +108,7 @@ CATEGORIES = [
         ('af3_trailers',   30430),
         ('af3_waves',      30603),
         ('af3_lucent',     30850),
+        ('af3_plotright',  30890),
         ('font_scale',     30740),
     ]),
     ('profiles', 30598, 'cat_profiles', [
@@ -121,6 +125,10 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 # 3.1.19: an action, not a folder - as a folder its URL became
                 # the container path, so the skin reload re-ran it in a loop
                 'af3_trailers', 'af3_waves',
+                # 4.6.15: AF3 Plot on the Right (on/off switch)
+                'af3_plotright',
+                # 4.6.14: AF3 Streaming Services (dialogs only)
+                'streaming_rows',
                 # 4.6.8: AF3 Lucent Look (Off / Glass / AMOLED picker)
                 'af3_lucent',
                 # 3.4.39: Lucent Theme per add-on (switch list dialog)
@@ -326,6 +334,9 @@ def _switch_state(mode):
         if mode == 'af3_waves':
             from resources.lib import af3_waves_toggle
             return bool(af3_waves_toggle.waves_on())
+        if mode == 'af3_plotright':
+            from resources.lib import af3_plotright_toggle
+            return af3_plotright_toggle.plot_right_on()
         if mode == 'af3_trailers':
             from resources.lib.af3_trailers import config as _tcfg
             return bool(_tcfg.load()['enabled'])
@@ -436,6 +447,12 @@ def router():
         service.run_now(remove_flag=True, force=True)
         return
 
+    if mode == 'subtitle_list':
+        # 4.6.14: AF3 OSD subtitle button while the Lucent Look is on
+        from resources.lib import sub_list
+        sub_list.open_list()
+        return
+
     if mode == 'subtitle_style':
         # 4.6.2: AF3 OSD Subtitle Look button - height / font size / font panel.
         from resources.lib import sub_quick
@@ -460,6 +477,9 @@ def router():
     elif mode == 'trakt_hubs':
         from resources.lib import trakt_hubs
         trakt_hubs.run_menu()
+    elif mode == 'streaming_rows':
+        from resources.lib import streaming_rows
+        streaming_rows.run()
 
     elif mode == 'phone_setup':
         from resources.lib import phone_setup
@@ -563,6 +583,9 @@ def router():
     elif mode == 'af3_lucent':
         from resources.lib import af3_lucent_toggle
         af3_lucent_toggle.run()
+    elif mode == 'af3_plotright':
+        from resources.lib import af3_plotright_toggle
+        af3_plotright_toggle.run()
     elif mode == 'lucent_theme':
         from resources.lib import lucent_toggle
         lucent_toggle.run()
