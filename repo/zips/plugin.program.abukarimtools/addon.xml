@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="AB Tools"
-       version="4.6.27"
+       version="4.6.28"
        provider-name="Abukarim">
 
   <requires>
@@ -33,7 +33,7 @@
     <description lang="en_GB">ABUKARIM TOOLS is an all-in-one utility for managing your Kodi setup. It bundles a Skin Installer and Skin Switcher, full backup and restore of your userdata, and quick access to the ABUKARIM Wizard and its maintenance tools (Total Clean and old thumbnail cleanup). A built-in patcher keeps popular add-ons (Seren, Prism, TinyPPI, Arctic Fuse 3, TMDbHelper, RedLight and more) working correctly on CoreELEC and Kodi, and re-applies its fixes automatically after those add-ons update. Also includes handy maintenance tools such as a speed test, a CPU benchmark and an add-on database rebuild.</description>
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، ووصولاً سريعاً إلى معالج أبوكريم وأدوات الصيانة فيه (التنظيف الشامل وحذف الصور المصغّرة القديمة). كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة واختبار أداء المعالج وإعادة بناء قاعدة بيانات الإضافات.</description>
-    <news>v4.6.27 - AF3 Subtitle Look button: the panel now has everything in Dex Hub's subtitle look - show/hide, delay, auto sync, four ready looks, height, font, size, style, colour with shades, opacity, border, background, shadow, blur, line spacing and position, all previewed live. v4.6.24 - AF3 Plot on the Right: the quality badges (SD / SDR / AAC / 1.0) move to the bottom of the info column - title, genre, date line, ratings, badges. Older versions: see changelog.txt.</news>
+    <news>v4.6.28 - Subtitle Look panel: the ready looks row is taken out. v4.6.27 - AF3 Subtitle Look button: the panel now has everything in Dex Hub's subtitle look - show/hide, delay, auto sync height, font, size, style, colour with shades, opacity, border, background, shadow, blur, line spacing and position, all previewed live. v4.6.24 - AF3 Plot on the Right: the quality badges (SD / SDR / AAC / 1.0) move to the bottom of the info column - title, genre, date line, ratings, badges. Older versions: see changelog.txt.</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>

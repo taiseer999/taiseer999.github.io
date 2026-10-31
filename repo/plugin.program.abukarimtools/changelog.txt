@@ -1,3 +1,7 @@
+v4.6.28
+- AF3 Subtitle Look panel: the "Look" row (ready looks Dex Hub / Cinema /
+  Box / Large) is taken out; every other row unchanged.
+
 v4.6.27
 - AF3 Subtitle Look button (toggle af3_substyle): the panel carries the rows
   of Dex Hub's "Subtitle look" (skin.dexhub 3.28.170 / Dex Hub 5.10.451,

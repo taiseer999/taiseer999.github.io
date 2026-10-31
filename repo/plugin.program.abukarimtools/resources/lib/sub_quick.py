@@ -12,7 +12,6 @@ Right change the row, OK changes it forward or opens it:
   Delay            SubtitleDelayPlus / Minus (Kodi's own player action)
   Auto sync        Dex Hub's best-synced subtitle (DexSubtitles' own flow
                    when Dex Hub is missing); only shown when one is there
-  Look             four ready looks in one press (Dex Hub, Cinema, Box, Large)
   Height           subtitles.marginvertical in percent (AB Tools 4.6.5 - a
                    known height, not SubtitleShift steps); OK = Kodi default
   Font, Size, Style, Colour (+ its Shade), Opacity, Border, Border colour,
@@ -327,11 +326,7 @@ class SubLookWindow(xbmcgui.WindowXMLDialog):
                      'value': xbmc.getInfoLabel('Player.SubtitleDelay') or '0.000 s', 'adjust': True})
         if _sync_target():
             rows.append({'id': 'sync', 'label': _t('مزامنة تلقائية', 'Auto sync'), 'value': '', 'opens': True})
-        preset = xbmcgui.Window(10000).getProperty(PRESET_PROP)
-        names = dict((n, l) for n, l, _v, _f in PRESETS)
-        rows.append({'id': 'preset', 'label': _t('مظهر جاهز', 'Look'),
-                     'value': _t(*names[preset]) if preset in names else _t('اختر', 'Choose'),
-                     'adjust': True})
+        # 4.6.28: the ready looks row (Look) is taken out
         try:
             margin = float(_get(POS_KEY))
         except (TypeError, ValueError):
