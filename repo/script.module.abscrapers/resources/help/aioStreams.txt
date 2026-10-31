@@ -1,0 +1,34 @@
+AIOStreams combines many Stremio addons (Comet, MediaFusion, StremThru Torz,
+TorrentsDB, ...) behind one search API.  Supported public instances:
+
+https://aiostreams.stremio.ru
+https://aiostreams.viren070.me (devs nightly instance)
+https://aiostreams.fortheweak.cloud
+https://aiostreamsfortheweebsstable.midnightignite.me
+
+A custom url may be entered, but is not "supported" (YMMV).
+
+LOGIN IS OPTIONAL
+AB Scrapers sends a ready-made AIOStreams configuration with every search
+(the x-aiostreams-user-data header).  Public instances accept such a
+one-off configuration without an account, so searching works with the
+Username/Password left empty.  Without a login you get the built-in
+addon list and torrent hashes only; your calling addon (Fen Light,
+Umbrella, ...) checks those hashes against your debrid service itself.
+
+Log in (UUID / password from the instance's /stremio/configure page) when
+you want YOUR saved AIOStreams setup instead: your own addons, filters,
+sorting and debrid services.  UUIDs belong to one instance - select the
+instance where you created the account.
+
+An instance owner can turn anonymous use off at any time; the scraper
+then logs HTTP 401/403 and you need a login for that instance.
+
+AIOStreams PLAYER
+The player plays debrid links only.  Without a login it adds the debrid
+keys authorised in Account Manager to the built-in configuration, which
+means those keys are sent to the public instance you selected.  If you
+would rather not share them, log in with your own AIOStreams account.
+
+From the addon main menu, select Install Playback Json and use that
+addon's settings to configure player actions.

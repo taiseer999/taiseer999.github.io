@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.module.abscrapers" name="AB Scrapers" version="1.1.3" provider-name="ABUKARIM">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0" />
+		<import addon="script.module.requests" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="lib/default.py">
+		<provides>executable video</provides>
+	</extension>
+	<extension point="xbmc.service" library="lib/service.py" start="startup" />
+	<extension point="xbmc.python.module" library="lib" />
+	<extension point="xbmc.addon.metadata">
+		<reuselanguageinvoker>false</reuselanguageinvoker>
+		<summary lang="en_GB">AB Scrapers - CocoScrapers + Gears + Magneto in one module</summary>
+		<summary lang="ar_SA">AB Scrapers - وحدة واحدة تجمع CocoScrapers وGears وMagneto</summary>
+		<description lang="en_GB">One scraper module built from three engines (CocoScrapers 1.0.44, Gears Scrapers 1.6.2, Magneto 6.10.04). 54 providers; where a provider exists in several engines with different instances or mirrors, AB Scrapers runs them together and merges the results by info-hash. Per-provider engine choice (Auto / All / single engine), one shared settings file, undesirables filter, Prowlarr, MediaFusion, Telegram and the AIOStreams player.</description>
+		<description lang="ar_SA">وحدة بحث واحدة مبنية من ثلاثة محركات (CocoScrapers وGears وMagneto) تضم 54 مزوّدًا. إذا توفّر المزوّد في أكثر من محرك بخوادم أو مرايا مختلفة، تشغّلها الوحدة معًا وتدمج النتائج حسب البصمة دون تكرار. يمكن اختيار المحرك لكل مزوّد (تلقائي / الكل / محرك واحد)، مع ملف إعدادات موحّد ومرشّح للمحتوى غير المرغوب فيه ودعم Prowlarr وMediaFusion وتيليجرام ومشغّل AIOStreams.</description>
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+		<website>https://taiseer999piers.github.io</website>
+		<disclaimer lang="en_GB">The author does not host or own any content found within this addon. The author is not responsible for the content found using this addon or for the use of this addon.</disclaimer>
+		<assets>
+			<icon>icon.png</icon>
+			<fanart>fanart.jpg</fanart>
+			<clearlogo>clearlogo.png</clearlogo>
+		</assets>
+		<news>v1.1.3 - Providers that returned nothing are now off by default (AnimeTosho, BitTorrented, BTDig, EXT.to, KONTRAST, MagnetDL, NNM-Club, Snowfl, TorrentDownloads, TorrentFunk, TorrentsDB, TorSeek, Zooqle); LimeTorrents Auto uses Gears only; new defaults also reach existing installs for toggles you never changed. New icon, fanart and clearlogo. v1.1.2 - CocoScrapers engine updated to 1.0.44: TV episodes also match by air date (daily / talk shows released as 2026.10.22), EZTV moved to the JSON API and now runs with Gears, Rutor searches single episodes. AIOStreams player fixed: no longer returns nothing when its own login is empty. v1.1.1 - New "Check provider access": shows per provider whether it is blocked for you (DNS, connection cut, block page), banned (403), rate-limited, behind Cloudflare, down or dead, with the fix. v1.1.0 - CocoScrapers engine updated to 1.0.43: newest upstream provider code, 3 new providers (BitCQ, isoHunt, TorrentQuest), AIOStreams login and MediaFusion instance. v1.0.3 - New filter for repeated results (same release name and size under different hashes, e.g. Comet), on by default. v1.0.2 - Provider trace in kodi.log (which add-on called, each provider result count, time, errors). v1.0.1 - Telegram: always-on logging, real error shown on screen, provider auto-enabled after linking. v1.0.0 - first release: CocoScrapers 1.0.39 + Gears Scrapers 1.6.2 + Magneto 6.10.04 merged into AB Scrapers.</news>
+	</extension>
+</addon>

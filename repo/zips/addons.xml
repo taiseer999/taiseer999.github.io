@@ -3251,7 +3251,7 @@ v.3.3.7
             <icon>resources/images/icon.png</icon>
         </assets>
     </extension>
-</addon><addon id="script.module.abscrapers" name="AB Scrapers" version="1.1.2" provider-name="ABUKARIM">
+</addon><addon id="script.module.abscrapers" name="AB Scrapers" version="1.1.3" provider-name="ABUKARIM">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" />
@@ -3274,8 +3274,9 @@ v.3.3.7
 		<assets>
 			<icon>icon.png</icon>
 			<fanart>fanart.jpg</fanart>
+			<clearlogo>clearlogo.png</clearlogo>
 		</assets>
-		<news>v1.1.2 - CocoScrapers engine updated to 1.0.44: TV episodes also match by air date (daily / talk shows released as 2026.10.22), EZTV moved to the JSON API and now runs with Gears, Rutor searches single episodes. AIOStreams player fixed: no longer returns nothing when its own login is empty. v1.1.1 - New "Check provider access": shows per provider whether it is blocked for you (DNS, connection cut, block page), banned (403), rate-limited, behind Cloudflare, down or dead, with the fix. v1.1.0 - CocoScrapers engine updated to 1.0.43: newest upstream provider code, 3 new providers (BitCQ, isoHunt, TorrentQuest), AIOStreams login and MediaFusion instance. v1.0.3 - New filter for repeated results (same release name and size under different hashes, e.g. Comet), on by default. v1.0.2 - Provider trace in kodi.log (which add-on called, each provider result count, time, errors). v1.0.1 - Telegram: always-on logging, real error shown on screen, provider auto-enabled after linking. v1.0.0 - first release: CocoScrapers 1.0.39 + Gears Scrapers 1.6.2 + Magneto 6.10.04 merged into AB Scrapers.</news>
+		<news>v1.1.3 - Providers that returned nothing are now off by default (AnimeTosho, BitTorrented, BTDig, EXT.to, KONTRAST, MagnetDL, NNM-Club, Snowfl, TorrentDownloads, TorrentFunk, TorrentsDB, TorSeek, Zooqle); LimeTorrents Auto uses Gears only; new defaults also reach existing installs for toggles you never changed. New icon, fanart and clearlogo. v1.1.2 - CocoScrapers engine updated to 1.0.44: TV episodes also match by air date (daily / talk shows released as 2026.10.22), EZTV moved to the JSON API and now runs with Gears, Rutor searches single episodes. AIOStreams player fixed: no longer returns nothing when its own login is empty. v1.1.1 - New "Check provider access": shows per provider whether it is blocked for you (DNS, connection cut, block page), banned (403), rate-limited, behind Cloudflare, down or dead, with the fix. v1.1.0 - CocoScrapers engine updated to 1.0.43: newest upstream provider code, 3 new providers (BitCQ, isoHunt, TorrentQuest), AIOStreams login and MediaFusion instance. v1.0.3 - New filter for repeated results (same release name and size under different hashes, e.g. Comet), on by default. v1.0.2 - Provider trace in kodi.log (which add-on called, each provider result count, time, errors). v1.0.1 - Telegram: always-on logging, real error shown on screen, provider auto-enabled after linking. v1.0.0 - first release: CocoScrapers 1.0.39 + Gears Scrapers 1.6.2 + Magneto 6.10.04 merged into AB Scrapers.</news>
 	</extension>
 </addon><addon id="script.module.acctmgr" version="1.2.0c" name="[COLOR dodgerblue][B]Account Manager[/B][/COLOR] [COLOR white][B]Lite[/B][/COLOR]" provider-name="Zaxxon709">
 	<requires>
