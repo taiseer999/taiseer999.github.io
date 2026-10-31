@@ -281,7 +281,7 @@ _AF3_SUBTOOLS_XML = (
     '                            <onclick>RunScript(special://home/addons/service.subtitles.dexworld/abk_osd_sync.py)</onclick>\n'
     '                        </control>\n'
     '                        <include content="OSD_Button_Icon_Overlay" condition="System.AddonIsEnabled(service.subtitles.dexworld)">\n'
-    '                            <param name="icon">special://skin/extras/icons/dexsync.png</param>\n'
+    '                            <param name="icon">$VAR[ABK_LucentIcon_dexsync]</param>\n'
     '                            <param name="id">6010</param>\n'
     '                            <param name="groupid">6110</param>\n'
     '                            <param name="itemgap">osd_itemgap</param>\n'
@@ -295,7 +295,7 @@ _AF3_SUBTOOLS_XML = (
     '                            <onclick condition="!System.AddonIsEnabled(script.subtitle.cycler)">RunPlugin(plugin://plugin.program.abukarimtools/?mode=subtitle_cycler)</onclick>\n'
     '                        </control>\n'
     '                        <include content="OSD_Button_Icon_Overlay">\n'
-    '                            <param name="icon">special://skin/extras/icons/subcycler.png</param>\n'
+    '                            <param name="icon">$VAR[ABK_LucentIcon_subcycler]</param>\n'
     '                            <param name="id">6011</param>\n'
     '                            <param name="groupid">6111</param>\n'
     '                            <param name="itemgap">osd_itemgap</param>\n'
@@ -489,7 +489,7 @@ _AF3_SUBSTYLE_XML = (
     '                            <onclick>RunPlugin(plugin://plugin.program.abukarimtools/?mode=subtitle_style)</onclick>\n'
     '                        </control>\n'
     '                        <include content="OSD_Button_Icon_Overlay">\n'
-    '                            <param name="icon">special://skin/extras/icons/substyle.png</param>\n'
+    '                            <param name="icon">$VAR[ABK_LucentIcon_substyle]</param>\n'
     '                            <param name="id">6012</param>\n'
     '                            <param name="groupid">6112</param>\n'
     '                            <param name="itemgap">osd_itemgap</param>\n'
@@ -1870,6 +1870,46 @@ PATCHES = [
     },
     {
         'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lucent', 'icons', 'subcycler.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_lucent', 'icons', 'subcycler.png'),
+        'description': 'AF3 Lucent Look - icon subcycler',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lucent', 'icons', 'dexsync.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_lucent', 'icons', 'dexsync.png'),
+        'description': 'AF3 Lucent Look - icon dexsync',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lucent', 'icons', 'substyle.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_lucent', 'icons', 'substyle.png'),
+        'description': 'AF3 Lucent Look - icon substyle',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lucent', 'icons', 'ppi.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_lucent', 'icons', 'ppi.png'),
+        'description': 'AF3 Lucent Look - icon ppi',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('1080i', 'Includes_Images.xml'),
         'not_found_ok': True,
         'old': '',
@@ -1977,6 +2017,121 @@ PATCHES = [
         'new': '<param name="icon">$VAR[ABK_LucentIcon_video]</param>',
         'already_patched_check': '$VAR[ABK_LucentIcon_video]',
         'description': 'AF3 Lucent Look - OSD button icon video',
+    },
+
+    # 4.6.22 (screen recording 2026-10-31 08:50): one icon set on the whole
+    # OSD row. The AB Tools buttons (Subtitle Cycler, DexSubtitles sync,
+    # Subtitle Look) and AF3's PPI button get Lucent line icons too, and AF3's
+    # stream popups (1145-1148) - which redraw the focused button over the
+    # bar - use the same Lucent icons instead of AF3's speaker / quote / film,
+    # so a button keeps its icon (white on glass, dark on the white focus).
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Images.xml'),
+        'not_found_ok': True,
+        'old': '    <!-- ABUKARIM: Lucent icons (AB Tools "AF3: Lucent Look"; AF3 icon when off) -->\n',
+        'new': '    <!-- ABUKARIM: Lucent icons (AB Tools "AF3: Lucent Look"; AF3 icon when off) -->\n    <variable name="ABK_LucentIcon_subcycler">\n        <value condition="Skin.HasSetting(abk.lucent)">abk_lucent/icons/subcycler.png</value>\n        <value>special://skin/extras/icons/subcycler.png</value>\n    </variable>\n    <variable name="ABK_LucentIcon_dexsync">\n        <value condition="Skin.HasSetting(abk.lucent)">abk_lucent/icons/dexsync.png</value>\n        <value>special://skin/extras/icons/dexsync.png</value>\n    </variable>\n    <variable name="ABK_LucentIcon_substyle">\n        <value condition="Skin.HasSetting(abk.lucent)">abk_lucent/icons/substyle.png</value>\n        <value>special://skin/extras/icons/substyle.png</value>\n    </variable>\n    <variable name="ABK_LucentIcon_ppi">\n        <value condition="Skin.HasSetting(abk.lucent)">abk_lucent/icons/ppi.png</value>\n        <value>special://skin/extras/icons/ppi.png</value>\n    </variable>\n',
+        'already_patched_check': '<variable name="ABK_LucentIcon_ppi">',
+        'description': 'AF3 Lucent Look - icon variables for the AB Tools / PPI buttons',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'not_found_ok': True,
+        'old': '<param name="icon">special://skin/extras/icons/dexsync.png</param>',
+        'new': '<param name="icon">$VAR[ABK_LucentIcon_dexsync]</param>',
+        'already_patched_check': '<param name="icon">$VAR[ABK_LucentIcon_dexsync]</param>',
+        'description': 'AF3 Lucent Look - OSD button icon dexsync',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'not_found_ok': True,
+        'old': '<param name="icon">special://skin/extras/icons/subcycler.png</param>',
+        'new': '<param name="icon">$VAR[ABK_LucentIcon_subcycler]</param>',
+        'already_patched_check': '<param name="icon">$VAR[ABK_LucentIcon_subcycler]</param>',
+        'description': 'AF3 Lucent Look - OSD button icon subcycler',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'not_found_ok': True,
+        'old': '<param name="icon">special://skin/extras/icons/substyle.png</param>',
+        'new': '<param name="icon">$VAR[ABK_LucentIcon_substyle]</param>',
+        'already_patched_check': '<param name="icon">$VAR[ABK_LucentIcon_substyle]</param>',
+        'description': 'AF3 Lucent Look - OSD button icon substyle',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_u3k.xml'),
+        'not_found_ok': True,
+        'old': '<param name="icon">special://skin/extras/icons/ppi.png</param>',
+        'new': '<param name="icon">$VAR[ABK_LucentIcon_ppi]</param>',
+        'already_patched_check': '$VAR[ABK_LucentIcon_ppi]',
+        'description': 'AF3 Lucent Look - OSD button icon ppi',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Custom_1145_OSD_InfoPanel.xml'),
+        'not_found_ok': True,
+        'old': '\n                <param name="icon">special://skin/extras/icons/info2.png</param>',
+        'new': '\n                <param name="icon">$VAR[ABK_LucentIcon_info]</param>',
+        'already_patched_check': '\n                <param name="icon">$VAR[ABK_LucentIcon_info]</param>',
+        'description': 'AF3 Lucent Look - popup icon info (button)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Custom_1146_OSD_AudioStreams.xml'),
+        'not_found_ok': True,
+        'old': '\n                    <param name="icon">special://skin/extras/icons/volume.png</param>',
+        'new': '\n                    <param name="icon">$VAR[ABK_LucentIcon_audio]</param>',
+        'already_patched_check': '\n                    <param name="icon">$VAR[ABK_LucentIcon_audio]</param>',
+        'description': 'AF3 Lucent Look - popup icon audio (list header)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Custom_1146_OSD_AudioStreams.xml'),
+        'not_found_ok': True,
+        'old': '\n                <param name="icon">special://skin/extras/icons/volume.png</param>',
+        'new': '\n                <param name="icon">$VAR[ABK_LucentIcon_audio]</param>',
+        'already_patched_check': '\n                <param name="icon">$VAR[ABK_LucentIcon_audio]</param>',
+        'description': 'AF3 Lucent Look - popup icon audio (button)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Custom_1147_OSD_SubtitleStreams.xml'),
+        'not_found_ok': True,
+        'old': '\n                    <param name="icon">special://skin/extras/icons/quote.png</param>',
+        'new': '\n                    <param name="icon">$VAR[ABK_LucentIcon_subtitles]</param>',
+        'already_patched_check': '\n                    <param name="icon">$VAR[ABK_LucentIcon_subtitles]</param>',
+        'description': 'AF3 Lucent Look - popup icon subtitles (list header)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Custom_1147_OSD_SubtitleStreams.xml'),
+        'not_found_ok': True,
+        'old': '\n                <param name="icon">special://skin/extras/icons/quote.png</param>',
+        'new': '\n                <param name="icon">$VAR[ABK_LucentIcon_subtitles]</param>',
+        'already_patched_check': '\n                <param name="icon">$VAR[ABK_LucentIcon_subtitles]</param>',
+        'description': 'AF3 Lucent Look - popup icon subtitles (button)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Custom_1148_OSD_VideoStreams.xml'),
+        'not_found_ok': True,
+        'old': '\n                    <param name="icon">special://skin/extras/icons/video.png</param>',
+        'new': '\n                    <param name="icon">$VAR[ABK_LucentIcon_video]</param>',
+        'already_patched_check': '\n                    <param name="icon">$VAR[ABK_LucentIcon_video]</param>',
+        'description': 'AF3 Lucent Look - popup icon video (list header)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Custom_1148_OSD_VideoStreams.xml'),
+        'not_found_ok': True,
+        'old': '\n                <param name="icon">special://skin/extras/icons/video.png</param>',
+        'new': '\n                <param name="icon">$VAR[ABK_LucentIcon_video]</param>',
+        'already_patched_check': '\n                <param name="icon">$VAR[ABK_LucentIcon_video]</param>',
+        'description': 'AF3 Lucent Look - popup icon video (button)',
     },
 
     # ── AF3: Lucent Look (4.6.14) - subtitle list from the OSD button ──

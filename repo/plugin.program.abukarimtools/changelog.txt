@@ -1,3 +1,18 @@
+v4.6.22
+- AF3 Lucent Look, player bar icons (screen recording 2026-10-31 08:50):
+  - new Lucent line icons (white on the glass circle, dark on the white
+    focus) for the AB Tools buttons Subtitle Cycler, DexSubtitles Sync and
+    Subtitle Look and for AF3's PPI button (tools/gen_af3_lucent_icons.py);
+    with the Lucent Look off they show their usual icons
+    (ABK_LucentIcon_subcycler / dexsync / substyle / ppi variables);
+  - AF3's stream popups (1145 info, 1146 audio, 1147 subtitles, 1148 video)
+    open on focus and redraw the focused button - they drew AF3's speaker /
+    quote / film icons, so the icon changed under the focus. They now use the
+    same Lucent icons (button and list header).
+- The Subtitle Cycler / Sync / Look buttons are written with the icon
+  variable; buttons already in the skin are converted on the next patch run
+  (always-on entries), so Subtitle Look's switch-off still finds its block.
+
 v4.6.21
 - (4.6.20 - AB Tools Lucent look - withdrawn.)
 - AF3 Plot on the Right, layout (screenshot 2026-10-31 08:09):

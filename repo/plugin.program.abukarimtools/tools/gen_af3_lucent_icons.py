@@ -107,6 +107,51 @@ def build():
     d.ellipse(p(34, 34, 62, 62), fill=W)
     save(im, 'record'); made.append('record')
 
+    # 4.6.22: the AB Tools OSD buttons in the same line style
+    def frame(d):                                    # small subtitle screen, top-left
+        d.rounded_rectangle(p(8, 16, 70, 62), radius=9 * S, outline=W, width=int(STROKE * S))
+        line(d, [(20, 39), (32, 39)], w=6); line(d, [(41, 39), (56, 39)], w=6)
+        line(d, [(20, 49), (44, 49)], w=6)
+
+    def badge_hole(d, cx, cy, r):
+        d.ellipse(p(cx - r, cy - r, cx + r, cy + r), fill=(0, 0, 0, 0))
+
+    im, d = canvas()                                   # subtitle cycler: screen + circular arrows
+    frame(d); badge_hole(d, 68, 66, 26)
+    d.arc(p(50, 48, 86, 84), 200, 340, fill=W, width=int(6.5 * S))
+    d.arc(p(50, 48, 86, 84), 20, 160, fill=W, width=int(6.5 * S))
+    rounded_poly(d, [(80, 46), (90, 58), (76, 60)], r=3)
+    rounded_poly(d, [(56, 86), (46, 74), (60, 72)], r=3)
+    save(im, 'subcycler'); made.append('subcycler')
+
+    im, d = canvas()                                   # subtitle sync: screen + clock
+    frame(d); badge_hole(d, 68, 66, 26)
+    d.ellipse(p(50, 48, 86, 84), outline=W, width=int(6.5 * S))
+    line(d, [(68, 56), (68, 67), (76, 72)], w=5.5)
+    save(im, 'dexsync'); made.append('dexsync')
+
+    im, d = canvas()                                   # subtitle look: "Aa" + height arrow
+    try:
+        from PIL import ImageFont
+        f = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 40 * S)
+        d.text((8 * S, 48 * S), 'Aa', font=f, fill=W, anchor='lm')
+    except Exception:
+        pass
+    line(d, [(80, 22), (80, 74)], w=6)
+    rounded_poly(d, [(72, 28), (80, 16), (88, 28)], r=3)
+    rounded_poly(d, [(72, 68), (80, 80), (88, 68)], r=3)
+    save(im, 'substyle'); made.append('substyle')
+
+    im, d = canvas()                                   # player process info: screen + play + gear
+    d.rounded_rectangle(p(8, 14, 74, 62), radius=9 * S, outline=W, width=int(STROKE * S))
+    tri(d, 32, 52, 38, 11)
+    badge_hole(d, 70, 68, 25)
+    for k in range(8):
+        a = math.radians(k * 45)
+        line(d, [(70 + 10 * math.cos(a), 68 + 10 * math.sin(a)), (70 + 17 * math.cos(a), 68 + 17 * math.sin(a))], w=7)
+    d.ellipse(p(57, 55, 83, 81), outline=W, width=int(6 * S))
+    save(im, 'ppi'); made.append('ppi')
+
     return made
 
 
