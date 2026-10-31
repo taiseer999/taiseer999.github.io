@@ -479,7 +479,7 @@ _TMDBH7_GENRE_BLOCK = (
 
 # ── AF3: Subtitle Look button (4.6.2, toggle 'af3_substyle') ──
 # One OSD button just before Video settings (6008): opens AB Tools' subtitle
-# panel (sub_quick.py) - height and font size sliders, font cycler.
+# panel (sub_quick.py) - 4.6.27: Dex Hub's whole subtitle look (rows, looks, swatches).
 _AF3_SUBSTYLE_ANCHOR = '                        <control type="button" id="6008">'
 _AF3_SUBSTYLE_XML = (
     '                        <!-- ABUKARIM: AF3 subtitle look button -->\n'
@@ -3623,7 +3623,7 @@ TOGGLE_GROUPS = [
     ('a4ksubs_utf8',     'a4kSubtitles: UTF-8 Subtitles Fix'),
     ('a4ksubs_quiet',    'a4kSubtitles: Hide Account/API-Key Nags'),
     ('af3_subtools',     'AF3: Subtitle Buttons (DexSubtitles Sync & Cycler)'),
-    ('af3_substyle',     'AF3: Subtitle Look Button (Height, Size & Font)'),
+    ('af3_substyle',     'AF3: Subtitle Look Button (Dex Hub look: font, size, colour, delay, sync...)'),
     ('dexhub_entry',     'DexHub: Plugin Entry Fix (Kodi 22)'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)

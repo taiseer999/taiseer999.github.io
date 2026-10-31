@@ -1,0 +1,81 @@
+# Generates resources/skins/Default/1080i/abk_subquick.xml (AB Tools 4.6.27)
+import sys
+out = sys.argv[1]
+W, H = 576, 84
+
+def swatch(i, focused):
+    x = 22 + i * 48
+    return f'''
+                <control type="group">
+                    <visible>!String.IsEmpty(ListItem.Property(c{i}))</visible>
+                    <control type="image"><left>{x-5}</left><top>37</top><width>44</width><height>44</height><texture colordiffuse="FFFFFFFF">abk_sq_circle.png</texture><visible>String.IsEqual(ListItem.Property(sel),{i})</visible></control>
+                    <control type="image"><left>{x-2}</left><top>40</top><width>38</width><height>38</height><texture colordiffuse="FF101418">abk_sq_circle.png</texture><visible>String.IsEqual(ListItem.Property(sel),{i})</visible></control>
+                    <control type="image"><left>{x-1}</left><top>41</top><width>36</width><height>36</height><texture colordiffuse="40FFFFFF">abk_sq_circle.png</texture><visible>!String.IsEqual(ListItem.Property(sel),{i})</visible></control>
+                    <control type="image"><left>{x}</left><top>42</top><width>34</width><height>34</height><texture colordiffuse="$INFO[ListItem.Property(c{i})]">abk_sq_circle.png</texture></control>
+                </control>'''
+
+def layout(focused):
+    tag = 'focusedlayout' if focused else 'itemlayout'
+    bg = ''
+    if focused:
+        bg = f'''
+                <control type="image"><left>0</left><top>3</top><width>{W}</width><height>78</height><texture border="22" colordiffuse="3DFFFFFF">abk_sq_round.png</texture><visible>Control.HasFocus(100)</visible></control>
+                <control type="image"><left>0</left><top>3</top><width>{W}</width><height>78</height><texture border="22" colordiffuse="B3FFFFFF">abk_sq_outline.png</texture><visible>Control.HasFocus(100)</visible></control>'''
+    sw = ''.join(swatch(i, focused) for i in range(10))
+    return f'''
+        <{tag} height="{H}" width="{W}">
+            <control type="group">
+                <left>0</left><top>0</top><width>{W}</width><height>{H}</height>{bg}
+                <!-- back row: chevron left -->
+                <control type="image"><left>22</left><top>29</top><width>26</width><height>26</height><texture colordiffuse="F2FFFFFF" flipx="true">abk_sq_chevron.png</texture><visible>String.IsEqual(ListItem.Property(id),close)</visible></control>
+                <control type="label"><left>66</left><top>0</top><width>470</width><height>{H}</height><font>font_mini</font><textcolor>F2FFFFFF</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label><visible>String.IsEqual(ListItem.Property(id),close)</visible></control>
+                <!-- plain row -->
+                <control type="label"><left>22</left><top>0</top><width>284</width><height>{H}</height><font>font_mini</font><textcolor>F2FFFFFF</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label><visible>!String.IsEqual(ListItem.Property(id),close) + String.IsEmpty(ListItem.Property(n))</visible></control>
+                <!-- swatch row: label + value on top, circles below -->
+                <control type="label"><left>22</left><top>4</top><width>294</width><height>34</height><font>font_tiny</font><textcolor>F2FFFFFF</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label><visible>!String.IsEmpty(ListItem.Property(n))</visible></control>
+                <control type="label"><left>312</left><top>4</top><width>220</width><height>34</height><font>font_tiny</font><textcolor>99FFFFFF</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Label2]</label><visible>!String.IsEmpty(ListItem.Property(n))</visible></control>{sw}
+                <!-- value -->
+                <control type="label"><left>306</left><top>0</top><width>230</width><height>{H}</height><font>font_tiny</font><textcolor>B3FFFFFF</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Label2]</label><visible>String.IsEmpty(ListItem.Property(pct)) + String.IsEmpty(ListItem.Property(n))</visible></control>
+                <control type="label"><left>306</left><top>8</top><width>230</width><height>44</height><font>font_tiny</font><textcolor>B3FFFFFF</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Label2]</label><visible>!String.IsEmpty(ListItem.Property(pct))</visible></control>
+                <control type="progress"><left>366</left><top>58</top><width>170</width><height>6</height><texturebg border="4" colordiffuse="26FFFFFF">abk_sq_bar.png</texturebg><lefttexture /><midtexture border="4" colordiffuse="F2FFFFFF">abk_sq_bar.png</midtexture><righttexture /><info>ListItem.PercentPlayed</info><visible>!String.IsEmpty(ListItem.Property(pct))</visible></control>
+                <!-- colour dot beside the label (single colour rows) -->
+                <control type="image"><left>266</left><top>28</top><width>28</width><height>28</height><texture colordiffuse="FF000000">abk_sq_circle.png</texture><visible>!String.IsEmpty(ListItem.Property(swatch)) + String.IsEmpty(ListItem.Property(n))</visible></control>
+                <control type="image"><left>269</left><top>31</top><width>22</width><height>22</height><texture colordiffuse="$INFO[ListItem.Property(swatch)]">abk_sq_circle.png</texture><visible>!String.IsEmpty(ListItem.Property(swatch)) + String.IsEmpty(ListItem.Property(n))</visible></control>
+                <!-- chevron -->
+                <control type="image"><left>542</left><top>31</top><width>22</width><height>22</height><texture colordiffuse="66FFFFFF">abk_sq_chevron.png</texture><visible>!String.IsEmpty(ListItem.Property(opens)) | !String.IsEmpty(ListItem.Property(adjust))</visible></control>
+            </control>
+        </{tag}>'''
+
+xml = f'''<?xml version="1.0" encoding="UTF-8"?>
+<!-- AB Tools 4.6.27: Subtitle look panel (AF3 OSD "Aa" button), the rows of
+     Dex Hub's subtitle look (skin.dexhub / Dex Hub 5.10.451 subwindow.py):
+     show, delay, auto sync, ready looks, height, font, size, style, colour +
+     shade swatches, opacity, border, background, shadow, blur, line spacing,
+     position, Kodi's dialog. sub_quick.py fills list 100 and changes a row
+     with Left / Right. Generated by tools/gen_subquick.py: edit that. -->
+<window type="dialog">
+    <defaultcontrol always="true">100</defaultcontrol>
+    <coordinates><left>0</left><top>0</top><width>1920</width><height>1080</height></coordinates>
+    <controls>
+        <control type="group">
+            <left>1254</left><top>110</top><width>600</width><height>880</height>
+            <animation type="WindowOpen" reversible="false"><effect type="fade" start="0" end="100" time="180"/><effect type="slide" start="240,0" end="0,0" tween="cubic" easing="out" time="220"/></animation>
+            <animation type="WindowClose" reversible="false"><effect type="fade" start="100" end="0" time="160"/><effect type="slide" start="0,0" end="240,0" tween="cubic" easing="in" time="180"/></animation>
+            <control type="image"><left>-40</left><top>-40</top><width>680</width><height>960</height><texture border="88">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/panel_shadow.png</texture><colordiffuse>B3000000</colordiffuse></control>
+            <control type="image"><left>0</left><top>0</top><width>600</width><height>880</height><texture border="22" colordiffuse="F01A1F25">abk_sq_round.png</texture></control>
+            <control type="image"><left>0</left><top>0</top><width>600</width><height>880</height><texture border="22" colordiffuse="38FFFFFF">abk_sq_outline.png</texture></control>
+            <control type="label"><left>34</left><top>16</top><width>532</width><height>44</height><font>font_tiny_bold</font><textcolor>8CFFFFFF</textcolor><aligny>center</aligny><label>[UPPERCASE]$INFO[Window.Property(sq.title)][/UPPERCASE]</label></control>
+            <control type="image"><left>24</left><top>68</top><width>552</width><height>1</height><texture colordiffuse="1AFFFFFF">white.png</texture></control>
+            <control type="list" id="100">
+                <left>12</left><top>80</top><width>{W}</width><height>780</height>
+                <orientation>vertical</orientation>
+                <scrolltime tween="cubic" easing="out">160</scrolltime>
+                <onup>noop</onup><ondown>noop</ondown><onleft>noop</onleft><onright>noop</onright>
+                {layout(False)}
+                {layout(True)}
+            </control>
+        </control>
+    </controls>
+</window>
+'''
+open(out, 'w', encoding='utf-8').write(xml)
