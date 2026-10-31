@@ -280,7 +280,7 @@ def _listitem(e, for_play=False):
                 tag.setEpisode(int(e['episode']))
         except (TypeError, ValueError):
             pass
-    ids = {k: str(v) for k, v in (e.get('ids') or {}).items() if v}
+    ids = store.clean_ids(e.get('ids'), e.get('path') or '')
     if ids:
         tag.setUniqueIDs(ids, 'tmdb' if 'tmdb' in ids else list(ids)[0])
         if ids.get('imdb'):

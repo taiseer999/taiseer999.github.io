@@ -201,7 +201,8 @@ class Recorder(object):
             'title': gi('ListItem.Title') or gi('ListItem.Label'),
             'show': gi('ListItem.TVShowTitle'), 'year': gi('ListItem.Year'),
             'season': gi('ListItem.Season'), 'episode': gi('ListItem.Episode'),
-            'tmdb': gi('ListItem.UniqueID(tmdb)'), 'imdb': gi('ListItem.IMDBNumber'),
+            'tmdb': gi('ListItem.UniqueID(tmdb)') if gi('ListItem.UniqueID(tmdb)').isdigit() else '',
+            'imdb': gi('ListItem.IMDBNumber'),
             'playable': gi('ListItem.Property(IsPlayable)').lower() != 'false',
         })
         del self.clicked[8:]
@@ -331,6 +332,7 @@ class Recorder(object):
         imdb = item.get('imdbnumber') or tg('getIMDBNumber') or ''
         if not ids.get('imdb') and str(imdb).startswith('tt'):
             ids['imdb'] = imdb
+        ids = store.clean_ids(ids)
 
         if mtype not in ('movie', 'episode', 'musicvideo'):
             if show and season >= 0 and episode > 0:
@@ -381,6 +383,7 @@ class Recorder(object):
                     for k in ('type', 'title', 'year', 'show', 'season', 'episode', 'ids', 'plot'):
                         if old.get(k) not in (None, '', {}, -1):
                             e[k] = old[k]
+                e['ids'] = store.clean_ids(e.get('ids'), e['path'])
                 store.log('replay (%s) of "%s" - keeping stored link' % (rp.get('mode'), old.get('title')))
                 return e
 
@@ -405,6 +408,7 @@ class Recorder(object):
             path = item.get('file') or full or playing
         e['path'] = path
         e['playable'] = playable
+        e['ids'] = store.clean_ids(e.get('ids'), path)
         e['source_id'] = src or _plugin_id(path)
         if e['dbid'] > 0:
             e['source'] = xbmc.getLocalizedString(14022)       # "Library"
@@ -479,6 +483,7 @@ class Recorder(object):
                 e['title'] = t
             if y and not e['year']:
                 e['year'] = y
+        e['ids'] = ids = store.clean_ids(ids)
         store.log('enriched: %s "%s" ids=%s (trakt.ids=%s launcher=%s focused=%s)' % (
             e['type'], e['title'], ids, bool(tk), bool(ltype), c['title'] if c else None))
         return e

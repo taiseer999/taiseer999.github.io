@@ -8,6 +8,7 @@ the plugin and the service never corrupt it between them.
 
 import json
 import os
+import re
 import time
 
 import xbmc
@@ -112,6 +113,31 @@ def same(a, b):
     return bool(a.get('path')) and a.get('path') == b.get('path')
 
 
+_TMDB_IN_PATH = re.compile(r'[?&]tmdb_id=(\d+)')
+
+
+def clean_ids(ids, path=''):
+    """tmdb must be numeric, imdb must be tt...: some players put the IMDb id
+    in the tmdb slot and TMDbHelper then dies on int('tt...').  A missing tmdb
+    is recovered from a TMDbHelper path (…&tmdb_id=123)."""
+    out = {k: str(v).strip() for k, v in (ids or {}).items() if v not in (None, '')}
+    for k in ('tmdb', 'tvdb'):
+        v = out.get(k, '')
+        if v and not v.isdigit():
+            out.pop(k)
+            if v.startswith('tt') and not out.get('imdb'):
+                out['imdb'] = v
+    if out.get('imdb') and not out['imdb'].startswith('tt'):
+        v = out.pop('imdb')
+        if v.isdigit() and not out.get('tmdb'):
+            out['tmdb'] = v
+    if not out.get('tmdb') and path and 'themoviedb.helper' in path:
+        m = _TMDB_IN_PATH.search(path)
+        if m:
+            out['tmdb'] = m.group(1)
+    return out
+
+
 def upsert(entry, limit=100):
     """Put entry at the top, replacing an older copy of the same title."""
     with _Lock():
@@ -125,6 +151,7 @@ def upsert(entry, limit=100):
                 art = dict(old.get('art') or {})
                 art.update({k: v for k, v in (entry.get('art') or {}).items() if v})
                 entry['art'] = art
+        entry['ids'] = clean_ids(entry.get('ids'), entry.get('path') or '')
         items.insert(0, entry)
         del items[max(1, int(limit)):]
         save(items)
