@@ -1,3 +1,48 @@
+v4.7.4
+- Setup progress pill on Arctic Fuse 3: a skin <visible> dialog
+  (1080i/Custom_1789_ABK_Setup.xml + media/abk_setup/*.png, 4 always-on
+  patcher entries tagged 'setup_banner') that Kodi opens by itself while
+  Window(Home).Property(abk.setup.banner) is set. It sits above Home and
+  the hubs and comes back by itself after every skin reload - the moments
+  the backdrop has to step aside, when AF3 showed no sign of setup. Shows
+  "Setup in progress - step x of y", the step name with "do not unplug",
+  a spinner and a 20-segment percent bar; "Setup complete" before the
+  restart. Written right after the Skin Installer; the Arabic switch's
+  reload loads it, otherwise one ReloadSkin. If this Kodi counts it as a
+  modal dialog (the wizard waits on System.HasModalDialog) it is switched
+  off for the run. Kodi's own background progress bar was not used:
+  skin_rebuild.busy() reads extendedprogressdialog as "skinvariables is
+  building" and every wait would have stalled.
+- TMDb Helper 6.20 sync questions (kodi.log 17:09:58-17:10:19: "set up a
+  sync provider?", provider list, Kodi's install yes/no for
+  script.module.tmdbhelper.sync.mdblist / .trakt) no longer appear:
+  setup sets TMDb Helper's own "Later" property
+  (TMDbHelper.SyncProviderSetup.Later) from the start, and a new step
+  "TMDb Helper: Trakt sync" after the add-ons installs both sync modules
+  (install prompts answered Yes) and saves Trakt for watched, watchlist,
+  collection, scrobbling and stats. A capability that already has a value
+  (restored choice, MDbList, "never") is kept. New resources/lib/
+  tmdbh_sync.py; also runs in the background at boot on a box where
+  TMDb Helper has no provider yet.
+- Strings 30960-30962.
+
+v4.7.3
+- From the 4.7.2 run (kodi.log 2026-11-01 17:08, macOS): 13 ok / 0 failed
+  in 166 s (194 s before); "changed nothing - no skin settle wait" worked;
+  the cleanup step removed 85 items in 22 s; the macOS restart was
+  immediate.
+- Setup cleanup: add-ons installed by this setup are never offered - every
+  add-on in the restored backup's abk_manifest.json plus the portal ticks.
+  The restore had reinstalled script.fonts.installer from the backup at
+  17:11:04 and the cleanup removed it again at 17:13:36.
+- Clean Unused Items (setup and Maintenance): new kind "Old database" -
+  older versions of a Kodi database family (MyVideos132.db next to the
+  MyVideos149.db Kodi 22 uses, Addons27.db next to Addons33.db...) with
+  their -wal/-shm/-journal, pre-ticked; Kodi only opens the highest one.
+- The library-scraper check reads only the newest MyVideos database (the
+  old MyVideos132.db made it log "no such table: path").
+- String 30959.
+
 v4.7.2
 - Setup review of the first complete 4.7.1 run (kodi.log 2026-11-01, macOS):
   12 ok / 0 failed in 194 s; zips registered in 250 ms; the 3 add-ons the

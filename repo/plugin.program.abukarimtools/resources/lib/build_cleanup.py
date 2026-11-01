@@ -91,10 +91,11 @@ _DATA_PRESELECT = ('script.', 'skin.', 'resource.', 'context.', 'metadata.')
 K_MODULE, K_SCRIPT, K_RESOURCE, K_CONTEXT, K_SCRAPER = 'module', 'script', 'resource', 'context', 'scraper'
 K_DATA, K_SKINLEFT, K_SOURCES = 'data', 'skinleft', 'sources'
 K_ADDON = 'addon'
+K_OLDDB = 'olddb'
 _ADDON_KINDS = (K_MODULE, K_SCRIPT, K_RESOURCE, K_CONTEXT, K_SCRAPER, K_ADDON)
 _KIND_LABEL = {K_ADDON: 30790, K_MODULE: 30791, K_SCRIPT: 30792, K_RESOURCE: 30793,
                K_CONTEXT: 30794, K_SCRAPER: 30795, K_DATA: 30796,
-               K_SKINLEFT: 30797, K_SOURCES: 30798}
+               K_SKINLEFT: 30797, K_SOURCES: 30798, K_OLDDB: 30959}
 
 
 def _log(msg, level=xbmc.LOGINFO):
@@ -297,6 +298,10 @@ def _library_scrapers():
         names = [n for n in os.listdir(DATABASE) if re.match(r'MyVideos\d+\.db$', n)]
     except OSError:
         return out
+    # 4.7.2: only the database Kodi uses (the highest version) - an old
+    # MyVideos132.db left by an earlier Kodi has another schema
+    # (kodi.log 2026-11-01 17:13:27: "no such table: path").
+    names = sorted(names, key=lambda n: int(re.findall(r'\d+', n)[0]))[-1:]
     for n in names:
         try:
             con = sqlite3.connect('file:%s?mode=ro' % os.path.join(DATABASE, n), uri=True, timeout=3)
@@ -471,8 +476,43 @@ def scan(progress=None):
                 items.append({'kind': K_SKINLEFT,
                               'name': os.path.relpath(p, ADDON_DATA).replace('\\', '/'),
                               'paths': [p], 'size': _dir_size(p), 'preselect': True})
+    items += _old_databases()
     step(100, '')
     return items
+
+
+_DB_RE = re.compile(r'^([A-Za-z]+?)(\d+)\.db$')
+
+
+def _old_databases():
+    """4.7.2: database files of an older Kodi (MyVideos132.db next to the
+    MyVideos149.db Kodi 22 uses, Addons27.db next to Addons33.db, ...).
+    Kodi only ever opens the highest version of each family, so the older
+    ones are dead weight; pre-ticked. Their -wal / -shm / -journal go too."""
+    try:
+        names = os.listdir(DATABASE)
+    except OSError:
+        return []
+    fam = {}
+    for n in names:
+        m = _DB_RE.match(n)
+        if m:
+            fam.setdefault(m.group(1), []).append((int(m.group(2)), n))
+    out = []
+    for family, vers in fam.items():
+        if len(vers) < 2:
+            continue
+        vers.sort()
+        for _v, n in vers[:-1]:
+            paths = [os.path.join(DATABASE, n)]
+            for ext in ('-wal', '-shm', '-journal'):
+                if os.path.exists(paths[0] + ext):
+                    paths.append(paths[0] + ext)
+            out.append({'kind': K_OLDDB, 'name': n, 'paths': paths,
+                        'size': sum(_dir_size(x) for x in paths), 'preselect': True})
+    if out:
+        _log('old database versions: %s' % ', '.join(i['name'] for i in out))
+    return out
 
 
 def _context_target_missing(a, installed):
@@ -549,7 +589,7 @@ def scan_items(heading=None):
         dp.close()
     if items:
         order = [K_ADDON, K_MODULE, K_SCRIPT, K_RESOURCE, K_CONTEXT, K_SCRAPER,
-                 K_SOURCES, K_DATA, K_SKINLEFT]
+                 K_SOURCES, K_OLDDB, K_DATA, K_SKINLEFT]
         items.sort(key=lambda i: (order.index(i['kind']), i['name'].lower()))
     return items
 
@@ -615,13 +655,22 @@ def run():
     dlg.ok(T(30780), msg)
 
 
-def setup_step():
+def setup_step(protect=()):
     """4.7.2 Installation Wizard, last step before the restart: scan; when
     something is unused, ask once, then the pre-ticked list; removal needs
     no further confirmation (the list is the confirmation) and ends without
     an OK dialog - the result goes into the setup report.
+    protect: add-on ids this setup has just installed (the restored backup's
+    add-ons, the portal ticks) - never offered (kodi.log 2026-11-01: the
+    restore reinstalled script.fonts.installer and the cleanup removed it).
     Returns (status, detail): 'ok' | 'skipped'."""
     items = scan_items(T(30957))
+    if items and protect:
+        keep = [i for i in items if i['kind'] in _ADDON_KINDS and i['name'] in protect]
+        if keep:
+            _log('setup: not offered - installed by this setup (restore / portal): %s'
+                 % ', '.join(i['name'] for i in keep))
+        items = [i for i in items if i not in keep]
     if not items:
         return 'skipped', 'nothing unused' if items == [] else 'scan cancelled'
     size = sum(i['size'] for i in items)

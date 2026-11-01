@@ -75,6 +75,7 @@ STEPS = (
     ('hw_tuning',    30948, 30775, False),
     ('restore',      30949, 30058, True),
     ('addons',       30950, 30021, True),
+    ('tmdbh_sync',   30962, 30021, False),
     ('layout',       30951, 30630, True),
     ('lists',        30952, 30660, True),
     ('patches',      30953, 30005, False),   # its ReloadSkin waits for the lock to go
@@ -515,6 +516,7 @@ def confirm_summary(answers):
 def ask_all(ctx, monitor, phone):
     """Phase A. Returns the answers dict (never applies anything)."""
     answers = {'phone': sorted(phone)}
+    banner(T(30770), T(30961), 0)
     first = True
     while not monitor.abortRequested():
         if 'restore' not in phone:
@@ -675,13 +677,39 @@ def _s_language(ctx, monitor, st):
     return OK
 
 
+def _s_tmdbh_sync(ctx, monitor, st):
+    """TMDb Helper: sync modules installed, Trakt as the provider (no prompts)."""
+    from resources.lib import tmdbh_sync
+    status, detail = tmdbh_sync.ensure()
+    st['steps']['tmdbh_sync']['detail'] = detail
+    return status
+
+
 def _s_cleanup(ctx, monitor, st):
     """Last step before the restart: offer to remove what the build no
     longer uses (Maintenance > Clean Unused Items, pre-ticked)."""
     from resources.lib import build_cleanup
-    status, detail = build_cleanup.setup_step()
+    status, detail = build_cleanup.setup_step(protect=_installed_by_setup(st))
     st['steps']['cleanup']['detail'] = detail
     return status
+
+
+def _installed_by_setup(st):
+    """Add-on ids this setup put on the box: portal ticks + every add-on in
+    the restored backup's manifest (abk_manifest.json)."""
+    ids = set(st['answers'].get('addons') or [])
+    path = st['answers'].get('restore')
+    if path and os.path.exists(path):
+        try:
+            from resources.lib import backup_manager
+            with zipfile.ZipFile(path) as zf:
+                man = json.loads(zf.read(backup_manager.MANIFEST_NAME).decode('utf-8'))
+            ids.update(a.get('id') for a in man.get('addons') or [] if a.get('id'))
+        except KeyError:
+            pass                      # an older backup without a manifest
+        except Exception as e:
+            _log('backup manifest not read: %s' % e, xbmc.LOGWARNING)
+    return ids
 
 
 def _may_reload(key, st):
@@ -709,7 +737,7 @@ RUNNERS = {
     'hw_tuning': _s_hw_tuning, 'restore': _s_restore, 'addons': _s_addons,
     'layout': _s_layout, 'lists': _s_lists, 'patches': _s_patches,
     'webserver': _s_webserver, 'lists_ensure': _s_lists_ensure,
-    'language': _s_language, 'cleanup': _s_cleanup,
+    'language': _s_language, 'cleanup': _s_cleanup, 'tmdbh_sync': _s_tmdbh_sync,
 }
 
 
@@ -745,6 +773,12 @@ def apply_all(ctx, monitor, st):
             save(st)
             continue
         ctx._overlay('step', overlay_id)
+        idx = STEP_KEYS.index(key) + 1
+        done_n = sum(1 for k in STEP_KEYS
+                     if (st['steps'].get(k) or {}).get('status') in (OK, SKIPPED, FAILED))
+        banner(T(30960) % (idx, len(STEP_KEYS)),
+               '%s  -  %s' % (step_label(key), T(30772)),
+               int(100 * done_n / len(STEP_KEYS)))
         paused = reloads and _may_reload(key, st)
         if paused:
             ctx._overlay('pause', '%s can reload the skin' % key)
@@ -774,12 +808,91 @@ def apply_all(ctx, monitor, st):
                 _log('step %s changed nothing - no skin settle wait' % key)
             ctx._overlay('ensure')
     if not unfinished(st):
+        banner(T(30770), T(30939) % tuple(
+            sum(1 for k in STEP_KEYS if (st['steps'].get(k) or {}).get('status') == x)
+            for x in (OK, FAILED, SKIPPED)), 100)
         st['phase'] = 'done'
         st['finished'] = int(time.time())
         st['report_pending'] = True
         save(st)
         write_report(st)
     return st
+
+
+# ---------------------------------------------------------------------------
+# progress pill (AF3 skin dialog Custom_1789, 4.7.4)
+# ---------------------------------------------------------------------------
+
+BANNER_PROPS = ('abk.setup.banner', 'abk.setup.title', 'abk.setup.text', 'abk.setup.pct')
+BANNER_WINDOW = 'Custom_1789_ABK_Setup.xml'
+_BANNER = {'ok': True, 'checked': False}
+
+
+def install_banner():
+    """Write the AF3 progress pill files now (setup step 0, right after the
+    Skin Installer). True = something was written - the skin must reload
+    before Kodi knows the new window. Only the 'setup_banner' entries."""
+    try:
+        from resources.lib import patcher
+        written = False
+        for p in patcher._all_patches():
+            if not p.get('setup_banner'):
+                continue
+            ok, msg = patcher._apply_patch(p)
+            if 'injected OK' in msg or 'Patched OK' in msg:
+                written = True
+        _log('progress pill files %s' % ('written' if written else 'already in place'))
+        return written
+    except Exception as e:
+        _log('progress pill not installed: %s' % e, xbmc.LOGWARNING)
+        return False
+
+
+def banner(title, text, pct):
+    """Show / update the pill. Never raises."""
+    if not _BANNER['ok']:
+        return
+    try:
+        w = xbmcgui.Window(10000)
+        w.setProperty('abk.setup.title', title)
+        w.setProperty('abk.setup.text', text)
+        w.setProperty('abk.setup.pct', str(max(0, min(100, int(pct)))))
+        first = not w.getProperty('abk.setup.banner')
+        w.setProperty('abk.setup.banner', '1')
+        if first and not _BANNER['checked']:
+            _check_banner()
+    except Exception as e:
+        _log('progress pill update failed: %s' % e, xbmc.LOGWARNING)
+
+
+def _check_banner():
+    """The pill must not count as a modal dialog: the wizard waits on
+    System.HasModalDialog everywhere. Shown on a calm screen, so a modal
+    dialog appearing with it means it is the pill - then it stays off for
+    this run (same rule as the backdrop)."""
+    _BANNER['checked'] = True
+    if xbmc.getCondVisibility('System.HasModalDialog'):
+        return                                  # not calm - cannot tell, trust it
+    xbmc.sleep(1200)
+    if not xbmc.getCondVisibility('Window.IsVisible(%s)' % BANNER_WINDOW):
+        _log('progress pill not shown (window not in this skin)')
+        return
+    if xbmc.getCondVisibility('System.HasModalDialog'):
+        _log('progress pill counts as a modal dialog here - switched off',
+             xbmc.LOGWARNING)
+        banner_off()
+        _BANNER['ok'] = False
+    else:
+        _log('progress pill shown')
+
+
+def banner_off():
+    try:
+        w = xbmcgui.Window(10000)
+        for p in BANNER_PROPS:
+            w.clearProperty(p)
+    except Exception:
+        pass
 
 
 # ---------------------------------------------------------------------------

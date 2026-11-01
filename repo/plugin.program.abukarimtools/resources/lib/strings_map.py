@@ -35,7 +35,7 @@ ID ranges:
   30880-30889  AF3 subtitle list (OSD, Lucent Look)
   30890-30893  AF3 Plot on the Right (Toggles)
   30900-30909  Maintenance - Fix Add-on Settings Version
-  30910-30959  Installation Wizard 4.7 - checks, summary, resume, report
+  30910-30969  Installation Wizard 4.7 - checks, summary, resume, report, progress pill
 """
 
 STRINGS = {
@@ -712,4 +712,9 @@ STRINGS = {
             'وجد الإعداد %d من العناصر التي لم يعد البناء يستخدمها (%s): إضافات وبيانات إضافات وبقايا. %d منها محدّدة مسبقًا لأن حذفها آمن.[CR][CR]هل تريد مراجعة القائمة وحذفها الآن؟'),
     30944: ('Review and remove', 'المراجعة والحذف'),
     30957: ('Clean unused items', 'تنظيف العناصر غير المستخدمة'),
+    30959: ('Old database', 'قاعدة بيانات قديمة'),
+    30960: ('Setup in progress - step %d of %d', 'الإعداد قيد التنفيذ - الخطوة %d من %d'),
+    30961: ('A few questions first - nothing changes until you press Start setup.',
+            'بعض الأسئلة أولًا - لن يتغيّر شيء حتى تضغط «بدء الإعداد».'),
+    30962: ('TMDb Helper: Trakt sync', 'TMDb Helper: مزامنة تراكت'),
 }

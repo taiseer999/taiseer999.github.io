@@ -2024,3 +2024,19 @@ msgctxt "#30958"
 msgid "Resuming setup..."
 msgstr "جارٍ استئناف الإعداد…"
 
+msgctxt "#30959"
+msgid "Old database"
+msgstr "قاعدة بيانات قديمة"
+
+msgctxt "#30960"
+msgid "Setup in progress - step %d of %d"
+msgstr "الإعداد قيد التنفيذ - الخطوة %d من %d"
+
+msgctxt "#30961"
+msgid "A few questions first - nothing changes until you press Start setup."
+msgstr "بعض الأسئلة أولًا - لن يتغيّر شيء حتى تضغط «بدء الإعداد»."
+
+msgctxt "#30962"
+msgid "TMDb Helper: Trakt sync"
+msgstr "TMDb Helper: مزامنة تراكت"
+

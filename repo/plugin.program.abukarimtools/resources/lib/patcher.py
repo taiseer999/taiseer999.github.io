@@ -1594,6 +1594,45 @@ PATCHES = [
         'already_patched_check': 'Includes_ABK_Lucent.xml',
         'description': 'AF3 Lucent Look - register Includes_ABK_Lucent.xml',
     },
+
+    # ── AF3: Installation Wizard progress pill (4.7.4) ──
+    # A skin <visible> dialog (Custom_1789) that Kodi opens by itself while
+    # Window(Home).Property(abk.setup.banner) is set: it stays on top of Home
+    # and the hubs and survives skin reloads - exactly when the setup backdrop
+    # has to step aside. Always on; 'setup_banner' lets setup apply just these
+    # at step 0 (setup_flow.install_banner).
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Custom_1789_ABK_Setup.xml'),
+        'inject_file': True, 'binary': True, 'replace': True, 'not_found_ok': True,
+        'setup_banner': True,
+        'inject_source': os.path.join('resources', 'af3_setup', 'Custom_1789_ABK_Setup.xml'),
+        'description': 'AF3 setup progress pill - window (Custom_1789_ABK_Setup.xml)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_setup', 'panel.png'),
+        'inject_file': True, 'binary': True, 'replace': True, 'not_found_ok': True,
+        'setup_banner': True,
+        'inject_source': os.path.join('resources', 'af3_setup', 'media', 'panel.png'),
+        'description': 'AF3 setup progress pill - texture panel.png',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_setup', 'ring.png'),
+        'inject_file': True, 'binary': True, 'replace': True, 'not_found_ok': True,
+        'setup_banner': True,
+        'inject_source': os.path.join('resources', 'af3_setup', 'media', 'ring.png'),
+        'description': 'AF3 setup progress pill - texture ring.png',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_setup', 'seg.png'),
+        'inject_file': True, 'binary': True, 'replace': True, 'not_found_ok': True,
+        'setup_banner': True,
+        'inject_source': os.path.join('resources', 'af3_setup', 'media', 'seg.png'),
+        'description': 'AF3 setup progress pill - texture seg.png',
+    },
     {
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('1080i', 'Includes_Defaults.xml'),

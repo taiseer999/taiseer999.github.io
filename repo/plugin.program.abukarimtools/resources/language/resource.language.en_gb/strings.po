@@ -2024,3 +2024,19 @@ msgctxt "#30958"
 msgid "Resuming setup..."
 msgstr ""
 
+msgctxt "#30959"
+msgid "Old database"
+msgstr ""
+
+msgctxt "#30960"
+msgid "Setup in progress - step %d of %d"
+msgstr ""
+
+msgctxt "#30961"
+msgid "A few questions first - nothing changes until you press Start setup."
+msgstr ""
+
+msgctxt "#30962"
+msgid "TMDb Helper: Trakt sync"
+msgstr ""
+

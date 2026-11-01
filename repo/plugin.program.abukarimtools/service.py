@@ -643,7 +643,23 @@ def _run_steps(monitor, mode=None):
         raise
     if not completed:
         _overlay('stop')
+        try:
+            from resources.lib import setup_flow, tmdbh_sync
+            setup_flow.banner_off()
+            tmdbh_sync.release_prompts()
+        except Exception:
+            pass
     return completed
+
+
+def _hold_tmdbh_prompts():
+    """4.7.4: TMDb Helper's own "Later" for its sync-provider prompts, so
+    none lands on the wizard; the tmdbh_sync step sets Trakt up instead."""
+    try:
+        from resources.lib import tmdbh_sync
+        tmdbh_sync.hold_prompts()
+    except Exception:
+        _log('Could not hold TMDb Helper prompts (ignored).', xbmc.LOGWARNING)
 
 
 def _run_steps_inner(monitor, mode=None):
@@ -681,6 +697,7 @@ def _run_steps_inner(monitor, mode=None):
                 _log('Resuming setup at %s (resume %d).'
                      % (setup_flow.unfinished(st), st['resumes']))
                 setup_flow.save(st)
+            _hold_tmdbh_prompts()
             _wait_no_modal(monitor)
             _overlay('step', 30958)
             _overlay('start')
@@ -688,6 +705,7 @@ def _run_steps_inner(monitor, mode=None):
             return not setup_flow.unfinished(st)
 
     _log('Starting first-run sequence.')
+    _hold_tmdbh_prompts()
 
     # Make Kodi's core dialogs readable before we show any: force the UI
     # language to English when the box is on Arabic (skin fonts have no Arabic
@@ -717,10 +735,16 @@ def _run_steps_inner(monitor, mode=None):
     _wait_skin_settle(monitor)
     _wait_no_modal(monitor)
     arabic = xbmc.getSkinDir() != 'skin.estuary'
+    # 4.7.4: the progress pill (AF3 skin dialog) - its files go in now; Kodi
+    # only knows a new skin window after a reload, which the Arabic switch
+    # below does anyway - otherwise one ReloadSkin here.
+    pill_written = arabic and setup_flow.install_banner()
+    reloaded = False
     if arabic:
         try:
             from resources.lib import set_language
             if set_language.force_arabic():
+                reloaded = True
                 _wait_skin_settle(monitor)     # the language switch reloads the skin
         except Exception:
             _log('Switch to Arabic after the skin crashed (ignored):\n%s'
@@ -728,6 +752,12 @@ def _run_steps_inner(monitor, mode=None):
         _wait_no_modal(monitor)
     else:
         _log('Skin Installer left Estuary active - setup stays in English.')
+    if pill_written and not reloaded:
+        _log('Reloading the skin once for the setup progress pill.')
+        xbmc.executebuiltin('ReloadSkin()')
+        _wait_skin_settle(monitor)
+        _wait_no_modal(monitor)
+    setup_flow.banner(T(30770), T(30961), 0)
 
     # From here until the summary nothing reloads the skin: questions only.
     _overlay('step', 30730)
@@ -777,6 +807,11 @@ def _finish_and_restart(monitor):
         return
     _wait_no_modal(monitor, timeout=60)
     _overlay('finish', 30774 if coreelec else 30773)
+    try:
+        from resources.lib import setup_flow
+        setup_flow.banner(T(30770), T(30774 if coreelec else 30773), 100)
+    except Exception:
+        pass
     _overlay('ensure')                 # back up after the Arabic switch
     try:
         from resources.lib import setup_overlay
@@ -1327,6 +1362,10 @@ def main():
             threading.Thread(target=setup_flow.show_pending_report,
                              args=(monitor,), name='abk-setup-report',
                              daemon=True).start()
+            # 4.7.4: TMDb Helper sync provider - Trakt, without its prompts
+            from resources.lib import tmdbh_sync
+            threading.Thread(target=tmdbh_sync.boot, args=(monitor,),
+                             name='abk-tmdbh-sync', daemon=True).start()
     except Exception:
         _log('Setup resume / report crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
