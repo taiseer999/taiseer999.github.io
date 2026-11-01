@@ -1,3 +1,23 @@
+v4.6.30
+- New patch toggle "AB Scrapers: Force as External Scraper (Red Light, Fen
+  Light, Umbrella)" (abscrapers_force, Apply Patches checklist). While
+  script.module.abscrapers is installed, the three add-ons use AB Scrapers
+  whatever external module is chosen in their settings, with external
+  scrapers switched on:
+  - Fen Light / Red Light: settings.py external_scraper_info() returns AB
+    Scrapers, active_internal_scrapers() always includes "external";
+    sources.py: the <name>.sources_<name> import may fail (AB Scrapers has
+    no such package) and Fen Light takes its legacy sources() path;
+    kodi_utils.py "External Scraper Settings" opens AB Scrapers' settings.
+  - Umbrella: control.setting() answers external_provider.module / .name and
+    provider.external.enabled (covers sources.py and the client.py
+    cfscrape fallback).
+  The AB Scrapers check runs at play time, so removing AB Scrapers gives each
+  add-on its own choice back. Every insert is one marked line.
+- Patcher: new entry key revert_regex = [(pattern, repl), ...], used when a
+  toggle is switched off (alongside revert_when_off). Turning "Force" off
+  removes the inserted lines and leaves the add-ons stock.
+
 v4.6.29
 - AB Scrapers patch (toggle abscrapers_support) now also installs AB Scrapers'
   TMDbHelper player, players/abscrapers.select.json - "AB Scrapers

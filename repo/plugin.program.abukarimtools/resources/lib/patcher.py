@@ -3318,6 +3318,99 @@ PATCHES += [
 ]
 
 
+# ── AB Scrapers: FORCE as the external scraper (4.6.30, toggle 'abscrapers_force') ──
+# abscrapers_support only falls back to AB Scrapers when no module was chosen.
+# This toggle makes Red Light, Fen Light and Umbrella use AB Scrapers ALWAYS -
+# whatever module is picked in their settings, and with their external
+# scrapers switched on - while script.module.abscrapers is installed (checked
+# at run time, so uninstalling AB Scrapers just gives the add-on back its own
+# choice). Every insert is ONE line ending in the marker below, so switching
+# the toggle off strips them again (revert_regex) and the add-on is stock.
+#   Fen Light / Red Light (same code base, regexes don't depend on the
+#   fenlight./redlight. setting prefix):
+#     settings.py external_scraper_info()   -> ('script.module.abscrapers', 'abscrapers')
+#     settings.py active_internal_scrapers() -> 'external' always active
+#     sources.py  import of <name>.sources_<name>: AB Scrapers has no such
+#                 package, so a failed import now leaves ext_sources None and
+#                 Fen Light takes its legacy path: abscrapers.sources(['torrents'])
+#     kodi_utils.py external_scraper_settings() -> opens AB Scrapers' settings
+#   Umbrella: control.setting() answers external_provider.module / .name and
+#     provider.external.enabled itself, which covers every caller (sources.py,
+#     client.py cfscrape fallback).
+_ABS_FORCE_MARK = '# ABK: force AB Scrapers'
+_ABS_HAS = "__import__('xbmc').getCondVisibility('System.HasAddon(script.module.abscrapers)')"
+_ABS_FORCE_LINE_RE = r'[ \t]*[^\r\n]*# ABK: force AB Scrapers \(%s\)[ \t]*\r?\n'
+
+
+def _abs_force_entry(addon_id, rel, tag, pattern, repl, desc, revert=None):
+    return {
+        'addon_id': addon_id,
+        'rel_path': rel,
+        'toggle': 'abscrapers_force',
+        'requires_addon': 'script.module.abscrapers',
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': '%s (%s)' % (_ABS_FORCE_MARK, tag),
+        'fallback_pattern': pattern,
+        'fallback_repl': repl,
+        'revert_regex': revert or [(_ABS_FORCE_LINE_RE % re.escape(tag), '')],
+        'description': desc,
+    }
+
+
+def _abs_force_fen_family(aid, label):
+    _settings = os.path.join('resources', 'lib', 'modules', 'settings.py')
+    _sources = os.path.join('resources', 'lib', 'modules', 'sources.py')
+    _kutils = os.path.join('resources', 'lib', 'modules', 'kodi_utils.py')
+    return [
+        _abs_force_entry(
+            aid, _settings, 'module',
+            r'(def external_scraper_info\(\):[ \t]*(\r?\n))',
+            lambda m: (m.group(1) + "\tif %s: return 'script.module.abscrapers', 'abscrapers'  %s (module)%s"
+                       % (_ABS_HAS, _ABS_FORCE_MARK, m.group(2))),
+            '%s settings.py - external scraper module is always AB Scrapers' % label),
+        _abs_force_entry(
+            aid, _settings, 'external on',
+            r'(def active_internal_scrapers\(\):(?:(?!\ndef )[\s\S])*?(\r?\n))(\treturn active\b)',
+            lambda m: (m.group(1) + "\tif 'external' not in active and %s: active.append('external')  %s (external on)%s"
+                       % (_ABS_HAS, _ABS_FORCE_MARK, m.group(2)) + m.group(3)),
+            '%s settings.py - external scrapers always on (AB Scrapers)' % label),
+        _abs_force_entry(
+            aid, _sources, 'import',
+            (r"([ \t]+)(self\.ext_sources = manual_module_import\('%s\.sources_%s' % "
+             r"\(self\.ext_name, self\.ext_name\)\))[ \t]*(\r?\n)"),
+            lambda m: ('%stry: %s  %s (import)%s%sexcept Exception: self.ext_sources = None  %s (import)%s'
+                       % (m.group(1), m.group(2), _ABS_FORCE_MARK, m.group(3),
+                          m.group(1), _ABS_FORCE_MARK, m.group(3))),
+            '%s sources.py - AB Scrapers has no sources_<name> package: use the legacy sources() path' % label,
+            revert=[(r'([ \t]+)try: (self\.ext_sources = [^\r\n]*?)  # ABK: force AB Scrapers \(import\)(\r?\n)'
+                     r'[ \t]+except Exception: self\.ext_sources = None  # ABK: force AB Scrapers \(import\)\r?\n',
+                     r'\1\2\3')]),
+        _abs_force_entry(
+            aid, _kutils, 'settings',
+            r"(([ \t]+)external = get_property\('\w+\.external_scraper\.module'\)[ \t]*(\r?\n))",
+            lambda m: (m.group(1) + "%sif %s: external = 'script.module.abscrapers'  %s (settings)%s"
+                       % (m.group(2), _ABS_HAS, _ABS_FORCE_MARK, m.group(3))),
+            '%s kodi_utils.py - "External Scraper Settings" opens AB Scrapers' % label),
+    ]
+
+
+PATCHES += _abs_force_fen_family('plugin.video.fenlight', 'Fen Light')
+PATCHES += _abs_force_fen_family('plugin.video.redlight', 'Red Light')
+PATCHES += [
+    _abs_force_entry(
+        'plugin.video.umbrella', os.path.join('resources', 'lib', 'modules', 'control.py'), 'umbrella',
+        r'(def setting\(id, fallback=None\):[ \t]*(\r?\n))',
+        lambda m: (m.group(1) + "\tif id in ('external_provider.module', 'external_provider.name', "
+                   "'provider.external.enabled') and %s: return {'external_provider.module': "
+                   "'script.module.abscrapers', 'external_provider.name': 'abscrapers', "
+                   "'provider.external.enabled': 'true'}[id]  %s (umbrella)%s"
+                   % (_ABS_HAS, _ABS_FORCE_MARK, m.group(2))),
+        'Umbrella control.py - external provider is always AB Scrapers (and switched on)'),
+]
+
+
 # ── DexHub: Plugin Entry Fix (3.4.26, toggle 'dexhub_entry') ──
 # Kodi 22 beta1 runs DexHub's xbmc.ui.screensaver library (screensaver.py)
 # for plugin:// calls - kodi.log 2026-10-24: every Home widget / menu call
@@ -3659,6 +3752,7 @@ TOGGLE_GROUPS = [
     ('fenlight_volume',  'Fenlight: Kill Volume Auto-Drop'),
     ('fenlight_tmdbh',   'Fenlight: TMDbHelper Playback Fix'),
     ('abscrapers_support', 'AB Scrapers: Fenlight & Umbrella Support + AIOStreams Player'),
+    ('abscrapers_force', 'AB Scrapers: Force as External Scraper (Red Light, Fen Light, Umbrella)'),
     ('a4ksubs_utf8',     'a4kSubtitles: UTF-8 Subtitles Fix'),
     ('a4ksubs_quiet',    'a4kSubtitles: Hide Account/API-Key Nags'),
     ('af3_subtools',     'AF3: Subtitle Buttons (DexSubtitles Sync & Cycler)'),
@@ -4491,7 +4585,8 @@ def _revert_disabled(addon_ids=None):
         return
     for patch in _all_patches():
         pair = patch.get('revert_when_off')
-        if not pair or _toggle_of(patch) not in disabled:
+        rx = patch.get('revert_regex')
+        if not (pair or rx) or _toggle_of(patch) not in disabled:
             continue
         if wanted is not None and patch['addon_id'] not in wanted:
             continue
@@ -4505,9 +4600,19 @@ def _revert_disabled(addon_ids=None):
             continue
         try:
             content = _read(target)
-            if pair[0] not in content:
-                continue
-            _write(target, content.replace(pair[0], pair[1], 1))
+            if rx:
+                # 4.6.30: revert_regex = [(pattern, repl), ...] - takes out
+                # inserted lines whatever the line endings / prefix were
+                new_content = content
+                for _pat, _rep in rx:
+                    new_content = re.sub(_pat, _rep, new_content)
+                if new_content == content:
+                    continue
+                _write(target, new_content)
+            else:
+                if pair[0] not in content:
+                    continue
+                _write(target, content.replace(pair[0], pair[1], 1))
             if patch.get('rescan_addons'):
                 _RESCAN_PENDING[0] = True
             yield True, '[%s] Patched OK (reverted, toggle off): %s' % (
