@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.aiostreams" name="AIOStreams" version="1.0.0" provider-name="Taiseer">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Browse and play your AIOStreams instance in Kodi</summary>
+        <summary lang="ar_SA">تصفّح مثيل AIOStreams الخاص بك وتشغيله داخل Kodi</summary>
+        <description lang="en_GB">Kodi client for AIOStreams (Stremio super-addon). Paste your AIOStreams manifest URL and get your configured catalogs, metadata, sorted/filtered streams and subtitles directly in Kodi. Includes TMDbHelper player integration.</description>
+        <description lang="ar_SA">عميل Kodi لـ AIOStreams. الصق رابط ملف manifest الخاص بمثيلك لتحصل على الفهارس والبيانات الوصفية والمصادر المرتبة والمرشّحة والترجمات مباشرةً في Kodi، مع دعم مشغّلات TMDbHelper.</description>
+        <platform>all</platform>
+        <license>GPL-3.0-only</license>
+        <source>https://github.com/Viren070/AIOStreams</source>
+        <website>https://buymeacoffee.com/taiseer999</website>
+        <news>v1.0.0 - Initial release, built against AIOStreams 2.37.0</news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

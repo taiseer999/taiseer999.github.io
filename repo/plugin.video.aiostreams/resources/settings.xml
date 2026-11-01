@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+    <section id="plugin.video.aiostreams">
+        <category id="general" label="30200">
+            <group id="1" label="30201">
+                <setting id="manifest_url" type="string" label="30202" help="30203">
+                    <level>0</level>
+                    <default/>
+                    <constraints><allowempty>true</allowempty></constraints>
+                    <control type="edit" format="string"><heading>30202</heading></control>
+                </setting>
+                <setting id="test_action" type="action" label="30050">
+                    <level>0</level>
+                    <data>RunPlugin(plugin://plugin.video.aiostreams/?action=test)</data>
+                    <constraints><allowempty>true</allowempty></constraints>
+                    <control type="button" format="action"/>
+                </setting>
+            </group>
+            <group id="2" label="30204">
+                <setting id="group_by_type" type="boolean" label="30205">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="flatten_seasons" type="boolean" label="30206">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="hide_unaired" type="boolean" label="30207">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+        </category>
+        <category id="playback" label="30210">
+            <group id="1" label="30211">
+                <setting id="stream_select" type="integer" label="30212">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <options>
+                            <option label="30213">0</option>
+                            <option label="30214">1</option>
+                            <option label="30215">2</option>
+                        </options>
+                    </constraints>
+                    <control type="spinner" format="string"/>
+                </setting>
+                <setting id="label_style" type="integer" label="30216">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <options>
+                            <option label="30217">0</option>
+                            <option label="30218">1</option>
+                        </options>
+                    </constraints>
+                    <control type="spinner" format="string"/>
+                </setting>
+                <setting id="strip_emoji" type="boolean" label="30219">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="hide_notices" type="boolean" label="30220">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="p2p_handler" type="integer" label="30221" help="30225">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <options>
+                            <option label="30222">0</option>
+                            <option label="30223">1</option>
+                            <option label="30224">2</option>
+                        </options>
+                    </constraints>
+                    <control type="spinner" format="string"/>
+                </setting>
+            </group>
+            <group id="2" label="30230">
+                <setting id="subtitles" type="boolean" label="30231">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="sub_langs" type="string" label="30232" help="30233">
+                    <level>0</level>
+                    <default>ara,eng</default>
+                    <constraints><allowempty>true</allowempty></constraints>
+                    <dependencies>
+                        <dependency type="enable" setting="subtitles">true</dependency>
+                    </dependencies>
+                    <control type="edit" format="string"><heading>30232</heading></control>
+                </setting>
+                <setting id="sub_limit" type="integer" label="30234">
+                    <level>0</level>
+                    <default>8</default>
+                    <constraints><minimum>1</minimum><step>1</step><maximum>30</maximum></constraints>
+                    <dependencies>
+                        <dependency type="enable" setting="subtitles">true</dependency>
+                    </dependencies>
+                    <control type="slider" format="integer"/>
+                </setting>
+            </group>
+        </category>
+        <category id="advanced" label="30240">
+            <group id="1">
+                <setting id="timeout" type="integer" label="30241">
+                    <level>0</level>
+                    <default>60</default>
+                    <constraints><minimum>10</minimum><step>5</step><maximum>180</maximum></constraints>
+                    <control type="slider" format="integer"/>
+                </setting>
+                <setting id="cache_minutes" type="integer" label="30242">
+                    <level>0</level>
+                    <default>60</default>
+                    <constraints><minimum>0</minimum><step>15</step><maximum>1440</maximum></constraints>
+                    <control type="slider" format="integer"/>
+                </setting>
+                <setting id="insecure_ssl" type="boolean" label="30243">
+                    <level>2</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="clear_cache_action" type="action" label="30051">
+                    <level>0</level>
+                    <data>RunPlugin(plugin://plugin.video.aiostreams/?action=clear_cache)</data>
+                    <constraints><allowempty>true</allowempty></constraints>
+                    <control type="button" format="action"/>
+                </setting>
+                <setting id="tmdbh_action" type="action" label="30052">
+                    <level>0</level>
+                    <data>RunPlugin(plugin://plugin.video.aiostreams/?action=install_tmdbh)</data>
+                    <constraints><allowempty>true</allowempty></constraints>
+                    <control type="button" format="action"/>
+                </setting>
+            </group>
+        </category>
+    </section>
+</settings>

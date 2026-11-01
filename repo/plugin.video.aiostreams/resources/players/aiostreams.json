@@ -1,0 +1,8 @@
+{
+    "name": "AIOStreams",
+    "plugin": "plugin.video.aiostreams",
+    "priority": 200,
+    "is_resolvable": "true",
+    "play_movie": "plugin://plugin.video.aiostreams/?action=play&type=movie&id={imdb}&title={title_url}",
+    "play_episode": "plugin://plugin.video.aiostreams/?action=play&type=series&id={imdb}:{season}:{episode}&title={showname_url}"
+}

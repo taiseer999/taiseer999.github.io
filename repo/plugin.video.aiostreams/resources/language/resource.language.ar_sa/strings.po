@@ -1,0 +1,292 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.aiostreams\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar_SA\n"
+
+msgctxt "#30010"
+msgid "Movies"
+msgstr "أفلام"
+
+msgctxt "#30011"
+msgid "Series"
+msgstr "مسلسلات"
+
+msgctxt "#30012"
+msgid "Anime"
+msgstr "أنمي"
+
+msgctxt "#30013"
+msgid "Channels"
+msgstr "قنوات"
+
+msgctxt "#30014"
+msgid "TV"
+msgstr "تلفاز"
+
+msgctxt "#30020"
+msgid "Set AIOStreams manifest URL"
+msgstr "تعيين رابط manifest الخاص بـ AIOStreams"
+
+msgctxt "#30021"
+msgid "Search"
+msgstr "بحث"
+
+msgctxt "#30022"
+msgid "Play by ID"
+msgstr "التشغيل بالمعرّف"
+
+msgctxt "#30023"
+msgid "Tools"
+msgstr "أدوات"
+
+msgctxt "#30024"
+msgid "Genres"
+msgstr "التصنيفات"
+
+msgctxt "#30025"
+msgid "Next page (%s)"
+msgstr "الصفحة التالية (%s)"
+
+msgctxt "#30026"
+msgid "New search"
+msgstr "بحث جديد"
+
+msgctxt "#30027"
+msgid "Settings"
+msgstr "الإعدادات"
+
+msgctxt "#30028"
+msgid "Movie ID (IMDb / TMDb)"
+msgstr "معرّف فيلم (IMDb / TMDb)"
+
+msgctxt "#30029"
+msgid "Series ID (IMDb / TMDb / Kitsu)"
+msgstr "معرّف مسلسل (IMDb / TMDb / Kitsu)"
+
+msgctxt "#30030"
+msgid "Specials"
+msgstr "حلقات خاصة"
+
+msgctxt "#30031"
+msgid "Season %s"
+msgstr "الموسم %s"
+
+msgctxt "#30040"
+msgid "Browse streams"
+msgstr "استعراض المصادر"
+
+msgctxt "#30041"
+msgid "Auto-play first stream"
+msgstr "تشغيل المصدر الأول تلقائيًا"
+
+msgctxt "#30042"
+msgid "Play"
+msgstr "تشغيل"
+
+msgctxt "#30043"
+msgid "Streams: %s"
+msgstr "عدد المصادر: %s"
+
+msgctxt "#30044"
+msgid "Remove from history"
+msgstr "إزالة من السجل"
+
+msgctxt "#30050"
+msgid "Test connection"
+msgstr "اختبار الاتصال"
+
+msgctxt "#30051"
+msgid "Clear cache"
+msgstr "مسح ذاكرة التخزين المؤقت"
+
+msgctxt "#30052"
+msgid "Install TMDbHelper players"
+msgstr "تثبيت مشغّلات TMDbHelper"
+
+msgctxt "#30060"
+msgid "Paste your AIOStreams manifest URL"
+msgstr "الصق رابط manifest الخاص بمثيل AIOStreams"
+
+msgctxt "#30061"
+msgid "Connected to %s v%s\n%s catalogs available"
+msgstr "تم الاتصال بـ %s الإصدار %s\nعدد الفهارس المتاحة: %s"
+
+msgctxt "#30062"
+msgid "Cleared %s cached items"
+msgstr "تم مسح %s عنصرًا من الذاكرة المؤقتة"
+
+msgctxt "#30070"
+msgid "TMDbHelper is not installed."
+msgstr "إضافة TMDbHelper غير مثبّتة."
+
+msgctxt "#30071"
+msgid "Installed players: %s\nRestart TMDbHelper / Kodi to load them."
+msgstr "تم تثبيت المشغّلات: %s\nأعد تشغيل TMDbHelper أو Kodi لتحميلها."
+
+msgctxt "#30100"
+msgid "No manifest URL set. Open Tools > Set AIOStreams manifest URL."
+msgstr "لم يُعيَّن رابط manifest. افتح الأدوات ثم اختر تعيين رابط manifest."
+
+msgctxt "#30101"
+msgid "This is not an AIOStreams URL (expected .../stremio/<uuid>/<password>/manifest.json)."
+msgstr "هذا ليس رابط AIOStreams صالحًا (المتوقع .../stremio/<uuid>/<password>/manifest.json)."
+
+msgctxt "#30102"
+msgid "Invalid response from the AIOStreams server."
+msgstr "استجابة غير صالحة من خادم AIOStreams."
+
+msgctxt "#30103"
+msgid "AIOStreams error"
+msgstr "خطأ في AIOStreams"
+
+msgctxt "#30104"
+msgid "Metadata not found."
+msgstr "لم يُعثر على البيانات الوصفية."
+
+msgctxt "#30105"
+msgid "No playable streams found."
+msgstr "لم يُعثر على مصادر قابلة للتشغيل."
+
+msgctxt "#30106"
+msgid "The stream list has expired, please open it again."
+msgstr "انتهت صلاحية قائمة المصادر، يُرجى فتحها مجددًا."
+
+msgctxt "#30107"
+msgid "This stream type cannot be played in Kodi."
+msgstr "لا يمكن تشغيل هذا النوع من المصادر في Kodi."
+
+msgctxt "#30200"
+msgid "General"
+msgstr "عام"
+
+msgctxt "#30201"
+msgid "Connection"
+msgstr "الاتصال"
+
+msgctxt "#30202"
+msgid "Manifest URL"
+msgstr "رابط manifest"
+
+msgctxt "#30203"
+msgid "Your AIOStreams install URL: https://host/stremio/<uuid>/<password>/manifest.json (stremio:// and alias /stremio/u/<alias> links also work)."
+msgstr "رابط التثبيت الخاص بك في AIOStreams: https://host/stremio/<uuid>/<password>/manifest.json (تعمل أيضًا روابط stremio:// والروابط المختصرة /stremio/u/<alias>)."
+
+msgctxt "#30204"
+msgid "Browsing"
+msgstr "التصفّح"
+
+msgctxt "#30205"
+msgid "Group catalogs by type"
+msgstr "تجميع الفهارس حسب النوع"
+
+msgctxt "#30206"
+msgid "List all episodes without season folders"
+msgstr "عرض جميع الحلقات دون مجلدات المواسم"
+
+msgctxt "#30207"
+msgid "Hide unaired episodes"
+msgstr "إخفاء الحلقات التي لم تُعرض بعد"
+
+msgctxt "#30210"
+msgid "Playback"
+msgstr "التشغيل"
+
+msgctxt "#30211"
+msgid "Streams"
+msgstr "المصادر"
+
+msgctxt "#30212"
+msgid "Stream selection"
+msgstr "طريقة اختيار المصدر"
+
+msgctxt "#30213"
+msgid "Select dialog"
+msgstr "نافذة اختيار"
+
+msgctxt "#30214"
+msgid "Stream list (folder)"
+msgstr "قائمة المصادر (مجلد)"
+
+msgctxt "#30215"
+msgid "Auto-play first stream"
+msgstr "تشغيل المصدر الأول تلقائيًا"
+
+msgctxt "#30216"
+msgid "Stream label style"
+msgstr "نمط عناوين المصادر"
+
+msgctxt "#30217"
+msgid "AIOStreams formatter"
+msgstr "منسّق AIOStreams"
+
+msgctxt "#30218"
+msgid "Compact (Kodi colours)"
+msgstr "مختصر (بألوان Kodi)"
+
+msgctxt "#30219"
+msgid "Strip emoji from labels"
+msgstr "إزالة الرموز التعبيرية من العناوين"
+
+msgctxt "#30220"
+msgid "Hide error / statistic entries"
+msgstr "إخفاء عناصر الأخطاء والإحصاءات"
+
+msgctxt "#30221"
+msgid "Torrent (P2P) streams"
+msgstr "مصادر التورنت (P2P)"
+
+msgctxt "#30222"
+msgid "Hide"
+msgstr "إخفاء"
+
+msgctxt "#30223"
+msgid "Play with Elementum"
+msgstr "التشغيل عبر Elementum"
+
+msgctxt "#30224"
+msgid "Play with Torrest"
+msgstr "التشغيل عبر Torrest"
+
+msgctxt "#30225"
+msgid "Only used for streams without a debrid/usenet URL."
+msgstr "تُستخدم فقط للمصادر التي لا تملك رابط Debrid أو Usenet."
+
+msgctxt "#30230"
+msgid "Subtitles"
+msgstr "الترجمات"
+
+msgctxt "#30231"
+msgid "Load subtitles from AIOStreams"
+msgstr "تحميل الترجمات من AIOStreams"
+
+msgctxt "#30232"
+msgid "Subtitle languages"
+msgstr "لغات الترجمة"
+
+msgctxt "#30233"
+msgid "Comma separated ISO 639-2 codes, e.g. ara,eng. Empty = all."
+msgstr "رموز ISO 639-2 مفصولة بفواصل، مثل ara,eng. اتركه فارغًا لجميع اللغات."
+
+msgctxt "#30234"
+msgid "Maximum subtitles to load"
+msgstr "الحد الأقصى لعدد الترجمات"
+
+msgctxt "#30240"
+msgid "Advanced"
+msgstr "متقدّم"
+
+msgctxt "#30241"
+msgid "Request timeout (seconds)"
+msgstr "مهلة الطلب (بالثواني)"
+
+msgctxt "#30242"
+msgid "Catalog / metadata cache (minutes)"
+msgstr "مدة تخزين الفهارس والبيانات الوصفية (بالدقائق)"
+
+msgctxt "#30243"
+msgid "Allow invalid SSL certificates"
+msgstr "السماح بشهادات SSL غير الصالحة"
+

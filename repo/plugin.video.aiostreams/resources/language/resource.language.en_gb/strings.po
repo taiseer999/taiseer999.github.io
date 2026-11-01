@@ -1,0 +1,292 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.aiostreams\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+
+msgctxt "#30010"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Series"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Anime"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30014"
+msgid "TV"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Set AIOStreams manifest URL"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Play by ID"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Tools"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Genres"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Next page (%s)"
+msgstr ""
+
+msgctxt "#30026"
+msgid "New search"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Settings"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Movie ID (IMDb / TMDb)"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Series ID (IMDb / TMDb / Kitsu)"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Specials"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Season %s"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Browse streams"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Auto-play first stream"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Play"
+msgstr ""
+
+msgctxt "#30043"
+msgid "Streams: %s"
+msgstr ""
+
+msgctxt "#30044"
+msgid "Remove from history"
+msgstr ""
+
+msgctxt "#30050"
+msgid "Test connection"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Clear cache"
+msgstr ""
+
+msgctxt "#30052"
+msgid "Install TMDbHelper players"
+msgstr ""
+
+msgctxt "#30060"
+msgid "Paste your AIOStreams manifest URL"
+msgstr ""
+
+msgctxt "#30061"
+msgid "Connected to %s v%s\n%s catalogs available"
+msgstr ""
+
+msgctxt "#30062"
+msgid "Cleared %s cached items"
+msgstr ""
+
+msgctxt "#30070"
+msgid "TMDbHelper is not installed."
+msgstr ""
+
+msgctxt "#30071"
+msgid "Installed players: %s\nRestart TMDbHelper / Kodi to load them."
+msgstr ""
+
+msgctxt "#30100"
+msgid "No manifest URL set. Open Tools > Set AIOStreams manifest URL."
+msgstr ""
+
+msgctxt "#30101"
+msgid "This is not an AIOStreams URL (expected .../stremio/<uuid>/<password>/manifest.json)."
+msgstr ""
+
+msgctxt "#30102"
+msgid "Invalid response from the AIOStreams server."
+msgstr ""
+
+msgctxt "#30103"
+msgid "AIOStreams error"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Metadata not found."
+msgstr ""
+
+msgctxt "#30105"
+msgid "No playable streams found."
+msgstr ""
+
+msgctxt "#30106"
+msgid "The stream list has expired, please open it again."
+msgstr ""
+
+msgctxt "#30107"
+msgid "This stream type cannot be played in Kodi."
+msgstr ""
+
+msgctxt "#30200"
+msgid "General"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Connection"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Manifest URL"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Your AIOStreams install URL: https://host/stremio/<uuid>/<password>/manifest.json (stremio:// and alias /stremio/u/<alias> links also work)."
+msgstr ""
+
+msgctxt "#30204"
+msgid "Browsing"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Group catalogs by type"
+msgstr ""
+
+msgctxt "#30206"
+msgid "List all episodes without season folders"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Hide unaired episodes"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30211"
+msgid "Streams"
+msgstr ""
+
+msgctxt "#30212"
+msgid "Stream selection"
+msgstr ""
+
+msgctxt "#30213"
+msgid "Select dialog"
+msgstr ""
+
+msgctxt "#30214"
+msgid "Stream list (folder)"
+msgstr ""
+
+msgctxt "#30215"
+msgid "Auto-play first stream"
+msgstr ""
+
+msgctxt "#30216"
+msgid "Stream label style"
+msgstr ""
+
+msgctxt "#30217"
+msgid "AIOStreams formatter"
+msgstr ""
+
+msgctxt "#30218"
+msgid "Compact (Kodi colours)"
+msgstr ""
+
+msgctxt "#30219"
+msgid "Strip emoji from labels"
+msgstr ""
+
+msgctxt "#30220"
+msgid "Hide error / statistic entries"
+msgstr ""
+
+msgctxt "#30221"
+msgid "Torrent (P2P) streams"
+msgstr ""
+
+msgctxt "#30222"
+msgid "Hide"
+msgstr ""
+
+msgctxt "#30223"
+msgid "Play with Elementum"
+msgstr ""
+
+msgctxt "#30224"
+msgid "Play with Torrest"
+msgstr ""
+
+msgctxt "#30225"
+msgid "Only used for streams without a debrid/usenet URL."
+msgstr ""
+
+msgctxt "#30230"
+msgid "Subtitles"
+msgstr ""
+
+msgctxt "#30231"
+msgid "Load subtitles from AIOStreams"
+msgstr ""
+
+msgctxt "#30232"
+msgid "Subtitle languages"
+msgstr ""
+
+msgctxt "#30233"
+msgid "Comma separated ISO 639-2 codes, e.g. ara,eng. Empty = all."
+msgstr ""
+
+msgctxt "#30234"
+msgid "Maximum subtitles to load"
+msgstr ""
+
+msgctxt "#30240"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#30241"
+msgid "Request timeout (seconds)"
+msgstr ""
+
+msgctxt "#30242"
+msgid "Catalog / metadata cache (minutes)"
+msgstr ""
+
+msgctxt "#30243"
+msgid "Allow invalid SSL certificates"
+msgstr ""
+
