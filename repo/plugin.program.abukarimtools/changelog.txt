@@ -1,3 +1,20 @@
+v4.6.34
+- Always-on fix, a4kSubtitles 3.24.2 service.py: TMDbHelper's play opens a
+  dummy item for a moment; the a4k service sees a video with an IMDb id and
+  starts a search, but playback has already stopped, so api.search() returns
+  None and "for result in results" raised TypeError in the service's main
+  loop - main_service.py ended and subtitles were no longer fetched
+  automatically until Kodi restarted. None is now treated as no results.
+
+v4.6.33
+- Always-on fix for TMDbHelper 6.20.1 + script.module.tmdbhelper.sync.trakt
+  1.2.0: TMDbHelper's nextmeta.py now reads sd.sync_succeeded on the Trakt
+  module's TraktSyncDataGetterAllUnHiddenShowsInProgress, which only has it
+  from Trakt sync 1.2.1 (upstream commit 61876b0, 2026-11-01). Every Trakt
+  "Next episodes" widget load failed with AttributeError. The patch adds the
+  1.2.1 property (parent getter's result + calendar check) to datasync.py;
+  1.2.1 already contains "def sync_succeeded", so the entry skips there.
+
 v4.6.32
 - AIOStreams (plugin.video.aiostreams) support, active only while it is
   installed:

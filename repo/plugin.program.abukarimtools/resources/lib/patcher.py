@@ -3029,6 +3029,59 @@ PATCHES = [
      'requires_addon': 'plugin.video.aiostreams', 'old': '', 'new': '',
      'inject_content': _AIOSTREAMS_PLAYER_JSON,
      'description': 'TMDbHelper players/aiostreams.json - AIOStreams player (installed and enabled)'},
+    # 4.6.33: TMDbHelper 6.20.1 (nextmeta.py get_item_queue) reads
+    # sd.sync_succeeded on the Trakt module's TraktSyncDataGetterAllUnHidden
+    # ShowsInProgress, which only gained it in script.module.tmdbhelper.sync.
+    # trakt 1.2.1 (commit 61876b0, 2026-11-01). With 1.2.0 every "Next
+    # episodes" widget load raised AttributeError (kodi.log 2026-11-01
+    # 11:20 / 11:36). Back-port of the 1.2.1 property; 1.2.1+ already has
+    # "def sync_succeeded", so the entry skips itself there.
+    {'addon_id': 'script.module.tmdbhelper.sync.trakt', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'lib', 'tmdbhelper_sync_trakt', 'sync', 'datasync.py'),
+     'old': ("    def get_keys(self):\n"
+             "        return self.parent_getter.keys\n"
+             "\n"
+             "    @property\n"
+             "    def parent_additional_keys(self):\n"),
+     'new': ("    def get_keys(self):\n"
+             "        return self.parent_getter.keys\n"
+             "\n"
+             "    # -- sync_succeeded back-port from 1.2.1 (by ABUKARIM TOOLS) --\n"
+             "    @cached_property\n"
+             "    def sync_succeeded(self):\n"
+             "        return self.get_sync_succeeded()\n"
+             "\n"
+             "    def get_sync_succeeded(self):\n"
+             "        if not getattr(self.parent_getter, 'sync_succeeded', True):\n"
+             "            return False\n"
+             "        return self.get_calendar_sync_succeeded()\n"
+             "\n"
+             "    def get_calendar_sync_succeeded(self):\n"
+             "        from tmdbhelper.lib.addon.plugin import get_setting\n"
+             "        if not get_setting('nextepisodes_usecalendar'):\n"
+             "            return True\n"
+             "        if not any(item['aired_episodes'] <= item['watched_episodes'] for item in self.parent_getter.items):\n"
+             "            return True\n"
+             "        return self.calendar_data is not None\n"
+             "\n"
+             "    @property\n"
+             "    def parent_additional_keys(self):\n"),
+     'already_patched_check': 'def sync_succeeded',
+     'description': 'TMDbHelper Trakt sync datasync.py - sync_succeeded back-port (6.20.1 Next Episodes AttributeError)'},
+    # 4.6.34: a4kSubtitles auto-download dies for the rest of the session.
+    # TMDbHelper's play opens a dummy item for a split second; the service
+    # sees a playing video with an IMDb id and searches, but by then nothing
+    # plays: video.get_meta -> getPlayingFile() RuntimeError, "missing imdb
+    # id", api.search() returns None and "for result in results" raises
+    # TypeError in the service's main loop, which ends main_service.py
+    # (kodi.log 2026-11-01 11:18:08, 11:54:34). None = no results.
+    {'addon_id': 'service.subtitles.a4ksubtitles', 'not_found_ok': True,
+     'rel_path': os.path.join('a4kSubtitles', 'service.py'),
+     'old': "        results = api.search(params)\n        for result in results:\n",
+     'new': "        results = api.search(params) or []  # ABK: search without a playing file returns None\n"
+            "        for result in results:\n",
+     'already_patched_check': '# ABK: search without a playing file returns None',
+     'description': 'a4kSubtitles service.py - empty search no longer kills the auto-download service'},
 ]
 
 

@@ -621,7 +621,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.6.32" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.6.34" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -652,7 +652,7 @@ updated YouTube addon URL
     <description lang="en_GB">ABUKARIM TOOLS is an all-in-one utility for managing your Kodi setup. It bundles a Skin Installer and Skin Switcher, full backup and restore of your userdata, and quick access to the ABUKARIM Wizard and its maintenance tools (Total Clean and old thumbnail cleanup). A built-in patcher keeps popular add-ons (Seren, Prism, TinyPPI, Arctic Fuse 3, TMDbHelper, RedLight and more) working correctly on CoreELEC and Kodi, and re-applies its fixes automatically after those add-ons update. Also includes handy maintenance tools such as a speed test, a CPU benchmark and an add-on database rebuild.</description>
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، ووصولاً سريعاً إلى معالج أبوكريم وأدوات الصيانة فيه (التنظيف الشامل وحذف الصور المصغّرة القديمة). كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة واختبار أداء المعالج وإعادة بناء قاعدة بيانات الإضافات.</description>
-    <news>v4.6.32 - AIOStreams: while plugin.video.aiostreams is installed its TMDbHelper player is installed and switched on, and Search All lists its streams next to the other add-ons (played through AIOStreams itself). v4.6.31 - Maintenance: new "Fix Add-on Settings Version" - shown only when this Kodi cannot read add-on settings saved by a newer Kodi (settings version 5 on a version-4 Kodi); converts them back and restarts. Not a patch, never runs by itself. v4.6.30 - New patch toggle "AB Scrapers: Force as External Scraper": Red Light, Fen Light and Umbrella always use AB Scrapers (external scrapers switched on), whatever module is picked in their settings; turning the toggle off restores their own choice. v4.6.29 - AB Scrapers patch: also adds the AB Scrapers (AIOStreams) player to TMDbHelper when AB Scrapers is installed. v4.6.28 - Subtitle Look panel: the ready looks row is taken out. v4.6.27 - AF3 Subtitle Look button: the panel now has everything in Dex Hub's subtitle look - show/hide, delay, auto sync height, font, size, style, colour with shades, opacity, border, background, shadow, blur, line spacing and position, all previewed live. v4.6.24 - AF3 Plot on the Right: the quality badges (SD / SDR / AAC / 1.0) move to the bottom of the info column - title, genre, date line, ratings, badges. Older versions: see changelog.txt.</news>
+    <news>v4.6.34 - a4kSubtitles: a subtitle search that finds nothing (TMDbHelper's split-second dummy playback) no longer stops automatic subtitle downloads until Kodi restarts. v4.6.33 - TMDbHelper 6.20.1: the Trakt "Next episodes" widget error (sync_succeeded) is fixed by back-porting Trakt sync 1.2.1's check into 1.2.0; skipped once 1.2.1 is installed. v4.6.32 - AIOStreams: while plugin.video.aiostreams is installed its TMDbHelper player is installed and switched on, and Search All lists its streams next to the other add-ons (played through AIOStreams itself). v4.6.31 - Maintenance: new "Fix Add-on Settings Version" - shown only when this Kodi cannot read add-on settings saved by a newer Kodi (settings version 5 on a version-4 Kodi); converts them back and restarts. Not a patch, never runs by itself. v4.6.30 - New patch toggle "AB Scrapers: Force as External Scraper": Red Light, Fen Light and Umbrella always use AB Scrapers (external scrapers switched on), whatever module is picked in their settings; turning the toggle off restores their own choice. v4.6.29 - AB Scrapers patch: also adds the AB Scrapers (AIOStreams) player to TMDbHelper when AB Scrapers is installed. v4.6.28 - Subtitle Look panel: the ready looks row is taken out. v4.6.27 - AF3 Subtitle Look button: the panel now has everything in Dex Hub's subtitle look - show/hide, delay, auto sync height, font, size, style, colour with shades, opacity, border, background, shadow, blur, line spacing and position, all previewed live. v4.6.24 - AF3 Plot on the Right: the quality badges (SD / SDR / AAC / 1.0) move to the bottom of the info column - title, genre, date line, ratings, badges. Older versions: see changelog.txt.</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>
@@ -4564,6 +4564,24 @@ Changes made:
         <platform>all</platform>
 		<assets>
             <icon>icon.png</icon>
+        </assets>
+    </extension>
+</addon><addon id="script.module.tmdbhelper.sync.trakt" version="1.2.1" name="TMDbHelper Sync - Trakt" provider-name="jurialmunkey">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1" />
+        <import addon="script.module.jurialmunkey" version="0.2.35" />
+        <import addon="plugin.video.themoviedb.helper" version="6.19.3" />
+    </requires>
+    <extension point="xbmc.python.script" library="resources/script.py" />
+    <extension point="xbmc.python.module" library="resources/lib" />
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Trakt sync provider for TMDbHelper</summary>
+        <description lang="en_GB">Trakt directories, discovery, ratings, favorites, monitored lists, data sync and scrobbling for TMDbHelper.</description>
+        <platform>all</platform>
+        <license>GPL-3.0-or-later</license>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
         </assets>
     </extension>
 </addon><addon id="script.module.tulip" name="Tulip Library collection" version="4.1.5" provider-name="Twilight0">
