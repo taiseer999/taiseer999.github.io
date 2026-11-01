@@ -1589,8 +1589,8 @@ msgid "Play with %s"
 msgstr "تشغيل عبر %s"
 
 msgctxt "#30827"
-msgid "None of the supported add-ons (Red Light, Fen Light, Umbrella, POV) is installed."
-msgstr "لا توجد أي إضافة مدعومة مثبّتة (Red Light أو Fen Light أو Umbrella أو POV)."
+msgid "None of the supported add-ons (Red Light, Fen Light, Umbrella, POV, AIOStreams) is installed."
+msgstr "لا توجد أي إضافة مدعومة مثبّتة (Red Light أو Fen Light أو Umbrella أو POV أو AIOStreams)."
 
 msgctxt "#30828"
 msgid "Finding streams in every add-on"
@@ -1647,6 +1647,10 @@ msgstr "توسيع"
 msgctxt "#30842"
 msgid "Collapse"
 msgstr "تصغير"
+
+msgctxt "#30843"
+msgid "Not set up (no manifest URL)"
+msgstr "غير مُعدّة (لا يوجد رابط manifest)"
 
 msgctxt "#30850"
 msgid "AF3: Lucent Look"
@@ -1823,4 +1827,3 @@ msgstr "حُوِّل %d من ملفات إعدادات الإضافات. سيُ�
 msgctxt "#30904"
 msgid "Converted %d, failed %d: %s[CR]Kodi will restart now."
 msgstr "حُوِّل %d، وتعذّر تحويل %d: %s[CR]سيُعاد تشغيل Kodi الآن."
-

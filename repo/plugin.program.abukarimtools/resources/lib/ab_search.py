@@ -21,6 +21,14 @@ scrapers and debrid accounts, and plays with its own resolver:
 Started from TMDbHelper's player list ("AB Search All", players JSON injected
 by the patcher) as plugin://plugin.program.abukarimtools/?mode=ab_search&...
 
+4.6.32 - AIOStreams (plugin.video.aiostreams) joins the list while it is
+installed and has a manifest URL. It has no device-select modes: AB Tools
+asks the AIOStreams instance itself (the add-on's own manifest URL, timeout
+and SSL settings, an "AIO..." User-Agent so every stream carries streamData)
+and turns the streams into rows. Playing one writes the add-on's
+last_streams.json and runs its own play_index, so the add-on resolves it
+(proxy headers, subtitles, P2P handler) exactly like its own stream list.
+
 4.6.13 - threads: every window call happens on the dialog's own thread (the
 one in doModal). The four provider threads and the TMDb meta thread only
 change data and post JSONRPC.NotifyAll; a Monitor created on the dialog
@@ -53,7 +61,8 @@ _DATA = xbmcvfs.translatePath('special://profile/addon_data/')
 ADDONS = (('rl', 'plugin.video.redlight', 'Red Light', 'RL'),
           ('fl', 'plugin.video.fenlight', 'Fen Light', 'FL'),
           ('umb', 'plugin.video.umbrella', 'Umbrella', 'UM'),
-          ('pov', 'plugin.video.pov', 'POV', 'POV'))
+          ('pov', 'plugin.video.pov', 'POV', 'POV'),
+          ('aio', 'plugin.video.aiostreams', 'AIOStreams', 'AIO'))
 _MODULES = os.path.join('resources', 'lib', 'modules')
 # file that carries the device-select modes, and the text that proves it
 _SUPPORT = {'fl': ('router.py', 'app_list_sources'), 'rl': ('router.py', 'abk_device_select'),
@@ -107,6 +116,8 @@ def _addon_dir(aid):
 
 
 def _supported(key, aid):
+    if key == 'aio':                        # no bridge: needs only its manifest URL
+        return bool(_aio_manifest())
     try:
         rel, mark = _SUPPORT[key]
         with open(os.path.join(_addon_dir(aid), _MODULES, rel), 'r', encoding='utf-8', errors='replace') as f:
@@ -189,6 +200,8 @@ class Session(object):
         return all(s['state'] != 'searching' for s in self.state.values())
 
     def _run(self, key, aid, name):
+        if key == 'aio':
+            return self._run_aio(name)
         rid = self.request_id(key)
         if key == 'umb':
             self.umb_media = _english_names(self.media)
@@ -228,6 +241,186 @@ class Session(object):
                 listener()
             except Exception as e:
                 _log('update failed: %s' % e, xbmc.LOGWARNING)
+
+
+    def _run_aio(self, name):
+        t0 = time.time()
+        self.aio_media = _english_names(self.media)     # IMDb id (show id for episodes)
+        results, raw, found = [], [], False
+        try:
+            raw, vid, type_ = _aio_streams(self.aio_media)
+            results = [_aio_item(st) for st in raw]
+            self.aio_play = {'type': type_, 'id': vid, 'streams': raw,
+                             'title': self.aio_media.get('tvshowtitle') or self.aio_media.get('title') or ''}
+            found = True
+            _log('%s: %d sources in %.1fs' % (name, len(results), time.time() - t0))
+        except Exception as e:
+            _log('%s: failed after %.1fs - %s' % (name, time.time() - t0, e), xbmc.LOGWARNING)
+        with self.lock:
+            self.state['aio'] = {'state': 'done' if found else 'failed', 'results': results,
+                                 'took': time.time() - t0}
+        listener = self.listener
+        if listener and not self.closed:
+            try:
+                listener()
+            except Exception as e:
+                _log('update failed: %s' % e, xbmc.LOGWARNING)
+
+
+# ───────────────────────── AIOStreams ─────────────────────────
+# Same requests as plugin.video.aiostreams resources/lib/api.py (Stremio
+# protocol at <host>/stremio/<uuid>/<password>/...), read with the add-on's
+# own settings. Streams it cannot play (errors, statistics, usenet/archive,
+# P2P without a handler) are left out exactly as the add-on does.
+
+_AIO_ID = 'plugin.video.aiostreams'
+_AIO_SVC = {'realdebrid': 'Real-Debrid', 'alldebrid': 'AllDebrid', 'premiumize': 'Premiumize',
+            'torbox': 'TorBox', 'offcloud': 'Offcloud', 'easynews': 'Easynews', 'easydebrid': 'EasyDebrid',
+            'debridlink': 'Debrid-Link', 'debrider': 'Debrider', 'putio': 'Put.io', 'pikpak': 'PikPak',
+            'seedr': 'Seedr'}
+_AIO_RES = re.compile(r'\b(2160p|4k|uhd|1440p|1080p|720p|576p|480p|360p)\b', re.I)
+
+
+def _aio_addon():
+    import xbmcaddon
+    return xbmcaddon.Addon(_AIO_ID)
+
+
+def _aio_manifest():
+    try:
+        return (_aio_addon().getSetting('manifest_url') or '').strip()
+    except Exception:
+        return ''
+
+
+def _aio_int(addon, key, default):
+    try:
+        return int(addon.getSetting(key) or default)
+    except (TypeError, ValueError):
+        return default
+
+
+def _aio_base(url):
+    """(base, query) like the add-on's normalise_manifest_url."""
+    from urllib.parse import urlsplit, urlunsplit
+    if url.startswith('stremio://'):
+        url = 'https://' + url[len('stremio://'):]
+    if not url.startswith(('http://', 'https://')):
+        url = 'https://' + url
+    parts = urlsplit(url)
+    path = parts.path.rstrip('/')
+    for suffix in ('/manifest.json', '/configure'):
+        if path.endswith(suffix):
+            path = path[:-len(suffix)]
+            break
+    if '/stremio/' not in path + '/':
+        raise ValueError('not an AIOStreams manifest URL')
+    return urlunsplit((parts.scheme, parts.netloc, path, '', '')), parts.query
+
+
+def _aio_streams(media):
+    """(playable raw streams, video id, stremio type) for the media."""
+    import ssl
+    import urllib.request
+    from urllib.parse import quote
+    imdb = media.get('imdb') or ''
+    if not str(imdb).startswith('tt'):
+        raise ValueError('no IMDb id')
+    if media['media_type'] == 'episode':
+        type_, vid = 'series', '%s:%s:%s' % (imdb, int(media['season']), int(media['episode']))
+    else:
+        type_, vid = 'movie', imdb
+    addon = _aio_addon()
+    base, query = _aio_base(_aio_manifest())
+    url = '%s/stream/%s/%s.json' % (base, type_, quote(vid, safe=''))
+    if query:
+        url += '?' + query
+    ctx = ssl.create_default_context()
+    if (addon.getSetting('insecure_ssl') or '').lower() == 'true':
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+    version = addon.getAddonInfo('version') or '1.0.0'
+    req = urllib.request.Request(url, headers={'User-Agent': 'AIOStreams-Kodi/%s (Kodi)' % version,
+                                               'Accept': 'application/json'})
+    timeout = max(10, min(_aio_int(addon, 'timeout', 60), _SCRAPE_TIMEOUT))
+    with urllib.request.urlopen(req, timeout=timeout, context=ctx) as r:
+        data = json.loads(r.read().decode('utf-8'))
+    streams = (data.get('streams') or []) if isinstance(data, dict) else []
+    p2p = _aio_int(addon, 'p2p_handler', 0) > 0
+    out = []
+    for st in streams:
+        if not isinstance(st, dict):
+            continue
+        sd = st.get('streamData') or {}
+        if sd.get('type') in ('error', 'statistic'):
+            continue
+        if st.get('url') or (p2p and st.get('infoHash')):
+            out.append(st)
+    return out, vid, type_
+
+
+def _aio_gb(st):
+    sd = st.get('streamData') or {}
+    try:
+        return float(sd.get('size') or (st.get('behaviorHints') or {}).get('videoSize') or 0) / 1073741824.0
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _aio_item(st):
+    """An AIOStreams stream as a Fen Light style result row."""
+    sd = st.get('streamData') or {}
+    pf = sd.get('parsedFile') or {}
+    hints = st.get('behaviorHints') or {}
+    name = sd.get('filename') or hints.get('filename') or ''
+    if not name:
+        lines = [ln.strip() for ln in str(st.get('description') or st.get('title') or '').splitlines() if ln.strip()]
+        name = lines[0] if lines else _clean(st.get('name')).replace('\n', ' ')
+    res = str(pf.get('resolution') or '').strip()
+    if not res:
+        m = _AIO_RES.search('%s %s' % (name, st.get('name') or ''))
+        res = m.group(1) if m else 'SD'
+    res = res.upper()
+    if res in ('4K', 'UHD', '2160P'):
+        res = '4K'
+    elif res in ('576P', '480P', '360P'):
+        res = 'SD'
+    gb = _aio_gb(st)
+    svc = sd.get('service') or {}
+    sid = str(svc.get('id') or '')
+    info = []
+    for part in (list(pf.get('visualTags') or []) + [pf.get('encode')] + list(pf.get('audioTags') or [])
+                 + list(pf.get('audioChannels') or []) + str(pf.get('quality') or '').split()):
+        if part and str(part) not in info:
+            info.append(str(part))
+    item = {'name': name, 'display_name': name, 'quality': res, 'size': gb,
+            'size_label': ('%.2f GB' % gb) if gb else '', 'scrape_provider': 'external',
+            'debrid': _AIO_SVC.get(sid, sid.title()) if sid else ('P2P' if st.get('infoHash') else ''),
+            'source': sd.get('addon') or 'AIOStreams', 'extraInfo': ' | '.join(info),
+            'hash': st.get('infoHash') or (sd.get('torrent') or {}).get('infoHash') or ''}
+    if sid and svc.get('cached') is False:
+        item['cache_provider'] = 'Uncached'
+    if pf.get('seasonPack') or (pf.get('seasons') and not pf.get('episodes')):
+        item['package'] = True
+    return item
+
+
+def _aio_play(session, index):
+    """Hand the picked stream to plugin.video.aiostreams (its play_index)."""
+    data = getattr(session, 'aio_play', None)
+    if not data:
+        return
+    path = os.path.join(_DATA, _AIO_ID, 'last_streams.json')
+    try:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, 'w', encoding='utf-8') as f:
+            json.dump(data, f)
+    except Exception as e:
+        _log('AIOStreams: last_streams.json not written: %s' % e, xbmc.LOGWARNING)
+        return
+    url = 'plugin://%s/?%s' % (_AIO_ID, urlencode({'action': 'play_index', 'idx': index}))
+    _log('play: %s' % url)
+    xbmc.executebuiltin('RunPlugin(%s)' % url)
 
 
 # ───────────────────────── Umbrella: English names ─────────────────────────
@@ -683,7 +876,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             elif s['state'] == 'done':           # playable rows only (uncached left out)
                 text = T(30820) % sum(1 for r in self.rows if any(k == key for k, _i in r['refs']))
             elif s['state'] == 'unsupported':
-                text = T(30829)
+                text = T(30843) if key == 'aio' else T(30829)
             else:
                 text = T(30821)
             self.setProperty('abs.s%d.key' % n, key)
@@ -1152,6 +1345,8 @@ def run(params):
     if not picked:
         return
     key, index = picked
+    if key == 'aio':
+        return _aio_play(session, index)
     aid = dict((k, a) for k, a, _n, _t, _ok in addons)[key]
     url = session.url(key, aid, 'play', index)
     _log('play: %s' % url)

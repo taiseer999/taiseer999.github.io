@@ -232,6 +232,26 @@ _ABSCRAPERS_PLAYER_JSON = (
     '}\n'
 )
 
+# 4.6.32: plugin.video.aiostreams' own TMDbHelper player (resources/players/
+# aiostreams.json, 1.0.0) - same file name its "Install TMDbHelper players"
+# button writes, plus "disabled": "false" so TMDbHelper lists it even after it
+# was switched off in "Configure players" (activated).
+_AIOSTREAMS_PLAYER_JSON = (
+    '{\n'
+    '    "name": "AIOStreams",\n'
+    '    "plugin": "plugin.video.aiostreams",\n'
+    '    "priority": 200,\n'
+    '    "is_resolvable": "true",\n'
+    '    "disabled": "false",\n'
+    '    "assert": {\n'
+    '        "play_movie": ["imdb"],\n'
+    '        "play_episode": ["imdb", "season", "episode"]\n'
+    '    },\n'
+    '    "play_movie": "plugin://plugin.video.aiostreams/?action=play&type=movie&id={imdb}&title={title_url}",\n'
+    '    "play_episode": "plugin://plugin.video.aiostreams/?action=play&type=series&id={imdb}:{season}:{episode}&title={showname_url}"\n'
+    '}\n'
+)
+
 # ── Fenlight resolve handoff block (3.2.54, v2) ──
 # The "already resolved" set lives in the player module's globals: Kodi's
 # xbmc.Player subclasses do not accept class attributes.
@@ -3000,6 +3020,15 @@ PATCHES = [
      'rel_path': AB_SEARCH_PLAYER, 'inject_file': True, 'old': '', 'new': '',
      'inject_content': _AB_SEARCH_PLAYER_JSON,
      'description': 'TMDbHelper players/abukarim.search_all.json - AB Search All (every add-on in one list)'},
+    # 4.6.32: AIOStreams' TMDbHelper player, installed and enabled while
+    # plugin.video.aiostreams is installed (always on, content-compared, so a
+    # player switched off in TMDbHelper is switched back on). Search All picks
+    # AIOStreams up by itself (ab_search.ADDONS).
+    {'addon_id': 'plugin.video.themoviedb.helper', 'base': 'addon_data', 'not_found_ok': True,
+     'rel_path': os.path.join('players', 'aiostreams.json'), 'inject_file': True,
+     'requires_addon': 'plugin.video.aiostreams', 'old': '', 'new': '',
+     'inject_content': _AIOSTREAMS_PLAYER_JSON,
+     'description': 'TMDbHelper players/aiostreams.json - AIOStreams player (installed and enabled)'},
 ]
 
 
@@ -3538,6 +3567,9 @@ def _apply_patch(patch):
     _need = patch.get('requires_addon')
     if _need and not (_resolve_addon_dir(_need) or os.path.isdir(os.path.join(ADDONS_DIR, _need))):
         return True, '[%s] %s not installed - skipping.' % (patch['addon_id'], _need)
+    if _need and patch.get('base') == 'addon_data' and not (
+            _resolve_addon_dir(patch['addon_id']) or os.path.isdir(os.path.join(ADDONS_DIR, patch['addon_id']))):
+        return True, '[%s] not installed - skipping.' % patch['addon_id']
 
     # Lucent theme entries are whole-feature installs handled by their own module.
     if patch.get('lucent'):
@@ -3965,7 +3997,10 @@ def _select(group=None, addon_ids=None, respect_selection=True):
     selected = _all_patches()
     if addon_ids:
         wanted   = set(addon_ids)
-        selected = [p for p in selected if p['addon_id'] in wanted]
+        # 4.6.32: an entry gated by requires_addon also runs when THAT add-on
+        # moves (AIOStreams installed -> its TMDbHelper player goes in now).
+        selected = [p for p in selected if p['addon_id'] in wanted
+                    or p.get('requires_addon') in wanted]
     # Feature-gated entries (e.g. the AF3 auto-trailers skin patch) apply only
     # while that feature is switched on from its Toggles menu entry.
     selected = [p for p in selected
@@ -4016,8 +4051,9 @@ def target_addon_ids(group=None):
     for patch in _all_patches():
         if patch.get('group') != group:
             continue
-        if patch['addon_id'] not in seen:
-            seen.append(patch['addon_id'])
+        for aid in (patch['addon_id'], patch.get('requires_addon')):
+            if aid and aid not in seen:
+                seen.append(aid)
     return seen
 
 

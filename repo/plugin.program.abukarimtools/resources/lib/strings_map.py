@@ -29,7 +29,7 @@ ID ranges:
   30770-30779  Installation Wizard - setup-in-progress backdrop, final restart
   30780-30799  Maintenance - Clean Unused Items
   30800-30813  Toggles - Glass Theme (internally 'Lucent', per add-on)
-  30814-30842  Search All (one stream list from every add-on)
+  30814-30843  Search All (one stream list from every add-on)
   30850-30859  AF3 Lucent Look (Toggles)
   30860-30874  AF3 Streaming Services (Setup)
   30880-30889  AF3 subtitle list (OSD, Lucent Look)
@@ -585,7 +585,7 @@ STRINGS = {
     30824: ('No streams found', 'لم يُعثر على أي مصدر'),
     30825: ('All', 'الكل'),
     30826: ('Play with %s', 'تشغيل عبر %s'),
-    30827: ('None of the supported add-ons (Red Light, Fen Light, Umbrella, POV) is installed.', 'لا توجد أي إضافة مدعومة مثبّتة (Red Light أو Fen Light أو Umbrella أو POV).'),
+    30827: ('None of the supported add-ons (Red Light, Fen Light, Umbrella, POV, AIOStreams) is installed.', 'لا توجد أي إضافة مدعومة مثبّتة (Red Light أو Fen Light أو Umbrella أو POV أو AIOStreams).'),
     30828: ('Finding streams in every add-on', 'جارٍ البحث عن المصادر في كل الإضافات'),
     30829: ('Not supported by this version', 'هذا الإصدار غير مدعوم'),
     30830: ('Size: under 5 GB', 'الحجم: أقل من 5 غيغابايت'),
@@ -600,6 +600,7 @@ STRINGS = {
     30840: ('Bitrate: under 10 Mbps (estimated)', 'معدل البت: أقل من 10 ميغابت/ث (تقديري)'),
     30841: ('Expand', 'توسيع'),
     30842: ('Collapse', 'تصغير'),
+    30843: ('Not set up (no manifest URL)', 'غير مُعدّة (لا يوجد رابط manifest)'),
     # ---- 4.6.8: AF3 Lucent Look (30850-30859) ----
     30850: ('AF3: Lucent Look', 'AF3: مظهر Lucent'),
     30851: ('Off (Arctic Fuse 3 as it is)', 'إيقاف (واجهة Arctic Fuse 3 كما هي)'),

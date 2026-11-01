@@ -1,3 +1,25 @@
+v4.6.32
+- AIOStreams (plugin.video.aiostreams) support, active only while it is
+  installed:
+  - TMDbHelper player: always-on patch entry writes the add-on's own
+    players/aiostreams.json (same file its "Install TMDbHelper players"
+    button writes) with "disabled": "false", so it is installed and enabled;
+    content-compared, so a player switched off in TMDbHelper is switched
+    back on. Assert on IMDb id / season / episode.
+  - Search All: AIOStreams is the fifth add-on (key aio, tag AIO, amber).
+    No bridge patch - AB Tools asks the AIOStreams instance directly with
+    the add-on's manifest URL, timeout and SSL setting (AIO User-Agent, so
+    every stream carries streamData: resolution, size, service, cache,
+    tags). Error/statistic entries, uncached debrid and P2P without a
+    handler are left out, as in the add-on. Rows merge with the other
+    add-ons by info hash. Playing writes the add-on's last_streams.json and
+    runs its play_index, so AIOStreams resolves (proxy headers, subtitles).
+    Without a manifest URL the status line reads "Not set up".
+  - ab_search.xml: fifth status line and the amber AIO dot / chip / tag.
+- Patcher: entries with requires_addon are now also re-run when THAT add-on
+  is installed or updated (watchdog watches it), and an addon_data entry is
+  skipped while its own add-on (TMDbHelper) is missing.
+
 v4.6.31
 - Maintenance: new "Fix Add-on Settings Version" (settings_downgrade.py).
   A settings.xml in addon_data saved by a newer Kodi (<settings version="5">)

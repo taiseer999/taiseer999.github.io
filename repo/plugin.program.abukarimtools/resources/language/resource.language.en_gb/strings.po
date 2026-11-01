@@ -1589,7 +1589,7 @@ msgid "Play with %s"
 msgstr ""
 
 msgctxt "#30827"
-msgid "None of the supported add-ons (Red Light, Fen Light, Umbrella, POV) is installed."
+msgid "None of the supported add-ons (Red Light, Fen Light, Umbrella, POV, AIOStreams) is installed."
 msgstr ""
 
 msgctxt "#30828"
@@ -1646,6 +1646,10 @@ msgstr ""
 
 msgctxt "#30842"
 msgid "Collapse"
+msgstr ""
+
+msgctxt "#30843"
+msgid "Not set up (no manifest URL)"
 msgstr ""
 
 msgctxt "#30850"
@@ -1823,4 +1827,3 @@ msgstr ""
 msgctxt "#30904"
 msgid "Converted %d, failed %d: %s[CR]Kodi will restart now."
 msgstr ""
-
