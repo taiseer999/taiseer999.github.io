@@ -564,6 +564,10 @@ msgctxt "#30419"
 msgid "The add-ons were installed and linked to their repositories.\\nA restart is recommended so their updates become active.\\nتم تثبيت الإضافات وربطها بمستودعاتها.\\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة."
 msgstr "تم تثبيت الإضافات وربطها بمستودعاتها.\\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة."
 
+msgctxt "#30420"
+msgid "needs an AIOStreams server"
+msgstr "يتطلب خادم AIOStreams"
+
 msgctxt "#30430"
 msgid "AF3 Auto Trailers"
 msgstr "التريلرات التلقائية (AF3)"
@@ -1827,3 +1831,180 @@ msgstr "حُوِّل %d من ملفات إعدادات الإضافات. سيُ�
 msgctxt "#30904"
 msgid "Converted %d, failed %d: %s[CR]Kodi will restart now."
 msgstr "حُوِّل %d، وتعذّر تحويل %d: %s[CR]سيُعاد تشغيل Kodi الآن."
+
+msgctxt "#30911"
+msgid "Setup checks"
+msgstr "فحوص ما قبل الإعداد"
+
+msgctxt "#30912"
+msgid "The clock is wrong (%s). Secure downloads fail until the date and time are synced."
+msgstr "ساعة الجهاز غير صحيحة (%s). ستفشل التنزيلات الآمنة حتى يُضبط التاريخ والوقت."
+
+msgctxt "#30913"
+msgid "No connection to the ABUKARIM repository (%s)."
+msgstr "لا يوجد اتصال بمستودع أبوكريم (%s)."
+
+msgctxt "#30914"
+msgid "Low free space: %s free, %s needed."
+msgstr "المساحة الحرة منخفضة: المتاح %s، والمطلوب %s."
+
+msgctxt "#30915"
+msgid "Kodi %s is older than this build expects."
+msgstr "إصدار Kodi %s أقدم مما يتطلبه هذا البناء."
+
+msgctxt "#30916"
+msgid "Check again"
+msgstr "إعادة الفحص"
+
+msgctxt "#30917"
+msgid "Continue anyway"
+msgstr "المتابعة على أي حال"
+
+msgctxt "#30918"
+msgid "Cancel setup"
+msgstr "إلغاء الإعداد"
+
+msgctxt "#30919"
+msgid "Waiting for the clock to sync..."
+msgstr "جارٍ انتظار مزامنة الساعة…"
+
+msgctxt "#30920"
+msgid "Restore %s"
+msgstr "استعادة %s"
+
+msgctxt "#30921"
+msgid "Choose another backup file..."
+msgstr "اختيار ملف نسخة احتياطية آخر…"
+
+msgctxt "#30922"
+msgid "No restore"
+msgstr "دون استعادة"
+
+msgctxt "#30923"
+msgid "Restore a backup?"
+msgstr "هل تريد استعادة نسخة احتياطية؟"
+
+msgctxt "#30924"
+msgid "Ready to set up"
+msgstr "جاهز للإعداد"
+
+msgctxt "#30925"
+msgid "Restore: %s"
+msgstr "الاستعادة: %s"
+
+msgctxt "#30926"
+msgid "Add-ons: %s"
+msgstr "الإضافات: %s"
+
+msgctxt "#30927"
+msgid "Widgets layout: %s"
+msgstr "ترتيب الودجات: %s"
+
+msgctxt "#30928"
+msgid "My lists: %s"
+msgstr "قوائمي: %s"
+
+msgctxt "#30929"
+msgid "Start setup"
+msgstr "بدء الإعداد"
+
+msgctxt "#30930"
+msgid "Change answers"
+msgstr "تعديل الاختيارات"
+
+msgctxt "#30931"
+msgid "none"
+msgstr "لا شيء"
+
+msgctxt "#30932"
+msgid "done from the phone"
+msgstr "أُنجز من الهاتف"
+
+msgctxt "#30933"
+msgid "Setup stopped at: %s"
+msgstr "توقّف الإعداد عند: %s"
+
+msgctxt "#30934"
+msgid "Resume setup"
+msgstr "استئناف الإعداد"
+
+msgctxt "#30935"
+msgid "Start again from the beginning"
+msgstr "البدء من جديد"
+
+msgctxt "#30936"
+msgid "Retry the failed steps (%s)"
+msgstr "إعادة محاولة الخطوات التي فشلت (%s)"
+
+msgctxt "#30937"
+msgid "Installation Wizard"
+msgstr "معالج التثبيت"
+
+msgctxt "#30938"
+msgid "Setup report"
+msgstr "تقرير الإعداد"
+
+msgctxt "#30939"
+msgid "Setup finished: %d done, %d failed, %d skipped."
+msgstr "اكتمل الإعداد: نجحت %d، وفشلت %d، وتُخطّيت %d."
+
+msgctxt "#30940"
+msgid "Failed steps can be retried from AB Tools > Installation Wizard."
+msgstr "يمكن إعادة محاولة الخطوات التي فشلت من أدوات أبوكريم > معالج التثبيت."
+
+msgctxt "#30942"
+msgid "Patches: your saved choices (change them later in Apply Patches)"
+msgstr "الترقيعات: اختياراتك المحفوظة (يمكن تغييرها لاحقًا من تطبيق الترقيعات)"
+
+msgctxt "#30945"
+msgid "Binary add-ons"
+msgstr "الإضافات الثنائية"
+
+msgctxt "#30946"
+msgid "TinyPPI"
+msgstr "TinyPPI"
+
+msgctxt "#30947"
+msgid "Base add-ons"
+msgstr "الإضافات الأساسية"
+
+msgctxt "#30948"
+msgid "Device tuning"
+msgstr "ضبط الجهاز"
+
+msgctxt "#30949"
+msgid "Restore backup"
+msgstr "استعادة النسخة الاحتياطية"
+
+msgctxt "#30950"
+msgid "Install add-ons"
+msgstr "تثبيت الإضافات"
+
+msgctxt "#30951"
+msgid "Widgets layout"
+msgstr "ترتيب الودجات"
+
+msgctxt "#30952"
+msgid "My lists"
+msgstr "قوائمي"
+
+msgctxt "#30953"
+msgid "Patches"
+msgstr "الترقيعات"
+
+msgctxt "#30954"
+msgid "Remote access password"
+msgstr "كلمة مرور الوصول عن بُعد"
+
+msgctxt "#30955"
+msgid "My lists check"
+msgstr "التحقق من قوائمي"
+
+msgctxt "#30956"
+msgid "Arabic interface"
+msgstr "الواجهة العربية"
+
+msgctxt "#30958"
+msgid "Resuming setup..."
+msgstr "جارٍ استئناف الإعداد…"
+

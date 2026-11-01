@@ -43,6 +43,10 @@ DEFAULTS = [
      'addons': []},
 ]
 
+# 4.6.35: listed in the portal but never pre-ticked by "*" (Full): it does
+# nothing until the user's own AIOStreams server is set up.
+NOT_IN_FULL = {'plugin.video.aiostreams'}
+
 STATE = os.path.join(xbmcvfs.translatePath(
     'special://profile/addon_data/plugin.program.abukarimtools/'), 'preset.txt')
 
@@ -104,5 +108,5 @@ def addon_selection(preset):
     want = preset.get('addons') or []
     if '*' in want:
         from resources.lib import addon_portal
-        return {c[0] for c in addon_portal._catalog()}
+        return {c[0] for c in addon_portal._catalog()} - NOT_IN_FULL
     return set(want)

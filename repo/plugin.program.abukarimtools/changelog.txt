@@ -1,3 +1,39 @@
+v4.7.0
+- Installation Wizard rework (new resources/lib/setup_flow.py):
+  - Checks before anything changes: the clock (waits up to 90 s for time
+    sync - a box at its factory date fails every HTTPS download with a
+    certificate error), internet to the ABUKARIM repo, free space (400 MB
+    minimum, warning under 1 GB), Kodi version. Silent when all is well;
+    otherwise Check again / Continue anyway / Cancel setup.
+  - Ask first, apply after: Skin Installer and the phone offer as before,
+    then ALL questions with no skin reload in between - restore (the newest
+    AB Tools backup found on the box or a USB stick is offered first),
+    preset + Add-on Portal ticks, Widgets Layout, My Lists - and a summary
+    page: Start setup / Change answers. Then every step runs with no more
+    questions (My Lists Custom/Anime keeps its Trakt pickers, which need
+    TMDb Helper installed first). Patch toggles are not asked: the saved
+    choice applies silently, as in the phone setup.
+  - Resumable: answers and each step's status live in
+    addon_data/.../setup_state.json (written atomically). A crash or power
+    cut continues at the unfinished step on the next boot, without asking
+    anything again (within 24 h, at most 3 automatic resumes). A step
+    interrupted twice is marked failed and skipped, so a step that crashes
+    Kodi cannot loop the box. Menu: Resume / Retry failed steps / Start
+    again; a retry of "Install add-ons" installs only the ones that failed.
+  - Done marker and the final restart only when every step has finished;
+    a cancelled setup no longer marks itself complete.
+  - setup_report.json (per-step status, time, error) and a report shown
+    once after the final reboot.
+  - Strings 30911-30958 (English + Arabic).
+
+v4.6.35
+- Add-on Portal: AIOStreams (plugin.video.aiostreams, repository.taiseer)
+  is now in the built-in catalogue, so it shows in the Installation
+  Wizard's portal step, AB Tools > Add-on Portal and the phone setup page.
+  Note under it: "needs an AIOStreams server" (string 30420). The Full
+  preset ("*") leaves it unticked (presets.NOT_IN_FULL) - it does nothing
+  until a manifest URL is set; it can be ticked by hand.
+
 v4.6.34
 - Always-on fix, a4kSubtitles 3.24.2 service.py: TMDbHelper's play opens a
   dummy item for a moment; the a4k service sees a video with an IMDb id and

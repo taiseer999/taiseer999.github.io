@@ -39,6 +39,8 @@ on the first Kodi start after a fresh build install. The service then:
 """
 
 import os
+import sys
+import threading
 import time
 import traceback
 
@@ -522,14 +524,18 @@ def run_first_run_sequence(monitor):
     except OSError:
         pass
 
+    completed = False
     try:
-        _run_steps(monitor)
+        completed = _run_steps(monitor)
     finally:
-        _mark_done()
+        if completed:
+            _mark_done()
         try:
             os.remove(LOCK_FILE)
         except OSError:
             pass
+    if not completed:
+        return
 
     # Reboot prompt LAST — only after the done marker is safely on disk, so a
     # user-approved reboot can never cut the completion record short and
@@ -537,7 +543,7 @@ def run_first_run_sequence(monitor):
     _finish_and_restart(monitor)
 
 
-def run_now(monitor=None, remove_flag=True, force=False):
+def run_now(monitor=None, remove_flag=True, force=False, mode=None):
     """Run the first-run steps immediately, skipping the boot-time wait.
 
     Guards against the loop where the skin's startup re-launches first-run on
@@ -584,9 +590,10 @@ def run_now(monitor=None, remove_flag=True, force=False):
         except OSError:
             pass
 
-    _log('Manual run requested.')
+    _log('Manual run requested (%s).' % (mode or 'menu'))
+    completed = False
     try:
-        _run_steps(monitor)
+        completed = _run_steps(monitor, mode)
     finally:
         # A restore during _run_steps (Step 2) can re-create first_run.flag from
         # the backup; drop it again so no stale flag survives this completed run.
@@ -595,7 +602,8 @@ def run_now(monitor=None, remove_flag=True, force=False):
         except OSError:
             pass
         # Mark complete (with the shipped build id) and release the lock.
-        _mark_done()
+        if completed:
+            _mark_done()
         try:
             os.remove(LOCK_FILE)
         except OSError:
@@ -603,6 +611,9 @@ def run_now(monitor=None, remove_flag=True, force=False):
 
     # Same ordering rule as the automatic path: done marker first, reboot
     # prompt second.
+    if not completed:
+        _log('Setup not completed - no restart (setup_state.json resumes it).')
+        return
     _finish_and_restart(monitor)
 
 
@@ -616,19 +627,66 @@ def _overlay(fn, *args):
              % (fn, traceback.format_exc()), xbmc.LOGWARNING)
 
 
-def _run_steps(monitor):
+def _run_steps(monitor, mode=None):
     """3.4.22: the blurred "setup in progress" backdrop. It is started after
     the Skin Installer (3.4.23) and hidden around every step that reloads the
     skin (see setup_overlay). Removed here on a crash; on success it stays
-    until the final restart."""
+    until the final restart.
+
+    4.7.0: returns True only when every step has finished (ok, skipped or
+    failed). False = cancelled at the checks / entry choice, or Kodi stopped
+    mid-way: no done marker, no restart - setup_state.json resumes it."""
     try:
-        _run_steps_inner(monitor)
+        completed = bool(_run_steps_inner(monitor, mode))
     except BaseException:
         _overlay('stop')
         raise
+    if not completed:
+        _overlay('stop')
+    return completed
 
 
-def _run_steps_inner(monitor):
+def _run_steps_inner(monitor, mode=None):
+    """4.7.0 Installation Wizard (resources/lib/setup_flow.py):
+
+      checks -> Skin Installer -> phone offer -> ALL questions + summary
+             -> apply every step with no questions (resumable)
+
+    mode: None = ask (menu: resume / retry failed / start again when a
+    setup_state.json says so), 'resume' = boot auto-resume, never asks."""
+    from resources.lib import setup_flow
+    choice = mode or setup_flow.entry_choice()
+    if choice is None:
+        _log('Setup cancelled at the entry choice.')
+        return False
+
+    if choice in (setup_flow.RESUME, setup_flow.RETRY):
+        st = setup_flow.load()
+        if not st and mode:
+            _log('Resume requested but there is no saved setup - nothing to do.')
+            return False
+        if not st:
+            choice = setup_flow.FRESH
+        else:
+            if choice == setup_flow.RETRY:
+                st = setup_flow.prepare_retry(st)
+                _log('Retrying failed steps: %s' % ', '.join(
+                    k for k in setup_flow.STEP_KEYS
+                    if st['steps'][k]['status'] == setup_flow.PENDING))
+            elif not setup_flow.unfinished(st) or st.get('phase') != 'apply':
+                _log('Resume requested but nothing is left to run.')
+                return False
+            else:
+                st['resumes'] = st.get('resumes', 0) + 1
+                _log('Resuming setup at %s (resume %d).'
+                     % (setup_flow.unfinished(st), st['resumes']))
+                setup_flow.save(st)
+            _wait_no_modal(monitor)
+            _overlay('step', 30958)
+            _overlay('start')
+            st = setup_flow.apply_all(sys.modules[__name__], monitor, st)
+            return not setup_flow.unfinished(st)
+
     _log('Starting first-run sequence.')
 
     # Make Kodi's core dialogs readable before we show any: force the UI
@@ -641,23 +699,25 @@ def _run_steps_inner(monitor):
     except Exception:
         _log('UI language switch crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
-
-    # (Welcome splash removed in 3.1.0.20.) The language switch above reloads
-    # the skin; let that finish before the first dialog, otherwise the reload
-    # tears down whatever we open.
     _wait_skin_settle(monitor)
     _wait_no_modal(monitor)
 
-    # 3.2.64: the skin comes FIRST, so every later step (restore, Add-on
-    # Portal, Widgets Layout, Trakt Lists, patches) is shown in the
+    # 4.7.0: checks first - clock (waits for time sync), internet to the
+    # repo, free space, Kodi version. Silent when all is well.
+    _log('Step 0a - checks.')
+    if not setup_flow.preflight(monitor):
+        return False
+
+    # 3.2.64: the skin comes FIRST, so every later step is shown in the
     # Arabic-capable skin, in Arabic. Estuary has no Arabic glyphs.
     # 3.4.23: no backdrop yet - the Skin Installer is full screen and its
     # ReloadSkin must not happen under an add-on window (3.4.22 froze here).
-    _log('Step 0 — Skin Installer (first).')
+    _log('Step 0 - Skin Installer (first).')
     _step_skin_installer()
     _wait_skin_settle(monitor)
     _wait_no_modal(monitor)
-    if xbmc.getSkinDir() != 'skin.estuary':
+    arabic = xbmc.getSkinDir() != 'skin.estuary'
+    if arabic:
         try:
             from resources.lib import set_language
             if set_language.force_arabic():
@@ -669,121 +729,30 @@ def _run_steps_inner(monitor):
     else:
         _log('Skin Installer left Estuary active - setup stays in English.')
 
-    _log('Step 1 — Binary Installer.')
-    _overlay('step', 30775)
-    _overlay('start')                  # waits until the new skin is calm
-    _step_binary_installer(monitor)
-    # The binary installer ends with UpdateLocalAddons; Kodi's add-on rescan
-    # that follows is what dismissed the restore popup instantly (3.1.0.19
-    # log). Give it time to finish before showing anything.
-    _settle(monitor, 3)
-    _wait_no_modal(monitor)
-
-    _log('Step 1a — TinyPPI (CoreELEC 22 only, from repository.jamal2362).')
-    _step_guarded('tinyppi', lambda: __import__(
-        'resources.lib.addon_portal', fromlist=['ensure_tinyppi']).ensure_tinyppi(
-            force=True))
-    _wait_no_modal(monitor)
-
-    _log('Step 1b — Thin-build bootstrap (no-op on a full build).')
-    _step_guarded('bootstrap', lambda: __import__(
-        'resources.lib.bootstrap', fromlist=['run']).run())
-    _wait_no_modal(monitor)
-
-    _log('Step 1c — Device tuning (silent).')
-    _step_guarded('hw_tuning', lambda: __import__(
-        'resources.lib.hw_tuning', fromlist=['auto']).auto())
-
-    _log('Step 1d — Setup from the phone (optional).')
+    # From here until the summary nothing reloads the skin: questions only.
     _overlay('step', 30730)
-    _overlay('ensure')
+    _overlay('start')                  # waits until the new skin is calm
+    _log('Step 1 - Setup from the phone (optional).')
     phone = _step_phone(monitor)
     if phone:
         _log('Done from the phone: %s' % ', '.join(sorted(phone)))
-
-    if 'restore' in phone:
-        _log('Step 2 — Restore: done from the phone.')
-    else:
-        _log('Step 2 — Restore popup.')
-        _overlay('step', 30058)
-        _overlay('ensure')
-        _final_choice(monitor)
-
-    if 'addons' in phone:
-        _log('Step 3 — Add-on Portal: done from the phone.')
-    else:
-        _log('Step 3 — Preset + Add-on Portal.')
-        _overlay('step', 30021)
-        # The portal reconciles menus afterwards (skin rebuild): no backdrop.
-        _overlay('pause', 'Add-on Portal rebuilds the menus')
-        _wait_no_modal(monitor)
-        _step_addon_portal()
-
-    if 'layout' in phone:
-        _log('Step 3b — Widgets Layout: done from the phone.')
-    else:
-        _log('Step 3b — Widgets Layout (Light / Moderate / Full).')
-        _overlay('step', 30630)
-        _overlay('pause', 'Widgets Layout rebuilds the skin')
-        _wait_no_modal(monitor)
-        _step_af3_shortcuts(monitor)
-
-    if 'lists' in phone or 'anime' in phone:
-        _log('Step 3c — My Lists: done from the phone.')
-    else:
-        _log('Step 3c — My Lists (Original / Trakt / Anime).')
-        _overlay('step', 30660)
-        _overlay('pause', 'My Lists rebuilds the skin')
-        _wait_no_modal(monitor)
-        _step_trakt_hubs(monitor)
-
-    _log('Step 4 — Apply Patches.')
-    _overlay('step', 30005)
-    _overlay('pause', 'patches may reload the skin')
-    # 3.2.59: the patcher waits - until no dialog is up and any AF3 menu
-    # rebuild started by Widgets Layout / Trakt Lists has finished (it was
-    # starting 1 s after the Trakt step, log 2026-10-12 06:31:11).
-    _wait_no_modal(monitor)
-    _wait_skin_build(monitor)
-    _settle(monitor, 2)
-    _wait_no_modal(monitor)
-    _step_patcher(monitor)
-
-    _log('Step 4b — Per-box remote access password.')
-    _overlay('step', 30776)
-    _wait_skin_settle(monitor)
     _overlay('ensure')
-    _wait_no_modal(monitor)
-    _step_guarded('webserver', lambda: __import__(
-        'resources.lib.webserver_secure', fromlist=['first_run']).first_run())
 
-    # 3.2.57: a skin profile applied by the Skin Installer can replace the
-    # AF3 hub menus - put the Custom Trakt lists back (no-op otherwise).
-    _step_guarded('trakt_hubs_ensure', lambda: __import__(
-        'resources.lib.trakt_hubs', fromlist=['ensure']).ensure())
+    _log('Step 2 - questions (nothing is applied yet).')
+    answers = setup_flow.ask_all(sys.modules[__name__], monitor, phone)
+    answers['arabic'] = arabic
+    if monitor.abortRequested():
+        return False
 
-    _log('First-run sequence finished.')
-
-    # All steps done — hand the box back to Arabic. Setup ran in English so its
-    # dialogs were readable; day-to-day use is Arabic. (Whether Arabic renders
-    # cleanly afterward depends on the active skin's font — Arctic Fuse 3, just
-    # installed, ships Arabic fonts; Estuary does not.) Done AFTER the last
-    # setup dialog so nothing shown during setup is affected, and BEFORE the
-    # caller's reboot prompt — that prompt uses a hardcoded English Python
-    # string, so it stays readable regardless of UI language.
-    _overlay('pause', 'switch to Arabic reloads the skin')
-    try:
-        from resources.lib import set_language
-        set_language.force_arabic()
-    except Exception:
-        _log('Switch back to Arabic crashed (ignored):\n%s'
-             % traceback.format_exc(), xbmc.LOGERROR)
-
-    # NOTE: the CoreELEC reboot prompt is deliberately NOT here any more.
-    # It is issued by the callers AFTER the done marker has been written —
-    # the Reboot builtin races the finally block, and if the system went
-    # down before DONE_FILE landed, the (now DONE-keyed) trigger would
-    # re-run the whole sequence on the next boot.
+    st = setup_flow.new_state(answers, _read_text(BUILD_ID_FILE))
+    setup_flow.save(st)
+    _log('Step 3 - applying (no questions; resumable).')
+    st = setup_flow.apply_all(sys.modules[__name__], monitor, st)
+    done = not setup_flow.unfinished(st)
+    _log('First-run sequence %s.' % ('finished' if done else 'stopped early'))
+    # NOTE: the restart is issued by the callers AFTER the done marker is
+    # written (the Reboot builtin races the finally block).
+    return done
 
 
 def _is_coreelec():
@@ -1332,6 +1301,24 @@ def main():
             os.remove(FLAG_FILE)
         except OSError:
             pass
+
+    # 4.7.0: an apply phase cut short by a crash / power cut resumes by
+    # itself (answers are already saved, nothing is asked); a finished setup
+    # shows its report once after the final reboot. Fenced.
+    try:
+        from resources.lib import setup_flow
+        if setup_flow.should_auto_resume():
+            _log('Unfinished setup found - resuming it.')
+            if _wait_until_ready(monitor):
+                run_now(monitor, remove_flag=True, force=True,
+                        mode=setup_flow.RESUME)
+        else:
+            threading.Thread(target=setup_flow.show_pending_report,
+                             args=(monitor,), name='abk-setup-report',
+                             daemon=True).start()
+    except Exception:
+        _log('Setup resume / report crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
 
     # AF3 auto-trailers (3.1.16): their engine runs on its own thread for the
     # rest of the session and idles until turned on from Toggles. Started

@@ -564,6 +564,10 @@ msgctxt "#30419"
 msgid "The add-ons were installed and linked to their repositories.\\nA restart is recommended so their updates become active.\\nتم تثبيت الإضافات وربطها بمستودعاتها.\\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة."
 msgstr ""
 
+msgctxt "#30420"
+msgid "needs an AIOStreams server"
+msgstr ""
+
 msgctxt "#30430"
 msgid "AF3 Auto Trailers"
 msgstr ""
@@ -1827,3 +1831,180 @@ msgstr ""
 msgctxt "#30904"
 msgid "Converted %d, failed %d: %s[CR]Kodi will restart now."
 msgstr ""
+
+msgctxt "#30911"
+msgid "Setup checks"
+msgstr ""
+
+msgctxt "#30912"
+msgid "The clock is wrong (%s). Secure downloads fail until the date and time are synced."
+msgstr ""
+
+msgctxt "#30913"
+msgid "No connection to the ABUKARIM repository (%s)."
+msgstr ""
+
+msgctxt "#30914"
+msgid "Low free space: %s free, %s needed."
+msgstr ""
+
+msgctxt "#30915"
+msgid "Kodi %s is older than this build expects."
+msgstr ""
+
+msgctxt "#30916"
+msgid "Check again"
+msgstr ""
+
+msgctxt "#30917"
+msgid "Continue anyway"
+msgstr ""
+
+msgctxt "#30918"
+msgid "Cancel setup"
+msgstr ""
+
+msgctxt "#30919"
+msgid "Waiting for the clock to sync..."
+msgstr ""
+
+msgctxt "#30920"
+msgid "Restore %s"
+msgstr ""
+
+msgctxt "#30921"
+msgid "Choose another backup file..."
+msgstr ""
+
+msgctxt "#30922"
+msgid "No restore"
+msgstr ""
+
+msgctxt "#30923"
+msgid "Restore a backup?"
+msgstr ""
+
+msgctxt "#30924"
+msgid "Ready to set up"
+msgstr ""
+
+msgctxt "#30925"
+msgid "Restore: %s"
+msgstr ""
+
+msgctxt "#30926"
+msgid "Add-ons: %s"
+msgstr ""
+
+msgctxt "#30927"
+msgid "Widgets layout: %s"
+msgstr ""
+
+msgctxt "#30928"
+msgid "My lists: %s"
+msgstr ""
+
+msgctxt "#30929"
+msgid "Start setup"
+msgstr ""
+
+msgctxt "#30930"
+msgid "Change answers"
+msgstr ""
+
+msgctxt "#30931"
+msgid "none"
+msgstr ""
+
+msgctxt "#30932"
+msgid "done from the phone"
+msgstr ""
+
+msgctxt "#30933"
+msgid "Setup stopped at: %s"
+msgstr ""
+
+msgctxt "#30934"
+msgid "Resume setup"
+msgstr ""
+
+msgctxt "#30935"
+msgid "Start again from the beginning"
+msgstr ""
+
+msgctxt "#30936"
+msgid "Retry the failed steps (%s)"
+msgstr ""
+
+msgctxt "#30937"
+msgid "Installation Wizard"
+msgstr ""
+
+msgctxt "#30938"
+msgid "Setup report"
+msgstr ""
+
+msgctxt "#30939"
+msgid "Setup finished: %d done, %d failed, %d skipped."
+msgstr ""
+
+msgctxt "#30940"
+msgid "Failed steps can be retried from AB Tools > Installation Wizard."
+msgstr ""
+
+msgctxt "#30942"
+msgid "Patches: your saved choices (change them later in Apply Patches)"
+msgstr ""
+
+msgctxt "#30945"
+msgid "Binary add-ons"
+msgstr ""
+
+msgctxt "#30946"
+msgid "TinyPPI"
+msgstr ""
+
+msgctxt "#30947"
+msgid "Base add-ons"
+msgstr ""
+
+msgctxt "#30948"
+msgid "Device tuning"
+msgstr ""
+
+msgctxt "#30949"
+msgid "Restore backup"
+msgstr ""
+
+msgctxt "#30950"
+msgid "Install add-ons"
+msgstr ""
+
+msgctxt "#30951"
+msgid "Widgets layout"
+msgstr ""
+
+msgctxt "#30952"
+msgid "My lists"
+msgstr ""
+
+msgctxt "#30953"
+msgid "Patches"
+msgstr ""
+
+msgctxt "#30954"
+msgid "Remote access password"
+msgstr ""
+
+msgctxt "#30955"
+msgid "My lists check"
+msgstr ""
+
+msgctxt "#30956"
+msgid "Arabic interface"
+msgstr ""
+
+msgctxt "#30958"
+msgid "Resuming setup..."
+msgstr ""
+

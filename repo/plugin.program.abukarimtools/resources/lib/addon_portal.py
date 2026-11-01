@@ -59,6 +59,10 @@ TAISEER_ZIPS = ('https://raw.githubusercontent.com/taiseer999/'
 
 # (addon id, display name, pinned repo, remote icon fallback)
 CATALOG = [
+    # 4.6.35: needs the user's own AIOStreams server (manifest URL), so it
+    # carries a note and is left out of the Full preset's auto-tick.
+    ('plugin.video.aiostreams',  'AIOStreams',  'repository.taiseer',
+     TAISEER_ZIPS + 'plugin.video.aiostreams/icon.png'),
     ('plugin.video.dexhub',      'Dex Hub',     'repository.dexworld',
      'https://dexworld.cc/kodi/plugin.video.dexhub/resources/media/icon.png'),
     ('plugin.video.dplex',       'DPlex',       'repository.dexworld',
@@ -86,7 +90,7 @@ CATALOG = [
 
 # Optional one-line note shown after the repository name in the list
 # (string id from strings.po, or plain text from portal.json "note").
-NOTES = {}
+NOTES = {'plugin.video.aiostreams': 30420}
 
 # 3.4.24: add-ons that exist ONLY where their upstream requirements are met.
 # TinyPPI = CoreELEC + Kodi 22+ (xbmc.python 3.1.0), installed from
