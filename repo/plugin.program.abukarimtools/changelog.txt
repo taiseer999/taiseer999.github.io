@@ -1,3 +1,14 @@
+v4.6.31
+- Maintenance: new "Fix Add-on Settings Version" (settings_downgrade.py).
+  A settings.xml in addon_data saved by a newer Kodi (<settings version="5">)
+  is rejected whole by a Kodi at settings version 4 ("unable to read setting
+  values from version 5 (current version: 4)"), so Account Manager, POV,
+  Umbrella, ResolveURL... run on defaults. The entry is listed only when
+  Kodi logged that error and a newer file is still present; the target
+  version comes from Kodi's own log line. Only the root tag version is
+  changed, each file backed up once as settings.xml.v<M>.bak, then Kodi is
+  force-restarted. Not a patch: nothing runs at boot or from the watchdog.
+
 v4.6.30
 - New patch toggle "AB Scrapers: Force as External Scraper (Red Light, Fen
   Light, Umbrella)" (abscrapers_force, Apply Patches checklist). While

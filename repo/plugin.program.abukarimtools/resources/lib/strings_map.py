@@ -34,6 +34,7 @@ ID ranges:
   30860-30874  AF3 Streaming Services (Setup)
   30880-30889  AF3 subtitle list (OSD, Lucent Look)
   30890-30893  AF3 Plot on the Right (Toggles)
+  30900-30909  Maintenance - Fix Add-on Settings Version
 """
 
 STRINGS = {
@@ -645,4 +646,14 @@ STRINGS = {
     30892: ('The plot is back on the left', 'عادت القصة إلى اليسار'),
     30893: ('Plot on the right: Arctic Fuse 3 could not be patched. Run Apply Patches and try again.',
             'القصة على اليمين: تعذّر ترقيع واجهة Arctic Fuse 3. شغّل تطبيق الترقيعات ثم أعد المحاولة.'),
+    # ---- 4.6.31: Fix Add-on Settings Version (30900-30909) ----
+    30900: ('Fix Add-on Settings Version', 'إصلاح إصدار إعدادات الإضافات'),
+    30901: ('%d add-on(s) have settings saved by a newer Kodi (version %d). This Kodi reads version %d only, so these add-ons run as if they were never set up:[CR][CR]%s[CR][CR]Convert them now? A backup of each file is kept and Kodi restarts afterwards.',
+            'توجد %d من الإضافات حُفظت إعداداتها بإصدار أحدث من Kodi (الإصدار %d)، وKodi الحالي لا يقرأ إلا الإصدار %d، لذا تعمل هذه الإضافات كأنها لم تُضبط قط:[CR][CR]%s[CR][CR]هل تريد تحويلها الآن؟ ستُحفظ نسخة احتياطية من كل ملف، ثم يُعاد تشغيل Kodi.'),
+    30902: ('No add-on settings need converting on this device.',
+            'لا توجد إعدادات إضافات تحتاج إلى تحويل على هذا الجهاز.'),
+    30903: ('Converted %d add-on settings file(s). Kodi will restart now.',
+            'حُوِّل %d من ملفات إعدادات الإضافات. سيُعاد تشغيل Kodi الآن.'),
+    30904: ('Converted %d, failed %d: %s[CR]Kodi will restart now.',
+            'حُوِّل %d، وتعذّر تحويل %d: %s[CR]سيُعاد تشغيل Kodi الآن.'),
 }

@@ -36,6 +36,7 @@ ICONS  = {
     'font_scale':     ADDON_PATH + 'resources/icons/font_scale.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/sources.png',
     'rebuild_addons33': ADDON_PATH + 'resources/icons/rebuild_addons33.png',
+    'settings_v4':    ADDON_PATH + 'resources/icons/clear_cache.png',
     'total_clean':    ADDON_PATH + 'resources/icons/total_clean.png',
     'old_thumbs':     ADDON_PATH + 'resources/icons/old_thumbs.png',
     'build_cleanup':  ADDON_PATH + 'resources/icons/build_cleanup.png',
@@ -94,6 +95,7 @@ CATEGORIES = [
         ('old_thumbs',     30013),
         ('build_cleanup',  30780),
         ('rebuild_addons33', 30018),
+        ('settings_v4',    30900),
         ('speedtest',      30019),
         ('cpu_benchmark',  30620),
         ('log_share',      30593),
@@ -122,6 +124,8 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 'total_clean', 'old_thumbs',
                 # 3.4.28: Clean Unused Items (dialogs only)
                 'build_cleanup',
+                # 4.6.31: Fix Add-on Settings Version (dialogs only)
+                'settings_v4',
                 # 3.1.19: an action, not a folder - as a folder its URL became
                 # the container path, so the skin reload re-ran it in a loop
                 'af3_trailers', 'af3_waves',
@@ -378,6 +382,12 @@ def category_menu(cat_key):
         if c_key != cat_key:
             continue
         for mode, label_id in items:
+            # 4.6.31: listed only on a box whose Kodi rejects newer
+            # addon_data settings.xml files (see settings_downgrade.py)
+            if mode == 'settings_v4':
+                from resources.lib import settings_downgrade
+                if not settings_downgrade.applicable():
+                    continue
             label = T(label_id)
             _add_item(label, mode, is_folder=(mode not in ACTION_MODES),
                       switch=_switch_state(mode), label2=_mode_label2(mode))
@@ -537,6 +547,11 @@ def router():
         _end_directory()
         from resources.lib import addons33_rebuild
         addons33_rebuild.run()
+
+    elif mode == 'settings_v4':
+        _end_directory()
+        from resources.lib import settings_downgrade
+        settings_downgrade.run()
 
     elif mode == 'speedtest':
         _end_directory()

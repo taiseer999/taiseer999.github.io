@@ -1804,3 +1804,23 @@ msgctxt "#30893"
 msgid "Plot on the right: Arctic Fuse 3 could not be patched. Run Apply Patches and try again."
 msgstr "القصة على اليمين: تعذّر ترقيع واجهة Arctic Fuse 3. شغّل تطبيق الترقيعات ثم أعد المحاولة."
 
+msgctxt "#30900"
+msgid "Fix Add-on Settings Version"
+msgstr "إصلاح إصدار إعدادات الإضافات"
+
+msgctxt "#30901"
+msgid "%d add-on(s) have settings saved by a newer Kodi (version %d). This Kodi reads version %d only, so these add-ons run as if they were never set up:[CR][CR]%s[CR][CR]Convert them now? A backup of each file is kept and Kodi restarts afterwards."
+msgstr "توجد %d من الإضافات حُفظت إعداداتها بإصدار أحدث من Kodi (الإصدار %d)، وKodi الحالي لا يقرأ إلا الإصدار %d، لذا تعمل هذه الإضافات كأنها لم تُضبط قط:[CR][CR]%s[CR][CR]هل تريد تحويلها الآن؟ ستُحفظ نسخة احتياطية من كل ملف، ثم يُعاد تشغيل Kodi."
+
+msgctxt "#30902"
+msgid "No add-on settings need converting on this device."
+msgstr "لا توجد إعدادات إضافات تحتاج إلى تحويل على هذا الجهاز."
+
+msgctxt "#30903"
+msgid "Converted %d add-on settings file(s). Kodi will restart now."
+msgstr "حُوِّل %d من ملفات إعدادات الإضافات. سيُعاد تشغيل Kodi الآن."
+
+msgctxt "#30904"
+msgid "Converted %d, failed %d: %s[CR]Kodi will restart now."
+msgstr "حُوِّل %d، وتعذّر تحويل %d: %s[CR]سيُعاد تشغيل Kodi الآن."
+
