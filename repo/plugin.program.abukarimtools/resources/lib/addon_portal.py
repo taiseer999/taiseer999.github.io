@@ -522,12 +522,46 @@ def _si():
     return skin_installer
 
 
-def _install_zip(url):
+def _install_zip(url, addon_id=None):
     si = _si()
     tmp = si._download_zip_silent(url)
     if not tmp:
         return False
-    return si._extract_zip_silent(tmp)
+    ok = si._extract_zip_silent(tmp)
+    if ok and addon_id:
+        _wait_registered(addon_id)
+    return ok
+
+
+def _registered(addon_id):
+    """Kodi knows the add-on (installed or not yet enabled)."""
+    try:
+        resp = xbmc.executeJSONRPC(
+            '{"jsonrpc":"2.0","method":"Addons.GetAddonDetails",'
+            '"params":{"addonid":"%s"},"id":1}' % addon_id)
+        return '"addon"' in resp
+    except Exception:
+        return False
+
+
+def _wait_registered(addon_id, timeout_ms=8000):
+    """4.7.0: an unpacked zip is unknown to Kodi until UpdateLocalAddons has
+    rescanned, so SetAddonEnabled answered "Invalid params" and every add-on
+    waited 2 s + the EnableAddon builtin with its yes/no fallback (kodi.log
+    2026-11-01 16:43:09, Last Played). Rescan, then wait until it is known."""
+    if _registered(addon_id):
+        return True
+    xbmc.executebuiltin('UpdateLocalAddons')
+    waited = 0
+    while waited < timeout_ms:
+        xbmc.sleep(250)
+        waited += 250
+        if _registered(addon_id):
+            _log('%s registered after %d ms' % (addon_id, waited))
+            return True
+    _log('%s not registered after %d ms - enabling anyway' % (addon_id, waited),
+         xbmc.LOGWARNING)
+    return False
 
 
 def _enable(addon_id, timeout_ms=8000):
@@ -735,7 +769,7 @@ def _install_selection(entries):
                 zip_url, ver = _resolve_zip_in_repo(rid, aid)
                 if zip_url:
                     _log('%s %s <- %s' % (aid, ver, zip_url))
-                    ok = _install_zip(zip_url)
+                    ok = _install_zip(zip_url, aid)
             if not ok:
                 # Could not pin the source (repo missing / host down):
                 # let Kodi resolve it from whatever repo carries it.

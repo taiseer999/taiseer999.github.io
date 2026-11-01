@@ -1,3 +1,16 @@
+v4.7.1
+- Setup (from the first 4.7.0 run, kodi.log 2026-11-01 on macOS): the
+  questions phase and the first apply steps ran as designed (questions
+  16:41:57-16:42:38, then binaries, TinyPPI, bootstrap, tuning, restore).
+- Install add-ons step: add-ons the restore step has just installed from
+  the backup are no longer downloaded and installed a second time (3 of
+  the 7 ticked add-ons were in the backup).
+- Add-on Portal installer (all callers): after unpacking a zip, Kodi is
+  asked to rescan (UpdateLocalAddons) and the add-on is enabled only once
+  Kodi knows it. Before, SetAddonEnabled answered "Invalid params" for the
+  just-unpacked add-on, so each add-on waited 2 s and then fell back to
+  the EnableAddon builtin and its auto-answered yes/no (up to 6 s more).
+
 v4.7.0
 - Installation Wizard rework (new resources/lib/setup_flow.py):
   - Checks before anything changes: the clock (waits up to 90 s for time

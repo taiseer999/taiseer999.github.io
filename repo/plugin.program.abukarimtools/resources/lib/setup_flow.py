@@ -595,8 +595,16 @@ def _s_addons(ctx, monitor, st):
     from resources.lib import addon_portal
     cat = {c[0]: c for c in addon_portal._catalog()}
     entries = [(i, cat[i][1], cat[i][2]) for i in ids if i in cat]
+    # The restore step has usually just installed these from the backup
+    # (same installer, origin already pinned): do not download them twice
+    # (kodi.log 2026-11-01: 3 of 7 ticked add-ons came back with the restore).
+    have = [e for e in entries if addon_portal._is_local(e[0])]
+    entries = [e for e in entries if not addon_portal._is_local(e[0])]
+    if have:
+        _log('add-ons already installed (restore): %s' % ', '.join(e[0] for e in have))
     if not entries:
-        return SKIPPED
+        st['steps']['addons']['detail'] = '%d already installed' % len(have)
+        return OK if have else SKIPPED
     by_name = {e[1]: e[0] for e in entries}
     results = addon_portal._install_selection(entries)
     bad = [by_name.get(n, n) for n, good, _note in results if not good]
@@ -606,7 +614,9 @@ def _s_addons(ctx, monitor, st):
         menu_reconcile.run(rebuild=True)
     except Exception as e:
         _log('menu reconcile failed: %s' % e, xbmc.LOGWARNING)
-    st['steps']['addons']['detail'] = '%d/%d' % (len(results) - len(bad), len(results))
+    st['steps']['addons']['detail'] = '%d/%d installed%s' % (
+        len(results) - len(bad), len(results),
+        (', %d already there' % len(have)) if have else '')
     if bad:
         st['steps']['addons']['failed_ids'] = bad
         st['steps']['addons']['error'] = '; '.join(notes) or ', '.join(bad)
