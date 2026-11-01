@@ -77,10 +77,11 @@ STEPS = (
     ('addons',       30950, 30021, True),
     ('layout',       30951, 30630, True),
     ('lists',        30952, 30660, True),
-    ('patches',      30953, 30005, True),
+    ('patches',      30953, 30005, False),   # its ReloadSkin waits for the lock to go
     ('webserver',    30954, 30776, False),
     ('lists_ensure', 30955, 30660, True),
     ('language',     30956, 30776, True),
+    ('cleanup',      30957, 30780, False),
 )
 STEP_KEYS = tuple(s[0] for s in STEPS)
 
@@ -629,6 +630,8 @@ def _s_layout(ctx, monitor, st):
     if not mode:
         return SKIPPED
     from resources.lib import af3_shortcuts
+    if mode == af3_shortcuts.LIGHT:
+        st['steps']['layout']['changed'] = False      # Light = nothing written
     return OK if af3_shortcuts.apply(mode) else FAILED
 
 
@@ -659,7 +662,8 @@ def _s_webserver(ctx, monitor, st):
 
 def _s_lists_ensure(ctx, monitor, st):
     from resources.lib import trakt_hubs
-    trakt_hubs.ensure()
+    written = trakt_hubs.ensure()
+    st['steps']['lists_ensure']['changed'] = bool(written)
     return OK
 
 
@@ -667,8 +671,37 @@ def _s_language(ctx, monitor, st):
     if not st['answers'].get('arabic', True):
         return SKIPPED
     from resources.lib import set_language
-    set_language.force_arabic()
+    st['steps']['language']['changed'] = bool(set_language.force_arabic())
     return OK
+
+
+def _s_cleanup(ctx, monitor, st):
+    """Last step before the restart: offer to remove what the build no
+    longer uses (Maintenance > Clean Unused Items, pre-ticked)."""
+    from resources.lib import build_cleanup
+    status, detail = build_cleanup.setup_step()
+    st['steps']['cleanup']['detail'] = detail
+    return status
+
+
+def _may_reload(key, st):
+    """Known before the step runs: can it reload the skin at all? Decides
+    whether the backdrop is taken down first (4.7.2: the waits around steps
+    that could not reload anything cost ~40 s of a 194 s run)."""
+    a = st['answers']
+    if key == 'layout':
+        return a.get('layout') in ('moderate', 'full')
+    if key == 'language':
+        if not a.get('arabic', True):
+            return False
+        try:
+            from resources.lib import set_language
+            return set_language._current_language() != set_language._ARABIC
+        except Exception:
+            return True
+    if key == 'restore':
+        return bool(a.get('restore'))
+    return True
 
 
 RUNNERS = {
@@ -676,7 +709,7 @@ RUNNERS = {
     'hw_tuning': _s_hw_tuning, 'restore': _s_restore, 'addons': _s_addons,
     'layout': _s_layout, 'lists': _s_lists, 'patches': _s_patches,
     'webserver': _s_webserver, 'lists_ensure': _s_lists_ensure,
-    'language': _s_language,
+    'language': _s_language, 'cleanup': _s_cleanup,
 }
 
 
@@ -712,13 +745,15 @@ def apply_all(ctx, monitor, st):
             save(st)
             continue
         ctx._overlay('step', overlay_id)
-        if reloads:
+        paused = reloads and _may_reload(key, st)
+        if paused:
             ctx._overlay('pause', '%s can reload the skin' % key)
-        ctx._wait_no_modal(monitor)
+        ctx._wait_no_modal(monitor, stable=2 if paused else 1)
         if key in ('patches', 'lists', 'lists_ensure'):
             ctx._wait_skin_build(monitor)
         s.update(status=RUNNING, attempts=s.get('attempts', 0) + 1,
                  started=int(time.time()), error='')
+        s.pop('changed', None)
         save(st)
         _log('step %s: start (attempt %d)' % (key, s['attempts']))
         t0 = time.time()
@@ -732,8 +767,11 @@ def apply_all(ctx, monitor, st):
         save(st)
         _log('step %s: %s in %.1fs%s' % (key, status, s['seconds'],
                                          (' - ' + s['error']) if s.get('error') else ''))
-        if reloads:
-            ctx._wait_skin_settle(monitor)
+        if paused:
+            if s.get('changed', True):
+                ctx._wait_skin_settle(monitor)
+            else:
+                _log('step %s changed nothing - no skin settle wait' % key)
             ctx._overlay('ensure')
     if not unfinished(st):
         st['phase'] = 'done'

@@ -535,10 +535,11 @@ def _remove(p):
 
 
 # ── UI ───────────────────────────────────────────────────────────────────────
-def run():
-    dlg = xbmcgui.Dialog()
+def scan_items(heading=None):
+    """Scan with a progress dialog. None = cancelled, [] = nothing unused.
+    Items come back sorted for display."""
     dp = xbmcgui.DialogProgress()
-    dp.create(T(30780), T(30781))
+    dp.create(heading or T(30780), T(30781))
     try:
         items = scan(dp)
     except Exception as exc:
@@ -546,29 +547,27 @@ def run():
         items = []
     finally:
         dp.close()
-    if items is None:          # cancelled
-        return
-    if not items:
-        dlg.ok(T(30780), T(30785))
-        return
+    if items:
+        order = [K_ADDON, K_MODULE, K_SCRIPT, K_RESOURCE, K_CONTEXT, K_SCRAPER,
+                 K_SOURCES, K_DATA, K_SKINLEFT]
+        items.sort(key=lambda i: (order.index(i['kind']), i['name'].lower()))
+    return items
 
-    order = [K_ADDON, K_MODULE, K_SCRIPT, K_RESOURCE, K_CONTEXT, K_SCRAPER, K_SOURCES, K_DATA, K_SKINLEFT]
-    items.sort(key=lambda i: (order.index(i['kind']), i['name'].lower()))
+
+def pick(items):
+    """The pre-ticked checklist. Returns the ticked items ([] = none)."""
     rows = []
     for it in items:
-        li = xbmcgui.ListItem('[%s] %s' % (T(_KIND_LABEL[it['kind']]), it['name']),
-                              _human(it['size']))
-        rows.append(li)
+        rows.append(xbmcgui.ListItem('[%s] %s' % (T(_KIND_LABEL[it['kind']]), it['name']),
+                                    _human(it['size'])))
     pre = [n for n, it in enumerate(items) if it['preselect']]
-    chosen = dlg.multiselect('%s (%d)' % (T(30786), len(items)), rows,
-                             preselect=pre, useDetails=False)
-    if not chosen:
-        return
-    picked = [items[i] for i in chosen]
-    total = sum(i['size'] for i in picked)
-    if not dlg.yesno(T(30780), T(30787) % (len(picked), _human(total))):
-        return
+    chosen = xbmcgui.Dialog().multiselect('%s (%d)' % (T(30786), len(items)), rows,
+                                          preselect=pre, useDetails=False)
+    return [items[i] for i in chosen] if chosen else []
 
+
+def remove(picked):
+    """Remove the ticked items. Returns (removed, failed, bytes freed)."""
     dp = xbmcgui.DialogProgress()
     dp.create(T(30780), T(30788))
     done = failed = 0
@@ -591,7 +590,51 @@ def run():
     dp.close()
     if removed_addons:
         xbmc.executebuiltin('UpdateLocalAddons')
+    return done, failed, freed
+
+
+def run():
+    """Maintenance > Clean Unused Items (unchanged behaviour)."""
+    dlg = xbmcgui.Dialog()
+    items = scan_items()
+    if items is None:          # cancelled
+        return
+    if not items:
+        dlg.ok(T(30780), T(30785))
+        return
+    picked = pick(items)
+    if not picked:
+        return
+    total = sum(i['size'] for i in picked)
+    if not dlg.yesno(T(30780), T(30787) % (len(picked), _human(total))):
+        return
+    done, failed, freed = remove(picked)
     msg = T(30789) % (done, _human(freed))
     if failed:
         msg += '[CR]' + T(30799) % failed
     dlg.ok(T(30780), msg)
+
+
+def setup_step():
+    """4.7.2 Installation Wizard, last step before the restart: scan; when
+    something is unused, ask once, then the pre-ticked list; removal needs
+    no further confirmation (the list is the confirmation) and ends without
+    an OK dialog - the result goes into the setup report.
+    Returns (status, detail): 'ok' | 'skipped'."""
+    items = scan_items(T(30957))
+    if not items:
+        return 'skipped', 'nothing unused' if items == [] else 'scan cancelled'
+    size = sum(i['size'] for i in items)
+    pre = [i for i in items if i['preselect']]
+    if not xbmcgui.Dialog().yesno(T(30957), T(30943) % (len(items), _human(size), len(pre)),
+                                  yeslabel=T(30944), nolabel=T(30941)):
+        _log('setup: %d unused item(s) found, user skipped the cleanup' % len(items))
+        return 'skipped', '%d found, not removed' % len(items)
+    picked = pick(items)
+    if not picked:
+        return 'skipped', '%d found, none ticked' % len(items)
+    done, failed, freed = remove(picked)
+    detail = 'removed %d, freed %s' % (done, _human(freed))
+    if failed:
+        detail += ', %d failed' % failed
+    return ('ok' if not failed else 'failed'), detail

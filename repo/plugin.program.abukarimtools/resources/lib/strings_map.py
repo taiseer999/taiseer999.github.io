@@ -707,4 +707,9 @@ STRINGS = {
     30955: ('My lists check', 'التحقق من قوائمي'),
     30956: ('Arabic interface', 'الواجهة العربية'),
     30958: ('Resuming setup...', 'جارٍ استئناف الإعداد…'),
+    30941: ('Skip', 'تخطٍّ'),
+    30943: ('Setup found %d item(s) the build no longer uses (%s): add-ons, add-on data and leftovers. %d of them are pre-ticked as safe to remove.[CR][CR]Review the list and remove them now?',
+            'وجد الإعداد %d من العناصر التي لم يعد البناء يستخدمها (%s): إضافات وبيانات إضافات وبقايا. %d منها محدّدة مسبقًا لأن حذفها آمن.[CR][CR]هل تريد مراجعة القائمة وحذفها الآن؟'),
+    30944: ('Review and remove', 'المراجعة والحذف'),
+    30957: ('Clean unused items', 'تنظيف العناصر غير المستخدمة'),
 }

@@ -814,6 +814,17 @@ def _finish_and_restart(monitor):
             os.system('reboot')
         return
 
+    if xbmc.getCondVisibility('System.Platform.OSX'):
+        # 4.7.2: RestartApp does nothing on macOS Kodi 22 (kodi.log
+        # 2026-11-01 16:58:44 -> forced 25 s later). Go straight to the
+        # forced restart; on macOS Kodi closes and is reopened by hand.
+        _log('First-run complete - macOS: forced restart (RestartApp is a no-op here).')
+        try:
+            from resources.lib import origin_fix
+            origin_fix.force_restart('first-run complete')
+        except Exception:
+            os._exit(1)
+        return
     _log('First-run complete — restarting Kodi (forced).')
     xbmc.executebuiltin('RestartApp')
     if monitor.waitForAbort(25):

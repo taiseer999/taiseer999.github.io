@@ -1,3 +1,24 @@
+v4.7.2
+- Setup review of the first complete 4.7.1 run (kodi.log 2026-11-01, macOS):
+  12 ok / 0 failed in 194 s; zips registered in 250 ms; the 3 add-ons the
+  restore brought back were not downloaded again.
+- New last step "Clean unused items" (before the restart): scans the build
+  (Maintenance > Clean Unused Items); when something is unused it asks once
+  - count, size, how many are pre-ticked as safe - then the pre-ticked list;
+  the ticked items are removed with no further dialog and the result goes
+  into the setup report. Nothing unused = no dialog. build_cleanup.run()
+  (the Maintenance item) is unchanged; it now shares scan_items / pick /
+  remove with the setup step.
+- Waits between steps: ~75 s of the 194 s run was waiting. The backdrop is
+  taken down and the skin-settle wait runs only for a step that can, and
+  did, reload the skin: Light layout (writes nothing), Arabic when already
+  Arabic, My Lists check with nothing to put back. Patches no longer count
+  as a reload step - reload_skin_if_pending() never reloads under the
+  setup lock, the reload happens after setup.
+- macOS: RestartApp does nothing on Kodi 22 (16:58:44, forced 25 s later);
+  setup now goes straight to the forced restart there.
+- Strings 30941, 30943, 30944, 30957.
+
 v4.7.1
 - Setup (from the first 4.7.0 run, kodi.log 2026-11-01 on macOS): the
   questions phase and the first apply steps ran as designed (questions

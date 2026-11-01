@@ -1952,8 +1952,20 @@ msgctxt "#30940"
 msgid "Failed steps can be retried from AB Tools > Installation Wizard."
 msgstr ""
 
+msgctxt "#30941"
+msgid "Skip"
+msgstr ""
+
 msgctxt "#30942"
 msgid "Patches: your saved choices (change them later in Apply Patches)"
+msgstr ""
+
+msgctxt "#30943"
+msgid "Setup found %d item(s) the build no longer uses (%s): add-ons, add-on data and leftovers. %d of them are pre-ticked as safe to remove.[CR][CR]Review the list and remove them now?"
+msgstr ""
+
+msgctxt "#30944"
+msgid "Review and remove"
 msgstr ""
 
 msgctxt "#30945"
@@ -2002,6 +2014,10 @@ msgstr ""
 
 msgctxt "#30956"
 msgid "Arabic interface"
+msgstr ""
+
+msgctxt "#30957"
+msgid "Clean unused items"
 msgstr ""
 
 msgctxt "#30958"

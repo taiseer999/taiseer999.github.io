@@ -1952,9 +1952,21 @@ msgctxt "#30940"
 msgid "Failed steps can be retried from AB Tools > Installation Wizard."
 msgstr "يمكن إعادة محاولة الخطوات التي فشلت من أدوات أبوكريم > معالج التثبيت."
 
+msgctxt "#30941"
+msgid "Skip"
+msgstr "تخطٍّ"
+
 msgctxt "#30942"
 msgid "Patches: your saved choices (change them later in Apply Patches)"
 msgstr "الترقيعات: اختياراتك المحفوظة (يمكن تغييرها لاحقًا من تطبيق الترقيعات)"
+
+msgctxt "#30943"
+msgid "Setup found %d item(s) the build no longer uses (%s): add-ons, add-on data and leftovers. %d of them are pre-ticked as safe to remove.[CR][CR]Review the list and remove them now?"
+msgstr "وجد الإعداد %d من العناصر التي لم يعد البناء يستخدمها (%s): إضافات وبيانات إضافات وبقايا. %d منها محدّدة مسبقًا لأن حذفها آمن.[CR][CR]هل تريد مراجعة القائمة وحذفها الآن؟"
+
+msgctxt "#30944"
+msgid "Review and remove"
+msgstr "المراجعة والحذف"
 
 msgctxt "#30945"
 msgid "Binary add-ons"
@@ -2003,6 +2015,10 @@ msgstr "التحقق من قوائمي"
 msgctxt "#30956"
 msgid "Arabic interface"
 msgstr "الواجهة العربية"
+
+msgctxt "#30957"
+msgid "Clean unused items"
+msgstr "تنظيف العناصر غير المستخدمة"
 
 msgctxt "#30958"
 msgid "Resuming setup..."
