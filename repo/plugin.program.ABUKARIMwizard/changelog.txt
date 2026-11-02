@@ -1,3 +1,17 @@
+v3.9.51
+- New app icon in the Lucent glass style: violet gradient ring with a soft
+  glow, glassy inner disc, shaded wand with a glowing violet tip, sparkles.
+- Dark Lucent look (Lucent "Violet AMOLED": bg 000000, panels 101010/141414,
+  accent 8B5CF6 (text A78BFA), text DCE2E7): add-on icon, fanart, banner, clearlogo, patch
+  image and all menu icons recoloured from green; service/brand logos keep
+  their colours, only their background goes to black.
+- Menu text: new "Lucent ..." entries in Color 1 / Color 2, used as defaults
+  (Color 1 = Lucent Violet, Color 2 = Lucent Text, update alert = Lucent Amber).
+- Status colours: ON/Enabled = Lucent green, OFF/Disabled/REMOVE/errors =
+  Lucent red, add-on type tags remapped to Lucent tones.
+- Support dialog, notify/log viewer, speed test and pop-up dialog textures
+  restyled to match.
+
 v3.9.50
 - Shortcuts update popup: no more silent first run - a box with no recorded
   guiversion gets the popup for the current one. Each startup decision is

@@ -123,7 +123,7 @@ def authorize_menu():
             row = f'{label}   {COLOR4("[" + state + "]")}'
             desc = local_string(30406).format(label, state)                       # Authorized as ...
         else:
-            row = f'{label}   [COLOR grey][{local_string(30407)}][/COLOR]'
+            row = f'{label}   [COLOR FF8F9BA6][{local_string(30407)}][/COLOR]'
             desc = local_string(30408).format(label)                              # Not authorized
         add_dir(COLOR2(row), '', 27, icon, addon_fanart, COLOR2(desc), name2=key)
 

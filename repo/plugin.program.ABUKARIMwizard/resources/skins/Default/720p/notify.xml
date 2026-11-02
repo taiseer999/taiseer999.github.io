@@ -14,7 +14,7 @@
 			<height>600</height>
 			<texture>background.png</texture>
 			<colordiffuse></colordiffuse>
-			<bordertexture border="2" colordiffuse="black">white.png</bordertexture>
+			<bordertexture border="2" colordiffuse="2EFFFFFF">white.png</bordertexture>
 			<bordersize>10</bordersize>
 		</control>
 		
@@ -24,8 +24,8 @@
 			<description>Close</description>
 			<width>75</width>
 			<height>37</height>
-			<texturefocus colordiffuse="deepskyblue">close.png</texturefocus>
-            <texturenofocus colordiffuse="grey">close.png</texturenofocus>
+			<texturefocus colordiffuse="FF8B5CF6">close.png</texturefocus>
+            <texturenofocus colordiffuse="FF8F9BA6">close.png</texturenofocus>
 			<bordersize>5</bordersize>
 			<onleft>301</onleft>
       <onright>301</onright>
@@ -39,7 +39,7 @@
 			<font>WizNotify</font>
 			<align>left</align>
 			<aligny>center</aligny>
-			<textcolor>white</textcolor>
+			<textcolor>FFDCE2E7</textcolor>
 			<shadowcolor>black</shadowcolor>
 			<pagecontrol>301</pagecontrol>
 		</control>
@@ -51,8 +51,8 @@
       <height>570</height>
       <visible>true</visible>
       <texturesliderbackground></texturesliderbackground>
-      <texturesliderbar>white.png</texturesliderbar>
-      <texturesliderbarfocus>white.png</texturesliderbarfocus>
+      <texturesliderbar colordiffuse="448B5CF6">white.png</texturesliderbar>
+      <texturesliderbarfocus colordiffuse="FF8B5CF6">white.png</texturesliderbarfocus>
       <textureslidernib></textureslidernib>
       <textureslidernibfocus></textureslidernibfocus>
       <pulseonselect></pulseonselect>

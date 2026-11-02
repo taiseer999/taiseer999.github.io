@@ -7,7 +7,7 @@
     <controls>
         <control type="image">
             <left>0</left><top>0</top><width>1920</width><height>1080</height>
-            <texture colordiffuse="F80D1116">white.png</texture>
+            <texture colordiffuse="F5000000">white.png</texture>
         </control>
 
         <control type="label">
@@ -19,10 +19,14 @@
         </control>
         <control type="image">
             <left>885</left><top>180</top><width>150</width><height>5</height>
-            <texture colordiffuse="FFFFDD00">white.png</texture>
+            <texture colordiffuse="FF8B5CF6">white.png</texture>
         </control>
 
         <!-- QR on a white card -->
+        <control type="image">
+            <left>234</left><top>244</top><width>632</width><height>632</height>
+            <texture colordiffuse="668B5CF6">white.png</texture>
+        </control>
         <control type="image">
             <left>240</left><top>250</top><width>620</width><height>620</height>
             <texture colordiffuse="FFFFFFFF">white.png</texture>
@@ -35,8 +39,16 @@
 
         <!-- right panel -->
         <control type="image">
+            <left>919</left><top>249</top><width>762</width><height>622</height>
+            <texture colordiffuse="2EFFFFFF">white.png</texture>
+        </control>
+        <control type="image">
             <left>920</left><top>250</top><width>760</width><height>620</height>
-            <texture colordiffuse="FF161C24">white.png</texture>
+            <texture colordiffuse="FF101010">white.png</texture>
+        </control>
+        <control type="image">
+            <left>920</left><top>250</top><width>760</width><height>620</height>
+            <texture colordiffuse="14FFFFFF">white.png</texture>
         </control>
         <control type="image">
             <left>1200</left><top>290</top><width>200</width><height>200</height>
@@ -47,14 +59,14 @@
             <left>970</left><top>520</top><width>660</width><height>230</height>
             <font>AbkRow</font>
             <align>center</align>
-            <textcolor>FFE8EEF3</textcolor>
+            <textcolor>FFDCE2E7</textcolor>
             <label>$INFO[Window.Property(text)]</label>
         </control>
         <control type="label">
             <left>920</left><top>770</top><width>760</width><height>60</height>
             <font>AbkRowBold</font>
             <align>center</align><aligny>center</aligny>
-            <textcolor>FFFFDD00</textcolor>
+            <textcolor>FF8B5CF6</textcolor>
             <label>$INFO[Window.Property(url)]</label>
         </control>
 
@@ -62,7 +74,7 @@
             <left>0</left><top>930</top><width>1920</width><height>60</height>
             <font>AbkHint</font>
             <align>center</align><aligny>center</aligny>
-            <textcolor>FF9AA4B2</textcolor>
+            <textcolor>FF8F9BA6</textcolor>
             <label>$INFO[Window.Property(hint)]</label>
         </control>
 

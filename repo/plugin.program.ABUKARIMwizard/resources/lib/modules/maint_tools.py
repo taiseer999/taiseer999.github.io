@@ -42,8 +42,8 @@ COLOR2 = colors.color_text2
 COLOR3 = colors.color_text3
 COLOR4 = colors.color_text4
 
-ON = '[COLOR springgreen]ON[/COLOR]'
-OFF = '[COLOR red]OFF[/COLOR]'
+ON = '[COLOR FF4CC38A]ON[/COLOR]'
+OFF = '[COLOR FFE5534B]OFF[/COLOR]'
 
 translate = xbmcvfs.translatePath
 LOGPATH = translate('special://logpath/')
@@ -585,17 +585,17 @@ def remove_addon_data_menu():
     if not os.path.exists(data_path):
         add_dir(COLOR2(_s(30278, 'No addon data folder found.')), '', '', addon_icon, addon_fanart, '', isFolder=False)
         return
-    rm = '[COLOR red][B][%s][/B][/COLOR] ' % _s(30279, 'REMOVE')
+    rm = '[COLOR FFE5534B][B][%s][/B][/COLOR] ' % _s(30279, 'REMOVE')
     add_dir(rm + COLOR2(_s(30280, 'All Addon Data')), 'all', 227, addon_icon, addon_fanart, '', isFolder=False)
     add_dir(rm + COLOR2(_s(30281, 'All Addon Data for Uninstalled Addons')), 'uninstalled', 227, addon_icon, addon_fanart, '', isFolder=False)
     add_dir(rm + COLOR2(_s(30282, 'All Empty Folders in Addon Data')), 'empty', 227, addon_icon, addon_fanart, '', isFolder=False)
     protected = _excludes()
-    tags = {'audio.': '[COLOR orange][AUDIO][/COLOR] ', 'metadata.': '[COLOR cyan][METADATA][/COLOR] ',
-            'module.': '[COLOR orange][MODULE][/COLOR] ', 'plugin.': '[COLOR blue][PLUGIN][/COLOR] ',
-            'program.': '[COLOR orange][PROGRAM][/COLOR] ', 'repository.': '[COLOR gold][REPO][/COLOR] ',
-            'script.': '[COLOR springgreen][SCRIPT][/COLOR] ', 'service.': '[COLOR springgreen][SERVICE][/COLOR] ',
-            'skin.': '[COLOR dodgerblue][SKIN][/COLOR] ', 'video.': '[COLOR orange][VIDEO][/COLOR] ',
-            'weather.': '[COLOR yellow][WEATHER][/COLOR] '}
+    tags = {'audio.': '[COLOR FFF2B84B][AUDIO][/COLOR] ', 'metadata.': '[COLOR FFC4B5FD][METADATA][/COLOR] ',
+            'module.': '[COLOR FFF2B84B][MODULE][/COLOR] ', 'plugin.': '[COLOR FFA78BFA][PLUGIN][/COLOR] ',
+            'program.': '[COLOR FFF2B84B][PROGRAM][/COLOR] ', 'repository.': '[COLOR FFF2B84B][REPO][/COLOR] ',
+            'script.': '[COLOR FF4CC38A][SCRIPT][/COLOR] ', 'service.': '[COLOR FF4CC38A][SERVICE][/COLOR] ',
+            'skin.': '[COLOR FFA78BFA][SKIN][/COLOR] ', 'video.': '[COLOR FFF2B84B][VIDEO][/COLOR] ',
+            'weather.': '[COLOR FFF2B84B][WEATHER][/COLOR] '}
     for folder in sorted(glob.glob(os.path.join(data_path, '*/'))):
         foldername = os.path.basename(os.path.normpath(folder))
         display = foldername
@@ -604,7 +604,7 @@ def remove_addon_data_menu():
         icon = os.path.join(addons_path, foldername, 'icon.png')
         icon = icon if os.path.exists(icon) else addon_icon
         if foldername in protected:
-            label = '[COLOR springgreen][B][%s][/B][/COLOR] %s' % (_s(30283, 'PROTECTED'), display)
+            label = '[COLOR FF4CC38A][B][%s][/B][/COLOR] %s' % (_s(30283, 'PROTECTED'), display)
         else:
             label = rm + display
         add_dir(label, foldername, 227, icon, addon_fanart, foldername, isFolder=False)
@@ -671,7 +671,7 @@ def enable_addons_menu():
     if not items:
         add_dir(COLOR2(_s(30292, 'No addons found to enable or disable.')), '', '', addon_icon, addon_fanart, '', isFolder=False)
         return
-    add_dir('[I][B][COLOR red]%s[/COLOR][/B][/I]' % _s(30293, '!! Notice: Disabling some addons can cause issues !!'),
+    add_dir('[I][B][COLOR FFE5534B]%s[/COLOR][/B][/I]' % _s(30293, '!! Notice: Disabling some addons can cause issues !!'),
             '', '', addon_icon, addon_fanart, '', isFolder=False)
     add_dir(COLOR2(_s(30294, 'Enable All Addons')), '', 223, addon_icon, addon_fanart, '', isFolder=False)
     for aid, name, folder in items:
@@ -680,9 +680,9 @@ def enable_addons_menu():
         fanart = os.path.join(folder, 'fanart.jpg')
         fanart = fanart if os.path.exists(fanart) else addon_fanart
         if _is_enabled(aid):
-            state, goto = '[COLOR springgreen][%s][/COLOR]' % _s(30295, 'Enabled'), 'false'
+            state, goto = '[COLOR FF4CC38A][%s][/COLOR]' % _s(30295, 'Enabled'), 'false'
         else:
-            state, goto = '[COLOR red][%s][/COLOR]' % _s(30296, 'Disabled'), 'true'
+            state, goto = '[COLOR FFE5534B][%s][/COLOR]' % _s(30296, 'Disabled'), 'true'
         add_dir('%s %s' % (state, name), goto, 224, icon, fanart, aid, name2=aid, isFolder=False)
 
 
@@ -785,9 +785,9 @@ def error_checking(count=False, last=False):
         return
     from .quick_log import show_text
     if last:
-        text = '[B][COLOR red]%s[/COLOR][/B]\n%s' % (_s(30301, 'Last Error in Log:'), errors[0].replace(home, '/'))
+        text = '[B][COLOR FFE5534B]%s[/COLOR][/B]\n%s' % (_s(30301, 'Last Error in Log:'), errors[0].replace(home, '/'))
     else:
-        text = '\n'.join('[B][COLOR red]%s %d:[/COLOR][/B] %s\n' % (_s(30302, 'ERROR NUMBER'), i + 1, e.replace(home, '/'))
+        text = '\n'.join('[B][COLOR FFE5534B]%s %d:[/COLOR][/B] %s\n' % (_s(30302, 'ERROR NUMBER'), i + 1, e.replace(home, '/'))
                          for i, e in enumerate(errors))
     show_text(text)
 
@@ -873,7 +873,7 @@ def net_info():
 
 
 def _kv(key, value):
-    return '%s [COLOR white]%s[/COLOR]' % (COLOR1(key), value)
+    return '%s [COLOR FFDCE2E7]%s[/COLOR]' % (COLOR1(key), value)
 
 
 def _info_row(text):
@@ -1082,7 +1082,7 @@ def check_repos():
             bad.add(m.strip())
     if bad:
         from .quick_log import show_text
-        show_text('%s\n\n[COLOR red]%s[/COLOR]' % (
+        show_text('%s\n\n[COLOR FFE5534B]%s[/COLOR]' % (
             _s(30361, 'These repositories did not resolve. Hosts can be down temporarily, so scan a few times before removing one.'),
             '\n'.join(sorted(bad))))
     else:
@@ -1178,7 +1178,7 @@ def clean_menu():
     sizearchive = get_size(ARCHIVE_CACHE) if os.path.exists(ARCHIVE_CACHE) else 0
     sizecache = get_cache_size()
     total = sizepack + sizethumb + sizecache + sizearchive
-    val = lambda n: '[COLOR springgreen][B]%s[/B][/COLOR]' % convert_size(n)
+    val = lambda n: '[COLOR FF4CC38A][B]%s[/B][/COLOR]' % convert_size(n)
 
     _header(_s(30200, 'Cleaning Tools'))
     _item('%s: %s' % (COLOR2(_s(30207, 'Total Clean Up')), val(total)), '', 210)
@@ -1205,7 +1205,7 @@ def clean_menu():
             f = freqs[int(setting('autocleanfreq') or 3)]
         except (ValueError, IndexError):
             f = freqs[3]
-        _item('--- %s: [COLOR springgreen]%s[/COLOR]' % (COLOR2(_s(30216, 'Auto Clean Frequency')), f), '', 218)
+        _item('--- %s: [COLOR FF4CC38A]%s[/COLOR]' % (COLOR2(_s(30216, 'Auto Clean Frequency')), f), '', 218)
         _item('--- %s: %s' % (COLOR2(_s(30217, 'Clear Cache on Startup')),
                               OFF if setting('autoclean_cache') == 'false' else ON), 'autoclean_cache', 217)
         _item('--- %s: %s' % (COLOR2(_s(30218, 'Clear Old Thumbs on Startup')),
@@ -1215,7 +1215,7 @@ def clean_menu():
         pv = pk[int(setting('autoclearpackages') or 1)]
     except (ValueError, IndexError):
         pv = pk[1]
-    _item('%s: [COLOR springgreen]%s[/COLOR]' % (COLOR2(_s(30270, 'Clear Packages on Startup')), pv), '', 219)
+    _item('%s: [COLOR FF4CC38A]%s[/COLOR]' % (COLOR2(_s(30270, 'Clear Packages on Startup')), pv), '', 219)
 
 
 def addon_menu():
@@ -1233,8 +1233,8 @@ def logging_menu():
     xbmcplugin.setPluginCategory(HANDLE, _s(30202, 'Logging Tools'))
     _header(_s(30202, 'Logging Tools'))
     errors = error_checking(count=True)
-    found = ('[COLOR red]%s[/COLOR]' % (_s(30222, '%s Error(s) Found') % errors)) if errors else \
-            '[COLOR springgreen]%s[/COLOR]' % _s(30223, 'None Found')
+    found = ('[COLOR FFE5534B]%s[/COLOR]' % (_s(30222, '%s Error(s) Found') % errors)) if errors else \
+            '[COLOR FF4CC38A]%s[/COLOR]' % _s(30223, 'None Found')
     debug = _get_kodi_setting('debug.showloginfo')
     _item('%s: %s' % (COLOR2(_s(30304, 'Debug Logging')), ON if debug else OFF), '', 230)
     _item(COLOR2(_s(30224, 'View Log File')), '', 26)
@@ -1253,7 +1253,7 @@ def misc_menu():
     _item(COLOR2(_s(30311, 'Network Information')), '', 240, folder=True)
     _item(COLOR2(_s(30230, 'Speed Test')), '', 28)
     _item('%s: %s' % (COLOR2(_s(30305, 'Unknown Sources')), ON if us else OFF), '', 241)
-    _item('%s: [COLOR springgreen]%s[/COLOR]' % (COLOR2(_s(30231, 'Addon Updates')), upd_txt), '', 242)
+    _item('%s: [COLOR FF4CC38A]%s[/COLOR]' % (COLOR2(_s(30231, 'Addon Updates')), upd_txt), '', 242)
     _item(COLOR2(_s(30232, 'Reload Skin')), '', 243)
     _item(COLOR2(_s(30233, 'Reload Profile')), '', 244)
     _item(COLOR2(_s(30234, 'Force Close Kodi')), '', 245)

@@ -604,7 +604,7 @@ class SpeedTest(Animation):
 
     def display_progress_bar(self, function='true'):
         if function == 'true':
-            self.img_progress = ControlImage(340, 640, 600, 20, '', aspectRatio=0, colorDiffuse="0xFF00AACC")
+            self.img_progress = ControlImage(340, 640, 600, 20, '', aspectRatio=0, colorDiffuse="0xFF8B5CF6")
             self.addControl(self.img_progress)
             self.img_progress.setVisible(False)
             self.img_progress.setImage(self.image_progress)

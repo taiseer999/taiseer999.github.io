@@ -116,21 +116,42 @@ def same(a, b):
 _TMDB_IN_PATH = re.compile(r'[?&]tmdb_id=(\d+)')
 
 
+def _id_kind(key):
+    """'tvshow.tmdb' -> ('tvshow.', 'tmdb'); 'tmdb_id' -> ('', 'tmdb')."""
+    k = key.lower().strip()
+    if k.endswith('_id'):
+        k = k[:-3]
+    for kind in ('tmdb', 'tvdb', 'imdb'):
+        if k.endswith(kind):
+            return k[:-len(kind)], kind
+    return k, ''
+
+
 def clean_ids(ids, path=''):
-    """tmdb must be numeric, imdb must be tt...: some players put the IMDb id
-    in the tmdb slot and TMDbHelper then dies on int('tt...').  A missing tmdb
-    is recovered from a TMDbHelper path (…&tmdb_id=123)."""
-    out = {k: str(v).strip() for k, v in (ids or {}).items() if v not in (None, '')}
-    for k in ('tmdb', 'tvdb'):
-        v = out.get(k, '')
-        if v and not v.isdigit():
-            out.pop(k)
-            if v.startswith('tt') and not out.get('imdb'):
-                out['imdb'] = v
-    if out.get('imdb') and not out['imdb'].startswith('tt'):
-        v = out.pop('imdb')
-        if v.isdigit() and not out.get('tmdb'):
-            out['tmdb'] = v
+    """tmdb/tvdb must be numeric, imdb must be tt... - for EVERY key, not just
+    the plain ones: players also send tvshow.tmdb / tvshow.imdb, and TMDbHelper
+    reads UniqueId(tvshow.tmdb) for episodes, so a tt... there kills it with
+    int('tt...') on every focus.  A missing tmdb is recovered from a
+    TMDbHelper path (…&tmdb_id=123)."""
+    src = {str(k).strip(): str(v).strip() for k, v in (ids or {}).items()
+           if v not in (None, '') and str(v).strip() not in ('', 'None', '0')}
+    out, moved = {}, {}
+    for k, v in src.items():
+        prefix, kind = _id_kind(k)
+        if kind in ('tmdb', 'tvdb'):
+            if v.isdigit():
+                out[prefix + kind] = v
+            elif v.startswith('tt'):
+                moved.setdefault(prefix + 'imdb', v)
+        elif kind == 'imdb':
+            if v.startswith('tt'):
+                out[prefix + 'imdb'] = v
+            elif v.isdigit():
+                moved.setdefault(prefix + 'tmdb', v)
+        else:
+            out[k] = v
+    for k, v in moved.items():
+        out.setdefault(k, v)
     if not out.get('tmdb') and path and 'themoviedb.helper' in path:
         m = _TMDB_IN_PATH.search(path)
         if m:
@@ -156,15 +177,19 @@ def repair_ids():
     return fixed
 
 
-def purge_tmdbh_identifiers():
-    """TMDbHelper caches item -> tmdb_id in ItemQueries.db (table identifier).
-    A tt... id cached there from an old list item crashes it with
-    int('tt...') every time that item is focused - delete those rows."""
+def purge_tmdbh_identifiers(quiet=False):
+    """TMDbHelper's ItemQueries.db caches lookups in several tables that all
+    have a tmdb_id column: identifier (item -> tmdb_id) and tmdb_id
+    (imdb_id -> tmdb_id) above all.  A tt... stored as tmdb_id in ANY of them
+    is fed straight back to int() on every focus, and a bad tmdb_id row
+    re-creates the identifier row we delete - so clean every table.
+    Only tt... values go: episode-group ids are legitimately text."""
     import sqlite3
     root = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.themoviedb.helper/')
     if not os.path.isdir(root):
         return 0
     total = 0
+    hits = []
     for base, dirs, files in os.walk(root):
         if base[len(root):].count(os.sep) > 3:
             dirs[:] = []
@@ -173,19 +198,29 @@ def purge_tmdbh_identifiers():
             continue
         fn = os.path.join(base, 'ItemQueries.db')
         try:
-            con = sqlite3.connect(fn, timeout=5)
+            con = sqlite3.connect(fn, timeout=2 if quiet else 5)
             try:
-                cur = con.execute(
-                    "DELETE FROM identifier WHERE typeof(tmdb_id)='text' "
-                    "AND tmdb_id GLOB '*[^0-9]*'")
+                tables = [r[0] for r in con.execute(
+                    "SELECT name FROM sqlite_master WHERE type='table'")]
+                for t in tables:
+                    cols = [r[1] for r in con.execute('PRAGMA table_info("%s")' % t)]
+                    if 'tmdb_id' not in cols:
+                        continue
+                    cur = con.execute(
+                        'DELETE FROM "%s" WHERE typeof(tmdb_id)=\'text\' '
+                        "AND tmdb_id GLOB 'tt[0-9]*'" % t)
+                    n = cur.rowcount or 0
+                    if n:
+                        total += n
+                        hits.append('%s=%d' % (t, n))
                 con.commit()
-                total += cur.rowcount or 0
             finally:
                 con.close()
         except Exception as ex:
-            log('TMDbHelper identifier purge skipped (%s): %r' % (fn, ex), xbmc.LOGWARNING)
+            if not quiet:
+                log('TMDbHelper tt... purge skipped (%s): %r' % (fn, ex), xbmc.LOGWARNING)
     if total:
-        log('removed %d bad TMDbHelper identifier rows' % total)
+        log('removed %d bad TMDbHelper tmdb_id rows (%s)' % (total, ', '.join(hits)))
     return total
 
 

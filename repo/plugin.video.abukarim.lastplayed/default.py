@@ -282,9 +282,10 @@ def _listitem(e, for_play=False):
             pass
     ids = store.clean_ids(e.get('ids'), e.get('path') or '')
     if ids:
+        # NO setIMDBNumber(): Kodi stores it in the DEFAULT uniqueid slot
+        # (SetUniqueID(value) with no type), i.e. it overwrote UniqueID(tmdb)
+        # with the tt... id -> TMDbHelper int('tt...').  'imdb' is already in ids.
         tag.setUniqueIDs(ids, 'tmdb' if 'tmdb' in ids else list(ids)[0])
-        if ids.get('imdb'):
-            tag.setIMDBNumber(ids['imdb'])
     if e.get('dbid'):
         try:
             tag.setDbId(int(e['dbid']))
@@ -329,6 +330,11 @@ def _listitem(e, for_play=False):
 
 
 def show_list(which, limit):
+    # before TMDbHelper's monitor sees the new list: drop any tt... it cached as a tmdb_id
+    try:
+        store.purge_tmdbh_identifiers(quiet=True)
+    except Exception:
+        pass
     items = _filter(store.load(), which)
     if limit:
         items = items[:limit]
