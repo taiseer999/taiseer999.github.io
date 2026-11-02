@@ -16,7 +16,7 @@ preview="http://"
 adult="no"
 info="http://"
 description="البيلد لا يحوي سكن راكب."
-guiversion="2"
+guiversion="3"
 guimode="1"
 
 name="test"
