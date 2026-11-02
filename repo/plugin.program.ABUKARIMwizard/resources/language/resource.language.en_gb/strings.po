@@ -1334,3 +1334,27 @@ msgstr ""
 msgctxt "#30997"
 msgid "Auto Clean: removed %s items (%s)"
 msgstr ""
+
+msgctxt "#30120"
+msgid "Shortcuts Update"
+msgstr ""
+
+msgctxt "#30121"
+msgid "A new shortcuts and menus update is available for your build.\nIt will be applied without wiping your data."
+msgstr ""
+
+msgctxt "#30122"
+msgid "Kodi will close after the update - reopen it to finish."
+msgstr ""
+
+msgctxt "#30123"
+msgid "Update Now"
+msgstr ""
+
+msgctxt "#30124"
+msgid "Later"
+msgstr ""
+
+msgctxt "#30125"
+msgid "Ignore"
+msgstr ""

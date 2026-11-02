@@ -1,3 +1,8 @@
+v3.9.49
+- Pushed no-wipe shortcuts update: bump guiversion="N" under a build in
+  Builds.txt (guimode="1" = Option 1, "2" = Option 2) and every box on that
+  build gets an Update Now / Later / Ignore popup at startup.
+
 v3.9.48
 - Removed the 3.9.47 prompt to run the ABUKARIM TOOLS Installation Wizard
   after a build install + restart.

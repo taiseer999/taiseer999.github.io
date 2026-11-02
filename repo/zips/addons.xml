@@ -589,7 +589,7 @@ updated YouTube addon URL
     <description lang="tr_TR">The Movie Database (TMDb), topluluk tarafından oluşturulmuş bir film ve TV veritabanıdır. Her bir veri parçası, 2008 yılına dayanan muhteşem topluluğumuz tarafından eklenmiştir. TMDb'nin güçlü uluslararası odağı ve veri genişliği büyük ölçüde benzersizdir ve inanılmaz derecede gurur duyduğumuz bir şeydir. Basitçe söylemek gerekirse, topluluk içinde yaşıyor ve nefes alıyoruz ve bizi farklı kılan da tam olarak bu.</description>
     <description lang="zh_CN">TMDb 是一个由网络社区创建的影视数据库。每一条数据都是由我们令人惊叹的社区添加的，可以追溯到2008年。TMDb 强大的国际关注度和数据广度在很大程度上是无与伦比的，我们对此感到无比自豪。简单地说，我们生活在社区中，呼吸着社区的气息，这正是我们与众不同的原因。</description>
   </extension>
-</addon><addon id="plugin.program.ABUKARIMwizard" name="AB Wizard" version="3.9.48" provider-name="Slam, Sarge, Funsterbe, BYB، ABUKARIM">
+</addon><addon id="plugin.program.ABUKARIMwizard" name="AB Wizard" version="3.9.49.1" provider-name="Slam, Sarge, Funsterbe, BYB، ABUKARIM">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0.1" />
 		<import addon="plugin.program.abukarimtools" version="3.3.4" />
@@ -612,7 +612,7 @@ updated YouTube addon URL
 		<website /> 
 		<email />
 		<source />
-		<news>v3.9.44: The ABUKARIM TOOLS backup before a build install is optional again: Back up / Skip backup / Cancel install. v3.9.43: Build install is safe on a bad connection - the download is checked (complete and a valid zip) BEFORE anything is wiped; if it fails, nothing on the box changes. A stalled server no longer freezes the download or the startup update check (timeouts). Dropbox build links work with dl=0. Needs AB Tools 3.3.4. v3.9.42: Fixed the build update popup never appearing (the startup service was off). Build versions compared numerically (2.10 &gt; 2.9); Ignore skips only that version. v3.9.41: Renamed to AB Wizard, new icon and artwork.</news>
+		<news>v3.9.49: Push no-wipe shortcut/menu updates from Builds.txt (guiversion= / guimode=) - boxes get an Update Now / Later / Ignore popup at startup. v3.9.44: The ABUKARIM TOOLS backup before a build install is optional again: Back up / Skip backup / Cancel install. v3.9.43: Build install is safe on a bad connection - the download is checked (complete and a valid zip) BEFORE anything is wiped; if it fails, nothing on the box changes. A stalled server no longer freezes the download or the startup update check (timeouts). Dropbox build links work with dl=0. Needs AB Tools 3.3.4. v3.9.42: Fixed the build update popup never appearing (the startup service was off). Build versions compared numerically (2.10 &gt; 2.9); Ignore skips only that version. v3.9.41: Renamed to AB Wizard, new icon and artwork.</news>
 		<assets>
 				<icon>resources/icon.png</icon>
 				<fanart>resources/fanart.jpg</fanart>

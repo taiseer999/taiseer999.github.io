@@ -1,3 +1,4 @@
+import re
 import os
 import json
 import base64
@@ -134,6 +135,8 @@ def get_version():
        builds = text.parse_builds()
 
     option2_url = ''
+    global _BUILDFILE_TEXT
+    _BUILDFILE_TEXT = response or ''
     for build in builds:
        if build.get('name') == CURRENT_BUILD:
            version = str(build.get('version'))
@@ -146,7 +149,32 @@ def get_version():
            option2_url = (build.get('gui', ''))
            break
     return version, url, gui_url, theme_url, option2_url
+_BUILDFILE_TEXT = ''
 UPDATE_VERSION, BUILD_URL, GUI_URL, THEME_URL, OPTION2_URL = get_version()
+
+
+def get_gui_update(build_name=None):
+    """Optional per-build no-wipe (shortcuts) update push, read from Builds.txt.
+    Add these lines AFTER the build's description= line (never between the
+    standard fields - the TextParser regex needs those on consecutive lines):
+        guiversion="3"   bump this to push a no-wipe update to every box
+        guimode="1"      1 = Option 1 (this build's gui= zip + ReloadSkin)
+                         2 = Option 2 (test build's gui= zip + force-close)
+    Old wizard versions simply ignore the extra lines."""
+    text = _BUILDFILE_TEXT or ''
+    build_name = build_name or CURRENT_BUILD
+    if not text or not build_name:
+        return '', '1'
+    start = text.find('name="%s"' % build_name)
+    if start < 0:
+        return '', '1'
+    nxt = text.find('\nname="', start + 1)
+    block = text[start:nxt if nxt > 0 else len(text)]
+    m_ver = re.search(r'guiversion="([^"]*)"', block)
+    m_mode = re.search(r'guimode="([^"]*)"', block)
+    mode = (m_mode.group(1).strip() if m_mode else '1') or '1'
+    return (m_ver.group(1).strip() if m_ver else ''), ('2' if mode == '2' else '1')
+GUI_UPDATE_VERSION, GUI_UPDATE_MODE = get_gui_update()
 
 # Build Menu - Total Build Count
 def count_builds():

@@ -52,6 +52,7 @@ def build_install(name, name2, version, url):
     clean_backups()
     setting_set('buildname', name2)
     setting_set('buildversion', version)
+    _mark_gui_current(name2)
     setting_set('update_passed', 'false')
     setting_set('firstrun', 'true')
     check_binary()
@@ -63,13 +64,23 @@ def build_install(name, name2, version, url):
     xbmc.sleep(4000)
     os._exit(1)
 
-def patch_gui(url):
+def _mark_gui_current(build_name=None):
+    # Box now has the latest no-wipe patch -> stop the push popup for it.
+    try:
+        from .addonvar import get_gui_update
+        gv = get_gui_update(build_name)[0]
+        if gv:
+            setting_set('guiversion', str(gv))
+    except Exception:
+        pass
+
+def patch_gui(url, confirm=True):
     if not url or url in ('', 'http://', None):
         dialog.ok(addon_name, local_string(30116))  # No GUI Patch Available For This Build!
         return
 
     # Patch GUI, Cancel, Continue
-    if not dialog.yesno(
+    if confirm and not dialog.yesno(
         COLOR2(local_string(30113)),  # Patch GUI
         COLOR2(local_string(30115)),  # This will update your GUI/skin files in place...
         nolabel=local_string(30029),
@@ -80,6 +91,7 @@ def patch_gui(url):
     if not download_build(local_string(30113), url):
         return
     extract_gui_patch()
+    _mark_gui_current()
 
     # Some skins (e.g. Arctic Fuse 3, via script.skinvariables) only rebuild
     # their home menu/widgets on skin load if this skin string has changed
@@ -112,13 +124,13 @@ def extract_gui_patch():
         dp.close()
         os.unlink(zippath)
 
-def patch_gui_no_wipe(url):
+def patch_gui_no_wipe(url, confirm=True):
     if not url or url in ('', 'http://', 'https://', None):
         dialog.ok(addon_name, local_string(30116))  # No GUI Patch Available For This Build!
         return
 
     # No Wipe (Option 2), Cancel, Continue
-    if not dialog.yesno(
+    if confirm and not dialog.yesno(
         COLOR2(local_string(30118)),  # No Wipe (Option 2)
         COLOR2(local_string(30115)),  # This will update your files in place without wiping. Continue?
         nolabel=local_string(30029),
@@ -129,6 +141,7 @@ def patch_gui_no_wipe(url):
     if not download_build(local_string(30118), url):
         return
     extract_userdata_patch()
+    _mark_gui_current()
 
     # Option 2 patches both the skin/menu templates (addons/skin.../shortcuts/)
     # and userdata (guisettings.xml, Database, addon_data). Kodi holds userdata

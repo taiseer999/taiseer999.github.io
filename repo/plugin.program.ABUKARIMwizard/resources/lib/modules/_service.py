@@ -6,7 +6,8 @@ from uservar import notify_url, changelog_dir
 from .maintenance import clear_packages_startup
 from .addonvar import (setting, setting_set, addon_name, addon_icon, isBase64, headers,
                        dialog, local_string, addon_id, gui_save_default, UPDATE_VERSION,
-                       CURRENT_BUILD, CURRENT_VERSION, BUILD_URL)
+                       CURRENT_BUILD, CURRENT_VERSION, BUILD_URL,
+                       GUI_URL, OPTION2_URL, GUI_UPDATE_VERSION, GUI_UPDATE_MODE)
 from .build_install import build_install
 from .addons_enable import enable_addons
 from .save_data import backup_gui_skin
@@ -85,6 +86,50 @@ class Startup:
                elif _vtuple(UPDATE_VERSION) == _vtuple(CURRENT_VERSION) and setting('update_passed') == 'true':
                    setting_set('update_passed', 'false')
                    
+    def check_gui_update(self):
+        """Pushed no-wipe (shortcuts/menus) update. Fires when Builds.txt
+        guiversion= for this box's build is newer than the local guiversion.
+        A pending FULL build update wins (it already carries new shortcuts)."""
+        if CURRENT_BUILD in ('No Build Installed', 'No Build') or not GUI_UPDATE_VERSION:
+            return
+        if is_newer(UPDATE_VERSION, CURRENT_VERSION):
+            return
+        local = setting('guiversion')
+        if not local:
+            # Box predates this feature: adopt the current number silently,
+            # so only the NEXT bump you publish triggers the popup.
+            # (Publish the first bump after users have this wizard version.)
+            setting_set('guiversion', str(GUI_UPDATE_VERSION))
+            return
+        if not is_newer(GUI_UPDATE_VERSION, local):
+            return
+        if setting('ignoredgui') == str(GUI_UPDATE_VERSION):
+            return
+        url = OPTION2_URL if GUI_UPDATE_MODE == '2' else GUI_URL
+        if not url or url in ('http://', 'https://'):
+            xbmc.log('AB Wizard: guiversion %s pushed but no gui= url for mode %s' % (GUI_UPDATE_VERSION, GUI_UPDATE_MODE), xbmc.LOGWARNING)
+            return
+        if url.startswith('https://www.dropbox.com'):
+            url = url.replace('dl=0', 'dl=1')
+        msg = local_string(30121)
+        if GUI_UPDATE_MODE == '2':
+            msg += '\n' + local_string(30122)
+        choice = xbmcgui.Dialog().yesnocustom(
+            local_string(30120), msg,
+            customlabel=local_string(30125),
+            nolabel=local_string(30124),
+            yeslabel=local_string(30123),
+            defaultbutton=xbmcgui.DLG_YESNO_YES_BTN
+        )
+        if choice == 1:
+            from .build_install import patch_gui, patch_gui_no_wipe
+            if GUI_UPDATE_MODE == '2':
+                patch_gui_no_wipe(url, confirm=False)
+            else:
+                patch_gui(url, confirm=False)
+        elif choice == 2:
+            setting_set('ignoredgui', str(GUI_UPDATE_VERSION))
+
     def save_menu(self):
         choices = []
         preselect = []
@@ -224,3 +269,7 @@ class Startup:
                 xbmc.log('AB Wizard: notify check failed: %s' % e, xbmc.LOGERROR)
             xbmc.sleep(3000)  # Delay Build Update Notification
             self.check_updates()
+            try:
+                self.check_gui_update()
+            except Exception as e:
+                xbmc.log('AB Wizard: gui update check failed: %s' % e, xbmc.LOGERROR)

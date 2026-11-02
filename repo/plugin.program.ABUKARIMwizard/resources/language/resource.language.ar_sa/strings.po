@@ -1364,3 +1364,27 @@ msgstr "تعذّر الوصول إلى الخادم. تحقّق من اتصال�
 msgctxt "#30997"
 msgid "Auto Clean: removed %s items (%s)"
 msgstr "التنظيف التلقائي: حُذف %s عنصرًا (%s)"
+
+msgctxt "#30120"
+msgid "Shortcuts Update"
+msgstr "تحديث الاختصارات"
+
+msgctxt "#30121"
+msgid "A new shortcuts and menus update is available for your build.\nIt will be applied without wiping your data."
+msgstr "يتوفر تحديث جديد للاختصارات والقوائم في البيلد الخاص بك.\nسيُطبَّق دون مسح بياناتك."
+
+msgctxt "#30122"
+msgid "Kodi will close after the update - reopen it to finish."
+msgstr "سيُغلَق كودي بعد التحديث، أعد فتحه لإكمال العملية."
+
+msgctxt "#30123"
+msgid "Update Now"
+msgstr "حدّث الآن"
+
+msgctxt "#30124"
+msgid "Later"
+msgstr "لاحقًا"
+
+msgctxt "#30125"
+msgid "Ignore"
+msgstr "تجاهل"
