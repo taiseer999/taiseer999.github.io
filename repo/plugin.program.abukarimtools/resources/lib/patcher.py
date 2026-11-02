@@ -4511,6 +4511,127 @@ def _ensure_ppi_fonts():
     return all_present, wrote
 
 
+# ── Search All fonts (4.7.7) ──
+# ab_search.xml is an add-on window, so it can only use fonts of the ACTIVE
+# skin, and their sizes are the skin's: AF3's font10 is 21 px in the stock
+# fontset but the Arabic fork sets its own, and on a 16:10 Mac screen the
+# 1080i window is drawn ~16 % taller. The window got one size down in 4.7.6
+# and was still large (screenshot 2026-11-02 21:06). Search All now uses its
+# own names with fixed sizes, registered in every fontset of the active skin
+# with THAT fontset's own regular font file (Inter in AF3, the Arabic font in
+# an Arabic fontset), so the typeface does not change - only the size.
+# A skin update wipes them; every patch sweep puts them back.
+_SRCH_FONTS = (('abk_srch_s', '22'),    # cards, rows, chips, info lines
+               ('abk_srch_m', '26'),    # headings, episode title, wait message
+               ('abk_srch_l', '32'))    # show title without clearlogo
+_SRCH_FONT_MARK = '<!-- ABK Search All -->'
+
+
+def _skin_regular_default(font_xml):
+    """The regular font file a skin's fonts fall back to: the first literal
+    <param name="font_regular"> in any include of its res folder (AF3:
+    Font_Default -> Inter-Regular.ttf), else ''."""
+    folder = os.path.dirname(font_xml)
+    try:
+        names = sorted(os.listdir(folder))
+    except Exception:
+        return ''
+    for name in names:
+        if not name.lower().endswith('.xml') or 'font' not in name.lower():
+            continue
+        try:
+            with open(os.path.join(folder, name), 'rb') as f:
+                text = f.read().decode('utf-8', 'replace')
+        except Exception:
+            continue
+        # only include DEFINITIONS (<include name="...">), never a fontset's
+        # own params - Font.xml's Unicode set passes resource://...Inter-Unicode
+        for inc in re.findall(r'<include\s+name="[^"]*"\s*>([\s\S]*?)</include>', text):
+            m = re.search(r'<param\s+name="font_regular"\s*>\s*([^<$\s][^<]*?)\s*</param>', inc)
+            if m:
+                return m.group(1)
+    return ''
+
+
+def _fontset_regular_file(inner, default):
+    """Regular font file of one fontset: its own font_regular param (AF3's
+    Unicode/Arabic sets pass one to the include), else a literal font13 /
+    first literal regular <filename>, else the skin default."""
+    m = re.search(r'<param\s+name="font_regular"\s*>\s*([^<$\s][^<]*?)\s*</param>', inner)
+    if m:
+        return m.group(1)
+    m = re.search(r'<font>\s*<name>\s*font13\s*</name>\s*<filename>\s*([^<$\s][^<]*?)\s*</filename>', inner)
+    if m:
+        return m.group(1)
+    if default:
+        return default
+    files = [f for f in re.findall(r'<filename>\s*([^<$\s][^<]*?)\s*</filename>', inner)]
+    regular = [f for f in files if 'bold' not in f.lower()]
+    return (regular or files or [''])[0]
+
+
+def _ensure_search_fonts():
+    """Register / update abk_srch_* in every fontset of the active skin.
+    Returns (all_present, wrote). Never raises."""
+    paths = _skin_font_xmls()
+    if not paths:
+        return False, False
+    all_present, wrote = True, False
+    for path in paths:
+        try:
+            with open(path, 'rb') as f:
+                text = f.read().decode('utf-8')
+        except Exception:
+            all_present = False
+            continue
+        if not re.search(r'<fontset\b', text):
+            all_present = False
+            continue
+        nl = '\r\n' if '\r\n' in text else '\n'
+        default = _skin_regular_default(path)
+        changed = [False]
+
+        def _fix(m):
+            open_tag, inner, close_tag = m.group(1), m.group(2), m.group(3)
+            fname = _fontset_regular_file(inner, default)
+            if not fname:
+                return m.group(0)
+            new_inner = inner
+            for name, size in _SRCH_FONTS:
+                block = ('%s        <font>%s            <name>%s</name>%s'
+                         '            <filename>%s</filename>%s'
+                         '            <size>%s</size>%s        </font>'
+                         % (nl, nl, name, nl, fname, nl, size, nl))
+                cur = re.search(r'[ \t]*\r?\n?[ \t]*<font>\s*<name>\s*%s\s*</name>[\s\S]*?</font>'
+                                % re.escape(name), new_inner)
+                if cur:
+                    have_file = re.search(r'<filename>\s*([^<]*?)\s*</filename>', cur.group(0))
+                    if have_file and have_file.group(1) == fname:
+                        continue        # keep it: Font Size may have scaled its <size>
+                    new_inner = new_inner[:cur.start()] + new_inner[cur.end():]
+                new_inner = block + new_inner
+                changed[0] = True
+            return open_tag + new_inner + close_tag
+
+        new = re.sub(r'(<fontset\b[^>]*>)(.*?)(</fontset>)', _fix, text, flags=re.S)
+        for name, _size in _SRCH_FONTS:
+            if len(re.findall(r'<name>\s*%s\s*</name>' % name, new)) < \
+                    len(re.findall(r'<fontset\b', new)):
+                all_present = False
+        if changed[0] and new != text:
+            try:
+                tmp = path + '.abk_tmp'
+                with open(tmp, 'wb') as f:
+                    f.write(new.encode('utf-8'))
+                os.replace(tmp, path)
+                wrote = True
+                _log('Search All fonts registered in %s' % path)
+            except Exception as e:
+                _log('Search All fonts: cannot write %s: %s' % (path, e), xbmc.LOGWARNING)
+                all_present = False
+    return all_present, wrote
+
+
 def _cleanup_retired_tinyppi(addon_path):
     """Remove what retired TinyPPI patches left in the add-on: the PPI AF3 Home
     publisher (home_publish.py + its monitor.py hook, <=3.2.39).
@@ -4879,6 +5000,21 @@ def apply_set(group=None, addon_ids=None):
                     _mark_skin_reload()
         else:
             failed += 1
+
+    # 4.7.7: Search All's own fixed-size fonts in the active skin (before the
+    # Font Size pass, so the chosen mode scales them like every other font).
+    if not addon_ids or any(_is_active_skin(a) for a in _scope):
+        try:
+            present, wrote = _ensure_search_fonts()
+            msg = ('[Search All fonts] registered in the active skin.' if wrote else
+                   '[Search All fonts] present.' if present else
+                   '[Search All fonts] not registered (skin fonts not writable) - skin sizes used.')
+        except Exception as e:
+            present, wrote, msg = False, False, '[Search All fonts] %s' % e
+        _log(msg)
+        if wrote:
+            changed += 1
+            _mark_skin_reload()
 
     # 3.4.6: Font Size mode (original / +5% / -5%) - LAST, so font blocks the
     # patches above just added to the skin get scaled in the same pass. A skin

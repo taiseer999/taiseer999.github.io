@@ -632,10 +632,14 @@ def _pretty(name):
     return _PRETTY.get(name.upper(), name.title() if name.isupper() else name)
 
 
-# Title fit for the stream cards, narrower than the add-ons' windows: the
-# skin font here ran wider and Kodi in Arabic cut the overflow from the START
-# ("sion 2025 ..." for "Obsession 2025 ..."), screenshot 2026-10-29.
-_TITLE_PX = 600
+# Title fit for the stream cards, in lucent_theme._px units: Kodi in Arabic
+# cut an overflowing label from the START ("sion 2025 ..." for "Obsession
+# 2025 ...", screenshot 2026-10-29), so titles are fitted here.
+# 4.7.8: the cards use abk_srch_s (22 px). Measured on AF3's Inter, real
+# width = 0.865 x _px at 22 px; the label is 740 wide; a 16:10 screen (Mac)
+# draws the 1080i window ~11 % wider-per-height -> 740 / 0.865 / 1.11 = 770.
+# The FOCUSED card shows the whole title (lucent.title_full, scrolling).
+_TITLE_PX = 760
 
 # size buckets in the filter menu (GB, string id)
 _SIZES = ((0, 5, 30830), (5, 15, 30831), (15, 40, 30832), (40, 1e9, 30833))
@@ -1144,7 +1148,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                     not any(part.upper() in m.upper() or m.upper() in part.upper() for m in meta):
                 meta.append(part)
         ntags = min(len(row['refs']), 4)
-        meta_px = 610 - ntags * 70
+        meta_px = 680 - ntags * 74      # 4.7.8: 22 px font (was 610 - 70 per tag)
         title = _clean(item.get('display_name') or item.get('name'))
         props = {'lucent.quality': q, 'lucent.lowq': 'true' if q in ('CAM', 'SCR', 'TELE', 'HC') else '',
                  'lucent.uncached': '', 'lucent.res': '', 'lucent.icon': '',
@@ -1161,6 +1165,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 while len(meta) > 1 and th._px('  ·  '.join(meta).upper()) > meta_px:
                     meta.pop()
                 props['lucent.title'] = th._fit(title, _TITLE_PX)
+                props['lucent.title_full'] = title
                 props['lucent.meta'] = th._fit('  ·  '.join(meta), meta_px)
                 # 4.6.1: no resolution flags; service icon (AB Wizard
                 # artwork, lucent/providers) under the quality pill
@@ -1171,6 +1176,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 found = []
         else:
             props['lucent.title'], props['lucent.meta'], found = title, '  ·  '.join(meta), []
+            props['lucent.title_full'] = title
         for n in range(7):
             props['lucent.badge_%d' % (n + 1)] = found[n] if n < len(found) else ''
         for n in range(4):

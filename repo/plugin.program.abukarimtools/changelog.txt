@@ -1,3 +1,47 @@
+v4.7.8
+- Search All: release names were cut with "..." well before the end of the
+  line (screenshot 2026-11-02 21:10; kodi.log 21:09:00 shows the 4.7.7
+  fonts registered and the skin reloaded). The cut was ours: titles are
+  fitted in Python (Kodi in Arabic trims an overflowing label from the
+  START) at 600 _px units, calibrated for the old skin font12.
+  * Focused card: the whole name (new property lucent.title_full) in a
+    scrolling label, so any release name can be read in full.
+  * Other cards: title labels 712 -> 740 wide, fit 600 -> 760 _px units
+    (Inter at 22 px measures 0.865 x _px; 16:10 screens draw the window
+    ~11 % wider per height) - about a quarter more of the name shows.
+  * Info line (service / size / bitrate): 610 - 70 per service tag ->
+    680 - 74 per tag.
+
+v4.7.7
+- Search All text still large after 4.7.6 (screenshot 2026-11-02 21:06,
+  macOS): the window can only use the active skin's fonts, and their sizes
+  are the skin's - the Arabic AF3 fontset sets its own, and a 16:10 screen
+  draws the 1080i window ~16 % taller. Search All now uses its own names
+  with fixed sizes:
+  * abk_srch_s 22 px - cards, rows, chips, info lines (was font10)
+  * abk_srch_m 26 px - headings, episode title, wait message (was font12)
+  * abk_srch_l 32 px - show title without clearlogo (was font13)
+  Every patch sweep registers them in every fontset of the active skin's
+  Font.xml (one per res folder), with THAT fontset's own regular font file:
+  its font_regular param (AF3 Unicode / Arabic sets), else a literal
+  font13, else the skin include's default (AF3: Inter-Regular.ttf). Same
+  typeface, only the size is fixed. A block whose file already matches is
+  kept (the Font Size toggle may have scaled it); a skin update wipes them
+  and the next sweep puts them back (skin reload). Runs before Font Size,
+  so the chosen mode scales them too. Skin fonts not writable: the window
+  falls back to the skin's default font.
+
+v4.7.6
+- Search All (ab_search.xml): text one size smaller. The window uses the
+  active skin's fonts; in Arctic Fuse 3:
+  * font12 (24 px, 95 cards/rows/chips/info lines) -> font10 (21 px)
+  * font27 (episode title, wait message, headings; not defined in AF3, so
+    Kodi fell back to font13, 28 px) -> font12 (24 px)
+  * font37 (show title without clearlogo; also fell back to font13) ->
+    font13 (28 px, unchanged size in AF3, now named explicitly)
+  font10 / font12 / font13 exist in AF3, Estuary and Bald, so no skin falls
+  back to a larger default. The Font Size toggle still scales them.
+
 v4.7.5
 - TMDb Helper 7.x: Arctic Fuse 3 calls two routes that jurialmunkey added
   in 6.20 and the multiservice 7.x fork never got, so every call raised

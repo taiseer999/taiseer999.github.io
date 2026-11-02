@@ -63,7 +63,7 @@
                 <top>60</top>
                 <width>720</width>
                 <height>160</height>
-                <font>font37</font>
+                <font>abk_srch_l</font>
                 <textcolor>FFFFFFFF</textcolor>
                 <aligny>bottom</aligny>
                 <label>[B]$INFO[Window.Property(lucent.show_title)][/B]</label>
@@ -79,7 +79,7 @@
                 <control type="button">
                     <width>auto</width>
                     <height>44</height>
-                    <font>font12</font>
+                    <font>abk_srch_s</font>
                     <textoffsetx>20</textoffsetx>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
@@ -93,7 +93,7 @@
                 <control type="button">
                     <width>auto</width>
                     <height>44</height>
-                    <font>font12</font>
+                    <font>abk_srch_s</font>
                     <textoffsetx>20</textoffsetx>
                     <aligny>center</aligny>
                     <textcolor>FFDCE2E7</textcolor>
@@ -107,7 +107,7 @@
                 <control type="button">
                     <width>auto</width>
                     <height>44</height>
-                    <font>font12</font>
+                    <font>abk_srch_s</font>
                     <textoffsetx>20</textoffsetx>
                     <aligny>center</aligny>
                     <textcolor>FFDCE2E7</textcolor>
@@ -121,7 +121,7 @@
                 <control type="button">
                     <width>auto</width>
                     <height>44</height>
-                    <font>font12</font>
+                    <font>abk_srch_s</font>
                     <textoffsetx>20</textoffsetx>
                     <aligny>center</aligny>
                     <textcolor>FFDCE2E7</textcolor>
@@ -135,7 +135,7 @@
                 <control type="button">
                     <width>auto</width>
                     <height>44</height>
-                    <font>font12</font>
+                    <font>abk_srch_s</font>
                     <textoffsetx>20</textoffsetx>
                     <aligny>center</aligny>
                     <textcolor>FFDCE2E7</textcolor>
@@ -151,7 +151,7 @@
                 <top>320</top>
                 <width>720</width>
                 <height>44</height>
-                <font>font27</font>
+                <font>abk_srch_m</font>
                 <textcolor>FFFFFFFF</textcolor>
                 <label>[B]$INFO[Window.Property(lucent.ep_title)][/B]</label>
                 <visible>!String.IsEmpty(Window.Property(lucent.ep_title))</visible>
@@ -169,7 +169,7 @@
             <control type="textbox">
                 <width>700</width>
                 <height>220</height>
-                <font>font12</font>
+                <font>abk_srch_s</font>
                 <textcolor>FFBDC8D1</textcolor>
                 <label>$INFO[Window.Property(lucent.plot)]</label>
                 <autoscroll delay="6000" time="2500" repeat="8000">true</autoscroll>
@@ -189,7 +189,7 @@
             <control type="label">
                 <width>700</width>
                 <height>40</height>
-                <font>font12</font>
+                <font>abk_srch_s</font>
                 <textcolor>FF8F9BA6</textcolor>
                 <label>[B][UPPERCASE]$INFO[Window.Property(abs.addons_heading)][/UPPERCASE][/B]</label>
             </control>
@@ -257,7 +257,7 @@
                     <top>0</top>
                     <width>360</width>
                     <height>50</height>
-                    <font>font12</font>
+                    <font>abk_srch_s</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
                     <label>[B]$INFO[Window.Property(abs.s1.name)][/B]</label>
@@ -267,7 +267,7 @@
                     <top>0</top>
                     <width>308</width>
                     <height>50</height>
-                    <font>font12</font>
+                    <font>abk_srch_s</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFBDC8D1</textcolor>
@@ -328,7 +328,7 @@
                     <top>54</top>
                     <width>360</width>
                     <height>50</height>
-                    <font>font12</font>
+                    <font>abk_srch_s</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
                     <label>[B]$INFO[Window.Property(abs.s2.name)][/B]</label>
@@ -338,7 +338,7 @@
                     <top>54</top>
                     <width>308</width>
                     <height>50</height>
-                    <font>font12</font>
+                    <font>abk_srch_s</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFBDC8D1</textcolor>
@@ -399,7 +399,7 @@
                     <top>108</top>
                     <width>360</width>
                     <height>50</height>
-                    <font>font12</font>
+                    <font>abk_srch_s</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
                     <label>[B]$INFO[Window.Property(abs.s3.name)][/B]</label>
@@ -409,7 +409,7 @@
                     <top>108</top>
                     <width>308</width>
                     <height>50</height>
-                    <font>font12</font>
+                    <font>abk_srch_s</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFBDC8D1</textcolor>
@@ -470,7 +470,7 @@
                     <top>162</top>
                     <width>360</width>
                     <height>50</height>
-                    <font>font12</font>
+                    <font>abk_srch_s</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
                     <label>[B]$INFO[Window.Property(abs.s4.name)][/B]</label>
@@ -480,7 +480,7 @@
                     <top>162</top>
                     <width>308</width>
                     <height>50</height>
-                    <font>font12</font>
+                    <font>abk_srch_s</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFBDC8D1</textcolor>
@@ -541,7 +541,7 @@
                     <top>216</top>
                     <width>360</width>
                     <height>50</height>
-                    <font>font12</font>
+                    <font>abk_srch_s</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
                     <label>[B]$INFO[Window.Property(abs.s5.name)][/B]</label>
@@ -551,7 +551,7 @@
                     <top>216</top>
                     <width>308</width>
                     <height>50</height>
-                    <font>font12</font>
+                    <font>abk_srch_s</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFBDC8D1</textcolor>
@@ -569,7 +569,7 @@
                 <top>28</top>
                 <width>1840</width>
                 <height>64</height>
-                <font>font37</font>
+                <font>abk_srch_l</font>
                 <aligny>center</aligny>
                 <textcolor>FFFFFFFF</textcolor>
                 <label>[B]$INFO[Window.Property(lucent.show_title)][/B]$INFO[Window.Property(lucent.ep_code),   [COLOR FFBDC8D1],[/COLOR]]</label>
@@ -611,7 +611,7 @@
                 <top>26</top>
                 <width>388</width>
                 <height>50</height>
-                <font>font27</font>
+                <font>abk_srch_m</font>
                 <textcolor>FFFFFFFF</textcolor>
                 <label>[B]$INFO[Window.Property(abs.heading)][/B]</label>
             </control>
@@ -620,7 +620,7 @@
                 <top>26</top>
                 <width>320</width>
                 <height>50</height>
-                <font>font12</font>
+                <font>abk_srch_s</font>
                 <align>right</align>
                 <aligny>center</aligny>
                 <textcolor>FFBDC8D1</textcolor>
@@ -632,7 +632,7 @@
                 <top>70</top>
                 <width>904</width>
                 <height>26</height>
-                <font>font12</font>
+                <font>abk_srch_s</font>
                 <textcolor>FF8F9BA6</textcolor>
                 <label>$INFO[Window.Property(abs.subhead)]</label>
             </control>
@@ -642,7 +642,7 @@
                 <top>29</top>
                 <width>180</width>
                 <height>44</height>
-                <font>font12</font>
+                <font>abk_srch_s</font>
                 <align>center</align>
                 <aligny>center</aligny>
                 <textcolor>FFDCE2E7</textcolor>
@@ -747,7 +747,7 @@
                         <left>38</left>
                         <width>148</width>
                         <height>52</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>left</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -757,7 +757,7 @@
                         <left>186</left>
                         <width>50</width>
                         <height>52</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>right</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -849,7 +849,7 @@
                         <left>38</left>
                         <width>148</width>
                         <height>52</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>left</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -859,7 +859,7 @@
                         <left>186</left>
                         <width>50</width>
                         <height>52</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>right</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -943,7 +943,7 @@
                         <left>38</left>
                         <width>148</width>
                         <height>52</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>left</align>
                         <aligny>center</aligny>
                         <textcolor>FF0B1119</textcolor>
@@ -953,7 +953,7 @@
                         <left>186</left>
                         <width>50</width>
                         <height>52</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>right</align>
                         <aligny>center</aligny>
                         <textcolor>FF0B1119</textcolor>
@@ -1028,7 +1028,7 @@
                             <top>20</top>
                             <width>124</width>
                             <height>42</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFDCE2E7</textcolor>
@@ -1040,7 +1040,7 @@
                             <top>20</top>
                             <width>124</width>
                             <height>42</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -1050,9 +1050,9 @@
                         <control type="label">
                             <left>168</left>
                             <top>12</top>
-                            <width>712</width>
+                            <width>740</width>
                             <height>40</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <textcolor>CCFFFFFF</textcolor>
                             <label>$INFO[ListItem.Property(lucent.title)]</label>
                         </control>
@@ -1061,7 +1061,7 @@
                             <top>46</top>
                             <width>712</width>
                             <height>34</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <textcolor>FF8F9BA6</textcolor>
                             <label>[UPPERCASE]$INFO[ListItem.Property(lucent.meta)][/UPPERCASE]</label>
                         </control>
@@ -1159,7 +1159,7 @@
                             <top>70</top>
                             <width>124</width>
                             <height>36</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFDCE2E7</textcolor>
@@ -1216,7 +1216,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -1272,7 +1272,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -1328,7 +1328,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -1384,7 +1384,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -1395,7 +1395,7 @@
                         <left>40</left>
                         <width>824</width>
                         <height>124</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>CCFFFFFF</textcolor>
@@ -1444,7 +1444,7 @@
                             <top>20</top>
                             <width>124</width>
                             <height>42</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFDCE2E7</textcolor>
@@ -1456,7 +1456,7 @@
                             <top>20</top>
                             <width>124</width>
                             <height>42</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -1466,9 +1466,9 @@
                         <control type="label">
                             <left>168</left>
                             <top>12</top>
-                            <width>712</width>
+                            <width>740</width>
                             <height>40</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <textcolor>CCFFFFFF</textcolor>
                             <label>$INFO[ListItem.Property(lucent.title)]</label>
                         </control>
@@ -1477,7 +1477,7 @@
                             <top>46</top>
                             <width>712</width>
                             <height>34</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <textcolor>FF8F9BA6</textcolor>
                             <label>[UPPERCASE]$INFO[ListItem.Property(lucent.meta)][/UPPERCASE]</label>
                         </control>
@@ -1575,7 +1575,7 @@
                             <top>70</top>
                             <width>124</width>
                             <height>36</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFDCE2E7</textcolor>
@@ -1632,7 +1632,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -1688,7 +1688,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -1744,7 +1744,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -1800,7 +1800,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -1811,7 +1811,7 @@
                         <left>40</left>
                         <width>824</width>
                         <height>124</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>CCFFFFFF</textcolor>
@@ -1869,7 +1869,7 @@
                             <top>20</top>
                             <width>124</width>
                             <height>42</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FF0B1119</textcolor>
@@ -1881,7 +1881,7 @@
                             <top>20</top>
                             <width>124</width>
                             <height>42</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -1891,18 +1891,20 @@
                         <control type="label">
                             <left>168</left>
                             <top>12</top>
-                            <width>712</width>
+                            <width>740</width>
                             <height>40</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <textcolor>FFFFFFFF</textcolor>
-                            <label>[B]$INFO[ListItem.Property(lucent.title)][/B]</label>
+                            <scroll>true</scroll>
+                            <scrollspeed>45</scrollspeed>
+                            <label>[B]$INFO[ListItem.Property(lucent.title_full)][/B]</label>
                         </control>
                         <control type="label">
                             <left>168</left>
                             <top>46</top>
                             <width>712</width>
                             <height>34</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <textcolor>FFDCE2E7</textcolor>
                             <label>[UPPERCASE]$INFO[ListItem.Property(lucent.meta)][/UPPERCASE]</label>
                         </control>
@@ -2000,7 +2002,7 @@
                             <top>70</top>
                             <width>124</width>
                             <height>36</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFDCE2E7</textcolor>
@@ -2057,7 +2059,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -2113,7 +2115,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -2169,7 +2171,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -2225,7 +2227,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -2236,7 +2238,7 @@
                         <left>40</left>
                         <width>824</width>
                         <height>124</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -2264,7 +2266,7 @@
                     <top>56</top>
                     <width>904</width>
                     <height>50</height>
-                    <font>font27</font>
+                    <font>abk_srch_m</font>
                     <align>center</align>
                     <aligny>center</aligny>
                     <textcolor>FFDCE2E7</textcolor>
@@ -2308,7 +2310,7 @@
                 <top>26</top>
                 <width>1300</width>
                 <height>50</height>
-                <font>font27</font>
+                <font>abk_srch_m</font>
                 <textcolor>FFFFFFFF</textcolor>
                 <label>[B]$INFO[Window.Property(abs.heading)][/B]</label>
             </control>
@@ -2317,7 +2319,7 @@
                 <top>26</top>
                 <width>320</width>
                 <height>50</height>
-                <font>font12</font>
+                <font>abk_srch_s</font>
                 <align>right</align>
                 <aligny>center</aligny>
                 <textcolor>FFBDC8D1</textcolor>
@@ -2329,7 +2331,7 @@
                 <top>70</top>
                 <width>1816</width>
                 <height>26</height>
-                <font>font12</font>
+                <font>abk_srch_s</font>
                 <textcolor>FF8F9BA6</textcolor>
                 <label>$INFO[Window.Property(abs.subhead)]</label>
             </control>
@@ -2339,7 +2341,7 @@
                 <top>29</top>
                 <width>180</width>
                 <height>44</height>
-                <font>font12</font>
+                <font>abk_srch_s</font>
                 <align>center</align>
                 <aligny>center</aligny>
                 <textcolor>FFDCE2E7</textcolor>
@@ -2444,7 +2446,7 @@
                         <left>38</left>
                         <width>148</width>
                         <height>52</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>left</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -2454,7 +2456,7 @@
                         <left>186</left>
                         <width>50</width>
                         <height>52</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>right</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -2546,7 +2548,7 @@
                         <left>38</left>
                         <width>148</width>
                         <height>52</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>left</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -2556,7 +2558,7 @@
                         <left>186</left>
                         <width>50</width>
                         <height>52</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>right</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -2640,7 +2642,7 @@
                         <left>38</left>
                         <width>148</width>
                         <height>52</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>left</align>
                         <aligny>center</aligny>
                         <textcolor>FF0B1119</textcolor>
@@ -2650,7 +2652,7 @@
                         <left>186</left>
                         <width>50</width>
                         <height>52</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>right</align>
                         <aligny>center</aligny>
                         <textcolor>FF0B1119</textcolor>
@@ -2723,7 +2725,7 @@
                             <top>20</top>
                             <width>124</width>
                             <height>42</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFDCE2E7</textcolor>
@@ -2735,7 +2737,7 @@
                             <top>20</top>
                             <width>124</width>
                             <height>42</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -2745,9 +2747,9 @@
                         <control type="label">
                             <left>168</left>
                             <top>12</top>
-                            <width>712</width>
+                            <width>740</width>
                             <height>40</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <textcolor>CCFFFFFF</textcolor>
                             <label>$INFO[ListItem.Property(lucent.title)]</label>
                         </control>
@@ -2756,7 +2758,7 @@
                             <top>46</top>
                             <width>712</width>
                             <height>34</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <textcolor>FF8F9BA6</textcolor>
                             <label>[UPPERCASE]$INFO[ListItem.Property(lucent.meta)][/UPPERCASE]</label>
                         </control>
@@ -2854,7 +2856,7 @@
                             <top>70</top>
                             <width>124</width>
                             <height>36</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFDCE2E7</textcolor>
@@ -2911,7 +2913,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -2967,7 +2969,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -3023,7 +3025,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -3079,7 +3081,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -3090,7 +3092,7 @@
                         <left>40</left>
                         <width>824</width>
                         <height>124</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>CCFFFFFF</textcolor>
@@ -3139,7 +3141,7 @@
                             <top>20</top>
                             <width>124</width>
                             <height>42</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFDCE2E7</textcolor>
@@ -3151,7 +3153,7 @@
                             <top>20</top>
                             <width>124</width>
                             <height>42</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -3161,9 +3163,9 @@
                         <control type="label">
                             <left>168</left>
                             <top>12</top>
-                            <width>712</width>
+                            <width>740</width>
                             <height>40</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <textcolor>CCFFFFFF</textcolor>
                             <label>$INFO[ListItem.Property(lucent.title)]</label>
                         </control>
@@ -3172,7 +3174,7 @@
                             <top>46</top>
                             <width>712</width>
                             <height>34</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <textcolor>FF8F9BA6</textcolor>
                             <label>[UPPERCASE]$INFO[ListItem.Property(lucent.meta)][/UPPERCASE]</label>
                         </control>
@@ -3270,7 +3272,7 @@
                             <top>70</top>
                             <width>124</width>
                             <height>36</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFDCE2E7</textcolor>
@@ -3327,7 +3329,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -3383,7 +3385,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -3439,7 +3441,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -3495,7 +3497,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -3506,7 +3508,7 @@
                         <left>40</left>
                         <width>824</width>
                         <height>124</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>CCFFFFFF</textcolor>
@@ -3564,7 +3566,7 @@
                             <top>20</top>
                             <width>124</width>
                             <height>42</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FF0B1119</textcolor>
@@ -3576,7 +3578,7 @@
                             <top>20</top>
                             <width>124</width>
                             <height>42</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -3586,18 +3588,20 @@
                         <control type="label">
                             <left>168</left>
                             <top>12</top>
-                            <width>712</width>
+                            <width>740</width>
                             <height>40</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <textcolor>FFFFFFFF</textcolor>
-                            <label>[B]$INFO[ListItem.Property(lucent.title)][/B]</label>
+                            <scroll>true</scroll>
+                            <scrollspeed>45</scrollspeed>
+                            <label>[B]$INFO[ListItem.Property(lucent.title_full)][/B]</label>
                         </control>
                         <control type="label">
                             <left>168</left>
                             <top>46</top>
                             <width>712</width>
                             <height>34</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <textcolor>FFDCE2E7</textcolor>
                             <label>[UPPERCASE]$INFO[ListItem.Property(lucent.meta)][/UPPERCASE]</label>
                         </control>
@@ -3695,7 +3699,7 @@
                             <top>70</top>
                             <width>124</width>
                             <height>36</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFDCE2E7</textcolor>
@@ -3752,7 +3756,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -3808,7 +3812,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -3864,7 +3868,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -3920,7 +3924,7 @@
                             <top>49</top>
                             <width>64</width>
                             <height>28</height>
-                            <font>font12</font>
+                            <font>abk_srch_s</font>
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
@@ -3931,7 +3935,7 @@
                         <left>40</left>
                         <width>824</width>
                         <height>124</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -3959,7 +3963,7 @@
                     <top>56</top>
                     <width>1816</width>
                     <height>50</height>
-                    <font>font27</font>
+                    <font>abk_srch_m</font>
                     <align>center</align>
                     <aligny>center</aligny>
                     <textcolor>FFDCE2E7</textcolor>
