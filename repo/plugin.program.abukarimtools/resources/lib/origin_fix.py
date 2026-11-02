@@ -361,15 +361,33 @@ def _apply_pinned_ready(cur, result, ready):
         if row is None:
             continue                      # not registered yet - next pass
         old = row[0] or ''
-        if old.lower() == repo_id.lower():
+        target = repo_id
+        # 4.7.5: a pin must not freeze an add-on newer than the pinned repo has.
+        # TMDb Helper 7.0.23 (multiservice fork) was pinned to jurialmunkey,
+        # whose newest is 6.20.3, so it could never update again (kodi.log
+        # 2026-11-02 18:59:09). Only a KNOWN older cached version counts: an
+        # empty cache or unknown version still pins as before.
+        inst = _installed_version(addon_id)
+        if inst:
+            cands = _repo_candidates(cur, addon_id)
+            pinned_ver = next((v for r, v in cands if r.lower() == repo_id.lower()), '')
+            if pinned_ver and _vkey(pinned_ver) < _vkey(inst):
+                others = [c for c in cands if c[0].lower() != repo_id.lower()]
+                alt = _pick_repo(others, inst) if others else None
+                if not (alt and _covers(others, alt, inst)):
+                    _log('origin pin skipped: %s %s is newer than %s %s - origin %s kept'
+                         % (addon_id, inst, repo_id, pinned_ver, old or '(empty)'))
+                    continue
+                target = alt
+        if old.lower() == target.lower():
             continue
         cur.execute('UPDATE installed SET origin = ? WHERE addonID = ?',
-                    (repo_id, addon_id))
+                    (target, addon_id))
         if cur.rowcount:
-            result['fixed'][addon_id] = repo_id
+            result['fixed'][addon_id] = target
             if old:
                 result.setdefault('corrected', []).append(addon_id)
-            _log('origin pinned: %s %s -> %s' % (addon_id, old or '(empty)', repo_id))
+            _log('origin pinned: %s %s -> %s' % (addon_id, old or '(empty)', target))
 
 
 def _ensure_pinned_repos():

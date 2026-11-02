@@ -470,6 +470,16 @@ _TMDBH7_CERT_NEW = (
     "        return (self.item_id, iso_country, iso_country)\n"
 )
 
+_TMDBH7_ROUTES_BLOCK = (
+    "# -- TMDbHelper 6.20 skin routes (by ABUKARIM TOOLS) --\n"
+    "ALL_ROUTES.append({\n"
+    "    'sync_watchedon': {'route': {\n"
+    "        'module_name': 'tmdbhelper.lib.items.abk_routes', 'import_attr': 'ListWatchedOn'}},\n"
+    "    'mdblist_officiallist': {'route': {\n"
+    "        'module_name': 'tmdbhelper.lib.items.abk_routes', 'import_attr': 'ListMDbListOfficial'}},\n"
+    "})\n"
+)
+
 _TMDBH7_GENRE_ANCHOR = "class ItemDetailsDataBase(DataBase):\n"
 _TMDBH7_GENRE_BLOCK = (
     "\n"
@@ -642,6 +652,36 @@ PATCHES = [
         'new': _TMDBH7_CERT_NEW,
         'already_patched_check': '# -- USA certification fallback v7 (by ABUKARIM TOOLS) --',
         'description': 'TMDbHelper 7 tmdbdata.py - use the USA certification when the configured country (e.g. SA) has none',
+    },
+    # ── TMDbHelper 7.x (4.7.5): the routes Arctic Fuse 3 calls but 7.x lacks ──
+    # AF3 is built against jurialmunkey's 6.20, which added info=sync_watchedon
+    # (Settings home: watched this month / last month / two months ago) and
+    # info=mdblist_officiallist ("Most Watched Shows (Past Week)"). The
+    # multiservice 7.x fork never got either: every call raised "info=... is not
+    # valid route" (kodi.log 2026-11-02, AM9 18:59:11 and macOS 17:57:53). The
+    # containers are ported onto what 7.x has - the local Trakt sync data and the
+    # MDBList API - in a file of their own; routes.py appends them to ALL_ROUTES.
+    # 6.20 ships both natively, hence the 7.x window.
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'items', 'abk_routes.py'),
+        'min_version': '7.0.0',
+        'old': '', 'new': '',
+        'inject_file': True,
+        'inject_source': os.path.join('resources', 'tmdbhelper_v7', 'abk_routes.py'),
+        'already_patched_check': '# -- TMDbHelper 6.20 skin routes v1 (by ABUKARIM TOOLS) --',
+        'description': 'TMDbHelper 7 - inject abk_routes.py (sync_watchedon, mdblist_officiallist)',
+    },
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'items', 'routes.py'),
+        'min_version': '7.0.0',
+        'old': '',
+        'new': '',
+        'already_patched_check': '# -- TMDbHelper 6.20 skin routes (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r'(?m)^ALL_ROUTES = \[[^\]]*\]\n',
+        'fallback_repl': lambda m: m.group(0) + _TMDBH7_ROUTES_BLOCK,
+        'description': 'TMDbHelper 7 routes.py - register sync_watchedon and mdblist_officiallist',
     },
     # ── RedLight – kill automatic volume drop to -30 dB on playback start ──
     {
@@ -3754,6 +3794,17 @@ def _apply_patch(patch):
                 _restart_addon(patch['addon_id'])
             return True, '[%s] File injected OK: %s' % (patch['addon_id'], patch['description'])
         inject_content = base64.b64decode(b64).decode('utf-8') if b64 else patch.get('inject_content', '')
+        # 4.7.5: a text file shipped inside this add-on (inject_source), like the binary branch.
+        if not b64 and patch.get('inject_source'):
+            src_abs = os.path.join(
+                xbmcvfs.translatePath('special://home/addons/plugin.program.abukarimtools/'),
+                patch['inject_source'])
+            try:
+                with open(src_abs, 'r', encoding='utf-8') as _sf:
+                    inject_content = _sf.read()
+            except Exception as e:
+                return False, ('[%s] Source file missing (%s): %s'
+                               % (patch['addon_id'], patch['inject_source'], e))
         already_check = patch.get('already_patched_check', '')
         if os.path.isfile(target) and already_check and already_check in _read(target):
             return True, '[%s] Already patched – skipping.' % patch['addon_id']

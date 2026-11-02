@@ -1,3 +1,29 @@
+v4.7.5
+- TMDb Helper 7.x: Arctic Fuse 3 calls two routes that jurialmunkey added
+  in 6.20 and the multiservice 7.x fork never got, so every call raised
+  "info=... is not valid route":
+  * info=sync_watchedon (Settings home: watched this month / last month /
+    two months ago; kodi.log AM9 2026-11-02 18:59:11, 19:02:17)
+  * info=mdblist_officiallist ("Most Watched Shows (Past Week)", list_id
+    most-watched-week; kodi.log macOS 17:57:53)
+  Ported onto what 7.x has: new resources/tmdbhelper_v7/abk_routes.py is
+  injected as resources/tmdbhelper/lib/items/abk_routes.py and routes.py
+  appends both to ALL_ROUTES. sync_watchedon reads the local Trakt sync data
+  (no extra request): items whose last watch falls on the year / month / day,
+  newest first, with 6.20's date reading (0 / negative = count back from
+  today, month names). Weekday names (day=monday) are not supported.
+  mdblist_officiallist reads GET /lists/official/{list_id}/items, the
+  endpoint 6.20 uses. Both entries are always-on and 7.x only (6.20 ships
+  the routes natively).
+- Patcher: a text inject_file can come from a file shipped in this add-on
+  (inject_source), as binary ones already could.
+- OriginFix: a pinned origin is no longer forced on an add-on newer than the
+  pinned repository carries. TMDb Helper 7.0.23 was moved from
+  repository.tmdbhelper-multiservice to repository.jurialmunkey (newest
+  6.20.3) and could never update again (kodi.log 18:59:09). Now it goes back
+  to the repository that carries its version; with none, the origin is left
+  alone. An unknown or empty repository listing still pins as before.
+
 v4.7.4
 - Setup progress pill on Arctic Fuse 3: a skin <visible> dialog
   (1080i/Custom_1789_ABK_Setup.xml + media/abk_setup/*.png, 4 always-on
