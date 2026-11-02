@@ -90,20 +90,22 @@ class Startup:
         """Pushed no-wipe (shortcuts/menus) update. Fires when Builds.txt
         guiversion= for this box's build is newer than the local guiversion.
         A pending FULL build update wins (it already carries new shortcuts)."""
+        def _log(m):
+            xbmc.log('[AB Wizard GuiUpdate] %s' % m, xbmc.LOGINFO)
+        local = setting('guiversion') or '0'
+        _log('build=%r remote=%r local=%r mode=%s ignored=%r' % (
+            CURRENT_BUILD, GUI_UPDATE_VERSION, local, GUI_UPDATE_MODE, setting('ignoredgui')))
         if CURRENT_BUILD in ('No Build Installed', 'No Build') or not GUI_UPDATE_VERSION:
+            _log('skip: no build installed or no guiversion= for this build')
             return
         if is_newer(UPDATE_VERSION, CURRENT_VERSION):
-            return
-        local = setting('guiversion')
-        if not local:
-            # Box predates this feature: adopt the current number silently,
-            # so only the NEXT bump you publish triggers the popup.
-            # (Publish the first bump after users have this wizard version.)
-            setting_set('guiversion', str(GUI_UPDATE_VERSION))
+            _log('skip: full build update %s pending (installed %s)' % (UPDATE_VERSION, CURRENT_VERSION))
             return
         if not is_newer(GUI_UPDATE_VERSION, local):
+            _log('skip: up to date')
             return
         if setting('ignoredgui') == str(GUI_UPDATE_VERSION):
+            _log('skip: user ignored this version')
             return
         url = OPTION2_URL if GUI_UPDATE_MODE == '2' else GUI_URL
         if not url or url in ('http://', 'https://'):
@@ -111,6 +113,7 @@ class Startup:
             return
         if url.startswith('https://www.dropbox.com'):
             url = url.replace('dl=0', 'dl=1')
+        _log('showing popup')
         msg = local_string(30121)
         if GUI_UPDATE_MODE == '2':
             msg += '\n' + local_string(30122)

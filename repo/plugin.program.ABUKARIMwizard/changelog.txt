@@ -1,3 +1,8 @@
+v3.9.50
+- Shortcuts update popup: no more silent first run - a box with no recorded
+  guiversion gets the popup for the current one. Each startup decision is
+  logged as [AB Wizard GuiUpdate].
+
 v3.9.49
 - Pushed no-wipe shortcuts update: bump guiversion="N" under a build in
   Builds.txt (guimode="1" = Option 1, "2" = Option 2) and every box on that
