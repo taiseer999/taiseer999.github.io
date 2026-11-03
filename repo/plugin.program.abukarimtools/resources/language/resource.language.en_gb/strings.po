@@ -2040,3 +2040,75 @@ msgctxt "#30962"
 msgid "TMDb Helper: Trakt sync"
 msgstr ""
 
+msgctxt "#30963"
+msgid "TMDb Helper: link accounts"
+msgstr ""
+
+msgctxt "#30964"
+msgid "Toggles"
+msgstr ""
+
+msgctxt "#30970"
+msgid "DPlex tab"
+msgstr ""
+
+msgctxt "#30971"
+msgid "Korean Media tab"
+msgstr ""
+
+msgctxt "#30972"
+msgid "Colored section icons"
+msgstr ""
+
+msgctxt "#30973"
+msgid "Glass Theme: %s"
+msgstr ""
+
+msgctxt "#30974"
+msgid "Toggles - pick a row to switch it, then Done"
+msgstr ""
+
+msgctxt "#30975"
+msgid "no changes"
+msgstr ""
+
+msgctxt "#30976"
+msgid "Toggles: %s"
+msgstr ""
+
+msgctxt "#30977"
+msgid "Link accounts in TMDb Helper (QR code)"
+msgstr ""
+
+msgctxt "#30978"
+msgid "Trakt"
+msgstr ""
+
+msgctxt "#30979"
+msgid "MDbList"
+msgstr ""
+
+msgctxt "#30980"
+msgid "TMDb Helper accounts: %s"
+msgstr ""
+
+msgctxt "#30982"
+msgid "already linked"
+msgstr ""
+
+msgctxt "#30983"
+msgid "Scan the code to link %s - Back skips it"
+msgstr ""
+
+msgctxt "#30984"
+msgid "Link %s"
+msgstr ""
+
+msgctxt "#30985"
+msgid "This TMDb Helper links MDbList with an API key.[CR][CR]1. Scan the code (or open %s) and copy your API key.[CR]2. TMDb Helper's MDbList settings open next - paste the key there and close them."
+msgstr ""
+
+msgctxt "#30986"
+msgid "Press any key to open the settings"
+msgstr ""
+

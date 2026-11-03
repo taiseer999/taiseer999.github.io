@@ -454,6 +454,17 @@ def _addon_is_enabled(addonid):
         return False
 
 
+def _addon_registered(addonid):
+    """Kodi knows the add-on (enabled or not) - Addons.GetAddonDetails answers."""
+    try:
+        resp = xbmc.executeJSONRPC(
+            '{"jsonrpc":"2.0","method":"Addons.GetAddonDetails",'
+            '"params":{"addonid":"%s"},"id":1}' % addonid)
+        return '"addon"' in resp
+    except Exception:
+        return False
+
+
 def _enable_addon(addonid):
     """Enable the addon silently via JSON-RPC (synchronous).
 
@@ -479,6 +490,40 @@ def _enable_addon(addonid):
             return
         xbmc.sleep(200)
         waited += 200
+
+    # 4.7.11: never hand Kodi's EnableAddon() an add-on Kodi does not know
+    # yet (zip unpacked, rescan not run): on macOS (kodi.log 2026-11-03
+    # 07:51:06, AB Last Played) that froze Kodi - no log line after it, the
+    # setup progress dialog stuck. Rescan, wait for it to be known, retry
+    # JSON-RPC; the builtin stays only for a known add-on.
+    if not _addon_registered(addonid):
+        _log('%s is not registered with Kodi yet - rescanning instead of '
+             'EnableAddon()' % addonid)
+        waited = 0
+        while waited < 20000:
+            if waited % 5000 == 0:
+                xbmc.executebuiltin('UpdateLocalAddons')
+            xbmc.sleep(500)
+            waited += 500
+            if _addon_registered(addonid):
+                break
+        if not _addon_registered(addonid):
+            _log('%s still unknown to Kodi after %d ms - left for the next '
+                 'start (no EnableAddon)' % (addonid, waited))
+            return
+        try:
+            resp = xbmc.executeJSONRPC(
+                '{"jsonrpc":"2.0","method":"Addons.SetAddonEnabled",'
+                '"params":{"addonid":"%s","enabled":true},"id":1}' % addonid)
+            _log('SetAddonEnabled(%s) after rescan -> %s' % (addonid, resp))
+        except Exception as e:
+            _log('SetAddonEnabled failed: %s' % e)
+        waited = 0
+        while waited < 3000:
+            if _addon_is_enabled(addonid):
+                return
+            xbmc.sleep(200)
+            waited += 200
 
     _log('JSON-RPC enable did not take for %s - builtin fallback '
          '(auto-confirmed)' % addonid)

@@ -74,3 +74,47 @@ def switch_list(title, rows, done_label=None, confirm_back=None):
         k, l, o = states[choice - 1]
         states[choice - 1] = (k, l, not o)
         pos = choice
+
+
+def option_list(title, rows, done_label=None):
+    """4.7.9 (setup wizard, all toggles on one page).
+
+    rows: [(key, label, value, choices), ...]
+      choices None      -> on/off switch, value is a bool; a pick flips it
+      choices [(v, l)]  -> several states; a pick moves to the next one,
+                           label2 shows the state, the switch shows "on" for
+                           anything but the first state (Off / Original)
+    Returns {key: value} after "Done" and also on Back (Back moves on, it is
+    never a cancel of the wizard - the summary page can change it again). A list that answers
+    faster than a person can is shown again, as in switch_list."""
+    states = [[k, l, v, c] for k, l, v, c in rows]
+    pos, quick = 0, 0
+    done = done_label or T(30604)
+    while True:
+        lis = [xbmcgui.ListItem(done, offscreen=True)]
+        lis[0].setArt({'icon': ICON_DONE, 'thumb': ICON_DONE})
+        for _k, l, v, c in states:
+            if c is None:
+                lis.append(item(l, bool(v)))
+            else:
+                names = dict(c)
+                lis.append(item(l, v != c[0][0], names.get(v, str(v))))
+        started = time.monotonic()
+        choice = xbmcgui.Dialog().select(title, lis, preselect=pos, useDetails=True)
+        if choice < 0:
+            if time.monotonic() - started < 1.0 and quick < 3:
+                quick += 1
+                xbmc.sleep(800)
+                continue
+            return {k: v for k, _l, v, _c in states}
+        quick = 0
+        if choice == 0:
+            return {k: v for k, _l, v, _c in states}
+        row = states[choice - 1]
+        if row[3] is None:
+            row[2] = not row[2]
+        else:
+            vals = [v for v, _l in row[3]]
+            i = vals.index(row[2]) if row[2] in vals else -1
+            row[2] = vals[(i + 1) % len(vals)]
+        pos = choice

@@ -13,12 +13,15 @@ Three parts, all driven from service._run_steps_inner():
 2. QUESTIONS - every question of the wizard is asked up front, with nothing
    applied and no skin reload in between: restore (the newest backup found on
    the box is offered first), preset + Add-on Portal ticks, Widgets Layout,
-   My Lists. A summary page follows: Start setup / Change answers. The
+   My Lists, then (4.7.9) every Toggles-menu switch on one page and the
+   TMDb Helper accounts to link (Trakt / MDbList). A summary page follows: Start setup / Change answers. The
    answers are written to setup_state.json.
 
 3. APPLY - the steps run one after another with no further questions (the
-   only exception is My Lists "Custom"/"Anime": its Trakt link and list
-   pickers need TMDb Helper, which may only be installed in this phase).
+   only exceptions are My Lists "Custom"/"Anime": its Trakt link and list
+   pickers need TMDb Helper, which may only be installed in this phase -
+   and the TMDb Helper account step, which opens the QR sign-in of each
+   account that was ticked).
    Patch toggles are NOT asked: the saved choice applies silently, as in the
    phone setup; they stay editable in Apply Patches.
 
@@ -79,6 +82,8 @@ STEPS = (
     ('layout',       30951, 30630, True),
     ('lists',        30952, 30660, True),
     ('patches',      30953, 30005, False),   # its ReloadSkin waits for the lock to go
+    ('tmdbh_auth',   30963, 30963, False),   # 4.7.9: after Patches = QR sign-in window
+    ('toggles',      30964, 30017, True),    # 4.7.9: the Toggles page
     ('webserver',    30954, 30776, False),
     ('lists_ensure', 30955, 30660, True),
     ('language',     30956, 30776, True),
@@ -493,9 +498,49 @@ def summary_text(answers):
                         or T(30931)),
         T(30927) % part('layout', _mode_label('layout', answers.get('layout'))),
         T(30928) % part('lists', _mode_label('lists', answers.get('lists'))),
+        T(30976) % _toggles_summary(answers),
+        T(30980) % _auth_summary(answers),
         T(30942),
     ]
     return '[CR]'.join(lines)
+
+
+def _toggles_summary(answers):
+    try:
+        from resources.lib import setup_toggles
+        return setup_toggles.summary(answers.get('toggles') or {}, answers)
+    except Exception:
+        return T(30975)
+
+
+def _auth_summary(answers):
+    try:
+        from resources.lib import tmdbh_auth
+        return tmdbh_auth.summary(answers.get('auth') or [])
+    except Exception:
+        return T(30931)
+
+
+def ask_toggles(answers, prev=None):
+    """4.7.9: every Toggles-menu switch (not Skin Selection) on one page."""
+    from resources.lib import setup_toggles
+    try:
+        return setup_toggles.ask(answers, prev)
+    except Exception:
+        _log('toggles page failed (nothing changes):\n%s' % traceback.format_exc(),
+             xbmc.LOGWARNING)
+        return {}
+
+
+def ask_auth(prev=None):
+    """4.7.9: Trakt / MDbList to link in TMDb Helper (done in the apply phase)."""
+    from resources.lib import tmdbh_auth
+    try:
+        return tmdbh_auth.ask(prev)
+    except Exception:
+        _log('account question failed (nothing linked):\n%s' % traceback.format_exc(),
+             xbmc.LOGWARNING)
+        return []
 
 
 def confirm_summary(answers):
@@ -531,6 +576,10 @@ def ask_all(ctx, monitor, phone):
         if 'lists' not in phone and 'anime' not in phone:
             ctx._overlay('step', 30660)
             answers['lists'] = ask_lists(ctx, monitor)
+        ctx._overlay('step', 30017)
+        answers['toggles'] = ask_toggles(answers, None if first else answers.get('toggles'))
+        ctx._overlay('step', 30963)
+        answers['auth'] = ask_auth(None if first else answers.get('auth'))
         _log('answers: %s' % json.dumps(answers, ensure_ascii=False))
         if confirm_summary(answers):
             return answers
@@ -685,6 +734,27 @@ def _s_tmdbh_sync(ctx, monitor, st):
     return status
 
 
+def _s_toggles(ctx, monitor, st):
+    """4.7.9: the switches changed on the Toggles page, applied silently."""
+    changes = st['answers'].get('toggles')
+    if not changes:
+        st['steps']['toggles']['changed'] = False
+        return SKIPPED
+    from resources.lib import setup_toggles
+    status, detail, changed = setup_toggles.apply(changes)
+    st['steps']['toggles']['detail'] = detail
+    st['steps']['toggles']['changed'] = changed
+    return status
+
+
+def _s_tmdbh_auth(ctx, monitor, st):
+    """4.7.9: Trakt / MDbList sign-in in TMDb Helper (QR window)."""
+    from resources.lib import tmdbh_auth
+    status, detail = tmdbh_auth.apply(st['answers'].get('auth'), ctx, monitor)
+    st['steps']['tmdbh_auth']['detail'] = detail
+    return status
+
+
 def _s_cleanup(ctx, monitor, st):
     """Last step before the restart: offer to remove what the build no
     longer uses (Maintenance > Clean Unused Items, pre-ticked)."""
@@ -729,6 +799,8 @@ def _may_reload(key, st):
             return True
     if key == 'restore':
         return bool(a.get('restore'))
+    if key == 'toggles':
+        return bool(a.get('toggles'))
     return True
 
 
@@ -738,6 +810,7 @@ RUNNERS = {
     'layout': _s_layout, 'lists': _s_lists, 'patches': _s_patches,
     'webserver': _s_webserver, 'lists_ensure': _s_lists_ensure,
     'language': _s_language, 'cleanup': _s_cleanup, 'tmdbh_sync': _s_tmdbh_sync,
+    'toggles': _s_toggles, 'tmdbh_auth': _s_tmdbh_auth,
 }
 
 

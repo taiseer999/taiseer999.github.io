@@ -2040,3 +2040,75 @@ msgctxt "#30962"
 msgid "TMDb Helper: Trakt sync"
 msgstr "TMDb Helper: مزامنة تراكت"
 
+msgctxt "#30963"
+msgid "TMDb Helper: link accounts"
+msgstr "TMDb Helper: ربط الحسابات"
+
+msgctxt "#30964"
+msgid "Toggles"
+msgstr "التبديلات"
+
+msgctxt "#30970"
+msgid "DPlex tab"
+msgstr "تبويب DPlex"
+
+msgctxt "#30971"
+msgid "Korean Media tab"
+msgstr "تبويب المحتوى الكوري"
+
+msgctxt "#30972"
+msgid "Colored section icons"
+msgstr "أيقونات الأقسام الملونة"
+
+msgctxt "#30973"
+msgid "Glass Theme: %s"
+msgstr "السمة الزجاجية: %s"
+
+msgctxt "#30974"
+msgid "Toggles - pick a row to switch it, then Done"
+msgstr "التبديلات - اختر سطرًا لتبديله ثم اضغط «تم»"
+
+msgctxt "#30975"
+msgid "no changes"
+msgstr "دون تغيير"
+
+msgctxt "#30976"
+msgid "Toggles: %s"
+msgstr "التبديلات: %s"
+
+msgctxt "#30977"
+msgid "Link accounts in TMDb Helper (QR code)"
+msgstr "ربط الحسابات في TMDb Helper (رمز QR)"
+
+msgctxt "#30978"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#30979"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#30980"
+msgid "TMDb Helper accounts: %s"
+msgstr "حسابات TMDb Helper: %s"
+
+msgctxt "#30982"
+msgid "already linked"
+msgstr "مرتبط مسبقًا"
+
+msgctxt "#30983"
+msgid "Scan the code to link %s - Back skips it"
+msgstr "امسح الرمز لربط %s - زر الرجوع يتخطّاه"
+
+msgctxt "#30984"
+msgid "Link %s"
+msgstr "ربط %s"
+
+msgctxt "#30985"
+msgid "This TMDb Helper links MDbList with an API key.[CR][CR]1. Scan the code (or open %s) and copy your API key.[CR]2. TMDb Helper's MDbList settings open next - paste the key there and close them."
+msgstr "تربط هذه النسخة من TMDb Helper حساب MDbList بمفتاح API.[CR][CR]1. امسح الرمز (أو افتح %s) وانسخ مفتاح API الخاص بك.[CR]2. ستُفتح بعدها إعدادات MDbList في TMDb Helper، فالصق المفتاح فيها ثم أغلقها."
+
+msgctxt "#30986"
+msgid "Press any key to open the settings"
+msgstr "اضغط أي زر لفتح الإعدادات"
+

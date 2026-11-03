@@ -544,7 +544,7 @@ def _registered(addon_id):
         return False
 
 
-def _wait_registered(addon_id, timeout_ms=8000):
+def _wait_registered(addon_id, timeout_ms=20000):
     """4.7.0: an unpacked zip is unknown to Kodi until UpdateLocalAddons has
     rescanned, so SetAddonEnabled answered "Invalid params" and every add-on
     waited 2 s + the EnableAddon builtin with its yes/no fallback (kodi.log
@@ -556,6 +556,11 @@ def _wait_registered(addon_id, timeout_ms=8000):
     while waited < timeout_ms:
         xbmc.sleep(250)
         waited += 250
+        # 4.7.11: a rescan asked for while Kodi is still busy with the last
+        # one is dropped (kodi.log 2026-11-03 07:50:53: no rescan after the
+        # Last Played zip) - ask again every 5 s
+        if waited % 5000 == 0:
+            xbmc.executebuiltin('UpdateLocalAddons')
         if _registered(addon_id):
             _log('%s registered after %d ms' % (addon_id, waited))
             return True

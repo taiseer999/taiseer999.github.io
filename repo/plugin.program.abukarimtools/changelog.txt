@@ -1,3 +1,67 @@
+v4.7.11
+- Setup froze on macOS in the restore step (screenshot 2026-11-03 07:56:
+  Add-on Portal dialog stuck on "Checking repository: repository.xbmc.org",
+  progress pill at step 5 of 16). kodi.log: AB Last Played's zip was
+  unpacked at 07:50:53 but Kodi never rescanned (the UpdateLocalAddons sent
+  while the previous rescan was still running was dropped), so after 8 s
+  SetAddonEnabled answered "Invalid params" and the EnableAddon() builtin
+  was fired on an add-on Kodi did not know. Kodi wrote nothing after that
+  (07:51:06) - frozen; the dialog label never got its next update.
+  * skin_installer._enable_addon: the builtin fallback is used only for an
+    add-on Kodi knows (Addons.GetAddonDetails). An unknown one gets
+    UpdateLocalAddons every 5 s for up to 20 s, then SetAddonEnabled again;
+    still unknown = left for the next start, nothing is fired.
+  * addon_portal._wait_registered: 20 s instead of 8 s, UpdateLocalAddons
+    asked again every 5 s.
+
+v4.7.10
+- kodi.log 2026-11-03 07:50 (macOS, TMDb Helper 6.20.3): the new toggles
+  page (14 rows) and the account question both ran; "Link MDbList" was
+  ticked, but 6.x has no MDbList sign-in, so 4.7.9 would only have reported
+  it as unavailable. Now, on 6.x: a QR to mdblist.com/preferences (where
+  the API key is), then the settings of script.module.tmdbhelper.sync.mdblist
+  open; linked = its 'apikey' is set when they close. 7.x unchanged (OAuth
+  QR window).
+- My Lists (MDBList lists): the key was read only from TMDb Helper's old
+  mdblist_apikey setting, which 6.20 moves into the sync module and clears -
+  so MDBList lists never showed on 6.20. It now reads the sync module first
+  (tmdbh_auth.mdblist_key), and "Authorise MDBList" opens the sync module's
+  settings when it is installed.
+
+v4.7.9
+- Setup wizard, new page near the end of the questions: every Toggles-menu
+  switch except Skin Selection on ONE page (toggle_ui.option_list): pick a
+  row to flip it (or step through the states of Lucent Look / Font Size),
+  then Done. Rows: DPlex tab, Korean Media tab, colored section icons,
+  Glass Theme per add-on (installed or ticked in the portal), totals screen,
+  Search All, AF3 auto trailers, waves while loading, Lucent Look, plot on
+  the right, font size. AF3 rows only while AF3 is the active skin.
+  Only the rows you CHANGE are kept, so a backup restored in the same setup
+  keeps its own values for the rest. New apply step 'toggles' (after
+  Patches) sets them silently - no dialogs, no restart of their own (the
+  tabs and Font Size restart Kodi from the menu; setup restarts at the end
+  anyway). New module resources/lib/setup_toggles.py.
+- Setup wizard: "Link accounts in TMDb Helper" question (Trakt / MDbList,
+  ticked unless already linked) and a new step 'tmdbh_auth' right after
+  Patches that opens TMDb Helper's own sign-in for each - the QR window -
+  and waits for the token (Back skips that account, not a failure).
+  MDbList: TMDb Helper 7.x OAuth device code (authenticate_mdblist); 6.x
+  has an API key only, reported as not available. New module
+  resources/lib/tmdbh_auth.py.
+- TMDb Helper sign-in window (trakt_auth_qr.xml) redesigned: a 950 x 470
+  card instead of 1100 x 750, QR 300 instead of 420, and only fonts every
+  skin defines (font10 / font12 / font13) - font27 / font37 / font_tiny are
+  not in Arctic Fuse 3, so Kodi drew all of them at its fallback size.
+  Arabic labels when Kodi is in Arabic; title / address from properties so
+  it serves MDbList too. Shipped as a file (resources/tmdbhelper_qr/), new
+  sentinel 'ABK QR v2' so boxes with the old window get the new one.
+- TMDb Helper 7.x: MDbList sign-in opens in the same QR window (new entry
+  on mdblist/api.py, toggle TMDbHelper Trakt Auth QR); the stock progress
+  dialog stays as the fallback.
+- My Lists "Custom" Trakt link: the QR window is modeless, so the wait saw
+  no dialog and gave up after 20 s while the code was still on screen. It
+  now also looks for the window itself (tmdbh_auth.wait_link).
+
 v4.7.8
 - Search All: release names were cut with "..." well before the end of the
   line (screenshot 2026-11-02 21:10; kodi.log 21:09:00 shows the 4.7.7

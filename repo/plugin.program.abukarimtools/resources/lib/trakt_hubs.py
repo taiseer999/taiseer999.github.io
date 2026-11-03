@@ -435,7 +435,8 @@ MDBLIST_API = 'https://api.mdblist.com/'
 
 def _mdblist_key():
     try:
-        return (xbmcaddon.Addon(TMDBH).getSetting('mdblist_apikey') or '').strip()
+        from resources.lib import tmdbh_auth     # 4.7.10: 6.20 keeps it in the sync module
+        return tmdbh_auth.mdblist_key()
     except Exception:
         return ''
 
@@ -1167,20 +1168,12 @@ def _link_trakt(force=False):
     if not yes:
         return ''
     xbmc.executebuiltin('RunScript(%s,authenticate_trakt)' % TMDBH)
-    mon = xbmc.Monitor()
-    started = time.time()
-    seen_dialog = False
-    while time.time() - started < 600:
-        if mon.waitForAbort(1):
-            return ''
-        tok = _token()
-        if tok and tok != old:
-            xbmc.sleep(1500)             # let TMDb Helper close its dialog
-            return tok
-        if xbmc.getCondVisibility('System.HasModalDialog'):
-            seen_dialog = True
-        elif seen_dialog or time.time() - started > 20:
-            break                         # closed (or never shown) without a token
+    # 4.7.9: the QR window is modeless (show()), so HasModalDialog alone
+    # never saw it and this gave up after 20 s while the code was still up
+    from resources.lib import tmdbh_auth
+    tok = tmdbh_auth.wait_link('trakt', old)
+    if tok:
+        return tok
     tok, state = _token_info()
     _log('after linking: token %s' % state)
     return tok if tok and tok != old else ''
@@ -1250,8 +1243,12 @@ def _offer_mdblist():
                                   yeslabel=AR(30705)):
         _log('MDBList: user skipped the authorisation')
         return False
-    _log('MDBList: opening TMDb Helper settings (API keys)')
-    xbmc.executebuiltin('Addon.OpenSettings(%s)' % TMDBH)
+    # 4.7.10: TMDb Helper 6.20 keeps the key in its MDbList sync module
+    from resources.lib import tmdbh_auth
+    module = xbmc.getCondVisibility('System.HasAddon(%s)' % tmdbh_auth.MDB_MODULE)
+    target = tmdbh_auth.MDB_MODULE if module else TMDBH
+    _log('MDBList: opening %s settings (API key)' % target)
+    xbmc.executebuiltin('Addon.OpenSettings(%s)' % target)
     mon = xbmc.Monitor()
     for _ in range(40):                       # wait for the settings window
         if xbmc.getCondVisibility('Window.IsActive(addonsettings)'):
@@ -1259,8 +1256,9 @@ def _offer_mdblist():
         if mon.waitForAbort(0.25):
             return False
     xbmc.sleep(300)
-    # category buttons are -200 + index (Kodi GUIDialogSettingsBase)
-    xbmc.executebuiltin('SetFocus(%d)' % (-200 + TMDBH_API_CATEGORY))
+    if not module:
+        # category buttons are -200 + index (Kodi GUIDialogSettingsBase)
+        xbmc.executebuiltin('SetFocus(%d)' % (-200 + TMDBH_API_CATEGORY))
     started = time.time()
     while xbmc.getCondVisibility('Window.IsActive(addonsettings)'):
         if mon.waitForAbort(0.5) or time.time() - started > 900:

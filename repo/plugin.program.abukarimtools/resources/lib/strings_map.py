@@ -36,6 +36,7 @@ ID ranges:
   30890-30893  AF3 Plot on the Right (Toggles)
   30900-30909  Maintenance - Fix Add-on Settings Version
   30910-30969  Installation Wizard 4.7 - checks, summary, resume, report, progress pill
+  30970-30989  Installation Wizard 4.7.9 - Toggles page, TMDb Helper accounts
 """
 
 STRINGS = {
@@ -717,4 +718,26 @@ STRINGS = {
     30961: ('A few questions first - nothing changes until you press Start setup.',
             'بعض الأسئلة أولًا - لن يتغيّر شيء حتى تضغط «بدء الإعداد».'),
     30962: ('TMDb Helper: Trakt sync', 'TMDb Helper: مزامنة تراكت'),
+    # ---- 4.7.9: wizard - Toggles page + TMDb Helper accounts ----
+    30963: ('TMDb Helper: link accounts', 'TMDb Helper: ربط الحسابات'),
+    30964: ('Toggles', 'التبديلات'),
+    30970: ('DPlex tab', 'تبويب DPlex'),
+    30971: ('Korean Media tab', 'تبويب المحتوى الكوري'),
+    30972: ('Colored section icons', 'أيقونات الأقسام الملونة'),
+    30973: ('Glass Theme: %s', 'السمة الزجاجية: %s'),
+    30974: ('Toggles - pick a row to switch it, then Done',
+            'التبديلات - اختر سطرًا لتبديله ثم اضغط «تم»'),
+    30975: ('no changes', 'دون تغيير'),
+    30976: ('Toggles: %s', 'التبديلات: %s'),
+    30977: ('Link accounts in TMDb Helper (QR code)', 'ربط الحسابات في TMDb Helper (رمز QR)'),
+    30978: ('Trakt', 'Trakt'),
+    30979: ('MDbList', 'MDbList'),
+    30980: ('TMDb Helper accounts: %s', 'حسابات TMDb Helper: %s'),
+    30982: ('already linked', 'مرتبط مسبقًا'),
+    30983: ('Scan the code to link %s - Back skips it',
+            'امسح الرمز لربط %s - زر الرجوع يتخطّاه'),
+    30984: ('Link %s', 'ربط %s'),
+    30985: ('This TMDb Helper links MDbList with an API key.[CR][CR]1. Scan the code (or open %s) and copy your API key.[CR]2. TMDb Helper\'s MDbList settings open next - paste the key there and close them.',
+            'تربط هذه النسخة من TMDb Helper حساب MDbList بمفتاح API.[CR][CR]1. امسح الرمز (أو افتح %s) وانسخ مفتاح API الخاص بك.[CR]2. ستُفتح بعدها إعدادات MDbList في TMDb Helper، فالصق المفتاح فيها ثم أغلقها.'),
+    30986: ('Press any key to open the settings', 'اضغط أي زر لفتح الإعدادات'),
 }
