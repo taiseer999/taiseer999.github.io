@@ -209,6 +209,20 @@ SPECS['umbrella_search'] = {
     ],
 }
 
+# 4.7.13: Dex Hub - one hook in plugin.py's dispatcher (spaces, not tabs);
+# the helper reuses Dex Hub's own stream collection and play()
+SPECS['dexhub_search'] = {
+    'addon_id': 'plugin.video.dexhub', 'label': 'Dex Hub', 'search': True,
+    'xml': (), 'media': False,
+    'helper': ('abk_dexhub_search.py', os.path.join('resources', 'lib', 'abk_dexhub_search.py')),
+    'hooks': [
+        (os.path.join('resources', 'lib', 'plugin.py'),
+         "    if action == 'tmdb_player':\n        # Helper no longer loads/scans the unrelated account/catalog dispatcher.\n",
+         "if action in ('app_list_sources', 'app_play_source'):\n    from .abk_dexhub_search import app_mode\n"
+         "    return app_mode(sys.modules[__name__], action, params)\n", 'before'),
+    ],
+}
+
 # Glass theme profiles only (the search bridge is switched on its own)
 PROFILE_OF = {spec['addon_id']: key for key, spec in SPECS.items() if not spec.get('search')}
 

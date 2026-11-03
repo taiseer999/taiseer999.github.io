@@ -29,6 +29,14 @@ and turns the streams into rows. Playing one writes the add-on's
 last_streams.json and runs its own play_index, so the add-on resolves it
 (proxy headers, subtitles, P2P handler) exactly like its own stream list.
 
+4.7.13 - Dex Hub (plugin.video.dexhub) joins the list. The "Search All
+bridge" patch (lucent_sources.SPECS['dexhub_search']) adds the same two modes
+to its dispatcher (action=app_list_sources / app_play_source): Dex Hub asks
+every one of its own stream add-ons with no window and saves the rows to
+device_select/<id>.json; playing one runs Dex Hub's own play() on the row's
+stream key (resolve, subtitles, resume, scrobbling), with the next rows as
+fallbacks.
+
 4.6.13 - threads: every window call happens on the dialog's own thread (the
 one in doModal). The four provider threads and the TMDb meta thread only
 change data and post JSONRPC.NotifyAll; a Monitor created on the dialog
@@ -62,13 +70,17 @@ ADDONS = (('rl', 'plugin.video.redlight', 'Red Light', 'RL'),
           ('fl', 'plugin.video.fenlight', 'Fen Light', 'FL'),
           ('umb', 'plugin.video.umbrella', 'Umbrella', 'UM'),
           ('pov', 'plugin.video.pov', 'POV', 'POV'),
-          ('aio', 'plugin.video.aiostreams', 'AIOStreams', 'AIO'))
+          ('aio', 'plugin.video.aiostreams', 'AIOStreams', 'AIO'),
+          ('dex', 'plugin.video.dexhub', 'Dex Hub', 'DEX'))
 _MODULES = os.path.join('resources', 'lib', 'modules')
-# file that carries the device-select modes, and the text that proves it
-_SUPPORT = {'fl': ('router.py', 'app_list_sources'), 'rl': ('router.py', 'abk_device_select'),
-            'umb': ('router.py', 'abk_device_select'), 'pov': ('entry.py', 'abk_device_select')}
+# file that carries the device-select modes (relative to the add-on), and the text that proves it
+_SUPPORT = {'fl': (os.path.join(_MODULES, 'router.py'), 'app_list_sources'),
+            'rl': (os.path.join(_MODULES, 'router.py'), 'abk_device_select'),
+            'umb': (os.path.join(_MODULES, 'router.py'), 'abk_device_select'),
+            'pov': (os.path.join(_MODULES, 'entry.py'), 'abk_device_select'),
+            'dex': (os.path.join('resources', 'lib', 'plugin.py'), 'abk_dexhub_search')}
 # Search All bridge patch (lucent_sources.SPECS) per add-on; Fen Light has the modes natively
-_BRIDGE = {'rl': 'redlight_search', 'umb': 'umbrella_search', 'pov': 'pov_search'}
+_BRIDGE = {'rl': 'redlight_search', 'umb': 'umbrella_search', 'pov': 'pov_search', 'dex': 'dexhub_search'}
 
 LIST, CHIPS = 2000, 2300
 # 4.6.7: expanded view - the same streams over the whole page (two columns)
@@ -120,7 +132,7 @@ def _supported(key, aid):
         return bool(_aio_manifest())
     try:
         rel, mark = _SUPPORT[key]
-        with open(os.path.join(_addon_dir(aid), _MODULES, rel), 'r', encoding='utf-8', errors='replace') as f:
+        with open(os.path.join(_addon_dir(aid), rel), 'r', encoding='utf-8', errors='replace') as f:
             return mark in f.read()
     except Exception:
         return False
@@ -173,8 +185,18 @@ class Session(object):
         m = self.media
         if key == 'umb':
             m = getattr(self, 'umb_media', None) or m
+        elif key == 'dex':
+            m = getattr(self, 'dex_media', None) or m
         mode = 'app_list_sources' if kind == 'list' else 'app_play_source'
-        if key == 'umb':                    # Umbrella: action=..., needs the names and the other ids
+        if key == 'dex':                    # Dex Hub: action=..., IMDb id (show id for episodes) for its add-ons
+            params = {'action': mode}
+            if kind == 'list':
+                params.update({'media_type': m['media_type'], 'tmdb_id': m['tmdb_id'], 'imdb_id': m.get('imdb', ''),
+                               'tvdb_id': m.get('tvdb', ''),
+                               'title': m.get('tvshowtitle') if m['media_type'] == 'episode' else m.get('title', '')})
+                if m['media_type'] == 'episode':
+                    params.update({'season': m['season'], 'episode': m['episode']})
+        elif key == 'umb':                    # Umbrella: action=..., needs the names and the other ids
             params = {'action': mode, 'title': m.get('title', ''), 'year': m.get('year', ''),
                       'imdb': m.get('imdb', ''), 'tmdb': m['tmdb_id'], 'tvdb': m.get('tvdb', ''),
                       'premiered': m.get('premiered', '')}
@@ -205,6 +227,8 @@ class Session(object):
         rid = self.request_id(key)
         if key == 'umb':
             self.umb_media = _english_names(self.media)
+        elif key == 'dex':
+            self.dex_media = _english_names(self.media)
         url = self.url(key, aid, 'list')
         path = os.path.join(_DATA, aid, 'device_select', '%s.json' % rid)
         t0 = time.time()

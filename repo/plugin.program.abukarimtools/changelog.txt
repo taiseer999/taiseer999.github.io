@@ -1,3 +1,20 @@
+v4.7.13
+- Search All: Dex Hub (plugin.video.dexhub) is now one of the add-ons, with
+  its own chip, colour (pink) and DEX tag on the stream cards.
+  * New Search All bridge for Dex Hub (lucent_sources 'dexhub_search',
+    helper resources/lucent/abk_dexhub_search.py -> Dex Hub's
+    resources/lib/): one fenced hook in plugin.py's dispatcher adds
+    action=app_list_sources / app_play_source.
+  * List: Dex Hub's own collection (every stream add-on it has, its
+    timeouts and ranking), no window, all providers waited for; rows saved
+    to addon_data/plugin.video.dexhub/device_select/<id>.json.
+  * Play: Dex Hub's own play() on the row's stream key (resolve,
+    subtitles, resume, scrobbling), next 4 cached rows as fallbacks.
+  * Patched with the other Search All bridges (toggle on) and on demand
+    when Dex Hub was just installed/updated; removed with toggle off.
+  * ab_search.xml: six add-on status rows (46 px apart instead of 54 so
+    the sixth stays on screen).
+
 v4.7.12
 - ROOT CAUSE of the setup freeze in the restore step (07:50 on Kodi 22 RC,
   08:30 on Kodi 23 alpha, macOS): a Kodi deadlock, proven with

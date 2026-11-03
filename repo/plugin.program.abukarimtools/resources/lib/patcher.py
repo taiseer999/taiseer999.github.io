@@ -3174,6 +3174,9 @@ PATCHES = [
     {'addon_id': 'plugin.video.umbrella', 'lucent': 'umbrella_search', 'feature': 'ab_search', 'not_found_ok': True,
      'rel_path': os.path.join('resources', 'lib', 'modules', 'router.py'),
      'old': '', 'new': '', 'description': 'Umbrella - Search All bridge (app_list_sources / app_play_source)'},
+    {'addon_id': 'plugin.video.dexhub', 'lucent': 'dexhub_search', 'feature': 'ab_search', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'lib', 'plugin.py'),
+     'old': '', 'new': '', 'description': 'Dex Hub - Search All bridge (app_list_sources / app_play_source)'},
     {'addon_id': 'plugin.video.themoviedb.helper', 'base': 'addon_data', 'feature': 'ab_search', 'not_found_ok': True,
      'rel_path': AB_SEARCH_PLAYER, 'inject_file': True, 'old': '', 'new': '',
      'inject_content': _AB_SEARCH_PLAYER_JSON,
@@ -4911,7 +4914,7 @@ def reload_skin_if_pending():
 
 def _revert_search(wanted=None):
     from resources.lib import lucent_sources
-    for profile in ('redlight_search', 'pov_search', 'umbrella_search'):
+    for profile in ('redlight_search', 'pov_search', 'umbrella_search', 'dexhub_search'):
         aid = lucent_sources.SPECS[profile]['addon_id']
         if wanted is not None and aid not in wanted:
             continue
