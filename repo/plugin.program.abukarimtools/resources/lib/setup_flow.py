@@ -845,6 +845,11 @@ def apply_all(ctx, monitor, st):
                  xbmc.LOGERROR)
             save(st)
             continue
+        try:                    # 4.7.12: re-asserted every step (a restore can put it back)
+            from resources.lib import kodi_updates
+            kodi_updates.setup_hold(st)
+        except Exception as e:
+            _log('auto-update hold failed: %s' % e, xbmc.LOGWARNING)
         ctx._overlay('step', overlay_id)
         idx = STEP_KEYS.index(key) + 1
         done_n = sum(1 for k in STEP_KEYS
@@ -884,6 +889,11 @@ def apply_all(ctx, monitor, st):
         banner(T(30770), T(30939) % tuple(
             sum(1 for k in STEP_KEYS if (st['steps'].get(k) or {}).get('status') == x)
             for x in (OK, FAILED, SKIPPED)), 100)
+        try:
+            from resources.lib import kodi_updates
+            kodi_updates.setup_release(st)
+        except Exception as e:
+            _log('auto-update restore failed: %s' % e, xbmc.LOGWARNING)
         st['phase'] = 'done'
         st['finished'] = int(time.time())
         st['report_pending'] = True

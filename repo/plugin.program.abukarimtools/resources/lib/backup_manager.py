@@ -699,6 +699,18 @@ def reinstall_missing(manifest, repos_added, zip_addon_data, progress=None):
                and a['id'] != 'skin.estuary']
     if not missing and not repos_added:
         return 0, []
+    # 4.7.12: enabling the restored repositories starts a repo check; with
+    # auto-updates on, a skin update found there deadlocked Kodi against our
+    # UpdateAddonRepos (see kodi_updates.py) - notify only while we work
+    from resources.lib import kodi_updates
+    updates_prev = kodi_updates.hold()
+    try:
+        return _reinstall_missing(missing, repos_added, progress, ap)
+    finally:
+        kodi_updates.release(updates_prev)
+
+
+def _reinstall_missing(missing, repos_added, progress, ap):
     if repos_added:
         _log('repositories restored from the backup: %s' % ', '.join(repos_added))
         xbmc.executebuiltin('UpdateLocalAddons')
@@ -795,6 +807,13 @@ def apply_guisettings_live(data):
     n = 0
     for sid, raw in want.items():
         if sid.startswith(_LIVE_SKIP) or sid not in types:
+            continue
+        if sid == 'general.addonupdates' and \
+                xbmcgui.Window(10000).getProperty('abk.updates.held'):
+            # 4.7.12: setup holds auto-updates at "notify" (kodi_updates.py);
+            # the backup's value is put back when setup ends
+            if str(raw).strip().isdigit():
+                xbmcgui.Window(10000).setProperty('abk.updates.restore', str(raw).strip())
             continue
         typ, now = types[sid]
         try:

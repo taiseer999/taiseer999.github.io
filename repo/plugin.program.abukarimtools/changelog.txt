@@ -1,3 +1,29 @@
+v4.7.12
+- ROOT CAUSE of the setup freeze in the restore step (07:50 on Kodi 22 RC,
+  08:30 on Kodi 23 alpha, macOS): a Kodi deadlock, proven with
+  `sample Kodi 5` (2026-11-03 08:33):
+    JobWorker    CRepositoryUpdater::OnJobComplete
+                 -> CAddonMgr::CheckAndInstallAddonUpdates (auto-update on)
+                 -> CAddonInstallJob::DoWork -> CSkinInfo::OnPreInstall
+                 -> CApplicationMessenger::SendMsg - waits for the main thread
+    XBMCMainThread  CBuiltins::Execute(UpdateAddonRepos)
+                 -> CRepositoryUpdater::CheckForUpdates - waits for the lock
+                    the JobWorker holds
+  The restore enabled repository.applify / repository.tmdbhelper-multiservice,
+  Kodi's repo check found a newer skin and started installing it, and our
+  own UpdateAddonRepos (Add-on Portal installer) met it. The main thread
+  never ran again: no screen updates (dialog stuck on "Checking
+  repository"), no add-on rescans (every unpacked add-on "not registered").
+  * New resources/lib/kodi_updates.py: general.addonupdates "auto" ->
+    "notify" while add-ons are installed, put back afterwards.
+  * Setup holds it for the whole apply phase (re-asserted before every
+    step) and restores the value at the end - the restored backup's own
+    value when the backup had one (the live guisettings restore no longer
+    switches auto-updates back on mid-setup).
+  * Add-on Portal installs and the restore's add-on reinstall hold it too.
+- 4.7.11's EnableAddon guard stays (it was right, but the missing rescans
+  were this deadlock, not a dropped rescan request).
+
 v4.7.11
 - Setup froze on macOS in the restore step (screenshot 2026-11-03 07:56:
   Add-on Portal dialog stuck on "Checking repository: repository.xbmc.org",

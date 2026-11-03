@@ -731,6 +731,9 @@ def _install_selection(entries):
     # asks a yes/no during this window, so auto-Yes is safe here.
     guard = _YesWatchdog()
     guard.__enter__()
+    # 4.7.12: no Kodi auto-install while we install (skin update deadlock)
+    from resources.lib import kodi_updates
+    updates_prev = kodi_updates.hold()
     try:
         # 1) repositories -------------------------------------------------
         repos = []
@@ -813,6 +816,7 @@ def _install_selection(entries):
     finally:
         guard.__exit__(None, None, None)
         prog.close()
+        kodi_updates.release(updates_prev)
     return results
 
 
