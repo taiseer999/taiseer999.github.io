@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-ab_search.py - ABUKARIM TOOLS (3.4.48)
+ab_search.py - ABUKARIM TOOLS (3.4.48, EasyNews 4.7.16)
 
 "Search All": one stream list collected from every supported video add-on,
 in the style of Dex Hub's source browser (filter chips per add-on and per
@@ -37,6 +37,16 @@ device_select/<id>.json; playing one runs Dex Hub's own play() on the row's
 stream key (resolve, subtitles, resume, scrobbling), with the next rows as
 fallbacks.
 
+4.7.16 - EasyNews (plugin.video.easynewsx) joins the list while it is
+installed and signed in. Like AIOStreams it has no device-select modes: AB
+Tools searches EasyNews itself (members.easynews.com solr search, the same
+request Fen Light's EasyNews scraper makes) with the add-on's own login -
+the one Account Manager writes into it (general.username / general.password;
+AM's own easynews.* login is copied over when the add-on has none yet).
+Only files whose name starts with the title, then the year (or SxxEyy), are
+kept. Playing one runs the add-on's own /play route through PlayMedia, so
+EasyNews Video resolves it (CDN redirect, play history) like its own list.
+
 4.6.13 - threads: every window call happens on the dialog's own thread (the
 one in doModal). The four provider threads and the TMDb meta thread only
 change data and post JSONRPC.NotifyAll; a Monitor created on the dialog
@@ -71,7 +81,8 @@ ADDONS = (('rl', 'plugin.video.redlight', 'Red Light', 'RL'),
           ('umb', 'plugin.video.umbrella', 'Umbrella', 'UM'),
           ('pov', 'plugin.video.pov', 'POV', 'POV'),
           ('aio', 'plugin.video.aiostreams', 'AIOStreams', 'AIO'),
-          ('dex', 'plugin.video.dexhub', 'Dex Hub', 'DEX'))
+          ('dex', 'plugin.video.dexhub', 'Dex Hub', 'DEX'),
+          ('en', 'plugin.video.easynewsx', 'EasyNews', 'EN'))
 _MODULES = os.path.join('resources', 'lib', 'modules')
 # file that carries the device-select modes (relative to the add-on), and the text that proves it
 _SUPPORT = {'fl': (os.path.join(_MODULES, 'router.py'), 'app_list_sources'),
@@ -130,6 +141,8 @@ def _addon_dir(aid):
 def _supported(key, aid):
     if key == 'aio':                        # no bridge: needs only its manifest URL
         return bool(_aio_manifest())
+    if key == 'en':                         # no bridge: needs only the EasyNews login
+        return all(_en_login())
     try:
         rel, mark = _SUPPORT[key]
         with open(os.path.join(_addon_dir(aid), rel), 'r', encoding='utf-8', errors='replace') as f:
@@ -224,6 +237,8 @@ class Session(object):
     def _run(self, key, aid, name):
         if key == 'aio':
             return self._run_aio(name)
+        if key == 'en':
+            return self._run_en(name)
         rid = self.request_id(key)
         if key == 'umb':
             self.umb_media = _english_names(self.media)
@@ -289,6 +304,256 @@ class Session(object):
                 listener()
             except Exception as e:
                 _log('update failed: %s' % e, xbmc.LOGWARNING)
+
+
+    def _run_en(self, name):
+        t0 = time.time()
+        self.en_media = _english_names(self.media)      # English title + year for the search
+        results, found = [], False
+        try:
+            results = _en_search(self.en_media)
+            found = True
+            _log('%s: %d sources in %.1fs' % (name, len(results), time.time() - t0))
+        except Exception as e:
+            _log('%s: failed after %.1fs - %s' % (name, time.time() - t0, e), xbmc.LOGWARNING)
+        with self.lock:
+            self.state['en'] = {'state': 'done' if found else 'failed', 'results': results,
+                                'took': time.time() - t0}
+        listener = self.listener
+        if listener and not self.closed:
+            try:
+                listener()
+            except Exception as e:
+                _log('update failed: %s' % e, xbmc.LOGWARNING)
+
+
+# ───────────────────────── EasyNews ─────────────────────────
+# plugin.video.easynewsx keeps its login in general.username / .password;
+# Account Manager (script.module.acctmgr, easynews_sync "Easynews Video")
+# writes it there. The search is members.easynews.com's solr search with the
+# parameters Fen Light's EasyNews scraper uses (relevance order, video files
+# only, spam filter); every row carries the members /dl/ link that the
+# add-on's /play route resolves.
+
+_EN_ID = 'plugin.video.easynewsx'
+_EN_AM = 'script.module.acctmgr'
+_EN_SEARCH = 'https://members.easynews.com/2.0/search/solr-search/advanced'
+_EN_EXT = ('mkv', 'mp4', 'avi', 'm4v', 'ts', 'm2ts', 'mts', 'mov', 'wmv', 'webm', 'mpg', 'mpeg', 'divx', 'xvid', 'flv',
+           'vob', 'iso')
+_EN_PARAMS = {'st': 'adv', 'sb': 1, 'fex': ', '.join(_EN_EXT), 'fty[]': 'VIDEO', 'spamf': 1, 'u': 1, 'gx': 1,
+              'pno': 1, 'sS': 3, 's1': 'relevance', 's1d': '-', 's2': 'dsize', 's2d': '-', 'pby': 250, 'safeO': 0}
+_EN_JUNK = re.compile(r'(?<![a-z])(sample|trailer|teaser|featurette|extras?|behind[ ._-]the[ ._-]scenes)(?![a-z])', re.I)
+_EN_WORD = re.compile(r'[a-z0-9]+')
+
+
+def _en_addon(aid=_EN_ID):
+    import xbmcaddon
+    return xbmcaddon.Addon(aid)
+
+
+def _en_login():
+    """(username, password) EasyNews Video uses. When it has none yet but Account
+    Manager holds an EasyNews login, AM's login is written into the add-on first
+    (the same keys AM's own Easynews sync writes)."""
+    try:
+        addon = _en_addon()
+        user = (addon.getSetting('general.username') or '').strip()
+        pwd = addon.getSetting('general.password') or ''
+    except Exception:
+        return '', ''
+    if user and pwd:
+        return user, pwd
+    try:
+        am = _en_addon(_EN_AM)
+        am_user = (am.getSetting('easynews.username') or '').strip()
+        am_pwd = am.getSetting('easynews.password') or ''
+    except Exception:
+        am_user = am_pwd = ''
+    if am_user and am_pwd:
+        try:
+            addon.setSetting('general.username', am_user)
+            addon.setSetting('general.password', am_pwd)
+            _log('EasyNews: login copied from Account Manager')
+        except Exception as e:
+            _log('EasyNews: login not copied from Account Manager: %s' % e, xbmc.LOGWARNING)
+        return am_user, am_pwd
+    return user, pwd
+
+
+def en_sync_from_am():
+    """Add-on Portal, after an install: give EasyNews Video the AM login now."""
+    try:
+        if xbmc.getCondVisibility('System.HasAddon(%s)' % _EN_ID):
+            _en_login()
+    except Exception as e:
+        _log('EasyNews: login sync failed: %s' % e, xbmc.LOGWARNING)
+
+
+def _en_words(text):
+    t = str(text or '').lower().replace('&', ' and ').replace("'", '').replace('’', '')
+    return _EN_WORD.findall(t)
+
+
+def _en_query(media):
+    """(search text, title words, year, season, episode)."""
+    ep = media['media_type'] == 'episode'
+    title = (media.get('tvshowtitle') if ep else media.get('title')) or media.get('title') or ''
+    words = _en_words(title)
+    if not words:
+        raise ValueError('no title')
+    year = str(media.get('year') or '')[:4]
+    if ep:
+        season, episode = int(media['season']), int(media['episode'])
+        return '%s S%02dE%02d' % (' '.join(words), season, episode), words, year, season, episode
+    return ('%s %s' % (' '.join(words), year)).strip(), words, year, None, None
+
+
+def _en_match(name, words, year, season, episode):
+    """The file name starts with the title, then the year (movies) or SxxEyy."""
+    fw = _en_words(name)
+    if fw[:1] == ['the'] and words[:1] != ['the']:
+        fw = fw[1:]
+    if words[:1] == ['the'] and fw[:1] != ['the']:
+        words = words[1:]
+    if fw[:len(words)] != words:
+        return False
+    rest = fw[len(words):]
+    if season is None:
+        if not year.isdigit():
+            return True
+        ys = {str(int(year) + d) for d in (-1, 0, 1)}
+        return any(w in ys for w in rest[:3])
+    if year.isdigit() and rest[:1] and rest[0].isdigit() and len(rest[0]) == 4:
+        rest = rest[1:]                                   # "Show 2019 S01E02"
+    for w in rest[:3]:
+        m = re.match(r'^s(\d{1,2})e(\d{1,3})(?:e\d{1,3})*$', w)
+        if m and int(m.group(1)) == season and int(m.group(2)) == episode:
+            return True
+        m = re.match(r'^(\d{1,2})x(\d{1,3})$', w)
+        if m and int(m.group(1)) == season and int(m.group(2)) == episode:
+            return True
+    return False
+
+
+def _en_quality(width, name):
+    m = _AIO_RES.search(re.sub(r'[._]', ' ', name or ''))
+    if m:
+        q = m.group(1).upper()
+        if q in ('4K', 'UHD', '2160P'):
+            return '4K'
+        return 'SD' if q in ('576P', '480P', '360P') else q
+    try:
+        width = int(width or 0)
+    except (TypeError, ValueError):
+        width = 0
+    if width > 1920:
+        return '4K'
+    if width > 1280:
+        return '1080P'
+    if width > 720:
+        return '720P'
+    return 'SD'
+
+
+def _en_rows(data, words, year, season, episode, no_erotica=False):
+    """EasyNews solr answer -> Fen Light style rows (+ 'abk_en' for the /play route)."""
+    from urllib.parse import quote
+    farm, port = data.get('dlFarm'), data.get('dlPort')
+    out, seen = [], set()
+    min_secs = 300 if season is not None else 1200        # leave samples / clips out
+    for f in data.get('data') or []:
+        try:
+            if not isinstance(f, dict):
+                continue
+            if str(f.get('type') or 'VIDEO').upper() != 'VIDEO' or f.get('virus') or f.get('passwd'):
+                continue
+            post_hash, name, ext = str(f['0']), str(f['10']), str(f['11'])
+            if ext.lstrip('.').lower() not in _EN_EXT:
+                continue
+            if no_erotica and 'erotica' in str(f.get('9') or ''):
+                continue
+            if _EN_JUNK.search(name) or not _en_match(name, words, year, season, episode):
+                continue
+            try:
+                secs = int(float(f.get('runtime') or 0))
+            except (TypeError, ValueError):
+                secs = 0
+            if 0 < secs < min_secs:
+                continue
+            try:
+                gb = round(float(f.get('rawSize') or 0) / 1073741824.0, 2)
+            except (TypeError, ValueError):
+                gb = 0.0
+            key = (name.lower(), gb)
+            if key in seen:
+                continue
+            seen.add(key)
+            path = quote('%s%s/%s%s' % (post_hash, ext, name, ext))
+            if farm and port:
+                dl = 'https://members.easynews.com/dl/%s/%s/%s' % (farm, port, path)
+            else:
+                dl = 'https://members.easynews.com/dl/' + path
+            langs = f.get('alangs') or []
+            if isinstance(langs, str):
+                langs = [langs]
+            info = [ext.lstrip('.').upper()] + [str(x).upper() for x in langs[:3] if x]
+            display = re.sub(r'[._]+', ' ', name).strip()
+            out.append({'name': name + ext, 'display_name': display, 'quality': _en_quality(f.get('width'), name),
+                        'size': gb, 'size_label': ('%.2f GB' % gb) if gb else '',
+                        'scrape_provider': 'easynews', 'source': 'easynews', 'debrid': '',
+                        'extraInfo': ' | '.join(info),
+                        'abk_en': {'video': dl, 'title': display, 'runtime': str(secs),
+                                   'thumb': 'https://th.easynews.com/thumbnails-%s/pr-%s.jpg' % (
+                                       post_hash[0:3], post_hash[:41]),
+                                   'newsgroups': str(f.get('9') or '').strip()}})
+        except Exception as e:
+            _log('EasyNews: row skipped: %s' % e, xbmc.LOGDEBUG)
+    return out
+
+
+def _en_search(media):
+    """EasyNews files for the media (signed in with the add-on's own login)."""
+    import base64
+    import urllib.request
+    from urllib.parse import quote
+    user, pwd = _en_login()
+    if not (user and pwd):
+        raise ValueError('not signed in')
+    text, words, year, season, episode = _en_query(media)
+    url = _EN_SEARCH + '?' + urlencode(dict(_EN_PARAMS, gps=text))
+    auth = base64.b64encode(('%s:%s' % (user, pwd)).encode('utf-8')).decode('ascii')
+    try:
+        addon = _en_addon()
+        version = addon.getAddonInfo('version') or ''
+        no_erotica = (addon.getSetting('general.newsgroup_exclusions.erotica') or '').lower() == 'true'
+    except Exception:
+        version, no_erotica = '', False
+    req = urllib.request.Request(url, headers={
+        'Authorization': 'Basic ' + auth, 'Accept': 'application/json',
+        'Cookie': 'chickenlicker=%s%%3A%s' % (quote(user, safe=''), quote(pwd, safe='')),
+        'User-Agent': '%s %s' % (_EN_ID, version)})
+    _log('EasyNews: search "%s"' % text)
+    with urllib.request.urlopen(req, timeout=30) as r:
+        data = json.loads(r.read().decode('utf-8', 'replace'))
+    if not isinstance(data, dict):
+        raise ValueError('unexpected answer')
+    out = _en_rows(data, words, year, season, episode, no_erotica)
+    _log('EasyNews: %d of %d files match' % (len(out), len(data.get('data') or [])))
+    return out
+
+
+def _en_play(session, index):
+    """Hand the picked file to plugin.video.easynewsx (its /play route)."""
+    with session.lock:
+        results = list(session.state.get('en', {}).get('results') or [])
+    if not (0 <= index < len(results)):
+        return
+    play = {k: v for k, v in (results[index].get('abk_en') or {}).items() if v and v != '0'}
+    if not play.get('video'):
+        return
+    url = 'plugin://%s/play?%s' % (_EN_ID, urlencode(play))
+    _log('play: plugin://%s/play (%s)' % (_EN_ID, play.get('title', '')))
+    xbmc.executebuiltin('PlayMedia(%s)' % url)
 
 
 # ───────────────────────── AIOStreams ─────────────────────────
@@ -904,7 +1169,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             elif s['state'] == 'done':           # playable rows only (uncached left out)
                 text = T(30820) % sum(1 for r in self.rows if any(k == key for k, _i in r['refs']))
             elif s['state'] == 'unsupported':
-                text = T(30843) if key == 'aio' else T(30829)
+                text = T(30843) if key == 'aio' else (T(30844) if key == 'en' else T(30829))
             else:
                 text = T(30821)
             self.setProperty('abs.s%d.key' % n, key)
@@ -1377,6 +1642,8 @@ def run(params):
     key, index = picked
     if key == 'aio':
         return _aio_play(session, index)
+    if key == 'en':
+        return _en_play(session, index)
     aid = dict((k, a) for k, a, _n, _t, _ok in addons)[key]
     url = session.url(key, aid, 'play', index)
     _log('play: %s' % url)

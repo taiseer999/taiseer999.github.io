@@ -568,6 +568,10 @@ msgctxt "#30420"
 msgid "needs an AIOStreams server"
 msgstr "يتطلب خادم AIOStreams"
 
+msgctxt "#30421"
+msgid "needs an EasyNews account - sign in with Account Manager"
+msgstr "يتطلب حساب EasyNews - سجّل الدخول عبر مدير الحسابات"
+
 msgctxt "#30430"
 msgid "AF3 Auto Trailers"
 msgstr "التريلرات التلقائية (AF3)"
@@ -1593,8 +1597,8 @@ msgid "Play with %s"
 msgstr "تشغيل عبر %s"
 
 msgctxt "#30827"
-msgid "None of the supported add-ons (Red Light, Fen Light, Umbrella, POV, AIOStreams) is installed."
-msgstr "لا توجد أي إضافة مدعومة مثبّتة (Red Light أو Fen Light أو Umbrella أو POV أو AIOStreams)."
+msgid "None of the supported add-ons (Red Light, Fen Light, Umbrella, POV, AIOStreams, Dex Hub, EasyNews) is installed."
+msgstr "لا توجد أي إضافة مدعومة مثبّتة (Red Light أو Fen Light أو Umbrella أو POV أو AIOStreams أو Dex Hub أو EasyNews)."
 
 msgctxt "#30828"
 msgid "Finding streams in every add-on"
@@ -1655,6 +1659,10 @@ msgstr "تصغير"
 msgctxt "#30843"
 msgid "Not set up (no manifest URL)"
 msgstr "غير مُعدّة (لا يوجد رابط manifest)"
+
+msgctxt "#30844"
+msgid "Not signed in (Account Manager)"
+msgstr "لم يُسجَّل الدخول (مدير الحسابات)"
 
 msgctxt "#30850"
 msgid "AF3: Lucent Look"

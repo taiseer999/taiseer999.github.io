@@ -1,3 +1,26 @@
+v4.7.16
+- Add-on Portal: EasyNews (plugin.video.easynewsx, from repository.taiseer)
+  is in the list, with the note "needs an EasyNews account - sign in with
+  Account Manager". Like AIOStreams it is not pre-ticked by the Full preset.
+  Right after the portal installs it, the EasyNews login saved in Account
+  Manager is written into it, so it is signed in without a restart.
+- Search All: EasyNews joins the add-ons (cyan, EN tag) while EasyNews Video
+  is installed and signed in. AB Tools searches EasyNews with the add-on's
+  own login (the one Account Manager writes; AM's login is copied in when the
+  add-on has none), keeps files whose name starts with the title followed by
+  the year or SxxEyy, and leaves out samples, trailers, virus-flagged and
+  password-protected posts. Picking one plays it through EasyNews Video's own
+  /play route (CDN redirect, play history). Not signed in shows
+  "Not signed in (Account Manager)".
+- Search All window: a 7th add-on line; the add-on list rows are 40 px apart
+  (were 46) so seven lines fit above the screen edge.
+- tools/gen_lucent.py builds the shipped Search All window again (it was
+  behind since 4.6.32: no AIOStreams / Dex Hub, skin fonts, old card
+  widths). It now knows all 7 add-ons, the abk_srch_s/m/l fonts, the 740 px
+  title and the scrolling full title on the focused card; its output is
+  byte-identical to ab_search.xml. tools/selftest.py fails when the two
+  differ or when its add-on keys do not match ab_search.ADDONS.
+
 v4.7.15
 - TMDbHelper (toggle "TMDbHelper: Stability"): items whose TMDb id is the
   literal text "None" no longer crash the listitem monitor with

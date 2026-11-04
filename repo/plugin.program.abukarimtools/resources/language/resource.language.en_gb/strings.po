@@ -568,6 +568,10 @@ msgctxt "#30420"
 msgid "needs an AIOStreams server"
 msgstr ""
 
+msgctxt "#30421"
+msgid "needs an EasyNews account - sign in with Account Manager"
+msgstr ""
+
 msgctxt "#30430"
 msgid "AF3 Auto Trailers"
 msgstr ""
@@ -1593,7 +1597,7 @@ msgid "Play with %s"
 msgstr ""
 
 msgctxt "#30827"
-msgid "None of the supported add-ons (Red Light, Fen Light, Umbrella, POV, AIOStreams) is installed."
+msgid "None of the supported add-ons (Red Light, Fen Light, Umbrella, POV, AIOStreams, Dex Hub, EasyNews) is installed."
 msgstr ""
 
 msgctxt "#30828"
@@ -1654,6 +1658,10 @@ msgstr ""
 
 msgctxt "#30843"
 msgid "Not set up (no manifest URL)"
+msgstr ""
+
+msgctxt "#30844"
+msgid "Not signed in (Account Manager)"
 msgstr ""
 
 msgctxt "#30850"

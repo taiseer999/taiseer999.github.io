@@ -67,6 +67,11 @@ CATALOG = [
      'https://dexworld.cc/kodi/plugin.video.dexhub/resources/media/icon.png'),
     ('plugin.video.dplex',       'DPlex',       'repository.dexworld',
      'https://dexworld.cc/kodi/plugin.video.dplex/resources/media/icon.png'),
+    # 4.7.16: EasyNews Video (tetsuo), mirrored in repository.taiseer. Needs a
+    # paid EasyNews account (Account Manager pushes the login into it), so it
+    # carries a note and stays out of the Full preset like AIOStreams.
+    ('plugin.video.easynewsx',   'EasyNews',    'repository.taiseer',
+     TAISEER_ZIPS + 'plugin.video.easynewsx/easynews.png'),
     ('plugin.video.fenlight',    'Fen Light+',  'repository.taiseer',
      TAISEER_ZIPS + 'plugin.video.fenlight/resources/media/fenlight_plus_icon.png'),
     ('plugin.video.abukarim.lastplayed', 'Last Played', 'repository.taiseer',
@@ -90,7 +95,7 @@ CATALOG = [
 
 # Optional one-line note shown after the repository name in the list
 # (string id from strings.po, or plain text from portal.json "note").
-NOTES = {'plugin.video.aiostreams': 30420}
+NOTES = {'plugin.video.aiostreams': 30420, 'plugin.video.easynewsx': 30421}
 
 # 3.4.24: add-ons that exist ONLY where their upstream requirements are met.
 # TinyPPI = CoreELEC + Kodi 22+ (xbmc.python 3.1.0), installed from
@@ -957,6 +962,15 @@ def run(first_run=False, preselect=None, confirm_skip=None):
         mark = '[COLOR FF33D17A]OK[/COLOR]' if good else '[COLOR FFFF5555]X[/COLOR]'
         lines.append('%s  %s%s' % (mark, name, ('  - ' + note) if note else ''))
     xbmcgui.Dialog().textviewer(TITLE, '\n'.join(lines))
+
+    # 4.7.16: EasyNews Video signs in with the Account Manager login at once
+    # (AM syncs it only on its own boot / authorize otherwise).
+    if any(a == 'plugin.video.easynewsx' for a, _n, _r in selection):
+        try:
+            from resources.lib import ab_search
+            ab_search.en_sync_from_am()
+        except Exception as e:
+            _log('EasyNews login sync failed: %s' % e)
 
     # First-run applies patches as its own next step.
     if ok and not first_run:

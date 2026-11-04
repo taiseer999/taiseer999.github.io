@@ -1365,7 +1365,13 @@ def lucent_select():
 # resources/lucent/media (absolute special:// paths, no second copy).
 
 AB_MEDIA = 'special://home/addons/plugin.program.abukarimtools/resources/lucent/media/'
-AB_ADDONS = (('rl', 'FFE5484D'), ('fl', 'FF3E9BFF'), ('umb', 'FF9B6BFF'), ('pov', 'FF2BC48A'))
+# (key, colour) in ab_search.ADDONS order: the key picks the dot / tag colour
+AB_ADDONS = (('rl', 'FFE5484D'), ('fl', 'FF3E9BFF'), ('umb', 'FF9B6BFF'), ('pov', 'FF2BC48A'),
+             ('aio', 'FFF5A524'),      # 4.6.32 AIOStreams (orange)
+             ('dex', 'FFEC4899'),      # 4.7.13 Dex Hub (pink)
+             ('en', 'FF22D3EE'))       # 4.7.16 EasyNews (cyan)
+AB_SLOTS = len(AB_ADDONS)             # one status line per add-on (abs.s1 .. abs.sN)
+AB_SLOT_PITCH = 40                    # 4.7.16: 7 lines fit above the screen edge (was 46)
 AB_TAGS = 4
 AB_TAG_W = 64
 
@@ -1413,6 +1419,20 @@ def ab_card(state):
                       r'[ \t]*<control type="image">(?:(?!</control>).)*?</control>\n', '', xml, flags=_re.S)
     assert a == 1 and b == 1, (a, b)
     xml = xml.replace(' + String.IsEmpty(ListItem.Property(lucent.res))', '')
+    # 4.7.8: the title line is 740 wide (Python fits it to _TITLE_PX); the
+    # FOCUSED card shows the whole title (lucent.title_full), scrolling
+    title_head = ('                            <left>168</left>\n'
+                  '                            <top>12</top>\n'
+                  '                            <width>712</width>\n'
+                  '                            <height>40</height>\n')
+    assert xml.count(title_head) == 1
+    xml = xml.replace(title_head, title_head.replace('<width>712</width>', '<width>740</width>'))
+    if state == 'active':
+        old = '                            <label>[B]$INFO[ListItem.Property(lucent.title)][/B]</label>'
+        assert xml.count(old) == 1
+        xml = xml.replace(old, '                            <scroll>true</scroll>\n'
+                               '                            <scrollspeed>45</scrollspeed>\n'
+                               '                            <label>[B]$INFO[ListItem.Property(lucent.title_full)][/B]</label>')
     marker = '\n                    <!-- Full search -->'
     assert marker in xml
     # 4.6.1: service icon (RD / AD / PM ..., AB Wizard artwork) under the quality;
@@ -1702,8 +1722,8 @@ def ab_panel(expanded, visible, W):
 def ab_search_window():
     W = 'Window.Property(abs.%s)'
     slots = []
-    for n in range(1, 5):
-        top = (n - 1) * 54
+    for n in range(1, AB_SLOTS + 1):
+        top = (n - 1) * AB_SLOT_PITCH
         dots = ''.join('''
                 <control type="image">
                     <left>0</left>
@@ -1714,14 +1734,14 @@ def ab_search_window():
                     <colordiffuse>%(c)s</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s%(n)d.state),searching)">Conditional</animation>
                     <visible>String.IsEqual(Window.Property(abs.s%(n)d.key),%(k)s)</visible>
-                </control>''' % {'t': top + 17, 'c': color, 'n': n, 'k': key} for key, color in AB_ADDONS)
+                </control>''' % {'t': top + 12, 'c': color, 'n': n, 'k': key} for key, color in AB_ADDONS)
         slots.append('''%(dots)s
                 <control type="label">
                     <left>32</left>
                     <top>%(t)d</top>
                     <width>360</width>
-                    <height>50</height>
-                    <font>font12</font>
+                    <height>%(h)d</height>
+                    <font>abk_srch_s</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
                     <label>[B]$INFO[Window.Property(abs.s%(n)d.name)][/B]</label>
@@ -1730,13 +1750,13 @@ def ab_search_window():
                     <left>392</left>
                     <top>%(t)d</top>
                     <width>308</width>
-                    <height>50</height>
-                    <font>font12</font>
+                    <height>%(h)d</height>
+                    <font>abk_srch_s</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFBDC8D1</textcolor>
                     <label>$INFO[Window.Property(abs.s%(n)d.status)]</label>
-                </control>''' % {'dots': dots, 't': top, 'n': n})
+                </control>''' % {'dots': dots, 't': top, 'n': n, 'h': AB_SLOT_PITCH})
     status = '''
         <!-- ============ Left: one line per add-on (searching / N streams) ============ -->
         <control type="group">
@@ -1805,7 +1825,21 @@ def ab_search_window():
 ''' % {'bg': backdrop('$INFO[Window.Property(lucent.fanart)]'), 'title': hide_left(title_block()),
        'plot': hide_left(plot_block('$INFO[Window.Property(lucent.plot)]', height=220)),
        'status': hide_left(status), 'top': top_title, 'body': body}
-    return ab_paths(xml)
+    return ab_paths(ab_fonts(xml))
+
+
+# 4.7.7: Search All uses its own font names with fixed sizes (patcher
+# _SRCH_FONTS registers them in every fontset of the active skin), so the
+# window looks the same whatever sizes the skin gives font12 / 27 / 37.
+AB_FONTS = (('font12', 'abk_srch_s'),     # 22 px: cards, rows, chips, info lines
+            ('font27', 'abk_srch_m'),     # 26 px: headings, episode title, wait message
+            ('font37', 'abk_srch_l'))     # 32 px: show title without clearlogo
+
+
+def ab_fonts(xml):
+    for skin_font, own in AB_FONTS:
+        xml = xml.replace('<font>%s</font>' % skin_font, '<font>%s</font>' % own)
+    return xml
 
 
 def ab_paths(xml):

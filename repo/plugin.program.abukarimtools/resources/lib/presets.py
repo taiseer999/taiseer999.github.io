@@ -45,7 +45,7 @@ DEFAULTS = [
 
 # 4.6.35: listed in the portal but never pre-ticked by "*" (Full): it does
 # nothing until the user's own AIOStreams server is set up.
-NOT_IN_FULL = {'plugin.video.aiostreams'}
+NOT_IN_FULL = {'plugin.video.aiostreams', 'plugin.video.easynewsx'}  # 4.7.16: + EasyNews (paid account)
 
 STATE = os.path.join(xbmcvfs.translatePath(
     'special://profile/addon_data/plugin.program.abukarimtools/'), 'preset.txt')

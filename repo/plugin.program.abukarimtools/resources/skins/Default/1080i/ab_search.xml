@@ -204,7 +204,7 @@
                 <top>56</top>
                 <control type="image">
                     <left>0</left>
-                    <top>15</top>
+                    <top>12</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -214,7 +214,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>15</top>
+                    <top>12</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -224,7 +224,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>15</top>
+                    <top>12</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -234,7 +234,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>15</top>
+                    <top>12</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -244,7 +244,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>15</top>
+                    <top>12</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -254,7 +254,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>15</top>
+                    <top>12</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -262,11 +262,21 @@
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s1.state),searching)">Conditional</animation>
                     <visible>String.IsEqual(Window.Property(abs.s1.key),dex)</visible>
                 </control>
+                <control type="image">
+                    <left>0</left>
+                    <top>12</top>
+                    <width>16</width>
+                    <height>16</height>
+                    <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                    <colordiffuse>FF22D3EE</colordiffuse>
+                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s1.state),searching)">Conditional</animation>
+                    <visible>String.IsEqual(Window.Property(abs.s1.key),en)</visible>
+                </control>
                 <control type="label">
                     <left>32</left>
                     <top>0</top>
                     <width>360</width>
-                    <height>46</height>
+                    <height>40</height>
                     <font>abk_srch_s</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
@@ -276,7 +286,7 @@
                     <left>392</left>
                     <top>0</top>
                     <width>308</width>
-                    <height>46</height>
+                    <height>40</height>
                     <font>abk_srch_s</font>
                     <align>right</align>
                     <aligny>center</aligny>
@@ -285,7 +295,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>61</top>
+                    <top>52</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -295,7 +305,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>61</top>
+                    <top>52</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -305,7 +315,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>61</top>
+                    <top>52</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -315,7 +325,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>61</top>
+                    <top>52</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -325,7 +335,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>61</top>
+                    <top>52</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -335,7 +345,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>61</top>
+                    <top>52</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -343,11 +353,21 @@
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s2.state),searching)">Conditional</animation>
                     <visible>String.IsEqual(Window.Property(abs.s2.key),dex)</visible>
                 </control>
+                <control type="image">
+                    <left>0</left>
+                    <top>52</top>
+                    <width>16</width>
+                    <height>16</height>
+                    <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                    <colordiffuse>FF22D3EE</colordiffuse>
+                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s2.state),searching)">Conditional</animation>
+                    <visible>String.IsEqual(Window.Property(abs.s2.key),en)</visible>
+                </control>
                 <control type="label">
                     <left>32</left>
-                    <top>46</top>
+                    <top>40</top>
                     <width>360</width>
-                    <height>46</height>
+                    <height>40</height>
                     <font>abk_srch_s</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
@@ -355,9 +375,9 @@
                 </control>
                 <control type="label">
                     <left>392</left>
-                    <top>46</top>
+                    <top>40</top>
                     <width>308</width>
-                    <height>46</height>
+                    <height>40</height>
                     <font>abk_srch_s</font>
                     <align>right</align>
                     <aligny>center</aligny>
@@ -366,7 +386,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>107</top>
+                    <top>92</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -376,7 +396,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>107</top>
+                    <top>92</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -386,7 +406,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>107</top>
+                    <top>92</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -396,7 +416,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>107</top>
+                    <top>92</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -406,7 +426,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>107</top>
+                    <top>92</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -416,7 +436,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>107</top>
+                    <top>92</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -424,11 +444,21 @@
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s3.state),searching)">Conditional</animation>
                     <visible>String.IsEqual(Window.Property(abs.s3.key),dex)</visible>
                 </control>
+                <control type="image">
+                    <left>0</left>
+                    <top>92</top>
+                    <width>16</width>
+                    <height>16</height>
+                    <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                    <colordiffuse>FF22D3EE</colordiffuse>
+                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s3.state),searching)">Conditional</animation>
+                    <visible>String.IsEqual(Window.Property(abs.s3.key),en)</visible>
+                </control>
                 <control type="label">
                     <left>32</left>
-                    <top>92</top>
+                    <top>80</top>
                     <width>360</width>
-                    <height>46</height>
+                    <height>40</height>
                     <font>abk_srch_s</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
@@ -436,9 +466,9 @@
                 </control>
                 <control type="label">
                     <left>392</left>
-                    <top>92</top>
+                    <top>80</top>
                     <width>308</width>
-                    <height>46</height>
+                    <height>40</height>
                     <font>abk_srch_s</font>
                     <align>right</align>
                     <aligny>center</aligny>
@@ -447,7 +477,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>153</top>
+                    <top>132</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -457,7 +487,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>153</top>
+                    <top>132</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -467,7 +497,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>153</top>
+                    <top>132</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -477,7 +507,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>153</top>
+                    <top>132</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -487,7 +517,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>153</top>
+                    <top>132</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -497,7 +527,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>153</top>
+                    <top>132</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -505,11 +535,21 @@
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s4.state),searching)">Conditional</animation>
                     <visible>String.IsEqual(Window.Property(abs.s4.key),dex)</visible>
                 </control>
+                <control type="image">
+                    <left>0</left>
+                    <top>132</top>
+                    <width>16</width>
+                    <height>16</height>
+                    <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                    <colordiffuse>FF22D3EE</colordiffuse>
+                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s4.state),searching)">Conditional</animation>
+                    <visible>String.IsEqual(Window.Property(abs.s4.key),en)</visible>
+                </control>
                 <control type="label">
                     <left>32</left>
-                    <top>138</top>
+                    <top>120</top>
                     <width>360</width>
-                    <height>46</height>
+                    <height>40</height>
                     <font>abk_srch_s</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
@@ -517,9 +557,9 @@
                 </control>
                 <control type="label">
                     <left>392</left>
-                    <top>138</top>
+                    <top>120</top>
                     <width>308</width>
-                    <height>46</height>
+                    <height>40</height>
                     <font>abk_srch_s</font>
                     <align>right</align>
                     <aligny>center</aligny>
@@ -528,7 +568,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>199</top>
+                    <top>172</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -538,7 +578,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>199</top>
+                    <top>172</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -548,7 +588,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>199</top>
+                    <top>172</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -558,7 +598,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>199</top>
+                    <top>172</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -568,7 +608,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>199</top>
+                    <top>172</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -578,7 +618,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>199</top>
+                    <top>172</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -586,11 +626,21 @@
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s5.state),searching)">Conditional</animation>
                     <visible>String.IsEqual(Window.Property(abs.s5.key),dex)</visible>
                 </control>
+                <control type="image">
+                    <left>0</left>
+                    <top>172</top>
+                    <width>16</width>
+                    <height>16</height>
+                    <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                    <colordiffuse>FF22D3EE</colordiffuse>
+                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s5.state),searching)">Conditional</animation>
+                    <visible>String.IsEqual(Window.Property(abs.s5.key),en)</visible>
+                </control>
                 <control type="label">
                     <left>32</left>
-                    <top>184</top>
+                    <top>160</top>
                     <width>360</width>
-                    <height>46</height>
+                    <height>40</height>
                     <font>abk_srch_s</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
@@ -598,9 +648,9 @@
                 </control>
                 <control type="label">
                     <left>392</left>
-                    <top>184</top>
+                    <top>160</top>
                     <width>308</width>
-                    <height>46</height>
+                    <height>40</height>
                     <font>abk_srch_s</font>
                     <align>right</align>
                     <aligny>center</aligny>
@@ -609,7 +659,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>245</top>
+                    <top>212</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -619,7 +669,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>245</top>
+                    <top>212</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -629,7 +679,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>245</top>
+                    <top>212</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -639,7 +689,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>245</top>
+                    <top>212</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -649,7 +699,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>245</top>
+                    <top>212</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -659,7 +709,7 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>245</top>
+                    <top>212</top>
                     <width>16</width>
                     <height>16</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
@@ -667,11 +717,21 @@
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s6.state),searching)">Conditional</animation>
                     <visible>String.IsEqual(Window.Property(abs.s6.key),dex)</visible>
                 </control>
+                <control type="image">
+                    <left>0</left>
+                    <top>212</top>
+                    <width>16</width>
+                    <height>16</height>
+                    <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                    <colordiffuse>FF22D3EE</colordiffuse>
+                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s6.state),searching)">Conditional</animation>
+                    <visible>String.IsEqual(Window.Property(abs.s6.key),en)</visible>
+                </control>
                 <control type="label">
                     <left>32</left>
-                    <top>230</top>
+                    <top>200</top>
                     <width>360</width>
-                    <height>46</height>
+                    <height>40</height>
                     <font>abk_srch_s</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
@@ -679,14 +739,105 @@
                 </control>
                 <control type="label">
                     <left>392</left>
-                    <top>230</top>
+                    <top>200</top>
                     <width>308</width>
-                    <height>46</height>
+                    <height>40</height>
                     <font>abk_srch_s</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFBDC8D1</textcolor>
                     <label>$INFO[Window.Property(abs.s6.status)]</label>
+                </control>
+                <control type="image">
+                    <left>0</left>
+                    <top>252</top>
+                    <width>16</width>
+                    <height>16</height>
+                    <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                    <colordiffuse>FFE5484D</colordiffuse>
+                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s7.state),searching)">Conditional</animation>
+                    <visible>String.IsEqual(Window.Property(abs.s7.key),rl)</visible>
+                </control>
+                <control type="image">
+                    <left>0</left>
+                    <top>252</top>
+                    <width>16</width>
+                    <height>16</height>
+                    <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                    <colordiffuse>FF3E9BFF</colordiffuse>
+                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s7.state),searching)">Conditional</animation>
+                    <visible>String.IsEqual(Window.Property(abs.s7.key),fl)</visible>
+                </control>
+                <control type="image">
+                    <left>0</left>
+                    <top>252</top>
+                    <width>16</width>
+                    <height>16</height>
+                    <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                    <colordiffuse>FF9B6BFF</colordiffuse>
+                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s7.state),searching)">Conditional</animation>
+                    <visible>String.IsEqual(Window.Property(abs.s7.key),umb)</visible>
+                </control>
+                <control type="image">
+                    <left>0</left>
+                    <top>252</top>
+                    <width>16</width>
+                    <height>16</height>
+                    <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                    <colordiffuse>FF2BC48A</colordiffuse>
+                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s7.state),searching)">Conditional</animation>
+                    <visible>String.IsEqual(Window.Property(abs.s7.key),pov)</visible>
+                </control>
+                <control type="image">
+                    <left>0</left>
+                    <top>252</top>
+                    <width>16</width>
+                    <height>16</height>
+                    <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                    <colordiffuse>FFF5A524</colordiffuse>
+                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s7.state),searching)">Conditional</animation>
+                    <visible>String.IsEqual(Window.Property(abs.s7.key),aio)</visible>
+                </control>
+                <control type="image">
+                    <left>0</left>
+                    <top>252</top>
+                    <width>16</width>
+                    <height>16</height>
+                    <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                    <colordiffuse>FFEC4899</colordiffuse>
+                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s7.state),searching)">Conditional</animation>
+                    <visible>String.IsEqual(Window.Property(abs.s7.key),dex)</visible>
+                </control>
+                <control type="image">
+                    <left>0</left>
+                    <top>252</top>
+                    <width>16</width>
+                    <height>16</height>
+                    <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                    <colordiffuse>FF22D3EE</colordiffuse>
+                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s7.state),searching)">Conditional</animation>
+                    <visible>String.IsEqual(Window.Property(abs.s7.key),en)</visible>
+                </control>
+                <control type="label">
+                    <left>32</left>
+                    <top>240</top>
+                    <width>360</width>
+                    <height>40</height>
+                    <font>abk_srch_s</font>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <label>[B]$INFO[Window.Property(abs.s7.name)][/B]</label>
+                </control>
+                <control type="label">
+                    <left>392</left>
+                    <top>240</top>
+                    <width>308</width>
+                    <height>40</height>
+                    <font>abk_srch_s</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFBDC8D1</textcolor>
+                    <label>$INFO[Window.Property(abs.s7.status)]</label>
                 </control>
             </control>
         </control>
@@ -863,6 +1014,15 @@
                         <visible>String.IsEqual(ListItem.Property(abs.key),dex) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
                     <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FF22D3EE</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),en) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
                         <left>10</left>
                         <top>12</top>
                         <width>28</width>
@@ -974,6 +1134,15 @@
                         <visible>String.IsEqual(ListItem.Property(abs.key),dex) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
                     <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FF22D3EE</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),en) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
                         <left>10</left>
                         <top>12</top>
                         <width>28</width>
@@ -1075,6 +1244,15 @@
                         <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                         <colordiffuse>FFEC4899</colordiffuse>
                         <visible>String.IsEqual(ListItem.Property(abs.key),dex) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FF22D3EE</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),en) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
                     <control type="image">
                         <left>10</left>
@@ -1378,6 +1556,15 @@
                             <colordiffuse>A6EC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_1),dex)</visible>
                         </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A622D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),en)</visible>
+                        </control>
                         <control type="label">
                             <left>820</left>
                             <top>49</top>
@@ -1442,6 +1629,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A6EC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_2),dex)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A622D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),en)</visible>
                         </control>
                         <control type="label">
                             <left>750</left>
@@ -1508,6 +1704,15 @@
                             <colordiffuse>A6EC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_3),dex)</visible>
                         </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A622D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),en)</visible>
+                        </control>
                         <control type="label">
                             <left>680</left>
                             <top>49</top>
@@ -1572,6 +1777,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A6EC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_4),dex)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A622D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),en)</visible>
                         </control>
                         <control type="label">
                             <left>610</left>
@@ -1830,6 +2044,15 @@
                             <colordiffuse>A6EC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_1),dex)</visible>
                         </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A622D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),en)</visible>
+                        </control>
                         <control type="label">
                             <left>820</left>
                             <top>49</top>
@@ -1894,6 +2117,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A6EC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_2),dex)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A622D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),en)</visible>
                         </control>
                         <control type="label">
                             <left>750</left>
@@ -1960,6 +2192,15 @@
                             <colordiffuse>A6EC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_3),dex)</visible>
                         </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A622D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),en)</visible>
+                        </control>
                         <control type="label">
                             <left>680</left>
                             <top>49</top>
@@ -2024,6 +2265,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A6EC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_4),dex)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A622D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),en)</visible>
                         </control>
                         <control type="label">
                             <left>610</left>
@@ -2293,6 +2543,15 @@
                             <colordiffuse>FFEC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_1),dex)</visible>
                         </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF22D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),en)</visible>
+                        </control>
                         <control type="label">
                             <left>820</left>
                             <top>49</top>
@@ -2357,6 +2616,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>FFEC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_2),dex)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF22D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),en)</visible>
                         </control>
                         <control type="label">
                             <left>750</left>
@@ -2423,6 +2691,15 @@
                             <colordiffuse>FFEC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_3),dex)</visible>
                         </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF22D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),en)</visible>
+                        </control>
                         <control type="label">
                             <left>680</left>
                             <top>49</top>
@@ -2487,6 +2764,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>FFEC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_4),dex)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF22D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),en)</visible>
                         </control>
                         <control type="label">
                             <left>610</left>
@@ -2697,6 +2983,15 @@
                         <visible>String.IsEqual(ListItem.Property(abs.key),dex) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
                     <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FF22D3EE</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),en) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
                         <left>10</left>
                         <top>12</top>
                         <width>28</width>
@@ -2808,6 +3103,15 @@
                         <visible>String.IsEqual(ListItem.Property(abs.key),dex) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
                     <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FF22D3EE</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),en) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
                         <left>10</left>
                         <top>12</top>
                         <width>28</width>
@@ -2909,6 +3213,15 @@
                         <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                         <colordiffuse>FFEC4899</colordiffuse>
                         <visible>String.IsEqual(ListItem.Property(abs.key),dex) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FF22D3EE</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),en) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
                     <control type="image">
                         <left>10</left>
@@ -3210,6 +3523,15 @@
                             <colordiffuse>A6EC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_1),dex)</visible>
                         </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A622D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),en)</visible>
+                        </control>
                         <control type="label">
                             <left>820</left>
                             <top>49</top>
@@ -3274,6 +3596,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A6EC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_2),dex)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A622D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),en)</visible>
                         </control>
                         <control type="label">
                             <left>750</left>
@@ -3340,6 +3671,15 @@
                             <colordiffuse>A6EC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_3),dex)</visible>
                         </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A622D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),en)</visible>
+                        </control>
                         <control type="label">
                             <left>680</left>
                             <top>49</top>
@@ -3404,6 +3744,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A6EC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_4),dex)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A622D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),en)</visible>
                         </control>
                         <control type="label">
                             <left>610</left>
@@ -3662,6 +4011,15 @@
                             <colordiffuse>A6EC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_1),dex)</visible>
                         </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A622D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),en)</visible>
+                        </control>
                         <control type="label">
                             <left>820</left>
                             <top>49</top>
@@ -3726,6 +4084,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A6EC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_2),dex)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A622D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),en)</visible>
                         </control>
                         <control type="label">
                             <left>750</left>
@@ -3792,6 +4159,15 @@
                             <colordiffuse>A6EC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_3),dex)</visible>
                         </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A622D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),en)</visible>
+                        </control>
                         <control type="label">
                             <left>680</left>
                             <top>49</top>
@@ -3856,6 +4232,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A6EC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_4),dex)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A622D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),en)</visible>
                         </control>
                         <control type="label">
                             <left>610</left>
@@ -4125,6 +4510,15 @@
                             <colordiffuse>FFEC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_1),dex)</visible>
                         </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF22D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),en)</visible>
+                        </control>
                         <control type="label">
                             <left>820</left>
                             <top>49</top>
@@ -4189,6 +4583,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>FFEC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_2),dex)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF22D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),en)</visible>
                         </control>
                         <control type="label">
                             <left>750</left>
@@ -4255,6 +4658,15 @@
                             <colordiffuse>FFEC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_3),dex)</visible>
                         </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF22D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),en)</visible>
+                        </control>
                         <control type="label">
                             <left>680</left>
                             <top>49</top>
@@ -4319,6 +4731,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>FFEC4899</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_4),dex)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FF22D3EE</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),en)</visible>
                         </control>
                         <control type="label">
                             <left>610</left>

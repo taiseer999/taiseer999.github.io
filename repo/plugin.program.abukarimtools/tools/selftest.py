@@ -193,6 +193,37 @@ try:
 except Exception as e:
     fail('patcher import under mocked Kodi failed: %r' % e)
 
+# ── Search All window: tools/gen_lucent.py must still build the shipped one ──
+# (4.7.16) The window was hand-edited for 4.6.32-4.7.13 while the generator
+# stayed behind; running it would have dropped AIOStreams and Dex Hub. Now
+# the generator is the source: its output must equal ab_search.xml, and its
+# add-on keys must be ab_search.ADDONS' keys in the same order.
+try:
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        'abk_gen_lucent', os.path.join(ROOT, 'tools', 'gen_lucent.py'))
+    gen = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(gen)
+    shipped_path = os.path.join(ROOT, 'resources', 'skins', 'Default', '1080i', 'ab_search.xml')
+    with open(shipped_path, 'r', encoding='utf-8') as f:
+        shipped = f.read()
+    if gen.ab_search_window() != shipped:
+        fail('ab_search.xml differs from tools/gen_lucent.py ab_search_window() - '
+             'edit the generator, then run it (never hand-edit the window)')
+    with open(os.path.join(ROOT, 'resources', 'lib', 'ab_search.py'), 'r', encoding='utf-8') as f:
+        tree = ast.parse(f.read())
+    keys = None
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and any(getattr(t, 'id', '') == 'ADDONS' for t in node.targets):
+            keys = [el.elts[0].value for el in node.value.elts]
+    gen_keys = [k for k, _c in gen.AB_ADDONS]
+    if keys != gen_keys:
+        fail('Search All add-ons: ab_search.ADDONS %s != gen_lucent.AB_ADDONS %s' % (keys, gen_keys))
+    else:
+        print('Search All window: generator == shipped, %d add-ons (%s)' % (len(keys), ', '.join(keys)))
+except Exception as e:
+    fail('Search All generator check failed: %r' % e)
+
 # ── report ───────────────────────────────────────────────────────────────────
 print('abukarimtools %s: %d .py checked' % (version, len(py_files)))
 for w in warns:

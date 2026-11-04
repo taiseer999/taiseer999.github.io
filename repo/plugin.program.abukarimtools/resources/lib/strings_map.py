@@ -29,7 +29,7 @@ ID ranges:
   30770-30779  Installation Wizard - setup-in-progress backdrop, final restart
   30780-30799  Maintenance - Clean Unused Items
   30800-30813  Toggles - Glass Theme (internally 'Lucent', per add-on)
-  30814-30843  Search All (one stream list from every add-on)
+  30814-30844  Search All (one stream list from every add-on)
   30850-30859  AF3 Lucent Look (Toggles)
   30860-30874  AF3 Streaming Services (Setup)
   30880-30889  AF3 subtitle list (OSD, Lucent Look)
@@ -251,6 +251,8 @@ STRINGS = {
     30416: ("Clear All",                       "إلغاء التحديد"),
     30417: ("Nothing selected",                "لم يتم تحديد شيء"),
     30420: ("needs an AIOStreams server",      "يتطلب خادم AIOStreams"),
+    30421: ("needs an EasyNews account - sign in with Account Manager",
+            "يتطلب حساب EasyNews - سجّل الدخول عبر مدير الحسابات"),
     30418: ("Install these add-ons from their repositories?[CR][CR]%s",
             "تثبيت هذه الإضافات من مستودعاتها؟[CR][CR]%s"),
     30419: ("The add-ons were installed and linked to their repositories.\nA restart is recommended so their updates become active.\nتم تثبيت الإضافات وربطها بمستودعاتها.\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة.",
@@ -588,7 +590,7 @@ STRINGS = {
     30824: ('No streams found', 'لم يُعثر على أي مصدر'),
     30825: ('All', 'الكل'),
     30826: ('Play with %s', 'تشغيل عبر %s'),
-    30827: ('None of the supported add-ons (Red Light, Fen Light, Umbrella, POV, AIOStreams) is installed.', 'لا توجد أي إضافة مدعومة مثبّتة (Red Light أو Fen Light أو Umbrella أو POV أو AIOStreams).'),
+    30827: ('None of the supported add-ons (Red Light, Fen Light, Umbrella, POV, AIOStreams, Dex Hub, EasyNews) is installed.', 'لا توجد أي إضافة مدعومة مثبّتة (Red Light أو Fen Light أو Umbrella أو POV أو AIOStreams أو Dex Hub أو EasyNews).'),
     30828: ('Finding streams in every add-on', 'جارٍ البحث عن المصادر في كل الإضافات'),
     30829: ('Not supported by this version', 'هذا الإصدار غير مدعوم'),
     30830: ('Size: under 5 GB', 'الحجم: أقل من 5 غيغابايت'),
@@ -604,6 +606,7 @@ STRINGS = {
     30841: ('Expand', 'توسيع'),
     30842: ('Collapse', 'تصغير'),
     30843: ('Not set up (no manifest URL)', 'غير مُعدّة (لا يوجد رابط manifest)'),
+    30844: ('Not signed in (Account Manager)', 'لم يُسجَّل الدخول (مدير الحسابات)'),
     # ---- 4.6.8: AF3 Lucent Look (30850-30859) ----
     30850: ('AF3: Lucent Look', 'AF3: مظهر Lucent'),
     30851: ('Off (Arctic Fuse 3 as it is)', 'إيقاف (واجهة Arctic Fuse 3 كما هي)'),
