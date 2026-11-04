@@ -1,3 +1,11 @@
+v4.7.15
+- TMDbHelper (toggle "TMDbHelper: Stability"): items whose TMDb id is the
+  literal text "None" no longer crash the listitem monitor with
+  ValueError int('None') (kodi.log 2026-11-04, itemdetails.get_lidc_item ->
+  request.py:69) and keep their artwork/details. Two entries in
+  monitor/itemdetails.py treat "None"/"null"/""/"0" as no id, at resolve
+  time and for ids already cached by an earlier session.
+
 v4.7.14
 - Scripts start through the add-on, not by file path. RunScript(special://
   .../service.py) runs with no add-on attached: Kodi 22 logs "Script invoked

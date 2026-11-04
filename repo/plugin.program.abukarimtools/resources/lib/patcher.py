@@ -2892,6 +2892,60 @@ PATCHES = [
         'toggle': 'tmdbh_stability',
         'description': 'TMDbHelper player.py \u2013 dead-player guard (getPlayingFile RuntimeError)',
     },
+    # ── TMDbHelper: "None" tmdb_id guard (4.7.15) ──
+    # kodi.log 2026-11-04 (TMDbHelper 6.20.6): ValueError "invalid literal for
+    # int() with base 10: 'None'" in listitemtools.on_listitem ->
+    # itemdetails.get_lidc_item -> DetailsRequest.get_identifier (request.py:69).
+    # Some widget items carry the literal text "None" in UniqueId(tmdb) /
+    # Property(tmdb_id); it is truthy, passes get_item()'s "if not tmdb_id",
+    # is cached in the identifier table, then int() crashes and the item loses
+    # its artwork/details. Two entries in itemdetails.py treat
+    # "None"/"null"/""/"0" as no id: (A) at resolve time, (B) on ids already
+    # cached by an earlier session.
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'monitor', 'itemdetails.py'),
+        'toggle': 'tmdbh_stability',
+        'old': (
+            "    def get_tmdb_id(self):\n"
+            "        if self.dbtype in self.allow_base_id:\n"
+        ),
+        'new': (
+            "    def get_tmdb_id(self):\n"
+            "        # -- TMDbHelper None tmdb_id guard A (by ABUKARIM TOOLS) --\n"
+            "        tmdb_id = self._abk_get_tmdb_id()\n"
+            "        if tmdb_id is not None and str(tmdb_id).strip().lower() in ('none', 'null', '', '0'):\n"
+            "            return None\n"
+            "        return tmdb_id\n"
+            "\n"
+            "    def _abk_get_tmdb_id(self):\n"
+            "        if self.dbtype in self.allow_base_id:\n"
+        ),
+        'already_patched_check': '# -- TMDbHelper None tmdb_id guard A (by ABUKARIM TOOLS) --',
+        'not_found_ok': True,
+        'description': 'TMDbHelper itemdetails.py – ignore a literal "None" tmdb_id (resolve)',
+    },
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'monitor', 'itemdetails.py'),
+        'toggle': 'tmdbh_stability',
+        'old': (
+            "        if identifier_details:\n"
+            "            self.tmdb_type = identifier_details.tmdb_type\n"
+            "            return identifier_details.tmdb_id\n"
+        ),
+        'new': (
+            "        if identifier_details:\n"
+            "            self.tmdb_type = identifier_details.tmdb_type\n"
+            "            # -- TMDbHelper None tmdb_id guard B (by ABUKARIM TOOLS) --\n"
+            "            if str(identifier_details.tmdb_id).strip().lower() in ('none', 'null', '', '0'):\n"
+            "                return None\n"
+            "            return identifier_details.tmdb_id\n"
+        ),
+        'already_patched_check': '# -- TMDbHelper None tmdb_id guard B (by ABUKARIM TOOLS) --',
+        'not_found_ok': True,
+        'description': 'TMDbHelper itemdetails.py – ignore a cached "None" tmdb_id',
+    },
     # ── TMDbHelper: genres follow the language setting (3.4.4) ──
     # Genre names sit in ItemDetails.db with NO iso_language column (unlike
     # title/plot in the translation table), and later writes only fill NULLs
