@@ -49,8 +49,8 @@ def _ensure_engine():
         if home.getProperty(ENGINE_PROP):
             return
         _log('trailer engine not running - starting it')
-        xbmc.executebuiltin('RunScript(%s,toggle)'
-                            % os.path.join(ADDON_PATH.rstrip('/\\'), 'trailers.py'))
+        xbmc.executebuiltin('RunPlugin(plugin://plugin.program.abukarimtools/'
+                            '?run=trailers&args=toggle)')
     except Exception as exc:
         _log('could not start the trailer engine: %s' % exc)
 

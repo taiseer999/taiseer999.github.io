@@ -49,7 +49,7 @@ class source:
 		return fallback
 
 	def sources(self, data, hostDict):
-		xbmc.log('[SF-DIAG] KNABEN.sources() called', xbmc.LOGINFO)
+		xbmc.log('[SF-DIAG] KNABEN.sources() called', xbmc.LOGDEBUG)
 		self.sources = []
 		if not data: return self.sources
 		self.sources_append = self.sources.append
@@ -81,10 +81,10 @@ class source:
 				append(workers.Thread(self.get_sources, url))
 			[i.start() for i in threads]
 			[i.join() for i in threads]
-			xbmc.log('[SF-DIAG] KNABEN.sources() returning %d results' % len(self.sources), xbmc.LOGINFO)
+			xbmc.log('[SF-DIAG] KNABEN.sources() returning %d results' % len(self.sources), xbmc.LOGDEBUG)
 			return self.sources
 		except Exception as e:
-			xbmc.log('[SF-DIAG] KNABEN.sources() exception: %s' % e, xbmc.LOGINFO)
+			xbmc.log('[SF-DIAG] KNABEN.sources() exception: %s' % e, xbmc.LOGDEBUG)
 			source_utils.scraper_error('KNABEN')
 			return self.sources
 
@@ -92,12 +92,12 @@ class source:
 		try:
 			results = client.request(url, timeout=7)
 			if not results:
-				xbmc.log('[SF-DIAG] KNABEN.get_sources() empty response from %s' % url, xbmc.LOGINFO)
+				xbmc.log('[SF-DIAG] KNABEN.get_sources() empty response from %s' % url, xbmc.LOGDEBUG)
 				return
 			rows = client.parseDOM(results, 'tr', attrs={'class': 'text-nowrap border-start'})
-			xbmc.log('[SF-DIAG] KNABEN.get_sources() found %d rows from %s' % (len(rows), url), xbmc.LOGINFO)
+			xbmc.log('[SF-DIAG] KNABEN.get_sources() found %d rows from %s' % (len(rows), url), xbmc.LOGDEBUG)
 		except Exception as e:
-			xbmc.log('[SF-DIAG] KNABEN.get_sources() exception: %s' % e, xbmc.LOGINFO)
+			xbmc.log('[SF-DIAG] KNABEN.get_sources() exception: %s' % e, xbmc.LOGDEBUG)
 			source_utils.scraper_error('KNABEN')
 			return
 		for row in rows:

@@ -51,7 +51,7 @@ def notification(message: str) -> None:
         def Close(self):
             self.close()
             
-    d = Notify('notify.xml', xbmcaddon.Addon().getAddonInfo('path'), 'Default', '720p')
+    d = Notify('notify.xml', xbmcaddon.Addon().getAddonInfo('path'), 'Default', '1080i')
     d.doModal()
     del d
 
@@ -78,6 +78,6 @@ def notification_clog(message: str) -> None:
             self.close()
             _service.Startup().check_updates()
     
-    d = Notify('notify.xml', xbmcaddon.Addon().getAddonInfo('path'), 'Default', '720p')
+    d = Notify('notify.xml', xbmcaddon.Addon().getAddonInfo('path'), 'Default', '1080i')
     d.doModal()
     del d

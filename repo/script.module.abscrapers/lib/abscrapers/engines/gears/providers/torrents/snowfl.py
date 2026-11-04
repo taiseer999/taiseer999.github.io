@@ -92,7 +92,7 @@ class source:
 			return []
 
 	def sources(self, data, hostDict):
-		xbmc.log('[SF-DIAG] SNOWFL.sources() called', xbmc.LOGINFO)
+		xbmc.log('[SF-DIAG] SNOWFL.sources() called', xbmc.LOGDEBUG)
 		self.sources = []
 		if not data: return self.sources
 		self.sources_append = self.sources.append
@@ -111,9 +111,9 @@ class source:
 			check_foreign_audio = source_utils.check_foreign_audio()
 			query = '%s %s' % (re.sub(r'[^A-Za-z0-9\s\.-]+', '', title), hdlr)
 			items = self._query(query)
-			xbmc.log('[SF-DIAG] SNOWFL fetched %d items, title=%r' % (len(items), title), xbmc.LOGINFO)
+			xbmc.log('[SF-DIAG] SNOWFL fetched %d items, title=%r' % (len(items), title), xbmc.LOGDEBUG)
 		except Exception as e:
-			xbmc.log('[SF-DIAG] SNOWFL.sources() exception before loop: %s' % e, xbmc.LOGINFO)
+			xbmc.log('[SF-DIAG] SNOWFL.sources() exception before loop: %s' % e, xbmc.LOGDEBUG)
 			source_utils.scraper_error('SNOWFL')
 			return self.sources
 
@@ -153,7 +153,7 @@ class source:
 												'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
 			except:
 				source_utils.scraper_error('SNOWFL')
-		xbmc.log('[SF-DIAG] SNOWFL.sources() returning %d results' % len(self.sources), xbmc.LOGINFO)
+		xbmc.log('[SF-DIAG] SNOWFL.sources() returning %d results' % len(self.sources), xbmc.LOGDEBUG)
 		return self.sources
 
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):

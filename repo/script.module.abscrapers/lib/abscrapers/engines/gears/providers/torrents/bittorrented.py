@@ -41,7 +41,7 @@ class source:
 
 			query = '%s %s' % (self.title, self.hdlr)
 			url = '%s/search/?q=%s&category=0' % (self.base_link, quote(query))
-			html = client.request(url, timeout=10)
+			html = client.request(url, timeout=6)  # 1.1.4: was 10 - slow/dead, held the caller's invoker open
 			if not html: return self.sources
 
 			text = _html_mod.unescape(html)

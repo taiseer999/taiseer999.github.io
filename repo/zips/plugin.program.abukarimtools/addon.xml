@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="AB Tools"
-       version="4.7.13"
+       version="4.7.14"
        provider-name="Abukarim">
 
   <requires>
@@ -33,7 +33,7 @@
     <description lang="en_GB">ABUKARIM TOOLS is an all-in-one utility for managing your Kodi setup. It bundles a Skin Installer and Skin Switcher, full backup and restore of your userdata, and quick access to the ABUKARIM Wizard and its maintenance tools (Total Clean and old thumbnail cleanup). A built-in patcher keeps popular add-ons (Seren, Prism, TinyPPI, Arctic Fuse 3, TMDbHelper, RedLight and more) working correctly on CoreELEC and Kodi, and re-applies its fixes automatically after those add-ons update. Also includes handy maintenance tools such as a speed test, a CPU benchmark and an add-on database rebuild.</description>
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، ووصولاً سريعاً إلى معالج أبوكريم وأدوات الصيانة فيه (التنظيف الشامل وحذف الصور المصغّرة القديمة). كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة واختبار أداء المعالج وإعادة بناء قاعدة بيانات الإضافات.</description>
-    <news>v4.7.12 - Setup froze Kodi in the restore step: Kodi auto-installed a skin update at the same moment AB Tools refreshed the repositories, and the two locked each other. Add-on auto-updates are now set to "notify" while setup (or the Add-on Portal) installs, and put back afterwards. v4.7.11 - Setup no longer freezes Kodi when an add-on installed during the restore is not yet known to Kodi (macOS: stuck on "Checking repository"): Kodi is asked to rescan until it knows the add-on, and Kodi's own "enable add-on" is never used on an unknown one. Older versions: see changelog.txt.</news>
+    <news>v4.7.14 - The service, the service guardian and the AF3 trailer scripts now start through the add-on (RunPlugin ?run=...) instead of by file path, so Kodi no longer logs "Script invoked without an addon"; skins patched earlier are moved over automatically. The TMDbHelper Trakt QR patch for authenticator.py is skipped on TMDbHelper 6.20+ (the file moved to the Trakt sync module) instead of failing on every boot. presets.json not being published is no longer reported as missing. TMDbHelper's reconfigured_players folder is created at boot (two GetDirectory errors per play). v4.7.12 - Setup froze Kodi in the restore step: Kodi auto-installed a skin update at the same moment AB Tools refreshed the repositories, and the two locked each other. Add-on auto-updates are now set to "notify" while setup (or the Add-on Portal) installs, and put back afterwards. v4.7.11 - Setup no longer freezes Kodi when an add-on installed during the restore is not yet known to Kodi (macOS: stuck on "Checking repository"): Kodi is asked to rescan until it knows the add-on, and Kodi's own "enable add-on" is never used on an unknown one. Older versions: see changelog.txt.</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>

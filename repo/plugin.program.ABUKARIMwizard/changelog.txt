@@ -1,3 +1,15 @@
+v3.9.52
+- Notifications / changelog window and Quick Log viewer: "XML File for Window
+  is missing" on Kodi 22 (kodi.log 2026-11-04 06:08:07). The add-on ships a
+  resources/skins/Default/1080i folder (support dialog), so Kodi looks for
+  the window there and never falls back to 720p. notify.xml and logview.xml
+  now also live in 1080i (coordinates x1.5) with WizNotify fonts in the
+  1080i Font.xml; notify.py / quick_log.py open them as 1080i.
+- service.py: Addon / Dialog / DialogProgress globals are released when the
+  service ends (Kodi warned "has left several classes in memory").
+- Auto Clean log: "next run next startup" when the frequency is Every startup
+  (it printed the current time, which looked like a scheduling bug).
+
 v3.9.51
 - New app icon in the Lucent glass style: violet gradient ring with a soft
   glow, glassy inner disc, shaded wand with a glowing violet tip, sparkles.

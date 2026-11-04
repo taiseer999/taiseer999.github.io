@@ -40,6 +40,8 @@ BASE_URLS = ('https://raw.githubusercontent.com/taiseer999/'
 BASE_URL = BASE_URLS[0]
 
 FILES = ('patches.json', 'portal.json', 'presets.json', 'config.json')
+# 4.7.14: optional files - not publishing them is normal (built-in defaults).
+OPTIONAL = ('presets.json',)
 SUPPORTED_SCHEMA = 1
 MAX_AGE = 6 * 3600            # refresh at most every 6 h unless forced
 
@@ -119,7 +121,7 @@ def refresh(force=False, timeout=6):
                     os.remove(_path(name))
                 except OSError:
                     pass
-                result[name] = 'missing'
+                result[name] = 'default' if name in OPTIONAL else 'missing'
             else:
                 result[name] = 'http %s' % e.code
         except Exception as e:

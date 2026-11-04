@@ -11,7 +11,10 @@ import xbmcvfs
 
 ADDON      = xbmcaddon.Addon('plugin.program.abukarimtools')
 ADDON_ID   = ADDON.getAddonInfo('id')
-HANDLE     = int(sys.argv[1]) if len(sys.argv) > 1 else -1
+try:
+    HANDLE = int(sys.argv[1]) if len(sys.argv) > 1 else -1
+except ValueError:
+    HANDLE = -1      # RunScript(plugin.program.abukarimtools, <name>, ...) - see _script_request
 ADDON_PATH = xbmcvfs.translatePath(ADDON.getAddonInfo('path'))
 if not ADDON_PATH.endswith('/') and not ADDON_PATH.endswith('\\'):
     ADDON_PATH += '/'
@@ -232,8 +235,7 @@ def _ensure_service():
         home.setProperty('abukarimtools.service.alive.kick', '1')
         xbmc.log('[AbukarimTools Menu] service not running - starting it',
                  xbmc.LOGWARNING)
-        xbmc.executebuiltin('RunScript(%s)'
-                            % os.path.join(ADDON_PATH.rstrip('/\\'), 'service.py'))
+        xbmc.executebuiltin('RunPlugin(plugin://%s/?run=service)' % ADDON_ID)
     except Exception as e:
         xbmc.log('[AbukarimTools Menu] could not start service: %s' % e,
                  xbmc.LOGWARNING)
@@ -672,4 +674,57 @@ def router():
         skin_profiles.restore_backup()
 
 
-router()
+
+# ---------------------------------------------------------------------------
+# 4.7.14: stand-alone scripts run THROUGH the add-on.
+# RunScript(special://.../service.py) runs a file with no add-on attached, so
+# Kodi 22 logs "Script invoked without an addon ... will be removed in future
+# version" and puts every installed module on sys.path. These now start as
+#     RunPlugin(plugin://plugin.program.abukarimtools/?run=<name>[&args=a,b])
+# (add-on context, no warning). RunScript(plugin.program.abukarimtools, <name>)
+# also lands here; it used to crash on int('firstrun').
+# ---------------------------------------------------------------------------
+_RUN_SCRIPTS = {
+    'service':      'service.py',
+    'guardian':     'guardian.py',
+    'trailers':     'trailers.py',
+    'trailer_play': 'trailer_play.py',
+    'firstrun':     'run.py',
+}
+
+
+def _script_request():
+    """(name, args) when this invocation should run a stand-alone script."""
+    argv = sys.argv
+    if len(argv) > 1:
+        try:
+            int(argv[1])
+        except ValueError:                       # RunScript(id, name, ...)
+            name = argv[1].strip().lower()
+            if name in _RUN_SCRIPTS:
+                return name, [a.strip() for a in argv[2:]]
+            xbmc.log('[AbukarimTools Menu] unknown RunScript entry %r' % argv[1],
+                     xbmc.LOGWARNING)
+            return 'none', []
+    raw = argv[2][1:] if len(argv) > 2 else ''
+    params = dict(parse_qsl(raw))
+    name = params.get('run')
+    if name in _RUN_SCRIPTS and 'mode' not in params and 'cat' not in params:
+        return name, [a for a in (params.get('args') or '').split(',') if a]
+    return None
+
+
+def _run_script(name, args):
+    if name not in _RUN_SCRIPTS:
+        return
+    import runpy
+    path = ADDON_PATH + _RUN_SCRIPTS[name]
+    sys.argv = [path] + list(args)
+    runpy.run_path(path, run_name='__main__')
+
+
+_REQ = _script_request()
+if _REQ:
+    _run_script(*_REQ)
+else:
+    router()

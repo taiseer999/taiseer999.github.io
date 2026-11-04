@@ -626,6 +626,9 @@ _AF3_SUBSTYLE_POPUP_XML = (
 )
 
 
+# 4.7.14: the old by-path launcher prefix (migration entries below)
+_ABK_SCRIPT_PATH = 'RunScript(special://home/addons/plugin.program.abukarimtools/'
+
 PATCHES = [
     # ── TMDbHelper Trakt QR Auth (by ABUKARIM TOOLS) ──
     {
@@ -674,6 +677,9 @@ PATCHES = [
         'new': base64.b64decode(_TMDBH_POLLER_NEW_B64).decode('utf-8'),
         'description': 'TMDbHelper authenticator.py - Trakt QR auth dialog',
         'max_version': '6.99.99',          # 7.x: see the v7 entry below
+        # 4.7.14: 6.20.x moved Trakt out to script.module.tmdbhelper.sync.trakt -
+        # there is no authenticator.py any more, which is a skip, not a failure.
+        'not_found_ok': True,
         'already_patched_check': '# -- TMDbHelper Trakt QR Auth patch (by ABUKARIM TOOLS) --',
         # Version-resilient fallback: replace the whole poller() method by anchor,
         # regardless of minor whitespace/line drift between TMDbHelper releases.
@@ -1489,11 +1495,11 @@ PATCHES = [
         'rel_path': os.path.join('1080i', 'Custom_1123_Dialog_Trailer.xml'),
         'not_found_ok': True,
         'old': '">PlayMedia($ESCINFO[Window(Home).Property(PlayTrailer)],False,1)</onload>',
-        'new': ('">RunScript(special://home/addons/plugin.program.abukarimtools/trailer_play.py)</onload>'
+        'new': ('">RunPlugin(plugin://plugin.program.abukarimtools/?run=trailer_play)</onload>'
                 '  <!-- ABUKARIM: trailer button -->'),
         'already_patched_check': '<!-- ABUKARIM: trailer button -->',
         'fallback_pattern': r'">\s*PlayMedia\(\$ESCINFO\[Window\(Home\)\.Property\(PlayTrailer\)\][^<]*\)\s*</onload>',
-        'fallback_repl': ('">RunScript(special://home/addons/plugin.program.abukarimtools/trailer_play.py)</onload>'
+        'fallback_repl': ('">RunPlugin(plugin://plugin.program.abukarimtools/?run=trailer_play)</onload>'
                           '  <!-- ABUKARIM: trailer button -->'),
         'description': 'AF3 trailer dialog - play through NewPipe/IMDb (auto-trailer sources)',
     },
@@ -1502,11 +1508,11 @@ PATCHES = [
         'rel_path': os.path.join('1080i', 'Dialog_DialogTrailer.xml'),
         'not_found_ok': True,
         'old': '<onclick>PlayMedia($ESCINFO[Window(Home).Property(PlayTrailer)],False,1)</onclick>',
-        'new': ('<onclick>RunScript(special://home/addons/plugin.program.abukarimtools/trailer_play.py)</onclick>'
+        'new': ('<onclick>RunPlugin(plugin://plugin.program.abukarimtools/?run=trailer_play)</onclick>'
                 '<!-- ABUKARIM: trailer button -->'),
         'already_patched_check': '<!-- ABUKARIM: trailer button -->',
         'fallback_pattern': r'<onclick>\s*PlayMedia\(\$ESCINFO\[Window\(Home\)\.Property\(PlayTrailer\)\][^<]*\)\s*</onclick>',
-        'fallback_repl': ('<onclick>RunScript(special://home/addons/plugin.program.abukarimtools/trailer_play.py)</onclick>'
+        'fallback_repl': ('<onclick>RunPlugin(plugin://plugin.program.abukarimtools/?run=trailer_play)</onclick>'
                           '<!-- ABUKARIM: trailer button -->'),
         'description': 'AF3 trailer dialog - Repeat plays through NewPipe/IMDb',
     },
@@ -1546,13 +1552,13 @@ PATCHES = [
         'old': '<window>\n',
         'new': ('<window>\n'
                 '    <onload condition="String.IsEmpty(Window(Home).Property(abukarimtools.trailers.engine))">'
-                'RunScript(special://home/addons/plugin.program.abukarimtools/trailers.py,home)</onload>'
+                'RunPlugin(plugin://plugin.program.abukarimtools/?run=trailers&amp;args=home)</onload>'
                 '  <!-- ABUKARIM: trailers engine -->\n'),
         'already_patched_check': '<!-- ABUKARIM: trailers engine -->',
         'fallback_pattern': r'<window>[ \t]*\r?\n',
         'fallback_repl': ('<window>\n'
                           '    <onload condition="String.IsEmpty(Window(Home).Property(abukarimtools.trailers.engine))">'
-                          'RunScript(special://home/addons/plugin.program.abukarimtools/trailers.py,home)</onload>'
+                          'RunPlugin(plugin://plugin.program.abukarimtools/?run=trailers&amp;args=home)</onload>'
                           '  <!-- ABUKARIM: trailers engine -->\n'),
         'description': 'AF3 Home.xml - start the trailer engine if it is not running',
     },
@@ -1567,16 +1573,45 @@ PATCHES = [
         'old': '<window>\n',
         'new': ('<window>\n'
                 '    <onload condition="String.IsEmpty(Window(Home).Property(abukarimtools.guardian))">'
-                'RunScript(special://home/addons/plugin.program.abukarimtools/guardian.py)</onload>'
+                'RunPlugin(plugin://plugin.program.abukarimtools/?run=guardian)</onload>'
                 '  <!-- ABUKARIM: service guardian -->\n'),
         'already_patched_check': '<!-- ABUKARIM: service guardian -->',
         'fallback_pattern': r'<window>[ \t]*\r?\n',
         'fallback_repl': ('<window>\n'
                           '    <onload condition="String.IsEmpty(Window(Home).Property(abukarimtools.guardian))">'
-                          'RunScript(special://home/addons/plugin.program.abukarimtools/guardian.py)</onload>'
+                          'RunPlugin(plugin://plugin.program.abukarimtools/?run=guardian)</onload>'
                           '  <!-- ABUKARIM: service guardian -->\n'),
         'description': 'AF3 Home.xml - start services Kodi skipped at boot (guardian)',
     },
+
+    # 4.7.14: skins patched by 4.7.13 or older still start these by FILE PATH
+    # (RunScript(special://.../x.py) - "Script invoked without an addon", which
+    # Kodi says it will remove). Move them to the add-on route. Always-on,
+    # optional; the sentinel is the new form, so a fresh patch skips these.
+    {'addon_id': 'skin.arctic.fuse.3', 'not_found_ok': True,
+     'rel_path': os.path.join('1080i', 'Home.xml'),
+     'old': _ABK_SCRIPT_PATH + 'guardian.py)',
+     'new': 'RunPlugin(plugin://plugin.program.abukarimtools/?run=guardian)',
+     'already_patched_check': 'RunPlugin(plugin://plugin.program.abukarimtools/?run=guardian)',
+     'description': 'AF3 guardian - start through the add-on, not by file path'},
+    {'addon_id': 'skin.arctic.fuse.3', 'not_found_ok': True,
+     'rel_path': os.path.join('1080i', 'Home.xml'),
+     'old': _ABK_SCRIPT_PATH + 'trailers.py,home)',
+     'new': 'RunPlugin(plugin://plugin.program.abukarimtools/?run=trailers&amp;args=home)',
+     'already_patched_check': 'RunPlugin(plugin://plugin.program.abukarimtools/?run=trailers&amp;args=home)',
+     'description': 'AF3 trailers engine - start through the add-on, not by file path'},
+    {'addon_id': 'skin.arctic.fuse.3', 'not_found_ok': True,
+     'rel_path': os.path.join('1080i', 'Custom_1123_Dialog_Trailer.xml'),
+     'old': _ABK_SCRIPT_PATH + 'trailer_play.py)',
+     'new': 'RunPlugin(plugin://plugin.program.abukarimtools/?run=trailer_play)',
+     'already_patched_check': 'RunPlugin(plugin://plugin.program.abukarimtools/?run=trailer_play)',
+     'description': 'AF3 trailer dialog - start through the add-on, not by file path'},
+    {'addon_id': 'skin.arctic.fuse.3', 'not_found_ok': True,
+     'rel_path': os.path.join('1080i', 'Dialog_DialogTrailer.xml'),
+     'old': _ABK_SCRIPT_PATH + 'trailer_play.py)',
+     'new': 'RunPlugin(plugin://plugin.program.abukarimtools/?run=trailer_play)',
+     'already_patched_check': 'RunPlugin(plugin://plugin.program.abukarimtools/?run=trailer_play)',
+     'description': 'AF3 trailer Repeat - start through the add-on, not by file path'},
 
     {   # AF3 busy-loader waves (3.2.10): Background_BusyLoader shows the
         # resource.images.arctic.waves animation behind everything while
@@ -3901,6 +3936,12 @@ def _apply_patch(patch):
         return True, '[%s] File injected OK: %s' % (patch['addon_id'], patch['description'])
 
     if not os.path.isfile(target):
+        # 4.7.14: an optional entry whose file is gone (upstream moved it, as
+        # TMDbHelper 6.20 did with api/trakt/authenticator.py) is a skip, not a
+        # failure on every sweep.
+        if patch.get('not_found_ok'):
+            return True, ('[%s] %s not in this version – patch not applicable, '
+                          'skipping.' % (patch['addon_id'], patch['rel_path']))
         return False, '[%s] Target file not found: %s' % (patch['addon_id'], patch['rel_path'])
 
     content = _read(target)

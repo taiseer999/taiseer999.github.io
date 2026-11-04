@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1080i copy of 720p/logview.xml (AB Wizard 3.9.52): the add-on also ships a 1080i
+     folder, so Kodi 22 looks for this window there only ("XML File for Window is missing"). -->
+<window>
+	<defaultcontrol always="true">302</defaultcontrol>
+	<coordinates>
+		<left>150</left>
+		<top>75</top>
+	</coordinates>
+	<animation effect="slide" start="0, 750" time="500" tween="quadratic" >WindowOpen</animation>
+	<animation effect="fade" time="500">WindowClose</animation>
+	<controls>
+		<control type="image">
+			<description>Image</description>
+			<width>1650</width>
+			<height>900</height>
+			<texture>background.png</texture>
+			<colordiffuse></colordiffuse>
+			<bordertexture border="2" colordiffuse="2EFFFFFF">white.png</bordertexture>
+			<bordersize>15</bordersize>
+		</control>
+		
+		<control type="button" id="302">
+			<left>1485</left>
+			<top>810</top>
+			<description>Close</description>
+			<width>112</width>
+			<height>56</height>
+			<texturefocus colordiffuse="FF8B5CF6">close.png</texturefocus>
+            <texturenofocus colordiffuse="FF8F9BA6">close.png</texturenofocus>
+			<bordersize>8</bordersize>
+			<onleft>301</onleft>
+      <onright>301</onright>
+		</control>
+		<control type="textbox" id = "300">
+			<description>text</description>
+			<top>45</top>
+			<left>75</left>
+			<width>1500</width>
+			<height>735</height>
+			<font>font13</font>
+			<align>left</align>
+			<aligny>center</aligny>
+			<textcolor>FFDCE2E7</textcolor>
+			<shadowcolor>black</shadowcolor>
+			<pagecontrol>301</pagecontrol>
+		</control>
+		<control type="scrollbar" id="301">
+      <description>My first scroll bar control</description>
+      <left>1620</left>
+      <top>15</top>
+      <width>15</width>
+      <height>855</height>
+      <visible>true</visible>
+      <texturesliderbackground></texturesliderbackground>
+      <texturesliderbar colordiffuse="448B5CF6">white.png</texturesliderbar>
+      <texturesliderbarfocus colordiffuse="FF8B5CF6">white.png</texturesliderbarfocus>
+      <textureslidernib></textureslidernib>
+      <textureslidernibfocus></textureslidernibfocus>
+      <pulseonselect></pulseonselect>
+      <orientation>vertical</orientation>
+      <showonepage>true</showonepage>
+      <onup></onup>
+      <ondown></ondown>
+      <onleft>302</onleft>
+      <onright>302</onright>
+</control>
+	</controls>
+</window>

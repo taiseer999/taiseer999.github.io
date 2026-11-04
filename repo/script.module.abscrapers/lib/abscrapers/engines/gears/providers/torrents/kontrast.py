@@ -44,7 +44,7 @@ class source:
 		return _RE_KONTRAST_ITEM.findall(html)
 
 	def sources(self, data, hostDict):
-		xbmc.log('[SF-DIAG] KONTRAST.sources() called', xbmc.LOGINFO)
+		xbmc.log('[SF-DIAG] KONTRAST.sources() called', xbmc.LOGDEBUG)
 		self.sources = []
 		if not data: return self.sources
 		self.sources_append = self.sources.append
@@ -64,9 +64,9 @@ class source:
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 			items = self._get_feed_items()
-			xbmc.log('[SF-DIAG] KONTRAST fetched %d feed items, title=%r want_media=%s' % (len(items), title, want_media), xbmc.LOGINFO)
+			xbmc.log('[SF-DIAG] KONTRAST fetched %d feed items, title=%r want_media=%s' % (len(items), title, want_media), xbmc.LOGDEBUG)
 		except Exception as e:
-			xbmc.log('[SF-DIAG] KONTRAST.sources() exception before loop: %s' % e, xbmc.LOGINFO)
+			xbmc.log('[SF-DIAG] KONTRAST.sources() exception before loop: %s' % e, xbmc.LOGDEBUG)
 			source_utils.scraper_error('KONTRAST')
 			return self.sources
 
@@ -89,7 +89,7 @@ class source:
 					'direct': False, 'debridonly': True, 'size': 0})
 			except:
 				source_utils.scraper_error('KONTRAST')
-		xbmc.log('[SF-DIAG] KONTRAST.sources() returning %d results' % len(self.sources), xbmc.LOGINFO)
+		xbmc.log('[SF-DIAG] KONTRAST.sources() returning %d results' % len(self.sources), xbmc.LOGDEBUG)
 		return self.sources
 
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):

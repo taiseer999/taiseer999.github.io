@@ -43,7 +43,7 @@ class source:
 			slug = re.sub(r'[\s_]+', '-', slug)
 			first = slug[0] if slug else 'm'
 			url = '%s/%s/%s/' % (self.base_link, first, slug)
-			html = client.request(url, timeout=10)
+			html = client.request(url, timeout=6)  # 1.1.4: was 10 - slow/dead, held the caller's invoker open
 			if not html: return self.sources
 
 			seen_hashes = set()

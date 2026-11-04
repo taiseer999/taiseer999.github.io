@@ -13,7 +13,8 @@ heartbeat property is still missing, as a plain script. Each service guards
 itself against a second copy with the same property, so a late normal start
 is harmless.
 
-    RunScript(special://home/addons/plugin.program.abukarimtools/guardian.py)
+    RunPlugin(plugin://plugin.program.abukarimtools/?run=guardian)
+    (4.7.14; older skins: RunScript(special://.../guardian.py), still works)
 """
 import os
 import sys
@@ -59,7 +60,11 @@ def main():
             _log('%s is installed but DISABLED - its service cannot run' % aid, xbmc.LOGWARNING)
             continue
         _log('%s service did not start at boot - starting it now' % aid, xbmc.LOGWARNING)
-        xbmc.executebuiltin('RunScript(%s)' % path)
+        # 4.7.14: through the add-on (add-on context), not by file path
+        if aid == 'plugin.program.abukarimtools':
+            xbmc.executebuiltin('RunPlugin(plugin://%s/?run=service)' % aid)
+        else:
+            xbmc.executebuiltin('RunScript(%s)' % path)
         started.append(aid)
     home.setProperty(PROP, 'done:%s' % (','.join(started) or 'none'))
     if not started:

@@ -52,7 +52,7 @@ class source:
 
 			query = quote('%s %s' % (self.title, self.hdlr))
 			url = '%s/search?q=%s' % (self.base_link, query)
-			html = client.request(url, timeout=10)
+			html = client.request(url, timeout=6)  # 1.1.4: was 10 - slow/dead, held the caller's invoker open
 			if not html: return self.sources
 		except:
 			source_utils.scraper_error('BTDIG')

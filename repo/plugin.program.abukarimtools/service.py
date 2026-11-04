@@ -1293,6 +1293,16 @@ def main():
         _log('Fallback font install crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
+    # 4.7.14: TMDbHelper lists addon_data/.../reconfigured_players/ on every
+    # play and logs two GetDirectory errors while it does not exist.
+    try:
+        _rp = xbmcvfs.translatePath('special://profile/addon_data/'
+                                    'plugin.video.themoviedb.helper/reconfigured_players/')
+        if os.path.isdir(os.path.dirname(_rp.rstrip('/\\'))) and not os.path.isdir(_rp):
+            os.makedirs(_rp, exist_ok=True)
+    except Exception:
+        pass
+
     # Force Kodi's UI language to English while first-run setup is still
     # pending, so the setup dialogs (and Kodi's own core dialogs) are readable
     # under a skin whose font lacks Arabic glyphs. Once first-run has completed

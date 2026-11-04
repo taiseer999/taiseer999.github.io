@@ -65,6 +65,6 @@ def show_text(message: str) -> None:
         def Close(self):
             self.close()
     
-    d = Logview('logview.xml', xbmcaddon.Addon().getAddonInfo('path'), 'Default', '720p')
+    d = Logview('logview.xml', xbmcaddon.Addon().getAddonInfo('path'), 'Default', '1080i')
     d.doModal()
     del d

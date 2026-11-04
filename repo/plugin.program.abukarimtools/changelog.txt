@@ -1,3 +1,22 @@
+v4.7.14
+- Scripts start through the add-on, not by file path. RunScript(special://
+  .../service.py) runs with no add-on attached: Kodi 22 logs "Script invoked
+  without an addon ... will be removed in future version" (kodi.log
+  2026-11-04, invokers 22/23/41). New entry in default.py:
+      RunPlugin(plugin://plugin.program.abukarimtools/?run=<name>[&args=a,b])
+  for service / guardian / trailers / trailer_play / firstrun. Used by the
+  guardian, the menu's service kick, the AF3 trailers toggle and the AF3
+  Home / trailer-dialog patches. Four always-on migration entries move
+  skins patched by 4.7.13 or older to the new form.
+- RunScript(plugin.program.abukarimtools, firstrun[, silent]) works again: it
+  crashed in default.py on int('firstrun').
+- TMDbHelper 6.20+: the authenticator.py Trakt QR entry is a skip (the file
+  moved to script.module.tmdbhelper.sync.trakt), not "1 failed" every boot.
+  Any not_found_ok entry whose target file is gone now skips.
+- Remote refresh: presets.json is optional ('default' instead of 'missing').
+- Boot: create addon_data/plugin.video.themoviedb.helper/reconfigured_players/
+  (TMDbHelper lists it on every play).
+
 v4.7.13
 - Search All: Dex Hub (plugin.video.dexhub) is now one of the add-ons, with
   its own chip, colour (pink) and DEX tag on the stream cards.

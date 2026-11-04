@@ -471,7 +471,8 @@ def auto_clean():
             items += res[0]
             freed += res[1]
     _log('Auto Clean: done - %s items, %s freed; next run %s'
-         % (items, convert_size(freed), setting('nextautocleanup')))
+         % (items, convert_size(freed),
+            'next startup' if freq == 0 else setting('nextautocleanup')))
     # One quiet toast at boot, only when something was actually cleaned,
     # so the user can see the auto clean ran (it used to be fully silent).
     if items:
