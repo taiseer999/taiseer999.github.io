@@ -3318,6 +3318,108 @@ PATCHES = [
              "    def parent_additional_keys(self):\n"),
      'already_patched_check': 'def sync_succeeded',
      'description': 'TMDbHelper Trakt sync datasync.py - sync_succeeded back-port (6.20.1 Next Episodes AttributeError)'},
+    # 4.7.17: Trakt sign-in from TMDbHelper 6.20.x did nothing. The button runs
+    # RunScript(script.module.tmdbhelper.sync.trakt,action=authenticate) and the
+    # module's script.py imports tmdbhelper.lib..., but plugin.video.themoviedb.
+    # helper is a pluginsource with no xbmc.python.module library, so Kodi never
+    # puts its resources/ folder on sys.path for a script run: ModuleNotFoundError
+    # 'tmdbhelper' (kodi.log 2026-11-05 09:56:19 / 09:58:40 / 09:59:56, AM9).
+    # Inside TMDbHelper the import works because the plugin's own path is first.
+    # Append (not insert) TMDbHelper's resources/ before run() imports anything.
+    {'addon_id': 'script.module.tmdbhelper.sync.trakt', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'script.py'),
+     'old': "from xbmc import executebuiltin\n",
+     'new': ("from xbmc import executebuiltin\n"
+             "\n"
+             "\n"
+             "# -- TMDbHelper path bootstrap (by ABUKARIM TOOLS) --\n"
+             "def _abk_tmdbh_path():\n"
+             "    import os\n"
+             "    import sys\n"
+             "    try:\n"
+             "        import xbmcaddon\n"
+             "        import xbmcvfs\n"
+             "        base = xbmcvfs.translatePath(\n"
+             "            xbmcaddon.Addon('plugin.video.themoviedb.helper').getAddonInfo('path'))\n"
+             "    except Exception:\n"
+             "        return\n"
+             "    res = os.path.join(base, 'resources')\n"
+             "    if os.path.isdir(os.path.join(res, 'tmdbhelper')) and res not in sys.path:\n"
+             "        sys.path.append(res)\n"
+             "\n"
+             "\n"
+             "_abk_tmdbh_path()\n"
+             "# -- end TMDbHelper path bootstrap --\n"),
+     'already_patched_check': '# -- TMDbHelper path bootstrap (by ABUKARIM TOOLS) --',
+     'description': 'TMDbHelper Trakt sync script.py - put TMDbHelper on sys.path (sign-in ModuleNotFoundError)'},
+    # 4.7.17: 6.20.x moved the Trakt device-code dialog out of TMDbHelper into
+    # this module (tmdbhelper_sync_trakt/api/authenticator.py), so the QR entry
+    # on TMDbHelper's authenticator.py has nothing to patch any more. Same QR
+    # window (qr_utils.py + trakt_auth_qr.xml injected into TMDbHelper above),
+    # now on the module's poller. Keeps 1.2.6's contract: on_success() stores
+    # the token and the authorization is returned. If the QR helpers cannot be
+    # loaded it falls back to the stock text dialog.
+    {'addon_id': 'script.module.tmdbhelper.sync.trakt', 'not_found_ok': True,
+     'toggle': 'tmdbh_trakt_auth',
+     'rel_path': os.path.join('resources', 'lib', 'tmdbhelper_sync_trakt', 'api', 'authenticator.py'),
+     'old': ("    def poller(self):\n"
+             "        authorization = None\n"
+             "        while True:\n"),
+     'new': ("    def poller(self):\n"
+             "        # -- Trakt sync QR Auth patch (by ABUKARIM TOOLS) --\n"
+             "        try:\n"
+             "            import xbmcaddon as _xa\n"
+             "            from tmdbhelper.lib.api.trakt.qr_utils import make_qr, remove_qr, get_qr_dialog\n"
+             "            _tpath = _xa.Addon('plugin.video.themoviedb.helper').getAddonInfo('path')\n"
+             "        except Exception as _e:\n"
+             "            kodi_log(f'Trakt QR unavailable ({_e}) - stock dialog', 1)\n"
+             "            return self._abk_poller_stock()\n"
+             "        _qr_url = self.verification_url or 'https://trakt.tv/activate'\n"
+             "        _qr_url = _qr_url.rstrip('/') + '/' + str(self.user_code)\n"
+             "        _qr_path = make_qr(_qr_url)\n"
+             "        _dlg = get_qr_dialog(_tpath)\n"
+             "        _dlg.show()\n"
+             "        _dlg.setProperty('user_code', str(self.user_code))\n"
+             "        _dlg.setProperty('qr_image', _qr_path)\n"
+             "        _dlg.setProperty('progress_width', '530')\n"
+             "        _dlg.setProperty('expires_label', 'Expires in %ss' % int(self.expires_in))\n"
+             "        authorization = None\n"
+             "        try:\n"
+             "            while True:\n"
+             "                if self.xbmc_monitor.abortRequested() or getattr(_dlg, 'is_canceled', False):\n"
+             "                    self.state = 'aborted'\n"
+             "                    break\n"
+             "                self.progress += self.interval\n"
+             "                _left = max(int(self.expires_in) - self.progress, 0)\n"
+             "                _w = int(float(_left * 530) / self.expires_in) if self.expires_in else 0\n"
+             "                _dlg.setProperty('progress_width', str(_w))\n"
+             "                _dlg.setProperty('expires_label', 'Expires in %ss' % _left)\n"
+             "                if self.expires_in <= self.progress:\n"
+             "                    self.state = 'expired'\n"
+             "                    break\n"
+             "                authorization = self.trakt_api.get_authorisation_token(self.device_code)\n"
+             "                if authorization:\n"
+             "                    self.state = 'success'\n"
+             "                    break\n"
+             "                self.xbmc_monitor.waitForAbort(self.interval)\n"
+             "        finally:\n"
+             "            try:\n"
+             "                _dlg.close()\n"
+             "            except Exception:\n"
+             "                pass\n"
+             "            del _dlg\n"
+             "            remove_qr(_qr_path)\n"
+             "        if self.state == 'success':\n"
+             "            self.on_success(authorization)\n"
+             "            return authorization\n"
+             "        self.auth_dialog_route()\n"
+             "\n"
+             "    def _abk_poller_stock(self):\n"
+             "        # -- end Trakt sync QR Auth patch --\n"
+             "        authorization = None\n"
+             "        while True:\n"),
+     'already_patched_check': '# -- Trakt sync QR Auth patch (by ABUKARIM TOOLS) --',
+     'description': 'TMDbHelper Trakt sync authenticator.py - Trakt QR auth dialog (6.20.x)'},
     # 4.6.34: a4kSubtitles auto-download dies for the rest of the session.
     # TMDbHelper's play opens a dummy item for a split second; the service
     # sees a playing video with an IMDb id and searches, but by then nothing

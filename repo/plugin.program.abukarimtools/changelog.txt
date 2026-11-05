@@ -1,3 +1,17 @@
+v4.7.17
+- TMDbHelper 6.20.x Trakt sign-in works again. The sign-in button runs
+  script.module.tmdbhelper.sync.trakt, whose script.py imports TMDbHelper's
+  code, but Kodi does not put TMDbHelper's resources folder on the path for
+  a script run, so every press died with ModuleNotFoundError 'tmdbhelper'
+  (kodi.log 2026-11-05 09:56:19 / 09:58:40 / 09:59:56). New always-on entry
+  on the module's resources/script.py adds that folder before anything runs.
+- Trakt QR sign-in on 6.20.x (toggle "TMDbHelper: Trakt Auth QR"): 6.20
+  moved the device-code dialog into the sync module, so the QR entry on
+  TMDbHelper's authenticator.py had nothing left to patch. The same QR
+  window now replaces the poller in tmdbhelper_sync_trakt/api/authenticator.py
+  (token saved through the module's own on_success). Falls back to the stock
+  text dialog if the QR helpers cannot be loaded.
+
 v4.7.16
 - Add-on Portal: EasyNews (plugin.video.easynewsx, from repository.taiseer)
   is in the list, with the note "needs an EasyNews account - sign in with
