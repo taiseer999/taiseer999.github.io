@@ -2120,3 +2120,11 @@ msgctxt "#30986"
 msgid "Press any key to open the settings"
 msgstr "اضغط أي زر لفتح الإعدادات"
 
+msgctxt "#30987"
+msgid "Playing with %s"
+msgstr "جارٍ التشغيل عبر %s"
+
+msgctxt "#30988"
+msgid "Next episode - searching %s"
+msgstr "الحلقة التالية: جارٍ البحث في %s"
+

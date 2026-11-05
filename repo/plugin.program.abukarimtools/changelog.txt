@@ -1,3 +1,41 @@
+v4.7.19
+- Play next episode is forced ON at every patch run (new playnext_force.py):
+  Fen Light / Red Light: autoplay_next_episode + autoscrape_next_episode in
+  addon_data/<id>/databases/settings.db and their Home properties (which one
+  runs follows the add-on's own episode autoplay choice); POV: the same two
+  settings (+ pov_settings cache); Umbrella: enable.playnext. Only writes
+  what is off; an add-on never opened yet is skipped.
+- Search All next episode: hooks moved to anchors checked on the installed
+  add-ons - Fen Light 2.5.4 and Red Light 2.9.8 at the top of
+  playback_prep; POV 3.x in episode_tools.execute_nextep and
+  execute_scrape_nextep (POV does not go through playback_prep). Red Light's
+  own prepared-next-episode play (nextep_stash_play) is left alone, and each
+  next episode opens Search All once (an add-on that asks twice - prep, then
+  play - does not get a second window).
+- lucent_sources: a file whose hooks are all optional may be missing.
+
+v4.7.18
+- Search All: with an add-on tab on (Red Light, Fen Light, POV...), the stream
+  picked plays through THAT add-on. Before, a release several add-ons found
+  always played through the first one in priority order (RL > FL > UM > POV
+  > AIO > DEX > EN), whatever tab was on. "Play with..." (long press) is
+  unchanged.
+- Search All: a notification says which add-on plays the picked stream
+  ("Playing with Red Light").
+- Search All, next episode: when an episode picked in Search All plays through
+  Fen Light, Red Light or POV and that add-on's own "Autoplay / Autoscrape
+  Next Episode" starts the next one (its own timing and settings), Search All
+  opens for the next episode instead, searching and playing through that same
+  add-on only. Bridge helper version 5 (nextep_redirect) + a hook in
+  modules/sources.py playback_prep for all three (Fen Light gets the helper
+  for this alone). The redirect only happens while the episode playing is the
+  one Search All started; plays straight from the add-on keep its own next
+  episode. Umbrella (playlist-based Play Next), AIOStreams, Dex Hub and
+  EasyNews keep their own behaviour.
+- lucent_sources: hooks can be marked optional - an add-on version without
+  the anchor keeps the rest of its Search All bridge.
+- Includes 4.7.17 (TMDbHelper 6.20.x Trakt sign-in fix).
+
 v4.7.17
 - TMDbHelper 6.20.x Trakt sign-in works again. The sign-in button runs
   script.module.tmdbhelper.sync.trakt, whose script.py imports TMDbHelper's

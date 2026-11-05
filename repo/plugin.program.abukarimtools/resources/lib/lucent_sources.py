@@ -174,6 +174,32 @@ SPECS['redlight_search'] = {
     ],
 }
 
+# 4.7.18: next episode of an episode Search All played. Fen Light / Red Light /
+# POV start their own next episode through Sources().playback_prep(play_type=
+# autoplay_nextep | autoscrape_nextep) shortly before the end. When the episode
+# playing came from Search All through this add-on, the hook opens Search All
+# for the next episode instead, searching and playing through this add-on only
+# (abk_device_select.nextep_redirect). Optional anchor: an add-on version
+# without it keeps the rest of the bridge and its own next episode.
+# Anchors checked on Fen Light 2.5.4 and Red Light 2.9.8 (first lines of playback_prep).
+_NEXTEP_HOOK = (os.path.join(_MOD, 'sources.py'), "\t\tif params: self.params = params\n\t\tparams_get = self.params.get\n",
+                "from modules.abk_device_select import nextep_redirect\nif nextep_redirect(self.params): return\n",
+                'after', 'optional')
+# POV 3.x starts its next episode from episode_tools.execute_nextep / execute_scrape_nextep
+# (a thread of its player), with the next episode's params already worked out.
+_POV_NEXTEP_HOOKS = [
+    (os.path.join(_MOD, 'episode_tools.py'), "\telse: nextep_meta, nextep_params = nextep_playback_info(meta)\n",
+     "from modules.abk_device_select import nextep_redirect\n"
+     "if 'random_continual' not in meta and isinstance(nextep_params, dict) and "
+     "nextep_redirect({**nextep_params, 'play_type': 'autoplay_nextep'}): return\n", 'after', 'optional'),
+    (os.path.join(_MOD, 'episode_tools.py'),
+     "def execute_scrape_nextep(player, meta):\n\tnextep_meta, nextep_params = nextep_playback_info(meta)\n",
+     "from modules.abk_device_select import nextep_redirect\n"
+     "if isinstance(nextep_params, dict) and nextep_redirect({**nextep_params, 'play_type': 'autoscrape_nextep'}): return\n",
+     'after', 'optional'),
+]
+SPECS['redlight_search']['hooks'].append(_NEXTEP_HOOK)
+
 _HELPER_SEARCH = ('abk_device_select.py', os.path.join(_MOD, 'abk_device_select.py'))
 SPECS['pov_search'] = {
     'addon_id': 'plugin.video.pov', 'label': 'POV', 'search': True,
@@ -190,6 +216,13 @@ SPECS['pov_search'] = {
          "if self.params.get('device_list') == 'true':\n\tfrom modules.abk_device_select import output_sources_directory\n\treturn output_sources_directory(self, results)\n",
          'after'),
     ],
+}
+SPECS['pov_search']['hooks'] += _POV_NEXTEP_HOOKS
+# Fen Light has the list / play modes natively: only the helper + the next-episode hook
+SPECS['fenlight_search'] = {
+    'addon_id': 'plugin.video.fenlight', 'label': 'Fen Light', 'search': True,
+    'xml': (), 'media': False, 'helper': _HELPER_SEARCH,
+    'hooks': [_NEXTEP_HOOK],
 }
 SPECS['umbrella_search'] = {
     'addon_id': 'plugin.video.umbrella', 'label': 'Umbrella', 'search': True,
@@ -285,7 +318,9 @@ def _apply_hooks(text, hooks):
     fence uses the newline style found there (revert is then byte-exact)."""
     missing = []
     text = _strip_hooks(text)
-    for _rel, anchor, code, where in hooks:
+    for hook in hooks:
+        _rel, anchor, code, where = hook[:4]
+        optional = len(hook) > 4 and hook[4] == 'optional'   # 4.7.18: a missing anchor is not an error
         nl, idx = '\n', text.find(anchor)
         if idx < 0:
             crlf_anchor = anchor.replace('\n', '\r\n')
@@ -293,7 +328,8 @@ def _apply_hooks(text, hooks):
             if idx >= 0:
                 nl, anchor = '\r\n', crlf_anchor
         if idx < 0:
-            missing.append(anchor.strip().split('\n')[0][:60])
+            if not optional:
+                missing.append(anchor.strip().split('\n')[0][:60])
             continue
         if where == 'before':
             indent = _indent_of(anchor.split('\n')[0])
@@ -333,7 +369,8 @@ def apply(addon_path, profile):
         for rel, hooks in by_file.items():
             path = os.path.join(addon_path, rel)
             if not os.path.isfile(path):
-                missing.append(rel)
+                if not all(len(h) > 4 and h[4] == 'optional' for h in hooks):
+                    missing.append(rel)
                 continue
             text, crlf = _load_py(path)
             new_text, miss = _apply_hooks(text, hooks)

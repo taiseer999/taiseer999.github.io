@@ -1537,6 +1537,9 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         if not row:
             return
         refs = list(row['refs'])
+        # 4.7.18: an add-on tab is on - play through that add-on, not the first by priority
+        if self.f_addon and not choose:
+            refs = [r for r in refs if r[0] == self.f_addon] or refs
         if choose and len(refs) > 1:
             pick = xbmcgui.Dialog().contextmenu([T(30826) % self.tags[k][0] for k, _i in refs])
             if pick < 0:
@@ -1585,6 +1588,23 @@ def _focused_meta(tmdb_id):
             'premiered': info('ListItem.Premiered')}
 
 
+_NEXTEP_PROP = 'abk.search.nextep'
+_NEXTEP_KEYS = ('rl', 'fl', 'pov')        # add-ons whose next episode the bridge hands back
+
+
+def _nextep_mark(key, addons, media):
+    """4.7.18: remember which add-on plays this episode, so its own next
+    episode opens Search All again for that add-on only. Any other pick clears it."""
+    win = xbmcgui.Window(10000)
+    if media.get('media_type') != 'episode' or key not in _NEXTEP_KEYS:
+        win.clearProperty(_NEXTEP_PROP)
+        return
+    aid = dict((k, a) for k, a, _n, _t, _ok in addons).get(key, '')
+    win.setProperty(_NEXTEP_PROP, json.dumps({'key': key, 'aid': aid, 'tmdb_id': media['tmdb_id'],
+                                              'season': media['season'], 'episode': media['episode'],
+                                              'ts': time.time()}))
+
+
 def run(params):
     media_type = 'episode' if params.get('media_type') in ('episode', 'tv', 'tvshow') else 'movie'
     tmdb_id = str(params.get('tmdb_id') or params.get('tmdb') or '').strip()
@@ -1596,6 +1616,14 @@ def run(params):
         media['season'] = str(params.get('season', ''))
         media['episode'] = str(params.get('episode', ''))
     addons = available_addons()
+    # 4.7.18: next episode of an episode Search All played - search and play
+    # through that add-on only (abk_device_select.nextep_redirect)
+    only = str(params.get('only') or '').strip()
+    if only:
+        addons = [a for a in addons if a[0] == only]
+        if addons and addons[0][4]:
+            xbmcgui.Dialog().notification('AB Search All', T(30988) % addons[0][2],
+                                          xbmcgui.NOTIFICATION_INFO, 4000)
     if not any(ok for *_x, ok in addons):
         xbmcgui.Dialog().ok('ABUKARIM TOOLS', T(30827))
         return
@@ -1640,6 +1668,10 @@ def run(params):
     if not picked:
         return
     key, index = picked
+    name = dict((k, n) for k, _a, n, _t, _ok in addons).get(key, key)
+    _log('picked: %s #%s' % (name, index))
+    xbmcgui.Dialog().notification('AB Search All', T(30987) % name, xbmcgui.NOTIFICATION_INFO, 3500)
+    _nextep_mark(key, addons, media)
     if key == 'aio':
         return _aio_play(session, index)
     if key == 'en':

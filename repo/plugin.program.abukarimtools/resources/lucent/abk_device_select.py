@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # AB Tools "Search All" bridge - injected by AB Tools (plugin.program.abukarimtools).
-# ABK_DEVICE_SELECT_VERSION = 4
+# ABK_DEVICE_SELECT_VERSION = 5
 #
 # Gives Red Light, POV and Umbrella Fen Light's device-select modes, so AB Tools
 # can collect their sources next to the other add-ons' and play the one picked:
@@ -9,6 +9,10 @@
 #   app_play_source   load that file and play results[selected_index] with the
 #                     add-on's own resolver (failover through the rest)
 # (Red Light / POV read 'mode', Umbrella reads 'action'.)
+#   nextep_redirect   (Fen Light / Red Light / POV, version 5) the add-on is about
+#                     to start its own next episode of an episode Search All
+#                     played through it: open Search All for the next episode,
+#                     limited to this add-on, instead
 # Only xbmc* modules here: the same file serves all three add-ons.
 import os
 import sys
@@ -308,3 +312,58 @@ def play_selected_source(src, title=None):
 		except Exception:
 			pass
 	return src.play_file(results, source)
+
+
+# ───────────────────────── next episode → Search All (same add-on) ─────────────────────────
+# AB Tools writes Home property abk.search.nextep when Search All plays an
+# episode through Fen Light / Red Light / POV: {key, aid, tmdb_id, season,
+# episode, ts}. The add-on's own next-episode logic (autoplay_nextep /
+# autoscrape_nextep, its own timing and settings) calls playback_prep near the
+# end; the hook there asks this function first.
+
+_NEXTEP_PROP = 'abk.search.nextep'
+_NEXTEP_TYPES = ('autoplay_nextep', 'autoscrape_nextep')
+_NEXTEP_MAX_AGE = 6 * 3600
+
+
+def nextep_redirect(params):
+	try:
+		params = params or {}
+		play_type = params.get('play_type')
+		if play_type not in _NEXTEP_TYPES: return False
+		if params.get('nextep_stash_play') == 'true': return False     # Red Light: play of its own prepared next episode
+		raw = xbmcgui.Window(10000).getProperty(_NEXTEP_PROP)
+		if not raw: return False
+		m = json.loads(raw)
+		if m.get('aid') != _aid(): return False
+		if str(m.get('tmdb_id')) != str(params.get('tmdb_id')): return False
+		if time.time() - float(m.get('ts') or 0) > _NEXTEP_MAX_AGE: return False
+		# the episode playing now must be the one Search All started (not a later
+		# play of the same show straight from the add-on)
+		if xbmc.getCondVisibility('Player.HasVideo'):
+			s, e = xbmc.getInfoLabel('VideoPlayer.Season'), xbmc.getInfoLabel('VideoPlayer.Episode')
+			if s and e and (str(s) != str(m.get('season')) or str(e) != str(m.get('episode'))):
+				_log('next episode: playing S%sE%s, Search All started S%sE%s - add-on keeps it'
+					 % (s, e, m.get('season'), m.get('episode')))
+				return False
+		# once per next episode (an add-on can ask more than once: prep, then play)
+		win = xbmcgui.Window(10000)
+		fired = '%s:%s:%s' % (params.get('tmdb_id'), params.get('season'), params.get('episode'))
+		last = win.getProperty(_NEXTEP_PROP + '.fired').split('|')
+		if len(last) == 2 and last[0] == fired and time.time() - float(last[1] or 0) < 600:
+			_log('next episode %s already handed to Search All' % fired)
+			return True
+		win.setProperty(_NEXTEP_PROP + '.fired', '%s|%s' % (fired, time.time()))
+		q = {'mode': 'ab_search', 'media_type': 'episode', 'tmdb_id': params.get('tmdb_id'),
+			 'season': params.get('season'), 'episode': params.get('episode'),
+			 'only': m.get('key'), 'nextep': play_type}
+		for k in ('tvshowtitle', 'custom_title'):
+			if params.get(k): q['showname'] = params.get(k); break
+		from urllib.parse import urlencode
+		url = 'plugin://plugin.program.abukarimtools/?%s' % urlencode({k: v for k, v in q.items() if v not in (None, '')})
+		_log('next episode S%sE%s -> Search All (%s only)' % (q['season'], q['episode'], m.get('key')))
+		xbmc.executebuiltin('RunPlugin(%s)' % url)
+		return True
+	except Exception as e:
+		_log('next episode redirect failed, add-on keeps it: %s' % e)
+		return False

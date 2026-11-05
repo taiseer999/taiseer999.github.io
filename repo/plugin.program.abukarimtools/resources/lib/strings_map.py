@@ -743,4 +743,7 @@ STRINGS = {
     30985: ('This TMDb Helper links MDbList with an API key.[CR][CR]1. Scan the code (or open %s) and copy your API key.[CR]2. TMDb Helper\'s MDbList settings open next - paste the key there and close them.',
             'تربط هذه النسخة من TMDb Helper حساب MDbList بمفتاح API.[CR][CR]1. امسح الرمز (أو افتح %s) وانسخ مفتاح API الخاص بك.[CR]2. ستُفتح بعدها إعدادات MDbList في TMDb Helper، فالصق المفتاح فيها ثم أغلقها.'),
     30986: ('Press any key to open the settings', 'اضغط أي زر لفتح الإعدادات'),
+    # 4.7.18 Search All: which add-on plays, next episode through the same add-on
+    30987: ('Playing with %s', 'جارٍ التشغيل عبر %s'),
+    30988: ('Next episode - searching %s', 'الحلقة التالية: جارٍ البحث في %s'),
 }
