@@ -23,22 +23,28 @@
 		<setting id="provider.cleanbay" type="bool" label="CleanBay  [COLOR grey](Gears)[/COLOR]" default="false" />
 		<setting id="provider.damagnet" type="bool" label="DaMagNet  [COLOR grey](Gears)[/COLOR]" default="false" />
 		<setting id="provider.extto" type="bool" label="EXT.to  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.filemood" type="bool" label="FileMood  [COLOR grey](Gears)[/COLOR]" default="false" />
 		<setting id="provider.glodls" type="bool" label="GloDLS  [COLOR grey](Gears)[/COLOR]" default="false" />
 		<setting id="provider.isohunt2" type="bool" label="isoHunt  [COLOR grey](CocoScrapers)[/COLOR]" default="false" />
 		<setting id="provider.kontrast" type="bool" label="KONTRAST  [COLOR grey](Gears)[/COLOR]" default="false" />
 		<setting id="provider.magnetdl" type="bool" label="MagnetDL  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.nekobt" type="bool" label="nekoBT  [COLOR grey](Gears)[/COLOR]" default="false" />
 		<setting id="provider.nnmclub" type="bool" label="NNM-Club  [COLOR grey](Gears)[/COLOR]" default="false" />
 		<setting id="provider.peerflix" type="bool" label="Peerflix  [COLOR grey](Gears)[/COLOR]" default="true" />
 		<setting id="provider.rarbgdump" type="bool" label="RarbgDump  [COLOR grey](Gears)[/COLOR]" default="false" />
 		<setting id="provider.redetorrent" type="bool" label="RedeTorrent  [COLOR grey](Gears)[/COLOR]" default="false" />
 		<setting id="provider.snowfl" type="bool" label="Snowfl  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.subsplease" type="bool" label="SubsPlease  [COLOR grey](Gears)[/COLOR]" default="false" />
 		<setting id="provider.telegrambot" type="bool" label="Telegram (TorrentSearchRoBot)  [COLOR grey](Gears)[/COLOR]" default="false" />
 		<setting id="provider.therarbg" type="bool" label="TheRarBG  [COLOR grey](Gears)[/COLOR]" default="false" />
 		<setting id="provider.torrent9" type="bool" label="Torrent9  [COLOR grey](Gears)[/COLOR]" default="false" />
 		<setting id="provider.torrentdownloads" type="bool" label="TorrentDownloads  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.torrentkitty" type="bool" label="TorrentKitty  [COLOR grey](Gears)[/COLOR]" default="false" />
 		<setting id="provider.torrentquest" type="bool" label="TorrentQuest  [COLOR grey](CocoScrapers)[/COLOR]" default="false" />
 		<setting id="provider.torrentscsv" type="bool" label="Torrents-CSV  [COLOR grey](Gears)[/COLOR]" default="true" />
 		<setting id="provider.torseek" type="bool" label="TorSeek  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.tsukihime" type="bool" label="TsukiHime  [COLOR grey](Gears)[/COLOR]" default="false" />
+		<setting id="provider.youplex" type="bool" label="Youplex  [COLOR grey](Gears)[/COLOR]" default="false" />
 		<setting id="provider.zooqle" type="bool" label="Zooqle  [COLOR grey](Gears)[/COLOR]" default="false" />
 	</category>
 	<category label="33033">

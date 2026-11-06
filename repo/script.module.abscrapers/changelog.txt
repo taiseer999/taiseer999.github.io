@@ -1,3 +1,14 @@
+[B]AB Scrapers v1.1.5[/B]
+- Gears engine updated 1.6.2 -> 1.6.5 (upstream code beyond 1.6.2 was already in
+  AB; the new part is the shared sfport base and 6 providers).
+- 6 new Gears providers, all OFF by default (Settings > Gears providers):
+  Youplex, FileMood, TorrentKitty - movies, episodes and season / show packs.
+  SubsPlease, nekoBT, TsukiHime - anime episodes; absolute numbering
+  ("Show - 05", "S2 - 05") is matched as well as S02E05.
+- 60 providers in total. "Check provider access" covers the new hosts automatically.
+- AB's own changes kept: unified settings, Telegram logging/auto-enable,
+  6 s timeouts (BTDig, MagnetDL, BitTorrented), [SF-DIAG] at debug level.
+
 [B]AB Scrapers v1.1.4[/B]
 - [SF-DIAG] lines from Knaben, KONTRAST, LimeTorrents and Snowfl are logged at
   debug level only (they filled kodi.log on every search).
