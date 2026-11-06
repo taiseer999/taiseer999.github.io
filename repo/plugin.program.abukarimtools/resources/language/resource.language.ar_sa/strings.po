@@ -1664,6 +1664,14 @@ msgctxt "#30844"
 msgid "Not signed in (Account Manager)"
 msgstr "لم يُسجَّل الدخول (مدير الحسابات)"
 
+msgctxt "#30845"
+msgid "Season %d  ·  Episode %d"
+msgstr "الموسم %d  ·  الحلقة %d"
+
+msgctxt "#30846"
+msgid "Episode %d"
+msgstr "الحلقة %d"
+
 msgctxt "#30850"
 msgid "AF3: Lucent Look"
 msgstr "AF3: مظهر Lucent"

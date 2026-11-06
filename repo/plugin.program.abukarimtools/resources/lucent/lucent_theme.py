@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Lucent theme helper - injected by AB Tools (plugin.program.abukarimtools).
-# LUCENT_HELPER_VERSION = 12
+# LUCENT_HELPER_VERSION = 13
 #
 # Normalises each add-on's own source-list and meta properties into one shared
 # 'lucent.*' property set, so a single Lucent window layout works for Fen Light,
@@ -24,8 +24,10 @@ _ITEM_KEYS = {
 # Release tag (as any of the add-ons spell it) -> Lucent badge file name.
 _BADGES = {
 	'DV': 'DV', 'D/VISION': 'DV', 'DOLBY-VISION': 'DV', 'DOLBY VISION': 'DV', 'DOLBY_VISION': 'DV', 'DOVI': 'DV',
-	'HDR': 'HDR', 'HDR10': 'HDR', 'HDR10+': 'HDR', 'HDR10PLUS': 'HDR', 'HDR_TRUE': 'HDR',
-	'SDR': 'SDR', 'HYBRID': 'HYBRID',
+	'DV2': 'DV2', 'DOVI2': 'DV2', 'DV 2': 'DV2', 'DOLBY VISION 2': 'DV2', 'DOLBY-VISION-2': 'DV2', 'DOLBY_VISION_2': 'DV2',
+	'HDR': 'HDR', 'HDR_TRUE': 'HDR',
+	'HDR10': 'HDR10', 'HDR10+': 'HDR10+', 'HDR10PLUS': 'HDR10+', 'HDR10_PLUS': 'HDR10+', 'HDR10P': 'HDR10+',
+	'HLG': 'HLG', 'SDR': 'SDR', 'HYBRID': 'HYBRID',
 	'HEVC': 'HEVC', 'H265': 'HEVC', 'H.265': 'HEVC', 'X265': 'HEVC', 'CODEC_H265': 'HEVC',
 	'AVC': 'AVC', 'H264': 'AVC', 'H.264': 'AVC', 'X264': 'AVC', 'CODEC_H264': 'AVC',
 	'AV1': 'AV1', 'CODEC_AV1': 'AV1', 'VP9': 'VP9', 'XVID': 'XVID', 'DIVX': 'DIVX',
@@ -42,19 +44,22 @@ _BADGES = {
 	'DTS-HD': 'DTS-HD', 'DTS_HD': 'DTS-HD', 'DTS': 'DTS', 'DTS_PLAIN': 'DTS',
 	'DD+': 'DD+', 'DDP': 'DD+', 'EAC3': 'DD+', 'E-AC3': 'DD+', 'DOLBY_DIGITALPLUS': 'DD+', 'DOLBYDIGITALPLUS': 'DD+',
 	'DD': 'DD', 'DD-EX': 'DD', 'AC3': 'DD', 'DOLBYDIGITAL': 'DD', 'DOLBY_DIGITALEX': 'DD',
+	'PCM': 'PCM', 'LPCM': 'PCM', 'FLAC': 'FLAC',
 	'AAC': 'AAC', 'MP3': 'MP3', 'OPUS': 'OPUS', 'WMA': 'WMA',
-	'8CH': '7.1', '7CH': '7.1', '7.1': '7.1', 'AUDIO_8CH': '7.1', 'AUDIO_7CH': '7.1',
+	'8CH': '7.1', '7.1': '7.1', 'AUDIO_8CH': '7.1', '7CH': '6.1', '6.1': '6.1', 'AUDIO_7CH': '6.1',
 	'6CH': '5.1', '5.1': '5.1', 'AUDIO_6CH': '5.1', '2CH': '2.0', '2.0': '2.0', 'AUDIO_2CH': '2.0',
+	'1CH': '1.0', '1.0': '1.0', 'MONO': '1.0', 'AUDIO_1CH': '1.0',
 }
 # Display order: release type, picture, codec, audio, channels, extras.
 _ORDER = ('CAM', 'SCR', 'HC', 'REMUX', 'BLURAY', 'WEB', 'HDTV', 'PDTV', 'HD-RIP', 'DVDRIP',
-		'DV', 'HDR', 'HYBRID', 'SDR', 'HEVC', 'AV1', 'AVC', 'VP9', 'XVID', 'DIVX', 'MPEG', 'WMV', 'MP4',
-		'ATMOS', 'TRUEHD', 'DTS-X', 'DTS-HDMA', 'DTS-HDHR', 'DTS-HD', 'DTS', 'DD+', 'DD', 'AAC', 'OPUS', 'MP3', 'WMA',
-		'7.1', '5.1', '2.0', '3D')
+		'DV2', 'DV', 'HDR10+', 'HDR10', 'HDR', 'HLG', 'HYBRID', 'SDR', 'HEVC', 'AV1', 'AVC', 'VP9', 'XVID', 'DIVX', 'MPEG', 'WMV', 'MP4',
+		'ATMOS', 'TRUEHD', 'DTS-X', 'DTS-HDMA', 'DTS-HDHR', 'DTS-HD', 'DTS', 'DD+', 'DD', 'PCM', 'FLAC', 'AAC', 'OPUS', 'MP3', 'WMA',
+		'7.1', '6.1', '5.1', '2.0', '1.0', '3D')
 _RANK = {b: n for n, b in enumerate(_ORDER)}
 # Within a family only the best badge is kept (DTS-X beats DTS-HD beats DTS ...).
 _FAMILY = {'DTS-X': 'dts', 'DTS-HDMA': 'dts', 'DTS-HDHR': 'dts', 'DTS-HD': 'dts', 'DTS': 'dts',
-		'DD+': 'dd', 'DD': 'dd', '7.1': 'ch', '5.1': 'ch', '2.0': 'ch',
+		'DD+': 'dd', 'DD': 'dd', '7.1': 'ch', '6.1': 'ch', '5.1': 'ch', '2.0': 'ch', '1.0': 'ch',
+		'DV2': 'dv', 'DV': 'dv', 'HDR10+': 'hdr', 'HDR10': 'hdr', 'HDR': 'hdr', 'HLG': 'hdr',
 		'REMUX': 'src', 'BLURAY': 'src', 'WEB': 'src', 'HDTV': 'src', 'PDTV': 'src', 'HD-RIP': 'src', 'DVDRIP': 'src'}
 _MAX_BADGES = 7
 _LOWQ = ('CAM', 'SCR', 'TELE', 'HC')
@@ -67,9 +72,14 @@ def _clean(text):
 	except Exception: return ''
 
 
-def badges(info, quality=''):
-	"""Ordered list of Lucent badge names for an info string."""
+# Dolby Vision 2 in a release name (no add-on parser has a tag for it yet).
+_DV2_RE = re.compile(r'(?<![A-Z0-9])(?:DV2|DOVI2|DOLBY[ ._-]?VISION[ ._-]?2)(?![A-Z0-9])', re.I)
+
+
+def badges(info, quality='', name=''):
+	"""Ordered list of Lucent badge names for an info string (+ release name)."""
 	found = []
+	if name and _DV2_RE.search(_clean(name)): found.append('DV2')
 	text = _clean(info).upper().replace('D/VISION', 'DV')
 	for token in _SPLIT_RE.split(text):
 		token = token.strip()
@@ -210,7 +220,7 @@ def lucent_item(listitem, profile):
 		props['lucent.icon'] = _provider_icon(provider, site)
 		if not props['lucent.icon'] and keys['icon']:
 			props['lucent.icon'] = get(keys['icon'])     # the add-on's own provider icon
-		found = badges(get(keys['info']), quality)
+		found = badges(get(keys['info']), quality, get(keys['name']))
 		for n in range(_MAX_BADGES):
 			props['lucent.badge_%d' % (n + 1)] = found[n] if n < len(found) else ''
 		listitem.setProperties(props)

@@ -29,7 +29,7 @@ ID ranges:
   30770-30779  Installation Wizard - setup-in-progress backdrop, final restart
   30780-30799  Maintenance - Clean Unused Items
   30800-30813  Toggles - Glass Theme (internally 'Lucent', per add-on)
-  30814-30844  Search All (one stream list from every add-on)
+  30814-30846  Search All (one stream list from every add-on)
   30850-30859  AF3 Lucent Look (Toggles)
   30860-30874  AF3 Streaming Services (Setup)
   30880-30889  AF3 subtitle list (OSD, Lucent Look)
@@ -607,6 +607,8 @@ STRINGS = {
     30842: ('Collapse', 'تصغير'),
     30843: ('Not set up (no manifest URL)', 'غير مُعدّة (لا يوجد رابط manifest)'),
     30844: ('Not signed in (Account Manager)', 'لم يُسجَّل الدخول (مدير الحسابات)'),
+    30845: ('Season %d  ·  Episode %d', 'الموسم %d  ·  الحلقة %d'),
+    30846: ('Episode %d', 'الحلقة %d'),
     # ---- 4.6.8: AF3 Lucent Look (30850-30859) ----
     30850: ('AF3: Lucent Look', 'AF3: مظهر Lucent'),
     30851: ('Off (Arctic Fuse 3 as it is)', 'إيقاف (واجهة Arctic Fuse 3 كما هي)'),

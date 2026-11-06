@@ -3259,7 +3259,7 @@ PATCHES = [
      'old': '', 'new': '', 'description': 'Red Light - Search All bridge (app_list_sources / app_play_source)'},
     {'addon_id': 'plugin.video.fenlight', 'lucent': 'fenlight_search', 'feature': 'ab_search', 'not_found_ok': True,
      'rel_path': os.path.join('resources', 'lib', 'modules', 'sources.py'),
-     'old': '', 'new': '', 'description': 'Fen Light - Search All next episode (same add-on)'},
+     'old': '', 'new': '', 'description': 'Fen Light - remove the 4.7.18 Search All next-episode hook'},
     {'addon_id': 'plugin.video.pov', 'lucent': 'pov_search', 'feature': 'ab_search', 'not_found_ok': True,
      'rel_path': os.path.join('resources', 'lib', 'modules', 'entry.py'),
      'old': '', 'new': '', 'description': 'POV - Search All bridge (app_list_sources / app_play_source)'},
@@ -5283,21 +5283,6 @@ def apply_set(group=None, addon_ids=None):
         else:
             failed += 1
 
-    # 4.7.18: "play next episode" forced on in Fen Light / Red Light / POV /
-    # Umbrella (their own settings; see playnext_force.py)
-    try:
-        from resources.lib import playnext_force
-        for ok, msg in playnext_force.ensure(addon_ids):
-            _log(msg)
-            results.append((ok, msg))
-            if ok:
-                succeeded += 1
-                if 'Patched OK' in msg:
-                    changed += 1
-            else:
-                failed += 1
-    except Exception as e:
-        _log('play next: %s' % e, xbmc.LOGWARNING)
 
     # 4.7.7: Search All's own fixed-size fonts in the active skin (before the
     # Font Size pass, so the chosen mode scales them like every other font).

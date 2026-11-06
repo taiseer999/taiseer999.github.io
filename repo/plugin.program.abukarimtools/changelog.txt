@@ -1,3 +1,28 @@
+v4.7.21
+- Next episode is the video add-on's own again. Removed:
+  * the forced "play next episode" settings (4.7.19 playnext_force.py) -
+    Fen Light / Red Light / POV / Umbrella keep whatever their own settings
+    say; AB Tools no longer turns them on at every patch run.
+  * the Search All next-episode hand-over (4.7.18): the hooks in Fen Light
+    and Red Light modules/sources.py and POV episode_tools.py are stripped at
+    the next patch run, and the bridge helper loses nextep_redirect
+    (version 6). An episode picked in Search All still plays through the
+    add-on of the tab that was on; what comes after is up to that add-on.
+
+v4.7.20
+- Search All: the episode name now sits under the plot (the empty space
+  there): "Season 1 · Episode 7", the name in the GUI language, and the
+  English name under it when it differs (TMDb). The plot moved up into the
+  old episode-title line; movies keep a full-height plot. An untranslated
+  TMDb stand-in ("Episode 7") is skipped for the real name.
+- Stream badges: new Dolby Vision 2 (DV2 / DOVI2 / "Dolby Vision 2", also
+  found in the release name), HDR10 and HDR10+ get their own badges (were
+  plain HDR), new HLG, PCM / LPCM, FLAC, 6.1 and 1.0 (mono). 7-channel audio
+  now shows 6.1 (was 7.1). Only the best of each family is kept (DV2 > DV,
+  HDR10+ > HDR10 > HDR > HLG). Resolution flags (8K/4K/1080p/720p/SD)
+  shipped with the set for later use. Glass Theme helper version 13; the
+  add-ons pick the new badges up at the next patch run.
+
 v4.7.19
 - Play next episode is forced ON at every patch run (new playnext_force.py):
   Fen Light / Red Light: autoplay_next_episode + autoscrape_next_episode in

@@ -83,9 +83,20 @@ def pill(label, visible, edge=False, bright=False):
                 </control>''' % {'c': color, 'd': diffuse, 't': tex, 'l': label, 'v': visible}
 
 
-def title_block(fade_cond=None, extra_anim=''):
-    """Logo / title, meta pills and episode title (top of the left column)."""
+def title_block(fade_cond=None, extra_anim='', ep_title=True):
+    """Logo / title, meta pills and episode title (top of the left column).
+    ep_title=False: no episode title line (Search All shows it under the plot)."""
     W = 'Window.Property(lucent.%s)'
+    ept_xml = '''
+            <control type="label">
+                <top>320</top>
+                <width>720</width>
+                <height>44</height>
+                <font>font27</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>[B]$INFO[%(ept)s][/B]</label>
+                <visible>!String.IsEmpty(%(ept)s)</visible>
+            </control>''' % {'ept': W % 'ep_title'} if ep_title else ''
     hide = ''
     if fade_cond:
         hide = '\n            <animation effect="fade" end="0" time="200" condition="%s">Conditional</animation>' % fade_cond
@@ -122,20 +133,11 @@ def title_block(fade_cond=None, extra_anim=''):
                 <orientation>horizontal</orientation>
                 <itemgap>12</itemgap>
                 <usecontrolcoords>true</usecontrolcoords>%(pills)s
-            </control>
-            <control type="label">
-                <top>320</top>
-                <width>720</width>
-                <height>44</height>
-                <font>font27</font>
-                <textcolor>FFFFFFFF</textcolor>
-                <label>[B]$INFO[%(ept)s][/B]</label>
-                <visible>!String.IsEmpty(%(ept)s)</visible>
-            </control>
+            </control>%(ept)s
         </control>
 ''' % {
-        'extra': hide + extra_anim,
-        'logo': W % 'clearlogo', 'show': W % 'show_title', 'ept': W % 'ep_title',
+        'extra': hide + extra_anim, 'ept': ept_xml,
+        'logo': W % 'clearlogo', 'show': W % 'show_title',
         'pills': ''.join([
             pill('[B]$INFO[%s][/B]' % (W % 'ep_code'), '!String.IsEmpty(%s)' % (W % 'ep_code'), bright=True),
             pill('$INFO[%s]' % (W % 'year'), '!String.IsEmpty(%s)' % (W % 'year')),
@@ -1808,6 +1810,71 @@ def ab_search_window():
             </control>
         </control>''' % {'xx': xx, 'show': 'Window.Property(lucent.show_title)',
                           'ep': 'Window.Property(lucent.ep_code)'}
+    # 4.7.20: the episode name sits under the plot (the empty space there); the
+    # plot moves up into the episode title's old line. Movies: full-height plot.
+    E = 'Window.Property(abs.ep_%s)'
+    has_ep = '!String.IsEmpty(%s)' % (E % 'name')
+    has_orig = '!String.IsEmpty(%s)' % (E % 'orig')
+    episode = '''
+        <!-- ============ Left: episode name under the plot ============ -->
+        <control type="group">
+            <animation effect="fade" start="0" end="100" time="350" delay="180">WindowOpen</animation>
+            <animation effect="fade" end="0" time="250">WindowClose</animation>
+            <visible>%(has)s</visible>
+            <left>96</left>
+            <top>596</top>
+            <width>700</width>
+            <control type="image">
+                <top>4</top>
+                <width>4</width>
+                <height>66</height>
+                <texture>lucent/white.png</texture>
+                <colordiffuse>80FFFFFF</colordiffuse>
+                <visible>!%(has_orig)s</visible>
+            </control>
+            <control type="image">
+                <top>4</top>
+                <width>4</width>
+                <height>98</height>
+                <texture>lucent/white.png</texture>
+                <colordiffuse>80FFFFFF</colordiffuse>
+                <visible>%(has_orig)s</visible>
+            </control>
+            <control type="label">
+                <left>20</left>
+                <top>0</top>
+                <width>680</width>
+                <height>30</height>
+                <font>font12</font>
+                <aligny>center</aligny>
+                <textcolor>FF8F9BA6</textcolor>
+                <label>[B]$INFO[%(cap)s][/B]</label>
+            </control>
+            <control type="label">
+                <left>20</left>
+                <top>32</top>
+                <width>680</width>
+                <height>42</height>
+                <font>font27</font>
+                <aligny>center</aligny>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>[B]$INFO[%(name)s][/B]</label>
+            </control>
+            <control type="label">
+                <left>20</left>
+                <top>74</top>
+                <width>680</width>
+                <height>32</height>
+                <font>font12</font>
+                <aligny>center</aligny>
+                <textcolor>FFBDC8D1</textcolor>
+                <label>$INFO[%(orig)s]</label>
+                <visible>%(has_orig)s</visible>
+            </control>
+        </control>''' % {'has': has_ep, 'has_orig': has_orig, 'cap': E % 'caption', 'name': E % 'name',
+                         'orig': E % 'orig'}
+    plot = (plot_block('$INFO[Window.Property(lucent.plot)]', top=416, height=160, visible=has_ep)
+            + plot_block('$INFO[Window.Property(lucent.plot)]', top=416, height=290, visible='!' + has_ep))
     body = ab_panel(False, xp, W) + ab_panel(True, xx, W)
     xml = '''<?xml version="1.0" encoding="UTF-8"?>
 <!-- AB Tools - Search All (streams from every add-on). Generated by tools/gen_lucent.py. -->
@@ -1819,11 +1886,11 @@ def ab_search_window():
         <width>1920</width>
         <height>1080</height>
     </coordinates>
-    <controls>%(bg)s%(title)s%(plot)s%(status)s%(top)s%(body)s
+    <controls>%(bg)s%(title)s%(plot)s%(episode)s%(status)s%(top)s%(body)s
     </controls>
 </window>
-''' % {'bg': backdrop('$INFO[Window.Property(lucent.fanart)]'), 'title': hide_left(title_block()),
-       'plot': hide_left(plot_block('$INFO[Window.Property(lucent.plot)]', height=220)),
+''' % {'bg': backdrop('$INFO[Window.Property(lucent.fanart)]'), 'title': hide_left(title_block(ep_title=False)),
+       'plot': hide_left(plot), 'episode': hide_left(episode),
        'status': hide_left(status), 'top': top_title, 'body': body}
     return ab_paths(ab_fonts(xml))
 

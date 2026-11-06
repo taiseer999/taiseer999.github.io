@@ -816,6 +816,9 @@ def tmdb_window_meta(media):
                 out['ep_plot'] = e.get('overview') or ''
                 out['ep_runtime'] = e.get('runtime') or 0
                 out['ep_name_tmdb'] = e.get('name') or ''
+                if tag != 'en-US':          # 4.7.20: English name under the localized one
+                    out['ep_name_en'] = _tmdb('tv/%s/season/%s/episode/%s' % (
+                        media['tmdb_id'], media['season'], media['episode'])).get('name') or ''
             except Exception:
                 pass
         out['plot'] = out.pop('ep_plot', '') or d.get('overview') or ''
@@ -840,6 +843,32 @@ def tmdb_window_meta(media):
         _log('window meta from TMDb failed: %s' % e, xbmc.LOGWARNING)
         return {}
     return {k: v for k, v in out.items() if v}
+
+
+# TMDb's stand-in name for an untranslated episode ("Episode 7", "الحلقة 7")
+_EP_PLACEHOLDER = re.compile(r'^\s*(?:episode|ep\.?|الحلقة|حلقة)\s*\d+\s*$', re.I)
+
+
+def episode_props(meta):
+    """abs.ep_caption / abs.ep_name / abs.ep_orig for the block under the plot
+    (4.7.20). Empty for a movie. Name: TMDb in the UI language, else the add-on's
+    own; a second line with the English name when it differs."""
+    out = {'abs.ep_caption': '', 'abs.ep_name': '', 'abs.ep_orig': ''}
+    try:
+        if meta.get('media_type') != 'episode':
+            return out
+        season, episode = int(meta.get('season')), int(meta.get('episode'))
+    except Exception:
+        return out
+    names = [_clean(meta.get(k)) for k in ('ep_name_tmdb', 'ep_name', 'ep_name_en')]
+    names = [n for n in names if n and not _EP_PLACEHOLDER.match(n)]
+    name = names[0] if names else ''
+    en = _clean(meta.get('ep_name_en'))
+    orig = en if en and name and not _EP_PLACEHOLDER.match(en) and en.casefold() != name.casefold() else ''
+    out['abs.ep_caption'] = T(30845) % (season, episode)
+    out['abs.ep_name'] = name or (T(30846) % episode)
+    out['abs.ep_orig'] = orig
+    return out
 
 
 # ───────────────────────── merging ─────────────────────────
@@ -1061,6 +1090,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 th.lucent_window(self, self.meta, fanart=self.meta.get('fanart', ''), clearlogo=self.meta.get('clearlogo', ''))
             except Exception as e:
                 _log('window meta: %s' % e)
+        self._episode_props()
         self.setProperty('abs.heading', T(30817))
         self.setProperty('abs.addons_heading', T(30818))
         self._view_props()
@@ -1135,6 +1165,12 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 th.lucent_window(self, meta, fanart=meta.get('fanart', ''), clearlogo=meta.get('clearlogo', ''))
             except Exception as e:
                 _log('window meta: %s' % e)
+        self._episode_props()
+
+    def _episode_props(self):
+        """Dialog thread: the episode name block under the plot."""
+        for k, v in episode_props(self.meta).items():
+            self.setProperty(k, v)
 
     def _focus(self, cid):
         # no <defaultcontrol>: the chips are empty until onInit fills them, and
@@ -1264,7 +1300,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         if found is None:
             th = _theme()
             try:
-                found = th.badges(item.get('extraInfo', ''), row['q']) if th else []
+                found = th.badges(item.get('extraInfo', ''), row['q'],
+                                   item.get('name') or item.get('display_name') or '') if th else []
             except Exception:
                 found = []
             self._badge_cache[id(item)] = found
@@ -1588,23 +1625,6 @@ def _focused_meta(tmdb_id):
             'premiered': info('ListItem.Premiered')}
 
 
-_NEXTEP_PROP = 'abk.search.nextep'
-_NEXTEP_KEYS = ('rl', 'fl', 'pov')        # add-ons whose next episode the bridge hands back
-
-
-def _nextep_mark(key, addons, media):
-    """4.7.18: remember which add-on plays this episode, so its own next
-    episode opens Search All again for that add-on only. Any other pick clears it."""
-    win = xbmcgui.Window(10000)
-    if media.get('media_type') != 'episode' or key not in _NEXTEP_KEYS:
-        win.clearProperty(_NEXTEP_PROP)
-        return
-    aid = dict((k, a) for k, a, _n, _t, _ok in addons).get(key, '')
-    win.setProperty(_NEXTEP_PROP, json.dumps({'key': key, 'aid': aid, 'tmdb_id': media['tmdb_id'],
-                                              'season': media['season'], 'episode': media['episode'],
-                                              'ts': time.time()}))
-
-
 def run(params):
     media_type = 'episode' if params.get('media_type') in ('episode', 'tv', 'tvshow') else 'movie'
     tmdb_id = str(params.get('tmdb_id') or params.get('tmdb') or '').strip()
@@ -1616,8 +1636,7 @@ def run(params):
         media['season'] = str(params.get('season', ''))
         media['episode'] = str(params.get('episode', ''))
     addons = available_addons()
-    # 4.7.18: next episode of an episode Search All played - search and play
-    # through that add-on only (abk_device_select.nextep_redirect)
+    # ?only=<key>: search one add-on only
     only = str(params.get('only') or '').strip()
     if only:
         addons = [a for a in addons if a[0] == only]
@@ -1671,7 +1690,7 @@ def run(params):
     name = dict((k, n) for k, _a, n, _t, _ok in addons).get(key, key)
     _log('picked: %s #%s' % (name, index))
     xbmcgui.Dialog().notification('AB Search All', T(30987) % name, xbmcgui.NOTIFICATION_INFO, 3500)
-    _nextep_mark(key, addons, media)
+    xbmcgui.Window(10000).clearProperty('abk.search.nextep')     # 4.7.20: left over from 4.7.18
     if key == 'aio':
         return _aio_play(session, index)
     if key == 'en':

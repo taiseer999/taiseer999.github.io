@@ -147,15 +147,6 @@
                     <visible>!String.IsEmpty(Window.Property(lucent.genre)) + String.IsEmpty(Window.Property(lucent.ep_code))</visible>
                 </control>
             </control>
-            <control type="label">
-                <top>320</top>
-                <width>720</width>
-                <height>44</height>
-                <font>abk_srch_m</font>
-                <textcolor>FFFFFFFF</textcolor>
-                <label>[B]$INFO[Window.Property(lucent.ep_title)][/B]</label>
-                <visible>!String.IsEmpty(Window.Property(lucent.ep_title))</visible>
-            </control>
         </control>
 
         </control>
@@ -164,11 +155,12 @@
         <control type="group">
             <animation effect="fade" start="0" end="100" time="350" delay="150">WindowOpen</animation>
             <animation effect="fade" end="0" time="250">WindowClose</animation>
+            <visible>!String.IsEmpty(Window.Property(abs.ep_name))</visible>
             <left>96</left>
-            <top>476</top>
+            <top>416</top>
             <control type="textbox">
                 <width>700</width>
-                <height>220</height>
+                <height>160</height>
                 <font>abk_srch_s</font>
                 <textcolor>FFBDC8D1</textcolor>
                 <label>$INFO[Window.Property(lucent.plot)]</label>
@@ -176,6 +168,81 @@
             </control>
         </control>
 
+        <control type="group">
+            <animation effect="fade" start="0" end="100" time="350" delay="150">WindowOpen</animation>
+            <animation effect="fade" end="0" time="250">WindowClose</animation>
+            <visible>!!String.IsEmpty(Window.Property(abs.ep_name))</visible>
+            <left>96</left>
+            <top>416</top>
+            <control type="textbox">
+                <width>700</width>
+                <height>290</height>
+                <font>abk_srch_s</font>
+                <textcolor>FFBDC8D1</textcolor>
+                <label>$INFO[Window.Property(lucent.plot)]</label>
+                <autoscroll delay="6000" time="2500" repeat="8000">true</autoscroll>
+            </control>
+        </control>
+
+        </control>
+        <control type="group">
+            <visible>String.IsEmpty(Window.Property(abs.expanded))</visible>
+        <!-- ============ Left: episode name under the plot ============ -->
+        <control type="group">
+            <animation effect="fade" start="0" end="100" time="350" delay="180">WindowOpen</animation>
+            <animation effect="fade" end="0" time="250">WindowClose</animation>
+            <visible>!String.IsEmpty(Window.Property(abs.ep_name))</visible>
+            <left>96</left>
+            <top>596</top>
+            <width>700</width>
+            <control type="image">
+                <top>4</top>
+                <width>4</width>
+                <height>66</height>
+                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/white.png</texture>
+                <colordiffuse>80FFFFFF</colordiffuse>
+                <visible>!!String.IsEmpty(Window.Property(abs.ep_orig))</visible>
+            </control>
+            <control type="image">
+                <top>4</top>
+                <width>4</width>
+                <height>98</height>
+                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/white.png</texture>
+                <colordiffuse>80FFFFFF</colordiffuse>
+                <visible>!String.IsEmpty(Window.Property(abs.ep_orig))</visible>
+            </control>
+            <control type="label">
+                <left>20</left>
+                <top>0</top>
+                <width>680</width>
+                <height>30</height>
+                <font>abk_srch_s</font>
+                <aligny>center</aligny>
+                <textcolor>FF8F9BA6</textcolor>
+                <label>[B]$INFO[Window.Property(abs.ep_caption)][/B]</label>
+            </control>
+            <control type="label">
+                <left>20</left>
+                <top>32</top>
+                <width>680</width>
+                <height>42</height>
+                <font>abk_srch_m</font>
+                <aligny>center</aligny>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>[B]$INFO[Window.Property(abs.ep_name)][/B]</label>
+            </control>
+            <control type="label">
+                <left>20</left>
+                <top>74</top>
+                <width>680</width>
+                <height>32</height>
+                <font>abk_srch_s</font>
+                <aligny>center</aligny>
+                <textcolor>FFBDC8D1</textcolor>
+                <label>$INFO[Window.Property(abs.ep_orig)]</label>
+                <visible>!String.IsEmpty(Window.Property(abs.ep_orig))</visible>
+            </control>
+        </control>
         </control>
         <control type="group">
             <visible>String.IsEmpty(Window.Property(abs.expanded))</visible>
