@@ -1460,6 +1460,15 @@ def main():
         _log('Subtitle Cycler check failed to start (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
+    # 4.7.22: Search All - when the episode it played ends by itself, Kodi's
+    # replay of the launching TMDbHelper item searches the NEXT episode.
+    try:
+        from resources.lib import search_nextep
+        search_nextep.start(monitor)
+    except Exception:
+        _log('Search All next-episode listener failed to start (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
     # From here the service stays alive for the rest of the Kodi session and
     # watches the patch targets: a Kodi add-on update replaces the add-on
     # folder wholesale, which silently wipes every patch we applied to it.

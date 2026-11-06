@@ -1625,6 +1625,19 @@ def _focused_meta(tmdb_id):
             'premiered': info('ListItem.Premiered')}
 
 
+def replay_after_end(media):
+    """4.7.23: Kodi starts the launching TMDbHelper item again when an episode
+    Search All played ends by itself (search_nextep.py). That request is not
+    the user's: the add-on that played the episode handles the next one with
+    its own settings, so Search All does nothing."""
+    from resources.lib import search_nextep
+    if media.get('media_type') != 'episode' or not search_nextep.take_ended(media):
+        return False
+    _log('S%sE%s replayed by Kodi after its end - ignored, the add-on handles the next episode'
+         % (media['season'], media['episode']))
+    return True
+
+
 def run(params):
     media_type = 'episode' if params.get('media_type') in ('episode', 'tv', 'tvshow') else 'movie'
     tmdb_id = str(params.get('tmdb_id') or params.get('tmdb') or '').strip()
@@ -1635,6 +1648,8 @@ def run(params):
     if media_type == 'episode':
         media['season'] = str(params.get('season', ''))
         media['episode'] = str(params.get('episode', ''))
+        if replay_after_end(media):
+            return
     addons = available_addons()
     # ?only=<key>: search one add-on only
     only = str(params.get('only') or '').strip()
@@ -1691,6 +1706,11 @@ def run(params):
     _log('picked: %s #%s' % (name, index))
     xbmcgui.Dialog().notification('AB Search All', T(30987) % name, xbmcgui.NOTIFICATION_INFO, 3500)
     xbmcgui.Window(10000).clearProperty('abk.search.nextep')     # 4.7.20: left over from 4.7.18
+    try:
+        from resources.lib import search_nextep
+        search_nextep.mark_pick(media)
+    except Exception as e:
+        _log('next-episode mark: %s' % e)
     if key == 'aio':
         return _aio_play(session, index)
     if key == 'en':

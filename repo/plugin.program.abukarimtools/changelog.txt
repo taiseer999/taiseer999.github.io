@@ -1,3 +1,23 @@
+v4.7.23
+- Next episode after Search All is the add-on's again: when the episode
+  Search All played ends by itself, Kodi's replay of the launching TMDbHelper
+  item is ignored (Search All stays closed) and the add-on that played it
+  (Red Light, Fen Light, POV, Umbrella...) starts the next episode with its
+  own settings. 4.7.22 searched the next episode in Search All instead.
+  Stopping an episode yourself changes nothing: opening it again searches
+  it as usual.
+
+v4.7.22
+- Search All opened again for the episode that just finished (kodi.log
+  2026-11-06 08:40:33): when an episode Search All played reaches its end,
+  Kodi starts the TMDbHelper item it was launched from again - the same
+  episode - and TMDbHelper's default player is AB Search All. Now the
+  service notes when the Search All episode ends by itself (not when you
+  stop it), and that replay searches the NEXT episode instead (TMDb: next
+  in the season, else episode 1 of the next season; nothing opens after the
+  last aired episode). If the add-on already started its own next episode,
+  the replay is ignored. New resources/lib/search_nextep.py.
+
 v4.7.21
 - Next episode is the video add-on's own again. Removed:
   * the forced "play next episode" settings (4.7.19 playnext_force.py) -
