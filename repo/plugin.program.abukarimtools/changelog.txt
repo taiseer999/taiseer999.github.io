@@ -1,3 +1,25 @@
+v4.7.29
+- AF3: Lucent Player now also changes AF3's furniture codec logos (the row
+  of 1080p / 16:9 / H.264 / AAC / 2.0 logos under the home widgets, in the
+  info screens and the OSD) to the Lucent pills: resolution, Dolby Vision /
+  HDR10+ / HDR10 / HLG, HEVC / AV1 / AVC / VP9, Atmos, the audio codec and
+  the channels. Turning Lucent Player off brings the AF3 logos back. The
+  pills come from the new include ABK_LP_FlagsRow
+  (tools/lucent_player/af3_furniture.py).
+
+v4.7.28
+- New in the Toggles menu: "Lucent: Widgets from AF3". With the Lucent skin
+  active it builds Lucent's side menu and widgets from the Arctic Fuse 3 menu
+  on the box (addon_data/skin.arctic.fuse.3): Home widgets -> the start tab,
+  every enabled hub -> a tab with its widgets (Movies, TV, Korean...), the
+  Add-ons hub -> Lucent's Add-ons tab, plus Search (TMDbHelper), Settings and
+  Power. Lucent holds 12 tabs of 10 widgets: a bigger hub is spread over
+  "Movies 2", "Movies 3"...; anything that still does not fit is listed.
+  Styles: Landscape / Gatefold / Square -> landscape, the rest -> posters.
+  AF3 "Stacked Folder" rows and hidden rows are left out, and the TMDbHelper
+  reload token is removed from the paths. Written through Lucent's own
+  menu.py, so Lucent's "Menu and widgets" editor can change it afterwards.
+
 v4.7.27
 - AF3: Lucent Player - the focused OSD button showed twice, one place to the
   right (info, audio, subtitles...): the AF3 OSD pop-ups draw their own copy

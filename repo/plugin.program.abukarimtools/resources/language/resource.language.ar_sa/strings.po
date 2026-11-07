@@ -2436,3 +2436,47 @@ msgctxt "#32083"
 msgid "Lucent Player files are not in the skin yet - run Apply Patches first"
 msgstr "ملفات مشغّل Lucent ليست في المظهر بعد؛ شغّل تطبيق التصحيحات أولًا"
 
+msgctxt "#32089"
+msgid "Lucent: Widgets from AF3"
+msgstr "Lucent: الودجات من AF3"
+
+msgctxt "#32090"
+msgid "Search"
+msgstr "البحث"
+
+msgctxt "#32091"
+msgid "Home"
+msgstr "الرئيسية"
+
+msgctxt "#32092"
+msgid "Settings"
+msgstr "الإعدادات"
+
+msgctxt "#32093"
+msgid "Power"
+msgstr "إيقاف التشغيل"
+
+msgctxt "#32094"
+msgid "Switch to the Lucent skin first, then run this again."
+msgstr "انتقل إلى مظهر Lucent أولًا، ثم أعد تشغيل هذا الخيار."
+
+msgctxt "#32095"
+msgid "No Arctic Fuse 3 menu was found on this device."
+msgstr "لم يُعثر على قائمة Arctic Fuse 3 على هذا الجهاز."
+
+msgctxt "#32096"
+msgid "Build the Lucent menu and widgets from your Arctic Fuse 3 hubs and widgets?[CR][CR]This replaces the current Lucent menu."
+msgstr "هل تريد بناء قائمة Lucent وودجاتها من أقسام Arctic Fuse 3 وودجاتها؟[CR][CR]سيحلّ هذا محلّ قائمة Lucent الحالية."
+
+msgctxt "#32097"
+msgid "Could not build the Lucent menu: %s"
+msgstr "تعذّر بناء قائمة Lucent: %s"
+
+msgctxt "#32098"
+msgid "Lucent menu ready: %d tabs, %d widgets."
+msgstr "قائمة Lucent جاهزة: %d تبويبًا و%d ودجة."
+
+msgctxt "#32099"
+msgid "Left out (Lucent has at most 12 tabs and 10 widgets per tab):"
+msgstr "لم تُضَف (يتّسع Lucent لـ 12 تبويبًا و10 ودجات لكل تبويب على الأكثر):"
+

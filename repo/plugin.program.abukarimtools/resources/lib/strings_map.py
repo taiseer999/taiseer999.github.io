@@ -826,4 +826,16 @@ STRINGS = {
     32081: ('Lucent Player turned on (OSD, pause card and statistics)', 'تم تشغيل مشغّل Lucent (شريط التحكم وبطاقة الإيقاف المؤقت والإحصائيات)'),
     32082: ('Lucent Player turned off - the Arctic Fuse 3 player is back', 'تم إيقاف مشغّل Lucent، وعاد مشغّل Arctic Fuse 3'),
     32083: ('Lucent Player files are not in the skin yet - run Apply Patches first', 'ملفات مشغّل Lucent ليست في المظهر بعد؛ شغّل تطبيق التصحيحات أولًا'),
+    # ---- 4.7.28: Lucent - widgets from AF3 (32089-32099) ----
+    32089: ('Lucent: Widgets from AF3', 'Lucent: الودجات من AF3'),
+    32090: ('Search', 'البحث'),
+    32091: ('Home', 'الرئيسية'),
+    32092: ('Settings', 'الإعدادات'),
+    32093: ('Power', 'إيقاف التشغيل'),
+    32094: ('Switch to the Lucent skin first, then run this again.', 'انتقل إلى مظهر Lucent أولًا، ثم أعد تشغيل هذا الخيار.'),
+    32095: ('No Arctic Fuse 3 menu was found on this device.', 'لم يُعثر على قائمة Arctic Fuse 3 على هذا الجهاز.'),
+    32096: ('Build the Lucent menu and widgets from your Arctic Fuse 3 hubs and widgets?[CR][CR]This replaces the current Lucent menu.', 'هل تريد بناء قائمة Lucent وودجاتها من أقسام Arctic Fuse 3 وودجاتها؟[CR][CR]سيحلّ هذا محلّ قائمة Lucent الحالية.'),
+    32097: ('Could not build the Lucent menu: %s', 'تعذّر بناء قائمة Lucent: %s'),
+    32098: ('Lucent menu ready: %d tabs, %d widgets.', 'قائمة Lucent جاهزة: %d تبويبًا و%d ودجة.'),
+    32099: ('Left out (Lucent has at most 12 tabs and 10 widgets per tab):', 'لم تُضَف (يتّسع Lucent لـ 12 تبويبًا و10 ودجات لكل تبويب على الأكثر):'),
 }

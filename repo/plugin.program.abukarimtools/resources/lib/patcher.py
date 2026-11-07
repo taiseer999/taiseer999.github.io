@@ -4172,6 +4172,48 @@ PATCHES += [
         'description': 'AF3 Lucent Player - Statistics button slot in the OSD pop-ups',
     },
     {
+        # 4.7.29: AF3 furniture codec logos (home widgets, info, OSD) -> the
+        # Lucent pills (ABK_LP_FlagsRow) while Lucent Player is on.
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Furniture.xml'),
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': 'ABK_LP_FlagsRow',
+        'fallback_pattern': (r'(<param name="infolabel_audiochannels">ListItem\.AudioChannels</param>\n)([\s\S]*?)'
+                             r'(            <control type="grouplist">\n                <visible>!String\.IsEmpty\(\$PARAM\[infolabel_videoresolution\]\) \+ \[\$PARAM\[visible\]\] \+ !Skin\.HasSetting\(Furniture\.DisableCodecLogos\))(</visible>)'),
+        'fallback_repl': ('\\1'
+                          '        <param name="infolabel_hdrtype">ListItem.HdrType</param>\n'
+                          '        <param name="infolabel_filename">ListItem.FileName</param>\n'
+                          '        <param name="infolabel_filenameandpath">ListItem.FileNameAndPath</param>\n'
+                          '\\2'
+                          '            <!-- ABUKARIM: Lucent Player pills -->\n'
+                          '            <include content="ABK_LP_FlagsRow" condition="Skin.HasSetting(abk.lucentplayer)">\n'
+                          '                <param name="il_videoresolution">$PARAM[infolabel_videoresolution]</param>\n'
+                          '                <param name="il_hdrtype">$PARAM[infolabel_hdrtype]</param>\n'
+                          '                <param name="il_videocodec">$PARAM[infolabel_videocodec]</param>\n'
+                          '                <param name="il_audiocodec">$PARAM[infolabel_audiocodec]</param>\n'
+                          '                <param name="il_audiochannels">$PARAM[infolabel_audiochannels]</param>\n'
+                          '                <param name="il_filename">$PARAM[infolabel_filename]</param>\n'
+                          '                <param name="il_filenameandpath">$PARAM[infolabel_filenameandpath]</param>\n'
+                          '                <param name="visible">!String.IsEmpty($PARAM[infolabel_videoresolution]) + [$PARAM[visible]] + !Skin.HasSetting(Furniture.DisableCodecLogos)</param>\n'
+                          '            </include>\n'
+                          '\\3 + !Skin.HasSetting(abk.lucentplayer)\\4'),
+        'description': 'AF3 Lucent Player - Lucent pills for the furniture codec logos',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '                    <param name="infolabel_audiochannels">VideoPlayer.AudioChannels</param>\n',
+        'new': ('                    <param name="infolabel_audiochannels">VideoPlayer.AudioChannels</param>\n'
+                '                    <param name="infolabel_hdrtype">VideoPlayer.HdrType</param>  <!-- ABK_LP -->\n'
+                '                    <param name="infolabel_filename">Player.Filename</param>\n'
+                '                    <param name="infolabel_filenameandpath">Player.FilenameAndPath</param>\n'),
+        'already_patched_check': '<param name="infolabel_hdrtype">VideoPlayer.HdrType</param>  <!-- ABK_LP -->',
+        'description': 'AF3 Lucent Player - furniture pills: OSD reads the playing video',
+    },
+    {
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('media', 'abk_lp', 'af3', 'stats.png'),
         'inject_file': True,

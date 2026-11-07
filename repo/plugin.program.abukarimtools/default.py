@@ -36,6 +36,7 @@ ICONS  = {
     'af3_waves':      ADDON_PATH + 'resources/icons/af3_waves.png',
     'af3_lucent':     ADDON_PATH + 'resources/icons/af3_lucent.png',
     'af3_lucentplayer': ADDON_PATH + 'resources/icons/af3_lucentplayer.png',
+    'lucent_from_af3': ADDON_PATH + 'resources/icons/lucent_from_af3.png',
     'af3_plotright':  ADDON_PATH + 'resources/icons/af3_plotright.png',
     'font_scale':     ADDON_PATH + 'resources/icons/font_scale.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/sources.png',
@@ -115,6 +116,7 @@ CATEGORIES = [
         ('af3_waves',      30603),
         ('af3_lucent',     30850),
         ('af3_lucentplayer', 32080),
+        ('lucent_from_af3', 32089),
         ('af3_plotright',  30890),
         ('font_scale',     30740),
     ]),
@@ -142,6 +144,8 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 'af3_lucent',
                 # 4.7.25: AF3 Lucent Player (on/off switch)
                 'af3_lucentplayer',
+                # 4.7.28: Lucent menu + widgets from AF3 (dialogs only)
+                'lucent_from_af3',
                 # 3.4.39: Lucent Theme per add-on (switch list dialog)
                 'lucent_theme',
                 # 3.4.6: Font Size (original / +5% / -5%)
@@ -613,6 +617,9 @@ def router():
     elif mode == 'af3_lucentplayer':
         from resources.lib import af3_lucentplayer_toggle
         af3_lucentplayer_toggle.run()
+    elif mode == 'lucent_from_af3':
+        from resources.lib import lucent_from_af3
+        lucent_from_af3.run()
     elif mode == 'lucent_theme':
         from resources.lib import lucent_toggle
         lucent_toggle.run()
