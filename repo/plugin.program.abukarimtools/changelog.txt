@@ -1,3 +1,13 @@
+v4.7.35
+- AF3: Lucent Player - the OSD always shows Arctic Fuse 3's own expanded
+  info (window 1153: logo, the format tags, stars / date / certificate /
+  runtime / studio logo, genre, plot, IMDb / Rotten Tomatoes / Trakt and
+  ends at), whatever AF3's "Expanded info on OSD" setting says - it used to
+  appear only with that setting on, otherwise the Lucent title block showed.
+  Patch on Custom_1153_OSD_VideoInfoOverlayTop.xml (gated on
+  abk.lucentplayer, not for live TV). The rating / plot block added in
+  4.7.33 is removed (the AF3 info replaces it); the DV2 fix stays.
+
 v4.7.34
 - Auto-patch after an AB Tools update: when AB Tools updated while Kodi
   was running, Kodi kept the old service (and its watchdog, with the old

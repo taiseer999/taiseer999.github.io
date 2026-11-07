@@ -235,31 +235,6 @@
                 <textcolor>FFDCE2E7</textcolor>
                 <label>$VAR[ABK_LP_PlayerSubtitle]</label>
             <shadowcolor>00FFFFFF</shadowcolor><aligny>center</aligny></control>
-            <!-- ABK_LP_OSDINFO -->
-            <control type="label">
-                <left>0</left>
-                <top>206</top>
-                <width>1100</width>
-                <height>36</height>
-                <font>abk_lp_font12</font>
-                <textcolor>B3FFFFFF</textcolor>
-                <shadowcolor>00FFFFFF</shadowcolor>
-                <aligny>center</aligny>
-                <label>$INFO[VideoPlayer.Rating,★ ,]$INFO[VideoPlayer.Duration,   ,]$INFO[VideoPlayer.mpaa,   ,]</label>
-                <visible>!String.IsEmpty(VideoPlayer.Rating) | !String.IsEmpty(VideoPlayer.Duration) | !String.IsEmpty(VideoPlayer.mpaa)</visible>
-            </control>
-            <control type="textbox">
-                <left>0</left>
-                <top>250</top>
-                <width>1000</width>
-                <height>124</height>
-                <font>abk_lp_font_body</font>
-                <textcolor>CCFFFFFF</textcolor>
-                <shadowcolor>00FFFFFF</shadowcolor>
-                <label>$INFO[VideoPlayer.Plot]</label>
-                <autoscroll delay="6000" time="3000" repeat="8000">true</autoscroll>
-                <visible>!String.IsEmpty(VideoPlayer.Plot)</visible>
-            </control>
         </control>
 
         <!-- ABK_LP_AF3_LAYOUT: format flags (Lucent pause card) --><control type="grouplist">

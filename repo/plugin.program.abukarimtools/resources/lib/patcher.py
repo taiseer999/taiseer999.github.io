@@ -4324,6 +4324,21 @@ PATCHES += [
                           r'ABK_LP_VolumePassthrough</include>  <!-- ABK_LP_VOL -->'),
         'description': 'AF3 Lucent Player - passthrough note on the volume bar',
     },
+    {
+        # 4.7.35: the OSD always shows AF3's own expanded info (window 1153:
+        # logo, format tags, stars / date / certificate / runtime / studio,
+        # genre, plot, IMDb / RT / Trakt, ends at) while Lucent Player is on,
+        # whatever AF3's "Expanded info on OSD" setting says. The Lucent title
+        # block steps aside while 1153 is visible (af3_layout.py).
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Custom_1153_OSD_VideoInfoOverlayTop.xml'),
+        'not_found_ok': True,
+        'old': '[Window.IsVisible(videoosd) + Skin.HasSetting(OSD.DisplayInfoOnControls)]</visible>',
+        'new': ('[Window.IsVisible(videoosd) + [Skin.HasSetting(OSD.DisplayInfoOnControls) | '
+                '[Skin.HasSetting(abk.lucentplayer) + !Pvr.IsPlayingTV]]]</visible>  <!-- ABK_LP_1153 -->'),
+        'already_patched_check': '<!-- ABK_LP_1153 -->',
+        'description': 'AF3 Lucent Player - OSD shows the AF3 expanded info',
+    },
 ]
 
 
