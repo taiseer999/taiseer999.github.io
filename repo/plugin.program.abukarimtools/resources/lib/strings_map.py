@@ -611,6 +611,9 @@ STRINGS = {
     30844: ('Not signed in (Account Manager)', 'لم يُسجَّل الدخول (مدير الحسابات)'),
     30845: ('Season %d  ·  Episode %d', 'الموسم %d  ·  الحلقة %d'),
     30846: ('Episode %d', 'الحلقة %d'),
+    # ---- 4.7.30: Search All ISO filter ----
+    30847: ('Hide ISO (disc images)', 'إخفاء ملفات ISO (صور الأقراص)'),
+    30848: ('ISO only (disc images)', 'ملفات ISO فقط (صور الأقراص)'),
     # ---- 4.6.8: AF3 Lucent Look (30850-30859) ----
     30850: ('AF3: Lucent Look', 'AF3: مظهر Lucent'),
     30851: ('Off (Arctic Fuse 3 as it is)', 'إيقاف (واجهة Arctic Fuse 3 كما هي)'),

@@ -965,6 +965,15 @@ _SIZES = ((0, 5, 30830), (5, 15, 30831), (15, 40, 30832), (40, 1e9, 30833))
 _BITRATES = ((40, 1e9, 30837), (20, 40, 30838), (10, 20, 30839), (0, 10, 30840))
 
 
+# 4.7.30: ISO / BDISO disc images ("Movie.2023.BDISO", "...COMPLETE.UHD.BLURAY.ISO", "movie.iso")
+_ISO_RE = re.compile(r'(?<![a-z0-9])(?:bd|uhd|dvd)?iso(?![a-z0-9])', re.I)
+
+
+def _is_iso(item):
+    text = ' '.join(str(item.get(k) or '') for k in ('name', 'display_name', 'filename', 'title', 'extraInfo'))
+    return bool(_ISO_RE.search(_clean(text)))
+
+
 def _size(item):
     try:
         return float(item.get('size') or 0)
@@ -1350,6 +1359,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         if kind == 'title':
             name = _clean(item.get('display_name') or item.get('name')).upper()
             return all(w in name for w in value)
+        if kind == 'iso':                       # value True = ISO only, False = hide ISO
+            return _is_iso(item) == value
         if kind == 'info':
             have = self._badges(row)
             return all(w in have for w in value)
@@ -1371,6 +1382,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             n = sum(1 for r in base if self._match(r, {'kind': kind, 'value': value}))
             if 0 < n < len(base):       # a filter that keeps everything (or nothing) is no filter
                 choices.append((label, kind, value, n))
+        counted('iso', False, T(30847))         # 4.7.30: shown when some (not all) results are ISO
+        counted('iso', True, T(30848))
         services = sorted({_provider(r['item']).upper() for r in base} - {''})
         for s in services:
             counted('service', s, _t('Show %s only') % _pretty(s))
