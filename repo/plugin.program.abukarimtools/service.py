@@ -1132,6 +1132,16 @@ def _start_update_watch(monitor, boot_version):
                     f.write(cur)              # the next boot won't ask again
             except OSError:
                 pass
+            # 4.7.33: apply the NEW version's patches now, in a fresh process
+            # (this service still runs the old code and old patch list until
+            # a restart, so the new skin / add-on patches used to wait for it).
+            _log('Tools updated %s -> %s while running; patching with the new '
+                 'version now.' % (boot_version, cur))
+            xbmc.executebuiltin('RunScript(special://home/addons/plugin.program.'
+                                'abukarimtools/resources/lib/patch_now.py,'
+                                'AB Tools %s update)' % cur)
+            if monitor.waitForAbort(15):
+                return
             _log('Tools updated %s -> %s while running; recommending a restart.'
                  % (boot_version, cur))
             try:

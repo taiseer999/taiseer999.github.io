@@ -1,3 +1,37 @@
+v4.7.34
+- Auto-patch after an AB Tools update: when AB Tools updated while Kodi
+  was running, Kodi kept the old service (and its watchdog, with the old
+  patch list) until a restart, and the watchdog only watches the patched
+  add-ons, not AB Tools itself - so the new version's skin / add-on patches
+  (e.g. new Lucent Player files for AF3) waited for the next reboot. The
+  service's update watch now runs one patch pass with the NEW code in a
+  fresh process (new resources/lib/patch_now.py), then reloads the skin
+  when it is safe; the restart is still recommended for the new service.
+  Works from this version on (the update from 4.7.33 is the first one it
+  covers).
+
+v4.7.33
+- AF3: Lucent Player - the OSD was empty under the year / genre line:
+  Lucent's own OSD shows only the logo and year / genre, and AF3's quick
+  info is hidden while Lucent Player is on. That space now has the rating,
+  runtime and certificate, and the plot (4 lines, scrolls when longer);
+  each hides when the video has none. Steps aside with the logo while AF3
+  shows its own info block. tools/lucent_player/af3_osdinfo.py.
+- AF3: Lucent Player - the Dolby Vision 2 badge never showed: the file-name
+  test String.Contains(...,[dv2]) made Kodi read "[" as a bracket, so the
+  whole expression failed to parse (kodi.log: "Misplaced [" / "Error
+  parsing boolean expression", every skin load). The two [dv2] clauses are
+  gone; .dv2. / -dv2. / _dv2_ / dovi2 / dolby.vision.2 still match.
+- Lucent skin keymaps left behind: after using the Lucent skin, its
+  lucent-back-stop.xml (Back in fullscreen video) and lucent-ok-page.xml (OK
+  in the video lists) stay in userdata/keymaps and run
+  special://skin/scripts/..., which does not exist in another skin - so
+  under AF3, Back in the player and OK in the video lists could do nothing
+  (they also load after, and override, the Lucent Player Back keymap).
+  While Lucent is not the skin they are removed (at start, on the Lucent
+  Player toggle and after an AB Tools skin switch); the Lucent skin writes
+  them again itself when its Home opens.
+
 v4.7.32
 - AF3: Lucent Player - Back while you skip through a video (fast forward /
   rewind, the seek bar on screen, or within 3 s of a skip) now ends the

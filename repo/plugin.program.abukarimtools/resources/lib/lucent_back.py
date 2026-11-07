@@ -76,13 +76,46 @@ def _read():
         f.close()
 
 
+def clear_lucent_keymaps():
+    """4.7.33: the Lucent skin writes keymaps into the profile (lucent-back-stop.xml:
+    Back in fullscreen video, lucent-ok-page.xml: OK in the video lists) that run
+    special://skin/scripts/... - with another skin active those scripts do not
+    exist, so Back / OK did nothing (they also load after ours and override it).
+    Remove them while Lucent is not the skin; Lucent writes them again itself
+    (scripts/keymap.py) when its Home opens. Returns True when a file went."""
+    if xbmc.getSkinDir() == 'skin.lucent':
+        return False
+    gone = []
+    try:
+        _dirs, files = xbmcvfs.listdir(KEYMAP_DIR)
+    except Exception:
+        return False
+    for name in files:
+        if not (name.startswith('lucent-') and name.endswith('.xml')):
+            continue
+        path = KEYMAP_DIR + name
+        try:
+            f = xbmcvfs.File(path)
+            try:
+                body = f.read()
+            finally:
+                f.close()
+        except Exception:
+            continue
+        if 'special://skin/scripts/' in body and xbmcvfs.delete(path):
+            gone.append(name)
+    if gone:
+        _log('removed Lucent skin keymaps (not the active skin): %s' % ', '.join(gone))
+    return bool(gone)
+
+
 def sync_keymap(wanted=None):
     """Keymap present while Lucent Player is on (AF3 active), gone otherwise.
     Returns True when the file changed (keymaps are then reloaded)."""
     if wanted is None:
         wanted = _active()
     have = _read()
-    changed = False
+    changed = clear_lucent_keymaps()
     if wanted and have != KEYMAP:
         xbmcvfs.mkdirs(KEYMAP_DIR)
         f = xbmcvfs.File(KEYMAP_PATH, 'w')
@@ -96,7 +129,7 @@ def sync_keymap(wanted=None):
         changed = True
     if changed:
         xbmc.executebuiltin('Action(reloadkeymaps)')
-        _log('keymap %s' % ('written' if wanted else 'removed'))
+        _log('keymaps updated (Lucent Player Back: %s)' % ('on' if wanted else 'off'))
     return changed
 
 

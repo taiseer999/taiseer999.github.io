@@ -161,6 +161,13 @@ def _swap_skin(addon_id):
     # down, confirm once more so it can't flip back.
     _dismiss_confirm_dialogs(500)
     _log('active skin now: %s (wanted %s)' % (xbmc.getSkinDir(), addon_id))
+    # 4.7.33: Lucent skin keymaps must not outlive the Lucent skin, and the
+    # AF3 Lucent Player Back keymap follows the new skin.
+    try:
+        from resources.lib import lucent_back
+        lucent_back.sync_keymap()
+    except Exception as exc:
+        _log('keymap sync failed: %s' % exc)
 
 
 def run():
