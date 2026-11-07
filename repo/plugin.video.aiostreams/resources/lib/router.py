@@ -47,6 +47,23 @@ def _cat_client(src):
     return AIOMetadata() if src == 'm' else AIOStreams()
 
 
+def _search_cats():
+    """(src, catalog) pairs that accept a search. Falls back to AIOStreams'
+    own search when the chosen source (AIOMetadata) offers none."""
+    cats = []
+    for src in _sources():
+        try:
+            cats += [(src, c) for c in _cat_client(src).catalogs() if _extra(c, 'search')]
+        except ApiError as e:
+            kodi.log('search catalogs (%s) failed: %s' % (src, e))
+    if not cats and 'a' not in _sources():
+        try:
+            cats = [('a', c) for c in AIOStreams().catalogs() if _extra(c, 'search')]
+        except ApiError as e:
+            kodi.log('search catalogs (fallback) failed: %s' % e)
+    return cats
+
+
 def _stream_id(params):
     """AIOMetadata movie ids can be tmdb:/tvdb:; map them to IMDb for AIOStreams."""
     type_, vid = params['type'], params['id']
@@ -143,7 +160,7 @@ def root(params):
     if not loaded:  # AIOMetadata down: fall back to AIOStreams' own catalogs
         loaded = [('a', client, manifest)]
 
-    if any(_extra(cat, 'search') for _, c, _m in loaded for cat in c.catalogs()):
+    if _search_cats():
         _add(kodi.build_url(action='search'), items.folder_item('[B]%s[/B]' % kodi.s(30021), icon=items.icon('search')))
     group = kodi.setting_bool('group_by_type')
     for src, c, m in loaded:
@@ -281,7 +298,17 @@ def show(params):
         with kodi.Busy():
             meta = client.meta(type_, mid)
     except ApiError as e:
-        return _fail(e)
+        if src != 'm':
+            return _fail(e)
+        kodi.log('AIOMetadata meta failed for %s, using AIOStreams: %s' % (mid, e))
+        meta = None
+    if not meta and src == 'm':
+        src, client = 'a', AIOStreams()
+        try:
+            with kodi.Busy():
+                meta = client.meta(type_, mid)
+        except ApiError as e:
+            return _fail(e)
     if not meta:
         return _fail(kodi.s(30104))
     vids = _videos(meta)
@@ -501,12 +528,7 @@ def search_del(params):
 
 def search_query(params):
     q = params['q']
-    cats = []
-    for src in _sources():
-        try:
-            cats += [(src, c) for c in _cat_client(src).catalogs() if _extra(c, 'search')]
-        except ApiError as e:
-            kodi.log('search catalogs (%s) failed: %s' % (src, e))
+    cats = _search_cats()
     if len(cats) == 1:
         src, cat = cats[0]
         return catalog({'type': cat['type'], 'cid': cat['id'], 'search': q, 'src': src})
@@ -535,7 +557,7 @@ def play_id_input(params):
         return _end(cache=False)
     vid = vid.strip()
     if type_ == 'series' and vid.count(':') < 2 and not vid.startswith(('kitsu', 'mal', 'anilist', 'anidb')):
-        return show({'type': type_, 'id': vid})
+        return show({'type': type_, 'id': vid, 'src': 'm' if _meta_configured() else 'a'})
     return streams_dir({'type': type_, 'id': vid, 'title': vid})
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.aiostreams" name="AIOStreams" version="1.1.1" provider-name="Taiseer">
+<addon id="plugin.video.aiostreams" name="AIOStreams" version="1.2.0" provider-name="Taiseer">
     <requires>
         <import addon="xbmc.python" version="3.0.1"/>
     </requires>
@@ -15,7 +15,7 @@
         <license>GPL-3.0-only</license>
         <source>https://github.com/Viren070/AIOStreams</source>
         <website>https://buymeacoffee.com/taiseer999</website>
-        <news>v1.1.0 - Optional AIOMetadata source for catalogs, search and title details (streams still from AIOStreams); catalog source setting (AIOStreams / AIOMetadata / both); IMDb mapping for movie streams; "Show widget path" context item; menu icons (BoxIcons, as in the AIOStreams web UI) instead of the add-on icon on every entry.
+        <news>v1.1.0 - Optional AIOMetadata source for catalogs, search and title details (streams still from AIOStreams); catalog source setting (AIOStreams / AIOMetadata / both); IMDb mapping for movie streams; "Show widget path" context item; menu icons (BoxIcons, as in the AIOStreams web UI) instead of the add-on icon on every entry; Play by ID (series) uses AIOMetadata with AIOStreams as fallback; Search falls back to AIOStreams when AIOMetadata has no search catalog.
 v1.0.0 - Initial release, built against AIOStreams 2.37.0</news>
         <assets>
             <icon>icon.png</icon>
