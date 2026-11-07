@@ -621,7 +621,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.7.23" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.7.24" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="AB Tools"
-       version="4.7.23"
+       version="4.7.24"
        provider-name="Abukarim">
 
   <requires>

@@ -1,3 +1,9 @@
+v4.7.24
+- Search All: when the last add-on finishes searching, the focus moves to the
+  All tab (first chip), so you start from the full list. If you picked a tab
+  (add-on / quality / service) or a filter yourself while it was searching,
+  your choice is kept and the focus is not moved.
+
 v4.7.23
 - Next episode after Search All is the add-on's again: when the episode
   Search All played ends by itself, Kodi's replay of the launching TMDbHelper

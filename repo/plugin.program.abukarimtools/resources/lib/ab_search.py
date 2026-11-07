@@ -1044,6 +1044,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         self._dirty_at = 0.0
         self._pending_meta = None     # TMDb meta fetched by the meta thread
         self._busy = 0                # nested dialog open (filter menu / "Play with")
+        self._finished = False        # 4.7.24: the All tab gets the focus once, when the search ends
 
     # ---- view (4.6.7) ----
     def _lid(self):
@@ -1193,6 +1194,22 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             self._status()
             self._chips()
             self._rows()
+        if not self._finished and self.session.done():
+            self._finished = True
+            self._focus_all()
+
+    def _focus_all(self):
+        """Dialog thread, once: every add-on has finished - highlight and focus the All tab.
+        A tab or filter you picked yourself while it was searching is kept."""
+        if self.f_addon or self.f_quality or self.f_service or self.filters:
+            _log('search done - kept the tab / filter you picked')
+            return
+        try:
+            self.getControl(self._cid()).selectItem(0)      # chip 0 = All
+        except Exception:
+            pass
+        self._focus(self._cid())
+        _log('search done - focus on the All tab')
 
     def _status(self):
         st = self.session.state
