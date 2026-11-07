@@ -115,17 +115,17 @@ def _context_for_meta(type_, meta_id, name, src='a'):
 def root(params):
     client = _client()
     if client is None:
-        li = items.folder_item('[B]%s[/B]' % kodi.s(30020))
+        li = items.folder_item('[B]%s[/B]' % kodi.s(30020), icon=items.icon('manifest'))
         _add(kodi.build_url(action='set_manifest'), li, folder=False)
-        li = items.folder_item(kodi.s(30027))
+        li = items.folder_item(kodi.s(30027), icon=items.icon('settings'))
         _add(kodi.build_url(action='settings'), li, folder=False)
         return _end(cache=False)
     try:
         manifest = client.manifest()
     except ApiError as e:
-        li = items.folder_item('[COLOR red]%s[/COLOR]' % e, plot=str(e))
+        li = items.folder_item('[COLOR red]%s[/COLOR]' % e, icon=items.icon('error'), plot=str(e))
         _add(kodi.build_url(action='settings'), li, folder=False)
-        li = items.folder_item(kodi.s(30020))
+        li = items.folder_item(kodi.s(30020), icon=items.icon('manifest'))
         _add(kodi.build_url(action='set_manifest'), li, folder=False)
         return _end(cache=False)
 
@@ -136,7 +136,7 @@ def root(params):
         try:
             m = c.manifest()
         except ApiError as e:
-            li = items.folder_item('[COLOR red]AIOMetadata: %s[/COLOR]' % e, plot=str(e))
+            li = items.folder_item('[COLOR red]AIOMetadata: %s[/COLOR]' % e, icon=items.icon('error'), plot=str(e))
             _add(kodi.build_url(action='set_meta'), li, folder=False)
             continue
         loaded.append((src, c, m))
@@ -144,12 +144,13 @@ def root(params):
         loaded = [('a', client, manifest)]
 
     if any(_extra(cat, 'search') for _, c, _m in loaded for cat in c.catalogs()):
-        _add(kodi.build_url(action='search'), items.folder_item('[B]%s[/B]' % kodi.s(30021)))
+        _add(kodi.build_url(action='search'), items.folder_item('[B]%s[/B]' % kodi.s(30021), icon=items.icon('search')))
     group = kodi.setting_bool('group_by_type')
     for src, c, m in loaded:
         if len(loaded) > 1:
             _add(kodi.build_url(action='noop'),
-                 items.folder_item('[COLOR grey]-- %s --[/COLOR]' % (m.get('name') or src)), folder=False)
+                 items.folder_item('[COLOR grey]-- %s --[/COLOR]' % (m.get('name') or src),
+                                  icon=items.icon('metadata' if src == 'm' else 'server')), folder=False)
         types_seen = []
         for cat in c.catalogs():
             search = _extra(cat, 'search')
@@ -161,10 +162,10 @@ def root(params):
                 continue
             _add_catalog_entry(cat, src)
         for t in types_seen:
-            _add(kodi.build_url(action='type', type=t, src=src), items.folder_item(items.type_label(t)))
+            _add(kodi.build_url(action='type', type=t, src=src), items.folder_item(items.type_label(t), icon=items.type_icon(t)))
 
-    _add(kodi.build_url(action='play_id'), items.folder_item(kodi.s(30022)), folder=True)
-    _add(kodi.build_url(action='tools'), items.folder_item(kodi.s(30023)))
+    _add(kodi.build_url(action='play_id'), items.folder_item(kodi.s(30022), icon=items.icon('play_id')), folder=True)
+    _add(kodi.build_url(action='tools'), items.folder_item(kodi.s(30023), icon=items.icon('tools')))
     xbmcplugin.setPluginCategory(kodi.HANDLE, manifest.get('name') or kodi.ADDON_NAME)
     _end(cache=False)
 
@@ -178,7 +179,7 @@ def _add_catalog_entry(cat, src='a', with_type=True):
     if genre and genre.get('isRequired'):
         url_kw['action'] = 'genres'
     url = kodi.build_url(**url_kw)
-    li = items.folder_item(label)
+    li = items.folder_item(label, icon=items.type_icon(cat.get('type')))
     li.addContextMenuItems([(kodi.s(30082), 'RunPlugin(%s)' % kodi.build_url(action='widget_path', path=url))])
     _add(url, li)
 
@@ -200,7 +201,7 @@ def genres(params):
     ex = _extra(cat or {}, 'genre') or {}
     for g in ex.get('options') or []:
         _add(kodi.build_url(action='catalog', type=params['type'], cid=params['cid'], genre=g, src=src),
-             items.folder_item(g))
+             items.folder_item(g, icon=items.icon('genres')))
     _end()
 
 
@@ -221,7 +222,7 @@ def catalog(params):
     genre_ex = _extra(cat, 'genre')
     if not skip and not params.get('genre') and not params.get('search') and genre_ex and genre_ex.get('options'):
         _add(kodi.build_url(action='genres', type=type_, cid=cid, src=src),
-             items.folder_item('[B]%s[/B]' % kodi.s(30024)))
+             items.folder_item('[B]%s[/B]' % kodi.s(30024), icon=items.icon('genres')))
 
     with kodi.Busy():
         metas, errors = client.catalog(type_, cid, extras)
@@ -234,7 +235,7 @@ def catalog(params):
         nxt = dict(params, skip=skip + len(metas), src=src)
         nxt['action'] = 'catalog'
         page = (skip // max(len(metas), 1)) + 2
-        _add(kodi.build_url(**nxt), items.folder_item('[B]%s[/B]' % (kodi.s(30025) % page)))
+        _add(kodi.build_url(**nxt), items.folder_item('[B]%s[/B]' % (kodi.s(30025) % page), icon=items.icon('next')))
     _end('movies' if type_ == 'movie' else 'tvshows', sort=False)
 
 
@@ -362,7 +363,7 @@ def streams_dir(params):
     if show_notices:
         for n in notices:
             li = items.folder_item('[COLOR grey]%s[/COLOR]' % st.clean(n.get('name')).replace('\n', ' '),
-                                   plot=st.clean(n.get('description')))
+                                   icon=items.icon('info'), plot=st.clean(n.get('description')))
             _add(kodi.build_url(action='noop'), li, folder=False)
     for i, stream in enumerate(playable):
         label, label2, plot = st.labels(stream)
@@ -371,7 +372,7 @@ def streams_dir(params):
         tag.setTitle(params.get('title') or label)
         tag.setPlot(plot)
         tag.setMediaType('video')
-        li.setArt({'icon': kodi.ICON, 'thumb': kodi.ICON, 'fanart': kodi.FANART})
+        li.setArt({'icon': items.icon('stream'), 'thumb': items.icon('stream'), 'fanart': kodi.FANART})
         li.setProperty('IsPlayable', 'true')
         _add(kodi.build_url(action='play_index', idx=i), li, folder=False)
     xbmcplugin.setPluginCategory(kodi.HANDLE, params.get('title') or '')
@@ -391,7 +392,7 @@ def _choose(playable, notices, title, auto):
     for stream in playable:
         label, label2, _ = st.labels(stream)
         li = xbmcgui.ListItem(label, label2, offscreen=True)
-        li.setArt({'icon': kodi.ICON, 'thumb': kodi.ICON})
+        li.setArt({'icon': items.icon('stream'), 'thumb': items.icon('stream')})
         lis.append(li)
     heading = '%s - %s' % (title, kodi.s(30043) % len(playable)) if title else kodi.s(30043) % len(playable)
     idx = xbmcgui.Dialog().select(heading, lis, useDetails=True)
@@ -474,9 +475,9 @@ def _mime(name):
 
 def search(params):
     history = _load_json(HISTORY_FILE, [])
-    _add(kodi.build_url(action='search_new'), items.folder_item('[B]%s[/B]' % kodi.s(30026)))
+    _add(kodi.build_url(action='search_new'), items.folder_item('[B]%s[/B]' % kodi.s(30026), icon=items.icon('search_new')))
     for q in history:
-        li = items.folder_item(q)
+        li = items.folder_item(q, icon=items.icon('history'))
         li.addContextMenuItems([(kodi.s(30044), 'RunPlugin(%s)' % kodi.build_url(action='search_del', q=q))])
         _add(kodi.build_url(action='search_query', q=q), li)
     _end(cache=False)
@@ -511,7 +512,7 @@ def search_query(params):
         return catalog({'type': cat['type'], 'cid': cat['id'], 'search': q, 'src': src})
     for src, cat in cats:
         label = '%s [COLOR grey](%s)[/COLOR]' % (cat.get('name') or cat.get('id'), items.type_label(cat.get('type')))
-        _add(kodi.build_url(action='catalog', type=cat['type'], cid=cat['id'], search=q, src=src), items.folder_item(label))
+        _add(kodi.build_url(action='catalog', type=cat['type'], cid=cat['id'], search=q, src=src), items.folder_item(label, icon=items.type_icon(cat.get('type'))))
     xbmcplugin.setPluginCategory(kodi.HANDLE, q)
     _end()
 
@@ -521,8 +522,8 @@ def search_query(params):
 # --------------------------------------------------------------------------
 
 def play_id(params):
-    _add(kodi.build_url(action='play_id_input', type='movie'), items.folder_item(kodi.s(30028)))
-    _add(kodi.build_url(action='play_id_input', type='series'), items.folder_item(kodi.s(30029)))
+    _add(kodi.build_url(action='play_id_input', type='movie'), items.folder_item(kodi.s(30028), icon=items.icon('movie')))
+    _add(kodi.build_url(action='play_id_input', type='series'), items.folder_item(kodi.s(30029), icon=items.icon('series')))
     _end(cache=False)
 
 
@@ -544,12 +545,13 @@ def play_id_input(params):
 
 def tools(params):
     entries = [
-        (30020, 'set_manifest'), (30050, 'test'), (30080, 'set_meta'), (30081, 'test_meta'),
-        (30051, 'clear_cache'),
-        (30052, 'install_tmdbh'), (30027, 'settings'),
+        (30020, 'set_manifest', 'manifest'), (30050, 'test', 'test'),
+        (30080, 'set_meta', 'metadata'), (30081, 'test_meta', 'test'),
+        (30051, 'clear_cache', 'clear_cache'),
+        (30052, 'install_tmdbh', 'tmdbh'), (30027, 'settings', 'settings'),
     ]
-    for sid, action in entries:
-        _add(kodi.build_url(action=action), items.folder_item(kodi.s(sid)), folder=False)
+    for sid, action, ic in entries:
+        _add(kodi.build_url(action=action), items.folder_item(kodi.s(sid), icon=items.icon(ic)), folder=False)
     _end(cache=False)
 
 

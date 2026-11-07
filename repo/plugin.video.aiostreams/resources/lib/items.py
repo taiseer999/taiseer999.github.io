@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Build Kodi ListItems from Stremio meta objects."""
+import os
 import re
 
 import xbmc
@@ -171,6 +172,19 @@ def episode_item(meta, video, type_, path):
         'clearlogo': meta.get('logo') or '', 'tvshow.poster': meta.get('poster') or ''}.items() if v})
     li.setProperty('IsPlayable', 'true')
     return li
+
+
+TYPE_ICONS = {'movie': 'movie', 'series': 'series', 'anime': 'anime', 'channel': 'channel', 'tv': 'channel'}
+
+
+def icon(name):
+    """Menu icon from resources/media (BoxIcons, as in the AIOStreams web UI)."""
+    path = os.path.join(kodi.ADDON_PATH, 'resources', 'media', name + '.png')
+    return path if os.path.exists(path) else kodi.ICON
+
+
+def type_icon(type_):
+    return icon(TYPE_ICONS.get(type_, 'catalog'))
 
 
 def folder_item(label, icon=None, plot=None):
