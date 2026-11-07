@@ -290,3 +290,71 @@ msgctxt "#30243"
 msgid "Allow invalid SSL certificates"
 msgstr ""
 
+
+msgctxt "#30080"
+msgid "Set AIOMetadata URL"
+msgstr ""
+
+msgctxt "#30081"
+msgid "Test AIOMetadata connection"
+msgstr ""
+
+msgctxt "#30082"
+msgid "Show widget path"
+msgstr ""
+
+msgctxt "#30083"
+msgid "AIOMetadata manifest URL (leave empty to remove)"
+msgstr ""
+
+msgctxt "#30084"
+msgid "Widget path"
+msgstr ""
+
+msgctxt "#30085"
+msgid "AIOMetadata URL removed"
+msgstr ""
+
+msgctxt "#30086"
+msgid "Remove the AIOMetadata URL and go back to AIOStreams catalogs?"
+msgstr ""
+
+msgctxt "#30250"
+msgid "Metadata (AIOMetadata)"
+msgstr ""
+
+msgctxt "#30251"
+msgid "AIOMetadata manifest URL"
+msgstr ""
+
+msgctxt "#30252"
+msgid "Optional. Catalogs, search and title details come from AIOMetadata; streams still come from AIOStreams. Set the language (for example Arabic) on AIOMetadata's own configure page."
+msgstr ""
+
+msgctxt "#30253"
+msgid "Catalog source"
+msgstr ""
+
+msgctxt "#30254"
+msgid "AIOStreams"
+msgstr ""
+
+msgctxt "#30255"
+msgid "AIOMetadata"
+msgstr ""
+
+msgctxt "#30256"
+msgid "Both"
+msgstr ""
+
+msgctxt "#30257"
+msgid "Use IMDb IDs for movie streams"
+msgstr ""
+
+msgctxt "#30258"
+msgid "Used only when an AIOMetadata URL is set."
+msgstr ""
+
+msgctxt "#30259"
+msgid "AIOMetadata may list movies by TMDB/TVDB id. When on, the IMDb id from its metadata is sent to AIOStreams, which most stream add-ons expect."
+msgstr ""

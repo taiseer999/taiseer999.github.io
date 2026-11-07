@@ -710,7 +710,7 @@ updated YouTube addon URL
         </assets>
         <news>v1.0.15 - Lucent colours: icons, fanart, banner, clearlogo and the support dialog moved from orange on black to the Lucent palette (navy 0B1119 / panel 162532, Arctic Blue accent 7FD1FF). v1.0.14 - Real fix for the TMDbHelper "invalid literal for int()" error: the list item called setIMDBNumber(), which Kodi writes into the default unique id (tmdb), so UniqueID(tmdb) became tt...; removed (the imdb id is already set as a unique id). v1.0.13 - TMDbHelper fix: the tt... id was cached in TMDbHelper's tmdb_id lookup table (imdb -&gt; tmdb), which re-created the identifier row on every focus; the purge now cleans every ItemQueries.db table with a tmdb_id column, only tt... values (episode-group ids are kept), and also runs each time a list is built. v1.0.12 - TMDbHelper fix: every id key is now validated, not only tmdb/imdb - a tt... id sent by the player as tvshow.tmdb (read by TMDbHelper for episodes) or tmdb_id is moved to the matching imdb key; fixes the remaining "invalid literal for int()" on focus. Saved history is repaired on start. v1.0.11 - On start: repairs ids already saved in the history and removes cached tt... rows from the TMDbHelper identifier table (ItemQueries.db) that kept the int() error alive. v1.0.10 - TMDbHelper fix: an IMDb id (tt...) stored in the tmdb slot is moved to imdb, and the TMDb id is recovered from the TMDbHelper link; fixes "invalid literal for int()" in TMDbHelper on focus and on replay. Old history entries are fixed when listed. v1.0.9 - Renamed to "AB Last Played"; icon without the ABUKARIM text with a larger emblem; clearlogo, banner and fanart updated. v1.0.8 - New add-on artwork matching NewPipe: clearlogo, banner and fanart with the emblem on the right. v1.0.7 - Crash fix: focused-item tracking no longer reads list labels inside dialogs, the Add-on Browser, File Browser or while a list is rebuilding, and pauses for 10s after playback ends (return-to-Home skin rebuild). One gated check per second, labels re-read only when focus changes. v1.0.6 - Records Fen Light / debrid streams that start without metadata: waits for the info tag, then falls back to script.trakt.ids, the TMDbHelper launcher and the focused item. v1.0.5 - Replay choice: play the saved stream link (instant, like the old Last Played) or play again from sources; setting for Ask / Saved first / Sources only, expired links fall back to sources. v1.0.2 - New ABUKARIM-style icons and fanart on a solid dark background; new "Buy Me a Coffee" entry opens a QR code. v1.0.1 - heartbeat so ABUKARIM TOOLS can start the service when Kodi skips it at boot. v1.0.0 - first release (replaces plugin.video.last_played)</news>
     </extension>
-</addon><addon id="plugin.video.aiostreams" name="AIOStreams" version="1.0.0" provider-name="Taiseer">
+</addon><addon id="plugin.video.aiostreams" name="AIOStreams" version="1.1.0" provider-name="Taiseer">
     <requires>
         <import addon="xbmc.python" version="3.0.1" />
     </requires>
@@ -726,7 +726,8 @@ updated YouTube addon URL
         <license>GPL-3.0-only</license>
         <source>https://github.com/Viren070/AIOStreams</source>
         <website>https://buymeacoffee.com/taiseer999</website>
-        <news>v1.0.0 - Initial release, built against AIOStreams 2.37.0</news>
+        <news>v1.1.0 - Optional AIOMetadata source for catalogs, search and title details (streams still from AIOStreams); catalog source setting (AIOStreams / AIOMetadata / both); IMDb mapping for movie streams; "Show widget path" context item.
+v1.0.0 - Initial release, built against AIOStreams 2.37.0</news>
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>

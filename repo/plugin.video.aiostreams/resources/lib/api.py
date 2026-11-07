@@ -136,8 +136,10 @@ def _enc(value):
 
 class AIOStreams(object):
 
+    SETTING = 'manifest_url'
+
     def __init__(self, manifest_url=None):
-        self.base, self.query = normalise_manifest_url(manifest_url or kodi.setting('manifest_url'))
+        self.base, self.query = normalise_manifest_url(manifest_url or kodi.setting(self.SETTING))
         self.timeout = max(10, kodi.setting_int('timeout', 60))
         self.ttl = max(0, kodi.setting_int('cache_minutes', 60)) * 60
         self._manifest = None
@@ -242,3 +244,26 @@ class AIOStreams(object):
             return []
         subs = data.get('subtitles', []) if isinstance(data, dict) else []
         return [x for x in subs if not str(x.get('id', '')).startswith('error.')]
+
+
+class AIOMetadata(AIOStreams):
+    """AIOMetadata (cedya77/aiometadata) speaks the same Stremio protocol at
+    <host>/stremio/<uuid>/..., so the AIOStreams client works unchanged.
+    It is used for catalogs and meta only - streams always come from
+    AIOStreams. Its episode ids are already stream-ready (imdb:S:E, or
+    kitsu:/mal:/tmdb: when that maps better), so they pass straight through.
+    """
+
+    SETTING = 'meta_url'
+
+    def imdb_for(self, type_, meta_id):
+        """Return the IMDb id for a tmdb:/tvdb: movie id, or the id unchanged."""
+        if str(meta_id).startswith('tt'):
+            return meta_id
+        try:
+            meta = self.meta(type_, meta_id) or {}
+        except ApiError as e:
+            kodi.log('imdb lookup failed for %s: %s' % (meta_id, e))
+            return meta_id
+        imdb = meta.get('imdb_id') or ''
+        return imdb if str(imdb).startswith('tt') else meta_id

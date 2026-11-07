@@ -9,7 +9,7 @@ import xbmcgui
 import xbmcplugin
 
 from . import kodi, items, streams as st
-from .api import AIOStreams, ApiError, cache_clear, normalise_manifest_url
+from .api import AIOMetadata, AIOStreams, ApiError, cache_clear, normalise_manifest_url
 
 HISTORY_FILE = os.path.join(kodi.PROFILE, 'search_history.json')
 LAST_STREAMS = os.path.join(kodi.PROFILE, 'last_streams.json')
@@ -23,6 +23,37 @@ def _client():
     if not kodi.setting('manifest_url'):
         return None
     return AIOStreams()
+
+
+def _meta_configured():
+    return bool(kodi.setting('meta_url'))
+
+
+def _sources():
+    """Catalog sources in display order: 'm' = AIOMetadata, 'a' = AIOStreams."""
+    mode = kodi.setting_int('catalog_source', 1)  # 0 AIOStreams, 1 AIOMetadata, 2 both
+    if not _meta_configured() or mode == 0:
+        return ['a']
+    return ['m'] if mode == 1 else ['m', 'a']
+
+
+def _src(params):
+    # URLs without src (widgets made before 1.1.0) keep pointing at AIOStreams
+    src = params.get('src') or 'a'
+    return 'm' if src == 'm' and _meta_configured() else 'a'
+
+
+def _cat_client(src):
+    return AIOMetadata() if src == 'm' else AIOStreams()
+
+
+def _stream_id(params):
+    """AIOMetadata movie ids can be tmdb:/tvdb:; map them to IMDb for AIOStreams."""
+    type_, vid = params['type'], params['id']
+    if params.get('src') == 'm' and type_ == 'movie' and _meta_configured() \
+            and kodi.setting_bool('prefer_imdb') and not vid.startswith('tt'):
+        return AIOMetadata().imdb_for(type_, vid)
+    return vid
 
 
 def _end(content=None, cache=True, sort=False):
@@ -70,10 +101,10 @@ def _extra(cat, name):
     return None
 
 
-def _context_for_meta(type_, meta_id, name):
-    ctx = [(kodi.s(30040), 'Container.Update(%s)' % kodi.build_url(action='streams', type=type_, id=meta_id, title=name))]
+def _context_for_meta(type_, meta_id, name, src='a'):
+    ctx = [(kodi.s(30040), 'Container.Update(%s)' % kodi.build_url(action='streams', type=type_, id=meta_id, title=name, src=src))]
     if type_ == 'movie':
-        ctx.append((kodi.s(30041), 'PlayMedia(%s)' % kodi.build_url(action='play', type=type_, id=meta_id, auto=1)))
+        ctx.append((kodi.s(30041), 'PlayMedia(%s)' % kodi.build_url(action='play', type=type_, id=meta_id, auto=1, src=src)))
     return ctx
 
 
@@ -98,22 +129,39 @@ def root(params):
         _add(kodi.build_url(action='set_manifest'), li, folder=False)
         return _end(cache=False)
 
-    catalogs = client.catalogs()
-    if any(_extra(c, 'search') for c in catalogs):
+    sources = _sources()
+    loaded = []
+    for src in sources:
+        c = client if src == 'a' else _cat_client(src)
+        try:
+            m = c.manifest()
+        except ApiError as e:
+            li = items.folder_item('[COLOR red]AIOMetadata: %s[/COLOR]' % e, plot=str(e))
+            _add(kodi.build_url(action='set_meta'), li, folder=False)
+            continue
+        loaded.append((src, c, m))
+    if not loaded:  # AIOMetadata down: fall back to AIOStreams' own catalogs
+        loaded = [('a', client, manifest)]
+
+    if any(_extra(cat, 'search') for _, c, _m in loaded for cat in c.catalogs()):
         _add(kodi.build_url(action='search'), items.folder_item('[B]%s[/B]' % kodi.s(30021)))
     group = kodi.setting_bool('group_by_type')
-    types_seen = []
-    for cat in catalogs:
-        search = _extra(cat, 'search')
-        if search and search.get('isRequired'):
-            continue  # search-only catalog
-        if group:
-            if cat.get('type') not in types_seen:
-                types_seen.append(cat.get('type'))
-            continue
-        _add_catalog_entry(cat)
-    for t in types_seen:
-        _add(kodi.build_url(action='type', type=t), items.folder_item(items.type_label(t)))
+    for src, c, m in loaded:
+        if len(loaded) > 1:
+            _add(kodi.build_url(action='noop'),
+                 items.folder_item('[COLOR grey]-- %s --[/COLOR]' % (m.get('name') or src)), folder=False)
+        types_seen = []
+        for cat in c.catalogs():
+            search = _extra(cat, 'search')
+            if search and search.get('isRequired'):
+                continue  # search-only catalog
+            if group:
+                if cat.get('type') not in types_seen:
+                    types_seen.append(cat.get('type'))
+                continue
+            _add_catalog_entry(cat, src)
+        for t in types_seen:
+            _add(kodi.build_url(action='type', type=t, src=src), items.folder_item(items.type_label(t)))
 
     _add(kodi.build_url(action='play_id'), items.folder_item(kodi.s(30022)), folder=True)
     _add(kodi.build_url(action='tools'), items.folder_item(kodi.s(30023)))
@@ -121,38 +169,44 @@ def root(params):
     _end(cache=False)
 
 
-def _add_catalog_entry(cat, with_type=True):
+def _add_catalog_entry(cat, src='a', with_type=True):
     label = cat.get('name') or cat.get('id')
     if with_type:
         label = '%s [COLOR grey](%s)[/COLOR]' % (label, items.type_label(cat.get('type')))
     genre = _extra(cat, 'genre')
-    url_kw = dict(action='catalog', type=cat.get('type'), cid=cat.get('id'))
+    url_kw = dict(action='catalog', type=cat.get('type'), cid=cat.get('id'), src=src)
     if genre and genre.get('isRequired'):
         url_kw['action'] = 'genres'
-    _add(kodi.build_url(**url_kw), items.folder_item(label))
+    url = kodi.build_url(**url_kw)
+    li = items.folder_item(label)
+    li.addContextMenuItems([(kodi.s(30082), 'RunPlugin(%s)' % kodi.build_url(action='widget_path', path=url))])
+    _add(url, li)
 
 
 def by_type(params):
-    client = _client()
+    src = _src(params)
+    client = _cat_client(src)
     for cat in client.catalogs():
         search = _extra(cat, 'search')
         if cat.get('type') == params['type'] and not (search and search.get('isRequired')):
-            _add_catalog_entry(cat, with_type=False)
+            _add_catalog_entry(cat, src, with_type=False)
     _end()
 
 
 def genres(params):
-    client = _client()
+    src = _src(params)
+    client = _cat_client(src)
     cat = client.find_catalog(params['type'], params['cid'])
     ex = _extra(cat or {}, 'genre') or {}
     for g in ex.get('options') or []:
-        _add(kodi.build_url(action='catalog', type=params['type'], cid=params['cid'], genre=g),
+        _add(kodi.build_url(action='catalog', type=params['type'], cid=params['cid'], genre=g, src=src),
              items.folder_item(g))
     _end()
 
 
 def catalog(params):
-    client = _client()
+    src = _src(params)
+    client = _cat_client(src)
     type_, cid = params['type'], params['cid']
     skip = int(params.get('skip') or 0)
     cat = client.find_catalog(type_, cid) or {}
@@ -166,7 +220,7 @@ def catalog(params):
 
     genre_ex = _extra(cat, 'genre')
     if not skip and not params.get('genre') and not params.get('search') and genre_ex and genre_ex.get('options'):
-        _add(kodi.build_url(action='genres', type=type_, cid=cid),
+        _add(kodi.build_url(action='genres', type=type_, cid=cid, src=src),
              items.folder_item('[B]%s[/B]' % kodi.s(30024)))
 
     with kodi.Busy():
@@ -174,17 +228,17 @@ def catalog(params):
     for err in errors:
         kodi.notify(st.clean(err.get('description') or err.get('name') or ''), kodi.s(30103))
 
-    _list_metas(metas, type_)
+    _list_metas(metas, type_, src)
 
     if metas and _extra(cat, 'skip') and not params.get('search'):
-        nxt = dict(params, skip=skip + len(metas))
+        nxt = dict(params, skip=skip + len(metas), src=src)
         nxt['action'] = 'catalog'
         page = (skip // max(len(metas), 1)) + 2
         _add(kodi.build_url(**nxt), items.folder_item('[B]%s[/B]' % (kodi.s(30025) % page)))
     _end('movies' if type_ == 'movie' else 'tvshows', sort=False)
 
 
-def _list_metas(metas, default_type):
+def _list_metas(metas, default_type, src='a'):
     for meta in metas:
         mtype = meta.get('type') or default_type
         mid = meta.get('id')
@@ -192,15 +246,15 @@ def _list_metas(metas, default_type):
             continue
         name = meta.get('name') or mid
         if mtype == 'movie':
-            url = kodi.build_url(action=_movie_action(), type=mtype, id=mid, title=name)
+            url = kodi.build_url(action=_movie_action(), type=mtype, id=mid, title=name, src=src)
             li = items.meta_item(meta, mtype, playable=_movie_action() == 'play', path=url)
-            li.addContextMenuItems(_context_for_meta(mtype, mid, name))
+            li.addContextMenuItems(_context_for_meta(mtype, mid, name, src))
             _add(url, li, folder=_movie_action() != 'play')
         else:
-            url = kodi.build_url(action='show', type=mtype, id=mid)
+            url = kodi.build_url(action='show', type=mtype, id=mid, src=src)
             li = items.meta_item(meta, mtype)
             li.addContextMenuItems([(kodi.s(30040), 'Container.Update(%s)' % kodi.build_url(
-                action='streams', type=mtype, id=mid, title=name))])
+                action='streams', type=mtype, id=mid, title=name, src=src))])
             _add(url, li)
 
 
@@ -219,7 +273,8 @@ def _videos(meta):
 
 
 def show(params):
-    client = _client()
+    src = _src(params)
+    client = _cat_client(src)
     type_, mid = params['type'], params['id']
     try:
         with kodi.Busy():
@@ -231,7 +286,7 @@ def show(params):
     vids = _videos(meta)
     if not vids:
         # single video item (e.g. a channel / tv entry without episodes)
-        url = kodi.build_url(action='play', type=type_, id=mid, title=meta.get('name'))
+        url = kodi.build_url(action='play', type=type_, id=mid, title=meta.get('name'), src=src)
         li = items.meta_item(meta, type_, playable=True, path=url)
         li.setLabel('[B]%s[/B] %s' % (kodi.s(30042), meta.get('name') or ''))
         _add(url, li, folder=False)
@@ -240,7 +295,7 @@ def show(params):
                      key=lambda x: (x == 0, x))
     if params.get('season') is not None or len(seasons) <= 1 or kodi.setting_bool('flatten_seasons'):
         season = params.get('season')
-        return _episodes(client, meta, type_, vids, int(season) if season is not None else None)
+        return _episodes(client, meta, type_, vids, int(season) if season is not None else None, src)
     for se in seasons:
         label = kodi.s(30030) if se == 0 else kodi.s(30031) % se
         li = items.meta_item(meta, type_, label=label)
@@ -248,12 +303,12 @@ def show(params):
         li.getVideoInfoTag().setSeason(int(se))
         count = sum(1 for v in vids if v.get('season') == se)
         li.setProperty('TotalEpisodes', str(count))
-        _add(kodi.build_url(action='show', type=type_, id=mid, season=se), li)
+        _add(kodi.build_url(action='show', type=type_, id=mid, season=se, src=src), li)
     xbmcplugin.setPluginCategory(kodi.HANDLE, meta.get('name') or '')
     _end('seasons')
 
 
-def _episodes(client, meta, type_, vids, season):
+def _episodes(client, meta, type_, vids, season, src='a'):
     if season is not None:
         vids = [v for v in vids if v.get('season') == season]
     vids = sorted(vids, key=lambda v: (v.get('season') or 0, v.get('episode') or v.get('number') or 0))
@@ -265,10 +320,10 @@ def _episodes(client, meta, type_, vids, season):
         if hide_future and rel and rel > today:
             continue
         url = kodi.build_url(action='play' if kodi.setting_int('stream_select', 0) != 1 else 'streams',
-                             type=type_, id=v['id'], title=meta.get('name'))
+                             type=type_, id=v['id'], title=meta.get('name'), src=src)
         li = items.episode_item(meta, v, type_, url)
         li.addContextMenuItems([(kodi.s(30040), 'Container.Update(%s)' % kodi.build_url(
-            action='streams', type=type_, id=v['id'], title=meta.get('name')))])
+            action='streams', type=type_, id=v['id'], title=meta.get('name'), src=src))])
         _add(url, li, folder=kodi.setting_int('stream_select', 0) == 1)
     xbmcplugin.setPluginCategory(kodi.HANDLE, meta.get('name') or '')
     _end('episodes')
@@ -295,7 +350,7 @@ def _notice_text(notices):
 def streams_dir(params):
     """List streams as a directory of playable items."""
     client = _client()
-    type_, vid = params['type'], params['id']
+    type_, vid = params['type'], _stream_id(params)
     try:
         playable, notices = _fetch_streams(client, type_, vid)
     except ApiError as e:
@@ -346,7 +401,7 @@ def _choose(playable, notices, title, auto):
 def play(params):
     """Resolve a movie/episode id: fetch streams, choose, resolve."""
     client = _client()
-    type_, vid = params['type'], params['id']
+    type_, vid = params['type'], _stream_id(params)
     title = params.get('title') or ''
     try:
         playable, notices = _fetch_streams(client, type_, vid)
@@ -444,15 +499,19 @@ def search_del(params):
 
 
 def search_query(params):
-    client = _client()
     q = params['q']
-    cats = [c for c in client.catalogs() if _extra(c, 'search')]
+    cats = []
+    for src in _sources():
+        try:
+            cats += [(src, c) for c in _cat_client(src).catalogs() if _extra(c, 'search')]
+        except ApiError as e:
+            kodi.log('search catalogs (%s) failed: %s' % (src, e))
     if len(cats) == 1:
-        params = {'type': cats[0]['type'], 'cid': cats[0]['id'], 'search': q}
-        return catalog(params)
-    for cat in cats:
+        src, cat = cats[0]
+        return catalog({'type': cat['type'], 'cid': cat['id'], 'search': q, 'src': src})
+    for src, cat in cats:
         label = '%s [COLOR grey](%s)[/COLOR]' % (cat.get('name') or cat.get('id'), items.type_label(cat.get('type')))
-        _add(kodi.build_url(action='catalog', type=cat['type'], cid=cat['id'], search=q), items.folder_item(label))
+        _add(kodi.build_url(action='catalog', type=cat['type'], cid=cat['id'], search=q, src=src), items.folder_item(label))
     xbmcplugin.setPluginCategory(kodi.HANDLE, q)
     _end()
 
@@ -485,7 +544,8 @@ def play_id_input(params):
 
 def tools(params):
     entries = [
-        (30020, 'set_manifest'), (30050, 'test'), (30051, 'clear_cache'),
+        (30020, 'set_manifest'), (30050, 'test'), (30080, 'set_meta'), (30081, 'test_meta'),
+        (30051, 'clear_cache'),
         (30052, 'install_tmdbh'), (30027, 'settings'),
     ]
     for sid, action in entries:
@@ -509,9 +569,39 @@ def set_manifest(params):
     xbmc.executebuiltin('Container.Refresh')
 
 
+def set_meta(params):
+    url = xbmcgui.Dialog().input(kodi.s(30083), defaultt=kodi.setting('meta_url'))
+    if not url:
+        if kodi.setting('meta_url') and xbmcgui.Dialog().yesno(kodi.ADDON_NAME, kodi.s(30086)):
+            kodi.set_setting('meta_url', '')
+            kodi.notify(kodi.s(30085))
+            xbmc.executebuiltin('Container.Refresh')
+        return
+    try:
+        base, query = normalise_manifest_url(url)
+    except ApiError as e:
+        return kodi.ok(str(e))
+    full = base + '/manifest.json' + ('?' + query if query else '')
+    kodi.set_setting('meta_url', full)
+    cache_clear()
+    test({'manifest': full, 'meta': '1'})
+    xbmc.executebuiltin('Container.Refresh')
+
+
+def test_meta(params):
+    if not _meta_configured():
+        return set_meta(params)
+    test({'meta': '1'})
+
+
+def widget_path(params):
+    xbmcgui.Dialog().textviewer(kodi.s(30084), params.get('path', ''))
+
+
 def test(params):
     try:
-        client = AIOStreams(params.get('manifest'))
+        cls = AIOMetadata if params.get('meta') == '1' else AIOStreams
+        client = cls(params.get('manifest'))
         with kodi.Busy():
             m = client.manifest(force=True)
         cats = len(client.catalogs())
@@ -545,6 +635,7 @@ ROUTES = {
     'play_id': play_id, 'play_id_input': play_id_input, 'tools': tools,
     'set_manifest': set_manifest, 'test': test, 'clear_cache': clear_cache_action,
     'install_tmdbh': install_tmdbh, 'settings': settings, 'noop': noop,
+    'set_meta': set_meta, 'test_meta': test_meta, 'widget_path': widget_path,
 }
 
 

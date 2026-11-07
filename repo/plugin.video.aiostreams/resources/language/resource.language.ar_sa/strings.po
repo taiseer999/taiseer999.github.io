@@ -290,3 +290,71 @@ msgctxt "#30243"
 msgid "Allow invalid SSL certificates"
 msgstr "السماح بشهادات SSL غير الصالحة"
 
+
+msgctxt "#30080"
+msgid "Set AIOMetadata URL"
+msgstr "تعيين رابط AIOMetadata"
+
+msgctxt "#30081"
+msgid "Test AIOMetadata connection"
+msgstr "اختبار الاتصال بـ AIOMetadata"
+
+msgctxt "#30082"
+msgid "Show widget path"
+msgstr "عرض مسار القائمة (Widget)"
+
+msgctxt "#30083"
+msgid "AIOMetadata manifest URL (leave empty to remove)"
+msgstr "رابط ملف manifest لـ AIOMetadata (اتركه فارغًا لإزالته)"
+
+msgctxt "#30084"
+msgid "Widget path"
+msgstr "مسار القائمة (Widget)"
+
+msgctxt "#30085"
+msgid "AIOMetadata URL removed"
+msgstr "تمت إزالة رابط AIOMetadata"
+
+msgctxt "#30086"
+msgid "Remove the AIOMetadata URL and go back to AIOStreams catalogs?"
+msgstr "هل تريد إزالة رابط AIOMetadata والعودة إلى فهارس AIOStreams؟"
+
+msgctxt "#30250"
+msgid "Metadata (AIOMetadata)"
+msgstr "البيانات الوصفية (AIOMetadata)"
+
+msgctxt "#30251"
+msgid "AIOMetadata manifest URL"
+msgstr "رابط ملف manifest لـ AIOMetadata"
+
+msgctxt "#30252"
+msgid "Optional. Catalogs, search and title details come from AIOMetadata; streams still come from AIOStreams. Set the language (for example Arabic) on AIOMetadata's own configure page."
+msgstr "اختياري. تأتي الفهارس والبحث وتفاصيل العناوين من AIOMetadata، بينما تبقى المصادر من AIOStreams. اضبط اللغة (العربية مثلًا) من صفحة إعدادات AIOMetadata نفسها."
+
+msgctxt "#30253"
+msgid "Catalog source"
+msgstr "مصدر الفهارس"
+
+msgctxt "#30254"
+msgid "AIOStreams"
+msgstr "AIOStreams"
+
+msgctxt "#30255"
+msgid "AIOMetadata"
+msgstr "AIOMetadata"
+
+msgctxt "#30256"
+msgid "Both"
+msgstr "كلاهما"
+
+msgctxt "#30257"
+msgid "Use IMDb IDs for movie streams"
+msgstr "استخدام معرّفات IMDb عند طلب مصادر الأفلام"
+
+msgctxt "#30258"
+msgid "Used only when an AIOMetadata URL is set."
+msgstr "يُستخدم فقط عند تعيين رابط AIOMetadata."
+
+msgctxt "#30259"
+msgid "AIOMetadata may list movies by TMDB/TVDB id. When on, the IMDb id from its metadata is sent to AIOStreams, which most stream add-ons expect."
+msgstr "قد يعرض AIOMetadata الأفلام بمعرّفات TMDB أو TVDB. عند التفعيل يُرسَل معرّف IMDb من بياناته إلى AIOStreams، وهو ما تتوقعه معظم إضافات المصادر."

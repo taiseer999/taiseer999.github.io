@@ -16,6 +16,37 @@
                     <control type="button" format="action"/>
                 </setting>
             </group>
+            <group id="3" label="30250">
+                <setting id="meta_url" type="string" label="30251" help="30252">
+                    <level>0</level>
+                    <default/>
+                    <constraints><allowempty>true</allowempty></constraints>
+                    <control type="edit" format="string"><heading>30251</heading></control>
+                </setting>
+                <setting id="test_meta_action" type="action" label="30081">
+                    <level>0</level>
+                    <data>RunPlugin(plugin://plugin.video.aiostreams/?action=test_meta)</data>
+                    <constraints><allowempty>true</allowempty></constraints>
+                    <control type="button" format="action"/>
+                </setting>
+                <setting id="catalog_source" type="integer" label="30253" help="30258">
+                    <level>0</level>
+                    <default>1</default>
+                    <constraints>
+                        <options>
+                            <option label="30254">0</option>
+                            <option label="30255">1</option>
+                            <option label="30256">2</option>
+                        </options>
+                    </constraints>
+                    <control type="spinner" format="string"/>
+                </setting>
+                <setting id="prefer_imdb" type="boolean" label="30257" help="30259">
+                    <level>1</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
             <group id="2" label="30204">
                 <setting id="group_by_type" type="boolean" label="30205">
                     <level>0</level>
