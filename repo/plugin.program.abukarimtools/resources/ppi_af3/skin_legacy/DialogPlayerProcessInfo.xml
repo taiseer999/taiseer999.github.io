@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
+    <!-- ABK_LP_PPI -->
+    <onload condition="Skin.HasSetting(abk.lucentplayer) + Player.HasVideo + !Pvr.IsPlayingTV">RunScript(special://home/addons/plugin.program.abukarimtools/resources/lib/lucent_playerinfo.py,open)</onload>
+    <onload condition="Skin.HasSetting(abk.lucentplayer) + Player.HasVideo + !Pvr.IsPlayingTV">Dialog.Close(playerprocessinfo,true)</onload>
 	<depth>DepthOSD</depth>
 	<defaultcontrol always="true">5553</defaultcontrol>
 	<animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>

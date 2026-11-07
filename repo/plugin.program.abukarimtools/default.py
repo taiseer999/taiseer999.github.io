@@ -35,6 +35,7 @@ ICONS  = {
     'af3_trailers':   ADDON_PATH + 'resources/icons/af3_trailers.png',
     'af3_waves':      ADDON_PATH + 'resources/icons/af3_waves.png',
     'af3_lucent':     ADDON_PATH + 'resources/icons/af3_lucent.png',
+    'af3_lucentplayer': ADDON_PATH + 'resources/icons/af3_lucentplayer.png',
     'af3_plotright':  ADDON_PATH + 'resources/icons/af3_plotright.png',
     'font_scale':     ADDON_PATH + 'resources/icons/font_scale.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/sources.png',
@@ -113,6 +114,7 @@ CATEGORIES = [
         ('af3_trailers',   30430),
         ('af3_waves',      30603),
         ('af3_lucent',     30850),
+        ('af3_lucentplayer', 32080),
         ('af3_plotright',  30890),
         ('font_scale',     30740),
     ]),
@@ -138,6 +140,8 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 'streaming_rows',
                 # 4.6.8: AF3 Lucent Look (Off / Glass / AMOLED picker)
                 'af3_lucent',
+                # 4.7.25: AF3 Lucent Player (on/off switch)
+                'af3_lucentplayer',
                 # 3.4.39: Lucent Theme per add-on (switch list dialog)
                 'lucent_theme',
                 # 3.4.6: Font Size (original / +5% / -5%)
@@ -343,6 +347,9 @@ def _switch_state(mode):
         if mode == 'af3_plotright':
             from resources.lib import af3_plotright_toggle
             return af3_plotright_toggle.plot_right_on()
+        if mode == 'af3_lucentplayer':
+            from resources.lib import af3_lucentplayer_toggle
+            return af3_lucentplayer_toggle.player_on()
         if mode == 'af3_trailers':
             from resources.lib.af3_trailers import config as _tcfg
             return bool(_tcfg.load()['enabled'])
@@ -603,6 +610,9 @@ def router():
     elif mode == 'af3_plotright':
         from resources.lib import af3_plotright_toggle
         af3_plotright_toggle.run()
+    elif mode == 'af3_lucentplayer':
+        from resources.lib import af3_lucentplayer_toggle
+        af3_lucentplayer_toggle.run()
     elif mode == 'lucent_theme':
         from resources.lib import lucent_toggle
         lucent_toggle.run()

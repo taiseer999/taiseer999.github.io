@@ -2136,3 +2136,303 @@ msgctxt "#30988"
 msgid "Next episode - searching %s"
 msgstr ""
 
+msgctxt "#32000"
+msgid "Ends at"
+msgstr ""
+
+msgctxt "#32001"
+msgid "Subtitles"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Audio"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Video settings"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Bookmarks"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Stop"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Next"
+msgstr ""
+
+msgctxt "#32007"
+msgid "Previous"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Information"
+msgstr ""
+
+msgctxt "#32009"
+msgid "Pause"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Buffering"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Back 10 seconds"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Forward 30 seconds"
+msgstr ""
+
+msgctxt "#32013"
+msgid "YOU'RE WATCHING"
+msgstr ""
+
+msgctxt "#32014"
+msgid "Statistics"
+msgstr ""
+
+msgctxt "#32015"
+msgid "SOURCE"
+msgstr ""
+
+msgctxt "#32016"
+msgid "VIDEO"
+msgstr ""
+
+msgctxt "#32017"
+msgid "AUDIO"
+msgstr ""
+
+msgctxt "#32018"
+msgid "NETWORK"
+msgstr ""
+
+msgctxt "#32019"
+msgid "SYSTEM"
+msgstr ""
+
+msgctxt "#32020"
+msgid "File"
+msgstr ""
+
+msgctxt "#32021"
+msgid "Location"
+msgstr ""
+
+msgctxt "#32022"
+msgid "Type"
+msgstr ""
+
+msgctxt "#32023"
+msgid "Bitrate"
+msgstr ""
+
+msgctxt "#32024"
+msgid "HDR"
+msgstr ""
+
+msgctxt "#32025"
+msgid "Format"
+msgstr ""
+
+msgctxt "#32026"
+msgid "Decoder"
+msgstr ""
+
+msgctxt "#32027"
+msgid "Deinterlace"
+msgstr ""
+
+msgctxt "#32028"
+msgid "Display"
+msgstr ""
+
+msgctxt "#32029"
+msgid "Queue"
+msgstr ""
+
+msgctxt "#32030"
+msgid "Buffer"
+msgstr ""
+
+msgctxt "#32031"
+msgid "CPU clock"
+msgstr ""
+
+msgctxt "#32032"
+msgid "Memory"
+msgstr ""
+
+msgctxt "#32033"
+msgid "Channel down"
+msgstr ""
+
+msgctxt "#32034"
+msgid "Channel up"
+msgstr ""
+
+msgctxt "#32035"
+msgid "Record"
+msgstr ""
+
+msgctxt "#32036"
+msgid "Sleep timer"
+msgstr ""
+
+msgctxt "#32037"
+msgid "Search subtitles"
+msgstr ""
+
+msgctxt "#32038"
+msgid "Add / remove channel in favourites"
+msgstr ""
+
+msgctxt "#32039"
+msgid "Player info"
+msgstr ""
+
+msgctxt "#32040"
+msgid "Picture"
+msgstr ""
+
+msgctxt "#32041"
+msgid "Sound"
+msgstr ""
+
+msgctxt "#32042"
+msgid "Subtitles"
+msgstr ""
+
+msgctxt "#32043"
+msgid "Container"
+msgstr ""
+
+msgctxt "#32044"
+msgid "Resolution"
+msgstr ""
+
+msgctxt "#32045"
+msgid "Track"
+msgstr ""
+
+msgctxt "#32046"
+msgid "Quality"
+msgstr ""
+
+msgctxt "#32047"
+msgid "Temperature CPU"
+msgstr ""
+
+msgctxt "#32048"
+msgid "Temperature GPU"
+msgstr ""
+
+msgctxt "#32049"
+msgid "Render"
+msgstr ""
+
+msgctxt "#32050"
+msgid "Video queue"
+msgstr ""
+
+msgctxt "#32051"
+msgid "Overview"
+msgstr ""
+
+msgctxt "#32052"
+msgid "switch"
+msgstr ""
+
+msgctxt "#32053"
+msgid "Resolution"
+msgstr ""
+
+msgctxt "#32054"
+msgid "Aspect ratio"
+msgstr ""
+
+msgctxt "#32055"
+msgid "Frame rate"
+msgstr ""
+
+msgctxt "#32056"
+msgid "Scan"
+msgstr ""
+
+msgctxt "#32057"
+msgid "Brightness · HDR"
+msgstr ""
+
+msgctxt "#32058"
+msgid "Colour"
+msgstr ""
+
+msgctxt "#32059"
+msgid "From file to screen"
+msgstr ""
+
+msgctxt "#32060"
+msgid "Picture bitrate"
+msgstr ""
+
+msgctxt "#32061"
+msgid "From file to your speakers"
+msgstr ""
+
+msgctxt "#32062"
+msgid "What you hear"
+msgstr ""
+
+msgctxt "#32063"
+msgid "Output"
+msgstr ""
+
+msgctxt "#32064"
+msgid "Device"
+msgstr ""
+
+msgctxt "#32065"
+msgid "Configuration"
+msgstr ""
+
+msgctxt "#32066"
+msgid "Volume"
+msgstr ""
+
+msgctxt "#32067"
+msgid "Audio queue"
+msgstr ""
+
+msgctxt "#32068"
+msgid "sofa"
+msgstr ""
+
+msgctxt "#32069"
+msgid "HEIGHT"
+msgstr ""
+
+msgctxt "#32070"
+msgid "Playing"
+msgstr ""
+
+msgctxt "#32080"
+msgid "AF3: Lucent Player"
+msgstr ""
+
+msgctxt "#32081"
+msgid "Lucent Player turned on (OSD, pause card and statistics)"
+msgstr ""
+
+msgctxt "#32082"
+msgid "Lucent Player turned off - the Arctic Fuse 3 player is back"
+msgstr ""
+
+msgctxt "#32083"
+msgid "Lucent Player files are not in the skin yet - run Apply Patches first"
+msgstr ""
+

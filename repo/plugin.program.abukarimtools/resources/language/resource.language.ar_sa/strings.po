@@ -2136,3 +2136,303 @@ msgctxt "#30988"
 msgid "Next episode - searching %s"
 msgstr "الحلقة التالية: جارٍ البحث في %s"
 
+msgctxt "#32000"
+msgid "Ends at"
+msgstr "ينتهي في"
+
+msgctxt "#32001"
+msgid "Subtitles"
+msgstr "الترجمة"
+
+msgctxt "#32002"
+msgid "Audio"
+msgstr "الصوت"
+
+msgctxt "#32003"
+msgid "Video settings"
+msgstr "إعدادات الفيديو"
+
+msgctxt "#32004"
+msgid "Bookmarks"
+msgstr "العلامات المرجعية"
+
+msgctxt "#32005"
+msgid "Stop"
+msgstr "إيقاف"
+
+msgctxt "#32006"
+msgid "Next"
+msgstr "التالي"
+
+msgctxt "#32007"
+msgid "Previous"
+msgstr "السابق"
+
+msgctxt "#32008"
+msgid "Information"
+msgstr "معلومات"
+
+msgctxt "#32009"
+msgid "Pause"
+msgstr "إيقاف مؤقت"
+
+msgctxt "#32010"
+msgid "Buffering"
+msgstr "جارٍ التخزين المؤقت"
+
+msgctxt "#32011"
+msgid "Back 10 seconds"
+msgstr "رجوع 10 ثوانٍ"
+
+msgctxt "#32012"
+msgid "Forward 30 seconds"
+msgstr "تقديم 30 ثانية"
+
+msgctxt "#32013"
+msgid "YOU'RE WATCHING"
+msgstr "أنت تشاهد"
+
+msgctxt "#32014"
+msgid "Statistics"
+msgstr "الإحصائيات"
+
+msgctxt "#32015"
+msgid "SOURCE"
+msgstr "المصدر"
+
+msgctxt "#32016"
+msgid "VIDEO"
+msgstr "الفيديو"
+
+msgctxt "#32017"
+msgid "AUDIO"
+msgstr "الصوت"
+
+msgctxt "#32018"
+msgid "NETWORK"
+msgstr "الشبكة"
+
+msgctxt "#32019"
+msgid "SYSTEM"
+msgstr "النظام"
+
+msgctxt "#32020"
+msgid "File"
+msgstr "الملف"
+
+msgctxt "#32021"
+msgid "Location"
+msgstr "الموقع"
+
+msgctxt "#32022"
+msgid "Type"
+msgstr "النوع"
+
+msgctxt "#32023"
+msgid "Bitrate"
+msgstr "معدل البت"
+
+msgctxt "#32024"
+msgid "HDR"
+msgstr "HDR"
+
+msgctxt "#32025"
+msgid "Format"
+msgstr "الصيغة"
+
+msgctxt "#32026"
+msgid "Decoder"
+msgstr "فك الترميز"
+
+msgctxt "#32027"
+msgid "Deinterlace"
+msgstr "إزالة التشابك"
+
+msgctxt "#32028"
+msgid "Display"
+msgstr "الشاشة"
+
+msgctxt "#32029"
+msgid "Queue"
+msgstr "قائمة الانتظار"
+
+msgctxt "#32030"
+msgid "Buffer"
+msgstr "المخزن المؤقت"
+
+msgctxt "#32031"
+msgid "CPU clock"
+msgstr "تردد المعالج"
+
+msgctxt "#32032"
+msgid "Memory"
+msgstr "الذاكرة"
+
+msgctxt "#32033"
+msgid "Channel down"
+msgstr "القناة السابقة"
+
+msgctxt "#32034"
+msgid "Channel up"
+msgstr "القناة التالية"
+
+msgctxt "#32035"
+msgid "Record"
+msgstr "تسجيل"
+
+msgctxt "#32036"
+msgid "Sleep timer"
+msgstr "مؤقت النوم"
+
+msgctxt "#32037"
+msgid "Search subtitles"
+msgstr "البحث عن ترجمة"
+
+msgctxt "#32038"
+msgid "Add / remove channel in favourites"
+msgstr "إضافة القناة إلى المفضلة أو إزالتها منها"
+
+msgctxt "#32039"
+msgid "Player info"
+msgstr "معلومات المشغل"
+
+msgctxt "#32040"
+msgid "Picture"
+msgstr "الصورة"
+
+msgctxt "#32041"
+msgid "Sound"
+msgstr "الصوت"
+
+msgctxt "#32042"
+msgid "Subtitles"
+msgstr "الترجمة"
+
+msgctxt "#32043"
+msgid "Container"
+msgstr "الحاوية"
+
+msgctxt "#32044"
+msgid "Resolution"
+msgstr "الدقة"
+
+msgctxt "#32045"
+msgid "Track"
+msgstr "المسار"
+
+msgctxt "#32046"
+msgid "Quality"
+msgstr "الجودة"
+
+msgctxt "#32047"
+msgid "Temperature CPU"
+msgstr "حرارة المعالج"
+
+msgctxt "#32048"
+msgid "Temperature GPU"
+msgstr "حرارة معالج الرسوميات"
+
+msgctxt "#32049"
+msgid "Render"
+msgstr "العرض"
+
+msgctxt "#32050"
+msgid "Video queue"
+msgstr "قائمة انتظار الفيديو"
+
+msgctxt "#32051"
+msgid "Overview"
+msgstr "نظرة عامة"
+
+msgctxt "#32052"
+msgid "switch"
+msgstr "تبديل"
+
+msgctxt "#32053"
+msgid "Resolution"
+msgstr "الدقة"
+
+msgctxt "#32054"
+msgid "Aspect ratio"
+msgstr "نسبة العرض إلى الارتفاع"
+
+msgctxt "#32055"
+msgid "Frame rate"
+msgstr "معدل الإطارات"
+
+msgctxt "#32056"
+msgid "Scan"
+msgstr "المسح"
+
+msgctxt "#32057"
+msgid "Brightness · HDR"
+msgstr "السطوع · HDR"
+
+msgctxt "#32058"
+msgid "Colour"
+msgstr "اللون"
+
+msgctxt "#32059"
+msgid "From file to screen"
+msgstr "من الملف إلى الشاشة"
+
+msgctxt "#32060"
+msgid "Picture bitrate"
+msgstr "معدل بت الصورة"
+
+msgctxt "#32061"
+msgid "From file to your speakers"
+msgstr "من الملف إلى مكبرات الصوت"
+
+msgctxt "#32062"
+msgid "What you hear"
+msgstr "ما تسمعه"
+
+msgctxt "#32063"
+msgid "Output"
+msgstr "الإخراج"
+
+msgctxt "#32064"
+msgid "Device"
+msgstr "الجهاز"
+
+msgctxt "#32065"
+msgid "Configuration"
+msgstr "التهيئة"
+
+msgctxt "#32066"
+msgid "Volume"
+msgstr "مستوى الصوت"
+
+msgctxt "#32067"
+msgid "Audio queue"
+msgstr "قائمة انتظار الصوت"
+
+msgctxt "#32068"
+msgid "sofa"
+msgstr "الأريكة"
+
+msgctxt "#32069"
+msgid "HEIGHT"
+msgstr "الارتفاع"
+
+msgctxt "#32070"
+msgid "Playing"
+msgstr "قيد التشغيل"
+
+msgctxt "#32080"
+msgid "AF3: Lucent Player"
+msgstr "AF3: مشغّل Lucent"
+
+msgctxt "#32081"
+msgid "Lucent Player turned on (OSD, pause card and statistics)"
+msgstr "تم تشغيل مشغّل Lucent (شريط التحكم وبطاقة الإيقاف المؤقت والإحصائيات)"
+
+msgctxt "#32082"
+msgid "Lucent Player turned off - the Arctic Fuse 3 player is back"
+msgstr "تم إيقاف مشغّل Lucent، وعاد مشغّل Arctic Fuse 3"
+
+msgctxt "#32083"
+msgid "Lucent Player files are not in the skin yet - run Apply Patches first"
+msgstr "ملفات مشغّل Lucent ليست في المظهر بعد؛ شغّل تطبيق التصحيحات أولًا"
+

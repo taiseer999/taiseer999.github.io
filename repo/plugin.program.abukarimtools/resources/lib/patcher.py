@@ -3935,6 +3935,310 @@ def _audit_sentinels():
                  % patch['rel_path'], xbmc.LOGWARNING)
 
 
+
+# ── AF3: Lucent Player (4.7.25) ──
+# djdirty60's Lucent player (github.com/djdirty60/Lucent, GPL-2.0-or-later),
+# ported to AF3: the OSD, seek bar / "YOU'RE WATCHING" pause card, buffering
+# spinner and the Statistics window (Overview / Video / Audio) that replaces
+# the PPI. Everything lives in our own files (Includes_ABK_LucentPlayer.xml,
+# ABK_LucentPlayerInfo.xml, media/abk_lp/); the AF3 edits below only add
+# includes and wrap AF3's own controls in a group, all gated on
+# Skin.HasSetting(abk.lucentplayer) and !Pvr.IsPlayingTV, so with the bool off
+# AF3 is unchanged and live TV always keeps AF3's own OSD. Always-on install;
+# af3_lucentplayer_toggle flips the bool and reloads the skin.
+# Regenerate the skin files with tools/lucent_player/port.py.
+_LP_MEDIA = (
+    'buttons/audio_fo.png',
+    'buttons/audio_nf.png',
+    'buttons/bookmark_fo.png',
+    'buttons/bookmark_nf.png',
+    'buttons/forward_fo.png',
+    'buttons/forward_nf.png',
+    'buttons/info_fo.png',
+    'buttons/info_nf.png',
+    'buttons/next_fo.png',
+    'buttons/next_nf.png',
+    'buttons/pause_fo.png',
+    'buttons/pause_nf.png',
+    'buttons/play_fo.png',
+    'buttons/play_nf.png',
+    'buttons/prev_fo.png',
+    'buttons/prev_nf.png',
+    'buttons/rewind_fo.png',
+    'buttons/rewind_nf.png',
+    'buttons/search_fo.png',
+    'buttons/search_nf.png',
+    'buttons/sleep_fo.png',
+    'buttons/sleep_nf.png',
+    'buttons/stats_fo.png',
+    'buttons/stats_nf.png',
+    'buttons/stop_fo.png',
+    'buttons/stop_nf.png',
+    'buttons/subtitles_fo.png',
+    'buttons/subtitles_nf.png',
+    'buttons/videosettings_fo.png',
+    'buttons/videosettings_nf.png',
+    'flags/1.0.png',
+    'flags/1080P.png',
+    'flags/2.0.png',
+    'flags/4K.png',
+    'flags/5.1.png',
+    'flags/6.1.png',
+    'flags/7.1.png',
+    'flags/720P.png',
+    'flags/8K.png',
+    'flags/AAC.png',
+    'flags/ATMOS.png',
+    'flags/AV1.png',
+    'flags/AVC.png',
+    'flags/DD+.png',
+    'flags/DD.png',
+    'flags/DTS-HDHR.png',
+    'flags/DTS-HDMA.png',
+    'flags/DTS-X.png',
+    'flags/DTS.png',
+    'flags/DV.png',
+    'flags/DV2.png',
+    'flags/FLAC.png',
+    'flags/HDR10+.png',
+    'flags/HDR10.png',
+    'flags/HEVC.png',
+    'flags/HLG.png',
+    'flags/MP3.png',
+    'flags/OPUS.png',
+    'flags/PCM.png',
+    'flags/SD.png',
+    'flags/TRUEHD.png',
+    'flags/VP9.png',
+    'mask_circle.png',
+    'osd_grad_bottom.png',
+    'osd_grad_left.png',
+    'osd_grad_top.png',
+    'panel.png',
+    'panel_edge.png',
+    'panel_shadow.png',
+    'pill6.png',
+    'pill64.png',
+    'pinfo/badge_dv.png',
+    'pinfo/bar7.png',
+    'pinfo/dot.png',
+    'pinfo/dvbar.png',
+    'pinfo/gamut_2020.png',
+    'pinfo/gamut_709.png',
+    'pinfo/hero_teal.png',
+    'pinfo/ic_aud.png',
+    'pinfo/ic_net.png',
+    'pinfo/ic_src.png',
+    'pinfo/ic_sub.png',
+    'pinfo/ic_sys.png',
+    'pinfo/ic_vid.png',
+    'pinfo/meter_cap.png',
+    'pinfo/meter_fill.png',
+    'pinfo/meter_track.png',
+    'pinfo/res_1080.png',
+    'pinfo/res_4k.png',
+    'pinfo/res_sd.png',
+    'pinfo/resviz.png',
+    'pinfo/room.png',
+    'pinfo/rr10.png',
+    'pinfo/rr12.png',
+    'pinfo/rr16.png',
+    'pinfo/rr16_edge.png',
+    'pinfo/rr22.png',
+    'pinfo/rr28.png',
+    'pinfo/rr28_edge.png',
+    'pinfo/rr6.png',
+    'pinfo/rr8.png',
+    'rr20_glow.png',
+    'slider_track26.png',
+    'spinner.png',
+    'svc/pill36.png',
+    'svc/rr14.png',
+    'white.png',
+)
+_LP_FONTS = '\n            <!-- ABK Lucent Player fonts -->\n            <font><name>abk_lp_font10</name><filename>$PARAM[font_regular]</filename><size>22</size></font>\n            <font><name>abk_lp_font12</name><filename>$PARAM[font_regular]</filename><size>25</size></font>\n            <font><name>abk_lp_font12_bold</name><filename>$PARAM[font_bold]</filename><size>25</size></font>\n            <font><name>abk_lp_font13</name><filename>$PARAM[font_regular]</filename><size>28</size></font>\n            <font><name>abk_lp_font13_bold</name><filename>$PARAM[font_bold]</filename><size>28</size></font>\n            <font><name>abk_lp_font45</name><filename>$PARAM[font_bold]</filename><size>48</size></font>\n            <font><name>abk_lp_font_body</name><filename>$PARAM[font_regular]</filename><size>26</size><linespacing>1.15</linespacing></font>\n            <font><name>abk_lp_font_caps</name><filename>$PARAM[font_bold]</filename><size>22</size></font>\n            <font><name>abk_lp_font_clock</name><filename>$PARAM[font_bold]</filename><size>30</size></font>\n            <font><name>abk_lp_font_label_bold</name><filename>$PARAM[font_bold]</filename><size>25</size></font>\n            <font><name>abk_lp_font_pi_11b</name><filename>$PARAM[font_bold]</filename><size>11</size></font>\n            <font><name>abk_lp_font_pi_13b</name><filename>$PARAM[font_bold]</filename><size>13</size></font>\n            <font><name>abk_lp_font_pi_14b</name><filename>$PARAM[font_bold]</filename><size>14</size></font>\n            <font><name>abk_lp_font_pi_15</name><filename>$PARAM[font_regular]</filename><size>15</size></font>\n            <font><name>abk_lp_font_pi_16b</name><filename>$PARAM[font_bold]</filename><size>16</size></font>\n            <font><name>abk_lp_font_pi_17</name><filename>$PARAM[font_regular]</filename><size>17</size></font>\n            <font><name>abk_lp_font_pi_18s</name><filename>$PARAM[font_bold]</filename><size>18</size></font>\n            <font><name>abk_lp_font_pi_20b</name><filename>$PARAM[font_bold]</filename><size>20</size></font>\n            <font><name>abk_lp_font_pi_21b</name><filename>$PARAM[font_bold]</filename><size>21</size></font>\n            <font><name>abk_lp_font_pi_34b</name><filename>$PARAM[font_bold]</filename><size>34</size></font>\n            <font><name>abk_lp_font_pi_arrow</name><filename>$PARAM[font_regular]</filename><size>26</size></font>\n            <font><name>abk_lp_font_pi_badge</name><filename>$PARAM[font_bold]</filename><size>15</size></font>\n            <font><name>abk_lp_font_pi_core</name><filename>$PARAM[font_regular]</filename><size>13</size></font>\n            <font><name>abk_lp_font_pi_hint</name><filename>$PARAM[font_regular]</filename><size>17</size></font>\n            <font><name>abk_lp_font_pi_kick</name><filename>$PARAM[font_bold]</filename><size>15</size></font>\n            <font><name>abk_lp_font_pi_m</name><filename>$PARAM[font_regular]</filename><size>18</size></font>\n            <font><name>abk_lp_font_pi_mb</name><filename>$PARAM[font_bold]</filename><size>18</size></font>\n            <font><name>abk_lp_font_pi_row</name><filename>$PARAM[font_regular]</filename><size>19</size></font>\n            <font><name>abk_lp_font_pi_rowb</name><filename>$PARAM[font_bold]</filename><size>19</size></font>\n            <font><name>abk_lp_font_pi_sub</name><filename>$PARAM[font_regular]</filename><size>16</size></font>\n            <font><name>abk_lp_font_pi_tab</name><filename>$PARAM[font_bold]</filename><size>19</size></font>\n            <font><name>abk_lp_font_pi_time</name><filename>$PARAM[font_regular]</filename><size>22</size></font>\n            <font><name>abk_lp_font_pi_title</name><filename>$PARAM[font_bold]</filename><size>30</size></font>\n'
+_LP_PPI = '<!-- ABK_LP_PPI -->\n    <onload condition="Skin.HasSetting(abk.lucentplayer) + Player.HasVideo + !Pvr.IsPlayingTV">RunScript(special://home/addons/plugin.program.abukarimtools/resources/lib/lucent_playerinfo.py,open)</onload>\n    <onload condition="Skin.HasSetting(abk.lucentplayer) + Player.HasVideo + !Pvr.IsPlayingTV">Dialog.Close(playerprocessinfo,true)</onload>'
+
+PATCHES += [
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', _f),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'lucent_player', _f),
+        'description': 'AF3 Lucent Player - %s' % _f,
+    } for _f in ('Includes_ABK_LucentPlayer.xml', 'ABK_LucentPlayerInfo.xml')
+]
+PATCHES += [
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lp', *_m.split('/')),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'lucent_player', 'media', *_m.split('/')),
+        'description': 'AF3 Lucent Player - texture %s' % _m,
+    } for _m in _LP_MEDIA
+]
+PATCHES += [
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes.xml'),
+        'not_found_ok': True,
+        'old': '    <include file="Includes_OSD.xml" />',
+        'new': '    <include file="Includes_OSD.xml" />\n    <include file="Includes_ABK_LucentPlayer.xml" />  <!-- ABUKARIM: Lucent Player -->',
+        'already_patched_check': 'Includes_ABK_LucentPlayer.xml',
+        'description': 'AF3 Lucent Player - register Includes_ABK_LucentPlayer.xml',
+    },
+    {
+        # Lucent's sizes, the active fontset's own font files (Arabic-safe).
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Font.xml'),
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': 'ABK Lucent Player fonts',
+        'fallback_pattern': r'(<include name="Font_Default">[\s\S]*?<definition>)',
+        'fallback_repl': r'\1' + _LP_FONTS,
+        'description': 'AF3 Lucent Player - fonts (every fontset)',
+    },
+    # 4.7.26: AF3 keeps its own OSD buttons; only the Lucent OSD include is
+    # added. The first two entries undo the 4.7.25 wrapper (that hid the AF3
+    # buttons) on skins patched by 4.7.25.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'not_found_ok': True,
+        'old': '<!-- ABK_LP_WRAP -->\n        <include condition="Skin.HasSetting(abk.lucentplayer)">ABK_LP_VideoOSD</include>\n        <control type="group">\n            <visible>!Skin.HasSetting(abk.lucentplayer) | Pvr.IsPlayingTV</visible>',
+        'new': '<!-- ABK_LP_OSD2 -->\n        <include condition="Skin.HasSetting(abk.lucentplayer)">ABK_LP_VideoOSD</include>\n        <control type="group">',
+        'already_patched_check': 'ABK_LP_OSD2',
+        'description': 'AF3 Lucent Player - OSD: AF3 buttons back (4.7.25 skins)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'not_found_ok': True,
+        'old': '<onload condition="Skin.HasSetting(abk.lucentplayer) + !Pvr.IsPlayingTV">SetFocus(7103)</onload>\n    ',
+        'new': '',
+        'already_patched_check': None,
+        'description': 'AF3 Lucent Player - OSD: AF3 default focus back (4.7.25 skins)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'not_found_ok': True,
+        'old': '    <controls>',
+        'new': '    <controls>\n        <!-- ABK_LP_OSD2 -->\n        <include condition="Skin.HasSetting(abk.lucentplayer)">ABK_LP_VideoOSD</include>',
+        'already_patched_check': 'ABK_LP_VideoOSD',
+        'description': 'AF3 Lucent Player - OSD',
+    },
+    {
+        # Statistics button (the Lucent PPI) in the AF3 OSD, before the PPI button.
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_u3k.xml'),
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': '<!-- ABK_LP_STATS -->',
+        'fallback_pattern': r'(\n[ \t]*<control type="button" id="6009">)',
+        'fallback_repl': ('\n\t\t<!-- ABK_LP_STATS -->'
+                          '\n\t\t<control type="button" id="6013">'
+                          '\n\t\t\t<include>Defs_OSD_Button</include>'
+                          '\n\t\t\t<visible>Skin.HasSetting(abk.lucentplayer)</visible>'
+                          '\n\t\t\t<onclick>CancelAlarm(osd_timeout,true)</onclick>'
+                          '\n\t\t\t<onclick>RunScript(special://home/addons/plugin.program.abukarimtools/resources/lib/lucent_playerinfo.py,open)</onclick>'
+                          '\n\t\t</control>'
+                          '\n\t\t<include content="OSD_Button_Icon_Overlay" condition="Skin.HasSetting(abk.lucentplayer)">'
+                          '\n\t\t\t<param name="icon">abk_lp/af3/stats.png</param>'
+                          '\n\t\t\t<param name="id">6013</param>'
+                          '\n\t\t\t<param name="groupid">6113</param>'
+                          '\n\t\t\t<param name="itemgap">osd_itemgap</param>'
+                          '\n\t\t</include>\\1'),
+        'description': 'AF3 Lucent Player - Statistics button in the AF3 OSD',
+    },
+    {
+        # 4.7.27: the OSD pop-ups (audio, subtitles, info...) draw their own
+        # copy of the button row; without a slot for the Statistics button the
+        # focused button showed twice, one place apart.
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '                <include content="OSD_CustomDialog_FakeButton" condition="![$PARAM[button_9]]">',
+        'new': '                <!-- ABK_LP_STATS slot -->\n                <control type="button" id="6013">\n                    <width>80</width>\n                    <texturefocus />\n                    <texturenofocus />\n                    <font />\n                    <label />\n                    <visible>Skin.HasSetting(abk.lucentplayer)</visible>\n                    <onfocus>Close</onfocus>\n                    <onfocus>SetFocus(6013)</onfocus>\n                </control>\n                <include content="OSD_CustomDialog_FakeButton" condition="![$PARAM[button_9]]">',
+        'already_patched_check': '<!-- ABK_LP_STATS slot -->',
+        'description': 'AF3 Lucent Player - Statistics button slot in the OSD pop-ups',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lp', 'af3', 'stats.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'lucent_player', 'af3', 'stats.png'),
+        'description': 'AF3 Lucent Player - Statistics button icon',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'DialogSeekBar.xml'),
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': '<!-- ABK_LP_WRAP -->',
+        'fallback_pattern': r'<controls>([\s\S]*)</controls>',
+        'fallback_repl': ('<controls>\n        <!-- ABK_LP_WRAP -->\n'
+                          '        <include condition="Skin.HasSetting(abk.lucentplayer)">ABK_LP_SeekBar</include>\n'
+                          '        <control type="group">\n            <visible>!Skin.HasSetting(abk.lucentplayer) | Pvr.IsPlayingTV</visible>'
+                          '\\1        </control>\n    </controls>'),
+        'description': 'AF3 Lucent Player - seek bar and pause card',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoFullScreen.xml'),
+        'not_found_ok': True,
+        'old': '    <controls>',
+        'new': '    <controls>\n        <include condition="Skin.HasSetting(abk.lucentplayer)">ABK_LP_FullScreen</include>  <!-- ABK_LP -->',
+        'already_patched_check': '<!-- ABK_LP -->',
+        'description': 'AF3 Lucent Player - buffering',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'DialogFullScreenInfo.xml'),
+        'not_found_ok': True,
+        'old': '    <controls>',
+        'new': '    <controls>\n        <include condition="Skin.HasSetting(abk.lucentplayer)">ABK_LP_FullScreenInfo</include>  <!-- ABK_LP -->',
+        'already_patched_check': '<!-- ABK_LP -->',
+        'description': 'AF3 Lucent Player - info card',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Custom_1152_OSD_VideoInfoOverlay.xml'),
+        'not_found_ok': True,
+        'old': '    <visible>$EXP[Exp_OSD_QuickInfo]</visible>',
+        'new': '    <visible>$EXP[Exp_OSD_QuickInfo]</visible>\n    <visible>!Skin.HasSetting(abk.lucentplayer) | Pvr.IsPlayingTV</visible>  <!-- ABK_LP -->',
+        'already_patched_check': '<!-- ABK_LP -->',
+        'description': 'AF3 Lucent Player - hide the AF3 quick-info overlay',
+    },
+    {
+        # PPI -> Lucent Statistics. The same block is in
+        # resources/ppi_af3/skin_legacy/DialogPlayerProcessInfo.xml, so the
+        # ppi_af3 whole-file replace and this entry never fight.
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'DialogPlayerProcessInfo.xml'),
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': '<!-- ABK_LP_PPI -->',
+        'fallback_pattern': r'(<window[^>]*>)',
+        'fallback_repl': r'\1\n    ' + _LP_PPI,
+        'description': 'AF3 Lucent Player - PPI opens Lucent Statistics',
+    },
+]
+
+
 def _apply_patch(patch):
     """
     Apply a single patch dict.

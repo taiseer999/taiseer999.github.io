@@ -101,6 +101,8 @@ def rows(answers):
                     [(m, T(30857) if m == 'off' else T(l))
                      for m, _c, l in af3_lucent_toggle.MODES]))
         out.append(('plotright', T(30890), bool(af3_plotright_toggle.plot_right_on()), None))
+        from resources.lib import af3_lucentplayer_toggle
+        out.append(('lucentplayer', T(32080), af3_lucentplayer_toggle.player_on(), None))
     from resources.lib import font_scale
     out.append(('font_scale', T(30740), font_scale.get_mode(),
                 [(m, T(l)) for m, _f, l in font_scale.MODES]))
@@ -256,6 +258,11 @@ def _set_af3_lucent(mode):
     return 'Lucent Look %s' % mode
 
 
+def _set_lucentplayer(on):
+    from resources.lib import af3_lucentplayer_toggle as lp
+    return lp.set_on(bool(on))
+
+
 def _set_font(mode):
     from resources.lib import font_scale as fs
     fs.set_mode(mode)
@@ -273,7 +280,7 @@ def apply(changes):
     """Returns (status, detail, changed). Each row is fenced on its own."""
     if not changes:
         return 'skipped', 'no changes', False
-    af3_keys = ('dplex', 'korean', 'trailers', 'waves', 'af3_lucent', 'plotright')
+    af3_keys = ('dplex', 'korean', 'trailers', 'waves', 'af3_lucent', 'plotright', 'lucentplayer')
     if any(k in changes for k in af3_keys) and not _af3_active():
         _log('Arctic Fuse 3 is not the active skin - its rows wait', xbmc.LOGWARNING)
     else:
@@ -295,6 +302,7 @@ def apply(changes):
         jobs.append(('glass', lambda: _set_lucent(lucent_sub)))
     for key, fn in (('trailers', _set_trailers), ('waves', _set_waves),
                     ('plotright', _set_plotright), ('af3_lucent', _set_af3_lucent),
+                    ('lucentplayer', _set_lucentplayer),
                     ('font_scale', _set_font)):
         if key in changes:
             jobs.append((key, lambda f=fn, k=key: f(changes[k])))

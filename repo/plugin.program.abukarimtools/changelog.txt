@@ -1,3 +1,41 @@
+v4.7.27
+- AF3: Lucent Player - the focused OSD button showed twice, one place to the
+  right (info, audio, subtitles...): the AF3 OSD pop-ups draw their own copy
+  of the button row, and that copy had no slot for the new Statistics
+  button. The slot is added (only while Lucent Player is on).
+
+v4.7.26
+- AF3: Lucent Player, laid out around the Arctic Fuse 3 OSD:
+  * the AF3 OSD buttons are back (play, skip, stop, info, audio, subtitles,
+    subtitle tools, video settings, PPI); Lucent's own button row is gone;
+  * new Statistics button in the AF3 OSD, next to the PPI button: it opens
+    the Lucent Statistics window (shown only while Lucent Player is on);
+  * the clear logo / title moved down from the top-left corner (it covered
+    the badges there) to where AF3 puts its info block, and steps aside
+    while AF3 shows that block itself (Info on OSD controls);
+  * the format flags of the Lucent pause card (4K, Dolby Vision, HEVC,
+    Atmos, DD+, 5.1) are shown in the OSD, above the progress bar.
+  Skins patched by 4.7.25 are moved over automatically.
+
+v4.7.25
+- New toggle "AF3: Lucent Player" (Toggles menu, and the Toggles page of the
+  Installation Wizard). It puts the player of djdirty60's Lucent skin
+  (github.com/djdirty60/Lucent, GPL-2.0-or-later) into Arctic Fuse 3:
+  * the OSD: title, Ends at, the thin progress bar, Back 10 s / Play /
+    Forward 30 s, and the Subtitles (AB Tools subtitle list), Audio, Video
+    settings, Bookmarks, Sleep timer and Statistics buttons;
+  * the seek bar and the "You're watching" pause card with the audio and
+    subtitle language flags;
+  * the buffering spinner;
+  * the Statistics window (Overview / Video / Audio, live every second),
+    which also opens instead of the PPI (Player Process Info).
+  Labels in Arabic (Fusha) and English, in the active fontset's own fonts.
+  Live TV keeps the AF3 OSD. Off by default; turning it off brings the
+  AF3 player back unchanged. The skin files are always installed by the
+  AF3 patches (Includes_ABK_LucentPlayer.xml, ABK_LucentPlayerInfo.xml,
+  media/abk_lp/); the AF3 windows only gain includes gated on
+  Skin.HasSetting(abk.lucentplayer).
+
 v4.7.24
 - Search All: when the last add-on finishes searching, the focus moves to the
   All tab (first chip), so you start from the full list. If you picked a tab
