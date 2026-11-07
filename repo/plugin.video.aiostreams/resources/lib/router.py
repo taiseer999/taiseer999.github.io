@@ -196,7 +196,7 @@ def _add_catalog_entry(cat, src='a', with_type=True):
     if genre and genre.get('isRequired'):
         url_kw['action'] = 'genres'
     url = kodi.build_url(**url_kw)
-    li = items.folder_item(label, icon=items.type_icon(cat.get('type')))
+    li = items.folder_item(label, icon=items.catalog_icon(cat))
     li.addContextMenuItems([(kodi.s(30082), 'RunPlugin(%s)' % kodi.build_url(action='widget_path', path=url))])
     _add(url, li)
 
@@ -534,7 +534,7 @@ def search_query(params):
         return catalog({'type': cat['type'], 'cid': cat['id'], 'search': q, 'src': src})
     for src, cat in cats:
         label = '%s [COLOR grey](%s)[/COLOR]' % (cat.get('name') or cat.get('id'), items.type_label(cat.get('type')))
-        _add(kodi.build_url(action='catalog', type=cat['type'], cid=cat['id'], search=q, src=src), items.folder_item(label, icon=items.type_icon(cat.get('type'))))
+        _add(kodi.build_url(action='catalog', type=cat['type'], cid=cat['id'], search=q, src=src), items.folder_item(label, icon=items.catalog_icon(cat)))
     xbmcplugin.setPluginCategory(kodi.HANDLE, q)
     _end()
 

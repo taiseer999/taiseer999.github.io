@@ -187,6 +187,50 @@ def type_icon(type_):
     return icon(TYPE_ICONS.get(type_, 'catalog'))
 
 
+# Catalog logos (resources/media/logos): streaming services and sources as
+# shipped by AIOMetadata; IMDb/Simkl/Kitsu from Simple Icons.
+_ID_PREFIX = (('tmdb', 'tmdb'), ('trakt', 'trakt'), ('mdblist', 'mdblist'), ('mal', 'mal'),
+              ('anilist', 'anilist'), ('tvdb', 'tvdb'), ('letterboxd', 'letterboxd'),
+              ('imdb', 'imdb'), ('simkl', 'simkl'), ('kitsu', 'kitsu'))
+# checked in order, so the more specific names come first
+_NAME_RULES = [(re.compile(rx, re.I), logo) for rx, logo in (
+    (r'netflix\s*kids', 'nfk'), (r'netflix', 'nfx'), (r'disney', 'dnp'),
+    (r'prime\s*video|amazon', 'amp'), (r'apple\s*tv', 'atp'), (r'hbo', 'hbm'),
+    (r'\bhulu\b', 'hlu'), (r'paramount', 'pmp'), (r'peacock', 'pcp'),
+    (r'crunchyroll', 'cru'), (r'hidive', 'hid'), (r'funimation', 'fun'), (r'\bviki\b', 'viki'),
+    (r'hotstar', 'hst'), (r'sony\s*liv', 'slv'), (r'\bzee\s*5\b', 'zee'), (r'\bmubi\b', 'mub'),
+    (r'\bstarz\b', 'sta'), (r'criterion', 'crc'), (r'discovery\s*\+|discovery\s*plus', 'dpe'),
+    (r'skyshowtime', 'sst'), (r'canal\s*\+', 'cpd'), (r'\bcrave\b', 'crv'), (r'youtube', 'ytp'),
+    (r'\bimdb\b', 'imdb'), (r'\btrakt\b', 'trakt'), (r'\btmdb\b|movie\s*db', 'tmdb'),
+    (r'mdblist', 'mdblist'), (r'anilist', 'anilist'), (r'myanimelist|\bmal\b', 'mal'),
+    (r'\btvdb\b', 'tvdb'), (r'letterboxd', 'letterboxd'), (r'\bsimkl\b', 'simkl'), (r'\bkitsu\b', 'kitsu'),
+)]
+
+
+def _logo(name):
+    path = os.path.join(kodi.ADDON_PATH, 'resources', 'media', 'logos', name + '.png')
+    return path if os.path.exists(path) else None
+
+
+def catalog_icon(cat):
+    """Service/source logo for a catalog, else the type icon."""
+    cid = str(cat.get('id') or '').lower()
+    if cid.startswith('streaming.'):
+        found = _logo(cid.split('.')[1])
+        if found:
+            return found
+    for prefix, logo in _ID_PREFIX:
+        if cid == prefix or cid.startswith((prefix + '.', prefix + ':', prefix + '_', prefix + '-')):
+            return _logo(logo) or type_icon(cat.get('type'))
+    name = '%s %s' % (cat.get('name') or '', cid)
+    for rx, logo in _NAME_RULES:
+        if rx.search(name):
+            found = _logo(logo)
+            if found:
+                return found
+    return type_icon(cat.get('type'))
+
+
 def folder_item(label, icon=None, plot=None):
     li = xbmcgui.ListItem(label, offscreen=True)
     li.setArt({'icon': icon or kodi.ICON, 'thumb': icon or kodi.ICON, 'fanart': kodi.FANART})
