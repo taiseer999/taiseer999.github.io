@@ -621,7 +621,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.7.30" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.7.31" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -652,7 +652,7 @@ updated YouTube addon URL
     <description lang="en_GB">ABUKARIM TOOLS is an all-in-one utility for managing your Kodi setup. It bundles a Skin Installer and Skin Switcher, full backup and restore of your userdata, and quick access to the ABUKARIM Wizard and its maintenance tools (Total Clean and old thumbnail cleanup). A built-in patcher keeps popular add-ons (Seren, Prism, TinyPPI, Arctic Fuse 3, TMDbHelper, RedLight and more) working correctly on CoreELEC and Kodi, and re-applies its fixes automatically after those add-ons update. Also includes handy maintenance tools such as a speed test, a CPU benchmark and an add-on database rebuild.</description>
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، ووصولاً سريعاً إلى معالج أبوكريم وأدوات الصيانة فيه (التنظيف الشامل وحذف الصور المصغّرة القديمة). كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة واختبار أداء المعالج وإعادة بناء قاعدة بيانات الإضافات.</description>
-    <news>v4.7.29 - AF3: Lucent Player also swaps the AF3 codec logos (home widgets, info) for the Lucent pills. v4.7.28 - New: "Lucent: Widgets from AF3" builds the Lucent skin menu and widgets from your Arctic Fuse 3 hubs and widgets. v4.7.27 - AF3: Lucent Player - the focused OSD button no longer shows twice when a pop-up (audio, subtitles, info) opens. v4.7.26 - AF3: Lucent Player keeps the Arctic Fuse 3 OSD buttons and adds a Statistics button (the new PPI) next to the PPI button; the clear logo moved down under the badges, and the format flags (4K, Dolby Vision, HEVC, Atmos, DD+, 5.1) are shown in the OSD. v4.7.25 - New toggle "AF3: Lucent Player": Lucent OSD, pause card and Statistics window for Arctic Fuse 3. Older versions: see changelog.txt.</news>
+    <news>v4.7.30 - AF3: Lucent Player - smaller pills in the OSD panels (all fit), Dolby Vision pill fixed. v4.7.29 - AF3: Lucent Player also swaps the AF3 codec logos (home widgets, info) for the Lucent pills. v4.7.28 - New: "Lucent: Widgets from AF3" builds the Lucent skin menu and widgets from your Arctic Fuse 3 hubs and widgets. v4.7.27 - AF3: Lucent Player - the focused OSD button no longer shows twice when a pop-up (audio, subtitles, info) opens. v4.7.26 - AF3: Lucent Player keeps the Arctic Fuse 3 OSD buttons and adds a Statistics button (the new PPI) next to the PPI button; the clear logo moved down under the badges, and the format flags (4K, Dolby Vision, HEVC, Atmos, DD+, 5.1) are shown in the OSD. v4.7.25 - New toggle "AF3: Lucent Player": Lucent OSD, pause card and Statistics window for Arctic Fuse 3. Older versions: see changelog.txt.</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>

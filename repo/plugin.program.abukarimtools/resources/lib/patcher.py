@@ -4214,6 +4214,38 @@ PATCHES += [
         'description': 'AF3 Lucent Player - furniture pills: OSD reads the playing video',
     },
     {
+        # 4.7.30: pill size per place; smaller in the OSD pop-up panels
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Furniture.xml'),
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': 'abk_lp_width',
+        'fallback_pattern': (r'(<param name="infolabel_filenameandpath">ListItem\.FileNameAndPath</param>\n)([\s\S]*?'
+                             r'<include content="ABK_LP_FlagsRow" condition="Skin\.HasSetting\(abk\.lucentplayer\)">\n)'),
+        'fallback_repl': ('\\1'
+                          '        <param name="abk_lp_width">132</param>\n'
+                          '        <param name="abk_lp_height">51</param>\n'
+                          '        <param name="abk_lp_itemgap">12</param>\n'
+                          '\\2'
+                          '                <param name="width">$PARAM[abk_lp_width]</param>\n'
+                          '                <param name="height">$PARAM[abk_lp_height]</param>\n'
+                          '                <param name="itemgap">$PARAM[abk_lp_itemgap]</param>\n'),
+        'description': 'AF3 Lucent Player - furniture pills: size parameters',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '                    <param name="infolabel_filenameandpath">Player.FilenameAndPath</param>\n',
+        'new': ('                    <param name="infolabel_filenameandpath">Player.FilenameAndPath</param>\n'
+                '                    <param name="abk_lp_width">80</param>\n'
+                '                    <param name="abk_lp_height">31</param>\n'
+                '                    <param name="abk_lp_itemgap">8</param>\n'),
+        'already_patched_check': 'abk_lp_width',
+        'description': 'AF3 Lucent Player - furniture pills: smaller in the OSD panels',
+    },
+    {
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('media', 'abk_lp', 'af3', 'stats.png'),
         'inject_file': True,

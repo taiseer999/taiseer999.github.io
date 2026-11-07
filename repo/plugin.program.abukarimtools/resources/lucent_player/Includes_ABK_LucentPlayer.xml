@@ -903,12 +903,13 @@
         <param name="align">center</param>
         <param name="height">51</param>
         <param name="width">132</param>
+        <param name="itemgap">12</param>
         <definition>
             <control type="grouplist">
                 <visible>$PARAM[visible]</visible>
                 <orientation>horizontal</orientation>
                 <align>$PARAM[align]</align>
-                <itemgap>12</itemgap>
+                <itemgap>$PARAM[itemgap]</itemgap>
                 <height>$PARAM[height]</height>
                 <usecontrolcoords>false</usecontrolcoords>
                 <control type="image">
@@ -956,16 +957,8 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/DV2.png</texture>
-                    <visible>[[String.IsEqual($PARAM[il_hdrtype],dolbyvision) + [String.Contains($PARAM[il_filename],.dv2.) | String.Contains($PARAM[il_filename],.dv2-) | String.Contains($PARAM[il_filename],-dv2.) | String.Contains($PARAM[il_filename],_dv2_) | String.Contains($PARAM[il_filename],.dv2_) | String.Contains($PARAM[il_filename],[dv2]) | String.Contains($PARAM[il_filename],dovi2) | String.Contains($PARAM[il_filename],dovi.2.) | String.Contains($PARAM[il_filename],dolby.vision.2.) | String.Contains($PARAM[il_filename],dolbyvision2) | String.Contains($PARAM[il_filenameandpath],.dv2.) | String.Contains($PARAM[il_filenameandpath],.dv2-) | String.Contains($PARAM[il_filenameandpath],-dv2.) | String.Contains($PARAM[il_filenameandpath],_dv2_) | String.Contains($PARAM[il_filenameandpath],.dv2_) | String.Contains($PARAM[il_filenameandpath],[dv2]) | String.Contains($PARAM[il_filenameandpath],dovi2) | String.Contains($PARAM[il_filenameandpath],dovi.2.) | String.Contains($PARAM[il_filenameandpath],dolby.vision.2.) | String.Contains($PARAM[il_filenameandpath],dolbyvision2)]]]</visible>
-                </control>
-                <control type="image">
-                    <width>$PARAM[width]</width>
-                    <height>$PARAM[height]</height>
-                    <centertop>50%</centertop>
-                    <aspectratio>keep</aspectratio>
                     <texture background="true">abk_lp/flags/DV.png</texture>
-                    <visible>[String.IsEqual($PARAM[il_hdrtype],dolbyvision)] + ![[String.IsEqual($PARAM[il_hdrtype],dolbyvision) + [String.Contains($PARAM[il_filename],.dv2.) | String.Contains($PARAM[il_filename],.dv2-) | String.Contains($PARAM[il_filename],-dv2.) | String.Contains($PARAM[il_filename],_dv2_) | String.Contains($PARAM[il_filename],.dv2_) | String.Contains($PARAM[il_filename],[dv2]) | String.Contains($PARAM[il_filename],dovi2) | String.Contains($PARAM[il_filename],dovi.2.) | String.Contains($PARAM[il_filename],dolby.vision.2.) | String.Contains($PARAM[il_filename],dolbyvision2) | String.Contains($PARAM[il_filenameandpath],.dv2.) | String.Contains($PARAM[il_filenameandpath],.dv2-) | String.Contains($PARAM[il_filenameandpath],-dv2.) | String.Contains($PARAM[il_filenameandpath],_dv2_) | String.Contains($PARAM[il_filenameandpath],.dv2_) | String.Contains($PARAM[il_filenameandpath],[dv2]) | String.Contains($PARAM[il_filenameandpath],dovi2) | String.Contains($PARAM[il_filenameandpath],dovi.2.) | String.Contains($PARAM[il_filenameandpath],dolby.vision.2.) | String.Contains($PARAM[il_filenameandpath],dolbyvision2)]]]</visible>
+                    <visible>[String.IsEqual($PARAM[il_hdrtype],dolbyvision)]</visible>
                 </control>
                 <control type="image">
                     <width>$PARAM[width]</width>
@@ -973,7 +966,7 @@
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
                     <texture background="true">abk_lp/flags/HDR10+.png</texture>
-                    <visible>[String.IsEqual($PARAM[il_hdrtype],hdr10plus)] + ![[String.IsEqual($PARAM[il_hdrtype],dolbyvision) + [String.Contains($PARAM[il_filename],.dv2.) | String.Contains($PARAM[il_filename],.dv2-) | String.Contains($PARAM[il_filename],-dv2.) | String.Contains($PARAM[il_filename],_dv2_) | String.Contains($PARAM[il_filename],.dv2_) | String.Contains($PARAM[il_filename],[dv2]) | String.Contains($PARAM[il_filename],dovi2) | String.Contains($PARAM[il_filename],dovi.2.) | String.Contains($PARAM[il_filename],dolby.vision.2.) | String.Contains($PARAM[il_filename],dolbyvision2) | String.Contains($PARAM[il_filenameandpath],.dv2.) | String.Contains($PARAM[il_filenameandpath],.dv2-) | String.Contains($PARAM[il_filenameandpath],-dv2.) | String.Contains($PARAM[il_filenameandpath],_dv2_) | String.Contains($PARAM[il_filenameandpath],.dv2_) | String.Contains($PARAM[il_filenameandpath],[dv2]) | String.Contains($PARAM[il_filenameandpath],dovi2) | String.Contains($PARAM[il_filenameandpath],dovi.2.) | String.Contains($PARAM[il_filenameandpath],dolby.vision.2.) | String.Contains($PARAM[il_filenameandpath],dolbyvision2)]]] + ![String.IsEqual($PARAM[il_hdrtype],dolbyvision)]</visible>
+                    <visible>[String.IsEqual($PARAM[il_hdrtype],hdr10plus)] + ![String.IsEqual($PARAM[il_hdrtype],dolbyvision)]</visible>
                 </control>
                 <control type="image">
                     <width>$PARAM[width]</width>
@@ -981,7 +974,7 @@
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
                     <texture background="true">abk_lp/flags/HDR10.png</texture>
-                    <visible>[String.IsEqual($PARAM[il_hdrtype],hdr10)] + ![[String.IsEqual($PARAM[il_hdrtype],dolbyvision) + [String.Contains($PARAM[il_filename],.dv2.) | String.Contains($PARAM[il_filename],.dv2-) | String.Contains($PARAM[il_filename],-dv2.) | String.Contains($PARAM[il_filename],_dv2_) | String.Contains($PARAM[il_filename],.dv2_) | String.Contains($PARAM[il_filename],[dv2]) | String.Contains($PARAM[il_filename],dovi2) | String.Contains($PARAM[il_filename],dovi.2.) | String.Contains($PARAM[il_filename],dolby.vision.2.) | String.Contains($PARAM[il_filename],dolbyvision2) | String.Contains($PARAM[il_filenameandpath],.dv2.) | String.Contains($PARAM[il_filenameandpath],.dv2-) | String.Contains($PARAM[il_filenameandpath],-dv2.) | String.Contains($PARAM[il_filenameandpath],_dv2_) | String.Contains($PARAM[il_filenameandpath],.dv2_) | String.Contains($PARAM[il_filenameandpath],[dv2]) | String.Contains($PARAM[il_filenameandpath],dovi2) | String.Contains($PARAM[il_filenameandpath],dovi.2.) | String.Contains($PARAM[il_filenameandpath],dolby.vision.2.) | String.Contains($PARAM[il_filenameandpath],dolbyvision2)]]] + ![String.IsEqual($PARAM[il_hdrtype],dolbyvision)] + ![String.IsEqual($PARAM[il_hdrtype],hdr10plus)]</visible>
+                    <visible>[String.IsEqual($PARAM[il_hdrtype],hdr10)] + ![String.IsEqual($PARAM[il_hdrtype],dolbyvision)] + ![String.IsEqual($PARAM[il_hdrtype],hdr10plus)]</visible>
                 </control>
                 <control type="image">
                     <width>$PARAM[width]</width>
@@ -989,7 +982,7 @@
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
                     <texture background="true">abk_lp/flags/HLG.png</texture>
-                    <visible>[String.IsEqual($PARAM[il_hdrtype],hlg)] + ![[String.IsEqual($PARAM[il_hdrtype],dolbyvision) + [String.Contains($PARAM[il_filename],.dv2.) | String.Contains($PARAM[il_filename],.dv2-) | String.Contains($PARAM[il_filename],-dv2.) | String.Contains($PARAM[il_filename],_dv2_) | String.Contains($PARAM[il_filename],.dv2_) | String.Contains($PARAM[il_filename],[dv2]) | String.Contains($PARAM[il_filename],dovi2) | String.Contains($PARAM[il_filename],dovi.2.) | String.Contains($PARAM[il_filename],dolby.vision.2.) | String.Contains($PARAM[il_filename],dolbyvision2) | String.Contains($PARAM[il_filenameandpath],.dv2.) | String.Contains($PARAM[il_filenameandpath],.dv2-) | String.Contains($PARAM[il_filenameandpath],-dv2.) | String.Contains($PARAM[il_filenameandpath],_dv2_) | String.Contains($PARAM[il_filenameandpath],.dv2_) | String.Contains($PARAM[il_filenameandpath],[dv2]) | String.Contains($PARAM[il_filenameandpath],dovi2) | String.Contains($PARAM[il_filenameandpath],dovi.2.) | String.Contains($PARAM[il_filenameandpath],dolby.vision.2.) | String.Contains($PARAM[il_filenameandpath],dolbyvision2)]]] + ![String.IsEqual($PARAM[il_hdrtype],dolbyvision)] + ![String.IsEqual($PARAM[il_hdrtype],hdr10plus)] + ![String.IsEqual($PARAM[il_hdrtype],hdr10)]</visible>
+                    <visible>[String.IsEqual($PARAM[il_hdrtype],hlg)] + ![String.IsEqual($PARAM[il_hdrtype],dolbyvision)] + ![String.IsEqual($PARAM[il_hdrtype],hdr10plus)] + ![String.IsEqual($PARAM[il_hdrtype],hdr10)]</visible>
                 </control>
                 <control type="image">
                     <width>$PARAM[width]</width>

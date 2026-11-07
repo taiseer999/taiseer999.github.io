@@ -47,10 +47,11 @@ def main(path):
     etree.SubElement(inc, 'param', name='align').text = 'center'
     etree.SubElement(inc, 'param', name='height').text = '51'
     etree.SubElement(inc, 'param', name='width').text = '132'
+    etree.SubElement(inc, 'param', name='itemgap').text = '12'
     d = etree.SubElement(inc, 'definition')
     gl = etree.SubElement(d, 'control', type='grouplist')
     etree.SubElement(gl, 'visible').text = '$PARAM[visible]'
-    for tag, val in (('orientation', 'horizontal'), ('align', '$PARAM[align]'), ('itemgap', '12'),
+    for tag, val in (('orientation', 'horizontal'), ('align', '$PARAM[align]'), ('itemgap', '$PARAM[itemgap]'),
                      ('height', '$PARAM[height]'), ('usecontrolcoords', 'false')):
         etree.SubElement(gl, tag).text = val
     n = 0
@@ -60,6 +61,8 @@ def main(path):
         for v in var.findall('value'):
             cond = v.get('condition') or ''
             if 'Skin.String(abk.lp.flag.' in cond:          # Lucent's own-flag override, not ported
+                continue
+            if 'LucentDV2Named' in cond:                     # its [dv2] text breaks the negated conditions
                 continue
             cond = re.sub(r'\$EXP\[([^\]]+)\]', lambda m: '[%s]' % exprs[m.group(1)], cond)
             full = '[%s]' % _p(cond)

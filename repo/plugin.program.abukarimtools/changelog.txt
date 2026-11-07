@@ -1,9 +1,9 @@
 v4.7.30
-- Search All: ISO filter. The filter menu (RIGHT on the list, or the "Filter"
-  chip) now offers "Hide ISO (disc images)" and "ISO only (disc images)".
-  ISO means BDISO / UHD / DVD ISO releases and .iso files. Like the other
-  filters, the entries show only when some (not all) results are ISO, and
-  Back removes the filter.
+- AF3: Lucent Player - the format pills in the OSD panels (video settings,
+  audio, subtitles...) are smaller (80 x 31) so all of them fit in the
+  panel; the home widgets keep the full size. The Dolby Vision pill was
+  missing from these rows (the "DV2" file-name test broke its condition);
+  the DV2 variant is left out of these rows, the OSD row keeps it.
 
 v4.7.29
 - AF3: Lucent Player now also changes AF3's furniture codec logos (the row

@@ -1672,14 +1672,6 @@ msgctxt "#30846"
 msgid "Episode %d"
 msgstr "الحلقة %d"
 
-msgctxt "#30847"
-msgid "Hide ISO (disc images)"
-msgstr "إخفاء ملفات ISO (صور الأقراص)"
-
-msgctxt "#30848"
-msgid "ISO only (disc images)"
-msgstr "ملفات ISO فقط (صور الأقراص)"
-
 msgctxt "#30850"
 msgid "AF3: Lucent Look"
 msgstr "AF3: مظهر Lucent"
