@@ -66,6 +66,12 @@ def set_on(on):
         raise RuntimeError('Lucent Player files are not in the skin')
     xbmc.executebuiltin(('Skin.SetBool(%s)' if on else 'Skin.Reset(%s)') % SETTING)
     _log('Lucent Player: %s' % ('ON' if on else 'OFF'))
+    # 4.7.32: Back while skipping ends the skipping (keymap, Lucent 1.34.3)
+    try:
+        from resources.lib import lucent_back
+        lucent_back.sync_keymap(bool(on))
+    except Exception as exc:
+        _log('Back keymap sync failed: %s' % exc)
     return 'Lucent Player %s' % ('on' if on else 'off')
 
 

@@ -838,4 +838,6 @@ STRINGS = {
     32097: ('Could not build the Lucent menu: %s', 'تعذّر بناء قائمة Lucent: %s'),
     32098: ('Lucent menu ready: %d tabs, %d widgets.', 'قائمة Lucent جاهزة: %d تبويبًا و%d ودجة.'),
     32099: ('Left out (Lucent has at most 12 tabs and 10 widgets per tab):', 'لم تُضَف (يتّسع Lucent لـ 12 تبويبًا و10 ودجات لكل تبويب على الأكثر):'),
+    32100: ('PASSTHROUGH', 'تمرير مباشر'),
+    32101: ('The sound goes straight to your amplifier - use its volume', 'يذهب الصوت مباشرةً إلى المُضخِّم؛ استخدم مستوى صوته'),
 }

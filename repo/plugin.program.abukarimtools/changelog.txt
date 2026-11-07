@@ -1,3 +1,19 @@
+v4.7.32
+- AF3: Lucent Player - Back while you skip through a video (fast forward /
+  rewind, the seek bar on screen, or within 3 s of a skip) now ends the
+  skipping and keeps you in the video: fast forward / rewind goes back to
+  normal speed, the seek bar closes. Any other Back is Kodi's normal Back,
+  as before. Idea from Lucent 1.34.3 (Lucent maps Back to Stop; that part
+  is not taken). Done with a keymap, special://profile/keymaps/
+  abk-lucentplayer-back.xml (fullscreen video only), written while Lucent
+  Player is on and removed when it is turned off or AF3 is not the skin
+  (checked at every start). New resources/lib/lucent_back.py.
+- AF3: Lucent Player - while the sound goes straight to the amplifier
+  (passthrough), changing the volume shows a note above the AF3 volume bar
+  that Kodi's volume does nothing and to use the amplifier's (Lucent
+  1.33.6). Include ABK_LP_VolumePassthrough
+  (tools/lucent_player/af3_volume.py), hooked into AF3 DialogVolumeBar.xml.
+
 v4.7.30
 - AF3: Lucent Player - the format pills in the OSD panels (video settings,
   audio, subtitles...) are smaller (80 x 31) so all of them fit in the

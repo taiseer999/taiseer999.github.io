@@ -2480,3 +2480,11 @@ msgctxt "#32099"
 msgid "Left out (Lucent has at most 12 tabs and 10 widgets per tab):"
 msgstr ""
 
+msgctxt "#32100"
+msgid "PASSTHROUGH"
+msgstr ""
+
+msgctxt "#32101"
+msgid "The sound goes straight to your amplifier - use its volume"
+msgstr ""
+

@@ -1163,4 +1163,25 @@
             </control>
         </definition>
     </include>
+<include name="ABK_LP_VolumePassthrough">
+        <param name="left">560</param>
+        <param name="top">40</param>
+        <definition>
+            <control type="group">
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <width>800</width>
+                <height>70</height>
+                <visible>Skin.HasSetting(abk.lucentplayer) + Player.Passthrough</visible>
+                <animation effect="fade" start="0" end="100" time="160">WindowOpen</animation>
+                <animation effect="fade" start="100" end="0" time="300">WindowClose</animation>
+                <control type="image"><left>0</left><top>0</top><width>800</width><height>70</height><texture border="24">abk_lp/pinfo/rr22.png</texture><colordiffuse>EB0E121C</colordiffuse></control>
+                <control type="image"><left>0</left><top>0</top><width>800</width><height>70</height><texture border="28">abk_lp/pinfo/rr28_edge.png</texture><colordiffuse>1AFFFFFF</colordiffuse></control>
+                <control type="grouplist"><left>30</left><top>0</top><width>740</width><height>70</height><orientation>horizontal</orientation><itemgap>10</itemgap>
+                    <control type="label"><width>auto</width><height>70</height><font>abk_lp_font_caps</font><textcolor>FF5FE0E0</textcolor><aligny>center</aligny><label>$ADDON[plugin.program.abukarimtools 32100]</label></control>
+                    <control type="label"><width>auto</width><height>70</height><font>abk_lp_font10</font><textcolor>BFFFFFFF</textcolor><aligny>center</aligny><label>·  $ADDON[plugin.program.abukarimtools 32101]</label></control>
+                </control>
+            </control>
+        </definition>
+    </include>
 </includes>

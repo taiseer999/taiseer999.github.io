@@ -4310,6 +4310,20 @@ PATCHES += [
         'fallback_repl': r'\1\n    ' + _LP_PPI,
         'description': 'AF3 Lucent Player - PPI opens Lucent Statistics',
     },
+    {
+        # 4.7.32: Lucent 1.33.6 passthrough note above AF3's own volume bar
+        # (include added by tools/lucent_player/af3_volume.py).
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'DialogVolumeBar.xml'),
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': '<!-- ABK_LP_VOL -->',
+        'fallback_pattern': r'(<controls>)',
+        'fallback_repl': (r'\1\n        <include condition="Skin.HasSetting(abk.lucentplayer)">'
+                          r'ABK_LP_VolumePassthrough</include>  <!-- ABK_LP_VOL -->'),
+        'description': 'AF3 Lucent Player - passthrough note on the volume bar',
+    },
 ]
 
 

@@ -1469,6 +1469,15 @@ def main():
         _log('Search All next-episode listener failed to start (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
+    # 4.7.32: AF3 Lucent Player Back keymap follows the toggle / active skin
+    # (a skin switch or a skin-settings reset leaves no stale keymap behind).
+    try:
+        from resources.lib import lucent_back
+        lucent_back.sync_keymap()
+    except Exception:
+        _log('Lucent Player Back keymap sync failed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
     # From here the service stays alive for the rest of the Kodi session and
     # watches the patch targets: a Kodi add-on update replaces the add-on
     # folder wholesale, which silently wipes every patch we applied to it.
