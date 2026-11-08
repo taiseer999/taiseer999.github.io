@@ -1,3 +1,10 @@
+v4.7.39
+- Search All: ISO filter restored. The filter menu (RIGHT on the list, or the
+  "Filter" chip) offers "Hide ISO (disc images)" and "ISO only (disc images)"
+  again - added in 4.7.25 / 4.7.30, lost when 4.7.35 was built from an older
+  copy. ISO means BDISO / UHD / DVD ISO releases and .iso files; the entries
+  show only when some (not all) results are ISO, and Back removes the filter.
+
 v4.7.38
 - AF3: Disc Menu button + Java (BD-J) menus. Most UHD and many newer Blu-rays
   have Java menus, which libbluray runs with Team CoreELEC's "JRE for BD-J
