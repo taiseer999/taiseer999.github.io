@@ -21,6 +21,8 @@ The new item carries the ListItem property playlist_chosen=true, so Kodi's own
 path into something else again (ApplicationPlay GetMenuDecisions).
 """
 import hashlib
+import os
+import stat
 from urllib.parse import unquote
 
 import xbmc
@@ -180,7 +182,100 @@ def _busy(on):
                         else 'Dialog.Close(busydialognocancel,true)')
 
 
+# ── Java for BD-J menus (4.7.38) ──
+# Most UHD and many newer Blu-rays have Java (BD-J) menus; libbluray runs them
+# with the JRE from Team CoreELEC's "JRE for BD-J menus" (tools.jre.zulu).
+# HDMV menus need nothing. The add-on's profile.d/jre.profile sets JAVA_HOME
+# and LIBBLURAY_CP at boot only, so right after an install libbluray would
+# not find Java until a reboot - the same two variables are put into Kodi's
+# process environment here (os.environ -> putenv), which libbluray reads
+# when it starts BD-J.
+_JRE = 'tools.jre.zulu'
+_JRE_REPO = 'repository.taiseer'          # fallback source: Taiseer repo zip
+_JRE_ASKED = 'abk.discmenu.jre_asked'
+
+
+def _jre_dir():
+    return os.path.join(xbmcvfs.translatePath('special://home/addons/'), _JRE)
+
+
+def _jre_present():
+    return os.path.isfile(os.path.join(_jre_dir(), 'addon.xml'))
+
+
+def _jre_install():
+    """Kodi's installer (enabled repos) first, then the repository.taiseer zip."""
+    from resources.lib import addon_portal as ap
+    _busy(True)
+    try:
+        if ap._kodi_install(_JRE, timeout_ms=180000):
+            return True
+        _log('%s not in the enabled repos - trying %s' % (_JRE, _JRE_REPO), xbmc.LOGWARNING)
+        try:
+            url, ver = ap._resolve_zip_in_repo(_JRE_REPO, _JRE)
+        except Exception as e:
+            url, ver = None, ''
+            _log('repo lookup failed: %s' % e, xbmc.LOGWARNING)
+        if url and ap._install_zip(url, _JRE):
+            _log('%s %s installed from %s' % (_JRE, ver, _JRE_REPO))
+            return True
+        return _jre_present()
+    finally:
+        _busy(False)
+
+
+def _jre_fix_modes(root):
+    """Python's zip extract drops the exec bits; Java needs them on its binaries."""
+    jre = os.path.join(root, 'jre')
+    for base, _dirs, files in os.walk(jre):
+        for f in files:
+            if base.endswith(os.sep + 'bin') or '.so' in f or f == 'jexec':
+                fp = os.path.join(base, f)
+                try:
+                    mode = os.stat(fp).st_mode
+                    if not mode & stat.S_IXUSR:
+                        os.chmod(fp, mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+                except OSError:
+                    pass
+
+
+def _jre_env(root):
+    root = root.rstrip('/\\')
+    if os.environ.get('JAVA_HOME') != root:
+        os.environ['JAVA_HOME'] = root
+        _log('JAVA_HOME=%s (process env, no reboot needed)' % root)
+    if not os.environ.get('LIBBLURAY_CP'):
+        os.environ['LIBBLURAY_CP'] = root + '/'
+
+
+def _ensure_jre():
+    """Java ready for BD-J menus, or a clear note why not. Never blocks the
+    menu itself - HDMV discs open without Java."""
+    win = xbmcgui.Window(_HOME)
+    if not _jre_present():
+        if win.getProperty(_JRE_ASKED):
+            return False                      # asked this session - no nagging
+        win.setProperty(_JRE_ASKED, '1')
+        if not xbmcgui.Dialog().yesno(TITLE, T(32110)):
+            return False
+        if not _jre_install():
+            xbmcgui.Dialog().ok(TITLE, T(32111))
+            return False
+        xbmcgui.Dialog().notification(TITLE, T(32112), xbmcgui.NOTIFICATION_INFO, 3000)
+    try:
+        from resources.lib import addon_portal as ap
+        ap._wait_registered(_JRE, timeout_ms=10000)
+        ap._enable(_JRE)
+    except Exception as e:
+        _log('enable %s: %s' % (_JRE, e), xbmc.LOGWARNING)
+    root = _jre_dir()
+    _jre_fix_modes(root)
+    _jre_env(root)
+    return True
+
+
 def _to_menu(iso):
+    _ensure_jre()
     player = xbmc.Player()
     try:
         pos = player.getTime()

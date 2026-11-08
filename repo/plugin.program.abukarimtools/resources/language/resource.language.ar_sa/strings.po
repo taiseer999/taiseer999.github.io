@@ -2520,3 +2520,15 @@ msgctxt "#32109"
 msgid "The main movie was not found on the disc - playing the ISO as before"
 msgstr "لم يُعثَر على الفيلم الرئيسي في القرص؛ سيُشغَّل ملف ISO كما كان"
 
+msgctxt "#32110"
+msgid "Java disc menus (most UHD and many newer Blu-rays) need \\"JRE for BD-J menus\\" (tools.jre.zulu, about 40 MB). Install it now?"
+msgstr "تحتاج قوائم الأقراص المكتوبة بلغة Java (معظم أقراص UHD وكثير من أقراص Blu-ray الحديثة) إلى إضافة «JRE for BD-J menus» ‏(tools.jre.zulu، نحو 40 ميغابايت). هل تريد تثبيتها الآن؟"
+
+msgctxt "#32111"
+msgid "\\"JRE for BD-J menus\\" could not be installed from your repositories. Install tools.jre.zulu from its zip (Add-ons > Install from zip file); simple (HDMV) disc menus still open without it."
+msgstr "تعذّر تثبيت «JRE for BD-J menus» من المستودعات. ثبّت tools.jre.zulu من ملفه المضغوط (الإضافات > التثبيت من ملف مضغوط)؛ وتبقى قوائم الأقراص البسيطة (HDMV) تعمل بدونها."
+
+msgctxt "#32112"
+msgid "Java installed - opening the disc menu"
+msgstr "ثُبِّتت Java، جارٍ فتح قائمة القرص"
+

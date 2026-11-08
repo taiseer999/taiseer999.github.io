@@ -1,3 +1,16 @@
+v4.7.38
+- AF3: Disc Menu button + Java (BD-J) menus. Most UHD and many newer Blu-rays
+  have Java menus, which libbluray runs with Team CoreELEC's "JRE for BD-J
+  menus" (tools.jre.zulu). Before it opens the disc menu, the button now:
+    - offers to install tools.jre.zulu when it is missing (once per session;
+      Kodi's installer from the enabled repos, then the repository.taiseer
+      zip as a fallback; a clear note when neither has it - HDMV menus still
+      open without Java),
+    - enables it, restores the exec bits a Python zip extract drops,
+    - puts JAVA_HOME / LIBBLURAY_CP (what the add-on's jre.profile sets at
+      boot) into Kodi's own process environment, so Java menus work straight
+      after the install - no reboot.
+
 v4.7.37
 - AF3: Disc Menu for ISO Streams with AF3: Lucent Look - the Disc Menu /
   Normal Player buttons follow the look: glass button (Defs_OSD_Button),

@@ -2520,3 +2520,15 @@ msgctxt "#32109"
 msgid "The main movie was not found on the disc - playing the ISO as before"
 msgstr ""
 
+msgctxt "#32110"
+msgid "Java disc menus (most UHD and many newer Blu-rays) need \\"JRE for BD-J menus\\" (tools.jre.zulu, about 40 MB). Install it now?"
+msgstr ""
+
+msgctxt "#32111"
+msgid "\\"JRE for BD-J menus\\" could not be installed from your repositories. Install tools.jre.zulu from its zip (Add-ons > Install from zip file); simple (HDMV) disc menus still open without it."
+msgstr ""
+
+msgctxt "#32112"
+msgid "Java installed - opening the disc menu"
+msgstr ""
+

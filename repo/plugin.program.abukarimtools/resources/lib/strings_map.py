@@ -39,7 +39,7 @@ ID ranges:
   30970-30989  Installation Wizard 4.7.9 - Toggles page, TMDb Helper accounts
   32000-32070  AF3 Lucent Player skin labels ($ADDON in the skin)
   32080-32089  AF3 Lucent Player toggle
-  32102-32109  AF3 Disc Menu for ISO Streams (Toggles + OSD buttons)
+  32102-32112  AF3 Disc Menu for ISO Streams (Toggles + OSD buttons, Java)
 """
 
 STRINGS = {
@@ -853,4 +853,9 @@ STRINGS = {
     32108: ('Back to the normal player...', 'جارٍ العودة إلى المشغّل العادي...'),
     32109: ('The main movie was not found on the disc - playing the ISO as before',
             'لم يُعثَر على الفيلم الرئيسي في القرص؛ سيُشغَّل ملف ISO كما كان'),
+    32110: ('Java disc menus (most UHD and many newer Blu-rays) need "JRE for BD-J menus" (tools.jre.zulu, about 40 MB). Install it now?',
+            'تحتاج قوائم الأقراص المكتوبة بلغة Java (معظم أقراص UHD وكثير من أقراص Blu-ray الحديثة) إلى إضافة «JRE for BD-J menus» ‏(tools.jre.zulu، نحو 40 ميغابايت). هل تريد تثبيتها الآن؟'),
+    32111: ('"JRE for BD-J menus" could not be installed from your repositories. Install tools.jre.zulu from its zip (Add-ons > Install from zip file); simple (HDMV) disc menus still open without it.',
+            'تعذّر تثبيت «JRE for BD-J menus» من المستودعات. ثبّت tools.jre.zulu من ملفه المضغوط (الإضافات > التثبيت من ملف مضغوط)؛ وتبقى قوائم الأقراص البسيطة (HDMV) تعمل بدونها.'),
+    32112: ('Java installed - opening the disc menu', 'ثُبِّتت Java، جارٍ فتح قائمة القرص'),
 }
