@@ -83,7 +83,7 @@ def pill(label, visible, edge=False, bright=False):
                 </control>''' % {'c': color, 'd': diffuse, 't': tex, 'l': label, 'v': visible}
 
 
-def title_block(fade_cond=None, extra_anim='', ep_title=True):
+def title_block(fade_cond=None, extra_anim='', ep_title=True, top=96, logo_h=220, pills_top=252):
     """Logo / title, meta pills and episode title (top of the left column).
     ep_title=False: no episode title line (Search All shows it under the plot)."""
     W = 'Window.Property(lucent.%s)'
@@ -107,17 +107,17 @@ def title_block(fade_cond=None, extra_anim='', ep_title=True):
             <animation effect="slide" start="-60,0" end="0,0" time="350" delay="100" tween="cubic" easing="out">WindowOpen</animation>
             <animation effect="fade" end="0" time="250">WindowClose</animation>%(extra)s
             <left>96</left>
-            <top>96</top>
+            <top>%(top)d</top>
             <width>720</width>
             <control type="image">
                 <width>560</width>
-                <height>220</height>
+                <height>%(logo_h)d</height>
                 <aspectratio align="left" aligny="bottom">keep</aspectratio>
                 <texture>$INFO[%(logo)s]</texture>
                 <visible>!String.IsEmpty(%(logo)s)</visible>
             </control>
             <control type="textbox">
-                <top>60</top>
+                <top>%(title_top)d</top>
                 <width>720</width>
                 <height>160</height>
                 <font>font37</font>
@@ -127,7 +127,7 @@ def title_block(fade_cond=None, extra_anim='', ep_title=True):
                 <visible>String.IsEmpty(%(logo)s)</visible>
             </control>
             <control type="grouplist">
-                <top>252</top>
+                <top>%(pills_top)d</top>
                 <height>44</height>
                 <width>720</width>
                 <orientation>horizontal</orientation>
@@ -136,7 +136,8 @@ def title_block(fade_cond=None, extra_anim='', ep_title=True):
             </control>%(ept)s
         </control>
 ''' % {
-        'extra': hide + extra_anim, 'ept': ept_xml,
+        'extra': hide + extra_anim, 'ept': ept_xml, 'top': top, 'logo_h': logo_h,
+        'title_top': logo_h - 160, 'pills_top': pills_top,
         'logo': W % 'clearlogo', 'show': W % 'show_title',
         'pills': ''.join([
             pill('[B]$INFO[%s][/B]' % (W % 'ep_code'), '!String.IsEmpty(%s)' % (W % 'ep_code'), bright=True),
@@ -1373,7 +1374,18 @@ AB_ADDONS = (('rl', 'FFE5484D'), ('fl', 'FF3E9BFF'), ('umb', 'FF9B6BFF'), ('pov'
              ('dex', 'FFEC4899'),      # 4.7.13 Dex Hub (pink)
              ('en', 'FF22D3EE'))       # 4.7.16 EasyNews (cyan)
 AB_SLOTS = len(AB_ADDONS)             # one status line per add-on (abs.s1 .. abs.sN)
-AB_SLOT_PITCH = 40                    # 4.7.16: 7 lines fit above the screen edge (was 46)
+AB_SLOT_PITCH = 54                    # 4.7.40: bigger lines (26 px), 7 fit under the plot (was 40)
+AB_DOT = 20
+# 4.7.40: left column all the way up (logo / title from y 48, was 96 + a
+# 220 px logo box), the plot right under the pills and the add-on list under
+# the plot (was y 736).
+AB_TOP = 48
+AB_LOGO_H = 150                       # logo box / title line (title bottom-aligned in it)
+AB_PLOT_TOP = AB_TOP + AB_LOGO_H + 18 + 44 + 22        # 282: under the pills
+AB_PLOT_H = 232                       # movies: 8 lines
+AB_PLOT_H_EP = 130                    # episodes: 4 lines, then the episode name
+AB_EP_TOP = AB_PLOT_TOP + AB_PLOT_H_EP + 18            # 430
+AB_LIST_TOP = 566                     # heading; 7 lines of 54 end at 566 + 56 + 378 = 1000
 AB_TAGS = 4
 AB_TAG_W = 64
 
@@ -1730,30 +1742,31 @@ def ab_search_window():
                 <control type="image">
                     <left>0</left>
                     <top>%(t)d</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <width>%(d)d</width>
+                    <height>%(d)d</height>
                     <texture>lucent/dot.png</texture>
                     <colordiffuse>%(c)s</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s%(n)d.state),searching)">Conditional</animation>
                     <visible>String.IsEqual(Window.Property(abs.s%(n)d.key),%(k)s)</visible>
-                </control>''' % {'t': top + 12, 'c': color, 'n': n, 'k': key} for key, color in AB_ADDONS)
+                </control>''' % {'t': top + (AB_SLOT_PITCH - AB_DOT) // 2, 'd': AB_DOT, 'c': color, 'n': n, 'k': key}
+            for key, color in AB_ADDONS)
         slots.append('''%(dots)s
                 <control type="label">
-                    <left>32</left>
+                    <left>36</left>
                     <top>%(t)d</top>
-                    <width>360</width>
+                    <width>380</width>
                     <height>%(h)d</height>
-                    <font>abk_srch_s</font>
+                    <font>abk_srch_m</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
                     <label>[B]$INFO[Window.Property(abs.s%(n)d.name)][/B]</label>
                 </control>
                 <control type="label">
-                    <left>392</left>
+                    <left>420</left>
                     <top>%(t)d</top>
-                    <width>308</width>
+                    <width>280</width>
                     <height>%(h)d</height>
-                    <font>abk_srch_s</font>
+                    <font>abk_srch_m</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFBDC8D1</textcolor>
@@ -1765,7 +1778,7 @@ def ab_search_window():
             <animation effect="fade" start="0" end="100" time="350" delay="200">WindowOpen</animation>
             <animation effect="fade" end="0" time="250">WindowClose</animation>
             <left>96</left>
-            <top>736</top>
+            <top>%(top)d</top>
             <width>700</width>
             <control type="label">
                 <width>700</width>
@@ -1784,7 +1797,7 @@ def ab_search_window():
             <control type="group">
                 <top>56</top>%(slots)s
             </control>
-        </control>''' % {'heading': W % 'addons_heading', 'slots': ''.join(slots)}
+        </control>''' % {'heading': W % 'addons_heading', 'slots': ''.join(slots), 'top': AB_LIST_TOP}
     xp = 'String.IsEmpty(%s)' % (W % 'expanded')       # default look
     xx = '!String.IsEmpty(%s)' % (W % 'expanded')      # expanded: streams over the whole page
 
@@ -1822,7 +1835,7 @@ def ab_search_window():
             <animation effect="fade" end="0" time="250">WindowClose</animation>
             <visible>%(has)s</visible>
             <left>96</left>
-            <top>596</top>
+            <top>%(ep_top)d</top>
             <width>700</width>
             <control type="image">
                 <top>4</top>
@@ -1872,9 +1885,9 @@ def ab_search_window():
                 <visible>%(has_orig)s</visible>
             </control>
         </control>''' % {'has': has_ep, 'has_orig': has_orig, 'cap': E % 'caption', 'name': E % 'name',
-                         'orig': E % 'orig'}
-    plot = (plot_block('$INFO[Window.Property(lucent.plot)]', top=416, height=160, visible=has_ep)
-            + plot_block('$INFO[Window.Property(lucent.plot)]', top=416, height=290, visible='!' + has_ep))
+                         'orig': E % 'orig', 'ep_top': AB_EP_TOP}
+    plot = (plot_block('$INFO[Window.Property(lucent.plot)]', top=AB_PLOT_TOP, height=AB_PLOT_H_EP, visible=has_ep)
+            + plot_block('$INFO[Window.Property(lucent.plot)]', top=AB_PLOT_TOP, height=AB_PLOT_H, visible='!' + has_ep))
     body = ab_panel(False, xp, W) + ab_panel(True, xx, W)
     xml = '''<?xml version="1.0" encoding="UTF-8"?>
 <!-- AB Tools - Search All (streams from every add-on). Generated by tools/gen_lucent.py. -->
@@ -1889,7 +1902,8 @@ def ab_search_window():
     <controls>%(bg)s%(title)s%(plot)s%(episode)s%(status)s%(top)s%(body)s
     </controls>
 </window>
-''' % {'bg': backdrop('$INFO[Window.Property(lucent.fanart)]'), 'title': hide_left(title_block(ep_title=False)),
+''' % {'bg': backdrop('$INFO[Window.Property(lucent.fanart)]'), 'title': hide_left(title_block(ep_title=False, top=AB_TOP, logo_h=AB_LOGO_H,
+                                                                          pills_top=AB_LOGO_H + 18)),
        'plot': hide_left(plot), 'episode': hide_left(episode),
        'status': hide_left(status), 'top': top_title, 'body': body}
     return ab_paths(ab_fonts(xml))

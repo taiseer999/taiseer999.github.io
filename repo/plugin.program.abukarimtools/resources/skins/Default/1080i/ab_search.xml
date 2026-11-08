@@ -50,17 +50,17 @@
             <animation effect="slide" start="-60,0" end="0,0" time="350" delay="100" tween="cubic" easing="out">WindowOpen</animation>
             <animation effect="fade" end="0" time="250">WindowClose</animation>
             <left>96</left>
-            <top>96</top>
+            <top>48</top>
             <width>720</width>
             <control type="image">
                 <width>560</width>
-                <height>220</height>
+                <height>150</height>
                 <aspectratio align="left" aligny="bottom">keep</aspectratio>
                 <texture>$INFO[Window.Property(lucent.clearlogo)]</texture>
                 <visible>!String.IsEmpty(Window.Property(lucent.clearlogo))</visible>
             </control>
             <control type="textbox">
-                <top>60</top>
+                <top>-10</top>
                 <width>720</width>
                 <height>160</height>
                 <font>abk_srch_l</font>
@@ -70,7 +70,7 @@
                 <visible>String.IsEmpty(Window.Property(lucent.clearlogo))</visible>
             </control>
             <control type="grouplist">
-                <top>252</top>
+                <top>168</top>
                 <height>44</height>
                 <width>720</width>
                 <orientation>horizontal</orientation>
@@ -157,10 +157,10 @@
             <animation effect="fade" end="0" time="250">WindowClose</animation>
             <visible>!String.IsEmpty(Window.Property(abs.ep_name))</visible>
             <left>96</left>
-            <top>416</top>
+            <top>282</top>
             <control type="textbox">
                 <width>700</width>
-                <height>160</height>
+                <height>130</height>
                 <font>abk_srch_s</font>
                 <textcolor>FFBDC8D1</textcolor>
                 <label>$INFO[Window.Property(lucent.plot)]</label>
@@ -173,10 +173,10 @@
             <animation effect="fade" end="0" time="250">WindowClose</animation>
             <visible>!!String.IsEmpty(Window.Property(abs.ep_name))</visible>
             <left>96</left>
-            <top>416</top>
+            <top>282</top>
             <control type="textbox">
                 <width>700</width>
-                <height>290</height>
+                <height>232</height>
                 <font>abk_srch_s</font>
                 <textcolor>FFBDC8D1</textcolor>
                 <label>$INFO[Window.Property(lucent.plot)]</label>
@@ -193,7 +193,7 @@
             <animation effect="fade" end="0" time="250">WindowClose</animation>
             <visible>!String.IsEmpty(Window.Property(abs.ep_name))</visible>
             <left>96</left>
-            <top>596</top>
+            <top>430</top>
             <width>700</width>
             <control type="image">
                 <top>4</top>
@@ -251,7 +251,7 @@
             <animation effect="fade" start="0" end="100" time="350" delay="200">WindowOpen</animation>
             <animation effect="fade" end="0" time="250">WindowClose</animation>
             <left>96</left>
-            <top>736</top>
+            <top>566</top>
             <width>700</width>
             <control type="label">
                 <width>700</width>
@@ -271,9 +271,9 @@
                 <top>56</top>
                 <control type="image">
                     <left>0</left>
-                    <top>12</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>17</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFE5484D</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s1.state),searching)">Conditional</animation>
@@ -281,9 +281,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>12</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>17</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF3E9BFF</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s1.state),searching)">Conditional</animation>
@@ -291,9 +291,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>12</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>17</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF9B6BFF</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s1.state),searching)">Conditional</animation>
@@ -301,9 +301,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>12</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>17</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF2BC48A</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s1.state),searching)">Conditional</animation>
@@ -311,9 +311,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>12</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>17</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFF5A524</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s1.state),searching)">Conditional</animation>
@@ -321,9 +321,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>12</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>17</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFEC4899</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s1.state),searching)">Conditional</animation>
@@ -331,30 +331,30 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>12</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>17</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF22D3EE</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s1.state),searching)">Conditional</animation>
                     <visible>String.IsEqual(Window.Property(abs.s1.key),en)</visible>
                 </control>
                 <control type="label">
-                    <left>32</left>
+                    <left>36</left>
                     <top>0</top>
-                    <width>360</width>
-                    <height>40</height>
-                    <font>abk_srch_s</font>
+                    <width>380</width>
+                    <height>54</height>
+                    <font>abk_srch_m</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
                     <label>[B]$INFO[Window.Property(abs.s1.name)][/B]</label>
                 </control>
                 <control type="label">
-                    <left>392</left>
+                    <left>420</left>
                     <top>0</top>
-                    <width>308</width>
-                    <height>40</height>
-                    <font>abk_srch_s</font>
+                    <width>280</width>
+                    <height>54</height>
+                    <font>abk_srch_m</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFBDC8D1</textcolor>
@@ -362,9 +362,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>52</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>71</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFE5484D</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s2.state),searching)">Conditional</animation>
@@ -372,9 +372,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>52</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>71</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF3E9BFF</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s2.state),searching)">Conditional</animation>
@@ -382,9 +382,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>52</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>71</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF9B6BFF</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s2.state),searching)">Conditional</animation>
@@ -392,9 +392,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>52</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>71</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF2BC48A</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s2.state),searching)">Conditional</animation>
@@ -402,9 +402,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>52</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>71</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFF5A524</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s2.state),searching)">Conditional</animation>
@@ -412,9 +412,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>52</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>71</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFEC4899</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s2.state),searching)">Conditional</animation>
@@ -422,30 +422,30 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>52</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>71</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF22D3EE</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s2.state),searching)">Conditional</animation>
                     <visible>String.IsEqual(Window.Property(abs.s2.key),en)</visible>
                 </control>
                 <control type="label">
-                    <left>32</left>
-                    <top>40</top>
-                    <width>360</width>
-                    <height>40</height>
-                    <font>abk_srch_s</font>
+                    <left>36</left>
+                    <top>54</top>
+                    <width>380</width>
+                    <height>54</height>
+                    <font>abk_srch_m</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
                     <label>[B]$INFO[Window.Property(abs.s2.name)][/B]</label>
                 </control>
                 <control type="label">
-                    <left>392</left>
-                    <top>40</top>
-                    <width>308</width>
-                    <height>40</height>
-                    <font>abk_srch_s</font>
+                    <left>420</left>
+                    <top>54</top>
+                    <width>280</width>
+                    <height>54</height>
+                    <font>abk_srch_m</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFBDC8D1</textcolor>
@@ -453,9 +453,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>92</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>125</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFE5484D</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s3.state),searching)">Conditional</animation>
@@ -463,9 +463,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>92</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>125</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF3E9BFF</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s3.state),searching)">Conditional</animation>
@@ -473,9 +473,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>92</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>125</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF9B6BFF</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s3.state),searching)">Conditional</animation>
@@ -483,9 +483,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>92</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>125</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF2BC48A</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s3.state),searching)">Conditional</animation>
@@ -493,9 +493,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>92</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>125</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFF5A524</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s3.state),searching)">Conditional</animation>
@@ -503,9 +503,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>92</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>125</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFEC4899</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s3.state),searching)">Conditional</animation>
@@ -513,30 +513,30 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>92</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>125</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF22D3EE</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s3.state),searching)">Conditional</animation>
                     <visible>String.IsEqual(Window.Property(abs.s3.key),en)</visible>
                 </control>
                 <control type="label">
-                    <left>32</left>
-                    <top>80</top>
-                    <width>360</width>
-                    <height>40</height>
-                    <font>abk_srch_s</font>
+                    <left>36</left>
+                    <top>108</top>
+                    <width>380</width>
+                    <height>54</height>
+                    <font>abk_srch_m</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
                     <label>[B]$INFO[Window.Property(abs.s3.name)][/B]</label>
                 </control>
                 <control type="label">
-                    <left>392</left>
-                    <top>80</top>
-                    <width>308</width>
-                    <height>40</height>
-                    <font>abk_srch_s</font>
+                    <left>420</left>
+                    <top>108</top>
+                    <width>280</width>
+                    <height>54</height>
+                    <font>abk_srch_m</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFBDC8D1</textcolor>
@@ -544,9 +544,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>132</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>179</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFE5484D</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s4.state),searching)">Conditional</animation>
@@ -554,9 +554,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>132</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>179</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF3E9BFF</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s4.state),searching)">Conditional</animation>
@@ -564,9 +564,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>132</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>179</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF9B6BFF</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s4.state),searching)">Conditional</animation>
@@ -574,9 +574,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>132</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>179</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF2BC48A</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s4.state),searching)">Conditional</animation>
@@ -584,9 +584,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>132</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>179</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFF5A524</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s4.state),searching)">Conditional</animation>
@@ -594,9 +594,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>132</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>179</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFEC4899</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s4.state),searching)">Conditional</animation>
@@ -604,30 +604,30 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>132</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>179</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF22D3EE</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s4.state),searching)">Conditional</animation>
                     <visible>String.IsEqual(Window.Property(abs.s4.key),en)</visible>
                 </control>
                 <control type="label">
-                    <left>32</left>
-                    <top>120</top>
-                    <width>360</width>
-                    <height>40</height>
-                    <font>abk_srch_s</font>
+                    <left>36</left>
+                    <top>162</top>
+                    <width>380</width>
+                    <height>54</height>
+                    <font>abk_srch_m</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
                     <label>[B]$INFO[Window.Property(abs.s4.name)][/B]</label>
                 </control>
                 <control type="label">
-                    <left>392</left>
-                    <top>120</top>
-                    <width>308</width>
-                    <height>40</height>
-                    <font>abk_srch_s</font>
+                    <left>420</left>
+                    <top>162</top>
+                    <width>280</width>
+                    <height>54</height>
+                    <font>abk_srch_m</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFBDC8D1</textcolor>
@@ -635,9 +635,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>172</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>233</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFE5484D</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s5.state),searching)">Conditional</animation>
@@ -645,9 +645,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>172</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>233</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF3E9BFF</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s5.state),searching)">Conditional</animation>
@@ -655,9 +655,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>172</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>233</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF9B6BFF</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s5.state),searching)">Conditional</animation>
@@ -665,9 +665,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>172</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>233</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF2BC48A</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s5.state),searching)">Conditional</animation>
@@ -675,9 +675,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>172</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>233</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFF5A524</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s5.state),searching)">Conditional</animation>
@@ -685,9 +685,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>172</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>233</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFEC4899</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s5.state),searching)">Conditional</animation>
@@ -695,30 +695,30 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>172</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>233</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF22D3EE</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s5.state),searching)">Conditional</animation>
                     <visible>String.IsEqual(Window.Property(abs.s5.key),en)</visible>
                 </control>
                 <control type="label">
-                    <left>32</left>
-                    <top>160</top>
-                    <width>360</width>
-                    <height>40</height>
-                    <font>abk_srch_s</font>
+                    <left>36</left>
+                    <top>216</top>
+                    <width>380</width>
+                    <height>54</height>
+                    <font>abk_srch_m</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
                     <label>[B]$INFO[Window.Property(abs.s5.name)][/B]</label>
                 </control>
                 <control type="label">
-                    <left>392</left>
-                    <top>160</top>
-                    <width>308</width>
-                    <height>40</height>
-                    <font>abk_srch_s</font>
+                    <left>420</left>
+                    <top>216</top>
+                    <width>280</width>
+                    <height>54</height>
+                    <font>abk_srch_m</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFBDC8D1</textcolor>
@@ -726,9 +726,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>212</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>287</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFE5484D</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s6.state),searching)">Conditional</animation>
@@ -736,9 +736,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>212</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>287</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF3E9BFF</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s6.state),searching)">Conditional</animation>
@@ -746,9 +746,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>212</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>287</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF9B6BFF</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s6.state),searching)">Conditional</animation>
@@ -756,9 +756,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>212</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>287</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF2BC48A</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s6.state),searching)">Conditional</animation>
@@ -766,9 +766,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>212</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>287</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFF5A524</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s6.state),searching)">Conditional</animation>
@@ -776,9 +776,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>212</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>287</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFEC4899</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s6.state),searching)">Conditional</animation>
@@ -786,30 +786,30 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>212</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>287</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF22D3EE</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s6.state),searching)">Conditional</animation>
                     <visible>String.IsEqual(Window.Property(abs.s6.key),en)</visible>
                 </control>
                 <control type="label">
-                    <left>32</left>
-                    <top>200</top>
-                    <width>360</width>
-                    <height>40</height>
-                    <font>abk_srch_s</font>
+                    <left>36</left>
+                    <top>270</top>
+                    <width>380</width>
+                    <height>54</height>
+                    <font>abk_srch_m</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
                     <label>[B]$INFO[Window.Property(abs.s6.name)][/B]</label>
                 </control>
                 <control type="label">
-                    <left>392</left>
-                    <top>200</top>
-                    <width>308</width>
-                    <height>40</height>
-                    <font>abk_srch_s</font>
+                    <left>420</left>
+                    <top>270</top>
+                    <width>280</width>
+                    <height>54</height>
+                    <font>abk_srch_m</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFBDC8D1</textcolor>
@@ -817,9 +817,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>252</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>341</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFE5484D</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s7.state),searching)">Conditional</animation>
@@ -827,9 +827,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>252</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>341</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF3E9BFF</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s7.state),searching)">Conditional</animation>
@@ -837,9 +837,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>252</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>341</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF9B6BFF</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s7.state),searching)">Conditional</animation>
@@ -847,9 +847,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>252</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>341</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF2BC48A</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s7.state),searching)">Conditional</animation>
@@ -857,9 +857,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>252</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>341</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFF5A524</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s7.state),searching)">Conditional</animation>
@@ -867,9 +867,9 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>252</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>341</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FFEC4899</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s7.state),searching)">Conditional</animation>
@@ -877,30 +877,30 @@
                 </control>
                 <control type="image">
                     <left>0</left>
-                    <top>252</top>
-                    <width>16</width>
-                    <height>16</height>
+                    <top>341</top>
+                    <width>20</width>
+                    <height>20</height>
                     <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                     <colordiffuse>FF22D3EE</colordiffuse>
                     <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s7.state),searching)">Conditional</animation>
                     <visible>String.IsEqual(Window.Property(abs.s7.key),en)</visible>
                 </control>
                 <control type="label">
-                    <left>32</left>
-                    <top>240</top>
-                    <width>360</width>
-                    <height>40</height>
-                    <font>abk_srch_s</font>
+                    <left>36</left>
+                    <top>324</top>
+                    <width>380</width>
+                    <height>54</height>
+                    <font>abk_srch_m</font>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
                     <label>[B]$INFO[Window.Property(abs.s7.name)][/B]</label>
                 </control>
                 <control type="label">
-                    <left>392</left>
-                    <top>240</top>
-                    <width>308</width>
-                    <height>40</height>
-                    <font>abk_srch_s</font>
+                    <left>420</left>
+                    <top>324</top>
+                    <width>280</width>
+                    <height>54</height>
+                    <font>abk_srch_m</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFBDC8D1</textcolor>

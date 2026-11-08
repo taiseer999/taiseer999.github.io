@@ -1223,18 +1223,30 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
 
     def _status(self):
         st = self.session.state
-        n = 0
-        for key, _aid, name, _tag, ok in self.session.addons:
-            n += 1
+        lines = []
+        for idx, (key, _aid, name, _tag, ok) in enumerate(self.session.addons):
             s = st[key]
+            count = 0
             if s['state'] == 'searching':
                 text = T(30819)
             elif s['state'] == 'done':           # playable rows only (uncached left out)
-                text = T(30820) % sum(1 for r in self.rows if any(k == key for k, _i in r['refs']))
+                count = sum(1 for r in self.rows if any(k == key for k, _i in r['refs']))
+                text = T(30820) % count
             elif s['state'] == 'unsupported':
                 text = T(30843) if key == 'aio' else (T(30844) if key == 'en' else T(30829))
             else:
                 text = T(30821)
+            # 4.7.40: most streams first, then the add-ons still searching, then
+            # the ones with nothing (none found / not set up / failed)
+            if count:
+                rank = (0, -count, idx)
+            elif s['state'] == 'searching':
+                rank = (1, 0, idx)
+            else:
+                rank = (2, 0, idx)
+            lines.append((rank, key, name, s, text))
+        lines.sort(key=lambda l: l[0])
+        for n, (_rank, key, name, s, text) in enumerate(lines, 1):
             self.setProperty('abs.s%d.key' % n, key)
             self.setProperty('abs.s%d.name' % n, name)
             self.setProperty('abs.s%d.state' % n, s['state'])

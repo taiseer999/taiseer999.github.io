@@ -1,3 +1,16 @@
+v4.7.40
+- Search All, left column:
+    - logo / title, the info pills and the plot start at the top of the
+      page (y 48, was 96 under a 220 px logo box);
+    - the add-on list moved up under the plot (y 566, was 736) with bigger
+      lines (26 px text, 20 px dots, 54 px apart; was 22 / 16 / 40);
+    - the add-ons are listed by streams found, most first; the ones still
+      searching come next, and those with nothing (none found, not set up,
+      failed) last.
+  Layout values: AB_TOP / AB_LOGO_H / AB_PLOT_* / AB_EP_TOP / AB_LIST_TOP in
+  tools/gen_lucent.py. The Fen Light / Red Light / POV / Umbrella source
+  windows are unchanged.
+
 v4.7.39
 - Search All: ISO filter restored. The filter menu (RIGHT on the list, or the
   "Filter" chip) offers "Hide ISO (disc images)" and "ISO only (disc images)"
