@@ -88,6 +88,13 @@ def _session(data):
 
 def apply(results, data, provider=''):
 	"""Filter one provider's results. Never raises; returns the input unchanged on error."""
+	# 1.1.7: ISO filter first (Filters > ISO releases) - every provider call
+	# (single-engine and composite) ends here.
+	try:
+		from abscrapers import isofilter
+		results = isofilter.apply(results, provider)
+	except Exception as e:
+		log('ISO filter hook error (%s): %s' % (provider, e))
 	try:
 		m = mode()
 		if not m or not results: return results

@@ -1,3 +1,13 @@
+[B]AB Scrapers v1.1.7[/B]
+- New: ISO filter (Settings > Filters > ISO releases): Show all (default) /
+  Hide ISO releases / ISO releases only. Works on the release name for every
+  provider and every calling add-on (Fen Light, Umbrella, Red Light, POV...).
+  ISO = "ISO" as its own word in the name (Movie.2019.UHD.BluRay.ISO, [ISO],
+  .iso) or BDISO / UHDISO. Optional: also count full-disc releases (COMPLETE
+  BLURAY, BDMV, BD25/50/66/100, FULL DISC) - these can be a BDMV folder rather
+  than an ISO, so they are off by default. ISO releases keep the disc menus
+  the AF3 Disc Menu button opens.
+
 [B]AB Scrapers v1.1.6[/B]
 - FIX Kodi freeze in AB Search All (kodi.log 2026-11-08 10:13 and 10:16): on a
   title not searched before, BTDig / LimeTorrents never answered. Only

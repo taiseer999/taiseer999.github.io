@@ -145,6 +145,8 @@
 		<setting id="filter.foreign.single.audio" type="bool" label="33077" default="false" />
 		<setting id="filter.duplicates" type="enum" label="33079" default="2" lvalues="33080|33081|33082" />
 		<setting id="filter.duplicates.cross" type="bool" label="33083" default="true" subsetting="true" visible="!eq(-1,0)" />
+		<setting id="filter.iso" type="enum" label="33139" default="0" lvalues="33140|33141|33142" />
+		<setting id="filter.iso.fulldisc" type="bool" label="33143" default="false" subsetting="true" visible="!eq(-1,0)" />
 		<setting id="filter.undesirables" type="bool" label="33078" default="false" />
 		<setting type="action" label="33084" subsetting="true" enable="eq(-1,true)" action="RunPlugin(plugin://script.module.abscrapers/?action=undesirablesSelect)" />
 		<setting type="action" label="33085" subsetting="true" enable="eq(-2,true)" action="RunPlugin(plugin://script.module.abscrapers/?action=undesirablesInput)" />
