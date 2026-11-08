@@ -551,34 +551,3 @@ msgctxt "#33135"
 msgid "Movie %s not found"
 msgstr "لم يُعثر على الفيلم %s"
 
-msgctxt "#33136"
-msgid "Provider time limit (seconds) - a provider that has not answered is skipped"
-msgstr "المهلة القصوى لكل مزوّد (بالثواني) - يُتجاوز المزوّد الذي لم يُجب"
-
-msgctxt "#33137"
-msgid "Share results between add-ons searching the same title (AB Search All)"
-msgstr "مشاركة النتائج بين الإضافات التي تبحث عن العنوان نفسه (البحث الشامل)"
-
-msgctxt "#33138"
-msgid "Keep shared results for (seconds)"
-msgstr "مدة الاحتفاظ بالنتائج المشتركة (بالثواني)"
-
-msgctxt "#33139"
-msgid "ISO releases (Blu-ray disc images)"
-msgstr "إصدارات ISO (صور أقراص Blu-ray)"
-
-msgctxt "#33140"
-msgid "Show all"
-msgstr "عرض الكل"
-
-msgctxt "#33141"
-msgid "Hide ISO releases"
-msgstr "إخفاء إصدارات ISO"
-
-msgctxt "#33142"
-msgid "ISO releases only"
-msgstr "إصدارات ISO فقط"
-
-msgctxt "#33143"
-msgid "Also count full-disc releases (COMPLETE BLURAY, BDMV, BD50...)"
-msgstr "احتساب إصدارات القرص الكامل أيضًا (COMPLETE BLURAY وBDMV وBD50...)"

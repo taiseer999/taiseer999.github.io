@@ -39,7 +39,7 @@ class Undesirables():
 		self.dbcon.close()
 
 	def make_connection(self):
-		self.dbcon = db.connect(undesirablescacheFile, timeout=8)
+		self.dbcon = db.connect(undesirablescacheFile, timeout=60)
 
 	def make_cursor(self):
 		self.dbcur = self.dbcon.cursor()

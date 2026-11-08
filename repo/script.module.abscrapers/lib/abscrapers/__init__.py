@@ -36,16 +36,13 @@ def _traced(name, engine, cls):
 	class source(cls):
 		ab_provider, ab_engines = name, (engine,)
 		def sources(self, data, hostDict):
-			from abscrapers import dedupe, guard
-			res = guard.call(name, 'sources', data, None, lambda: trace(name, engine, 'sources', lambda: cls.sources(self, data, hostDict)) or [])
-			return dedupe.apply(res or [], data, name)
+			from abscrapers import dedupe
+			return dedupe.apply(trace(name, engine, 'sources', lambda: cls.sources(self, data, hostDict)) or [], data, name)
 		if hasattr(cls, 'sources_packs'):
 			def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
-				from abscrapers import dedupe, guard
-				kw = {'search_series': search_series, 'total_seasons': total_seasons, 'bypass_filter': bypass_filter}
-				res = guard.call(name, 'sources_packs', data, kw, lambda: trace(name, engine, 'sources_packs', lambda: cls.sources_packs(self, data, hostDict,
-					search_series=search_series, total_seasons=total_seasons, bypass_filter=bypass_filter)) or [])
-				return dedupe.apply(res or [], data, name)
+				from abscrapers import dedupe
+				return dedupe.apply(trace(name, engine, 'sources_packs', lambda: cls.sources_packs(self, data, hostDict,
+					search_series=search_series, total_seasons=total_seasons, bypass_filter=bypass_filter)) or [], data, name)
 	source.__module__ = cls.__module__
 	return source
 

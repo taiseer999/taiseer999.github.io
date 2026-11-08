@@ -89,23 +89,18 @@ def make_composite(name, impls):
 			deadline = time.monotonic() + _timeout()
 			for t in threads: t.join(max(0.0, deadline - time.monotonic()))
 			with lock: snapshot = list(collected)
-			return merge(snapshot)
-
-		def _guarded(self, method, wants, *args, **kwargs):
-			from abscrapers import dedupe, guard
-			data = args[0] if args else None
-			res = guard.call(name, method, data, kwargs or None, lambda: self._run(method, wants, *args, **kwargs))
-			return dedupe.apply(res or [], data, name)
+			from abscrapers import dedupe
+			return dedupe.apply(merge(snapshot), args[0] if args else None, name)
 
 		def sources(self, data, hostDict):
 			if not data: return []
 			episode = 'tvshowtitle' in data
 			wants = (lambda c: getattr(c, 'hasEpisodes', True)) if episode else (lambda c: getattr(c, 'hasMovies', True))
-			return self._guarded('sources', wants, data, hostDict)
+			return self._run('sources', wants, data, hostDict)
 
 		def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
 			if not data: return []
-			return self._guarded('sources_packs', lambda c: getattr(c, 'pack_capable', False), data, hostDict,
+			return self._run('sources_packs', lambda c: getattr(c, 'pack_capable', False), data, hostDict,
 							search_series=search_series, total_seasons=total_seasons, bypass_filter=bypass_filter)
 
 	return source

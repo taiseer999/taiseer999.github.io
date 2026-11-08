@@ -81,7 +81,7 @@ def cache_insert(key, value):
 
 def get_connection():
 	if not existsPath(dataPath): makeFile(dataPath)
-	dbcon = db.connect(cacheFile, timeout=8) # added timeout 3/23/21 for concurrency with threads
+	dbcon = db.connect(cacheFile, timeout=60) # added timeout 3/23/21 for concurrency with threads
 	dbcon.row_factory = _dict_factory
 	return dbcon
 
