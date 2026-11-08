@@ -19,6 +19,23 @@ from urllib.response import addinfourl
 from urllib.error import HTTPError
 
 
+
+# AB Scrapers 1.1.6: one cached User-Agent per interpreter (was a SQLite read on
+# every request from every scraper thread) and a hard cap on the socket timeout.
+_AGENT = None
+_MAX_TIMEOUT = 12
+
+def _cached_agent():
+	global _AGENT
+	if _AGENT is None:
+		try: _AGENT = cache.get(randomagent, 12) or randomagent()
+		except Exception: _AGENT = randomagent()
+	return _AGENT
+
+def _t(timeout):
+	try: return max(1, min(int(float(timeout)), _MAX_TIMEOUT))
+	except Exception: return _MAX_TIMEOUT
+
 def request(url, close=True, redirect=True, error=False, proxy=None, post=None, headers=None, mobile=False, XHR=False, limit=None,
 					referer=None, cookie=None, compression=True, output='', timeout='30', verifySsl=True, flare=True, ignoreErrors=None, as_bytes=False):
 	try:
@@ -74,7 +91,7 @@ def request(url, close=True, redirect=True, error=False, proxy=None, post=None, 
 		try: headers.update(headers)
 		except: headers = {}
 		if 'User-Agent' in headers: pass
-		elif mobile is not True: headers['User-Agent'] = cache.get(randomagent, 12)
+		elif mobile is not True: headers['User-Agent'] = _cached_agent()
 		else: headers['User-Agent'] = 'Apple-iPhone/701.341'
 		if 'Referer' in headers: pass
 		elif referer is not None: headers['Referer'] = referer
@@ -106,7 +123,7 @@ def request(url, close=True, redirect=True, error=False, proxy=None, post=None, 
 		req = urllib2.Request(url, data=post)
 		_add_request_header(req, headers)
 		try:
-			response = urllib2.urlopen(req, timeout=int(timeout))
+			response = urllib2.urlopen(req, timeout=_t(timeout))
 		except HTTPError as error_response:# if HTTPError, using "as response" will be reset after entire Exception code runs and throws error around line 247 as "local variable 'response' referenced before assignment", re-assign it
 			response = error_response
 			try: ignore = ignoreErrors and (int(response.code) == ignoreErrors or int(response.code) in ignoreErrors)
@@ -130,8 +147,8 @@ def request(url, close=True, redirect=True, error=False, proxy=None, post=None, 
 								except: data = None
 							scraper = cfscrape.CloudScraper()
 							if response.code == 403: # possible bad User-Agent in headers, let cfscrape assign
-								response = scraper.request(method='GET' if post is None else 'POST', url=url, data=data, timeout=int(timeout))
-							else: response = scraper.request(method='GET' if post is None else 'POST', url=url, headers=headers, data=data, timeout=int(timeout))
+								response = scraper.request(method='GET' if post is None else 'POST', url=url, data=data, timeout=_t(timeout))
+							else: response = scraper.request(method='GET' if post is None else 'POST', url=url, headers=headers, data=data, timeout=_t(timeout))
 							result = response.content
 							flare = 'cloudflare' # Used below
 							try: cookies = response.request._cookies
@@ -149,7 +166,7 @@ def request(url, close=True, redirect=True, error=False, proxy=None, post=None, 
 						headers['Cookie'] = cf
 						req = urllib2.Request(url, data=post)
 						_add_request_header(req, headers)
-						response = urllib2.urlopen(req, timeout=int(timeout))
+						response = urllib2.urlopen(req, timeout=_t(timeout))
 					else:
 						if error is False:
 							from abscrapers.engines.coco.modules import log_utils
@@ -214,7 +231,7 @@ def request(url, close=True, redirect=True, error=False, proxy=None, post=None, 
 			headers['Cookie'] = su
 			req = urllib2.Request(url, data=post)
 			_add_request_header(req, headers)
-			response = urllib2.urlopen(req, timeout=int(timeout))
+			response = urllib2.urlopen(req, timeout=_t(timeout))
 			if limit == '0': result = response.read(224 * 1024)
 			elif limit is not None: result = response.read(int(limit) * 1024)
 			else: result = response.read(5242880)
@@ -257,7 +274,7 @@ def _basic_request(url, headers=None, post=None, method='GET', timeout='30', lim
 		except: headers = {}
 		req = urllib2.Request(url, data=post, method=method)
 		_add_request_header(req, headers)
-		response = urllib2.urlopen(req, timeout=int(timeout))
+		response = urllib2.urlopen(req, timeout=_t(timeout))
 		return _get_result(response, limit, ret_code)
 	except:
 		from abscrapers.engines.coco.modules import log_utils
@@ -373,7 +390,7 @@ class cfcookie:
 			req = urllib2.Request(netloc)
 			_add_request_header(req, headers)
 
-			try: response = urllib2.urlopen(req, timeout=int(timeout))
+			try: response = urllib2.urlopen(req, timeout=_t(timeout))
 			except HTTPError as response:
 				result = response.read(5242880)
 				try: encoding = response.headers["Content-Encoding"]
@@ -407,7 +424,7 @@ class cfcookie:
 			try:
 				req = urllib2.Request(query)
 				_add_request_header(req, headers)
-				response = urllib2.urlopen(req, timeout=int(timeout))
+				response = urllib2.urlopen(req, timeout=_t(timeout))
 			except: pass
 			cookie = '; '.join(['%s=%s' % (i.name, i.value) for i in cookies])
 			if 'cf_clearance' in cookie: self.cookie = cookie

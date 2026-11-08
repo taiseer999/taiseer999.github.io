@@ -1432,3 +1432,34 @@ msgctxt "#33135"
 msgid "Movie %s not found"
 msgstr ""
 
+msgctxt "#33136"
+msgid "Provider time limit (seconds) - a provider that has not answered is skipped"
+msgstr ""
+
+msgctxt "#33137"
+msgid "Share results between add-ons searching the same title (AB Search All)"
+msgstr ""
+
+msgctxt "#33138"
+msgid "Keep shared results for (seconds)"
+msgstr ""
+
+msgctxt "#33139"
+msgid "ISO releases (Blu-ray disc images)"
+msgstr ""
+
+msgctxt "#33140"
+msgid "Show all"
+msgstr ""
+
+msgctxt "#33141"
+msgid "Hide ISO releases"
+msgstr ""
+
+msgctxt "#33142"
+msgid "ISO releases only"
+msgstr ""
+
+msgctxt "#33143"
+msgid "Also count full-disc releases (COMPLETE BLURAY, BDMV, BD50...)"
+msgstr ""
