@@ -1,0 +1,279 @@
+<?xml version="1.0" ?>
+<settings version="1">
+	<section id="script.light.imdb.ratings.update">
+		<category id="General" label="32801" help="">
+			<group id="1" label="">
+				<setting id="DatasetDate" type="string" label="" help="">
+					<level>0</level>
+					<default>Sat, 01 Jan 2000</default>
+					<control type="edit" format="string">
+						<heading></heading>
+					</control>
+					<visible>false</visible>
+				</setting>
+				<setting id="Top250Date" type="string" label="" help="">
+					<level>0</level>
+					<default>Sat, 01 Jan 2000</default>
+					<control type="edit" format="string">
+						<heading></heading>
+					</control>
+					<visible>false</visible>
+				</setting>
+				<setting id="Movies" type="boolean" label="32807" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="TVShows" type="boolean" label="32810" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="IncludeEpisodes" type="boolean" label="32818" help="" parent="TVShows">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+					<dependencies>
+						<dependency type="enable" setting="TVShows">true</dependency>
+					</dependencies>
+				</setting>
+				<setting id="UpdateMode" type="integer" label="32835" help="" parent="TVShows">
+					<level>0</level>
+					<default>0</default>
+					<constraints>
+						<options>
+							<option label="32836">0</option>
+							<option label="32837">1</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+					<dependencies>
+						<dependency type="enable">
+							<and>
+								<condition setting="TVShows">true</condition>
+								<condition setting="IncludeEpisodes">true</condition>
+							</and>
+						</dependency>
+					</dependencies>
+					<visible>false</visible>
+				</setting>
+				<setting id="IncludeTop250" type="boolean" label="32883" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="IMDbRatingDefault" type="boolean" label="32820" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
+		</category>
+		<category id="UpdateOptions" label="32887" help="">
+			<group id="1" label="32893">
+				<setting id="UpdateDatabaseStartup" type="boolean" label="32884" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="UpdateDatabaseRatings" type="boolean" label="32885" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="UpdatingDatabase" type="boolean" label="" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+					<visible>false</visible>
+				</setting>
+				<setting id="LastDatabaseUpdate" type="date" label="" help="">
+					<level>0</level>
+					<default>2000-01-01</default>
+					<control type="button" format="date">
+						<heading></heading>
+					</control>
+					<visible>false</visible>
+				</setting>
+			</group>
+			<group id="2" label="32894">
+				<setting id="FilterByDateAdded" type="boolean" label="32860" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="Months" type="integer" label="32861" help="" parent="FilterByDateAdded">
+					<level>0</level>
+					<default>6</default>
+					<control type="edit" format="integer">
+						<heading>32861</heading>
+					</control>
+					<dependencies>
+						<dependency type="enable" setting="FilterByDateAdded">true</dependency>
+					</dependencies>
+				</setting>
+				<setting id="FilterByYear" type="boolean" label="32862" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="Year" type="integer" label="32863" help="" parent="FilterByYear">
+					<level>0</level>
+					<default>2025</default>
+					<control type="edit" format="integer">
+						<heading>32863</heading>
+					</control>
+					<dependencies>
+						<dependency type="enable" setting="FilterByYear">true</dependency>
+					</dependencies>
+				</setting>
+			</group>
+			<group id="3" label="32895">
+				<setting id="NumberOfThreads" type="integer" label="32804" help="">
+					<level>0</level>
+					<default>8</default>
+					<constraints>
+						<options>
+							<option label="32850">8</option>
+							<option label="32851">16</option>
+							<option label="32852">1</option>
+							<option label="32853">2</option>
+							<option label="32854">4</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+			</group>
+		</category>
+		<category id="Scheduling" label="32821" help="">
+			<group id="1" label="">
+				<setting id="ScheduleEnabled" type="boolean" label="32822" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="ScheduleType" type="integer" label="32838" help="" parent="ScheduleEnabled">
+					<level>0</level>
+					<default>0</default>
+					<constraints>
+						<options>
+							<option label="32826">0</option>
+							<option label="32827">1</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+					<dependencies>
+						<dependency type="enable" setting="ScheduleEnabled">true</dependency>
+					</dependencies>
+				</setting>
+				<setting id="WeekDay" type="integer" label="32813" help="" parent="ScheduleEnabled">
+					<level>0</level>
+					<default>0</default>
+					<constraints>
+						<options>
+							<option label="32828">0</option>
+							<option label="32829">1</option>
+							<option label="32830">2</option>
+							<option label="32831">3</option>
+							<option label="32832">4</option>
+							<option label="32833">5</option>
+							<option label="32834">6</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+					<dependencies>
+						<dependency type="enable" setting="ScheduleEnabled">true</dependency>
+						<dependency type="enable" setting="ScheduleType">0</dependency>
+					</dependencies>
+				</setting>
+				<setting id="DayTime" type="time" label="32814" help="" parent="ScheduleEnabled">
+					<level>0</level>
+					<default>12:00</default>
+					<control type="button" format="time">
+						<heading>32814</heading>
+					</control>
+					<dependencies>
+						<dependency type="enable" setting="ScheduleEnabled">true</dependency>
+					</dependencies>
+				</setting>
+				<setting id="ScheduledWeekDay" type="date" label="" help="">
+					<level>0</level>
+					<default>2000-01-01</default>
+					<control type="button" format="date">
+						<heading></heading>
+					</control>
+					<visible>false</visible>
+				</setting>
+				<setting id="PerformingUpdate" type="boolean" label="" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+					<visible>false</visible>
+				</setting>
+			</group>
+		</category>
+		<category id="ContextMenuOptions" label="32870" help="">
+			<group id="1" label="">
+				<setting id="EnableContextMenu" type="boolean" label="32871" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="UseEstuaryColors" type="boolean" label="32872" help="" parent="EnableContextMenu">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+					<dependencies>
+						<dependency type="enable" setting="EnableContextMenu">true</dependency>
+					</dependencies>
+				</setting>
+			</group>
+		</category>
+		<category id="Notifications" label="32815" help="">
+			<group id="1" label="">
+				<setting id="ShowNotifications" type="boolean" label="32816" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="NotificationsSound" type="boolean" label="32819" help="" parent="ShowNotifications">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+					<dependencies>
+						<dependency type="enable" setting="ShowNotifications">true</dependency>
+					</dependencies>
+				</setting>
+				<setting id="ShowProgress" type="boolean" label="32817" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="ShowErrorMessage" type="boolean" label="32823" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="IgnoreNotFound" type="boolean" label="32910" help="" parent="ShowErrorMessage">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+					<dependencies>
+						<dependency type="enable" setting="ShowErrorMessage">true</dependency>
+					</dependencies>
+				</setting>
+				<setting id="LogDialog" type="boolean" label="" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+					<visible>false</visible>
+				</setting>
+				<setting id="CompleteLog" type="boolean" label="32825" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
+		</category>
+	</section>
+</settings>

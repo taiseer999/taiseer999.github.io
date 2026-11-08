@@ -1,0 +1,349 @@
+# KODI Media Center Language File
+# Addon Name: Light IMDb Ratings Update
+# Addon ID: script.light.imdb.ratings.update
+# Addon Provider: axlt2002
+msgid ""
+msgstr ""
+"Project-Id-Version: Light IMDb Ratings Update\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-05-26 00:00+0000\n"
+"PO-Revision-Date: 2017-05-26 00:00+0000\n"
+"Last-Translator: axlt2002 \n"
+"Language-Team: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Light IMDb Ratings Update is a Kodi add-on that keeps updated the IMDb ratings for your movies and TV shows."
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Light IMDb Ratings Update runs as a Kodi service to update the ratings and votes for movies and TV shows (including episodes) using the IMDb Non-Commercial Dataset for ratings (information courtesy of IMDb, https://www.imdb.com, in compliance with related copyright and conditions of use). Additionally, it also updates the Top 250 for movies by obtaining the information from IMDb Top250.Informer site. The update can be launched manually or scheduled daily or weekly and it will run as soon as possible after a scheduled start is missed. Please check the add-on thread in the Kodi forum for more details."
+msgstr ""
+
+msgctxt "#32000"
+msgid "Update IMDb ratings"
+msgstr ""
+
+msgctxt "#32250"
+msgid "An error occurred while creating or connecting to the database. Please check the log file"
+msgstr ""
+
+msgctxt "#32251"
+msgid "The ratings update is already running, please wait..."
+msgstr ""
+
+msgctxt "#32252"
+msgid "The database is currently updating, please wait..."
+msgstr ""
+
+msgctxt "#32253"
+msgid "Update"
+msgstr ""
+
+msgctxt "#32255"
+msgid "Ratings update for movies started"
+msgstr ""
+
+msgctxt "#32256"
+msgid "Ratings update for TV shows started"
+msgstr ""
+
+msgctxt "#32257"
+msgid "An issue occurred while updating the database. Please check the log file"
+msgstr ""
+
+msgctxt "#32258"
+msgid "Ratings update for movies finished"
+msgstr ""
+
+msgctxt "#32259"
+msgid "Ratings update for TV shows finished"
+msgstr ""
+
+msgctxt "#32260"
+msgid "Updating IMDb ratings..."
+msgstr ""
+
+msgctxt "#32263"
+msgid "Rating"
+msgstr ""
+
+msgctxt "#32264"
+msgid "votes"
+msgstr ""
+
+msgctxt "#32265"
+msgid "Top 250"
+msgstr ""
+
+msgctxt "#32528"
+msgid "n/a"
+msgstr ""
+
+msgctxt "#32801"
+msgid "General"
+msgstr ""
+
+msgctxt "#32804"
+msgid "Number of threads"
+msgstr ""
+
+msgctxt "#32807"
+msgid "Update ratings for movies"
+msgstr ""
+
+msgctxt "#32810"
+msgid "Update ratings for TV shows"
+msgstr ""
+
+msgctxt "#32813"
+msgid "Day"
+msgstr ""
+
+msgctxt "#32814"
+msgid "Time"
+msgstr ""
+
+msgctxt "#32815"
+msgid "Notifications"
+msgstr ""
+
+msgctxt "#32816"
+msgid "Show update notifications"
+msgstr ""
+
+msgctxt "#32817"
+msgid "Show update progress"
+msgstr ""
+
+msgctxt "#32818"
+msgid "Include episodes"
+msgstr ""
+
+msgctxt "#32819"
+msgid "Enable sound"
+msgstr ""
+
+msgctxt "#32820"
+msgid "Set IMDb ratings as default"
+msgstr ""
+
+msgctxt "#32821"
+msgid "Scheduling"
+msgstr ""
+
+msgctxt "#32822"
+msgid "Enable scheduling"
+msgstr ""
+
+msgctxt "#32823"
+msgid "Show error messages"
+msgstr ""
+
+msgctxt "#32824"
+msgid "One or more issues have been occurred during the update. Please check the log file"
+msgstr ""
+
+msgctxt "#32825"
+msgid "Enable complete log"
+msgstr ""
+
+msgctxt "#32826"
+msgid "Weekly"
+msgstr ""
+
+msgctxt "#32827"
+msgid "Daily"
+msgstr ""
+
+msgctxt "#32828"
+msgid "Monday"
+msgstr ""
+
+msgctxt "#32829"
+msgid "Tuesday"
+msgstr ""
+
+msgctxt "#32830"
+msgid "Wednesday"
+msgstr ""
+
+msgctxt "#32831"
+msgid "Thursday"
+msgstr ""
+
+msgctxt "#32832"
+msgid "Friday"
+msgstr ""
+
+msgctxt "#32833"
+msgid "Saturday"
+msgstr ""
+
+msgctxt "#32834"
+msgid "Sunday"
+msgstr ""
+
+msgctxt "#32835"
+msgid "Ratings update mode"
+msgstr ""
+
+msgctxt "#32836"
+msgid "Episode"
+msgstr ""
+
+msgctxt "#32837"
+msgid "Season"
+msgstr ""
+
+msgctxt "#32838"
+msgid "Scheduling period"
+msgstr ""
+
+msgctxt "#32840"
+msgid "The movies video library is empty or there are no movies to be updated based on the current filters settings. Please check"
+msgstr ""
+
+msgctxt "#32841"
+msgid "The TV shows video library is empty or there are no TV shows to be updated based on the current filters settings. Please check"
+msgstr ""
+
+msgctxt "#32842"
+msgid "The ratings update of movies and TV shows is disabled. Please check the add-on settings"
+msgstr ""
+
+msgctxt "#32850"
+msgid "8"
+msgstr ""
+
+msgctxt "#32851"
+msgid "16"
+msgstr ""
+
+msgctxt "#32852"
+msgid "1"
+msgstr ""
+
+msgctxt "#32853"
+msgid "2"
+msgstr ""
+
+msgctxt "#32854"
+msgid "4"
+msgstr ""
+
+msgctxt "#32860"
+msgid "Enable filter by date added to the library"
+msgstr ""
+
+msgctxt "#32861"
+msgid "Time period (months)"
+msgstr ""
+
+msgctxt "#32862"
+msgid "Enable filter by year (premiered/first aired)"
+msgstr ""
+
+msgctxt "#32863"
+msgid "Year (including previous years)"
+msgstr ""
+
+msgctxt "#32870"
+msgid "Context menu"
+msgstr ""
+
+msgctxt "#32871"
+msgid "Enable context menu"
+msgstr ""
+
+msgctxt "#32872"
+msgid "Use Estuary colors"
+msgstr ""
+
+msgctxt "#32880"
+msgid "Updating database..."
+msgstr ""
+
+msgctxt "#32881"
+msgid "The database has been successfully updated"
+msgstr ""
+
+msgctxt "#32882"
+msgid "The database does not exist or it contains some errors. Please update it"
+msgstr ""
+
+msgctxt "#32883"
+msgid "Include Top 250 for movies"
+msgstr ""
+
+msgctxt "#32884"
+msgid "Update database at Kodi startup"
+msgstr ""
+
+msgctxt "#32885"
+msgid "Update database when ratings update starts"
+msgstr ""
+
+msgctxt "#32887"
+msgid "Update options"
+msgstr ""
+
+msgctxt "#32890"
+msgid "Update ratings"
+msgstr ""
+
+msgctxt "#32891"
+msgid "Update database"
+msgstr ""
+
+msgctxt "#32892"
+msgid "Settings"
+msgstr ""
+
+msgctxt "#32893"
+msgid "Database"
+msgstr ""
+
+msgctxt "#32894"
+msgid "Ratings"
+msgstr ""
+
+msgctxt "#32895"
+msgid "Performance"
+msgstr ""
+
+msgctxt "#32896"
+msgid "Database information"
+msgstr ""
+
+msgctxt "#32900"
+msgid "Update all movies in the set"
+msgstr ""
+
+msgctxt "#32901"
+msgid "Update all the episodes of the TV show"
+msgstr ""
+
+msgctxt "#32902"
+msgid "Update all the episodes of the season"
+msgstr ""
+
+msgctxt "#32905"
+msgid "Last database update: "
+msgstr ""
+
+msgctxt "#32906"
+msgid "IMDb ratings dataset: "
+msgstr ""
+
+msgctxt "#32907"
+msgid "Top 250 chart: "
+msgstr ""
+
+msgctxt "#32910"
+msgid "Ignore IMDb ID not found in the database"
+msgstr ""
