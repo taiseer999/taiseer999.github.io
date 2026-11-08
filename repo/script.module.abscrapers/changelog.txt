@@ -1,3 +1,13 @@
+[B]AB Scrapers v1.1.8[/B]
+- FIX: after updating to 1.1.7, the second AB Search All (first one after a
+  boot worked) hung - Fen Light, Umbrella, Red Light, POV and Dex Hub never
+  started (kodi.log 2026-11-08 11:30:22, 11:37:13). The new ISO filter
+  settings were not in the profile settings yet, so every provider result in
+  every add-on asked Kodi for them (xbmcaddon.Addon().getSetting) from the
+  provider threads. A setting missing from the profile now takes its default
+  from resources/settings.xml in Python; Kodi is asked only for ids without a
+  shipped default.
+
 [B]AB Scrapers v1.1.7[/B]
 - New: ISO filter (Settings > Filters > ISO releases): Show all (default) /
   Hide ISO releases / ISO releases only. Works on the release name for every

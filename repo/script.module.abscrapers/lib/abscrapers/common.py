@@ -89,7 +89,16 @@ def setting(id, fallback=None):
 	except Exception:
 		settings_dict = make_settings_dict()
 	if not settings_dict or id not in settings_dict:
-		settings_dict = settings_fallback(id) # not in the profile yet -> addon default
+		# 1.1.8: a setting not in the profile yet (new in this version) takes its
+		# default from resources/settings.xml - parsed in Python, no Kodi call.
+		# 1.1.7 fell through to xbmcaddon.Addon().getSetting() for filter.iso on
+		# every provider result, from the provider threads of every add-on; the
+		# second AB Search All after a boot then hung before any add-on started
+		# (kodi.log 2026-11-08 11:30:22 and 11:37:13). Kodi is asked only for
+		# ids it does not ship a default for.
+		defaults = addon_defaults()
+		if id in defaults: settings_dict = {id: defaults[id]}
+		else: settings_dict = settings_fallback(id)
 	value = settings_dict.get(id, '')
 	if fallback is None: return value
 	if value == '': return fallback
