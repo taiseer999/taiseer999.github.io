@@ -1432,3 +1432,14 @@ msgctxt "#33135"
 msgid "Movie %s not found"
 msgstr ""
 
+msgctxt "#33136"
+msgid "Provider time limit (seconds) - a provider that has not answered is skipped"
+msgstr ""
+
+msgctxt "#33137"
+msgid "Share results between add-ons searching the same title (AB Search All)"
+msgstr ""
+
+msgctxt "#33138"
+msgid "Keep shared results for (seconds)"
+msgstr ""

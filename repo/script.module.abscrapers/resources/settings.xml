@@ -9,6 +9,9 @@
 		<setting type="action" label="33044" action="RunPlugin(plugin://script.module.abscrapers/?action=toggleAllPackTorrent)" />
 		<setting type="lsep" label="33045" />
 		<setting id="composite.timeout" type="slider" label="33046" default="30" range="10,5,90" option="int" />
+		<setting id="provider.timeout" type="slider" label="33136" default="15" range="5,1,60" option="int" />
+		<setting id="share.results" type="bool" label="33137" default="true" />
+		<setting id="share.ttl" type="slider" label="33138" default="180" range="30,30,900" option="int" enable="eq(-1,true)" />
 		<setting type="action" label="33048" action="RunPlugin(plugin://script.module.abscrapers/?action=ShowHelp&amp;name=torrentInfo)" />
 		<setting type="action" label="33049" action="RunPlugin(plugin://script.module.abscrapers/?action=ShowHelp&amp;name=packScrapers)" />
 		<setting type="action" label="33047" action="RunPlugin(plugin://script.module.abscrapers/?action=ShowChangelog)" />

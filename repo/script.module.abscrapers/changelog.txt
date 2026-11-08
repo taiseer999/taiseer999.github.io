@@ -1,3 +1,21 @@
+[B]AB Scrapers v1.1.6[/B]
+- FIX Kodi freeze in AB Search All (kodi.log 2026-11-08 10:13 and 10:16): on a
+  title not searched before, BTDig / LimeTorrents never answered. Only
+  multi-engine providers had a time limit, so the single-engine ones kept
+  Fen Light / Umbrella open ("waiting on thread"), Red Light never got its
+  turn and the whole search hung.
+- New: hard time limit for EVERY provider (Settings > Provider time limit,
+  default 15 s). A provider that has not answered returns 0 results and the
+  calling add-on carries on.
+- New: shared results. When several add-ons search the same title at the same
+  time (AB Search All: Fen Light + Umbrella + Red Light), the first one runs
+  each provider and the others reuse its answer - 28 provider searches instead
+  of 84. Each add-on still applies its own repeated-results filter.
+  Can be switched off; results kept 180 s (adjustable).
+- Scraper cache / undesirables databases: wait at most 8 s for a lock (was 60 s).
+- One cached User-Agent per add-on instead of a database read on every request;
+  socket timeouts capped at 12 s in the Gears and Coco clients.
+
 [B]AB Scrapers v1.1.5[/B]
 - Gears engine updated 1.6.2 -> 1.6.5 (upstream code beyond 1.6.2 was already in
   AB; the new part is the shared sfport base and 6 providers).
