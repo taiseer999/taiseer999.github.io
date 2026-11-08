@@ -674,6 +674,10 @@ def _af3_discmenu_button(cid, gid, vis, icon, arg):
         '                                    <bordersize>12</bordersize>\n'
         '                                    <height>80</height>\n'
         '                                    <width>80</width>\n'
+        '                                    <include content="ABK_Lucent_IconFocus" condition="Skin.HasSetting(abk.lucent)">\n'
+        '                                        <param name="icon">%(icon)s</param>\n'
+        '                                        <param name="flipx">false</param>\n'
+        '                                    </include>\n'
         '                                    <texture colordiffuse="$VAR[ColorSelected]">%(icon)s</texture>\n'
         '                                    <visible>Control.HasFocus(%(cid)d)</visible>\n'
         '                                </control>\n'
@@ -683,12 +687,25 @@ def _af3_discmenu_button(cid, gid, vis, icon, arg):
 
 
 _AF3_DISCMENU_XML = (
-    '\n\n                        <!-- ABUKARIM: AF3 disc menu buttons -->'
+    '\n\n                        <!-- ABUKARIM: AF3 disc menu buttons v2 -->'
     + _af3_discmenu_button(6015, 6115, _AF3_DISCMENU_VIS + ' + !VideoPlayer.HasMenu',
-                           'special://skin/extras/icons/compact-disc.png', 'menu')
+                           '$VAR[ABK_LucentIcon_discmenu]', 'menu')
     + _af3_discmenu_button(6016, 6116, _AF3_DISCMENU_VIS + ' + VideoPlayer.HasMenu',
-                           'special://skin/extras/icons/film.png', 'normal')
-    + '                        <!-- /ABUKARIM: AF3 disc menu buttons -->'
+                           '$VAR[ABK_LucentIcon_normalplayer]', 'normal')
+    + '                        <!-- /ABUKARIM: AF3 disc menu buttons v2 -->'
+)
+# Icons: Lucent Look line icons while abk.lucent is on, AF3's own otherwise.
+# Own variable block (not the Lucent one), so it exists on every AF3.
+_AF3_DISCMENU_ICONVARS = (
+    '    <!-- ABUKARIM: disc menu icons -->\n'
+    '    <variable name="ABK_LucentIcon_discmenu">\n'
+    '        <value condition="Skin.HasSetting(abk.lucent)">abk_lucent/icons/discmenu.png</value>\n'
+    '        <value>special://skin/extras/icons/compact-disc.png</value>\n'
+    '    </variable>\n'
+    '    <variable name="ABK_LucentIcon_normalplayer">\n'
+    '        <value condition="Skin.HasSetting(abk.lucent)">abk_lucent/icons/normalplayer.png</value>\n'
+    '        <value>special://skin/extras/icons/film.png</value>\n'
+    '    </variable>\n'
 )
 _AF3_DISCMENU_ONLEFT_OLD = '                        <onleft>6004</onleft>\n                        <onright>6001</onright>'
 _AF3_DISCMENU_ONLEFT_NEW = (
@@ -3235,13 +3252,59 @@ PATCHES = [
     # ── AF3: Disc Menu for ISO streams (4.7.36) ──
     # Always-on XML, gated in the skin by Skin.HasSetting(abk.discmenu)
     # (Toggles > AF3: Disc Menu for ISO Streams, af3_discmenu_toggle.py).
+    # Lucent Look: glass buttons (Defs_OSD_Button), dark focused icon and
+    # Lucent line icons (media/abk_lucent/icons/discmenu|normalplayer.png).
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lucent', 'icons', 'discmenu.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_lucent', 'icons', 'discmenu.png'),
+        'description': 'AF3 Disc Menu - Lucent icon discmenu',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('media', 'abk_lucent', 'icons', 'normalplayer.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_lucent', 'icons', 'normalplayer.png'),
+        'description': 'AF3 Disc Menu - Lucent icon normalplayer',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Images.xml'),
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': '<!-- ABUKARIM: disc menu icons -->',
+        'fallback_pattern': '(<includes>[ \\t]*\\r?\\n)',
+        'fallback_repl': '\\g<1>' + _AF3_DISCMENU_ICONVARS,
+        'description': 'AF3 Disc Menu - icon variables (Includes_Images.xml)',
+    },
+    # 4.7.37: drop the 4.7.36 buttons (AF3 icons only, no Lucent focus);
+    # the v2 block below goes in at the same place.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': None,
+        'fallback_pattern': r'(</include>)\n\n {24}<!-- ABUKARIM: AF3 disc menu buttons -->[\s\S]*?<!-- /ABUKARIM: AF3 disc menu buttons -->',
+        'fallback_repl': r'\1',
+        'description': 'AF3 Disc Menu - remove the 4.7.36 buttons',
+    },
     {
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
         'not_found_ok': True,
         'old': _AF3_DISCMENU_ANCHOR,
         'new': _AF3_DISCMENU_ANCHOR + _AF3_DISCMENU_XML,
-        'already_patched_check': '<!-- ABUKARIM: AF3 disc menu buttons -->',
+        'already_patched_check': '<!-- ABUKARIM: AF3 disc menu buttons v2 -->',
         'description': 'AF3 Disc Menu - OSD buttons (disc menu / normal player) for ISO streams',
     },
     {

@@ -19,7 +19,7 @@ from resources.lib.i18n import T
 SKIN_ID = 'skin.arctic.fuse.3'
 SETTING = 'abk.discmenu'
 TITLE = 'ABUKARIM TOOLS'
-MARK = '<!-- ABUKARIM: AF3 disc menu buttons -->'
+MARK = '<!-- ABUKARIM: AF3 disc menu buttons v2 -->'
 
 
 def _log(msg, level=xbmc.LOGINFO):

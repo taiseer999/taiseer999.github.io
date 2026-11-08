@@ -1,3 +1,12 @@
+v4.7.37
+- AF3: Disc Menu for ISO Streams with AF3: Lucent Look - the Disc Menu /
+  Normal Player buttons follow the look: glass button (Defs_OSD_Button),
+  dark icon on the white focus (ABK_Lucent_IconFocus) and new Lucent line
+  icons discmenu.png / normalplayer.png (tools/gen_af3_lucent_icons.py,
+  media/abk_lucent/icons/). With the look off they keep AF3's compact-disc /
+  film icons ($VAR[ABK_LucentIcon_discmenu|normalplayer], own variable block
+  in Includes_Images.xml). The 4.7.36 buttons are replaced in place.
+
 v4.7.36
 - AF3: Disc Menu for ISO Streams (new Toggles entry, off by default; skin bool
   abk.discmenu). A Blu-ray ISO from a stream add-on (Fen Light, Umbrella, Red

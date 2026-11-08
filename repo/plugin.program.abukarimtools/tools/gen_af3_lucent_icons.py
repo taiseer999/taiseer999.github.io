@@ -152,6 +152,21 @@ def build():
     d.ellipse(p(57, 55, 83, 81), outline=W, width=int(6 * S))
     save(im, 'ppi'); made.append('ppi')
 
+    # 4.7.36: Disc Menu / Normal Player (AF3: Disc Menu for ISO Streams)
+    im, d = canvas()                                   # disc + menu lines
+    d.ellipse(p(8, 8, 66, 66), outline=W, width=int(STROKE * S))
+    d.ellipse(p(30, 30, 44, 44), fill=W)
+    badge_hole(d, 70, 70, 28)
+    for y in (56, 70, 84):
+        line(d, [(56, y), (86, y)], w=6)
+    save(im, 'discmenu'); made.append('discmenu')
+
+    im, d = canvas()                                   # screen + play = normal player
+    d.rounded_rectangle(p(10, 18, 86, 72), radius=10 * S, outline=W, width=int(STROKE * S))
+    tri(d, 40, 60, 45, 12)
+    line(d, [(30, 84), (66, 84)])
+    save(im, 'normalplayer'); made.append('normalplayer')
+
     return made
 
 
