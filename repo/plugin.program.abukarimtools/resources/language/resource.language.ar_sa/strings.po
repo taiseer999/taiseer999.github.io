@@ -2488,3 +2488,35 @@ msgctxt "#32101"
 msgid "The sound goes straight to your amplifier - use its volume"
 msgstr "يذهب الصوت مباشرةً إلى المُضخِّم؛ استخدم مستوى صوته"
 
+msgctxt "#32102"
+msgid "AF3: Disc Menu for ISO Streams"
+msgstr "AF3: قائمة القرص لملفات ISO المبثوثة"
+
+msgctxt "#32103"
+msgid "Disc menu buttons are on - they show in the player while an ISO plays from a stream"
+msgstr "تم تشغيل أزرار قائمة القرص، وتظهر في المشغّل أثناء بثّ ملف ISO"
+
+msgctxt "#32104"
+msgid "Disc menu buttons are off"
+msgstr "تم إيقاف أزرار قائمة القرص"
+
+msgctxt "#32105"
+msgid "Disc menu: Arctic Fuse 3 could not be patched. Run Apply Patches and try again."
+msgstr "قائمة القرص: تعذّر تعديل Arctic Fuse 3. شغّل تطبيق الترقيعات ثم أعد المحاولة."
+
+msgctxt "#32106"
+msgid "This is not an ISO stream"
+msgstr "هذا ليس ملف ISO مبثوثًا"
+
+msgctxt "#32107"
+msgid "Opening the disc menu..."
+msgstr "جارٍ فتح قائمة القرص..."
+
+msgctxt "#32108"
+msgid "Back to the normal player..."
+msgstr "جارٍ العودة إلى المشغّل العادي..."
+
+msgctxt "#32109"
+msgid "The main movie was not found on the disc - playing the ISO as before"
+msgstr "لم يُعثَر على الفيلم الرئيسي في القرص؛ سيُشغَّل ملف ISO كما كان"
+

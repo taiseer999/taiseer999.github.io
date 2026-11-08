@@ -626,6 +626,80 @@ _AF3_SUBSTYLE_POPUP_XML = (
 )
 
 
+# ── AF3: Disc Menu for ISO streams (4.7.36, Toggles 'af3_discmenu') ──
+# Two OSD buttons at the end of the left bar (after Stop), shown only while
+# the skin bool abk.discmenu is on (af3_discmenu_toggle.py) and a Blu-ray ISO
+# is playing from a stream (http... .iso):
+#   6015 Disc Menu      - main-movie playback (no disc menu): reopen the same
+#                         ISO in disc-menu mode (disc_menu.py)
+#   6016 Normal Player  - disc-menu playback: back to the main movie in the
+#                         normal AF3 player, at the same point
+# The icon groups carry the same <visible> as their buttons, so a hidden
+# button leaves no gap in the bar. Left-bar end slot: the OSD popups (slots
+# 1-4, left-aligned) do not move. The right bar's "left" goes to the visible one.
+_AF3_DISCMENU_VIS = ('Skin.HasSetting(abk.discmenu) + !VideoPlayer.Content(livetv)'
+                     ' + String.Contains(Player.Filenameandpath,http)'
+                     ' + String.Contains(Player.Filenameandpath,.iso)')
+_AF3_DISCMENU_ANCHOR = (
+    '                            <param name="groupid">6104</param>\n'
+    '                            <param name="itemgap">osd_itemgap</param>\n'
+    '                        </include>'
+)
+
+
+def _af3_discmenu_button(cid, gid, vis, icon, arg):
+    return (
+        '\n                        <control type="button" id="%(cid)d">\n'
+        '                            <include>Defs_OSD_Button</include>\n'
+        '                            <visible>%(vis)s</visible>\n'
+        '                            <onclick>CancelAlarm(osd_timeout,true)</onclick>\n'
+        '                            <onclick>RunPlugin(plugin://plugin.program.abukarimtools/?mode=disc_menu&amp;go=%(arg)s)</onclick>\n'
+        '                            <onclick>Close</onclick>\n'
+        '                            <onup>8200</onup>\n'
+        '                        </control>\n'
+        '                        <control type="group" id="%(gid)d">\n'
+        '                            <visible>%(vis)s</visible>\n'
+        '                            <left>-osd_itemgap</left>\n'
+        '                            <width>0</width>\n'
+        '                            <control type="group">\n'
+        '                                <left>-80</left>\n'
+        '                                <control type="image">\n'
+        '                                    <bordersize>12</bordersize>\n'
+        '                                    <height>80</height>\n'
+        '                                    <width>80</width>\n'
+        '                                    <texture colordiffuse="panel_fg_70">%(icon)s</texture>\n'
+        '                                    <visible>!Control.HasFocus(%(cid)d)</visible>\n'
+        '                                </control>\n'
+        '                                <control type="image">\n'
+        '                                    <bordersize>12</bordersize>\n'
+        '                                    <height>80</height>\n'
+        '                                    <width>80</width>\n'
+        '                                    <texture colordiffuse="$VAR[ColorSelected]">%(icon)s</texture>\n'
+        '                                    <visible>Control.HasFocus(%(cid)d)</visible>\n'
+        '                                </control>\n'
+        '                            </control>\n'
+        '                        </control>\n'
+    ) % dict(cid=cid, gid=gid, vis=vis, icon=icon, arg=arg)
+
+
+_AF3_DISCMENU_XML = (
+    '\n\n                        <!-- ABUKARIM: AF3 disc menu buttons -->'
+    + _af3_discmenu_button(6015, 6115, _AF3_DISCMENU_VIS + ' + !VideoPlayer.HasMenu',
+                           'special://skin/extras/icons/compact-disc.png', 'menu')
+    + _af3_discmenu_button(6016, 6116, _AF3_DISCMENU_VIS + ' + VideoPlayer.HasMenu',
+                           'special://skin/extras/icons/film.png', 'normal')
+    + '                        <!-- /ABUKARIM: AF3 disc menu buttons -->'
+)
+_AF3_DISCMENU_ONLEFT_OLD = '                        <onleft>6004</onleft>\n                        <onright>6001</onright>'
+_AF3_DISCMENU_ONLEFT_NEW = (
+    '                        <!-- ABUKARIM: AF3 disc menu buttons (left from the right bar) -->\n'
+    '                        <onleft condition="Control.IsVisible(6015)">6015</onleft>\n'
+    '                        <onleft condition="Control.IsVisible(6016)">6016</onleft>\n'
+    '                        <onleft condition="!Control.IsVisible(6015) + !Control.IsVisible(6016)">6004</onleft>\n'
+    '                        <onright>6001</onright>'
+)
+
+
 # 4.7.14: the old by-path launcher prefix (migration entries below)
 _ABK_SCRIPT_PATH = 'RunScript(special://home/addons/plugin.program.abukarimtools/'
 
@@ -3157,6 +3231,27 @@ PATCHES = [
         'fallback_pattern': r'([ \t]*<include content="OSD_CustomDialog_FakeButton" condition="!\[\$PARAM\[button_8\]\]">)',
         'fallback_repl': _AF3_SUBTOOLS_POPUP_XML.replace('\\', '\\\\') + r'\1',
         'description': 'AF3 Subtitle Buttons - matching slots in OSD popups (no duplicate icons)',
+    },
+    # ── AF3: Disc Menu for ISO streams (4.7.36) ──
+    # Always-on XML, gated in the skin by Skin.HasSetting(abk.discmenu)
+    # (Toggles > AF3: Disc Menu for ISO Streams, af3_discmenu_toggle.py).
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'not_found_ok': True,
+        'old': _AF3_DISCMENU_ANCHOR,
+        'new': _AF3_DISCMENU_ANCHOR + _AF3_DISCMENU_XML,
+        'already_patched_check': '<!-- ABUKARIM: AF3 disc menu buttons -->',
+        'description': 'AF3 Disc Menu - OSD buttons (disc menu / normal player) for ISO streams',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'not_found_ok': True,
+        'old': _AF3_DISCMENU_ONLEFT_OLD,
+        'new': _AF3_DISCMENU_ONLEFT_NEW,
+        'already_patched_check': '<!-- ABUKARIM: AF3 disc menu buttons (left from the right bar) -->',
+        'description': 'AF3 Disc Menu - right bar Left goes to the disc menu button',
     },
     # ── AF3: Subtitle Look button (4.6.2, toggle 'af3_substyle') ──
     # Icon into extras/icons, the button before Video settings in VideoOSD,

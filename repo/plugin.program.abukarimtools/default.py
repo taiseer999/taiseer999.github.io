@@ -38,6 +38,7 @@ ICONS  = {
     'af3_lucentplayer': ADDON_PATH + 'resources/icons/af3_lucentplayer.png',
     'lucent_from_af3': ADDON_PATH + 'resources/icons/lucent_from_af3.png',
     'af3_plotright':  ADDON_PATH + 'resources/icons/af3_plotright.png',
+    'af3_discmenu':   ADDON_PATH + 'resources/icons/af3_discmenu.png',
     'font_scale':     ADDON_PATH + 'resources/icons/font_scale.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/sources.png',
     'rebuild_addons33': ADDON_PATH + 'resources/icons/rebuild_addons33.png',
@@ -118,6 +119,7 @@ CATEGORIES = [
         ('af3_lucentplayer', 32080),
         ('lucent_from_af3', 32089),
         ('af3_plotright',  30890),
+        ('af3_discmenu',   32102),
         ('font_scale',     30740),
     ]),
     ('profiles', 30598, 'cat_profiles', [
@@ -138,6 +140,8 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 'af3_trailers', 'af3_waves',
                 # 4.6.15: AF3 Plot on the Right (on/off switch)
                 'af3_plotright',
+                # 4.7.36: AF3 Disc Menu for ISO Streams (on/off switch)
+                'af3_discmenu',
                 # 4.6.14: AF3 Streaming Services (dialogs only)
                 'streaming_rows',
                 # 4.6.8: AF3 Lucent Look (Off / Glass / AMOLED picker)
@@ -351,6 +355,9 @@ def _switch_state(mode):
         if mode == 'af3_plotright':
             from resources.lib import af3_plotright_toggle
             return af3_plotright_toggle.plot_right_on()
+        if mode == 'af3_discmenu':
+            from resources.lib import af3_discmenu_toggle
+            return af3_discmenu_toggle.disc_menu_on()
         if mode == 'af3_lucentplayer':
             from resources.lib import af3_lucentplayer_toggle
             return af3_lucentplayer_toggle.player_on()
@@ -480,6 +487,12 @@ def router():
         # 4.6.2: AF3 OSD Subtitle Look button - height / font size / font panel.
         from resources.lib import sub_quick
         sub_quick.open_window()
+        return
+
+    if mode == 'disc_menu':
+        # 4.7.36: AF3 OSD Disc Menu / Normal Player buttons (ISO streams)
+        from resources.lib import disc_menu
+        disc_menu.run(params.get('go', 'menu'))
         return
 
     if mode == 'subtitle_cycler':
@@ -614,6 +627,9 @@ def router():
     elif mode == 'af3_plotright':
         from resources.lib import af3_plotright_toggle
         af3_plotright_toggle.run()
+    elif mode == 'af3_discmenu':
+        from resources.lib import af3_discmenu_toggle
+        af3_discmenu_toggle.run()
     elif mode == 'af3_lucentplayer':
         from resources.lib import af3_lucentplayer_toggle
         af3_lucentplayer_toggle.run()

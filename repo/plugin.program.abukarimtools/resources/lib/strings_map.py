@@ -39,6 +39,7 @@ ID ranges:
   30970-30989  Installation Wizard 4.7.9 - Toggles page, TMDb Helper accounts
   32000-32070  AF3 Lucent Player skin labels ($ADDON in the skin)
   32080-32089  AF3 Lucent Player toggle
+  32102-32109  AF3 Disc Menu for ISO Streams (Toggles + OSD buttons)
 """
 
 STRINGS = {
@@ -840,4 +841,16 @@ STRINGS = {
     32099: ('Left out (Lucent has at most 12 tabs and 10 widgets per tab):', 'لم تُضَف (يتّسع Lucent لـ 12 تبويبًا و10 ودجات لكل تبويب على الأكثر):'),
     32100: ('PASSTHROUGH', 'تمرير مباشر'),
     32101: ('The sound goes straight to your amplifier - use its volume', 'يذهب الصوت مباشرةً إلى المُضخِّم؛ استخدم مستوى صوته'),
+    # ---- 4.7.36: AF3 Disc Menu for ISO Streams (32102-32109) ----
+    32102: ('AF3: Disc Menu for ISO Streams', 'AF3: قائمة القرص لملفات ISO المبثوثة'),
+    32103: ('Disc menu buttons are on - they show in the player while an ISO plays from a stream',
+            'تم تشغيل أزرار قائمة القرص، وتظهر في المشغّل أثناء بثّ ملف ISO'),
+    32104: ('Disc menu buttons are off', 'تم إيقاف أزرار قائمة القرص'),
+    32105: ('Disc menu: Arctic Fuse 3 could not be patched. Run Apply Patches and try again.',
+            'قائمة القرص: تعذّر تعديل Arctic Fuse 3. شغّل تطبيق الترقيعات ثم أعد المحاولة.'),
+    32106: ('This is not an ISO stream', 'هذا ليس ملف ISO مبثوثًا'),
+    32107: ('Opening the disc menu...', 'جارٍ فتح قائمة القرص...'),
+    32108: ('Back to the normal player...', 'جارٍ العودة إلى المشغّل العادي...'),
+    32109: ('The main movie was not found on the disc - playing the ISO as before',
+            'لم يُعثَر على الفيلم الرئيسي في القرص؛ سيُشغَّل ملف ISO كما كان'),
 }

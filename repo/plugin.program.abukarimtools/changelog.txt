@@ -1,3 +1,25 @@
+v4.7.36
+- AF3: Disc Menu for ISO Streams (new Toggles entry, off by default; skin bool
+  abk.discmenu). A Blu-ray ISO from a stream add-on (Fen Light, Umbrella, Red
+  Light, POV, AIOStreams...) plays as the main movie in the normal Arctic Fuse
+  3 player - the add-ons hand Kodi the ISO URL and Kodi's disc playback
+  setting picks the main title. With the switch on, the AF3 OSD has two more
+  buttons at the end of the left bar (after Stop), only while the playing file
+  is an http... .iso:
+    Disc Menu (compact-disc icon) - shown in main-movie mode: reopens the same
+      ISO in disc-menu mode (bluray://<udf ISO>/menu, HDMV and BD-J menus).
+      The main movie's position is kept for the way back.
+    Normal Player (film icon) - shown in disc-menu mode (VideoPlayer.HasMenu):
+      back to the main movie playlist (bluray://.../root/main -> 00xxx.mpls)
+      in the normal player - at the current point when the movie was started
+      from the disc menu, otherwise where it was left for the menu. When the
+      disc's playlists cannot be read, the plain ISO plays again from the start.
+  The new items carry playlist_chosen, so Kodi's "Blu-ray playback mode"
+  setting does not rewrite them. Title, art and ids go with the new item.
+  New resources/lib/disc_menu.py, resources/lib/af3_discmenu_toggle.py;
+  always-on VideoOSD.xml patches (also: Left from the right bar goes to the
+  visible disc button). Works with Lucent Player too (AF3 keeps its buttons).
+
 v4.7.35
 - AF3: Lucent Player - the OSD always shows Arctic Fuse 3's own expanded
   info (window 1153: logo, the format tags, stars / date / certificate /
