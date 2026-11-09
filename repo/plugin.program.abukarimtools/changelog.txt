@@ -1,3 +1,16 @@
+v4.8.1
+- Fix: Kodi crashed (SIGSEGV, macOS crash reports 2026-11-09 07:38:35 and
+  07:45:02, Kodi 22 RC1 / Python 3.14) 1-3 s after a source was picked in
+  Search All. Search All returned while some of its searches were still
+  running (Dex Hub 12-16 s, AIOStreams); Kodi waited for those threads, then
+  tore Python down, and its clean-up ran a weakref callback on a half-freed
+  object (CPythonInvoker::onExecutionDone -> gc -> PyObject_ClearWeakRefs).
+  Search All now starts playback first, then waits for its own search
+  threads (up to 45 s), drops its window references and collects garbage
+  while Python is still healthy, so nothing is left for Kodi's teardown.
+  Not related to the 4.7.42/4.7.43 OSD button changes.
+- v4.8 was v4.7.43 with a new version number and icon.
+
 v4.7.43
 - Fix (4.7.42, Lucent Look): the focused OSD button showed a second white
   circle beside it once a pop-up opened (info, audio, subtitles...). The

@@ -57,6 +57,7 @@ stopped responding right after the last add-on's results were drawn from a
 worker thread - the same class of freeze as 3.4.23 (window calls from a
 background thread).
 """
+import gc
 import json
 import os
 import re
@@ -188,6 +189,7 @@ class Session(object):
             self.state[key] = {'state': 'searching' if ok else 'unsupported', 'results': [], 'took': 0}
         self.listener = None
         self.closed = False
+        self.threads = []          # 4.7.44: joined before the script ends
         self.started_threads = False
 
     def request_id(self, key):
@@ -229,7 +231,9 @@ class Session(object):
     def start(self):
         for key, aid, name, tag, ok in self.addons:
             if ok:
-                threading.Thread(target=self._run, args=(key, aid, name), name='abs_' + key).start()
+                t = threading.Thread(target=self._run, args=(key, aid, name), name='abs_' + key)
+                self.threads.append(t)
+                t.start()
 
     def done(self):
         return all(s['state'] != 'searching' for s in self.state.values())
@@ -1106,7 +1110,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         self.setProperty('abs.addons_heading', T(30818))
         self._view_props()
         # always: besides any missing art / plot it brings the running time
-        threading.Thread(target=self._fill_meta, name='abs_meta').start()
+        self._meta_thread = threading.Thread(target=self._fill_meta, name='abs_meta')
+        self._meta_thread.start()
         self.ready = True
         self.session.listener = self.request_refresh
         self.refresh()
@@ -1681,6 +1686,33 @@ def replay_after_end(media):
     return True
 
 
+def _settle(session, extra=(), wait=45.0):
+    """4.7.44: Kodi 22 / Python 3.14 crash fix. When Search All returned while
+    its search threads were still running (Dex Hub / AIOStreams finish after
+    the pick), Kodi logged 'waiting on thread', waited, then tore the
+    interpreter down - and its garbage collection ran a weakref callback on a
+    half-freed object: SIGSEGV in CPythonInvoker::onExecutionDone (macOS crash
+    reports 2026-11-09 07:38:35 / 07:45:02). The script now waits for its own
+    threads (playback has already been started), drops its references and
+    collects while Python is still healthy, so nothing is left for teardown."""
+    session.closed = True
+    session.listener = None
+    threads = [t for t in list(session.threads) + list(extra) if t is not None]
+    deadline = time.time() + wait
+    mon = xbmc.Monitor()
+    try:
+        for t in threads:
+            while t.is_alive() and time.time() < deadline and not mon.abortRequested():
+                t.join(0.25)
+    finally:
+        del mon
+    left = [t.name for t in threads if t.is_alive()]
+    if left:
+        _log('threads still running after %.0fs: %s' % (wait, ', '.join(left)), xbmc.LOGWARNING)
+    del threads
+    gc.collect()
+
+
 def run(params):
     media_type = 'episode' if params.get('media_type') in ('episode', 'tv', 'tvshow') else 'movie'
     tmdb_id = str(params.get('tmdb_id') or params.get('tmdb') or '').strip()
@@ -1741,7 +1773,15 @@ def run(params):
     session.closed = True
     pump.win = None
     picked = win.picked
+    meta_thread = getattr(win, '_meta_thread', None)
     del win, pump
+    try:
+        return _after_pick(session, addons, media, picked)
+    finally:
+        _settle(session, (meta_thread,))
+
+
+def _after_pick(session, addons, media, picked):
     if not picked:
         return
     key, index = picked
