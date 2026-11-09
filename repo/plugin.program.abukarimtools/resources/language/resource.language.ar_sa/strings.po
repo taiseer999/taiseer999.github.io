@@ -2545,8 +2545,8 @@ msgid "AF3: Plot Text Size"
 msgstr "AF3: حجم خط القصة"
 
 msgctxt "#32114"
-msgid "Normal"
-msgstr "عادي"
+msgid "Large"
+msgstr "كبير"
 
 msgctxt "#32115"
 msgid "Small"
@@ -2559,4 +2559,36 @@ msgstr "حجم خط القصة: %s"
 msgctxt "#32117"
 msgid "Plot text size: no plot to resize. Turn on «AF3: Vertical Plot» in Apply Patches, then try again."
 msgstr "حجم خط القصة: لا توجد قصة لتغيير حجمها. فعّل «AF3: Vertical Plot» في تطبيق الترقيعات ثم أعد المحاولة."
+
+msgctxt "#32118"
+msgid "%dh %dm"
+msgstr "%d س %d د"
+
+msgctxt "#32119"
+msgid "Ends at %s"
+msgstr "ينتهي في %s"
+
+msgctxt "#32120"
+msgid "Resume %d%%"
+msgstr "استئناف %d%%"
+
+msgctxt "#32121"
+msgid "Start Over"
+msgstr "البدء من جديد"
+
+msgctxt "#32122"
+msgid "Cancel"
+msgstr "إلغاء"
+
+msgctxt "#32124"
+msgid "%dm"
+msgstr "%d د"
+
+msgctxt "#32125"
+msgid "Large - 3 lines"
+msgstr "كبير - ثلاثة أسطر"
+
+msgctxt "#32126"
+msgid "Small - 2 lines"
+msgstr "صغير - سطران"
 

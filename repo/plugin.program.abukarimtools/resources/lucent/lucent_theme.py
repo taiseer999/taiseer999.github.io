@@ -279,7 +279,7 @@ def lucent_progress(window, content, percent=0):
 			for key, value in zip(('c_4k', 'c_1080p', 'c_720p', 'c_sd'), totals):
 				window.setProperty('lucent.' + key, str(value))
 			window.setProperty('lucent.c_total', str(sum(totals)))
-		window.setProperty('lucent.heading', 'Searching for streams' if found else ('Opening stream' if seen else ''))
+		window.setProperty('lucent.heading', _t('Searching for streams') if found else _t('Opening stream'))
 		try: window.setProperty('lucent.percent', str(int(float(percent))))
 		except Exception: pass
 		if not found: return content
@@ -332,6 +332,18 @@ def lucent_window(window, meta, fanart='', clearlogo=None):
 		window.setProperty('lucent.subtitle', _clean(subtitle))
 		window.setProperty('lucent.fanart', fanart or get('fanart') or '')
 		window.setProperty('lucent.clearlogo', clearlogo if clearlogo is not None else (get('clearlogo') or ''))
+		# 4.8.4: Fen Light+ style lines - "year | running time | ends at" and
+		# "certificate | genres | rating" (Umbrella progress window)
+		line1, line2 = [year] if year else [], []
+		minutes = _minutes(get('duration') or get('runtime'))
+		if minutes:
+			line1.append(_t('%dh %dm') % (minutes // 60, minutes % 60) if minutes >= 60 else _t('%dm') % minutes)
+			import time as _time
+			line1.append(_t('Ends at %s') % _time.strftime('%H:%M', _time.localtime(_time.time() + minutes * 60)))
+		for v in (mpaa, _clean(str(genre).replace(' / ', ', ')), rating):
+			if v: line2.append(v)
+		window.setProperty('lucent.line1', '  |  '.join(line1))
+		window.setProperty('lucent.line2', '  |  '.join(line2))
 	except Exception:
 		pass
 
@@ -343,6 +355,18 @@ _AR = {'Filter results': 'تصفية النتائج', 'Show all results': 'عر�
 	'Filter by info': 'تصفية حسب المعلومات', 'Keywords (comma separated)': 'كلمات مفتاحية (مفصولة بفواصل)',
 	'No results': 'لا توجد نتائج', 'Apply': 'تطبيق', '%s results': '%s نتيجة', '%d selected': 'المحدد: %d',
 	'Choose one or more, then Apply': 'اختر عنصرًا أو أكثر ثم اضغط تطبيق', 'Title: %s': 'العنوان: %s'}
+
+
+def _minutes(value):
+	"""Running time in minutes from seconds (Kodi / Umbrella 'duration') or
+	minutes (Search All 'runtime'); 0 when unknown."""
+	try:
+		v = float(str(value).strip())
+	except Exception:
+		return 0
+	if v <= 0:
+		return 0
+	return int(round(v / 60.0)) if v > 600 else int(round(v))
 
 
 def _t(text):
@@ -677,6 +701,8 @@ _GROUP_Q = ('4K', '1080P', '720P', 'SD', 'CAM/SCR/TELE')
 _PRETTY = {'ALLDEBRID': 'AllDebrid', 'REAL-DEBRID': 'Real-Debrid', 'REALDEBRID': 'Real-Debrid', 'TORBOX': 'TorBox',
 		'PREMIUMIZE': 'Premiumize', 'OFFCLOUD': 'Offcloud', 'EASYNEWS': 'Easynews', 'EASYDEBRID': 'EasyDebrid'}
 _AR.update({'All streams': 'كل المصادر', 'Choose what to show': 'اختر ما تريد عرضه'})
+_AR.update({'Ends at %s': 'ينتهي في %s', '%dh %dm': '%d س %d د', '%dm': '%d د',
+	'Searching for streams': 'جارٍ البحث عن المصادر', 'Opening stream': 'جارٍ فتح المصدر'})
 
 
 def _layer1_on():

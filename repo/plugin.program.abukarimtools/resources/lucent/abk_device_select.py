@@ -277,6 +277,146 @@ def _notify(text):
 	except Exception: pass
 
 
+def _umbrella_direct_play():
+	"""4.8.3: Search All starts Umbrella with RunPlugin - there is no plugin
+	handle (argv[1] = -1). Umbrella 6.8's player hands a movie to Kodi with
+	setResolvedUrl(argv[1], ...) only, which does nothing without a handle:
+	nothing played, Umbrella waited 100 s for playback (keepAlive) and gave
+	up ("Kodi is not playing any file", kodi.log 2026-11-09 11:37 / 11:40).
+	For this call only, a resolve without a handle plays through Kodi's
+	player instead. Put back afterwards: Umbrella may reuse this interpreter."""
+	try:
+		from resources.lib.modules import control
+	except Exception as e:
+		_log('direct play hook: %s' % e)
+		return lambda: None
+	original = control.resolve
+
+	def resolve(handle, succeeded, listitem=None, *args, **kwargs):
+		try:
+			h = int(handle)
+		except Exception:
+			h = -1
+		if h >= 0:
+			return original(handle, succeeded, listitem, *args, **kwargs)
+		if not succeeded or listitem is None:
+			return
+		try:
+			path = listitem.getPath() or listitem.getVideoInfoTag().getFilenameAndPath()
+		except Exception:
+			path = ''
+		if not path:
+			_log('direct play: no path on the list item')
+			return
+		_log('no plugin handle - playing through the player')
+		control.player.play(path, listitem)
+
+	control.resolve = resolve
+
+	def restore():
+		control.resolve = original
+	return restore
+
+
+def _search_meta(request_id):
+	"""What Search All published for this pick (ab_search._publish_meta)."""
+	try:
+		data = json.loads(xbmcgui.Window(10000).getProperty('abk.search.meta') or '{}')
+	except Exception:
+		return {}
+	rid = data.get('rid') or ''
+	return data if rid and str(request_id or '').startswith(rid) else {}
+
+
+def _with_search_meta(meta, params):
+	"""4.8.4: Umbrella's meta for an app_play_source call is often empty, so
+	its progress window had no plot / running time and the playing item no
+	plot (OSD). Fill what is missing from what Search All published (TMDb, in
+	the Kodi language); Umbrella's own values win."""
+	meta = dict(meta or {})
+	sm = _search_meta(params.get('request_id') or params.get('play_selected'))
+	for k in ('title', 'tvshowtitle', 'year', 'plot', 'genre', 'mpaa', 'rating', 'clearlogo', 'fanart'):
+		if sm.get(k) and not meta.get(k):
+			meta[k] = sm[k]
+	try:
+		if not float(meta.get('duration') or 0) and int(sm.get('runtime') or 0):
+			meta['duration'] = int(sm['runtime']) * 60
+	except Exception:
+		pass
+	return meta
+
+
+def _set_kodi_resume(resume):
+	"""Umbrella's player reads Kodi's 'resume:true/false' (argv[3]) and then
+	asks nothing."""
+	value = 'resume:true' if resume else 'resume:false'
+	argv = sys.argv
+	while len(argv) < 3:
+		argv.append('')
+	if len(argv) > 3: argv[3] = value
+	else: argv.append(value)
+
+
+def _umbrella_resume(src, title, meta, params):
+	"""None = nothing to resume (Umbrella plays from the start); 'resume' /
+	'start' = answered (Umbrella told through argv); 'cancel'."""
+	sm = _search_meta(params.get('request_id') or params.get('play_selected'))
+	g = lambda k: getattr(src, k, None) or meta.get(k) or params.get(k)
+	season, episode = _none(g('season')), _none(g('episode'))
+	year = _none(g('year')) or sm.get('year')
+	try:
+		runtime = float(meta.get('duration') or 0)
+	except Exception:
+		runtime = 0.0
+	if runtime <= 0:
+		runtime = float(sm.get('runtime') or 0) * 60
+	if runtime <= 0:
+		return None
+	if season is not None and episode is not None:
+		try: name = '%s S%02dE%02d' % (title, int(season), int(episode))
+		except Exception: name = title
+	else:
+		name = '%s (%s)' % (title, year)
+	try:
+		from resources.lib.modules.player import Bookmarks
+		bm = Bookmarks()
+		offset = bm.get(name=name, imdb=g('imdb'), tmdb=g('tmdb'), tvdb=g('tvdb'), season=season, episode=episode,
+						year=str(year), runtime=runtime, ck=True)
+		offset = float(offset or 0)
+	except Exception as e:
+		_log('resume point: %s' % e)
+		return None
+	if offset <= 0:
+		return None
+	percent = getattr(bm, 'trakt_resume_percent', None) or getattr(bm, 'mdblist_resume_percent', None)
+	if not percent:
+		percent = offset / runtime * 100 if offset < runtime else 0
+	view = dict(sm)
+	for k in ('title', 'tvshowtitle', 'year', 'mpaa', 'genre', 'rating', 'plot', 'clearlogo', 'fanart'):
+		if not view.get(k) and meta.get(k):
+			view[k] = meta.get(k)
+	view.setdefault('runtime', int(runtime // 60))
+	view.setdefault('title', title)
+	try:
+		import importlib.util
+		path = xbmcvfs.translatePath('special://home/addons/plugin.program.abukarimtools/resources/lib/resume_screen.py')
+		spec = importlib.util.spec_from_file_location('abk_resume_screen', path)
+		screen = importlib.util.module_from_spec(spec)
+		spec.loader.exec_module(screen)
+		choice = screen.show(view, percent)
+	except Exception as e:
+		_log('resume screen failed (%s) - plain menu instead' % e)
+		ab = xbmcaddon.Addon('plugin.program.abukarimtools')
+		pick = xbmcgui.Dialog().contextmenu([ab.getLocalizedString(32120) % max(1, int(round(percent))),
+											 ab.getLocalizedString(32121)])
+		choice = {0: 'resume', 1: 'start'}.get(pick)
+	if choice is None:
+		return 'cancel'
+	_set_kodi_resume(choice == 'resume')
+	_log('resume %.0f%%: %s' % (percent, choice))
+	return choice
+
+
 def play_selected_source(src, title=None):
 	params = _params(src)
 	request_id = params.get('play_selected') or params.get('request_id', '')
@@ -297,8 +437,18 @@ def play_selected_source(src, title=None):
 			for k in item.pop(_ADDED, []):
 				item.pop(k, None)
 		source = results[index]
-		meta = getattr(src, 'meta', None) or {}
-		return src.playItem(title or '', json.dumps(results), json.dumps([source]), json.dumps(meta))
+		meta = _with_search_meta(getattr(src, 'meta', None) or {}, params)
+		# 4.8.2: ask resume / start over first, in AB Tools' own screen, and
+		# hand Umbrella the answer. Umbrella's own question opened behind its
+		# "Searching for streams" window and playback waited on it unseen.
+		if _umbrella_resume(src, title, meta, params) == 'cancel':
+			_log('resume screen cancelled - not playing')
+			return
+		restore = _umbrella_direct_play()
+		try:
+			return src.playItem(title or '', json.dumps(results), json.dumps([source]), json.dumps(meta))
+		finally:
+			restore()
 	source = results[index]
 	if 'Uncached' in str(source.get('cache_provider', '')):
 		try:

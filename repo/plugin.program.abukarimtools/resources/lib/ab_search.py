@@ -1774,11 +1774,26 @@ def run(params):
     pump.win = None
     picked = win.picked
     meta_thread = getattr(win, '_meta_thread', None)
+    _publish_meta(session.rid, getattr(win, 'meta', None) or {}, getattr(win, 'runtime', 0))
     del win, pump
     try:
         return _after_pick(session, addons, media, picked)
     finally:
         _settle(session, (meta_thread,))
+
+
+def _publish_meta(rid, meta, runtime):
+    """4.8.2: what Search All knows about the item (TMDb art, plot, running
+    time...) for the add-on that plays the pick - the Umbrella bridge builds
+    its resume screen from it. Tagged with the search id: never reused."""
+    keys = ('title', 'tvshowtitle', 'year', 'mpaa', 'genre', 'rating', 'plot', 'clearlogo', 'fanart',
+            'season', 'episode', 'ep_name')
+    data = {k: meta.get(k) for k in keys if meta.get(k)}
+    data.update({'rid': rid, 'runtime': int(runtime or 0)})
+    try:
+        xbmcgui.Window(10000).setProperty('abk.search.meta', json.dumps(data))
+    except Exception as e:
+        _log('publish meta: %s' % e)
 
 
 def _after_pick(session, addons, media, picked):

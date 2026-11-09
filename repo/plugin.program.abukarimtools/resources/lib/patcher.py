@@ -4482,6 +4482,23 @@ PATCHES += [
         'already_patched_check': '<!-- ABK_LUCENT_OSDBTN stats -->',
         'description': 'AF3 Lucent Look - OSD pop-ups: Statistics slot follows the size',
     },
+    # 4.8.4: AF3 OSD info - the landscape thumbnail slot takes no space when
+    # the thumbnail is off. The bottom-aligned info list was already full with
+    # it (about 230 px of nothing when OSD.DisableLandscapeOnInfo is set), so a
+    # taller plot (Plot Text Size: Large) overflowed it and Kodi laid it out
+    # from the top - the ratings row slid down over the codec pills.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': '<!-- ABUKARIM: osd landscape slot -->',
+        'fallback_pattern': (r'(<include name="OSD_Progress_Details_Extended">[\s\S]*?<include>OSD_Progress_Details_Grouplist_Def</include>'
+                             r'\s*<control type="group">)(\s*)(<left>40</left>\s*<height>view_landscape_item_h</height>)'),
+        'fallback_repl': r'\1\2<visible>$PARAM[landscape_visible]</visible>  <!-- ABUKARIM: osd landscape slot -->\2\3',
+        'description': 'AF3 OSD info - no empty landscape slot (room for a 3-line plot)',
+    },
     # 4.7.43: our own popup slots (DexSync / Cycler / Subtitle Look) follow
     # the size too - at 80 px they put the popup's focused circle 16 px off
     # per slot (doubled circle). One-time rewrite of the 4.6.x-4.7.42 text.

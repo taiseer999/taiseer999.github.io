@@ -2545,7 +2545,7 @@ msgid "AF3: Plot Text Size"
 msgstr ""
 
 msgctxt "#32114"
-msgid "Normal"
+msgid "Large"
 msgstr ""
 
 msgctxt "#32115"
@@ -2558,5 +2558,37 @@ msgstr ""
 
 msgctxt "#32117"
 msgid "Plot text size: no plot to resize. Turn on «AF3: Vertical Plot» in Apply Patches, then try again."
+msgstr ""
+
+msgctxt "#32118"
+msgid "%dh %dm"
+msgstr ""
+
+msgctxt "#32119"
+msgid "Ends at %s"
+msgstr ""
+
+msgctxt "#32120"
+msgid "Resume %d%%"
+msgstr ""
+
+msgctxt "#32121"
+msgid "Start Over"
+msgstr ""
+
+msgctxt "#32122"
+msgid "Cancel"
+msgstr ""
+
+msgctxt "#32124"
+msgid "%dm"
+msgstr ""
+
+msgctxt "#32125"
+msgid "Large - 3 lines"
+msgstr ""
+
+msgctxt "#32126"
+msgid "Small - 2 lines"
 msgstr ""
 

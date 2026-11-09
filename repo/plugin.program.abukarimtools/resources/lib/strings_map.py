@@ -41,6 +41,7 @@ ID ranges:
   32080-32089  AF3 Lucent Player toggle
   32102-32112  AF3 Disc Menu for ISO Streams (Toggles + OSD buttons, Java)
   32113-32117  AF3 Plot Text Size (Toggles)
+  32118-32126  Search All resume screen (4.8.2) + Plot Text Size choices
 """
 
 STRINGS = {
@@ -864,9 +865,18 @@ STRINGS = {
     32112: ('Java installed - opening the disc menu', 'ثُبِّتت Java، جارٍ فتح قائمة القرص'),
     # ---- 4.7.41: AF3 Plot Text Size (32113-32117) ----
     32113: ('AF3: Plot Text Size', 'AF3: حجم خط القصة'),
-    32114: ('Normal', 'عادي'),
+    32114: ('Large', 'كبير'),
     32115: ('Small', 'صغير'),
     32116: ('Plot text size: %s', 'حجم خط القصة: %s'),
     32117: ('Plot text size: no plot to resize. Turn on «AF3: Vertical Plot» in Apply Patches, then try again.',
             'حجم خط القصة: لا توجد قصة لتغيير حجمها. فعّل «AF3: Vertical Plot» في تطبيق الترقيعات ثم أعد المحاولة.'),
+    # ---- 4.8.2: Search All resume screen + Plot Text Size choices (32118-32126) ----
+    32118: ('%dh %dm', '%d س %d د'),
+    32119: ('Ends at %s', 'ينتهي في %s'),
+    32120: ('Resume %d%%', 'استئناف %d%%'),
+    32121: ('Start Over', 'البدء من جديد'),
+    32122: ('Cancel', 'إلغاء'),
+    32124: ('%dm', '%d د'),
+    32125: ('Large - 3 lines', 'كبير - ثلاثة أسطر'),
+    32126: ('Small - 2 lines', 'صغير - سطران'),
 }

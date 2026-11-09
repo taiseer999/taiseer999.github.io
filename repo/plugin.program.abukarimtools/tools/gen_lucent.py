@@ -895,55 +895,120 @@ def shifted_textbox(cid, top, height, color='FFDCE2E7'):
     return textbox(cid, top, height, color=color).replace('<font>font12</font>', '<font>font12</font>' + SHIFT, 1)
 
 
-def pov_progress():
-    p = 'Window.Property(tikiskins.source_progress.%s)'
-    buttons_on = 'String.IsEqual(%s,true)' % (p % 'buttons')
-    has_heading = '!String.IsEmpty(%s)' % (LC % 'heading')
-    inner = ''.join([
-        header('$INFO[%s]' % (LC % 'heading'), has_heading, right='$INFO[%s]' % (LC % 'c_total')),
-        header('$INFO[%s]' % (LC % 'show_title'), '!' + has_heading),
-        native_progress('5000', 96),
-        counts_row(PARSED_TILES, 128, COUNTS_ON),
-        shifted_textbox('2000', 128, 104),
-        button_row([
-            action_button('10', '$INFO[%s]' % (p % 'true_button'), nav='\n                    <onright>11</onright>\n                    <onleft>11</onleft>'),
-            action_button('11', '$INFO[%s]' % (p % 'false_button'), nav='\n                    <onright>10</onright>\n                    <onleft>10</onleft>'),
-        ], 256, visible=buttons_on),
-    ])
-    body = ''.join([
-        backdrop('$INFO[%s]' % (p % 'fanart')),
-        title_block(),
-        plot_block('$INFO[Window.Property(lucent.plot)]', top=476, height=110),
-        progress_card(inner, height=364),
-    ])
-    return window_shell('POV', 'progress', body)
+def flplus_info(top=110, alt=None):
+    """4.8.4: Fen Light+ style title block - clearlogo (or title), "year |
+    running time | ends at", "certificate | genres | rating", plot.
+    lucent.line1 / lucent.line2 come from lucent_theme.lucent_window().
+    alt=(label, condition): show that text in the plot slot while condition holds."""
+    pvis = alt_box = ''
+    if alt:
+        pvis = '\n                <visible>!%s</visible>' % alt[1]
+        alt_box = '''
+            <control type="textbox">
+                <top>318</top>
+                <width>1060</width>
+                <height>150</height>
+                <font>font12</font>
+                <textcolor>FFE6E9ED</textcolor>
+                <label>%s</label>
+                <visible>%s</visible>
+            </control>''' % alt
+    return '''
+        <!-- ============ Fen Light+ style info ============ -->
+        <control type="group">
+            <animation effect="fade" start="0" end="100" time="350">WindowOpen</animation>
+            <animation effect="fade" end="0" time="200">WindowClose</animation>
+            <left>90</left>
+            <top>%(top)d</top>
+            <control type="image">
+                <width>760</width>
+                <height>190</height>
+                <aspectratio align="left" aligny="bottom">keep</aspectratio>
+                <texture background="true">$INFO[Window.Property(lucent.clearlogo)]</texture>
+                <visible>!String.IsEmpty(Window.Property(lucent.clearlogo))</visible>
+            </control>
+            <control type="textbox">
+                <width>1100</width>
+                <height>190</height>
+                <font>font37</font>
+                <aligny>bottom</aligny>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>[B]$INFO[Window.Property(lucent.show_title)][/B]</label>
+                <visible>String.IsEmpty(Window.Property(lucent.clearlogo))</visible>
+            </control>
+            <control type="label">
+                <top>202</top>
+                <width>1500</width>
+                <height>48</height>
+                <font>font27</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>$INFO[Window.Property(lucent.line1)]</label>
+            </control>
+            <control type="label">
+                <top>256</top>
+                <width>1500</width>
+                <height>40</height>
+                <font>font12</font>
+                <textcolor>FFC4CBD3</textcolor>
+                <label>$INFO[Window.Property(lucent.line2)]</label>
+            </control>
+            <control type="textbox">
+                <top>318</top>
+                <width>1060</width>
+                <height>150</height>
+                <font>font12</font>
+                <textcolor>FFE6E9ED</textcolor>
+                <label>$INFO[Window.Property(lucent.plot)]</label>
+                <autoscroll delay="6000" time="2500" repeat="8000">true</autoscroll>%(pvis)s
+            </control>%(alt)s
+        </control>''' % {'top': top, 'pvis': pvis, 'alt': alt_box}
 
 
 def umbrella_progress():
+    """4.8.4: Fen Light+ style - backdrop + info top left, the stream being
+    opened, the status with its percentage and a full-width bar at the bottom."""
     shown = '!String.IsEqual(Window.Property(umbrella.icononly),true) + !String.IsEqual(Window.Property(umbrella.isHidden),true)'
     icon_only = 'String.IsEqual(Window.Property(umbrella.icononly),true) + !String.IsEqual(Window.Property(umbrella.isHidden),true)'
-    inner = ''.join([
-        header('$INFO[%s]' % (LC % 'heading'), '!String.IsEmpty(%s)' % (LC % 'heading'),
-               right='$INFO[Window().Property(percent)]%'),
-        header('Searching for streams', 'String.IsEmpty(%s)' % (LC % 'heading'),
-               right='$INFO[Window().Property(percent)]%'),
-        segmented_bar('Window().Property(percent)', top=96, left=40),
-        counts_row(PARSED_TILES, 128, COUNTS_ON),
-        shifted_textbox('2001', 128, 104),
-        '''
-            <control type="label">
-                <left>40</left>
-                <top>336</top>
-                <width>760</width>
-                <height>30</height>
+    status = '''
+        <!-- ============ status (bottom) ============ -->
+        <control type="group">
+            <animation effect="fade" start="0" end="100" time="350" delay="100">WindowOpen</animation>
+            <animation effect="fade" end="0" time="200">WindowClose</animation>
+            <left>90</left>
+            <top>780</top>
+            <width>1740</width>
+            <height>270</height>%(counts)s
+            <control type="textbox" id="2001">
+                <top>96</top>
+                <width>1740</width>
+                <height>96</height>
                 <font>font12</font>
-                <textcolor>FF8F9BA6</textcolor>
-                <label>[UPPERCASE]$ADDON[plugin.video.umbrella 40337][/UPPERCASE]</label>
-            </control>''',
-    ])
+                <textcolor>FFDCE2E7</textcolor>
+            </control>
+            <control type="label">
+                <top>200</top>
+                <width>1300</width>
+                <height>44</height>
+                <font>font27</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>[B]$INFO[Window.Property(lucent.heading)][/B]</label>
+            </control>
+            <control type="label">
+                <right>0</right>
+                <top>200</top>
+                <width>300</width>
+                <height>44</height>
+                <font>font27</font>
+                <align>right</align>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>[B]$INFO[Window().Property(percent)]%%[/B]</label>
+            </control>%(bar)s
+        </control>''' % {
+        'counts': counts_row(PARSED_TILES, 0, COUNTS_ON).replace('\n', '\n    '),
+        'bar': segmented_bar('Window().Property(percent)', width=1740, segments=58, top=262, left=0)}
     body = '''
         <control type="group">
-            <visible>%(shown)s</visible>%(bg)s%(title)s%(plot)s%(card)s
+            <visible>%(shown)s</visible>%(bg)s%(info)s%(status)s
         </control>
         <!-- Icon-only mode: small glass pill top right -->
         <control type="group">
@@ -968,11 +1033,115 @@ def umbrella_progress():
         </control>''' % {
         'shown': shown, 'icon': icon_only,
         'bg': backdrop('$INFO[Window.Property(umbrella.fanart)]').replace('\n', '\n    '),
-        'title': title_block().replace('\n', '\n    '),
-        'plot': plot_block('$INFO[Window.Property(lucent.plot)]', top=476, height=90).replace('\n', '\n    '),
-        'card': progress_card(inner, height=384).replace('\n', '\n    '),
+        'info': flplus_info().replace('\n', '\n    '),
+        'status': status.replace('\n', '\n    '),
         'spin': spinner('true', 24, 20)}
     return window_shell('Umbrella', 'progress', body)
+
+
+def flplus_status(inner, delay=100):
+    """4.8.5: the bottom status group shared by the Fen Light+ style progress
+    screens (Umbrella layout): row 0 tiles, 96 text, 200 heading + percent, 262 bar."""
+    return """
+        <!-- ============ status (bottom) ============ -->
+        <control type="group">
+            <animation effect="fade" start="0" end="100" time="350" delay="%d">WindowOpen</animation>
+            <animation effect="fade" end="0" time="200">WindowClose</animation>
+            <left>90</left>
+            <top>780</top>
+            <width>1740</width>
+            <height>270</height>%s
+        </control>""" % (delay, inner.replace('\n', '\n    '))
+
+
+def status_label(label, visible=None, right=False, top=200):
+    vis = '\n                <visible>%s</visible>' % visible if visible else ''
+    if right:
+        pos, width, align = '\n                <right>0</right>', 300, '\n                <align>right</align>'
+    else:
+        pos, width, align = '', 1300, ''
+    return """
+            <control type="label">%s
+                <top>%d</top>
+                <width>%d</width>
+                <height>44</height>
+                <font>font27</font>%s
+                <textcolor>FFFFFFFF</textcolor>
+                <label>[B]%s[/B]</label>%s
+            </control>""" % (pos, top, width, align, label, vis)
+
+
+def status_textbox(cid, visible=None, top=96, color='FFDCE2E7'):
+    vis = '\n                <visible>%s</visible>' % visible if visible else ''
+    idattr = ' id="%s"' % cid if cid else ''
+    return """
+            <control type="textbox"%s>
+                <top>%d</top>
+                <width>1740</width>
+                <height>96</height>
+                <font>font12</font>
+                <textcolor>%s</textcolor>%s
+            </control>""" % (idattr, top, color, vis)
+
+
+def _row_at_zero(row):
+    return row.replace('<left>40</left>', '<left>0</left>', 1)
+
+
+def redlight_playback(counts, percent_prop, resume_percent_prop):
+    """4.8.5: Red Light sources_playback.xml in the Fen Light+ style (as
+    Umbrella's progress screen): info top left, status + full-width bar
+    at the bottom. Keeps the scraper / resolver / resume modes, textboxes
+    2001 / 2002 and the resume buttons 3010-3012 (grouplist 3001)."""
+    mode = 'String.IsEqual(Window.Property(window_mode),%s)'
+    scraper, resolver, resume = mode % 'scraper', mode % 'resolver', mode % 'resume'
+    busy = 'String.IsEqual(Window.Property(enable_busy_spinner),true)'
+    inner = ''.join([
+        counts_row(counts, 0, scraper),
+        status_textbox('2001', scraper),
+        status_textbox('2002', resolver),
+        _row_at_zero(resume_buttons_redlight()).replace('<top>160</top>', '<top>96</top>', 1),
+        spinner(busy, -30, 214),
+        status_label('Searching for streams', scraper),
+        status_label('Opening stream', resolver),
+        status_label('Resume playback?', resume),
+        status_label('$INFO[%s]%%' % percent_prop, '!' + resume, right=True),
+        status_label('$INFO[%s]%%' % resume_percent_prop, resume, right=True),
+        segmented_bar(percent_prop, width=1740, segments=58, top=262, left=0, visible='!' + resume),
+        segmented_bar(resume_percent_prop, width=1740, segments=58, top=262, left=0, visible=resume),
+    ])
+    body = ''.join([
+        backdrop('$INFO[Window.Property(lucent.fanart)]'),
+        flplus_info(alt=('$INFO[Window.Property(text)]', resolver)),
+        flplus_status(inner),
+    ])
+    return window_shell('Red Light', 'scraping / resolving', body)
+
+
+def pov_progress():
+    """4.8.5: POV progress_media.xml in the Fen Light+ style (as Umbrella's
+    progress screen). Keeps textbox 2000, progress 5000 (now full width at
+    the bottom) and the true/false buttons 10 / 11."""
+    p = 'Window.Property(tikiskins.source_progress.%s)'
+    buttons_on = 'String.IsEqual(%s,true)' % (p % 'buttons')
+    has_heading = '!String.IsEmpty(%s)' % (LC % 'heading')
+    inner = ''.join([
+        counts_row(PARSED_TILES + [('TOTAL', LC % 'c_total')], 0, COUNTS_ON),
+        status_textbox('2000'),
+        _row_at_zero(button_row([
+            action_button('10', '$INFO[%s]' % (p % 'true_button'), nav='\n                    <onright>11</onright>\n                    <onleft>11</onleft>'),
+            action_button('11', '$INFO[%s]' % (p % 'false_button'), nav='\n                    <onright>10</onright>\n                    <onleft>10</onleft>'),
+        ], -84, visible=buttons_on)),
+        status_label('$INFO[%s]' % (LC % 'heading'), has_heading),
+        status_label('$INFO[%s]%%' % (LC % 'percent'), has_heading, right=True),
+        native_progress('5000', 262, left=0, width=1740),
+    ])
+    body = ''.join([
+        backdrop('$INFO[%s]' % (p % 'fanart')),
+        flplus_info(),
+        flplus_status(inner),
+    ])
+    return window_shell('POV', 'progress', body)
 
 
 def pov_contextmenu():
@@ -1941,8 +2110,8 @@ def build():
     files['fenlight/sources_playback.xml'] = fen_playback('Fen Light', fen_counts, 'Window.Property(percent)',
                                                           'Window.Property(percent)', resume_buttons_fen())
     files['redlight/sources_results.xml'] = results_window(fen_results_profile('Red Light'))
-    files['redlight/sources_playback.xml'] = fen_playback(
-        'Red Light', rl_counts, rl % 'percent', 'Window.Property(resume_timeout_percent)', resume_buttons_redlight())
+    files['redlight/sources_playback.xml'] = redlight_playback(
+        rl_counts, rl % 'percent', 'Window.Property(resume_timeout_percent)')
     files['pov/sources_results.xml'] = results_window(pov_results_profile())
     files['pov/progress_media.xml'] = pov_progress()
     files['pov/contextmenu.xml'] = pov_contextmenu()
