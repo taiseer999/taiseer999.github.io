@@ -30,6 +30,8 @@ ORDER = ['fenlt',
          'seren',
          'luc',
          'prism',
+         'a4k',
+         'madtitan',
          'shadow',
          'ghost',
          'chains',
@@ -44,7 +46,6 @@ ORDER = ['fenlt',
          'easyv',
          'rurl',
          'tmdbhelper',
-         'dexhub',
          'trakt',
          'premx',   # Premiumize Only
          'realx',   # Real-Debrid Only
@@ -193,9 +194,6 @@ ADDONS = {
         #EN
         'default_en'  : 'easynews.password',
         'data_en'     : ['easynews.password', 'easynews.user', 'easynews.enable'],
-        #SK
-        'default_sk'  : 'simkltoken',
-        'data_sk'     : ['simkltoken', 'simklusername', 'simkljoindate'],
     },
 
     #POV
@@ -276,7 +274,7 @@ ADDONS = {
         'settings'    : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.seren', 'settings.xml'),
         #TK
         'default_tk'  : 'trakt.auth',
-        'data_tk'     : ['trakt.auth', 'trakt.refresh', 'trakt.username', 'trakt.expires'],
+        'data_tk'     : ['trakt.auth', 'trakt.refresh', 'trakt.username', 'trakt.expires', 'trakt.enabled'],
         #RD
         'default_rd'  : 'rd.auth',
         'data_rd'     : ['rd.auth', 'rd.client_id', 'rd.refresh', 'rd.secret', 'rd.username', 'realdebrid.enabled', 'realdebrid.premiumstatus'],
@@ -286,6 +284,38 @@ ADDONS = {
         #AD
         'default_ad'  : 'alldebrid.apikey',
         'data_ad'     : ['alldebrid.enabled', 'alldebrid.username', 'alldebrid.apikey', 'alldebrid.premiumstatus'],
+    },
+
+    #MAD TITAN SPORTS
+    'madtitan': {
+        'name'        : 'Mad Titan Sports',
+        'plugin'      : 'plugin.video.madtitansports',
+        'path'        : os.path.join(CONFIG.ADDONS, 'plugin.video.madtitansports'),
+        'icon'        : os.path.join(CONFIG.ADDONS, 'plugin.video.madtitansports', 'icon.png'),
+        'fanart'      : os.path.join(CONFIG.ADDONS, 'plugin.video.madtitansports', 'fanart.jpg'),
+        'settings'    : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.madtitansports', 'settings.xml'),
+        #TK
+        'default_tk'  : 'trakt.access_token',
+        'data_tk'     : ['trakt.access_token', 'trakt.refresh_token', 'trakt.user_id', 'trakt.authorize'],
+    },
+
+    #A4KSTREAMING
+    'a4k': {
+        'name'        : 'a4kStreaming',
+        'plugin'      : 'plugin.video.a4kstreaming',
+        'path'        : os.path.join(CONFIG.ADDONS, 'plugin.video.a4kstreaming'),
+        'icon'        : os.path.join(CONFIG.ADDONS, 'plugin.video.a4kstreaming', 'icon.png'),
+        'fanart'      : os.path.join(CONFIG.ADDONS, 'plugin.video.a4kstreaming', 'fanart.jpg'),
+        'settings'    : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.a4kstreaming', 'settings.xml'),
+        #TK - Migration Only
+        'default_tk'  : 'trakt.clientid',
+        'data_tk'     : ['trakt.clientid', 'trakt.username'],
+        #PM
+        'default_pm'  : 'premiumize.apikey',
+        'data_pm'     : ['premiumize.apikey'],
+        #AD
+        'default_ad'  : 'alldebrid.apikey',
+        'data_ad'     : ['alldebrid.apikey'],
     },
 
     #PRISM
@@ -551,9 +581,6 @@ ADDONS = {
         #EN
         'default_en'  : 'easynews.password',
         'data_en'     : ['easynews.password', 'easynews.user', 'easynews.enabled'],
-        #SK
-        'default_sk'  : 'simkl.token',
-        'data_sk'     : ['simkl.token', 'simkl.username', 'simkl.userid', 'simkl.enabled'],
     },
 
     #EASYNEWS VIDEO
@@ -594,37 +621,20 @@ ADDONS = {
         'data_oc'     : ['OffCloudResolver_apikey', 'OffCloudResolver_user', 'OffCloudResolver_cached_only', 'OffCloudResolver_enabled'],
     },
 
-    #TMDb HELPER
-    #DEX HUB - Trakt token lives in trakt_token.json, API keys + MDBList in settings.xml
-    'dexhub': {
-        'name'        : 'Dex Hub',
-        'plugin'      : 'plugin.video.dexhub',
-        'path'        : os.path.join(CONFIG.ADDONS, 'plugin.video.dexhub'),
-        'icon'        : os.path.join(CONFIG.ADDONS, 'plugin.video.dexhub', 'resources', 'media', 'icon.png'),
-        'fanart'      : os.path.join(CONFIG.ADDONS, 'plugin.video.dexhub', 'resources', 'media', 'fanart.jpg'),
-        'settings'    : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.dexhub', 'settings.xml'),
-        'tk_json'     : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.dexhub', 'trakt_token.json'),
-        #TK ('trakt_token' is filled from tk_json below)
-        'default_tk'  : 'trakt_token',
-        'data_tk'     : ['trakt_client_id', 'trakt_client_secret'],
-        #MDB
-        'default_mdb' : 'mdblist_api_key',
-        'data_mdb'    : ['mdblist_api_key'],
-    },
-
+    #TMDb HELPER - external Trakt & MDBList sync providers
     'tmdbhelper': {
         'name'        : 'TMDb Helper',
-        'plugin'      : 'plugin.video.themoviedb.helper',
-        'path'        : os.path.join(CONFIG.ADDONS, 'plugin.video.themoviedb.helper'),
+        'plugin'      : 'script.module.tmdbhelper.sync.trakt',
+        'path'        : os.path.join(CONFIG.ADDONS, 'script.module.tmdbhelper.sync.trakt'),
         'icon'        : os.path.join(CONFIG.ADDONS, 'plugin.video.themoviedb.helper', 'icon.png'),
         'fanart'      : os.path.join(CONFIG.ADDONS, 'plugin.video.themoviedb.helper', 'fanart.jpg'),
-        'settings'    : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.themoviedb.helper', 'settings.xml'),
-        #TK
-        'default_tk'  : 'trakt_token',
-        'data_tk'     : ['trakt_token'],
-        #MDB
-        'default_mdb'  : 'mdblist_apikey',
-        'data_mdb'     : ['mdblist_apikey'],
+        'settings'    : os.path.join(CONFIG.ADDON_DATA, 'script.module.tmdbhelper.sync.trakt', 'settings.xml'),
+        'default_tk'  : 'token',
+        'data_tk'     : ['token'],
+        'mdb_plugin'  : 'script.module.tmdbhelper.sync.mdblist',
+        'mdb_settings': os.path.join(CONFIG.ADDON_DATA, 'script.module.tmdbhelper.sync.mdblist', 'settings.xml'),
+        'default_mdb' : 'apikey',
+        'data_mdb'    : ['apikey'],
     },
 
     #TRAKT ADDON
@@ -727,9 +737,6 @@ ADDONS = {
         #EN
         'default_en'  : 'easynews.password',
         'data_en'     : [],
-        #SK
-        'default_sk'  : 'simkl.token',
-        'data_sk'     : [],
     },
 }
             
@@ -750,6 +757,9 @@ def addon_installed(who):
         return False
 
     try:
+        if who == 'tmdbhelper':
+            return (get_addon_by_id(plugin_id) is not None
+                    or get_addon_by_id(info['mdb_plugin']) is not None)
         return get_addon_by_id(plugin_id) is not None
     except Exception:
         return False
@@ -757,7 +767,7 @@ def addon_installed(who):
 def is_authorized_value(val):
     return bool(val) and str(val).strip().lower() not in ('', '0', 'none', 'null', 'empty_setting') # Added '0' due to Fen/Forks default setting being 0
 
-def open_settings(who):  # Open add-on settings / skin settings
+def open_settings(who, service=None):  # Open add-on settings / skin settings
     info = ADDONS.get(who)
     if not info:
         return
@@ -768,8 +778,10 @@ def open_settings(who):  # Open add-on settings / skin settings
             xbmc.executebuiltin('ActivateWindowAndFocus(skinsettings)')
             return
 
-        # Standard add-ons
-        addon = get_addon_by_id(info.get('plugin'))
+        # Use the selected TMDb Helper sync module for Trakt/MDBList.
+        plugin_id = (info.get('mdb_plugin') if who == 'tmdbhelper' and service == 'mdb'
+                     else info.get('plugin'))
+        addon = get_addon_by_id(plugin_id)
         if addon:
             addon.openSettings()
 
@@ -798,7 +810,7 @@ def chk_sql_auth(db, key, return_value=False): # Check if a setting exists. If T
       
 def load_am_lite_tokens(): # Load AM Lite tokens for all services
     path = xbmcvfs.translatePath('special://profile/addon_data/script.module.acctmgr/settings.xml')
-    tokens = { 'tk': {}, 'rd': {}, 'mdb': {}, 'pm': {}, 'ad': {}, 'ed': {}, 'tb': {}, 'oc': {}, 'en': {}, 'sk': {} }
+    tokens = { 'tk': {}, 'rd': {}, 'mdb': {}, 'pm': {}, 'ad': {}, 'ed': {}, 'tb': {}, 'oc': {}, 'en': {} }
 
     if os.path.exists(path):
         try:
@@ -816,7 +828,6 @@ def load_am_lite_tokens(): # Load AM Lite tokens for all services
                 'tb': ['torbox.token'],
                 'oc': ['offcloud.token'],
                 'en': ['easynews.password'],
-                'sk': ['simkl.token'],
             }
 
             for setting in root.findall('setting'):
@@ -843,7 +854,6 @@ ED_TOKENS  = {}
 TB_TOKENS  = {}
 OC_TOKENS  = {}
 EN_TOKENS  = {}
-SK_TOKENS  = {}
 
 SERVICE_MAP = {
     'tk':  TK_TOKENS,
@@ -855,14 +865,14 @@ SERVICE_MAP = {
     'tb':  TB_TOKENS,
     'oc':  OC_TOKENS,
     'en':  EN_TOKENS,
-    'sk':  SK_TOKENS,
 }
 
 # Populate tokens for each add-on and service using default keys
 for addon_id, info in ADDONS.items():
     settings_path = info.get('settings')
     if not settings_path or not os.path.exists(settings_path):
-        continue
+        if addon_id != 'tmdbhelper' or not os.path.exists(info.get('mdb_settings', '')):
+            continue
 
     # Load key/value pairs from the add-on settings
     kv = {}
@@ -874,7 +884,7 @@ for addon_id, info in ADDONS.items():
         conn.close()
         kv = {r[0]: r[1] for r in rows}
 
-    elif settings_path.endswith('.xml'): # Add-ons using settings.xml
+    elif settings_path.endswith('.xml') and os.path.isfile(settings_path): # Add-ons using settings.xml
         tree = ElementTree.parse(settings_path)
         root = tree.getroot()
         kv = {s.attrib.get('id'): s.text or '' for s in root.findall('setting')}
@@ -883,19 +893,21 @@ for addon_id, info in ADDONS.items():
         with open(settings_path) as f:
             kv = json.load(f)
 
-    # Add-ons that keep the Trakt token in a separate JSON file (Dex Hub)
-    if info.get('tk_json'):
-        try:
-            with open(info['tk_json'], encoding='utf-8') as f:
-                kv[info.get('default_tk')] = (json.load(f) or {}).get('access_token', '') or ''
-        except Exception:
-            kv[info.get('default_tk')] = ''
-
     # Only store default key per service
     for service, dict_ref in SERVICE_MAP.items():
         default_key = info.get(f'default_{service}')
         if default_key:
-            val = kv.get(default_key, '')
+            service_kv = kv
+            if addon_id == 'tmdbhelper' and service == 'mdb':
+                service_kv = {}
+                mdb_path = info['mdb_settings']
+                if os.path.isfile(mdb_path):
+                    try:
+                        mdb_root = ElementTree.parse(mdb_path).getroot()
+                        service_kv = {s.attrib.get('id'): s.text or '' for s in mdb_root.findall('setting')}
+                    except Exception as exc:
+                        xbmc.log(f'{amgr}: MDBList provider read failed: {exc}', xbmc.LOGERROR)
+            val = service_kv.get(default_key, '')
 
             # Handle JSON blob add-ons
             if addon_id in ('tmdbhelper', 'trakt') and service == 'tk' and val:
@@ -930,6 +942,21 @@ def _addon_user_service(addon_id, service, token_dict):
 
 # Return TRUE if add-on tokens match AM Lite, else return FALSE
 def addon_user_trakt(addon_id):
+    # a4kStreaming uses Trakt for migration only; it has no OAuth token.
+    if addon_id == 'a4k':
+        try:
+            a4k = get_addon_by_id('plugin.video.a4kstreaming')
+            acctmgr = get_addon_by_id('script.module.acctmgr')
+            if not a4k or not acctmgr:
+                return False
+            username = a4k.getSetting('trakt.username').strip()
+            client_id = a4k.getSetting('trakt.clientid').strip()
+            return (is_authorized_value(acctmgr.getSetting('trakt.token'))
+                    and is_authorized_value(username)
+                    and is_authorized_value(client_id)
+                    and username == acctmgr.getSetting('trakt.username').strip())
+        except Exception:
+            return False
     return _addon_user_service(addon_id, 'tk', TK_TOKENS)
 
 def addon_user_rd(addon_id):
@@ -956,11 +983,8 @@ def addon_user_oc(addon_id):
 def addon_user_en(addon_id):
     return _addon_user_service(addon_id, 'en', EN_TOKENS)
 
-def addon_user_sk(addon_id):
-    return _addon_user_service(addon_id, 'sk', SK_TOKENS)
-
 # Revoke Handler
-def addon_it(do, who='all', services=('tk','mdb','rd','pm','ad','ed','tb','oc','en','sk'), force=True):
+def addon_it(do, who='all', services=('tk','mdb','rd','pm','ad','ed','tb','oc','en'), force=True):
     #do: 'wipeaddon'
     #who: addon key or 'all'
     #Force: ignore token match and wipe all
@@ -980,6 +1004,8 @@ def addon_it(do, who='all', services=('tk','mdb','rd','pm','ad','ed','tb','oc','
             continue
 
         for service in services:
+            if addon == 'tmdbhelper' and service == 'mdb' and not get_addon_by_id('script.module.tmdbhelper.sync.mdblist'):
+                continue
             check_func = globals().get(f'addon_user_{service}')
             if force or (check_func and check_func(addon)):
                 wipe_addons(do, addon, service)
@@ -990,7 +1016,7 @@ def wipe_addons(do, who, service):
     if not info:
         return
 
-    settings = info.get('settings', '')
+    settings = info.get('mdb_settings') if who == 'tmdbhelper' and service == 'mdb' else info.get('settings', '')
     data = info.get(f'data_{service}', [])
 
     # Skip the below list of add-ons
@@ -1000,15 +1026,6 @@ def wipe_addons(do, who, service):
     if not settings:
         xbmc.log(f"{amgr}: wipe_addons skipped [{who}] - no settings path", xbmc.LOGINFO)
         return
-
-    # Trakt token kept in its own JSON file (Dex Hub): delete it and its .bak
-    if service == 'tk' and info.get('tk_json'):
-        for p in (info['tk_json'], info['tk_json'] + '.bak'):
-            try:
-                if os.path.exists(p):
-                    os.remove(p)
-            except Exception as e:
-                xbmc.log(f"{amgr}: wipe_addons token delete failed [{who}] - {e}", xbmc.LOGERROR)
 
     try:
         if settings.endswith('.json'):

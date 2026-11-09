@@ -621,7 +621,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.7.40" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.7.41" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -652,7 +652,7 @@ updated YouTube addon URL
     <description lang="en_GB">ABUKARIM TOOLS is an all-in-one utility for managing your Kodi setup. It bundles a Skin Installer and Skin Switcher, full backup and restore of your userdata, and quick access to the ABUKARIM Wizard and its maintenance tools (Total Clean and old thumbnail cleanup). A built-in patcher keeps popular add-ons (Seren, Prism, TinyPPI, Arctic Fuse 3, TMDbHelper, RedLight and more) working correctly on CoreELEC and Kodi, and re-applies its fixes automatically after those add-ons update. Also includes handy maintenance tools such as a speed test, a CPU benchmark and an add-on database rebuild.</description>
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، ووصولاً سريعاً إلى معالج أبوكريم وأدوات الصيانة فيه (التنظيف الشامل وحذف الصور المصغّرة القديمة). كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة واختبار أداء المعالج وإعادة بناء قاعدة بيانات الإضافات.</description>
-    <news>v4.7.40 - Search All: title, info and plot moved to the top of the left column; the add-on list sits right under the plot with bigger lines, sorted by streams found (still searching next, nothing found last). v4.7.39 - Search All: the ISO filter is back (Hide ISO / ISO only in the filter menu; it was lost in 4.7.35). v4.7.38 - AF3: Disc Menu button sets up Java for BD-J disc menus (offers to install "JRE for BD-J menus", works without a reboot). v4.7.37 - AF3: Disc Menu buttons in the Lucent Look style (glass button, Lucent line icons, dark icon on focus). v4.7.36 - AF3: Disc Menu for ISO Streams (Toggles) - a Disc Menu button in the Arctic Fuse 3 player while a Blu-ray ISO plays from a stream, and a Normal Player button in the disc menu to go back to the main movie at the same point. v4.7.35 - AF3: Lucent Player - the OSD always shows the Arctic Fuse 3 expanded info (logo, format tags, rating / date / certificate / runtime / studio, genre, plot, IMDb / RT / Trakt, ends at); the 4.7.33 plot block is gone. v4.7.34 - Auto-patch after an AB Tools update: the new version's patches are applied at once, no restart needed. v4.7.33 - AF3: Lucent Player - the OSD shows the rating, runtime, certificate and plot under the year / genre line; the Dolby Vision 2 badge works (its test never parsed); leftover Lucent skin keymaps no longer break Back / OK under AF3. Older versions: see changelog.txt.</news>
+    <news>v4.7.41 - New Toggles entry "AF3: Plot Text Size" (Normal / Small) for the Vertical Plot on Home, the OSD and the views; the old fixed smaller plot font is gone (default is now AF3's normal plot size). v4.7.40 - Search All: title, info and plot moved to the top of the left column; the add-on list sits right under the plot with bigger lines, sorted by streams found (still searching next, nothing found last). v4.7.39 - Search All: the ISO filter is back (Hide ISO / ISO only in the filter menu; it was lost in 4.7.35). v4.7.38 - AF3: Disc Menu button sets up Java for BD-J disc menus (offers to install "JRE for BD-J menus", works without a reboot). v4.7.37 - AF3: Disc Menu buttons in the Lucent Look style (glass button, Lucent line icons, dark icon on focus). v4.7.36 - AF3: Disc Menu for ISO Streams (Toggles) - a Disc Menu button in the Arctic Fuse 3 player while a Blu-ray ISO plays from a stream, and a Normal Player button in the disc menu to go back to the main movie at the same point. v4.7.35 - AF3: Lucent Player - the OSD always shows the Arctic Fuse 3 expanded info (logo, format tags, rating / date / certificate / runtime / studio, genre, plot, IMDb / RT / Trakt, ends at); the 4.7.33 plot block is gone. v4.7.34 - Auto-patch after an AB Tools update: the new version's patches are applied at once, no restart needed. Older versions: see changelog.txt.</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>
@@ -3384,11 +3384,11 @@ v.3.3.7
 		</assets>
 		<news>v1.1.7 - New ISO filter (Filters &gt; ISO releases): show all, hide ISO releases or ISO releases only; optional full-disc releases. v1.1.6 - Fix: AB Search All froze Kodi when a provider never answered (BTDig, LimeTorrents). Every provider now has a hard time limit (15 s, Settings), Fen Light, Umbrella and Red Light share one search per provider instead of running all providers three times, scraper database waits cut from 60 s to 8 s. v1.1.5 - Gears engine updated to 1.6.5: 6 new providers, off by default - Youplex, FileMood, TorrentKitty (movies, episodes, season packs) and the anime providers SubsPlease, nekoBT, TsukiHime (absolute episode numbers understood). 60 providers in total. v1.1.4 - [SF-DIAG] diagnostics (Knaben, KONTRAST, LimeTorrents, Snowfl) only with Kodi debug logging. BTDig, MagnetDL and BitTorrented give up after 6 s instead of 10, so a dead site no longer keeps the calling add-on open after its search. v1.1.3 - Providers that returned nothing are now off by default (AnimeTosho, BitTorrented, BTDig, EXT.to, KONTRAST, MagnetDL, NNM-Club, Snowfl, TorrentDownloads, TorrentFunk, TorrentsDB, TorSeek, Zooqle); LimeTorrents Auto uses Gears only; new defaults also reach existing installs for toggles you never changed. New icon, fanart and clearlogo. v1.1.2 - CocoScrapers engine updated to 1.0.44: TV episodes also match by air date (daily / talk shows released as 2026.10.22), EZTV moved to the JSON API and now runs with Gears, Rutor searches single episodes. AIOStreams player fixed: no longer returns nothing when its own login is empty. v1.1.1 - New "Check provider access": shows per provider whether it is blocked for you (DNS, connection cut, block page), banned (403), rate-limited, behind Cloudflare, down or dead, with the fix. v1.1.0 - CocoScrapers engine updated to 1.0.43: newest upstream provider code, 3 new providers (BitCQ, isoHunt, TorrentQuest), AIOStreams login and MediaFusion instance. v1.0.3 - New filter for repeated results (same release name and size under different hashes, e.g. Comet), on by default. v1.0.2 - Provider trace in kodi.log (which add-on called, each provider result count, time, errors). v1.0.1 - Telegram: always-on logging, real error shown on screen, provider auto-enabled after linking. v1.0.0 - first release: CocoScrapers 1.0.39 + Gears Scrapers 1.6.2 + Magneto 6.10.04 merged into AB Scrapers.</news>
 	</extension>
-</addon><addon id="script.module.acctmgr" version="1.2.0c" name="[COLOR dodgerblue][B]Account Manager[/B][/COLOR] [COLOR white][B]Lite[/B][/COLOR]" provider-name="Zaxxon709">
+</addon><addon id="script.module.acctmgr" version="1.2.1b" name="[COLOR dodgerblue][B]Account Manager[/B][/COLOR] [COLOR white][B]Lite[/B][/COLOR]" provider-name="Zaxxon709">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.19.1" />
-		<import addon="script.module.acctvwr" version="1.1.5.3" />
+		<import addon="script.module.acctvwr" version="1.1.6a" />
 		<import addon="script.module.qrcode" />
 	</requires>
 	<extension point="xbmc.service" library="lib/startup.py" start="startup" />
@@ -3408,15 +3408,13 @@ v.3.3.7
 			<fanart>fanart.png</fanart>
 		</assets>
 	</extension>
-</addon><addon id="script.module.acctvwr" name="[COLOR dodgerblue][B]Account[/B][/COLOR] [COLOR white][B]Viewer[/B][/COLOR]" version="1.1.5.3" provider-name="Zaxxon709">
+</addon><addon id="script.module.acctvwr" name="[COLOR dodgerblue][B]Account[/B][/COLOR] [COLOR white][B]Viewer[/B][/COLOR]" version="1.1.6a" provider-name="Zaxxon709">
     <extension point="xbmc.python.pluginsource" library="default.py">
     </extension>
     <extension point="xbmc.python.module" library="resources" />
     <extension point="xbmc.addon.metadata">
         <summary lang="en">Account Viewer - AM Lite Dependency</summary>
-        <summary lang="ar">عارض الحسابات - مكوّن تابع لـ AM Lite</summary>
         <description lang="en">A centralized viewer for your authorized accounts. Easily check debrid, Trakt and other connected services across supported add-ons.</description>
-        <description lang="ar">عارض موحّد لحساباتك المفوَّضة. تحقّق بسهولة من خدمات Debrid و Trakt وغيرها من الخدمات المرتبطة عبر الإضافات المدعومة.</description>
         <platform>all</platform>
         <reuselanguageinvoker>false</reuselanguageinvoker>
         <source>https://</source>

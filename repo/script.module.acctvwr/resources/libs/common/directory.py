@@ -2,7 +2,6 @@ import xbmc, xbmcgui, xbmcplugin
 import sys
 from urllib.parse import quote_plus
 from resources.libs.common.config import CONFIG
-from resources.libs.common.i18n import tr
 
 def set_view():
     auto_view = CONFIG.get_setting('auto-view')
@@ -44,9 +43,6 @@ def _add_menu_item(display, params, menu, description, overwrite, fanart, icon, 
                 continue
                 
             u += "&{0}={1}".format(param, quote_plus(params.get(param, "")))
-
-    display = tr(display)
-    description = tr(description)
 
     if themeit is not None:
         display = themeit.format(display)

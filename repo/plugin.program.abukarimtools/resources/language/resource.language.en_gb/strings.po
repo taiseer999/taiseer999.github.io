@@ -2540,3 +2540,23 @@ msgctxt "#32112"
 msgid "Java installed - opening the disc menu"
 msgstr ""
 
+msgctxt "#32113"
+msgid "AF3: Plot Text Size"
+msgstr ""
+
+msgctxt "#32114"
+msgid "Normal"
+msgstr ""
+
+msgctxt "#32115"
+msgid "Small"
+msgstr ""
+
+msgctxt "#32116"
+msgid "Plot text size: %s"
+msgstr ""
+
+msgctxt "#32117"
+msgid "Plot text size: no plot to resize. Turn on «AF3: Vertical Plot» in Apply Patches, then try again."
+msgstr ""
+

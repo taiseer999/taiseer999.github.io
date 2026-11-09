@@ -129,6 +129,11 @@ elif action == 'traktAuth':										# Authorize service
 		control.notification('Trakt', 'Sync in progress, please wait!', icon=trakt_icon)
 		xbmc.sleep(1500)
 		control.notification('Trakt', 'Sync Complete!', icon=trakt_icon)
+		# Install TMDb Helper Trakt provider before force-closing Kodi; retry at startup on failure.
+		from acctmgr.modules.sync import tmdbh_provider
+		tmdbh_provider.complete_authorization_install()
+		from acctmgr.modules.sync import tmdbh_choice
+		tmdbh_choice.prompt_if_both()
 		xbmc.sleep(3000)
 		control.updates_off()                                                                   # Disable add-on auto-updates
 		dialog.notification('Trakt', 'Force Closing Kodi!', trakt_icon, 3000)
@@ -145,6 +150,11 @@ elif action == 'traktReSync':                                                   
         xbmc.sleep(1500)
         
         control.notification('Trakt', 'Sync Complete!', icon=trakt_icon)
+        # Install TMDb Helper Trakt provider before force-closing Kodi; retry at startup on failure.
+        from acctmgr.modules.sync import tmdbh_provider
+        tmdbh_provider.complete_authorization_install()
+        from acctmgr.modules.sync import tmdbh_choice
+        tmdbh_choice.prompt_if_both()
         xbmc.sleep(3000)
         dialog.notification('Trakt', 'Force Closing Kodi!', trakt_icon, 3000)
         xbmc.sleep(3000)
@@ -165,6 +175,11 @@ elif action == 'traktEditSyncList':
 	trakt_sync.Auth().trakt_auth(mode="auth")                                                       # Sync add-ons (Auth mode = Remake Settings & Clear Trakt Cache)
 	xbmc.sleep(1000)
 	control.notification('Trakt', 'Sync Complete!', icon=trakt_icon)
+	# Install TMDb Helper Trakt provider before force-closing Kodi; retry at startup on failure.
+	from acctmgr.modules.sync import tmdbh_provider
+	tmdbh_provider.complete_authorization_install()
+	from acctmgr.modules.sync import tmdbh_choice
+	tmdbh_choice.prompt_if_both()
 	xbmc.sleep(3000)
 	dialog.notification('Trakt', 'Force Closing Kodi!', trakt_icon, 3000)
 	xbmc.sleep(3000)
@@ -238,6 +253,17 @@ elif action == 'mdblistAuth':
         xbmc.sleep(200)
         control.setSetting('sync.mdb.service', 'true')                                                 
         control.notification('MDBList', 'Sync Complete!', icon=mdb_icon)
+        # Authorization and synchronization are complete: install the MDBList
+        # provider now, rather than waiting until the next Kodi startup.
+        try:
+            from acctmgr.modules.sync import tmdbh_mdblist
+            tmdbh_mdblist.complete_authorization_install()
+        except Exception as exc:
+            xbmc.log('AM Lite [TMDb MDBList]: post-authorization setup failed: %s' % exc, xbmc.LOGERROR)
+            control.setSetting('am_tmdbh_mdblist_install_pending', 'true')
+            xbmcgui.Dialog().notification('AM Lite', 'TMDb Helper MDBList setup failed. Retrying next startup.', xbmcgui.NOTIFICATION_WARNING, 6500)
+        from acctmgr.modules.sync import tmdbh_choice
+        tmdbh_choice.prompt_if_both()
         xbmc.sleep(3000)
         control.openSettings()
 
@@ -301,6 +327,11 @@ elif action == 'mdblistRevoke':
                 except Exception as e:
                     log_utils.error(f"Skin MDBList Revoke Failed: {e}")
                     
+                try:
+                    from acctmgr.modules.sync import tmdbh_mdblist
+                    tmdbh_mdblist.revoke()
+                except Exception as exc:
+                    xbmc.log('AM Lite: TMDb MDBList revoke failed: %s' % exc, xbmc.LOGERROR)
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_mdb")')
                 dialog.notification('MDBList', 'All Add-ons Revoked!', mdb_icon, 3000)
                 xbmc.sleep(3000)

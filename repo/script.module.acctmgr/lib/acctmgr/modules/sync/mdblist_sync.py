@@ -44,7 +44,6 @@ def get_targets():
 		("plugin.video.pov",               "POV",       var.chk_pov,    var.chkset_pov,   "mdblist.token",  {"refresh_key": "mdblist.refresh", "user_key": "mdblist_user", "expires_key": "mdblist.expires", "indicators_act": "mdbl_indicators_active", "wtch_indicators": "watched_indicators", "remake_settings": getattr(control, 'remake_pov_settings', None)}),
 		("plugin.video.luc_kodi",          "luc_kodi",  var.chk_luc,   var.chkset_luc,   "mdblist.token",  {"refresh_key": "mdblist.refresh", "user_key": "mdblist.username"}),
 		("plugin.video.gratisred",         "Gratis Red", var.chk_redg,  var.chkset_redg,  "mdblist.token",  {"refresh_key": "mdblist.refresh", "user_key": "mdblist.user", "extra": {"indicators.alt.name": "MDBList", "indicators.alt": "3", "bookmarks.source": "3"}}),
-		("plugin.video.themoviedb.helper", "TMDbH",     var.chk_tmdbh,  var.chkset_tmdbh, "mdblist_apikey", {}),
 		("plugin.video.dexhub",            "Dex Hub",   var.chk_dexhub, var.chkset_dexhub, "mdblist_api_key", {}),
 	]
 
@@ -71,7 +70,7 @@ def _active_skin():
 
 
 def detect_installed():
-    """Scan for installed targets and return (oauth_targets, apikey_targets)."""
+    #Scan for installed targets and return (oauth_targets, apikey_targets)
     oauth, apikey = [], []
     skin = None
     for t in get_targets():
@@ -86,11 +85,14 @@ def detect_installed():
             (oauth if t['auth'] == OAUTH else apikey).append(t)
         except Exception as e:
             log_utils.error(f"{t.get('label')} MDBList detection failed: {e}")
+    # TMDb Helper requires an external MDBList provider; include it even before installation.
+    if exists(var.chk_tmdbh):
+        apikey.append({"id": "script.module.tmdbhelper.sync.mdblist", "label": "TMDb Helper", "type": "addon", "auth": APIKEY, "chk_addon": var.chk_tmdbh, "chk_settings": "", "token_key": "apikey", "user_key": None, "refresh_key": None, "db_path": None, "remake_settings": None, "tmdbh_external": True})
     return oauth, apikey
 
 
 def read_credentials(acctmgr=None):
-    """Read stored MDBList credentials, separating OAuth tokens from API keys."""
+    #Read stored MDBList credentials, separating OAuth tokens from API keys.
     acctmgr = acctmgr or xbmcaddon.Addon(ACCTMGR_ID)
     get = acctmgr.getSetting
     creds = {
@@ -116,7 +118,11 @@ class Auth:
             self._sync_oauth(t, creds)
 
         for t in apikey_targets:
-            self._sync_apikey(t, creds)
+            if t.get("tmdbh_external"):
+                from acctmgr.modules.sync import tmdbh_mdblist
+                tmdbh_mdblist.sync(creds["apikey"])
+            else:
+                self._sync_apikey(t, creds)
 
     def _sync_oauth(self, t, creds):
         token, refresh = creds['token'], creds['refresh']

@@ -133,6 +133,8 @@ class tk_list():
 		# Uniques
 		add_if(var.chk_seren,       'Seren')
 		add_if(var.chk_luc,         'Luc_Kodi')
+		add_if(var.chk_a4k,         'a4kStreaming')
+		add_if(var.chk_madtitan,    'Mad Titan Sports')
 		
 		# Shadow & Forks
 		add_if(var.chk_shadow,      'Shadow')
@@ -142,7 +144,7 @@ class tk_list():
 		# Homelander & Forks
 		add_if(var.chk_home,        'Homelander')
 		add_if(var.chk_night,       'Nightwing')
-		add_if(var.chk_absol,       'Jokers Absolution')
+		add_if(var.chk_absol,       'Absolution')
 		# Others
 		add_if(var.chk_crew,        'The Crew')
 		add_if(var.chk_salts,       'SALTS')

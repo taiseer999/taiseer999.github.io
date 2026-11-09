@@ -19,19 +19,37 @@ def update_settings(conn, pairs):
 		cur = conn.cursor()
 		for value, setting_id in pairs:
 			cur.execute(SQL_UPDATE, (value, setting_id))
+			if cur.rowcount != 1:
+				raise RuntimeError(f"Missing or duplicate Trakt setting: {setting_id}")
 		conn.commit()
-		cur.close()
+		for value, setting_id in pairs:
+			cur.execute("SELECT setting_value FROM settings WHERE setting_id = ?", (setting_id,))
+			row = cur.fetchone()
+			if row is None or str(row[0]) != str(value):
+				raise RuntimeError(f"Trakt setting verification failed: {setting_id}")
+		return True
 	except Exception as e:
+		conn.rollback()
 		log_utils.error(f"Trakt_db Update Failed: {e}")
+		return False
+	finally:
+		if 'cur' in locals():
+			cur.close()
 
 ###################### Connect to Database & Update ###########
 def connect_db(actions, settings_db):
+	conn = None
 	try:
 		conn = create_conn(settings_db)
-		with conn:
-			update_settings(conn, actions)
+		if conn is None:
+			return False
+		return update_settings(conn, actions)
 	except Exception as e:
-		log_utils.error(f"Trakt_db Fen Light Action Failed: {e}")
+		log_utils.error(f"Trakt_db Action Failed: {e}")
+		return False
+	finally:
+		if conn is not None:
+			conn.close()
 
 ###################### Get AM Lite Settings ################
 def get():
@@ -48,15 +66,15 @@ def get():
 #################### Auth Trakt ####################
 def auth(settings_db):
 	tk = get()
-	connect_db([
+	return connect_db([
 		(tk["client"],   'trakt.client'),
 		(tk["secret"],   'trakt.secret'),
 		(tk["token"],    'trakt.token'),
 		(tk["username"], 'trakt.user'),
 		(tk["refresh"],  'trakt.refresh'),
 		(tk["expires"],  'trakt.expires'),
-		(1,             'watched_indicators'),
-		('Trakt',       'watched_indicators_name'),
+		(1,              'watched_indicators'),
+		('Trakt',        'watched_indicators_name'),
 	], settings_db)
 
 #################### Revoke Trakt ####################

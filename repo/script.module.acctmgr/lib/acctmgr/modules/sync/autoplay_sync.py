@@ -127,6 +127,13 @@ class AutoPlay:
         except Exception as e:
             log_utils.error(f"luc_kodi Autoplay Failed: {e}")
 
+        # ===================== a4kStreaming =====================
+        try:
+            if exists(var.chk_a4k):
+                xbmcaddon.Addon("plugin.video.a4kstreaming").setSetting("general.autoplay", tf_playback)
+        except Exception as e:
+            log_utils.error(f"a4kStreaming Autoplay Failed: {e}")
+
         # ================= Prism ===================
         for name, plugin, chk_addon, chk_setting in (
                 ("Prism", "plugin.video.prism", var.chk_prism, var.chkset_prism),

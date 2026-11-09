@@ -2540,3 +2540,23 @@ msgctxt "#32112"
 msgid "Java installed - opening the disc menu"
 msgstr "ثُبِّتت Java، جارٍ فتح قائمة القرص"
 
+msgctxt "#32113"
+msgid "AF3: Plot Text Size"
+msgstr "AF3: حجم خط القصة"
+
+msgctxt "#32114"
+msgid "Normal"
+msgstr "عادي"
+
+msgctxt "#32115"
+msgid "Small"
+msgstr "صغير"
+
+msgctxt "#32116"
+msgid "Plot text size: %s"
+msgstr "حجم خط القصة: %s"
+
+msgctxt "#32117"
+msgid "Plot text size: no plot to resize. Turn on «AF3: Vertical Plot» in Apply Patches, then try again."
+msgstr "حجم خط القصة: لا توجد قصة لتغيير حجمها. فعّل «AF3: Vertical Plot» في تطبيق الترقيعات ثم أعد المحاولة."
+

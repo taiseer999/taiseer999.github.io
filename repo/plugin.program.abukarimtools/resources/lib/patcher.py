@@ -1228,11 +1228,14 @@ PATCHES = [
         'description': 'AF3 - Home spotlight plot scrolls vertically (textbox)',
     },
 
-    # ── AF3: Vertical Plot — smaller plot font on Home (font_mini_plot) ──
+    # ── AF3: Vertical Plot — plot font param (size: Toggles > Plot Text Size) ──
     # Info_Plot_TextBox hard-codes font_main_plot (size_main). Thread a new
     # 'plotfont' param through the Info_* chain (default font_main_plot, so
-    # every other caller is unchanged) and pass font_mini_plot (size_mini,
-    # with the skin's own plot linespacing) from the two Home panels only.
+    # every other caller is unchanged) and pass it from the Vertical Plot call
+    # sites. 4.7.41: the call sites are written with font_mini_plot as before;
+    # af3_plotsize.reconcile() (end of apply_set) then puts the chosen size on
+    # them - Normal = font_main_plot (default), Small = font_mini_plot. Until
+    # 4.7.40 the Home / OSD / views plot was always the smaller font.
     {   # 1) Info_Plot_TextBox: declare the default
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
@@ -1386,6 +1389,9 @@ PATCHES = [
                 '                    <param name="plottop">54</param>\n'
                 '                    <param name="plotboxh">80</param>  <!-- ABUKARIM: plot gap (hub) -->'),
         'already_patched_check': '<!-- ABUKARIM: plot gap (hub) -->',
+        'fallback_pattern': r'(<param name="plotfont">font_(?:mini|main)_plot</param>  <!-- ABUKARIM: plot font \(hub\) -->)',
+        'fallback_repl': (r'\1\n                    <param name="plottop">54</param>'
+                          r'\n                    <param name="plotboxh">80</param>  <!-- ABUKARIM: plot gap (hub) -->'),
         'description': 'AF3 - Home hub plot gap under the genre line',
     },
     {
@@ -1398,6 +1404,9 @@ PATCHES = [
                 '                <param name="plottop">54</param>\n'
                 '                <param name="plotboxh">80</param>  <!-- ABUKARIM: plot gap (spotlight) -->'),
         'already_patched_check': '<!-- ABUKARIM: plot gap (spotlight) -->',
+        'fallback_pattern': r'(<param name="plotfont">font_(?:mini|main)_plot</param>  <!-- ABUKARIM: plot font \(spotlight\) -->)',
+        'fallback_repl': (r'\1\n                <param name="plottop">54</param>'
+                          r'\n                <param name="plotboxh">80</param>  <!-- ABUKARIM: plot gap (spotlight) -->'),
         'description': 'AF3 - Home spotlight plot gap under the genre line',
     },
 
@@ -5848,6 +5857,25 @@ def apply_set(group=None, addon_ids=None):
         else:
             failed += 1
 
+
+    # 4.7.41: AF3 plot text size (Toggles > AF3: Plot Text Size) on the
+    # Vertical Plot call sites the loop above wrote (or a skin update reset)
+    if not addon_ids or 'skin.arctic.fuse.3' in _scope:
+        try:
+            from resources.lib import af3_plotsize
+            ok, msg, wrote, _sites = af3_plotsize.reconcile(_resolve_addon_dir('skin.arctic.fuse.3'))
+        except Exception as e:
+            ok, msg, wrote = False, '[plot size] %s' % e, False
+        _log(msg)
+        results.append((ok, msg))
+        if ok:
+            succeeded += 1
+        else:
+            failed += 1
+        if wrote:
+            changed += 1
+            if _is_active_skin('skin.arctic.fuse.3'):
+                _mark_skin_reload()
 
     # 4.7.7: Search All's own fixed-size fonts in the active skin (before the
     # Font Size pass, so the chosen mode scales them like every other font).

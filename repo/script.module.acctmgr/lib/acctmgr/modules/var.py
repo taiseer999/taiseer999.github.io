@@ -104,6 +104,8 @@ chk_red = addons + translatePath('plugin.video.redlight/')#----------------Fork 
 chk_umb = addons + translatePath('plugin.video.umbrella/')#----------------Umbrella
 chk_seren = addons + translatePath('plugin.video.seren/')#-----------------Seren
 chk_prism = addons + translatePath('plugin.video.prism/')#-----------------Prism
+chk_madtitan = addons + translatePath('plugin.video.madtitansports/')
+chk_a4k = addons + translatePath('plugin.video.a4kstreaming/')
 chk_luc = addons + translatePath('plugin.video.luc_kodi/')#----------------luc_kodi
 # Fen & Forks
 chk_fen = addons + translatePath('plugin.video.fen/')#---------------------Fen
@@ -129,6 +131,7 @@ chk_salts = addons + translatePath('plugin.video.salts/')#-----------------SALTS
 chk_otaku = addons + translatePath('plugin.video.otaku/')#-----------------Otaku
 chk_tmdbh = addons + translatePath('plugin.video.themoviedb.helper/')#-----TMDb Helper
 chk_dexhub = addons + translatePath('plugin.video.dexhub/')#---------------Dex Hub
+chk_tmdbh_trakt_provider = addons + translatePath('script.module.tmdbhelper.sync.trakt/')
 chk_easyv = addons + translatePath('plugin.video.easynewsx/')#-------------Easynews Video
 chk_trakt = addons + translatePath('script.trakt/')#-----------------------Trakt
 # Debrid Only
@@ -145,6 +148,10 @@ chk_nimbus = addons + translatePath('skin.nimbus/')#-----------------------Nimbu
 umb_ud = addon_data + translatePath('plugin.video.umbrella/')
 seren_ud = addon_data + translatePath('plugin.video.seren/')
 prism_ud = addon_data + translatePath('plugin.video.prism/')
+madtitan_ud = addon_data + translatePath('plugin.video.madtitansports/')
+madtitan = addons + translatePath('plugin.video.madtitansports/')
+a4k_ud = addon_data + translatePath('plugin.video.a4kstreaming/')
+a4k = addons + translatePath('plugin.video.a4kstreaming/')
 luc_ud = addon_data + translatePath('plugin.video.luc_kodi/')
 # Fen & Forks
 fen_ud = addon_data + translatePath('plugin.video.fen/')
@@ -171,6 +178,7 @@ salts_ud = addon_data + translatePath('plugin.video.salts/')
 otaku_ud = addon_data + translatePath('plugin.video.otaku/')
 tmdbh_ud = addon_data + translatePath('plugin.video.themoviedb.helper/')
 dexhub_ud = addon_data + translatePath('plugin.video.dexhub/')
+tmdbh_trakt_provider_ud = addon_data + translatePath('script.module.tmdbhelper.sync.trakt/')
 easyv_ud = addon_data + translatePath('plugin.video.easynewsx/')
 trakt_ud = addon_data + translatePath('script.trakt/')
 # Debrid Only
@@ -189,6 +197,8 @@ chkset_red = addon_data + translatePath('plugin.video.redlight/databases/setting
 chkset_umb = addon_data + translatePath('plugin.video.umbrella/settings.xml')
 chkset_seren = addon_data + translatePath('plugin.video.seren/settings.xml')
 chkset_prism = addon_data + translatePath('plugin.video.prism/settings.xml')
+chkset_madtitan = addon_data + translatePath('plugin.video.madtitansports/settings.xml')
+chkset_a4k = addon_data + translatePath('plugin.video.a4kstreaming/settings.xml')
 chkset_luc = addon_data + translatePath('plugin.video.luc_kodi/settings.xml')
 # Fen & Forks
 chkset_fen = addon_data + translatePath('plugin.video.fen/settings.xml')
@@ -216,6 +226,7 @@ chkset_tmdbh = addon_data + translatePath('plugin.video.themoviedb.helper/settin
 chkset_dexhub = addon_data + translatePath('plugin.video.dexhub/settings.xml')
 # Dex Hub keeps its Trakt token in a JSON file (not settings.xml)
 path_dexhub_trakt_token = addon_data + translatePath('plugin.video.dexhub/trakt_token.json')
+chkset_tmdbh_trakt_provider = addon_data + translatePath('script.module.tmdbhelper.sync.trakt/settings.xml')
 chkset_easyv = addon_data + translatePath('plugin.video.easynewsx/settings.xml')
 chkset_trakt = addon_data + translatePath('script.trakt/settings.xml')
 # Debrid Only
@@ -281,7 +292,7 @@ path_redg_service = addons + translatePath('plugin.video.gratisred/service.py')
 path_crew_service = addons + translatePath('plugin.video.thecrew/service.py')
 path_salts_service = addons + translatePath('plugin.video.salts/service.py')
 path_scrubs_service = addons + translatePath('plugin.video.scrubsv2/service.py')
-path_tmdbh_service = addons + translatePath('plugin.video.themoviedb.helper/resources/service.py')
+path_tmdbh_trakt_recovery = chk_tmdbh_trakt_provider + translatePath('resources/lib/tmdbhelper_sync_trakt/api/recovery.py')
 path_trakt_service = addons + translatePath('script.trakt/resources/lib/service.py')
 
 
@@ -302,7 +313,7 @@ path_redg = addons + translatePath('plugin.video.gratisred/resources/lib/modules
 path_crew = addons + translatePath('script.module.thecrew/lib/resources/lib/modules/keys.py')
 path_salts = addons + translatePath('plugin.video.salts/salts_lib/trakt_api.py')
 path_scrubs = addons + translatePath('plugin.video.scrubsv2/resources/lib/modules/trakt.py')
-path_tmdbh = addons + translatePath('plugin.video.themoviedb.helper/resources/tmdbhelper/lib/api/api_keys/trakt.py')
+path_tmdbh_trakt_keys = chk_tmdbh_trakt_provider + translatePath('resources/lib/tmdbhelper_sync_trakt/api/keys.py')
 path_trakt = addons + translatePath('script.trakt/resources/lib/traktapi.py')
 
 
@@ -319,7 +330,7 @@ dradis_secret_obs = [113, 39, 39, 122, 116, 122, 32, 35, 33, 32, 36, 123, 39, 38
 seren_client_obs = [114, 33, 123, 35, 113, 114, 122, 115, 123, 39, 118, 35, 36, 116, 36, 36, 35, 36, 113, 32, 123, 119, 118, 33, 32, 39, 35, 39, 123, 32, 119, 118, 118, 123, 123, 114, 122, 122, 119, 115, 113, 122, 116, 113, 33, 114, 113, 33, 114, 112, 123, 115, 115, 38, 39, 114, 114, 35, 33, 112, 38, 39, 117, 123]
 seren_secret_obs = [32, 36, 114, 112, 118, 115, 117, 36, 112, 117, 32, 119, 115, 118, 33, 39, 39, 116, 35, 122, 38, 115, 113, 119, 36, 112, 38, 38, 33, 112, 116, 115, 35, 115, 119, 39, 39, 33, 36, 32, 116, 39, 38, 116, 112, 122, 123, 33, 113, 116, 112, 113, 123, 122, 112, 116, 38, 33, 38, 38, 115, 122, 118, 112]
 
-# Alternate Seren fork Trakt API credentials
+# Alternate Seren fork Trakt API keys (Diggz and minhgi forks)
 seren_fork_client_obs = [112, 116, 118, 36, 122, 39, 33, 38, 115, 118, 33, 122, 117, 123, 39, 113, 117, 112, 119, 118, 122, 33, 116, 115, 119, 118, 119, 36, 115, 38, 112, 117, 36, 36, 119, 116, 36, 33, 33, 36, 33, 114, 118, 113, 33, 118, 36, 35, 112, 35, 118, 123, 113, 118, 116, 38, 36, 118, 32, 116, 39, 113, 116, 36]
 seren_fork_secret_obs = [118, 113, 119, 123, 115, 117, 32, 117, 118, 122, 38, 114, 116, 119, 39, 112, 116, 117, 122, 116, 36, 119, 36, 123, 35, 36, 112, 114, 38, 115, 112, 117, 123, 112, 116, 123, 39, 32, 112, 119, 35, 35, 115, 116, 38, 119, 115, 36, 118, 35, 36, 115, 118, 39, 39, 113, 115, 115, 38, 114, 112, 118, 117, 33]
 
@@ -352,13 +363,17 @@ thechains_client_obs = [123, 115, 39, 39, 114, 115, 112, 119, 123, 39, 119, 122,
 thechains_secret_obs = [112, 113, 117, 114, 38, 114, 118, 112, 119, 39, 118, 114, 35, 119, 112, 118, 122, 35, 38, 36, 117, 35, 113, 35, 113, 118, 113, 39, 113, 112, 117, 35, 116, 122, 117, 116, 36, 119, 112, 113, 38, 38, 117, 39, 123, 118, 39, 39, 117, 117, 117, 35, 118, 123, 32, 119, 112, 39, 114, 116, 33, 116, 112, 36]
 
 tmdbh_client_obs = [39, 116, 36, 38, 39, 116, 115, 117, 113, 35, 38, 36, 113, 33, 116, 35, 36, 122, 36, 38, 115, 32, 114, 116, 123, 118, 32, 123, 32, 122, 118, 38, 117, 33, 119, 115, 123, 33, 39, 36, 33, 112, 118, 118, 122, 112, 113, 115, 114, 39, 115, 38, 39, 114, 116, 33, 116, 35, 32, 39, 119, 118, 116, 117]
-tmdbh_secret_obs = [115, 119, 115, 115, 123, 113, 122, 118, 113, 118, 115, 38, 123, 35, 116, 115, 33, 117, 119, 115, 38, 122, 38, 119, 115, 119, 35, 33, 32, 33, 114, 38, 38, 122, 114, 115, 114, 114, 115, 38, 118, 39, 32, 39, 122, 119, 38, 113, 39, 39, 36, 123, 122, 122, 119, 38, 36, 122, 114, 39, 39, 118, 38, 123]
 
 trakt_client_obs_str = '[123, 39, 116, 119, 33, 117, 32, 32, 118, 35, 119, 32, 117, 122, 116, 35, 119, 32, 119, 38, 36, 113, 39, 117, 113, 117, 115, 33, 113, 32, 33, 38, 36, 35, 114, 114, 39, 112, 116, 35, 118, 123, 114, 117, 122, 39, 35, 112, 114, 112, 122, 122, 38, 116, 115, 116, 36, 39, 122, 113, 38, 122, 118, 38]'
 trakt_secret_obs_str = '[35, 32, 33, 116, 36, 33, 123, 119, 119, 118, 114, 118, 123, 123, 38, 114, 113, 114, 122, 39, 119, 117, 32, 33, 112, 117, 39, 33, 35, 36, 123, 35, 38, 39, 33, 117, 36, 123, 38, 118, 114, 35, 122, 123, 112, 116, 36, 113, 117, 123, 118, 115, 36, 36, 119, 117, 123, 123, 32, 35, 119, 35, 32, 113]'
 
 
+madtitan_client_obs = [35, 36, 116, 35, 119, 123, 32, 118, 39, 35, 38, 38, 112, 32, 119, 114, 33, 115, 33, 38, 123, 123, 35, 114, 112, 122, 115, 35, 33, 123, 39, 32, 33, 39, 32, 115, 117, 112, 116, 35, 36, 114, 116, 33, 39, 36, 123, 122, 116, 115, 38, 115, 39, 112, 115, 113, 33, 35, 38, 36, 116, 116, 36, 35]
+madtitan_secret_obs = [122, 35, 117, 33, 32, 116, 112, 39, 118, 116, 122, 35, 35, 115, 113, 117, 36, 35, 32, 123, 35, 35, 32, 39, 123, 119, 32, 116, 39, 122, 118, 119, 119, 33, 118, 33, 118, 115, 32, 119, 122, 118, 118, 119, 38, 39, 115, 123, 122, 122, 119, 39, 32, 115, 117, 115, 117, 118, 33, 116, 118, 32, 123, 119]
+
 #================ TRAKT API KEY VARIABLES ================
+madtitan_client = obfuscation.deobfuscate(madtitan_client_obs)
+madtitan_secret = obfuscation.deobfuscate(madtitan_secret_obs)
 umb_client = obfuscation.deobfuscate(umb_client_obs)
 umb_secret = obfuscation.deobfuscate(umb_secret_obs)
 
@@ -406,4 +421,3 @@ thechains_client = obfuscation.deobfuscate(thechains_client_obs)
 thechains_secret = obfuscation.deobfuscate(thechains_secret_obs)
 
 tmdbh_client = obfuscation.deobfuscate(tmdbh_client_obs)
-tmdbh_secret = obfuscation.deobfuscate(tmdbh_secret_obs)

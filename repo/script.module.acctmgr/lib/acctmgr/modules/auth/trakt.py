@@ -281,6 +281,11 @@ class Trakt(BaseDeviceAuth):
 		except Exception as e:
 			log_utils.error(f"Trakt revoke failed: {e}")
 			pass
+		try:
+			from acctmgr.modules.sync import tmdbh_provider
+			tmdbh_provider.revoke()
+		except Exception as exc:
+			log_utils.error('TMDb Helper provider revoke failed: %s' % exc)
 		control.setSetting('trakt.username', '')
 		control.setSetting('trakt.expires', '')
 		control.setSetting('trakt.expires_in', '')

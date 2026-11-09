@@ -720,7 +720,7 @@ def patch_seren_trakt_keys(restore=False):
 		version = _seren.getAddonInfo('version')
 		# Which original key pair to put back on restore: the one recorded when
 		# the keys were patched; otherwise official Seren (3.0.1 or provider
-		# Nixgates, e.g. 3.0.62) vs the Diggz fork.
+		# Nixgates, e.g. 3.0.62) vs the Diggz/minhgi forks.
 		_origin_file = os.path.join(var.acctmgr_datapath, 'seren_keys_origin.txt')
 		origin = ''
 		try:
@@ -783,7 +783,7 @@ def apply_default_trakt_api_keys(): # Restore default API keys for python files 
         (var.chk_salts,         var.path_salts,   var.salts_client,          var.salts_secret,          "SALTS",        var.client_am,            var.secret_am),
         (var.chk_scrubs,        var.path_scrubs,  var.scrubs_client,         var.scrubs_secret,         "Scrubs V2",    var.client_am,            var.secret_am),
         (var.chk_redg,          var.path_redg,    var.redg_client,           var.redg_secret,           "Gratis Red",   var.client_am,            var.secret_am),
-        (var.chk_tmdbh,         var.path_tmdbh,   var.tmdbh_client,          var.tmdbh_secret,          "TMDb Helper",  var.client_am,            var.secret_am),
+
         (var.chk_trakt,         var.path_trakt,   var.trakt_client_obs_str,  var.trakt_secret_obs_str,  "Trakt",        var.client_am_obs_str,    var.secret_am_obs_str),
     )
 
@@ -825,9 +825,20 @@ def apply_default_trakt_api_keys(): # Restore default API keys for python files 
             xbmc.log(f"AM Lite: restore default API keys [{name}]: ERROR {e}", xbmc.LOGINFO)
             results.append((name, False, str(e)))
 
+    # External TMDb Helper Trakt provider: one CLIENT_ID, no client secret.
+    try:
+        from acctmgr.modules.sync import tmdbh_provider
+        restored = tmdbh_provider.restore_api_key()
+        tmdbh_provider.remove_guard()
+        results.append(('TMDb Helper Trakt provider', True, 'restored' if restored else 'no changes needed'))
+    except Exception as exc:
+        xbmc.log('AM Lite: TMDb Helper provider key restore failed: %s' % exc, xbmc.LOGERROR)
+        results.append(('TMDb Helper Trakt provider', False, str(exc)))
+
     # Restore default keys in settings.xml only if AM Lite keys are currently applied
     settings_targets = (
         ("plugin.video.luc_kodi",   var.chk_luc,       var.luc_client,    var.luc_secret,    "luc_kodi"),
+        ("plugin.video.madtitansports", var.chk_madtitan, var.madtitan_client, var.madtitan_secret, "Mad Titan Sports"),
         ("plugin.video.pov",        var.chk_pov,       var.pov_client,    var.pov_secret,    "POV"),
         #("plugin.video.dradis",     var.chk_dradis,    var.dradis_client, var.dradis_secret, "Dradis"),
         ("plugin.video.genocide",   var.chk_genocide,  var.chains_client, var.chains_secret, "Genocide"),
@@ -1281,7 +1292,6 @@ def unpatch_all_services():
         # Others
         ("The Crew", var.chk_crew, var.path_crew_service),
         ("SALTS", var.chk_salts, var.path_salts_service),
-        ("TMDbH", var.chk_tmdbh, var.path_tmdbh_service),
         ("Trakt Add-on", var.chk_trakt, var.path_trakt_service),
     )
 

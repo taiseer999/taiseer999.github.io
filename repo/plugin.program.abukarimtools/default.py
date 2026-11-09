@@ -38,6 +38,7 @@ ICONS  = {
     'af3_lucentplayer': ADDON_PATH + 'resources/icons/af3_lucentplayer.png',
     'lucent_from_af3': ADDON_PATH + 'resources/icons/lucent_from_af3.png',
     'af3_plotright':  ADDON_PATH + 'resources/icons/af3_plotright.png',
+    'af3_plotsize':   ADDON_PATH + 'resources/icons/af3_plotsize.png',
     'af3_discmenu':   ADDON_PATH + 'resources/icons/af3_discmenu.png',
     'font_scale':     ADDON_PATH + 'resources/icons/font_scale.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/sources.png',
@@ -119,6 +120,7 @@ CATEGORIES = [
         ('af3_lucentplayer', 32080),
         ('lucent_from_af3', 32089),
         ('af3_plotright',  30890),
+        ('af3_plotsize',   32113),
         ('af3_discmenu',   32102),
         ('font_scale',     30740),
     ]),
@@ -140,6 +142,8 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 'af3_trailers', 'af3_waves',
                 # 4.6.15: AF3 Plot on the Right (on/off switch)
                 'af3_plotright',
+                # 4.7.41: AF3 Plot Text Size (Normal / Small)
+                'af3_plotsize',
                 # 4.7.36: AF3 Disc Menu for ISO Streams (on/off switch)
                 'af3_discmenu',
                 # 4.6.14: AF3 Streaming Services (dialogs only)
@@ -379,6 +383,12 @@ def _mode_label2(mode):
         try:
             from resources.lib import lucent_toggle
             return lucent_toggle.summary()
+        except Exception:
+            return None
+    if mode == 'af3_plotsize':
+        try:
+            from resources.lib import af3_plotsize
+            return af3_plotsize.mode_label()
         except Exception:
             return None
     if mode == 'font_scale':
@@ -627,6 +637,9 @@ def router():
     elif mode == 'af3_plotright':
         from resources.lib import af3_plotright_toggle
         af3_plotright_toggle.run()
+    elif mode == 'af3_plotsize':
+        from resources.lib import af3_plotsize
+        af3_plotsize.run()
     elif mode == 'af3_discmenu':
         from resources.lib import af3_discmenu_toggle
         af3_discmenu_toggle.run()

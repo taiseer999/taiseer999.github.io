@@ -19,8 +19,13 @@ addon = xbmcaddon.Addon(addon_id)
 addoninfo = addon.getAddonInfo
 
 # Sync Helpers
+def set_verified_setting(addon, key, value):
+	addon.setSetting(key, str(value))
+	if addon.getSetting(key) != str(value):
+		raise RuntimeError(f"Trakt setting verification failed: {key}")
+
 def refresh_sync(mode, chk_auth, token):
-    if mode == "auth":
+    if mode in ("auth", "repair"):
         return True
     return chk_auth != str(token)
 
@@ -44,37 +49,43 @@ class Auth:
     def trakt_auth(self, mode="refresh"):
         your_token, your_username, your_refresh, your_expires = self.am_trakt()
         master_token = your_token
+        your_expires_in = xbmcaddon.Addon("script.module.acctmgr").getSetting("trakt.expires_in")
+        self._sync_failures = []
 
         if not exists(var.tk_sync_list):
-            return
+            log_utils.error("Trakt sync list missing")
+            return False
 
         try:
             with open(var.tk_sync_list, "r") as synclist:
                 current = json.load(synclist)["addon_list"]
         except Exception as e:
             log_utils.error(f"Error reading sync list: {e}")
-            return
+            return False
 
         # ===================== Copy Addon Data (settings.xml) =====================
         addons = (
-            ("Shadow",        var.chk_shadow, var.shadow_ud,  var.chkset_shadow,  var.shadow),
-            ("Ghost",         var.chk_ghost,  var.ghost_ud,   var.chkset_ghost,   var.ghost),
-            ("The Chains",    var.chk_chains, var.chains_ud,  var.chkset_chains,  var.chains),
-            ("Homelander",    var.chk_home,   var.home_ud,    var.chkset_home,    var.home),
-            ("Nightwing",     var.chk_night,  var.night_ud,   var.chkset_night,   var.night),
-            ("Absolution",    var.chk_absol,  var.absol_ud,   var.chkset_absol,   var.absol),
-            ("The Crew",      var.chk_crew,   var.crew_ud,    var.chkset_crew,    var.crew),
-            ("SALTS",         var.chk_salts,  var.salts_ud,   var.chkset_salts,   var.salts),
-            ("Scrubs V2",     var.chk_scrubs, var.scrubs_ud,  var.chkset_scrubs,  var.scrubs),
-            ("Gratis Red",    var.chk_redg,   var.redg_ud,    var.chkset_redg,    var.redg),
-            ("TMDb Helper",   var.chk_tmdbh,  var.tmdbh_ud,   var.chkset_tmdbh,   var.tmdbh),
-            ("Trakt",         var.chk_trakt,  var.trakt_ud,   var.chkset_trakt,   var.trakt),
+            ("Shadow",                  var.chk_shadow, var.shadow_ud,  var.chkset_shadow,  var.shadow),
+            ("Ghost",                   var.chk_ghost,  var.ghost_ud,   var.chkset_ghost,   var.ghost),
+            ("The Chains",              var.chk_chains, var.chains_ud,  var.chkset_chains,  var.chains),
+            ("Homelander",              var.chk_home,   var.home_ud,    var.chkset_home,    var.home),
+            ("Nightwing",               var.chk_night,  var.night_ud,   var.chkset_night,   var.night),
+            ("Absolution",              var.chk_absol,  var.absol_ud,   var.chkset_absol,   var.absol),
+            ("The Crew",                var.chk_crew,   var.crew_ud,    var.chkset_crew,    var.crew),
+            ("SALTS",                   var.chk_salts,  var.salts_ud,   var.chkset_salts,   var.salts),
+            ("Scrubs V2",               var.chk_scrubs, var.scrubs_ud,  var.chkset_scrubs,  var.scrubs),
+            ("Gratis Red",              var.chk_redg,   var.redg_ud,    var.chkset_redg,    var.redg),
+            ("TMDb Helper",             var.chk_tmdbh,  var.tmdbh_ud,   var.chkset_tmdbh,   var.tmdbh),
+            ("Trakt",                   var.chk_trakt,  var.trakt_ud,   var.chkset_trakt,   var.trakt),
+            ("Mad Titan Sports",        var.chk_madtitan, var.madtitan_ud, var.chkset_madtitan, var.madtitan),
+            ("a4kStreaming",            var.chk_a4k, var.a4k_ud, var.chkset_a4k, var.a4k),
         )
 
         for name, chk_addon, ud_path, chk_setting, base_path in addons:
             try:
                 control.copy_addon_settings(name, chk_addon, ud_path, chk_setting, base_path)
             except Exception as e:
+                self._sync_failures.append(f"{name} settings copy: {e}")
                 log_utils.error(f"Error copying settings for {name}: {e}")
                 
         # ========================= Fen Light / The Gears / Red Light =========================
@@ -98,19 +109,56 @@ class Auth:
                         chk_auth = chk_auth_db.chk_auth(settings_db, "trakt.token")
 
                         if refresh_sync(mode, chk_auth, master_token):
-                            trakt_db.auth(settings_db)
+                            if not trakt_db.auth(settings_db):
+                                raise RuntimeError(f"{current_name} database Trakt write failed")
                             remake_settings_func()
 
                             patched, msg = control.startup_patch(service_path, addon_name=addon_name)
                             if not patched:
-                                log_utils.log(f"{addon_name} startup patch failed, msg={msg}", level=log_utils.LOGERROR)
+                                raise RuntimeError(f"{addon_name} startup patch failed, msg={msg}")
 
                             if authorize(mode):
                                 xbmc.sleep(300)
                                 remake_cache_func()
+                    else:
+                        raise RuntimeError(f"{current_name} settings database unavailable")
 
             except Exception as e:
+                self._sync_failures.append(str(e))
                 log_utils.error(f"{current_name} Trakt Failed: {e}")
+
+        # ========================= Mad Titan Sports =========================
+        try:
+            if "Mad Titan Sports" in current and exists(var.chk_madtitan):
+                addon = xbmcaddon.Addon("plugin.video.madtitansports")
+                chk_auth = addon.getSetting("trakt.access_token")
+                if refresh_sync(mode, chk_auth, master_token):
+                    for k, v in {
+                        "trakt.client_id": var.client_am,
+                        "trakt.client_secret": var.secret_am,
+                        "trakt.access_token": your_token,
+                        "trakt.refresh_token": your_refresh,
+                        "trakt.user_id": your_username,
+                        "trakt.authorize": "Authorized",
+                    }.items():
+                        set_verified_setting(addon, k, v)
+        except Exception as e:
+            self._sync_failures.append(str(e))
+            log_utils.error(f"Mad Titan Sports Trakt Failed: {e}")
+
+        # ========================= a4kStreaming (Migration Only) =========================
+        try:
+            if "a4kStreaming" in current and exists(var.chk_a4k):
+                addon = xbmcaddon.Addon("plugin.video.a4kstreaming")
+                for key, value in {
+                    "trakt.clientid": var.client_am,
+                    "trakt.username": your_username,
+                }.items():
+                    if addon.getSetting(key) != str(value):
+                        set_verified_setting(addon, key, value)
+        except Exception as e:
+            self._sync_failures.append(str(e))
+            log_utils.error(f"a4kStreaming Trakt Migration Failed: {e}")
 
         # ========================= Umbrella =========================
         try:
@@ -131,11 +179,11 @@ class Auth:
                         patched_keys = True
 
                     if not patched_keys:
-                        log_utils.log("Umbrella Trakt keys NOT patched")
+                        raise RuntimeError("Umbrella Trakt keys NOT patched")
 
                     patched, msg = control.startup_patch(var.path_umb_service, addon_name="Umbrella")
                     if not patched:
-                        log_utils.log(f"Umbrella startup patch failed, msg={msg}", level=log_utils.LOGERROR)
+                        raise RuntimeError(f"Umbrella startup patch failed, msg={msg}")
 
                     for k, v in {
                         "trakt.user.name": your_username,
@@ -150,8 +198,9 @@ class Auth:
                         "scrobble.source": "1",
                         "resume.source": "1",
                     }.items():
-                        addon.setSetting(k, v)
+                        set_verified_setting(addon, k, v)
         except Exception as e:
+            self._sync_failures.append(str(e))
             log_utils.error(f"Umbrella Trakt Failed: {e}")
 
         # ========================== POV ==========================
@@ -163,7 +212,7 @@ class Auth:
                 if refresh_sync(mode, chk_auth, master_token):
                     patched, msg = control.startup_patch(var.path_pov_service)
                     if not patched:
-                        log_utils.log(f"POV startup patch failed, msg={msg}", level=log_utils.LOGERROR)
+                        raise RuntimeError(f"POV startup patch failed, msg={msg}")
                     for k, v in {
                         "trakt.client_id": var.client_am,
                         "trakt.client_secret": var.secret_am,
@@ -174,11 +223,12 @@ class Auth:
                         "trakt_indicators_active": "true",
                         "watched_indicators": "1",
                     }.items():
-                        addon.setSetting(k, v)
+                        set_verified_setting(addon, k, v)
                     #control.remake_pov_settings()
                     xbmc.sleep(500)
                     control.remake_pov_trakt_cache()
         except Exception as e:
+            self._sync_failures.append(str(e))
             log_utils.error(f"POV Trakt Failed: {e}")
             
         # =================== Dradis / Genocide ===================
@@ -195,7 +245,7 @@ class Auth:
                     if refresh_sync(mode, chk_auth, master_token):
                         patched, msg = control.startup_patch(path_service)
                         if not patched:
-                            log_utils.log(f"{name} startup patch failed, msg={msg}", level=log_utils.LOGERROR)
+                            raise RuntimeError(f"{name} startup patch failed, msg={msg}")
                         expires = int(time.time() + (8 * 86400))
                         for k, v in {
                             "trakt.client_id": var.client_am,
@@ -206,8 +256,9 @@ class Auth:
                             "trakt.expires": str(expires),
                             "trakt.isauthed": "true",
                         }.items():
-                            addon.setSetting(k, v)
+                            set_verified_setting(addon, k, v)
             except Exception as e:
+                self._sync_failures.append(str(e))
                 log_utils.error(f"{name} Trakt Failed: {e}")
 
         # ========================= Seren =========================
@@ -223,7 +274,7 @@ class Auth:
 
                     patched, msg = control.startup_patch(var.path_seren_service)
                     if not patched:
-                        log_utils.log(f"Seren startup patch failed, msg={msg}", level=log_utils.LOGERROR)
+                        raise RuntimeError(f"Seren startup patch failed, msg={msg}")
 
                     your_expires_str = str(int(float(your_expires)))
                     for k, v in {
@@ -231,9 +282,11 @@ class Auth:
                         "trakt.username": your_username,
                         "trakt.refresh": your_refresh,
                         "trakt.expires": your_expires_str,
+                        "trakt.enabled": "true",
                     }.items():
-                        addon.setSetting(k, v)
+                        set_verified_setting(addon, k, v)
         except Exception as e:
+            self._sync_failures.append(str(e))
             log_utils.error(f"Seren Trakt Failed: {e}")
 
         # ========================= luc_kodi =========================
@@ -245,7 +298,7 @@ class Auth:
                 if refresh_sync(mode, chk_auth, master_token):
                     patched, msg = control.startup_patch(var.path_luc_service)
                     if not patched:
-                        log_utils.log(f"luc_kodi startup patch failed, msg={msg}", level=log_utils.LOGERROR)
+                        raise RuntimeError(f"luc_kodi startup patch failed, msg={msg}")
                     for k, v in {
                         "trakt.username": your_username,
                         "trakt.token": your_token,
@@ -254,8 +307,9 @@ class Auth:
                         "trakt.client_id": var.client_am,
                         "trakt.client_secret": var.secret_am,
                     }.items():
-                        addon.setSetting(k, v)
+                        set_verified_setting(addon, k, v)
         except Exception as e:
+            self._sync_failures.append(str(e))
             log_utils.error(f"luc_kodi Trakt Failed: {e}")
 
         # ========================= Shadow / Ghost =========================
@@ -279,7 +333,7 @@ class Auth:
                             "trakt_refresh_token": your_refresh,
                             "trakt_expires_at": your_expires,
                         }.items():
-                            addon.setSetting(k, v)
+                            set_verified_setting(addon, k, v)
 
                         if name == "Shadow":
                             path = var.path_shadow
@@ -308,12 +362,13 @@ class Auth:
                                 patched = True
 
                             if not patched:
-                                log_utils.log(f"{name}: Trakt keys NOT patched")
+                                raise RuntimeError(f"{name}: Trakt keys NOT patched")
 
                         except Exception as e:
-                            log_utils.error(f"{name} Trakt API keys patch failed: {e}")
+                            raise RuntimeError(f"{name} Trakt API keys patch failed: {e}") from e
 
             except Exception as e:
+                self._sync_failures.append(str(e))
                 log_utils.error(f"{name} Trakt Failed: {e}")
 
 
@@ -322,7 +377,7 @@ class Auth:
         addons = [
             ("Homelander",        "plugin.video.homelander", var.chk_home,  var.home_ud,  var.chkset_home,  var.home, var.path_home_service),
             ("Nightwing",         "plugin.video.nightwing",  var.chk_night, var.night_ud, var.chkset_night, var.night, var.path_night_service),
-            ("Jokers Absolution", "plugin.video.absolution", var.chk_absol, var.absol_ud, var.chkset_absol, var.absol, var.path_absol_service),
+            ("Absolution",        "plugin.video.absolution", var.chk_absol, var.absol_ud, var.chkset_absol, var.absol, var.path_absol_service),
         ]
 
         for name, plugin, chk_addon, ud_path, chk_setting, base_path, path_service in addons:
@@ -333,7 +388,7 @@ class Auth:
                     if refresh_sync(mode, chk_auth, master_token):
                         patched, msg = control.startup_patch(path_service)
                         if not patched:
-                            log_utils.log(f"{name} startup patch failed, msg={msg}", level=log_utils.LOGERROR)
+                            raise RuntimeError(f"{name} startup patch failed, msg={msg}")
                         for k, v in {
                             "trakt.user": your_username,
                             "trakt.token": your_token,
@@ -342,8 +397,9 @@ class Auth:
                             "trakt.client_id": var.client_am,
                             "trakt.client_secret": var.secret_am,
                         }.items():
-                            addon.setSetting(k, v)
+                            set_verified_setting(addon, k, v)
             except Exception as e:
+                self._sync_failures.append(str(e))
                 log_utils.error(f"{name} Trakt Failed: {e}")
 
         # ========================= The Crew =========================
@@ -367,11 +423,11 @@ class Auth:
                             patched_keys = True
 
                         if not patched_keys:
-                            log_utils.log("The Crew Trakt keys NOT patched")
+                            raise RuntimeError("The Crew Trakt keys NOT patched")
 
                         patched, msg = control.startup_patch(var.path_crew_service)
                         if not patched:
-                            log_utils.log(f"The Crew startup patch failed, msg={msg}", level=log_utils.LOGERROR)
+                            raise RuntimeError(f"The Crew startup patch failed, msg={msg}")
 
                         for k, v in {
                             "trakt.user": your_username,
@@ -380,8 +436,9 @@ class Auth:
                             "trakt.expires_at": your_expires,
                             "silent.boot": "true",
                         }.items():
-                            addon.setSetting(k, v)
+                            set_verified_setting(addon, k, v)
         except Exception as e:
+            self._sync_failures.append(str(e))
             log_utils.error(f"The Crew Trakt Failed: {e}")
 
         # ========================= SALTS =========================
@@ -404,11 +461,11 @@ class Auth:
                             patched_keys = True
 
                         if not patched_keys:
-                            log_utils.log("SALTS Trakt keys NOT patched")
+                            raise RuntimeError("SALTS Trakt keys NOT patched")
 
                         patched, msg = control.startup_patch(var.path_salts_service)
                         if not patched:
-                            log_utils.log(f"SALTS startup patch failed, msg={msg}", level=log_utils.LOGERROR)
+                            raise RuntimeError(f"SALTS startup patch failed, msg={msg}")
 
                         for k, v in {
                             "trakt_access_token": your_token,
@@ -416,8 +473,9 @@ class Auth:
                             "trakt_expires": your_expires,
                             "trakt_enabled": "true",
                         }.items():
-                            addon.setSetting(k, v)
+                            set_verified_setting(addon, k, v)
         except Exception as e:
+            self._sync_failures.append(str(e))
             log_utils.error(f"SALTS Trakt Failed: {e}")
 
         # ========================= Scrubs V2 =========================
@@ -440,11 +498,11 @@ class Auth:
                             patched_keys = True
 
                         if not patched_keys:
-                            log_utils.log("Scrubs V2 Trakt keys NOT patched")
+                            raise RuntimeError("Scrubs V2 Trakt keys NOT patched")
 
                         patched, msg = control.startup_patch(var.path_scrubs_service)
                         if not patched:
-                            log_utils.log(f"Scrubs V2 startup patch failed, msg={msg}", level=log_utils.LOGERROR)
+                            raise RuntimeError(f"Scrubs V2 startup patch failed, msg={msg}")
 
                         for k, v in {
                             "trakt.user": your_username,
@@ -452,8 +510,9 @@ class Auth:
                             "trakt.refresh": your_refresh,
                             "trakt.authed": "yes",
                         }.items():
-                            addon.setSetting(k, v)
+                            set_verified_setting(addon, k, v)
         except Exception as e:
+            self._sync_failures.append(str(e))
             log_utils.error(f"Scrubs V2 Trakt Failed: {e}")
 
         # ========================= Gratis Red =========================
@@ -476,11 +535,11 @@ class Auth:
                             patched_keys = True
 
                         if not patched_keys:
-                            log_utils.log("Gratis Red Trakt keys NOT patched")
+                            raise RuntimeError("Gratis Red Trakt keys NOT patched")
 
                         patched, msg = control.startup_patch(var.path_redg_service)
                         if not patched:
-                            log_utils.log(f"Gratis Red startup patch failed, msg={msg}", level=log_utils.LOGERROR)
+                            raise RuntimeError(f"Gratis Red startup patch failed, msg={msg}")
 
                         for k, v in {
                             "trakt.user": your_username,
@@ -488,56 +547,29 @@ class Auth:
                             "trakt.refresh": your_refresh,
                             "trakt.authed": "yes",
                         }.items():
-                            addon.setSetting(k, v)
+                            set_verified_setting(addon, k, v)
         except Exception as e:
+            self._sync_failures.append(str(e))
             log_utils.error(f"Gratis Red Trakt Failed: {e}")
 
-        # ========================= TMDb Helper =========================
+        # ========================= TMDb Helper (external Trakt provider) =========================
         try:
             if "TMDb Helper" in current and exists(var.chk_tmdbh):
-                addon = xbmcaddon.Addon("plugin.video.themoviedb.helper")
-                chk_auth = addon.getSetting("trakt_token")
-
-                if refresh_sync(mode, chk_auth, master_token):
-                    with open(var.path_tmdbh, "r") as f:
-                        data = f.read()
-
-                    patched_keys = False
-                    if var.tmdbh_client in data or var.tmdbh_secret in data:
-                        # Replace old keys
-                        data = data.replace(var.tmdbh_client, var.client_am).replace(var.tmdbh_secret, var.secret_am)
-                        with open(var.path_tmdbh, "w") as f:
-                            f.write(data)
-                        patched_keys = True
-                    elif var.client_am in data and var.secret_am in data:
-                        # Keys are already correct
-                        patched_keys = True
-
-                    if not patched_keys:
-                        log_utils.log("TMDbH Trakt keys NOT patched")
-
-                    patched, msg = control.startup_patch(var.path_tmdbh_service)
-                    if not patched:
-                        log_utils.log(f"TMDbH startup patch failed, msg={msg}", level=log_utils.LOGERROR)
-
-                    expires_int = int(float(your_expires or 0))
-                    tmdbh_data = (
-                        '{"access_token":"%s","token_type":"bearer",'
-                        '"expires_in":7776000,"refresh_token":"%s",'
-                        '"scope":"public","created_at":%s}'
-                        % (your_token, your_refresh, expires_int)
-                    )
-
-                    addon.setSettingString("trakt_token", tmdbh_data)
-                    addon.setSetting("startup_notifications", "false")
+                from acctmgr.modules.sync import tmdbh_provider
+                tmdbh_provider.sync()
         except Exception as e:
-            log_utils.error(f"TMDBh Trakt Failed: {e}")
+            self._sync_failures.append("TMDb Helper provider sync: %s" % e)
+            log_utils.error("TMDb Helper provider sync failed: %s" % e)
 
         # ========================= Trakt Addon =========================
         try:
             if "Trakt Addon" in current and exists(var.chk_trakt) and exists(var.chkset_trakt):
                 addon = xbmcaddon.Addon("script.trakt")
-                chk_auth = addon.getSetting("trakt_token")
+                chk_auth = addon.getSetting("authorization")
+                try:
+                    chk_auth = json.loads(chk_auth).get("access_token", "")
+                except (ValueError, TypeError, AttributeError):
+                    chk_auth = ""
 
                 if refresh_sync(mode, chk_auth, master_token):
                     with open(var.path_trakt, "r") as f:
@@ -553,23 +585,28 @@ class Auth:
                         patched_keys = True
 
                     if not patched_keys:
-                        log_utils.log("Trakt Addon Trakt keys NOT patched")
+                        raise RuntimeError("Trakt Addon Trakt keys NOT patched")
 
                     patched, msg = control.startup_patch(var.path_trakt_service)
                     if not patched:
-                        log_utils.log(f"Trakt Add-on startup patch failed, msg={msg}", level=log_utils.LOGERROR)
+                        raise RuntimeError(f"Trakt Add-on startup patch failed, msg={msg}")
 
                     expires_int = int(float(your_expires or 0))
+                    expires_in_int = int(float(your_expires_in or 0))
+                    if expires_int <= 0 or expires_in_int <= 0:
+                        raise RuntimeError("AM Lite Trakt expiration values unavailable")
+                    created_at = expires_int - expires_in_int
                     trakt_data = (
                         '{"access_token":"%s","token_type":"bearer",'
-                        '"expires_in":7776000,"refresh_token":"%s",'
+                        '"expires_in":%s,"refresh_token":"%s",'
                         '"scope":"public","created_at":%s}'
-                        % (your_token, your_refresh, expires_int)
+                        % (your_token, expires_in_int, your_refresh, created_at)
                     )
 
-                    addon.setSetting("user", your_username)
-                    addon.setSetting("authorization", trakt_data)
+                    set_verified_setting(addon, "user", your_username)
+                    set_verified_setting(addon, "authorization", trakt_data)
         except Exception as e:
+            self._sync_failures.append(str(e))
             log_utils.error(f"Trakt Addon Trakt Failed: {e}")
 
         # ========================= Dex Hub =========================
@@ -600,6 +637,12 @@ class Auth:
                         "trakt_client_secret": var.secret_am,
                         "enable_trakt": "true",
                     }.items():
-                        addon.setSetting(k, v)
+                        set_verified_setting(addon, k, v)
         except Exception as e:
+            self._sync_failures.append(f"Dex Hub: {e}")
             log_utils.error(f"Dex Hub Trakt Failed: {e}")
+
+        if self._sync_failures:
+            log_utils.error(f"Trakt sync incomplete: {len(self._sync_failures)} add-on operation(s) failed")
+            return False
+        return True

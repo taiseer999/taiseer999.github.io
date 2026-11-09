@@ -30,6 +30,7 @@ class Auth:
             ("The Chains",    var.chk_chains,  var.chains_ud,  var.chkset_chains,  var.chains),
             ("SALTS",         var.chk_salts,   var.salts_ud,   var.chkset_salts,   var.salts),
             ("Otaku",         var.chk_otaku,   var.otaku_ud,   var.chkset_otaku,   var.otaku),
+            ("a4kStreaming", var.chk_a4k, var.a4k_ud, var.chkset_a4k, var.a4k),
             ("ResolveURL",    var.chk_rurl,    var.rurl_ud,    var.chkset_rurl,    var.rurl),
         ]
 
@@ -80,6 +81,15 @@ class Auth:
 
             except Exception as e:
                 log_utils.error(f"{addon_name} All-Debrid Failed: {e}")
+
+        # ========================= a4kStreaming =========================
+        try:
+            if exists(var.chk_a4k):
+                addon = xbmcaddon.Addon("plugin.video.a4kstreaming")
+                if addon.getSetting("alldebrid.apikey") != ad_master_token:
+                    addon.setSetting("alldebrid.apikey", your_ad_token)
+        except Exception as e:
+            log_utils.error(f"a4kStreaming alldebrid Failed: {e}")
 
         # ========================= Umbrella =========================
         try:

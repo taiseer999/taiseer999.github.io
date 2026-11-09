@@ -208,23 +208,7 @@ def check_api():
         except Exception as e:
             log_utils.error(f"Gratis Red API Failed: {e}")
 
-    # ================= TMDbH =================
-    if "TMDb Helper" in current and exists(var.chk_tmdbh):
-        try:
-            patched, msg = control.startup_patch(var.path_tmdbh_service, addon_name="TMDb Helper")
-            with open(var.path_tmdbh, 'r') as f:
-                data = f.read()
-            new_data = None
-            if var.client_am in data:
-                pass
-            else:
-                new_data = data.replace(var.tmdbh_client, var.client_am).replace(var.tmdbh_secret, var.secret_am)
-            if new_data is not None:
-                with open(var.path_tmdbh, 'w') as f:
-                    f.write(new_data)
-        except Exception as e:
-            log_utils.error(f"TMDbH API Failed: {e}")
-
+    # TMDb Helper now uses an external Trakt provider; no legacy key/service patch.
     # ================= Trakt Add-on =================
     if "Trakt Addon" in current and exists(var.chk_trakt):
         try:

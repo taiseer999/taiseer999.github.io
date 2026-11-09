@@ -1,3 +1,17 @@
+v4.7.41
+- Toggles: new "AF3: Plot Text Size" entry - Normal / Small (shows the
+  current size; one click switches and reloads the skin). It sets the plot
+  font of the AF3 Vertical Plot on Home (hub and Spotlight), the OSD seek-bar
+  info and the library / combined views:
+    - Normal: font_main_plot, AF3's own plot size (the default);
+    - Small: font_mini_plot, the smaller size these plots always used before.
+- The old fixed smaller plot is gone: the Vertical Plot patches no longer
+  force font_mini_plot. The chosen size is saved (addon_data
+  af3_plotsize.json) and put back after every patch run, so an AF3 update
+  keeps it. "Plot on the Right" keeps its own box and font.
+- The Home plot-gap patches now also find their anchor when the plot is at
+  Normal size.
+
 v4.7.40
 - Search All, left column:
     - logo / title, the info pills and the plot start at the top of the

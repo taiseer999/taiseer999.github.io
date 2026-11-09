@@ -40,6 +40,7 @@ ID ranges:
   32000-32070  AF3 Lucent Player skin labels ($ADDON in the skin)
   32080-32089  AF3 Lucent Player toggle
   32102-32112  AF3 Disc Menu for ISO Streams (Toggles + OSD buttons, Java)
+  32113-32117  AF3 Plot Text Size (Toggles)
 """
 
 STRINGS = {
@@ -861,4 +862,11 @@ STRINGS = {
     32111: ('"JRE for BD-J menus" could not be installed from your repositories. Install tools.jre.zulu from its zip (Add-ons > Install from zip file); simple (HDMV) disc menus still open without it.',
             'تعذّر تثبيت «JRE for BD-J menus» من المستودعات. ثبّت tools.jre.zulu من ملفه المضغوط (الإضافات > التثبيت من ملف مضغوط)؛ وتبقى قوائم الأقراص البسيطة (HDMV) تعمل بدونها.'),
     32112: ('Java installed - opening the disc menu', 'ثُبِّتت Java، جارٍ فتح قائمة القرص'),
+    # ---- 4.7.41: AF3 Plot Text Size (32113-32117) ----
+    32113: ('AF3: Plot Text Size', 'AF3: حجم خط القصة'),
+    32114: ('Normal', 'عادي'),
+    32115: ('Small', 'صغير'),
+    32116: ('Plot text size: %s', 'حجم خط القصة: %s'),
+    32117: ('Plot text size: no plot to resize. Turn on «AF3: Vertical Plot» in Apply Patches, then try again.',
+            'حجم خط القصة: لا توجد قصة لتغيير حجمها. فعّل «AF3: Vertical Plot» في تطبيق الترقيعات ثم أعد المحاولة.'),
 }

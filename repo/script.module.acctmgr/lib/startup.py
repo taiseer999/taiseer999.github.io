@@ -139,7 +139,9 @@ def trakt_refresh(): # Refresh Trakt token if expired or near expiry
 
 	try:
 		from acctmgr.modules.auth import trakt
-		trakt.Trakt().refresh_token()
+		if not trakt.Trakt().refresh_token():
+			xbmc.log('AM Lite: Trakt token refresh returned failure', xbmc.LOGERROR)
+			return 'failed'
 	except Exception:
 		log_utils.error("Trakt token refresh FAILED")
 		return 'failed'
@@ -161,14 +163,26 @@ def trakt_refresh(): # Refresh Trakt token if expired or near expiry
 	xbmc.log('AM Lite: Trakt token refreshed successfully', xbmc.LOGINFO)
 	return 'refreshed'
 
+def trakt_sync_pending(): # Persistent retry state survives Kodi restarts
+	return control.setting('am_trakt_sync_pending') == 'true'
+
+
+def set_trakt_sync_pending(pending):
+	control.setSetting('am_trakt_sync_pending', 'true' if pending else 'false')
+
+
 def startup_tk_sync(mode="refresh"): # Sync Trakt tokens to add-ons
 	if not get_trakt_token():
 		xbmc.log('AM Lite: Trakt sync skipped - no master token present', xbmc.LOGINFO)
 		return False
 
+	set_trakt_sync_pending(True)
 	try:
 		from acctmgr.modules.sync import trakt_sync
-		trakt_sync.Auth().trakt_auth(mode=mode)
+		if trakt_sync.Auth().trakt_auth(mode=mode) is not True:
+			xbmc.log('AM Lite: Trakt add-on synchronization incomplete', xbmc.LOGERROR)
+			return False
+		set_trakt_sync_pending(False)
 		xbmc.log('AM Lite: Trakt token synced to add-ons', xbmc.LOGINFO)
 		return True
 	except Exception:
@@ -209,7 +223,7 @@ def TraktStartup():
 	if status == 'refreshed':
 		sync_ok = startup_tk_sync(mode="refresh")
 	elif status == 'valid':
-		sync_ok = startup_tk_sync(mode="startup")
+		sync_ok = startup_tk_sync(mode="repair" if trakt_sync_pending() else "startup")
 	elif status == 'missing':
 		sync_ok = True
 	else:
@@ -325,7 +339,7 @@ def StartupManager():  # Compare and restore Trakt API keys / Run add-on updates
 		var.path_salts_service,
 		var.path_scrubs_service,
                 var.path_redg_service,
-		var.path_tmdbh_service,
+		var.path_tmdbh_trakt_keys,
 		var.path_trakt_service,
 	]
 
@@ -422,7 +436,7 @@ def AddonCheckUpdate(): # AM Lite Update Notification
 		except Exception:
 			log_utils.error("Addon update check failed")
 
-def trakt_refresh_monitor(interval=300): # Trakt background monitor loop to refresh/sync Trakt when needed. Checks every 5 minutes
+def trakt_refresh_monitor(interval=120): # Trakt background monitor loop to refresh/sync Trakt when needed. Checks every 2 minutes
 	xbmc.log('AM Lite: Starting Trakt refresh monitor loop', xbmc.LOGINFO)
 
 	while not abort_requested():
@@ -434,7 +448,12 @@ def trakt_refresh_monitor(interval=300): # Trakt background monitor loop to refr
 
 				if status == 'refreshed':
 					xbmc.log('AM Lite: Background Trakt refresh succeeded - syncing add-ons', xbmc.LOGINFO)
-					startup_tk_sync(mode="refresh")
+					if not startup_tk_sync(mode="refresh"):
+						xbmc.log('AM Lite: Background Trakt sync failed after refresh; retry scheduled', xbmc.LOGERROR)
+				elif status == 'valid' and trakt_sync_pending():
+					xbmc.log('AM Lite: Retrying incomplete Trakt synchronization without refreshing token', xbmc.LOGINFO)
+					if startup_tk_sync(mode="repair"):
+						am_trakt_startup_complete()
 				elif status == 'failed':
 					xbmc.log('AM Lite: Background Trakt refresh failed', xbmc.LOGERROR)
 		except Exception:
@@ -450,6 +469,18 @@ def trakt_refresh_monitor(interval=300): # Trakt background monitor loop to refr
         #ScraperCheck()
 if not abort_requested():
 	TraktStartup()
+if not abort_requested():
+    try:
+        from acctmgr.modules.sync import tmdbh_provider
+        tmdbh_provider.startup_install()
+    except Exception as exc:
+        xbmc.log('AM Lite [TMDb Trakt install]: startup handler failed: %s' % exc, xbmc.LOGERROR)
+if not abort_requested():
+    try:
+        from acctmgr.modules.sync import tmdbh_mdblist
+        tmdbh_mdblist.startup_install()
+    except Exception as exc:
+        xbmc.log('AM Lite [TMDb MDBList install]: %s' % exc, xbmc.LOGERROR)
 if not abort_requested():
 	SyncManager()
 if not abort_requested():

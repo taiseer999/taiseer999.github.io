@@ -1,3 +1,9 @@
+1.2.1b - Rebased on upstream 1.2.1a. Re-added Dex Hub (plugin.video.dexhub) support: Trakt (sync list, token + AM API keys, revoke) and MDBList API key. Re-applied Seren "Restore default API keys" fix (puts back the key pair that was actually replaced).
+
+1.2.1a - Updated TMDb Helper Trakt and MDBList authorization process.
+
+1.2.1 - Added support for a4kStreaming. Added Trakt support for Mad Titan Sports. Improved Trakt startup synchronization. Other minor fixes and stability improvements.
+
 1.2.0c - Added Dex Hub (plugin.video.dexhub) support: Trakt (sync list, token + AM API keys, revoke) and MDBList API key.
 
 1.2.0b - Seren: "Restore default API keys" now puts back the key pair that was actually replaced (official Seren e.g. 3.0.62 no longer receives the Diggz fork keys).

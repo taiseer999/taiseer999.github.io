@@ -75,6 +75,7 @@ class MaxQL:
             ("Scrubs V2",   var.chk_scrubs, var.scrubs_ud,  var.chkset_scrubs,  var.scrubs),
             ("Gratis Red",  var.chk_redg,   var.redg_ud,    var.chkset_redg,    var.redg),
             ("Otaku",       var.chk_otaku,  var.otaku_ud,   var.chkset_otaku,   var.otaku),
+            ("a4kStreaming", var.chk_a4k, var.a4k_ud, var.chkset_a4k, var.a4k),
         )
 
         for name, chk_addon, ud_path, chk_setting, base_path in addons:
@@ -168,6 +169,15 @@ class MaxQL:
             except Exception as e:
                 log_utils.error(f"{name} MaxQL Failed: {e}")
 
+
+        # ===================== a4kStreaming =====================
+        try:
+            if exists(var.chk_a4k):
+                a4k_quality = {var.QL_UHD: '3', var.QL_HD: '2', var.QL_SD: '1'}.get(mode)
+                if a4k_quality is not None:
+                    xbmcaddon.Addon("plugin.video.a4kstreaming").setSetting("general.max_quality", a4k_quality)
+        except Exception as e:
+            log_utils.error(f"a4kStreaming MaxQL Failed: {e}")
 
         # ================= Prism ===================
         for name, plugin, chk_addon, chk_setting in (
