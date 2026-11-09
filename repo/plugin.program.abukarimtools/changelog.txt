@@ -1,3 +1,23 @@
+v4.7.43
+- Fix (4.7.42, Lucent Look): the focused OSD button showed a second white
+  circle beside it once a pop-up opened (info, audio, subtitles...). The
+  pop-ups redraw the button row, and AB Tools' own slots there (DexSubtitles
+  Sync, Subtitle Cycler, Subtitle Look) were still 80 px wide - each one put
+  the pop-up's focused circle 16 px off. They now follow the button size
+  (64 px with Lucent Look, 80 px without); skins patched before are
+  rewritten once.
+- Disc Menu buttons (ISO streams): their icons follow the button size too
+  (v3 block replaces v2).
+
+v4.7.42
+- AF3 Lucent Look: smaller OSD button circles. With Lucent Look on, the
+  player OSD buttons are 64 px circles with a 44 px icon (AF3: 80 px with a
+  56 px icon). The OSD pop-ups (audio, subtitles, info...) draw their copy
+  of the row at the same size - placeholder buttons and the Lucent Player
+  Statistics slot included - so the focused circle stays in place. Lucent
+  Look off keeps AF3's own sizes. (Include conditions on abk.lucent; the
+  Lucent Look switch already reloads the skin.)
+
 v4.7.41
 - Toggles: new "AF3: Plot Text Size" entry - Normal / Small (shows the
   current size; one click switches and reloads the skin). It sets the plot

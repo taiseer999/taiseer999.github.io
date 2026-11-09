@@ -349,7 +349,7 @@ _AF3_SUBTOOLS_XML = (
 _AF3_SUBTOOLS_POPUP_ANCHOR = (
     '                <include content="OSD_CustomDialog_FakeButton" condition="![$PARAM[button_8]]">'
 )
-_AF3_SUBTOOLS_POPUP_XML = (
+_AF3_SUBTOOLS_POPUP_XML_V1 = (
     '                <!-- ABUKARIM: AF3 subtitle buttons (popup slots) -->\n'
     '                <control type="button" id="6010">\n'
     '                    <width>80</width>\n'
@@ -611,7 +611,7 @@ _AF3_SUBSTYLE_XML = (
 )
 # Matching empty slot in the OSD popups (1143-1159), so their redrawn bar
 # keeps the same number of slots as VideoOSD (no shifted duplicate icon).
-_AF3_SUBSTYLE_POPUP_XML = (
+_AF3_SUBSTYLE_POPUP_XML_V1 = (
     '                <!-- ABUKARIM: AF3 subtitle look button (popup slot) -->\n'
     '                <control type="button" id="6012">\n'
     '                    <width>80</width>\n'
@@ -624,6 +624,23 @@ _AF3_SUBSTYLE_POPUP_XML = (
     '                </control>\n'
     '                <!-- /ABUKARIM: AF3 subtitle look button (popup slot) -->\n\n'
 )
+
+
+# 4.7.43: OSD popup slots follow the OSD button size (Lucent Look: 64 px
+# circles, else AF3's 80) - an 80 px slot in a popup row put the popup's
+# focused circle 16 px off per slot (a doubled circle).
+_OSDBTN_SLOT_WIDTH = (
+    '                    <!-- ABK_LUCENT_OSDBTN slot -->\n'
+    '                    <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_OSDBtn_Width_Small</include>\n'
+    '                    <include condition="!Skin.HasSetting(abk.lucent)">ABK_Lucent_OSDBtn_Width_Stock</include>\n'
+)
+
+
+def _osdbtn_slots(xml):
+    return xml.replace('                    <width>80</width>\n', _OSDBTN_SLOT_WIDTH)
+
+_AF3_SUBTOOLS_POPUP_XML = _osdbtn_slots(_AF3_SUBTOOLS_POPUP_XML_V1)
+_AF3_SUBSTYLE_POPUP_XML = _osdbtn_slots(_AF3_SUBSTYLE_POPUP_XML_V1)
 
 
 # ── AF3: Disc Menu for ISO streams (4.7.36, Toggles 'af3_discmenu') ──
@@ -662,18 +679,17 @@ def _af3_discmenu_button(cid, gid, vis, icon, arg):
         '                            <left>-osd_itemgap</left>\n'
         '                            <width>0</width>\n'
         '                            <control type="group">\n'
-        '                                <left>-80</left>\n'
+        '                                <include condition="%(ll)s">ABK_Lucent_OSDBtn_IconLeft_Small</include>\n'
+        '                                <include condition="!%(ll)s">ABK_Lucent_OSDBtn_IconLeft_Stock</include>\n'
         '                                <control type="image">\n'
-        '                                    <bordersize>12</bordersize>\n'
-        '                                    <height>80</height>\n'
-        '                                    <width>80</width>\n'
+        '                                    <include condition="%(ll)s">ABK_Lucent_OSDBtn_Icon_Small</include>\n'
+        '                                    <include condition="!%(ll)s">ABK_Lucent_OSDBtn_Icon_Stock</include>\n'
         '                                    <texture colordiffuse="panel_fg_70">%(icon)s</texture>\n'
         '                                    <visible>!Control.HasFocus(%(cid)d)</visible>\n'
         '                                </control>\n'
         '                                <control type="image">\n'
-        '                                    <bordersize>12</bordersize>\n'
-        '                                    <height>80</height>\n'
-        '                                    <width>80</width>\n'
+        '                                    <include condition="%(ll)s">ABK_Lucent_OSDBtn_Icon_Small</include>\n'
+        '                                    <include condition="!%(ll)s">ABK_Lucent_OSDBtn_Icon_Stock</include>\n'
         '                                    <include content="ABK_Lucent_IconFocus" condition="Skin.HasSetting(abk.lucent)">\n'
         '                                        <param name="icon">%(icon)s</param>\n'
         '                                        <param name="flipx">false</param>\n'
@@ -683,16 +699,16 @@ def _af3_discmenu_button(cid, gid, vis, icon, arg):
         '                                </control>\n'
         '                            </control>\n'
         '                        </control>\n'
-    ) % dict(cid=cid, gid=gid, vis=vis, icon=icon, arg=arg)
+    ) % dict(cid=cid, gid=gid, vis=vis, icon=icon, arg=arg, ll='Skin.HasSetting(abk.lucent)')
 
 
 _AF3_DISCMENU_XML = (
-    '\n\n                        <!-- ABUKARIM: AF3 disc menu buttons v2 -->'
+    '\n\n                        <!-- ABUKARIM: AF3 disc menu buttons v3 -->'
     + _af3_discmenu_button(6015, 6115, _AF3_DISCMENU_VIS + ' + !VideoPlayer.HasMenu',
                            '$VAR[ABK_LucentIcon_discmenu]', 'menu')
     + _af3_discmenu_button(6016, 6116, _AF3_DISCMENU_VIS + ' + VideoPlayer.HasMenu',
                            '$VAR[ABK_LucentIcon_normalplayer]', 'normal')
-    + '                        <!-- /ABUKARIM: AF3 disc menu buttons v2 -->'
+    + '                        <!-- /ABUKARIM: AF3 disc menu buttons v3 -->'
 )
 # Icons: Lucent Look line icons while abk.lucent is on, AF3's own otherwise.
 # Own variable block (not the Lucent one), so it exists on every AF3.
@@ -3307,13 +3323,25 @@ PATCHES = [
         'fallback_repl': r'\1',
         'description': 'AF3 Disc Menu - remove the 4.7.36 buttons',
     },
+    # 4.7.43: v2 (80 px icons) out; v3 sizes its icons like the OSD buttons
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': None,
+        'fallback_pattern': r'(</include>)\n\n {24}<!-- ABUKARIM: AF3 disc menu buttons v2 -->[\s\S]*?<!-- /ABUKARIM: AF3 disc menu buttons v2 -->',
+        'fallback_repl': r'\1',
+        'description': 'AF3 Disc Menu - remove the 4.7.36-4.7.42 buttons (v2)',
+    },
     {
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
         'not_found_ok': True,
         'old': _AF3_DISCMENU_ANCHOR,
         'new': _AF3_DISCMENU_ANCHOR + _AF3_DISCMENU_XML,
-        'already_patched_check': '<!-- ABUKARIM: AF3 disc menu buttons v2 -->',
+        'already_patched_check': '<!-- ABUKARIM: AF3 disc menu buttons v3 -->',
         'description': 'AF3 Disc Menu - OSD buttons (disc menu / normal player) for ISO streams',
     },
     {
@@ -4338,6 +4366,169 @@ PATCHES += [
         'already_patched_check': '<!-- ABK_LP_STATS slot -->',
         'description': 'AF3 Lucent Player - Statistics button slot in the OSD pop-ups',
     },
+
+    # ── 4.7.42: AF3 Lucent Look - smaller OSD button circles ──
+    # AF3's OSD buttons are 80 px circles (Defs_OSD_Button) with the icon
+    # drawn on top by OSD_Button_Icon_Overlay (size 80, border 12 = 56 px
+    # icon). With Lucent Look on (abk.lucent: translucent circles, white focus
+    # circle) they are 64 px circles with a 44 px icon (border 10). The OSD
+    # pop-ups' copies of the row (real and placeholder buttons) and the Lucent
+    # Player Statistics slot follow, so the focused circle stays in place.
+    # Include conditions: the Lucent Look switch already reloads the skin.
+    # Lucent Look off = stock AF3 sizes.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Defaults.xml'),
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': '<!-- ABK_LUCENT_OSDBTN size -->',
+        'fallback_pattern': (r'(<include name="Defs_OSD_Button">[^<]*(?:<param [^>]*>[^<]*</param>\s*)*<definition>\s*)'
+                             r'<height>80</height>\s*<width>80</width>'),
+        'fallback_repl': (r'\1<!-- ABK_LUCENT_OSDBTN size -->\n'
+                          r'            <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_OSDBtn_Size_Small</include>\n'
+                          r'            <include condition="!Skin.HasSetting(abk.lucent)">ABK_Lucent_OSDBtn_Size_Stock</include>'),
+        'description': 'AF3 Lucent Look - OSD buttons: smaller circles',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Defaults.xml'),
+        'not_found_ok': True,
+        'old': '    <include name="Defs_OSD_Button">',
+        'new': ('    <!-- ABK_LUCENT_OSDBTN sizes -->\n'
+                '    <include name="ABK_Lucent_OSDBtn_Size_Small">\n'
+                '        <height>64</height>\n'
+                '        <width>64</width>\n'
+                '    </include>\n'
+                '    <include name="ABK_Lucent_OSDBtn_Size_Stock">\n'
+                '        <height>80</height>\n'
+                '        <width>80</width>\n'
+                '    </include>\n'
+                '    <include name="ABK_Lucent_OSDBtn_Width_Small">\n'
+                '        <width>64</width>\n'
+                '    </include>\n'
+                '    <include name="ABK_Lucent_OSDBtn_Width_Stock">\n'
+                '        <width>80</width>\n'
+                '    </include>\n'
+                '    <include name="Defs_OSD_Button">'),
+        'already_patched_check': '<!-- ABK_LUCENT_OSDBTN sizes -->',
+        'description': 'AF3 Lucent Look - OSD buttons: size includes',
+    },
+    {   # the icon overlay: a wrapper picks 64/10 (Lucent Look) or the caller's / stock 80/12
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '    <include name="OSD_Button_Icon_Overlay">\n        <param name="size">80</param>\n        <param name="bordersize">12</param>',
+        'new': ('    <!-- ABK_LUCENT_OSDBTN overlay -->\n'
+                '    <include name="OSD_Button_Icon_Overlay">\n'
+                '        <param name="size">80</param>\n'
+                '        <param name="bordersize">12</param>\n'
+                '        <param name="itemgap">40</param>\n'
+                '        <param name="visible">true</param>\n'
+                '        <param name="flipx">false</param>\n'
+                '        <param name="icon_colordiffuse">panel_fg_70</param>\n'
+                '        <param name="iconoffset_condition">false</param>\n'
+                '        <param name="itemgap_mod">-</param>\n'
+                '        <definition>\n'
+                '            <include content="ABK_Lucent_OSD_Button_Icon_Overlay_Base" condition="Skin.HasSetting(abk.lucent)">\n'
+                '                <param name="size">64</param>\n'
+                '                <param name="bordersize">10</param>\n                <param name="icon">$PARAM[icon]</param>\n                <param name="id">$PARAM[id]</param>\n                <param name="groupid">$PARAM[groupid]</param>\n                <param name="itemgap">$PARAM[itemgap]</param>\n                <param name="visible">$PARAM[visible]</param>\n                <param name="flipx">$PARAM[flipx]</param>\n                <param name="icon_colordiffuse">$PARAM[icon_colordiffuse]</param>\n                <param name="iconoffset_condition">$PARAM[iconoffset_condition]</param>\n                <param name="itemgap_mod">$PARAM[itemgap_mod]</param>\n'
+                '            </include>\n'
+                '            <include content="ABK_Lucent_OSD_Button_Icon_Overlay_Base" condition="!Skin.HasSetting(abk.lucent)">\n'
+                '                <param name="size">$PARAM[size]</param>\n'
+                '                <param name="bordersize">$PARAM[bordersize]</param>\n                <param name="icon">$PARAM[icon]</param>\n                <param name="id">$PARAM[id]</param>\n                <param name="groupid">$PARAM[groupid]</param>\n                <param name="itemgap">$PARAM[itemgap]</param>\n                <param name="visible">$PARAM[visible]</param>\n                <param name="flipx">$PARAM[flipx]</param>\n                <param name="icon_colordiffuse">$PARAM[icon_colordiffuse]</param>\n                <param name="iconoffset_condition">$PARAM[iconoffset_condition]</param>\n                <param name="itemgap_mod">$PARAM[itemgap_mod]</param>\n'
+                '            </include>\n'
+                '        </definition>\n'
+                '    </include>\n'
+                '    <include name="ABK_Lucent_OSD_Button_Icon_Overlay_Base">\n'
+                '        <param name="size">80</param>\n'
+                '        <param name="bordersize">12</param>'),
+        'already_patched_check': '<!-- ABK_LUCENT_OSDBTN overlay -->',
+        'fallback_pattern': (r'[ \t]*<include name="OSD_Button_Icon_Overlay">\s*'
+                             r'<param name="size">80</param>\s*<param name="bordersize">12</param>'),
+        'fallback_repl': None,          # = 'new' (set below the list)
+        'description': 'AF3 Lucent Look - OSD buttons: smaller icons',
+    },
+    {   # the OSD pop-ups' placeholder buttons keep the row spacing
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': ('    <include name="OSD_CustomDialog_FakeButton">\n'
+                '        <control type="button" id="600$PARAM[id]">\n'
+                '            <width>80</width>'),
+        'new': ('    <include name="OSD_CustomDialog_FakeButton">\n'
+                '        <control type="button" id="600$PARAM[id]">\n'
+                '            <!-- ABK_LUCENT_OSDBTN fake -->\n'
+                '            <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_OSDBtn_Width_Small</include>\n'
+                '            <include condition="!Skin.HasSetting(abk.lucent)">ABK_Lucent_OSDBtn_Width_Stock</include>'),
+        'already_patched_check': '<!-- ABK_LUCENT_OSDBTN fake -->',
+        'fallback_pattern': (r'[ \t]*<include name="OSD_CustomDialog_FakeButton">\s*'
+                             r'<control type="button" id="600\$PARAM\[id\]">\s*<width>80</width>'),
+        'fallback_repl': None,          # = 'new' (set below the list)
+        'description': 'AF3 Lucent Look - OSD pop-ups: placeholder buttons follow the size',
+    },
+    {   # the Lucent Player Statistics slot in the pop-ups follows too
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': ('<!-- ABK_LP_STATS slot -->\n'
+                '                <control type="button" id="6013">\n'
+                '                    <width>80</width>'),
+        'new': ('<!-- ABK_LP_STATS slot -->\n'
+                '                <control type="button" id="6013">\n'
+                '                    <!-- ABK_LUCENT_OSDBTN stats -->\n'
+                '                    <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_OSDBtn_Width_Small</include>\n'
+                '                    <include condition="!Skin.HasSetting(abk.lucent)">ABK_Lucent_OSDBtn_Width_Stock</include>'),
+        'already_patched_check': '<!-- ABK_LUCENT_OSDBTN stats -->',
+        'description': 'AF3 Lucent Look - OSD pop-ups: Statistics slot follows the size',
+    },
+    # 4.7.43: our own popup slots (DexSync / Cycler / Subtitle Look) follow
+    # the size too - at 80 px they put the popup's focused circle 16 px off
+    # per slot (doubled circle). One-time rewrite of the 4.6.x-4.7.42 text.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': _AF3_SUBTOOLS_POPUP_XML_V1,
+        'new': _AF3_SUBTOOLS_POPUP_XML,
+        'already_patched_check': None,
+        'description': 'AF3 Lucent Look - subtitle buttons popup slots follow the size',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': _AF3_SUBSTYLE_POPUP_XML_V1,
+        'new': _AF3_SUBSTYLE_POPUP_XML,
+        'already_patched_check': None,
+        'description': 'AF3 Lucent Look - subtitle look popup slot follows the size',
+    },
+    {   # icon size / offset includes for hand-drawn button icons (Disc Menu)
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Defaults.xml'),
+        'not_found_ok': True,
+        'old': '    <include name="Defs_OSD_Button">',
+        'new': ('    <!-- ABK_LUCENT_OSDBTN icon sizes -->\n'
+                '    <include name="ABK_Lucent_OSDBtn_Icon_Small">\n'
+                '        <bordersize>10</bordersize>\n'
+                '        <height>64</height>\n'
+                '        <width>64</width>\n'
+                '    </include>\n'
+                '    <include name="ABK_Lucent_OSDBtn_Icon_Stock">\n'
+                '        <bordersize>12</bordersize>\n'
+                '        <height>80</height>\n'
+                '        <width>80</width>\n'
+                '    </include>\n'
+                '    <include name="ABK_Lucent_OSDBtn_IconLeft_Small">\n'
+                '        <left>-64</left>\n'
+                '    </include>\n'
+                '    <include name="ABK_Lucent_OSDBtn_IconLeft_Stock">\n'
+                '        <left>-80</left>\n'
+                '    </include>\n'
+                '    <include name="Defs_OSD_Button">'),
+        'already_patched_check': '<!-- ABK_LUCENT_OSDBTN icon sizes -->',
+        'description': 'AF3 Lucent Look - OSD buttons: icon size includes',
+    },
     {
         # 4.7.29: AF3 furniture codec logos (home widgets, info, OSD) -> the
         # Lucent pills (ABK_LP_FlagsRow) while Lucent Player is on.
@@ -4507,6 +4698,12 @@ PATCHES += [
         'description': 'AF3 Lucent Player - OSD shows the AF3 expanded info',
     },
 ]
+
+# 4.7.42: entries whose regex fallback writes the same text as 'new' (a
+# function, so nothing in 'new' is read as a regex backreference)
+for _p in PATCHES:
+    if 'fallback_repl' in _p and _p['fallback_repl'] is None:
+        _p['fallback_repl'] = (lambda _m, _t=_p['new']: _t)
 
 
 def _apply_patch(patch):
