@@ -455,13 +455,13 @@ msgid "Advanced Settings K22"
 msgstr "الإعدادات المتقدمة K22"
 
 msgctxt "#30113"
-msgid "Patch GUI"
-msgstr "تحديث البيلد دون مسح"
+msgid "Lite Setup"
+msgstr "إعداد مخفف"
 
 msgctxt "#30114"
 msgid ""
 "Update your current build's GUI/skin files in place, then reset the skin"
-msgstr "تحديث البيلد دون مسح"
+msgstr "إعداد مخفف: تحديث ملفات الواجهة والسمة في مكانها دون مسح البيانات"
 
 msgctxt "#30115"
 msgid ""
@@ -480,8 +480,8 @@ msgid "GUI Patch Applied Successfully!"
 msgstr "تم تطبيق تحديث الواجهة بنجاح!"
 
 msgctxt "#30118"
-msgid "No Wipe (Option 2)"
-msgstr "تحديث البيلد دون مسح (الخيار 2)"
+msgid "Full Setup"
+msgstr "إعداد كامل"
 
 msgctxt "#30119"
 msgid "Update applied. Kodi will now close - reopen it to finish."

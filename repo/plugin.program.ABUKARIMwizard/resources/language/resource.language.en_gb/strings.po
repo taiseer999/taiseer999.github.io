@@ -430,7 +430,7 @@ msgid "Advanced Settings K22"
 msgstr ""
 
 msgctxt "#30113"
-msgid "Patch GUI"
+msgid "Lite Setup"
 msgstr ""
 
 msgctxt "#30114"
@@ -450,7 +450,7 @@ msgid "GUI Patch Applied Successfully!"
 msgstr ""
 
 msgctxt "#30118"
-msgid "No Wipe (Option 2)"
+msgid "Full Setup"
 msgstr ""
 
 msgctxt "#30119"
