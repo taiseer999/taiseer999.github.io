@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.ABUKARIMwizard" name="AB Wizard" version="3.9.53" provider-name="Slam, Sarge, Funsterbe, BYB، ABUKARIM">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0.1"/>
+		<import addon="plugin.program.abukarimtools" version="3.3.4"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>executable</provides>
+	</extension>
+	<extension point="xbmc.service" library="service.py" start="login"/>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en_GB">AB Wizard - install, update and maintain ABUKARIM Kodi builds</summary>
+		<summary lang="ar_SA">معالج أبو كريم - تثبيت بيلدات أبو كريم لكودي وتحديثها وصيانتها</summary>
+		<description lang="en_GB">ABUKARIM Wizard is the official installer and maintenance tool for ABUKARIM Kodi builds, with full English and Arabic support.[CR][CR][B]Builds[/B][CR]- Fresh install or update a build without wiping (No-Wipe), plus Patch GUI to refresh skin and GUI files in place.[CR]- Mandatory ABUKARIM TOOLS backup before any build install - no backup, no install.[CR]- Update notification when a new build version is released.[CR][CR][B]Accounts - Account Authorization[/B][CR]- Powered by Account Manager: Real-Debrid, Premiumize, AllDebrid, TorBox, Easy Debrid, OffCloud, Easynews, Trakt, Simkl and MDBList - authorize, view status, re-sync and revoke.[CR]- Keep your Trakt and debrid data across build installs.[CR][CR][B]Maintenance[/B][CR]- Cleaning tools: cache, packages, thumbnails, crash logs, databases, Fresh Start and scheduled auto-clean.[CR]- Addon tools: remove, enable/disable, force-refresh repos, force-update addons, whitelist.[CR]- Logging, speed test, network and system info, backup/restore and advanced settings presets by RAM size.[CR][CR][B]Arabic ready[/B][CR]Installs an Arabic-capable fallback font so menus and dialogs display correctly in any skin.[CR][CR]Based on Simple Wizard by Slam, Sarge, Funsterbe and BYB. Requires ABUKARIM TOOLS (installed automatically). Support: buymeacoffee.com/taiseer999</description>
+		<description lang="ar_SA">معالج أبو كريم هو أداة التثبيت والصيانة الرسمية لبيلدات أبو كريم لكودي، ويدعم اللغتين العربية والإنجليزية دعمًا كاملًا.[CR][CR][B]البيلدات[/B][CR]- تثبيت جديد للبيلد أو تحديثه دون مسح البيانات، مع خيار ترقيع الواجهة لتحديث ملفات الواجهة والسمة في مكانها.[CR]- نسخة احتياطية إلزامية عبر أدوات أبو كريم قبل أي تثبيت؛ فلا تثبيت بلا نسخة احتياطية.[CR]- تنبيه عند صدور إصدار جديد من البيلد.[CR][CR][B]الحسابات - مصادقة الحسابات[/B][CR]- بالاعتماد على مدير الحسابات: Real-Debrid وPremiumize وAllDebrid وTorBox وEasy Debrid وOffCloud وEasynews وTrakt وSimkl وMDBList؛ مصادقة الحسابات وعرض حالتها وإعادة مزامنتها وإلغاؤها.[CR]- الاحتفاظ ببيانات Trakt وخدمات الديبريد عند تثبيت البيلد.[CR][CR][B]الصيانة[/B][CR]- أدوات التنظيف: ذاكرة التخزين المؤقت والحزم والصور المصغرة وسجلات الأعطال وقواعد البيانات، والبدء من جديد، والتنظيف التلقائي المجدول.[CR]- أدوات الإضافات: الحذف والتفعيل والتعطيل، وتحديث المستودعات والإضافات قسرًا، والقائمة البيضاء.[CR]- السجلات، واختبار السرعة، ومعلومات الشبكة والنظام، والنسخ الاحتياطي والاستعادة، وإعدادات متقدمة جاهزة بحسب حجم الذاكرة.[CR][CR][B]جاهز للعربية[/B][CR]يثبّت خطًا احتياطيًا يدعم العربية لتظهر القوائم والنوافذ بوضوح في أي سمة.[CR][CR]مبني على Simple Wizard من تطوير Slam وSarge وFunsterbe وBYB. يتطلب أدوات أبو كريم (تُثبَّت تلقائيًا). الدعم: buymeacoffee.com/taiseer999</description>
+		<disclaimer lang="en_GB">This addon contains no content</disclaimer>
+		<disclaimer lang="ar_SA">لا تحتوي هذه الإضافة على أي محتوى</disclaimer>
+		<language>en</language>
+		<platform>all</platform>
+		<license>GPL-2.0-or-later</license>
+		<forum></forum>
+		<website></website> 
+		<email></email>
+		<source></source>
+		<news>v3.9.52: Startup notification window opens again on Kodi 22 ("XML File for Window is missing": 1080i copies of notify.xml and logview.xml). The service no longer leaves Addon/Dialog objects in memory at exit. Auto Clean log says "next startup" when the frequency is Every startup. v3.9.51: New app icon (Lucent glass: violet gradient ring with glow, shaded wand with glowing tip, sparkles). Dark Lucent look (Violet AMOLED): icon, fanart, banner, clearlogo and all menu icons moved from green to Lucent violet (8B5CF6) on true black (service logos keep their brand colours); menu text colours default to the Lucent palette (new Lucent entries in Color 1/Color 2); ON/OFF, Enabled/Disabled and REMOVE use Lucent green/red/amber; support dialog, notify/log windows, speed test and pop-up dialogs restyled. v3.9.50: Shortcuts update popup now also shows on boxes that never recorded a guiversion (no silent first run); decisions logged as [AB Wizard GuiUpdate]. v3.9.49: Push no-wipe shortcut/menu updates from Builds.txt (guiversion= / guimode=) - boxes get an Update Now / Later / Ignore popup at startup. v3.9.44: The ABUKARIM TOOLS backup before a build install is optional again: Back up / Skip backup / Cancel install. v3.9.43: Build install is safe on a bad connection - the download is checked (complete and a valid zip) BEFORE anything is wiped; if it fails, nothing on the box changes. A stalled server no longer freezes the download or the startup update check (timeouts). Dropbox build links work with dl=0. Needs AB Tools 3.3.4. v3.9.42: Fixed the build update popup never appearing (the startup service was off). Build versions compared numerically (2.10 > 2.9); Ignore skips only that version. v3.9.41: Renamed to AB Wizard, new icon and artwork.</news>
+		<assets>
+				<icon>resources/icon.png</icon>
+				<fanart>resources/fanart.jpg</fanart>
+				<banner>resources/media/banner.jpg</banner>
+				<clearlogo>resources/media/clearlogo.png</clearlogo>
+				<screenshot></screenshot>
+		</assets>
+	</extension>
+</addon>
