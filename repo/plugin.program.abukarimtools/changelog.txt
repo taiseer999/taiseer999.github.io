@@ -1,3 +1,12 @@
+v4.8.8
+- Arctic Fuse 3 now has two builds. Below Kodi 22 every installed AF3 is
+  linked to repository.taiseer (the build for older Kodi), whatever repo it
+  came from; Kodi 22 (Piers) keeps repository.taiseerKODI22. Applied on the
+  next boot and on every skin install; repository.taiseer is installed first
+  when missing. Below Kodi 22 the link is forced even if the installed AF3 is
+  newer than repository.taiseer's - it updates once that repo ships a higher
+  version.
+
 v4.8.7
 - New AB Tools logo: the clearlogo and banner use the new gear / check icon
   (was the wrench).

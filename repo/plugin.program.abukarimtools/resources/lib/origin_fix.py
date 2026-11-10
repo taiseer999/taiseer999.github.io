@@ -69,8 +69,15 @@ SKIP_IDS = set()
 # Kodi 21.3, CoreELEC 21.3 "NG" and Piers - is linked to
 # repository.taiseerKODI22, overriding an origin that points elsewhere. The
 # repository add-on itself is installed first when it is missing.
+# 4.8.8: Arctic Fuse 3 now ships in two builds - the Piers / Kodi 22 build in
+# repository.taiseerKODI22 and the build for older Kodi in repository.taiseer.
+# Below Kodi 22 every install (whatever it came from) is linked to
+# repository.taiseer; Kodi 22 and later keep repository.taiseerKODI22.
+AF3_REPO = ('repository.taiseerKODI22' if _kodi_major() >= 22
+            else 'repository.taiseer')
+
 PINNED_ORIGINS = {
-    'skin.arctic.fuse.3': 'repository.taiseerKODI22',
+    'skin.arctic.fuse.3': AF3_REPO,
     # 3.4.20: AF3's own dependencies update from their author's repository
     # (jurialmunkey), not from the taiseer repos.
     'script.texturemaker':            'repository.jurialmunkey',
@@ -78,9 +85,18 @@ PINNED_ORIGINS = {
     'script.skinvariables':           'repository.jurialmunkey',
     'plugin.video.themoviedb.helper': 'repository.jurialmunkey',
 }
+# Pins whose repository wins even when it carries an OLDER version than the
+# one installed (the 4.7.5 "don't freeze a newer add-on" guard is skipped):
+# a Kodi 21 box that took AF3 from the Piers repo must still move to
+# repository.taiseer. Kodi never downgrades, so it simply waits there until
+# repository.taiseer ships a higher AF3 version.
+FORCED_PINS = {'skin.arctic.fuse.3'}
+
 _PINNED_REPO_BASE = {
     'repository.taiseerKODI22': ('https://raw.githubusercontent.com/taiseer999/'
                                  'taiseer999Piers.github.io/main/repo/zips/'),
+    'repository.taiseer':       ('https://raw.githubusercontent.com/taiseer999/'
+                                 'taiseer999.github.io/main/repo/zips/'),
     'repository.jurialmunkey':  ('https://raw.githubusercontent.com/jurialmunkey/'
                                  'repository.jurialmunkey/master/repo/zips/'),
 }
@@ -368,7 +384,7 @@ def _apply_pinned_ready(cur, result, ready):
         # 2026-11-02 18:59:09). Only a KNOWN older cached version counts: an
         # empty cache or unknown version still pins as before.
         inst = _installed_version(addon_id)
-        if inst:
+        if inst and addon_id not in FORCED_PINS:
             cands = _repo_candidates(cur, addon_id)
             pinned_ver = next((v for r, v in cands if r.lower() == repo_id.lower()), '')
             if pinned_ver and _vkey(pinned_ver) < _vkey(inst):
@@ -442,8 +458,8 @@ def fix_addons(addon_ids=None):
             _log(result['error'])
             return result
 
-        # 3.4.18: pinned add-ons (Arctic Fuse 3 -> repository.taiseerKODI22)
-        # first, overriding any other origin; the generic passes skip them.
+        # 3.4.18: pinned add-ons (Arctic Fuse 3 -> repository.taiseerKODI22 on
+        # Kodi 22+, repository.taiseer below - 4.8.8) first, overriding any other origin; the generic passes skip them.
         if pinned_ready:
             _apply_pinned_ready(cur, result, pinned_ready)
 
@@ -730,8 +746,9 @@ def set_origin(addon_id, repo_id):
         return False
     pinned = PINNED_ORIGINS.get(addon_id)
     if pinned:
-        # 3.4.18: e.g. AF3 installed from the Kodi/CE skins.json entry still
-        # comes from the Piers repo - link it there, overriding any origin.
+        # 3.4.18: AF3 is linked to its pinned repo whatever skins.json it was
+        # installed from (4.8.8: Piers repo on Kodi 22+, repository.taiseer
+        # below), overriding any origin.
         if not ensure_repo_installed(pinned):
             _log('set_origin: pinned repo %s missing, using %s' % (pinned, repo_id))
             pinned = None
