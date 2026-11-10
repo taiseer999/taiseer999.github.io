@@ -1,3 +1,17 @@
+v4.8.7
+- New AB Tools logo: the clearlogo and banner use the new gear / check icon
+  (was the wrench).
+
+v4.8.6
+- Search All: the plot is bigger (26 px, was 22) and uses the room down to
+  the add-on list (movies ~8 lines, episodes 4 lines above the episode name).
+- Search All: a source that does not play brings the results back - same
+  search, tab, filters and the picked row - instead of ending the search.
+  That covers links that fail to resolve and Back / Cancel on the add-on's
+  "Searching for streams" or resume screen. Only Back in Search All's own
+  window ends the search. If the add-on was only slow and its file starts
+  after the results came back, they close by themselves.
+
 v4.8.5
 - POV and Red Light "Searching for streams" windows (Lucent theme) now use
   the Fen Light+ layout made for Umbrella in 4.8.4: backdrop, clearlogo (or

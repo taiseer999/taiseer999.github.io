@@ -56,6 +56,13 @@ the list. kodi.log 2026-10-30 06:40 / 06:49 (macOS, Kodi 22): the window
 stopped responding right after the last add-on's results were drawn from a
 worker thread - the same class of freeze as 3.4.23 (window calls from a
 background thread).
+
+4.8.6 - a pick that does not play brings the results back. After a pick the
+script waits: playback starting ends Search All; the add-on giving up (no
+link resolved, its "Searching for streams" / resume screen closed with Back
+or Cancel, nothing left on screen) opens the same results again - same
+search, tab, filters and the row that was picked. Only Back in Search All's
+own window ends the search.
 """
 import gc
 import json
@@ -558,6 +565,7 @@ def _en_play(session, index):
     url = 'plugin://%s/play?%s' % (_EN_ID, urlencode(play))
     _log('play: plugin://%s/play (%s)' % (_EN_ID, play.get('title', '')))
     xbmc.executebuiltin('PlayMedia(%s)' % url)
+    return True
 
 
 # ───────────────────────── AIOStreams ─────────────────────────
@@ -714,6 +722,7 @@ def _aio_play(session, index):
     url = 'plugin://%s/?%s' % (_AIO_ID, urlencode({'action': 'play_index', 'idx': index}))
     _log('play: %s' % url)
     xbmc.executebuiltin('RunPlugin(%s)' % url)
+    return True
 
 
 # ───────────────────────── Umbrella: English names ─────────────────────────
@@ -1059,6 +1068,9 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         self._pending_meta = None     # TMDb meta fetched by the meta thread
         self._busy = 0                # nested dialog open (filter menu / "Play with")
         self._finished = False        # 4.7.24: the All tab gets the focus once, when the search ends
+        self.played = False           # 4.8.6: a late start of the last pick closed the reopened window
+        self._restore = kwargs.get('restore') or None   # 4.8.6: reopened after a pick that did not play
+        self._meta_thread = None
 
     # ---- view (4.6.7) ----
     def _lid(self):
@@ -1109,13 +1121,21 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         self.setProperty('abs.heading', T(30817))
         self.setProperty('abs.addons_heading', T(30818))
         self._view_props()
-        # always: besides any missing art / plot it brings the running time
-        self._meta_thread = threading.Thread(target=self._fill_meta, name='abs_meta')
-        self._meta_thread.start()
+        r = self._restore
+        if r:                                   # 4.8.6: back from a pick that did not play
+            self.f_addon, self.f_quality, self.f_service = r.get('f_addon'), r.get('f_quality'), r.get('f_service')
+            self.filters = list(r.get('filters') or [])
+            self.focused_key = r.get('focused_key')
+            self.runtime = int(r.get('runtime') or 0)
+            self._finished = True               # no jump to the All tab: stay on the picked row
+        if not self.runtime:
+            # besides any missing art / plot it brings the running time
+            self._meta_thread = threading.Thread(target=self._fill_meta, name='abs_meta')
+            self._meta_thread.start()
         self.ready = True
         self.session.listener = self.request_refresh
         self.refresh()
-        self._focus(self._cid())
+        self._focus(self._lid() if r and self.shown else self._cid())
         if not self.session.started_threads:
             self.session.started_threads = True
             self.session.start()
@@ -1123,6 +1143,11 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
     def close(self):
         self.session.closed = True
         super().close()
+
+    def snapshot(self):
+        """4.8.6: what a reopened window needs to look the same."""
+        return {'f_addon': self.f_addon, 'f_quality': self.f_quality, 'f_service': self.f_service,
+                'filters': list(self.filters), 'focused_key': self.focused_key, 'runtime': self.runtime}
 
     # ---- cross-thread (4.6.13): workers change data only, the dialog thread draws ----
     def request_refresh(self):
@@ -1631,6 +1656,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 return
             refs = [refs[pick]]
         self.picked = refs[0]
+        self.focused_key = _row_key(row['item'])     # 4.8.6: back on this row if it does not play
         self.close()
 
 
@@ -1653,6 +1679,90 @@ class _Pump(xbmc.Monitor):
                 win.pump()
             except Exception as e:
                 _log('refresh failed: %s' % e, xbmc.LOGWARNING)
+
+
+class _PlayWatch(xbmc.Player):
+    """4.8.6: created on the dialog thread of a REOPENED window. The add-on
+    behind the last pick was only slow, not failed: its file starting now
+    closes the results again."""
+
+    def __init__(self):
+        super().__init__()
+        self.win = None
+
+    def onAVStarted(self):
+        win = self.win
+        if win is None or _real_file() is None:
+            return
+        _log('the last pick started after all - closing the results')
+        win.played = True
+        try:
+            win.close()
+        except Exception:
+            pass
+
+
+def _real_file():
+    """The playing file, None for nothing / TMDbHelper's dummy.mp4."""
+    if not xbmc.getCondVisibility('Player.HasMedia'):
+        return None
+    try:
+        f = xbmc.Player().getPlayingFile() or ''
+    except Exception:
+        f = ''
+    return None if not f or f.endswith('dummy.mp4') else f
+
+
+# Windows that mean "the add-on is still at work on the pick": Kodi's busy /
+# progress / question dialogs, the add-ons' Glass "Searching for streams"
+# screens and AB Tools' own resume screen (Umbrella bridge).
+_PICK_WINDOWS = ('busydialog', 'busydialognocancel', 'progressdialog', 'yesnodialog', 'okdialog',
+                 'selectdialog', 'contextmenu', 'numericinput',
+                 'sources_playback.xml', 'progress_media.xml', 'source_progress.xml', 'abk_resume.xml')
+_PICK_FIRST = 12.0          # s for the add-on to show anything at all
+_PICK_QUIET = 3.0           # s with nothing on screen after that = it gave up
+_PICK_MAX = 300.0           # s from pick to picture (search_nextep._PICK_TO_PLAY)
+
+
+def _pick_busy():
+    cond = xbmc.getCondVisibility
+    if cond('System.HasActiveModalDialog') or _real_file():     # a file opening (not TMDbHelper's dummy)
+        return True
+    return any(cond('Window.IsVisible(%s)' % w) for w in _PICK_WINDOWS)
+
+
+def _wait_playback():
+    """4.8.6: after a pick. True = playing (or Kodi is quitting), False = the
+    add-on gave up / was cancelled: show the results again."""
+    mon = xbmc.Monitor()
+    try:
+        start = time.time()
+        seen = False
+        quiet_since = None
+        while not mon.abortRequested():
+            now = time.time()
+            if _real_file() and xbmc.getCondVisibility('Player.HasVideo | Player.HasAudio'):
+                _log('pick playing after %.1fs' % (now - start))
+                return True
+            if _pick_busy():
+                seen, quiet_since = True, None
+            elif seen:
+                if quiet_since is None:
+                    quiet_since = now
+                elif now - quiet_since >= _PICK_QUIET:
+                    _log('pick not played (add-on finished / cancelled after %.1fs)' % (now - start))
+                    return False
+            elif now - start >= _PICK_FIRST:
+                _log('pick not played (nothing happened in %.0fs)' % _PICK_FIRST)
+                return False
+            if now - start >= _PICK_MAX:
+                _log('pick not played in %.0fs' % _PICK_MAX, xbmc.LOGWARNING)
+                return False
+            if mon.waitForAbort(0.25):
+                break
+        return True
+    finally:
+        del mon
 
 
 def _focused_meta(tmdb_id):
@@ -1766,20 +1876,38 @@ def run(params):
             meta.setdefault('ep_name', meta.get('title', ''))
             meta['title'] = meta['tvshowtitle']
     session = Session(media, addons)
-    pump = _Pump(session.rid)
-    win = SearchWindow('ab_search.xml', ADDON_PATH, 'Default', '1080i', session=session, meta=meta)
-    pump.win = win
-    win.doModal()
-    session.closed = True
-    pump.win = None
-    picked = win.picked
-    meta_thread = getattr(win, '_meta_thread', None)
-    _publish_meta(session.rid, getattr(win, 'meta', None) or {}, getattr(win, 'runtime', 0))
-    del win, pump
+    meta_threads = []
+    restore = None
     try:
-        return _after_pick(session, addons, media, picked)
+        # 4.8.6: a pick that does not play opens the results again; only Back
+        # in this window (no pick) ends the search.
+        while True:
+            session.closed = False
+            pump = _Pump(session.rid)
+            watch = _PlayWatch() if restore else None
+            win = SearchWindow('ab_search.xml', ADDON_PATH, 'Default', '1080i', session=session, meta=meta,
+                               restore=restore)
+            pump.win = win
+            if watch:
+                watch.win = win
+            win.doModal()
+            session.closed = True
+            pump.win = None
+            if watch:
+                watch.win = None
+            picked, played = win.picked, win.played
+            meta_threads.append(getattr(win, '_meta_thread', None))
+            meta = getattr(win, 'meta', None) or meta
+            restore = win.snapshot()
+            _publish_meta(session.rid, meta, restore.get('runtime', 0))
+            del win, pump, watch
+            if played or not picked:
+                return
+            if _after_pick(session, addons, media, picked) and _wait_playback():
+                return
+            xbmcgui.Dialog().notification('AB Search All', T(30989), xbmcgui.NOTIFICATION_INFO, 3000)
     finally:
-        _settle(session, (meta_thread,))
+        _settle(session, meta_threads)
 
 
 def _publish_meta(rid, meta, runtime):
@@ -1797,8 +1925,9 @@ def _publish_meta(rid, meta, runtime):
 
 
 def _after_pick(session, addons, media, picked):
+    """Hand the pick to its add-on. True = sent, False = nothing to send."""
     if not picked:
-        return
+        return False
     key, index = picked
     name = dict((k, n) for k, _a, n, _t, _ok in addons).get(key, key)
     _log('picked: %s #%s' % (name, index))
@@ -1817,3 +1946,4 @@ def _after_pick(session, addons, media, picked):
     url = session.url(key, aid, 'play', index)
     _log('play: %s' % url)
     xbmc.executebuiltin('RunPlugin(%s)' % url)
+    return True

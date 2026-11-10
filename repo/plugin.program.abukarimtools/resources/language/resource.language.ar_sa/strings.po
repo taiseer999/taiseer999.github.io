@@ -2144,6 +2144,10 @@ msgctxt "#30988"
 msgid "Next episode - searching %s"
 msgstr "الحلقة التالية: جارٍ البحث في %s"
 
+msgctxt "#30989"
+msgid "Did not play - back to the results"
+msgstr "لم يبدأ التشغيل - العودة إلى النتائج"
+
 msgctxt "#32000"
 msgid "Ends at"
 msgstr "ينتهي في"

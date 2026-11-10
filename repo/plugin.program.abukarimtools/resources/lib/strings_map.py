@@ -756,6 +756,7 @@ STRINGS = {
     # 4.7.18 Search All: which add-on plays, next episode through the same add-on
     30987: ('Playing with %s', 'جارٍ التشغيل عبر %s'),
     30988: ('Next episode - searching %s', 'الحلقة التالية: جارٍ البحث في %s'),
+    30989: ('Did not play - back to the results', 'لم يبدأ التشغيل - العودة إلى النتائج'),
     # ---- 4.7.25: AF3 Lucent Player (djdirty60/Lucent) - skin labels 32000-32070, toggle 32080-32084 ----
     32000: ('Ends at', 'ينتهي في'),
     32001: ('Subtitles', 'الترجمة'),
