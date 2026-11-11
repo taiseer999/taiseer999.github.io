@@ -92,6 +92,94 @@ msgctxt "#30022"
 msgid "ABUKARIM Wizard is not installed or is disabled. Install it now?"
 msgstr "معالج أبوكريم غير مثبّت أو معطّل. هل تريد تثبيته الآن؟"
 
+msgctxt "#30023"
+msgid "Update TMDb Helper Players"
+msgstr "تحديث مشغّلات TMDb Helper"
+
+msgctxt "#30024"
+msgid "Seek Preview"
+msgstr "معاينة التقديم"
+
+msgctxt "#30030"
+msgid "TMDb Helper is not installed."
+msgstr "إضافة TMDb Helper غير مثبّتة."
+
+msgctxt "#30031"
+msgid "Download the latest players pack and install it in TMDb Helper?[CR][CR]Players with the same name are replaced; your other players are kept. The current players are backed up first."
+msgstr "هل تريد تنزيل أحدث حزمة مشغّلات وتثبيتها في TMDb Helper؟[CR][CR]تُستبدل المشغّلات التي تحمل الاسم نفسه، وتبقى مشغّلاتك الأخرى كما هي. وتُحفظ نسخة احتياطية من المشغّلات الحالية أولاً."
+
+msgctxt "#30032"
+msgid "Downloading the players pack..."
+msgstr "جارٍ تنزيل حزمة المشغّلات..."
+
+msgctxt "#30033"
+msgid "The players pack could not be downloaded. Check the internet connection and try again."
+msgstr "تعذّر تنزيل حزمة المشغّلات. تحقّق من الاتصال بالإنترنت ثم أعد المحاولة."
+
+msgctxt "#30034"
+msgid "Installing the players..."
+msgstr "جارٍ تثبيت المشغّلات..."
+
+msgctxt "#30035"
+msgid "The downloaded pack holds no valid player. Nothing was changed."
+msgstr "لا تحتوي الحزمة المنزَّلة على أي مشغّل صالح، ولم يُغيَّر شيء."
+
+msgctxt "#30036"
+msgid "Players updated.[CR]New: %d   Updated: %d   Unchanged: %d"
+msgstr "تم تحديث المشغّلات.[CR]جديدة: %d   محدَّثة: %d   دون تغيير: %d"
+
+msgctxt "#30037"
+msgid "Skipped (invalid): %d - %s"
+msgstr "تم تخطّي (غير صالحة): %d - %s"
+
+msgctxt "#30038"
+msgid "The new players are used from the next play."
+msgstr "تُستخدم المشغّلات الجديدة بدءاً من التشغيل التالي."
+
+msgctxt "#30039"
+msgid "Hide subtitles while skipping"
+msgstr "إخفاء الترجمة أثناء التقديم"
+
+msgctxt "#30040"
+msgid "Picture size"
+msgstr "حجم الصورة"
+
+msgctxt "#30041"
+msgid "Small"
+msgstr "صغير"
+
+msgctxt "#30042"
+msgid "Medium"
+msgstr "متوسط"
+
+msgctxt "#30043"
+msgid "Large"
+msgstr "كبير"
+
+msgctxt "#30044"
+msgid "Prepare pictures ahead"
+msgstr "تجهيز الصور مسبقاً"
+
+msgctxt "#30045"
+msgid "Local files only"
+msgstr "الملفات المحلية فقط"
+
+msgctxt "#30046"
+msgid "Seek Preview needs ffmpeg, which is not available on Android."
+msgstr "تحتاج معاينة التقديم إلى ffmpeg، وهو غير متاح على أندرويد."
+
+msgctxt "#30047"
+msgid "Seek Preview needs ffmpeg. Install the FFmpeg Tools add-on now?"
+msgstr "تحتاج معاينة التقديم إلى ffmpeg. هل تريد تثبيت إضافة FFmpeg Tools الآن؟"
+
+msgctxt "#30048"
+msgid "ffmpeg was not found, so Seek Preview stays off. Install FFmpeg Tools (Program add-ons, CoreELEC repository), restart Kodi and turn it on again."
+msgstr "لم يُعثر على ffmpeg، لذا تبقى معاينة التقديم متوقفة. ثبّت إضافة FFmpeg Tools (إضافات البرامج، مستودع CoreELEC)، ثم أعد تشغيل Kodi وفعّلها من جديد."
+
+msgctxt "#30049"
+msgid "Always (streams too)"
+msgstr "دائماً (والبث أيضاً)"
+
 msgctxt "#30050"
 msgid "Run first-time setup now?[CR][CR]Skin Installer, binaries, backup restore, Add-on Portal, widgets layout, lists and patches.[CR]Do not restart or exit while it runs - Kodi restarts by itself at the end (the box reboots on CoreELEC)."
 msgstr "هل تريد تشغيل الإعداد لأول مرة الآن؟[CR][CR]مثبّت الواجهات، والملفات الثنائية، واستعادة النسخة الاحتياطية، وبوابة الإضافات، وترتيب الودجات، والقوائم، والترقيعات.[CR]لا تُعِد التشغيل ولا تخرج أثناء الإعداد، إذ يُعاد تشغيل Kodi تلقائياً في النهاية (ويُعاد تشغيل الجهاز على CoreELEC)."

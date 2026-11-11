@@ -1,3 +1,23 @@
+v4.8.12
+- New: Toggles > Seek Preview. While you skip forward or back, a picture of
+  the spot you are jumping to shows above the seek bar, with its time, in a
+  Lucent-style glass card (fitted to the Lucent Player seek bar on AF3).
+  Options: picture size, pictures made ahead of time (off / local files
+  only / always) and hiding subtitles while skipping. Needs ffmpeg: turning
+  it on offers to install FFmpeg Tools. Kodi's skip settings are not
+  changed. Streams get pictures only for the spot you skip to unless
+  "Always" is picked, so playback is not slowed. Based on Seek Preview 1.2.0
+  by easter478 (GPL-3.0, resources/lib/seek_preview/LICENSE.txt).
+
+v4.8.11
+- New: Patching > Update TMDb Helper Players. Downloads the players pack
+  (.zip from the ABUKARIM builds index, Google Drive as fallback) and
+  installs every valid player .json in TMDb Helper's players folder. Players with the same name are replaced, other
+  players are kept, and the current folder is backed up first
+  (addon_data/plugin.program.abukarimtools/players_backup). The links can
+  be changed through the remote config.json keys "players_url" and
+  "players_drive_id".
+
 v4.8.10
 - TMDbHelper playback settings are now forced (always on, re-applied after a
   TMDbHelper update and on every boot): Resolve library STRM only = on,

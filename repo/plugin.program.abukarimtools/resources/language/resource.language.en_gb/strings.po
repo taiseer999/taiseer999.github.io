@@ -92,6 +92,94 @@ msgctxt "#30022"
 msgid "ABUKARIM Wizard is not installed or is disabled. Install it now?"
 msgstr ""
 
+msgctxt "#30023"
+msgid "Update TMDb Helper Players"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Seek Preview"
+msgstr ""
+
+msgctxt "#30030"
+msgid "TMDb Helper is not installed."
+msgstr ""
+
+msgctxt "#30031"
+msgid "Download the latest players pack and install it in TMDb Helper?[CR][CR]Players with the same name are replaced; your other players are kept. The current players are backed up first."
+msgstr ""
+
+msgctxt "#30032"
+msgid "Downloading the players pack..."
+msgstr ""
+
+msgctxt "#30033"
+msgid "The players pack could not be downloaded. Check the internet connection and try again."
+msgstr ""
+
+msgctxt "#30034"
+msgid "Installing the players..."
+msgstr ""
+
+msgctxt "#30035"
+msgid "The downloaded pack holds no valid player. Nothing was changed."
+msgstr ""
+
+msgctxt "#30036"
+msgid "Players updated.[CR]New: %d   Updated: %d   Unchanged: %d"
+msgstr ""
+
+msgctxt "#30037"
+msgid "Skipped (invalid): %d - %s"
+msgstr ""
+
+msgctxt "#30038"
+msgid "The new players are used from the next play."
+msgstr ""
+
+msgctxt "#30039"
+msgid "Hide subtitles while skipping"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Picture size"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Small"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Medium"
+msgstr ""
+
+msgctxt "#30043"
+msgid "Large"
+msgstr ""
+
+msgctxt "#30044"
+msgid "Prepare pictures ahead"
+msgstr ""
+
+msgctxt "#30045"
+msgid "Local files only"
+msgstr ""
+
+msgctxt "#30046"
+msgid "Seek Preview needs ffmpeg, which is not available on Android."
+msgstr ""
+
+msgctxt "#30047"
+msgid "Seek Preview needs ffmpeg. Install the FFmpeg Tools add-on now?"
+msgstr ""
+
+msgctxt "#30048"
+msgid "ffmpeg was not found, so Seek Preview stays off. Install FFmpeg Tools (Program add-ons, CoreELEC repository), restart Kodi and turn it on again."
+msgstr ""
+
+msgctxt "#30049"
+msgid "Always (streams too)"
+msgstr ""
+
 msgctxt "#30050"
 msgid "Run first-time setup now?[CR][CR]Skin Installer, binaries, backup restore, Add-on Portal, widgets layout, lists and patches.[CR]Do not restart or exit while it runs - Kodi restarts by itself at the end (the box reboots on CoreELEC)."
 msgstr ""

@@ -1400,6 +1400,15 @@ def main():
         _log('AF3 auto-trailers failed to start (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
+    # 4.8.12: Seek Preview - a picture of the spot you skip to, above the
+    # seek bar. Own thread for the session, idles while off (Toggles). Fenced.
+    try:
+        from resources.lib.seek_preview import engine as seek_preview_engine
+        seek_preview_engine.start(monitor)
+    except Exception:
+        _log('Seek Preview failed to start (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
     # After an Addons33 rebuild (or whenever the repo listing cache is still
     # empty) the plain boot linking above cannot match anything: restore the
     # phase-1 origin snapshot and refresh the repositories, retrying for up to
