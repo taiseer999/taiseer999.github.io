@@ -1468,6 +1468,16 @@ def main():
         _log('Remote config refresh crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
+    # 4.8.17: AF3 Classic OSD Flags - keep resource.images.af3.classicflags
+    # in step with its toggle (install when missing / disable when off).
+    # Background thread, delayed, waits out first-run and playback. Fenced.
+    try:
+        from resources.lib import af3_classicflags_toggle
+        af3_classicflags_toggle.start_boot_ensure(monitor)
+    except Exception:
+        _log('Classic OSD flags check failed to start (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
     # 3.3.2: AF3 Subtitle Buttons - make sure script.subtitle.cycler is
     # installed (repository.taiseer) so its OSD button works. Background
     # thread, delayed, waits out first-run and playback. Fenced.

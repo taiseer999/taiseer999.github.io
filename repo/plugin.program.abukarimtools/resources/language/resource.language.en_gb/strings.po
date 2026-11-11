@@ -2684,3 +2684,23 @@ msgctxt "#32126"
 msgid "Small - 2 lines"
 msgstr ""
 
+
+msgctxt "#32127"
+msgid "AF3: Classic OSD Flags"
+msgstr ""
+
+msgctxt "#32128"
+msgid "Classic OSD flags are on"
+msgstr ""
+
+msgctxt "#32129"
+msgid "Classic OSD flags are off - AF3 uses its stock footer and player OSD"
+msgstr ""
+
+msgctxt "#32130"
+msgid "Installing the classic OSD flags..."
+msgstr ""
+
+msgctxt "#32131"
+msgid "The classic OSD flags could not be installed. Check that the repository is reachable and try again."
+msgstr ""

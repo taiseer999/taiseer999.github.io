@@ -1,3 +1,14 @@
+v4.8.17
+- New Toggles entry "AF3: Classic OSD Flags". The classic colour codec /
+  HDR / audio / channels / source / language badges of the Piers AF3 build
+  (OSD extras row + footer codec row) moved out of the skin into their own
+  add-on, resource.images.af3.classicflags, so the AF3 zip stays under
+  GitHub's 100 MB limit. On (default): installs it from AF3's repository
+  (repository.taiseerKODI22 on Kodi 22, repository.taiseer below) and pins
+  its updates there. Off: disables it; AF3 then shows its stock footer and
+  player OSD. A boot check puts the add-on back when it is missing. Needs
+  AF3 50.11.68 or later.
+
 v4.8.15
 - Seek Preview speed on streams (kodi.log 2026-11-11: ~4 s per picture on a
   4K stream, made one at a time, so most skips showed the waiting card):

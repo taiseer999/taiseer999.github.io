@@ -44,6 +44,7 @@ ID ranges:
   32102-32112  AF3 Disc Menu for ISO Streams (Toggles + OSD buttons, Java)
   32113-32117  AF3 Plot Text Size (Toggles)
   32118-32126  Search All resume screen (4.8.2) + Plot Text Size choices
+  32127-32131  AF3 Classic OSD Flags (Toggles)
 """
 
 STRINGS = {
@@ -919,4 +920,10 @@ STRINGS = {
     32124: ('%dm', '%d د'),
     32125: ('Large - 3 lines', 'كبير - ثلاثة أسطر'),
     32126: ('Small - 2 lines', 'صغير - سطران'),
+    # ---- 4.8.17: AF3 Classic OSD Flags (32127-32131) ----
+    32127: ('AF3: Classic OSD Flags', 'AF3: شارات التشغيل الكلاسيكية'),
+    32128: ('Classic OSD flags are on', 'شارات التشغيل الكلاسيكية مُفعَّلة'),
+    32129: ('Classic OSD flags are off - AF3 uses its stock footer and player OSD', 'شارات التشغيل الكلاسيكية مُعطَّلة، وتستخدم AF3 التذييل وشاشة التشغيل الافتراضيين'),
+    32130: ('Installing the classic OSD flags...', 'جارٍ تثبيت شارات التشغيل الكلاسيكية...'),
+    32131: ('The classic OSD flags could not be installed. Check that the repository is reachable and try again.', 'تعذَّر تثبيت شارات التشغيل الكلاسيكية. تحقَّق من إمكانية الوصول إلى المستودع ثم أعد المحاولة.'),
 }

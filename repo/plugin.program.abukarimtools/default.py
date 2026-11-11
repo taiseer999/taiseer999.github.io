@@ -40,6 +40,7 @@ ICONS  = {
     'af3_plotright':  ADDON_PATH + 'resources/icons/af3_plotright.png',
     'af3_plotsize':   ADDON_PATH + 'resources/icons/af3_plotsize.png',
     'af3_discmenu':   ADDON_PATH + 'resources/icons/af3_discmenu.png',
+    'af3_classicflags': ADDON_PATH + 'resources/icons/af3_classicflags.png',
     # 4.8.12: Seek Preview
     'seek_preview':   ADDON_PATH + 'resources/icons/seek_preview.png',
     'font_scale':     ADDON_PATH + 'resources/icons/font_scale.png',
@@ -127,6 +128,7 @@ CATEGORIES = [
         ('af3_plotright',  30890),
         ('af3_plotsize',   32113),
         ('af3_discmenu',   32102),
+        ('af3_classicflags', 32127),
         ('seek_preview',   30024),
         ('font_scale',     30740),
     ]),
@@ -152,6 +154,8 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 'af3_plotsize',
                 # 4.7.36: AF3 Disc Menu for ISO Streams (on/off switch)
                 'af3_discmenu',
+                # 4.8.17: AF3 Classic OSD Flags (on/off switch)
+                'af3_classicflags',
                 # 4.8.12: Seek Preview (options page)
                 'seek_preview',
                 # 4.6.14: AF3 Streaming Services (dialogs only)
@@ -372,6 +376,9 @@ def _switch_state(mode):
         if mode == 'af3_discmenu':
             from resources.lib import af3_discmenu_toggle
             return af3_discmenu_toggle.disc_menu_on()
+        if mode == 'af3_classicflags':
+            from resources.lib import af3_classicflags_toggle
+            return af3_classicflags_toggle.toggle_on() and af3_classicflags_toggle.res_ready()
         if mode == 'seek_preview':
             from resources.lib.seek_preview import engine as _sp
             return bool(_sp.load_config()['enabled'])
@@ -665,6 +672,9 @@ def router():
     elif mode == 'af3_discmenu':
         from resources.lib import af3_discmenu_toggle
         af3_discmenu_toggle.run()
+    elif mode == 'af3_classicflags':
+        from resources.lib import af3_classicflags_toggle
+        af3_classicflags_toggle.run()
     elif mode == 'af3_lucentplayer':
         from resources.lib import af3_lucentplayer_toggle
         af3_lucentplayer_toggle.run()

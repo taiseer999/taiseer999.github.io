@@ -5124,6 +5124,10 @@ TOGGLE_GROUPS = [
     ('af3_subtools',     'AF3: Subtitle Buttons (DexSubtitles Sync & Cycler)'),
     ('af3_substyle',     'AF3: Subtitle Look Button (Dex Hub look: font, size, colour, delay, sync...)'),
     ('dexhub_entry',     'DexHub: Plugin Entry Fix (Kodi 22)'),
+    # 4.8.17: no patch entries - the state of the Toggles menu switch
+    # "AF3: Classic OSD Flags" (af3_classicflags_toggle.py); listed so the
+    # phone setup / presets keep it as a known id.
+    ('af3_classicflags', 'AF3: Classic OSD Flags'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
 
