@@ -1,3 +1,11 @@
+v4.8.9
+- Fix: "Playback failed" popped up although the episode played, when
+  TMDbHelper played through DexHub (or any player that is not resolvable)
+  with TMDbHelper's "Resolve library STRM only" on. TMDbHelper skipped its
+  dummy file and never answered Kodi's play request. New patch (TMDbHelper:
+  Stability): when Kodi is waiting for an answer, TMDbHelper answers it with
+  the dummy file first, then starts the player.
+
 v4.8.8
 - Arctic Fuse 3 now has two builds. Below Kodi 22 every installed AF3 is
   linked to repository.taiseer (the build for older Kodi), whatever repo it

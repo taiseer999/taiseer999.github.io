@@ -3008,6 +3008,46 @@ PATCHES = [
         'toggle': 'tmdbh_stability',
         'description': 'TMDbHelper player.py \u2013 dead-player guard (getPlayingFile RuntimeError)',
     },
+    # ── TMDbHelper: live-handle dummy (4.8.9) ──
+    # kodi.log 2026-11-10 (TMDbHelper 6.21.5 -> dexhub.json): with "Resolve
+    # library STRM only" (only_resolve_strm) on, PlayerDummy.check_strm skips
+    # the dummy.mp4 resolve even when Kodi handed TMDbHelper a live resolve
+    # handle. TMDbHelper then plays the player through xbmc.Player() and exits
+    # without answering the handle, so Kodi's playlist player logs "skipping
+    # unplayable item" and shows "Playback failed" (16026/16027) while DexHub
+    # plays anyway. check_strm only runs when a handle exists, so answering it
+    # with the dummy whenever a handle is live fixes this; the setting still
+    # keeps TMDbHelper list items non-playable.
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'player', 'action', 'dummy.py'),
+        'toggle': 'tmdbh_stability',
+        'old': (
+            "    def check_strm(self):\n"
+            "        if not self.resolver.is_strm and get_setting('only_resolve_strm'):\n"
+        ),
+        'new': (
+            "    def check_strm(self):\n"
+            "        # -- TMDbHelper live-handle dummy (by ABUKARIM TOOLS) --\n"
+            "        # A live resolve handle must be answered; otherwise Kodi's playlist player marks the\n"
+            "        # item unplayable and shows \"Playback failed\" while the external add-on plays anyway.\n"
+            "        if self.resolver.handle is not None:\n"
+            "            return True\n"
+            "        if not self.resolver.is_strm and get_setting('only_resolve_strm'):\n"
+        ),
+        'already_patched_check': '# -- TMDbHelper live-handle dummy (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r"(    def check_strm\(self\):\n)(?!        # -- TMDbHelper live-handle dummy)",
+        'fallback_repl': (
+            r"\1"
+            "        # -- TMDbHelper live-handle dummy (by ABUKARIM TOOLS) --\n"
+            "        # A live resolve handle must be answered; otherwise Kodi's playlist player marks the\n"
+            "        # item unplayable and shows \"Playback failed\" while the external add-on plays anyway.\n"
+            "        if self.resolver.handle is not None:\n"
+            "            return True\n"
+        ),
+        'not_found_ok': True,
+        'description': 'TMDbHelper dummy.py – answer a live resolve handle (no "Playback failed" with STRM-only resolving)',
+    },
     # ── TMDbHelper: "None" tmdb_id guard (4.7.15) ──
     # kodi.log 2026-11-04 (TMDbHelper 6.20.6): ValueError "invalid literal for
     # int() with base 10: 'None'" in listitemtools.on_listitem ->
