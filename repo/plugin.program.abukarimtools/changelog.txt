@@ -8,6 +8,7 @@ v4.8.12
   changed. Streams get pictures only for the spot you skip to unless
   "Always" is picked, so playback is not slowed. Based on Seek Preview 1.2.0
   by easter478 (GPL-3.0, resources/lib/seek_preview/LICENSE.txt).
+  On macOS it finds a Homebrew / MacPorts ffmpeg (Kodi.app has no shell PATH).
 
 v4.8.11
 - New: Patching > Update TMDb Helper Players. Downloads the players pack

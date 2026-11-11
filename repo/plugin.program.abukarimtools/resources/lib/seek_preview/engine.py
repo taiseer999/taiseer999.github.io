@@ -44,6 +44,9 @@ MEDIA = os.path.join(paths.ADDON_PATH, 'resources', 'seek_preview', 'media')
 FFMPEG_TOOLS = [
     xbmcvfs.translatePath('special://home/addons/tools.ffmpeg-tools/bin/ffmpeg'),
     '/usr/lib/kodi/addons/tools.ffmpeg-tools/bin/ffmpeg',
+    # macOS: Kodi.app does not get the shell PATH, so Homebrew / MacPorts
+    # installs are not found by shutil.which.
+    '/opt/homebrew/bin/ffmpeg', '/usr/local/bin/ffmpeg', '/opt/local/bin/ffmpeg',
 ]
 
 DEFAULTS = {'enabled': False, 'size': 1, 'ahead': 1, 'hidesubs': True, 'step': 10}
