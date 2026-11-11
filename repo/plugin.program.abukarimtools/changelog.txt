@@ -1,3 +1,9 @@
+v4.8.10
+- TMDbHelper playback settings are now forced (always on, re-applied after a
+  TMDbHelper update and on every boot): Resolve library STRM only = on,
+  Dummy duration = 0.5 s, Resolve delay = 1.5 s. Both the default and the
+  saved value are set.
+
 v4.8.9
 - Fix: "Playback failed" popped up although the episode played, when
   TMDbHelper played through DexHub (or any player that is not resolvable)

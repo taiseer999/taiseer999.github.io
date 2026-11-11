@@ -3199,6 +3199,87 @@ PATCHES = [
         'not_found_ok': True,
         'description': 'TMDbHelper userdata settings.xml – max_threads=3',
     },
+    # ── TMDbHelper: forced playback settings (4.8.10) ──
+    # Always on. Resolve library STRM only = on, Dummy duration = 0.5 s,
+    # Resolve delay = 1.5 s. With STRM-only on, the live-handle dummy patch
+    # (dummy.py) still answers a waiting Kodi play request, so "Playback
+    # failed" stays away while list clicks skip the dummy altogether.
+    # Two entries per setting: the default in resources/settings.xml, and the
+    # saved value in userdata (a saved value beats the default, so it is
+    # rewritten whatever it was). Kodi keeps add-on settings in memory, so a
+    # value changed in the settings dialog lasts until the next boot sweep.
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'settings.xml'),
+        'old': '',
+        'new': '',
+        'already_patched_check': '<!-- ABK only_resolve_strm=true -->',
+        'fallback_pattern': (r'(<setting id="only_resolve_strm"[^>]*>'
+                             r'(?:(?!</setting>)[\s\S])*?<default>)[^<]*(</default>)'),
+        'fallback_repl': r'<!-- ABK only_resolve_strm=true -->\g<1>true\g<2>',
+        'not_found_ok': True,
+        'description': 'TMDbHelper settings.xml – Resolve library STRM only default true',
+    },
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'base': 'addon_data',
+        'rel_path': 'settings.xml',
+        'old': '',
+        'new': '',
+        'already_patched_check': '<setting id="only_resolve_strm">true</setting>',
+        'fallback_pattern': r'<setting id="only_resolve_strm"(?: default="true")?\s*(?:/>|>[^<]*</setting>)',
+        'fallback_repl': '<setting id="only_resolve_strm">true</setting>',
+        'not_found_ok': True,
+        'description': 'TMDbHelper userdata settings.xml – Resolve library STRM only = true',
+    },
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'settings.xml'),
+        'old': '',
+        'new': '',
+        'already_patched_check': '<!-- ABK dummy_duration=0.5 -->',
+        'fallback_pattern': (r'(<setting id="dummy_duration"[^>]*>'
+                             r'(?:(?!</setting>)[\s\S])*?<default>)[^<]*(</default>)'),
+        'fallback_repl': r'<!-- ABK dummy_duration=0.5 -->\g<1>0.5\g<2>',
+        'not_found_ok': True,
+        'description': 'TMDbHelper settings.xml – Dummy duration default 0.5',
+    },
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'base': 'addon_data',
+        'rel_path': 'settings.xml',
+        'old': '',
+        'new': '',
+        'already_patched_check': '<setting id="dummy_duration">0.5</setting>',
+        'fallback_pattern': r'<setting id="dummy_duration"(?: default="true")?\s*(?:/>|>[^<]*</setting>)',
+        'fallback_repl': '<setting id="dummy_duration">0.5</setting>',
+        'not_found_ok': True,
+        'description': 'TMDbHelper userdata settings.xml – Dummy duration = 0.5',
+    },
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'settings.xml'),
+        'old': '',
+        'new': '',
+        'already_patched_check': '<!-- ABK dummy_delay=1.5 -->',
+        'fallback_pattern': (r'(<setting id="dummy_delay"[^>]*>'
+                             r'(?:(?!</setting>)[\s\S])*?<default>)[^<]*(</default>)'),
+        'fallback_repl': r'<!-- ABK dummy_delay=1.5 -->\g<1>1.5\g<2>',
+        'not_found_ok': True,
+        'description': 'TMDbHelper settings.xml – Resolve delay default 1.5',
+    },
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'base': 'addon_data',
+        'rel_path': 'settings.xml',
+        'old': '',
+        'new': '',
+        'already_patched_check': '<setting id="dummy_delay">1.5</setting>',
+        'fallback_pattern': r'<setting id="dummy_delay"(?: default="true")?\s*(?:/>|>[^<]*</setting>)',
+        'fallback_repl': '<setting id="dummy_delay">1.5</setting>',
+        'not_found_ok': True,
+        'description': 'TMDbHelper userdata settings.xml – Resolve delay = 1.5',
+    },
     # ── Last Played: capture engine for TMDbHelper / Fen Light playback (3.2.11) ──
     # Stock 6.4.0 never recorded TMDbHelper -> player add-on playback on Kodi 21/22:
     # the dummy.mp4 splash fired the stop callback with empty data, the real stream
@@ -6034,6 +6115,42 @@ def _revert_disabled(addon_ids=None):
 _RESCAN_PENDING = [False]
 
 
+# 4.8.10: TMDbHelper playback settings forced by AB Tools (id -> value).
+TMDBH_FORCED_SETTINGS = (
+    ('only_resolve_strm', 'true'),   # Resolve library STRM only
+    ('dummy_duration',    '0.5'),    # Dummy duration (s)
+    ('dummy_delay',       '1.5'),    # Resolve delay (s)
+)
+
+
+def _force_tmdbh_settings():
+    """Set TMDBH_FORCED_SETTINGS through Kodi's own settings store.
+
+    Yields (ok, msg, wrote). One xbmcaddon.Addon() call, made only when
+    TMDbHelper is installed in the standard addons/ folder (no registry
+    lookup), and setSetting only for values that differ.
+    """
+    aid = 'plugin.video.themoviedb.helper'
+    if not os.path.isdir(os.path.join(ADDONS_DIR, aid)):
+        return
+    try:
+        import xbmcaddon
+        tm = xbmcaddon.Addon(aid)
+    except Exception as e:
+        yield False, '[%s] forced settings: %s' % (aid, e), False
+        return
+    for sid, val in TMDBH_FORCED_SETTINGS:
+        try:
+            cur = (tm.getSetting(sid) or '').strip()
+            if cur.lower() == val.lower():
+                yield True, '[%s] Setting %s already %s – skipping.' % (aid, sid, val), False
+                continue
+            tm.setSetting(sid, val)
+            yield True, '[%s] Setting forced: %s = %s (was %s)' % (aid, sid, val, cur or 'empty'), True
+        except Exception as e:
+            yield False, '[%s] Setting %s: %s' % (aid, sid, e), False
+
+
 def apply_set(group=None, addon_ids=None):
     """Silent patch core — no dialogs, safe to call from the service thread.
 
@@ -6111,6 +6228,21 @@ def apply_set(group=None, addon_ids=None):
         else:
             failed += 1
 
+
+    # 4.8.10: forced TMDbHelper playback settings - in Kodi's memory too.
+    # The settings.xml entries above fix the files, but Kodi already holds
+    # TMDbHelper's settings in memory (its service starts before the boot
+    # sweep) and writes them back over the file on its next save.
+    if not addon_ids or 'plugin.video.themoviedb.helper' in _scope:
+        for ok, msg, wrote in _force_tmdbh_settings():
+            _log(msg)
+            results.append((ok, msg))
+            if ok:
+                succeeded += 1
+                if wrote:
+                    changed += 1
+            else:
+                failed += 1
 
     # 4.7.41: AF3 plot text size (Toggles > AF3: Plot Text Size) on the
     # Vertical Plot call sites the loop above wrote (or a skin update reset)
