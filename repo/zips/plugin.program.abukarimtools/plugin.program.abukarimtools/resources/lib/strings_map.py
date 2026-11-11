@@ -21,8 +21,6 @@ ID ranges:
   30290-30319  patcher / auto-patch watchdog
   30400-30429  add-on portal
   30430-30459  AF3 auto-trailers
-  30030-30038  Patching - Update TMDb Helper Players
-  30039-30049  Toggles - Seek Preview
   30530-30599  3.2: profiles, tuning, remote access, log share, bootstrap
   30630-30649  Widgets Layout / ترتيب الودجات (Light / Moderate / Full)
   30660-30705  My Lists / قوائمي (Original / Trakt / Anime); Anime 30709-30727
@@ -67,8 +65,6 @@ STRINGS = {
     30016: ("Maintenance",                      "الصيانة والتنظيف"),
     30017: ("Toggles",                          "التبديلات"),
     30018: ("Rebuild Add-on Database",          "إعادة بناء قاعدة بيانات الإضافات"),
-    30023: ("Update TMDb Helper Players",       "تحديث مشغّلات TMDb Helper"),
-    30024: ("Seek Preview",                      "معاينة التقديم"),
     30019: ("Speed Test",                       "اختبار السرعة"),
     30020: ("Node Icons: Color / Black & White", "أيقونات الأقسام: ملونة / أبيض وأسود"),
     30021: ("Add-on Portal",                    "بوابة الإضافات"),
@@ -214,41 +210,6 @@ STRINGS = {
             "موافق للاختيار  ·  رجوع للإلغاء"),
     30325: ("Selected Skin",                   "الواجهة المختارة"),
 
-    # ---- Update TMDb Helper Players (Patching) (30030-30039) ----
-    30030: ("TMDb Helper is not installed.",
-            "إضافة TMDb Helper غير مثبّتة."),
-    30031: ("Download the latest players pack and install it in TMDb Helper?[CR][CR]Players with the same name are replaced; your other players are kept. The current players are backed up first.",
-            "هل تريد تنزيل أحدث حزمة مشغّلات وتثبيتها في TMDb Helper؟[CR][CR]تُستبدل المشغّلات التي تحمل الاسم نفسه، وتبقى مشغّلاتك الأخرى كما هي. وتُحفظ نسخة احتياطية من المشغّلات الحالية أولاً."),
-    30032: ("Downloading the players pack...",
-            "جارٍ تنزيل حزمة المشغّلات..."),
-    30033: ("The players pack could not be downloaded. Check the internet connection and try again.",
-            "تعذّر تنزيل حزمة المشغّلات. تحقّق من الاتصال بالإنترنت ثم أعد المحاولة."),
-    30034: ("Installing the players...",
-            "جارٍ تثبيت المشغّلات..."),
-    30035: ("The downloaded pack holds no valid player. Nothing was changed.",
-            "لا تحتوي الحزمة المنزَّلة على أي مشغّل صالح، ولم يُغيَّر شيء."),
-    30036: ("Players updated.[CR]New: %d   Updated: %d   Unchanged: %d",
-            "تم تحديث المشغّلات.[CR]جديدة: %d   محدَّثة: %d   دون تغيير: %d"),
-    30037: ("Skipped (invalid): %d - %s",
-            "تم تخطّي (غير صالحة): %d - %s"),
-    30038: ("The new players are used from the next play.",
-            "تُستخدم المشغّلات الجديدة بدءاً من التشغيل التالي."),
-    30039: ("Hide subtitles while skipping",
-            "إخفاء الترجمة أثناء التقديم"),
-    # ---- Seek Preview (Toggles) (30040-30049) ----
-    30040: ("Picture size",          "حجم الصورة"),
-    30041: ("Small",                 "صغير"),
-    30042: ("Medium",                "متوسط"),
-    30043: ("Large",                 "كبير"),
-    30044: ("Prepare pictures ahead", "تجهيز الصور مسبقاً"),
-    30045: ("Normal (3 min on streams)", "عادي (3 دقائق في البث)"),
-    30046: ("Seek Preview needs ffmpeg, which is not available on Android.",
-            "تحتاج معاينة التقديم إلى ffmpeg، وهو غير متاح على أندرويد."),
-    30047: ("Seek Preview needs ffmpeg. Install the FFmpeg Tools add-on now?",
-            "تحتاج معاينة التقديم إلى ffmpeg. هل تريد تثبيت إضافة FFmpeg Tools الآن؟"),
-    30048: ("ffmpeg was not found, so Seek Preview stays off. Install FFmpeg Tools (Program add-ons, CoreELEC repository), restart Kodi and turn it on again.",
-            "لم يُعثر على ffmpeg، لذا تبقى معاينة التقديم متوقفة. ثبّت إضافة FFmpeg Tools (إضافات البرامج، مستودع CoreELEC)، ثم أعد تشغيل Kodi وفعّلها من جديد."),
-    30049: ("More (10 min on streams)", "أكثر (10 دقائق في البث)"),
     # ---- Addons33 rebuild (maintenance) (30330-30349) ----
     30330: ("Rebuild the Kodi add-on database (Addons33.db)?[CR][CR]This deletes the database so Kodi builds a clean one. Your enabled add-ons, current skin and update sources are remembered first. The box restarts [B]twice[/B] and takes a few minutes.[CR][CR]After the first restart Kodi opens on Estuary with all add-ons disabled - this is normal. ABUKARIM TOOLS re-enables itself within about a minute and finishes the rest. If nothing happens after 3 minutes, enable it once in Add-ons > My add-ons > Program add-ons.",
             "إعادة بناء قاعدة بيانات إضافات كودي (Addons33.db)؟[CR][CR]سيتم حذف القاعدة ليبنيها كودي من جديد، بعد حفظ الإضافات المفعّلة والواجهة الحالية ومصادر التحديث. سيُعيد الجهاز التشغيل [B]مرتين[/B] وقد يستغرق بضع دقائق.[CR][CR]بعد إعادة التشغيل الأولى سيفتح كودي على واجهة Estuary وكل الإضافات معطّلة - وهذا طبيعي. ستُفعّل ABUKARIM TOOLS نفسها خلال دقيقة تقريباً وتُكمل الباقي. إذا لم يحدث شيء بعد 3 دقائق، فعّلها مرة واحدة من الإضافات > إضافاتي > إضافات البرامج."),

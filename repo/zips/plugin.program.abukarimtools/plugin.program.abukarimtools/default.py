@@ -40,8 +40,6 @@ ICONS  = {
     'af3_plotright':  ADDON_PATH + 'resources/icons/af3_plotright.png',
     'af3_plotsize':   ADDON_PATH + 'resources/icons/af3_plotsize.png',
     'af3_discmenu':   ADDON_PATH + 'resources/icons/af3_discmenu.png',
-    # 4.8.12: Seek Preview
-    'seek_preview':   ADDON_PATH + 'resources/icons/seek_preview.png',
     'font_scale':     ADDON_PATH + 'resources/icons/font_scale.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/sources.png',
     'rebuild_addons33': ADDON_PATH + 'resources/icons/rebuild_addons33.png',
@@ -62,8 +60,6 @@ ICONS  = {
     'webserver':      ADDON_PATH + 'resources/icons/webserver.png',
     'log_share':      ADDON_PATH + 'resources/icons/log_share.png',
     'remote_refresh': ADDON_PATH + 'resources/icons/remote_refresh.png',
-    # 4.8.11: Update TMDb Helper Players
-    'players_update': ADDON_PATH + 'resources/icons/players_update.png',
     'menu_reconcile': ADDON_PATH + 'resources/icons/menu_reconcile.png',
     'profile_export': ADDON_PATH + 'resources/icons/profile_export.png',
     'profile_restore': ADDON_PATH + 'resources/icons/profile_restore.png',
@@ -99,7 +95,6 @@ CATEGORIES = [
         ('patcher',        30005),
         ('origin_fix',     30007),
         ('remote_refresh', 30594),
-        ('players_update', 30023),
     ]),
     ('maint',  30016, 'cat_maint', [
         ('abukarimwizard', 30008),
@@ -127,7 +122,6 @@ CATEGORIES = [
         ('af3_plotright',  30890),
         ('af3_plotsize',   32113),
         ('af3_discmenu',   32102),
-        ('seek_preview',   30024),
         ('font_scale',     30740),
     ]),
     ('profiles', 30598, 'cat_profiles', [
@@ -152,8 +146,6 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 'af3_plotsize',
                 # 4.7.36: AF3 Disc Menu for ISO Streams (on/off switch)
                 'af3_discmenu',
-                # 4.8.12: Seek Preview (options page)
-                'seek_preview',
                 # 4.6.14: AF3 Streaming Services (dialogs only)
                 'streaming_rows',
                 # 4.6.8: AF3 Lucent Look (Off / Glass / AMOLED picker)
@@ -177,9 +169,7 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 # 3.2.57: Trakt Lists (its own window)
                 'trakt_hubs',
                 # 3.3.7: setup from the phone (QR window + local server)
-                'phone_setup',
-                # 4.8.11: Update TMDb Helper Players (dialogs only)
-                'players_update'}
+                'phone_setup'}
 
 
 def _add_folder(label, cat_key, icon_key):
@@ -372,9 +362,6 @@ def _switch_state(mode):
         if mode == 'af3_discmenu':
             from resources.lib import af3_discmenu_toggle
             return af3_discmenu_toggle.disc_menu_on()
-        if mode == 'seek_preview':
-            from resources.lib.seek_preview import engine as _sp
-            return bool(_sp.load_config()['enabled'])
         if mode == 'af3_lucentplayer':
             from resources.lib import af3_lucentplayer_toggle
             return af3_lucentplayer_toggle.player_on()
@@ -592,11 +579,6 @@ def router():
         from resources.lib import patcher
         patcher.run()
 
-    elif mode == 'players_update':
-        _end_directory()
-        from resources.lib import players_update
-        players_update.run()
-
     elif mode == 'rebuild_addons33':
         _end_directory()
         from resources.lib import addons33_rebuild
@@ -658,10 +640,6 @@ def router():
     elif mode == 'af3_plotsize':
         from resources.lib import af3_plotsize
         af3_plotsize.run()
-    elif mode == 'seek_preview':
-        from resources.lib import seek_preview_toggle
-        seek_preview_toggle.run()
-
     elif mode == 'af3_discmenu':
         from resources.lib import af3_discmenu_toggle
         af3_discmenu_toggle.run()
