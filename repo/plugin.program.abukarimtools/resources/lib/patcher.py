@@ -3102,6 +3102,43 @@ PATCHES = [
         'not_found_ok': True,
         'description': 'TMDbHelper itemdetails.py – ignore a cached "None" tmdb_id',
     },
+    # ── TMDbHelper: play with no item details (4.8.22) ──
+    # 2026-11-11 AM6B log: api.themoviedb.org timed out at "Getting item
+    # details", PlayerDetails.details came back None, and the resolver's
+    # listitem did `self.player.item.details.params = {}` -> AttributeError.
+    # The player action (AB Search All's RunPlugin, or any other player)
+    # never ran: pressing Play did nothing, three times in a row. With an
+    # empty ListItem in its place the action runs with the ids it has
+    # (AB Search All fetches the rest itself). Same line in 6.21.5 and nexus.
+    # Always on: it only changes what happens where stock would crash.
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'player', 'action', 'resolver.py'),
+        'old': (
+            "    def listitem(self):\n"
+            "        self.player.item.details.params = {}\n"
+        ),
+        'new': (
+            "    def listitem(self):\n"
+            "        # -- TMDbHelper None details guard (by ABUKARIM TOOLS) --\n"
+            "        if getattr(self.player.item, 'details', None) is None:\n"
+            "            from tmdbhelper.lib.items.listitem import ListItem as _AbkListItem\n"
+            "            self.player.item.details = _AbkListItem()\n"
+            "        self.player.item.details.params = {}\n"
+        ),
+        'already_patched_check': '# -- TMDbHelper None details guard (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r"(    def listitem\(self\):[ \t]*\r?\n)(        self\.player\.item\.details\.params = \{\})",
+        'fallback_repl': (
+            r"\1"
+            "        # -- TMDbHelper None details guard (by ABUKARIM TOOLS) --\n"
+            "        if getattr(self.player.item, 'details', None) is None:\n"
+            "            from tmdbhelper.lib.items.listitem import ListItem as _AbkListItem\n"
+            "            self.player.item.details = _AbkListItem()\n"
+            r"\2"
+        ),
+        'not_found_ok': True,
+        'description': 'TMDbHelper resolver.py – play even when item details failed to load (TMDb timeout)',
+    },
     # ── TMDbHelper: genres follow the language setting (3.4.4) ──
     # Genre names sit in ItemDetails.db with NO iso_language column (unlike
     # title/plot in the translation table), and later writes only fill NULLs
@@ -4842,6 +4879,123 @@ PATCHES += [
 for _p in PATCHES:
     if 'fallback_repl' in _p and _p['fallback_repl'] is None:
         _p['fallback_repl'] = (lambda _m, _t=_p['new']: _t)
+
+
+# ── AF3: Plot on the Right - library views, combined views, search (4.8.20) ──
+# The Home glass plot box (Hub_Spotlight_Info / Hub_Combined_Info above) as one
+# shared include, ABK_PlotRight_Box (resources/af3_plotright/), placed on the
+# same screen spot in the library views, the combined views and the search
+# page (search: removed again in 4.8.21). Same switch (skin bool abk.plotright, Toggles "AF3: Plot on the Right"):
+# with it on the plot leaves the left column there too (visible_plot) and the
+# genre line / row order of the Home layout is used (plotright_genre). The
+# Wall views show no plot (include_details false) - nothing to move there.
+# Also: the ratings row cancels its meta_offset when the plot is on the right.
+# The Piers block raise lowers that row 60 px (meta_offset) so the -52 slide
+# left it on the badges row (screenshot 2026-11-11: IMDb/RT numbers under the
+# HD/SDR/AAC badges, an empty row above). Font: af3_plotsize (Large/Small).
+def _af3_plotright_payload():
+    try:
+        _p = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir,
+                          'af3_plotright', 'abk_plotright_box.xml')
+        with open(_p, 'r', encoding='utf-8') as _f:
+            return _f.read().rstrip('\n')
+    except Exception:
+        return ''
+
+
+_AF3_PRBOX = _af3_plotright_payload()
+_AF3_PRBOX_CHECK = '<include name="ABK_PlotRight_Box">'
+
+
+def _af3_prbox_call(indent, item, idbase, visible, right=None, top=None, condition=None):
+    pad = ' ' * indent
+    head = '<include content="ABK_PlotRight_Box"%s>' % (
+        ' condition="%s"' % condition if condition else '')
+    rows = [pad + head,
+            pad + '    <param name="item">%s</param>' % item,
+            pad + '    <param name="idbase">%s</param>' % idbase,
+            pad + '    <param name="visible">%s</param>' % visible]
+    if right is not None:
+        rows.append(pad + '    <param name="right">%s</param>' % right)
+    if top is not None:
+        rows.append(pad + '    <param name="top">%s</param>' % top)
+    rows.append(pad + '</include>')
+    return '\n'.join(rows)
+
+
+_AF3_PR_VIEWS_BOXES = '\n'.join(
+    ['        <!-- ABUKARIM: plot on the right (views) - screen spot of the Home hub box -->',
+     _af3_prbox_call(8, 'ListItem', '9450',
+                     '!Integer.IsEqual(Container.NumItems,0) + String.IsEmpty(Window.Property(TMDBHelper.WidgetContainer)) + $EXP[View_Row_Info_Details_Expression]')]
+    + [_af3_prbox_call(8, 'Container(53%d).ListItem' % _i, '946%d' % _i,
+                       'Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),53%d)' % _i,
+                       condition='$EXP[Exp_View_52%d_Include]' % _i)
+       for _i in (0, 1, 2, 3, 4, 6)])
+
+PATCHES += [
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'not_found_ok': True,
+        'old': '    <include name="Info_Panel_Dimensions">',
+        'new': '    ' + _AF3_PRBOX + '\n\n    <include name="Info_Panel_Dimensions">',
+        'already_patched_check': _AF3_PRBOX_CHECK,
+        'description': 'AF3 Plot on the Right - shared plot box include (views, combined, search)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'not_found_ok': True,
+        'old': '                <animation effect="slide" end="0,-52" time="0" condition="$PARAM[plotright]">Conditional</animation>  <!-- ABUKARIM: plot on the right - ratings up -->',
+        'new': '                <animation effect="slide" end="0,-52" time="0" condition="$PARAM[plotright]">Conditional</animation>  <!-- ABUKARIM: plot on the right - ratings up -->\n'
+               '                <animation effect="slide" end="0,-$PARAM[meta_offset]" time="0" condition="$PARAM[plotright]">Conditional</animation>  <!-- ABUKARIM: plot on the right - cancel meta_offset (4.8.20) -->',
+        'already_patched_check': '<!-- ABUKARIM: plot on the right - cancel meta_offset (4.8.20) -->',
+        'description': 'AF3 Plot on the Right - ratings row no longer drawn over the badges row',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Views.xml'),
+        'not_found_ok': True,
+        'old': '                    <param name="visible_plot">$EXP[View_Row_Info_Details_Expression]</param>\n',
+        'new': '                    <param name="visible_plot">$EXP[View_Row_Info_Details_Expression] + !Skin.HasSetting(abk.plotright)</param>\n'
+               '                    <param name="plotright_genre">$EXP[View_Row_Info_Details_Expression] + Skin.HasSetting(abk.plotright)</param>  <!-- ABUKARIM: plot on the right (views) -->\n',
+        'already_patched_check': '<!-- ABUKARIM: plot on the right (views) -->',
+        'description': 'AF3 Plot on the Right - library views left column',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Views.xml'),
+        'not_found_ok': True,
+        'old': '            <include>View_Combined_Info_Panel</include>\n            <include>View_Combined_Wall_Info_Panel</include>\n        </control>\n    </include>',
+        'new': '            <include>View_Combined_Info_Panel</include>\n            <include>View_Combined_Wall_Info_Panel</include>\n        </control>\n'
+               + _AF3_PR_VIEWS_BOXES + '\n    </include>',
+        'already_patched_check': '<!-- ABUKARIM: plot on the right (views) - screen spot of the Home hub box -->',
+        'description': 'AF3 Plot on the Right - library + combined views plot box',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Views_Combined.xml'),
+        'not_found_ok': True,
+        'old': '                    <param name="include_details">$PARAM[include_details]</param>\n',
+        'new': '                    <param name="include_details">$PARAM[include_details]</param>\n'
+               '                    <param name="visible_plot">!Skin.HasSetting(abk.plotright)</param>  <!-- ABUKARIM: plot on the right (combined) -->\n'
+               '                    <param name="plotright_genre">Skin.HasSetting(abk.plotright) + $PARAM[include_details]</param>\n',
+        'already_patched_check': '<!-- ABUKARIM: plot on the right (combined) -->',
+        'description': 'AF3 Plot on the Right - combined views left column',
+    },
+    # 4.8.21: the plot box is not wanted on the search page (it sat off the
+    # right edge there). Put back the stock Search_Info on boxes that took
+    # the 4.8.20 search entry; a fresh AF3 already has the stock text.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Search.xml'),
+        'not_found_ok': True,
+        'old': '            <param name="visible_plot">!Skin.HasSetting(abk.plotright)</param>\n            <param name="plotright_genre">Skin.HasSetting(abk.plotright)</param>  <!-- ABUKARIM: plot on the right (search) -->\n            <param name="visible_meta">true</param>\n            <param name="include_title">true</param>\n            <param name="container">Container($PARAM[id]).</param>\n        </include>\n        <!-- ABUKARIM: plot box inside the 1120 info column (left 80): right -600 = screen right 120; top 139 = the Home spot + the 40 the search block sits lower -->\n        <include content="ABK_PlotRight_Box" condition="!String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)">\n            <param name="item">Container($PARAM[id]).ListItem</param>\n            <param name="idbase">947$PARAM[id]</param>\n            <param name="visible">!$EXP[Exp_InfoDialogs] + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),$PARAM[id])</param>\n            <param name="right">-600</param>\n            <param name="top">139</param>\n        </include>\n',
+        'new': '            <param name="visible_plot">true</param>\n            <param name="visible_meta">true</param>\n            <param name="include_title">true</param>\n            <param name="container">Container($PARAM[id]).</param>\n        </include>\n',
+        'already_patched_check': '            <param name="visible_plot">true</param>\n            <param name="visible_meta">true</param>\n            <param name="include_title">true</param>\n            <param name="container">Container($PARAM[id]).</param>\n        </include>\n',
+        'description': 'AF3 Plot on the Right - removed from the search page',
+    },
+]
 
 
 def _apply_patch(patch):

@@ -1,3 +1,39 @@
+v4.8.22
+- TMDbHelper: pressing Play no longer does nothing when TMDb is slow. If
+  api.themoviedb.org timed out while TMDbHelper was loading the item details,
+  its resolver crashed ('NoneType' object has no attribute 'params') before
+  the player ran, so AB Search All (or any other player) never opened. A new
+  always-on patch on resolver.py gives it an empty item instead; the player
+  then runs with the ids it has. Applies to TMDbHelper 6.x (and the current
+  nexus code, which has the same line).
+- AB Search All: "_" values from TMDbHelper (its stand-in for a missing
+  IMDb id / year / title / premiered date) are now treated as missing, so a
+  title or year of "_" never reaches the scrapers; the real ones come from
+  TMDb as before.
+- AF3 Subtitle Buttons: the DexSubtitles AutoSync button in the player OSD
+  failed every time with "No valid addon id could be obtained" (the launcher
+  runs by file path, so Kodi gives it no add-on). The launcher now tells
+  Kodi which add-on it belongs to. The new launcher is copied into
+  DexSubtitles on the next patch run.
+
+v4.8.21
+- AF3 "Plot on the Right": the glass plot box is no longer added to the
+  search page (it sat off the right edge there); the search page is put back
+  to the stock layout. Library and combined views keep the box.
+
+v4.8.20
+- AF3 "Plot on the Right": the ratings row (IMDb / Rotten Tomatoes / Trakt /
+  ends-at) no longer sits on top of the HD / SDR / AAC / 2.0 badges. The
+  Piers layout lowers that row 60 px, and the plot-on-the-right order did not
+  take it back, so it landed on the badges row with an empty row above it.
+- The plot in the glass box is bigger: it follows "AF3: Plot Text Size"
+  (Large, the default, = AF3's own plot font; Small = the old smaller one).
+- The glass plot box now also shows in the library views, the combined views
+  and the search page, in the same spot as on Home, with the same switch.
+  The left column there drops the plot and uses the Home order (genre line,
+  stars and date, ratings, badges). The Wall views show no plot, so they stay
+  as they are.
+
 v4.8.17
 - New Toggles entry "AF3: Classic OSD Flags". The classic colour codec /
   HDR / audio / channels / source / language badges of the Piers AF3 build

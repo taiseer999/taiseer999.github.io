@@ -1824,6 +1824,10 @@ def _settle(session, extra=(), wait=45.0):
 
 
 def run(params):
+    # TMDbHelper fills a missing {imdb}/{year}/{title}/... with "_" (seen when
+    # its item details failed to load); treat those as missing so "_" never
+    # reaches the scrapers as a title or year.
+    params = {k: v for k, v in params.items() if str(v).strip() not in ('_', 'None')}
     media_type = 'episode' if params.get('media_type') in ('episode', 'tv', 'tvshow') else 'movie'
     tmdb_id = str(params.get('tmdb_id') or params.get('tmdb') or '').strip()
     if not tmdb_id:

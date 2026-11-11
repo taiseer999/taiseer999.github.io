@@ -22,8 +22,13 @@ The choice is saved in addon_data (af3_plotsize.json). reconcile() rewrites
 the plotfont value at those call sites in the installed AF3; patcher.apply_set
 runs it after every patch pass, so a skin update or a fresh patch run keeps
 the chosen size. Fonts are read when the skin loads, so a change reloads the
-skin. "Plot on the Right" has its own box sized to font_mini_plot lines and is
-not changed.
+skin.
+
+4.8.20 - "Plot on the Right" follows the size too: the glass box on Home (hub +
+Spotlight) and the shared ABK_PlotRight_Box (library views, combined views,
+search) use the chosen plot font. Both fonts have about the same line pitch
+in every Piers fontset (main 29-30 px x 0.9-1.1 vs mini 23-25 px x 1.15-1.31),
+so the box's 35 px-per-line fit probes stay right; they read the font in use.
 """
 import json
 import os
@@ -55,6 +60,38 @@ _OSD_RE = re.compile(r'(<!-- ABUKARIM: vertical plot \(osd\) -->\s*<param name="
                      r'\s*<param name="plottop">)\d+(</param>\s*<param name="plotboxh">)\d+(</param>)'
                      r'(?:\n[ \t]*<param name="height">\d+</param>  <!-- ABUKARIM: plot height \(osd\) -->)?')
 _OSD_INDENT = ' ' * 20
+# 4.8.20: plot-on-the-right boxes
+_BOX_MARK = '<!-- ABUKARIM: plot on the right -->'
+_BOX_FONT_RE = re.compile(r'<font>font_(?:mini|main)_plot</font>')
+_BOX_DEF_RE = re.compile(r'(<param name="font">)font_(?:mini|main)_plot'
+                         r'(</param>  <!-- ABUKARIM: plot box font \(af3_plotsize\) -->)')
+_CTRL_RE = re.compile(r'<control\b|</control>')
+
+
+def _box_fonts(content, font):
+    """Set <font> inside every Home plot-on-the-right block (Includes_Hubs.xml)
+    to font; nothing outside those blocks is touched. Returns (text, blocks)."""
+    out, pos, blocks = [], 0, 0
+    while True:
+        i = content.find(_BOX_MARK, pos)
+        if i < 0:
+            break
+        start = content.find('<control type="group">', i)
+        if start < 0:
+            break
+        depth, end = 0, None
+        for m in _CTRL_RE.finditer(content, start):
+            depth += -1 if m.group(0) == '</control>' else 1
+            if depth == 0:
+                end = m.end()
+                break
+        if end is None:
+            break
+        out.append(content[pos:start])
+        out.append(_BOX_FONT_RE.sub('<font>%s</font>' % font, content[start:end]))
+        pos, blocks = end, blocks + 1
+    out.append(content[pos:])
+    return ''.join(out), blocks
 _STATE = os.path.join(xbmcvfs.translatePath('special://profile/addon_data/'),
                       'plugin.program.abukarimtools', 'af3_plotsize.json')
 
@@ -119,6 +156,22 @@ def reconcile(skin_dir=None):
             new = _HUB_RE.sub(r'\g<1>%d\g<2>%d\g<3>' % (top, box), new)
             new = _OSD_RE.sub(lambda m: '%s%d%s%d%s\n%s<param name="height">%d</param>  <!-- ABUKARIM: plot height (osd) -->'
                               % (m.group(1), top, m.group(2), box, m.group(3), _OSD_INDENT, top + box), new)
+            if new != content:
+                with open(path, 'w', encoding='utf-8') as f:
+                    f.write(new)
+                wrote = True
+        except Exception as e:
+            return False, '[plot size] %s: %s' % (name, e), wrote, sites
+    # 4.8.20: plot-on-the-right boxes (Home blocks + shared include default)
+    for name, fn in (('Includes_Hubs.xml', lambda c: _box_fonts(c, font)[0]),
+                     ('Includes_Info.xml', lambda c: _BOX_DEF_RE.sub(r'\g<1>%s\g<2>' % font, c))):
+        path = os.path.join(skin_dir, '1080i', name)
+        if not os.path.isfile(path):
+            continue
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            new = fn(content)
             if new != content:
                 with open(path, 'w', encoding='utf-8') as f:
                     f.write(new)

@@ -17,6 +17,22 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 if _HERE not in sys.path:
     sys.path.insert(0, _HERE)
 
+# RunScript(<file path>) runs "without an addon" on Kodi 21/22, so a bare
+# xbmcaddon.Addon() in service.py / autosync.py raises "No valid addon id
+# could be obtained" (2026-11-11 AM6B log, every OSD AutoSync press). Give
+# Addon() this add-on's id as its default before those modules import it.
+_ADDON_ID = os.path.basename(_HERE) or 'service.subtitles.dexworld'
+try:
+    import xbmcaddon
+    _AbkAddon = xbmcaddon.Addon
+
+    def _abk_addon(id=None, *args, **kwargs):
+        return _AbkAddon(id or _ADDON_ID, *args, **kwargs)
+
+    xbmcaddon.Addon = _abk_addon
+except Exception:
+    pass
+
 
 def _log(msg, level=xbmc.LOGINFO):
     xbmc.log('[DexSubtitles.abk_osd_sync] %s' % msg, level)
