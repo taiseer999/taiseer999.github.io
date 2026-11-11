@@ -2684,7 +2684,6 @@ msgctxt "#32126"
 msgid "Small - 2 lines"
 msgstr ""
 
-
 msgctxt "#32127"
 msgid "AF3: Classic OSD Flags"
 msgstr ""
@@ -2704,3 +2703,220 @@ msgstr ""
 msgctxt "#32131"
 msgid "The classic OSD flags could not be installed. Check that the repository is reachable and try again."
 msgstr ""
+
+msgctxt "#32140"
+msgid "First setup of the build and what goes on top of it: add-ons, skins, menus, lists and the settings of this device."
+msgstr ""
+
+msgctxt "#32141"
+msgid "The fixes AB Tools applies to other add-ons and skins, and the data it downloads for them."
+msgstr ""
+
+msgctxt "#32142"
+msgid "Cleaning, repairs and tests: free space, repair the add-on database and the menus, test the network and the processor, share the log."
+msgstr ""
+
+msgctxt "#32143"
+msgid "Features you switch on and off or set: the look of Arctic Fuse 3, glass windows, trailers, seek preview and font size."
+msgstr ""
+
+msgctxt "#32144"
+msgid "Save the look of the current skin (settings, menus, views) or bring back a saved copy."
+msgstr ""
+
+msgctxt "#32145"
+msgid "Support the work on AB Tools and the Piers build. Shows a QR code for Buy Me a Coffee."
+msgstr ""
+
+msgctxt "#32146"
+msgid "Runs the full setup again, step by step: add-ons, menus, Trakt lists and accounts."
+msgstr ""
+
+msgctxt "#32147"
+msgid "Shows a QR code; open it on your phone to back up, install add-ons and arrange menus from the phone, over your home network."
+msgstr ""
+
+msgctxt "#32148"
+msgid "Save a full backup of the build, or restore one."
+msgstr ""
+
+msgctxt "#32149"
+msgid "Download and install one of the build's skins."
+msgstr ""
+
+msgctxt "#32150"
+msgid "Pick video add-ons from the catalogue; each one is installed from its own repository, so it keeps getting updates."
+msgstr ""
+
+msgctxt "#32151"
+msgid "Choose which Arctic Fuse 3 menus and widgets this device keeps: light, moderate or full."
+msgstr ""
+
+msgctxt "#32152"
+msgid "Choose the Trakt lists shown in the Movies, TV Shows and Korean hubs, and the anime lists on the Home page."
+msgstr ""
+
+msgctxt "#32153"
+msgid "Rows of the streaming services of your country on the Arctic Fuse 3 Home page."
+msgstr ""
+
+msgctxt "#32154"
+msgid "Install the binary add-ons built for this device (InputStream Adaptive, archive support)."
+msgstr ""
+
+msgctxt "#32155"
+msgid "Install the add-ons a light build left out, from their repositories."
+msgstr ""
+
+msgctxt "#32156"
+msgid "Set Kodi's video cache to suit the memory of this device."
+msgstr ""
+
+msgctxt "#32157"
+msgid "Give this device its own web server password and show it, for remote control apps."
+msgstr ""
+
+msgctxt "#32158"
+msgid "Choose which groups of fixes are applied to the add-ons and skins, then apply them now."
+msgstr ""
+
+msgctxt "#32159"
+msgid "Link add-ons installed from a zip or a build to their repository, so they receive updates."
+msgstr ""
+
+msgctxt "#32160"
+msgid "Download the latest online fixes and catalogues now instead of waiting for the next start."
+msgstr ""
+
+msgctxt "#32161"
+msgid "Download the latest TMDb Helper players pack."
+msgstr ""
+
+msgctxt "#32162"
+msgid "Open the maintenance menu of the ABUKARIM Wizard (offers to install it when it is missing)."
+msgstr ""
+
+msgctxt "#32163"
+msgid "Delete the cache, the downloaded packages and the thumbnails to free space."
+msgstr ""
+
+msgctxt "#32164"
+msgid "Delete old thumbnails to free space."
+msgstr ""
+
+msgctxt "#32165"
+msgid "Find add-ons and files the build no longer uses; only what you tick is removed."
+msgstr ""
+
+msgctxt "#32166"
+msgid "Rebuild Kodi's add-on database when it is damaged. Kodi restarts during the repair."
+msgstr ""
+
+msgctxt "#32167"
+msgid "Make add-on settings saved by a newer Kodi readable by this one."
+msgstr ""
+
+msgctxt "#32168"
+msgid "Measure the speed of your internet connection."
+msgstr ""
+
+msgctxt "#32169"
+msgid "Measure the speed of this device's processor."
+msgstr ""
+
+msgctxt "#32170"
+msgid "Upload the Kodi log without passwords, keys or links, and show a QR code to send it."
+msgstr ""
+
+msgctxt "#32171"
+msgid "Hide menu items and widgets whose add-on is missing, and bring back the ones whose add-on is installed again."
+msgstr ""
+
+msgctxt "#32172"
+msgid "Switch to another installed skin."
+msgstr ""
+
+msgctxt "#32173"
+msgid "Show or hide the DPlex tab in the menu."
+msgstr ""
+
+msgctxt "#32174"
+msgid "Show or hide the Korean media tab in the menu."
+msgstr ""
+
+msgctxt "#32175"
+msgid "Color or black and white icons for genres, networks and lists in Arctic Fuse 3."
+msgstr ""
+
+msgctxt "#32176"
+msgid "Glass source windows in Fen Light, Red Light, POV and Umbrella, set for each add-on."
+msgstr ""
+
+msgctxt "#32177"
+msgid "Play a title's trailer when the cursor rests on it in Arctic Fuse 3, with its sound, delay and quality."
+msgstr ""
+
+msgctxt "#32178"
+msgid "The waves animation that Arctic Fuse 3 shows while something loads."
+msgstr ""
+
+msgctxt "#32179"
+msgid "Navy glass colours for Arctic Fuse 3: off, Lucent Glass, or Lucent Glass on true black."
+msgstr ""
+
+msgctxt "#32180"
+msgid "The Lucent player screen in Arctic Fuse 3: controls, seek bar, pause card and statistics."
+msgstr ""
+
+msgctxt "#32181"
+msgid "Build the side menu and widgets of the Lucent skin from your Arctic Fuse 3 menu."
+msgstr ""
+
+msgctxt "#32182"
+msgid "Show the plot complete in a glass box on the right side of the Arctic Fuse 3 Home page."
+msgstr ""
+
+msgctxt "#32183"
+msgid "Size of the plot text in Arctic Fuse 3: large or small."
+msgstr ""
+
+msgctxt "#32184"
+msgid "Disc Menu and Normal Player buttons in the player while a Blu-ray ISO plays from a stream."
+msgstr ""
+
+msgctxt "#32185"
+msgid "The colour codec, HDR, audio and source badges in the Arctic Fuse 3 player."
+msgstr ""
+
+msgctxt "#32186"
+msgid "Show a picture of the video while you skip forward or back, with its size and options."
+msgstr ""
+
+msgctxt "#32187"
+msgid "Make every font of the current skin smaller, or keep the skin's own sizes."
+msgstr ""
+
+msgctxt "#32188"
+msgid "Save the settings, menus and views of the current skin as a profile."
+msgstr ""
+
+msgctxt "#32189"
+msgid "Bring back a saved profile of the current skin."
+msgstr ""
+
+msgctxt "#32190"
+msgid "Classic List View"
+msgstr ""
+
+msgctxt "#32191"
+msgid "Settings View"
+msgstr ""
+
+msgctxt "#32192"
+msgid "Support ABUKARIM"
+msgstr ""
+
+msgctxt "#32194"
+msgid "Show AB Tools as the old list of folders. To come back, open \\"Settings View\\" at the end of that list."
+msgstr ""
+

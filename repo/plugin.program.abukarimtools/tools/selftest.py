@@ -224,6 +224,27 @@ try:
 except Exception as e:
     fail('Search All generator check failed: %r' % e)
 
+# 4.8.23: settings window - both abk_settings.xml copies come from
+# tools/gen_settings_window.py and must equal its output.
+try:
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        'abk_gen_settings', os.path.join(ROOT, 'tools', 'gen_settings_window.py'))
+    gen_sw = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(gen_sw)
+    for path, xml in gen_sw.outputs().items():
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                same = f.read() == xml
+        except Exception:
+            same = False
+        if not same:
+            fail('%s differs from tools/gen_settings_window.py - run the generator '
+                 '(never hand-edit the window)' % os.path.relpath(path, ROOT))
+    print('Settings window: generator == shipped (%d files)' % len(gen_sw.outputs()))
+except Exception as e:
+    fail('settings window generator check: %s' % e)
+
 # ── report ───────────────────────────────────────────────────────────────────
 print('abukarimtools %s: %d .py checked' % (version, len(py_files)))
 for w in warns:

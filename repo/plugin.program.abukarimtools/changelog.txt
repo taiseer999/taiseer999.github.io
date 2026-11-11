@@ -1,3 +1,32 @@
+v4.8.24
+- Settings page: on a 16:10 screen (MacBook, screenshot 2026-11-11) Kodi
+  gives the window a narrower coordinate width than 1920, and the page lost
+  its right side - the title and, in Arabic, the categories column. All
+  content now sits in one group 1560 wide, centred on the screen; the
+  backgrounds fill the screen whatever its shape. On 16:9 the page is
+  centred with even margins.
+
+v4.8.23
+- New: AB Tools opens as a settings page, like the skin's own settings.
+  The categories (Setup & Install, Patching, Maintenance, Toggles, Skin
+  Profiles) are in a column on one side and the entries of the chosen one
+  on the other. On/off entries show a switch, entries with a choice show
+  the current value (Font Size, Plot Text Size, Lucent Look, Glass Theme),
+  and the focused entry or category is described at the bottom. The
+  switches and values update by themselves after an entry has run.
+- Arabic Kodi gets the mirrored layout: categories on the right, text
+  aligned right.
+- Arctic Fuse 3 shows the page in its own theme colours (a copy of the
+  window is put in the skin by an always-on patch; no skin reload).
+  Other skins get the add-on's navy glass copy.
+- Every entry runs exactly as before. ABUKARIM Wizard opens its menu on
+  top of the page, and Back comes back to it.
+- "Classic List View" (end of the categories) brings back the old list of
+  folders; "Settings View" at the end of that list returns to the page.
+  Widgets and shortcuts that list the add-on keep getting the list.
+- New fixed-size fonts abk_set_* are registered in the active skin with
+  the Search All fonts (the skin's own typeface, only the size is fixed).
+
 v4.8.22
 - TMDbHelper: pressing Play no longer does nothing when TMDb is slow. If
   api.themoviedb.org timed out while TMDbHelper was loading the item details,

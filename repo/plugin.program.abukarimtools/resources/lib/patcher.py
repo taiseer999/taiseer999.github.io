@@ -3409,6 +3409,23 @@ PATCHES = [
         'inject_source': os.path.join('resources', 'af3_subtools', 'abk_osd_sync.py'),
         'description': 'AF3 Subtitle Buttons - DexSubtitles OSD AutoSync launcher',
     },
+    # ── AF3: AB Tools settings window in the skin's colours (4.8.23) ──
+    # Kodi opens a script window from the ACTIVE skin's folder when the skin
+    # has a file of that name, so this copy (same layout, AF3 theme colour
+    # names) is what AF3 shows; other skins use the add-on's own copy.
+    # Made by tools/gen_settings_window.py. Read when the window opens - no
+    # skin reload needed. Always on; a missing AF3 is a skip.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'abk_settings.xml'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_settings', 'abk_settings.xml'),
+        'no_skin_reload': True,
+        'description': 'AF3: AB Tools settings window (theme colours)',
+    },
     {
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
@@ -5872,7 +5889,12 @@ def _ensure_ppi_fonts():
 # A skin update wipes them; every patch sweep puts them back.
 _SRCH_FONTS = (('abk_srch_s', '22'),    # cards, rows, chips, info lines
                ('abk_srch_m', '26'),    # headings, episode title, wait message
-               ('abk_srch_l', '32'))    # show title without clearlogo
+               ('abk_srch_l', '32'),    # show title without clearlogo
+               # 4.8.23: settings window (abk_settings.xml)
+               ('abk_set_s', '24'),     # values, description, version
+               ('abk_set_m', '30'),     # rows, categories, category title
+               ('abk_set_l', '36'),
+               ('abk_set_xl', '46'))    # window title
 _SRCH_FONT_MARK = '<!-- ABK Search All -->'
 
 
@@ -6381,7 +6403,9 @@ def apply_set(group=None, addon_ids=None):
                 changed += 1
                 if patch.get('rescan_addons'):
                     _RESCAN_PENDING[0] = True
-                if _is_active_skin(patch['addon_id']):
+                # 4.8.23: 'no_skin_reload' - a file the skin engine does not
+                # cache (a script window XML is read when the window opens)
+                if _is_active_skin(patch['addon_id']) and not patch.get('no_skin_reload'):
                     _mark_skin_reload()
         else:
             failed += 1

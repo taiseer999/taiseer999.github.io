@@ -2684,7 +2684,6 @@ msgctxt "#32126"
 msgid "Small - 2 lines"
 msgstr "صغير - سطران"
 
-
 msgctxt "#32127"
 msgid "AF3: Classic OSD Flags"
 msgstr "AF3: شارات التشغيل الكلاسيكية"
@@ -2704,3 +2703,220 @@ msgstr "جارٍ تثبيت شارات التشغيل الكلاسيكية..."
 msgctxt "#32131"
 msgid "The classic OSD flags could not be installed. Check that the repository is reachable and try again."
 msgstr "تعذَّر تثبيت شارات التشغيل الكلاسيكية. تحقَّق من إمكانية الوصول إلى المستودع ثم أعد المحاولة."
+
+msgctxt "#32140"
+msgid "First setup of the build and what goes on top of it: add-ons, skins, menus, lists and the settings of this device."
+msgstr "الإعداد الأول للبناء وما يُثبَّت فوقه: الإضافات والواجهات والقوائم، وإعدادات هذا الجهاز."
+
+msgctxt "#32141"
+msgid "The fixes AB Tools applies to other add-ons and skins, and the data it downloads for them."
+msgstr "الإصلاحات التي يطبّقها AB Tools على الإضافات والواجهات الأخرى، والبيانات التي ينزّلها لها."
+
+msgctxt "#32142"
+msgid "Cleaning, repairs and tests: free space, repair the add-on database and the menus, test the network and the processor, share the log."
+msgstr "التنظيف والإصلاح والاختبار: تحرير المساحة، وإصلاح قاعدة بيانات الإضافات والقوائم، واختبار الشبكة والمعالج، ومشاركة السجل."
+
+msgctxt "#32143"
+msgid "Features you switch on and off or set: the look of Arctic Fuse 3, glass windows, trailers, seek preview and font size."
+msgstr "ميزات تُفعَّل وتُعطَّل أو تُضبَط: مظهر Arctic Fuse 3، والنوافذ الزجاجية، والتريلرات، ومعاينة التقديم، وحجم الخط."
+
+msgctxt "#32144"
+msgid "Save the look of the current skin (settings, menus, views) or bring back a saved copy."
+msgstr "حفظ مظهر الواجهة الحالية (الإعدادات والقوائم وطرق العرض) أو استعادة نسخة محفوظة."
+
+msgctxt "#32145"
+msgid "Support the work on AB Tools and the Piers build. Shows a QR code for Buy Me a Coffee."
+msgstr "ادعم العمل على AB Tools وبناء Piers. يعرض رمز QR لصفحة Buy Me a Coffee."
+
+msgctxt "#32146"
+msgid "Runs the full setup again, step by step: add-ons, menus, Trakt lists and accounts."
+msgstr "يعيد تشغيل الإعداد الكامل خطوةً خطوة: الإضافات والقوائم وقوائم Trakt والحسابات."
+
+msgctxt "#32147"
+msgid "Shows a QR code; open it on your phone to back up, install add-ons and arrange menus from the phone, over your home network."
+msgstr "يعرض رمز QR؛ افتحه على جوالك لأخذ نسخة احتياطية وتثبيت الإضافات وترتيب القوائم من الجوال عبر شبكة المنزل."
+
+msgctxt "#32148"
+msgid "Save a full backup of the build, or restore one."
+msgstr "حفظ نسخة احتياطية كاملة من البناء، أو استعادة نسخة."
+
+msgctxt "#32149"
+msgid "Download and install one of the build's skins."
+msgstr "تنزيل إحدى واجهات البناء وتثبيتها."
+
+msgctxt "#32150"
+msgid "Pick video add-ons from the catalogue; each one is installed from its own repository, so it keeps getting updates."
+msgstr "اختر إضافات الفيديو من القائمة؛ تُثبَّت كل إضافة من مستودعها، فتبقى تصلها التحديثات."
+
+msgctxt "#32151"
+msgid "Choose which Arctic Fuse 3 menus and widgets this device keeps: light, moderate or full."
+msgstr "اختر قوائم Arctic Fuse 3 وودجاتها التي يحتفظ بها هذا الجهاز: خفيف أو متوسط أو كامل."
+
+msgctxt "#32152"
+msgid "Choose the Trakt lists shown in the Movies, TV Shows and Korean hubs, and the anime lists on the Home page."
+msgstr "اختر قوائم Trakt المعروضة في أقسام الأفلام والمسلسلات والكوري، وقوائم الأنمي في الصفحة الرئيسية."
+
+msgctxt "#32153"
+msgid "Rows of the streaming services of your country on the Arctic Fuse 3 Home page."
+msgstr "صفوف خدمات البث في بلدك على الصفحة الرئيسية لـ Arctic Fuse 3."
+
+msgctxt "#32154"
+msgid "Install the binary add-ons built for this device (InputStream Adaptive, archive support)."
+msgstr "تثبيت الإضافات الثنائية المبنية لهذا الجهاز (InputStream Adaptive ودعم الملفات المضغوطة)."
+
+msgctxt "#32155"
+msgid "Install the add-ons a light build left out, from their repositories."
+msgstr "تثبيت الإضافات التي تركها البناء الخفيف، من مستودعاتها."
+
+msgctxt "#32156"
+msgid "Set Kodi's video cache to suit the memory of this device."
+msgstr "ضبط ذاكرة التخزين المؤقت للفيديو في Kodi بما يناسب ذاكرة هذا الجهاز."
+
+msgctxt "#32157"
+msgid "Give this device its own web server password and show it, for remote control apps."
+msgstr "منح هذا الجهاز كلمة مرور خاصة لخادم الويب وعرضها، لتطبيقات التحكم عن بُعد."
+
+msgctxt "#32158"
+msgid "Choose which groups of fixes are applied to the add-ons and skins, then apply them now."
+msgstr "اختر مجموعات الإصلاحات التي تُطبَّق على الإضافات والواجهات، ثم طبّقها الآن."
+
+msgctxt "#32159"
+msgid "Link add-ons installed from a zip or a build to their repository, so they receive updates."
+msgstr "ربط الإضافات المثبّتة من ملف مضغوط أو من البناء بمستودعها، لتصلها التحديثات."
+
+msgctxt "#32160"
+msgid "Download the latest online fixes and catalogues now instead of waiting for the next start."
+msgstr "تنزيل أحدث الإصلاحات والقوائم من الإنترنت الآن بدل انتظار التشغيل التالي."
+
+msgctxt "#32161"
+msgid "Download the latest TMDb Helper players pack."
+msgstr "تنزيل أحدث حزمة مشغّلات لـ TMDb Helper."
+
+msgctxt "#32162"
+msgid "Open the maintenance menu of the ABUKARIM Wizard (offers to install it when it is missing)."
+msgstr "فتح قائمة الصيانة في معالج أبوكريم (ويعرض تثبيته إن لم يكن مثبّتًا)."
+
+msgctxt "#32163"
+msgid "Delete the cache, the downloaded packages and the thumbnails to free space."
+msgstr "حذف الذاكرة المؤقتة والحزم المنزّلة والصور المصغّرة لتحرير المساحة."
+
+msgctxt "#32164"
+msgid "Delete old thumbnails to free space."
+msgstr "حذف الصور المصغّرة القديمة لتحرير المساحة."
+
+msgctxt "#32165"
+msgid "Find add-ons and files the build no longer uses; only what you tick is removed."
+msgstr "البحث عن الإضافات والملفات التي لم يعد البناء يستخدمها؛ ولا يُحذَف إلا ما تحدّده."
+
+msgctxt "#32166"
+msgid "Rebuild Kodi's add-on database when it is damaged. Kodi restarts during the repair."
+msgstr "إعادة بناء قاعدة بيانات الإضافات في Kodi عند تلفها. يُعاد تشغيل Kodi أثناء الإصلاح."
+
+msgctxt "#32167"
+msgid "Make add-on settings saved by a newer Kodi readable by this one."
+msgstr "جعل إعدادات الإضافات التي حفظها إصدار أحدث من Kodi قابلةً للقراءة في هذا الإصدار."
+
+msgctxt "#32168"
+msgid "Measure the speed of your internet connection."
+msgstr "قياس سرعة اتصالك بالإنترنت."
+
+msgctxt "#32169"
+msgid "Measure the speed of this device's processor."
+msgstr "قياس سرعة معالج هذا الجهاز."
+
+msgctxt "#32170"
+msgid "Upload the Kodi log without passwords, keys or links, and show a QR code to send it."
+msgstr "رفع سجل Kodi بعد حذف كلمات المرور والمفاتيح والروابط منه، وعرض رمز QR لإرساله."
+
+msgctxt "#32171"
+msgid "Hide menu items and widgets whose add-on is missing, and bring back the ones whose add-on is installed again."
+msgstr "إخفاء عناصر القوائم والودجات التي إضافتها غير مثبّتة، وإعادة ما ثُبّتت إضافته من جديد."
+
+msgctxt "#32172"
+msgid "Switch to another installed skin."
+msgstr "التبديل إلى واجهة أخرى مثبّتة."
+
+msgctxt "#32173"
+msgid "Show or hide the DPlex tab in the menu."
+msgstr "إظهار تبويب DPlex في القائمة أو إخفاؤه."
+
+msgctxt "#32174"
+msgid "Show or hide the Korean media tab in the menu."
+msgstr "إظهار تبويب المحتوى الكوري في القائمة أو إخفاؤه."
+
+msgctxt "#32175"
+msgid "Color or black and white icons for genres, networks and lists in Arctic Fuse 3."
+msgstr "أيقونات ملوّنة أو بالأبيض والأسود للتصنيفات والشبكات والقوائم في Arctic Fuse 3."
+
+msgctxt "#32176"
+msgid "Glass source windows in Fen Light, Red Light, POV and Umbrella, set for each add-on."
+msgstr "نوافذ مصادر زجاجية في Fen Light وRed Light وPOV وUmbrella، تُضبَط لكل إضافة على حدة."
+
+msgctxt "#32177"
+msgid "Play a title's trailer when the cursor rests on it in Arctic Fuse 3, with its sound, delay and quality."
+msgstr "تشغيل تريلر العنوان عند توقّف المؤشر عليه في Arctic Fuse 3، مع ضبط الصوت والمهلة والجودة."
+
+msgctxt "#32178"
+msgid "The waves animation that Arctic Fuse 3 shows while something loads."
+msgstr "حركة الأمواج التي تعرضها Arctic Fuse 3 أثناء التحميل."
+
+msgctxt "#32179"
+msgid "Navy glass colours for Arctic Fuse 3: off, Lucent Glass, or Lucent Glass on true black."
+msgstr "ألوان زجاجية كحلية لـ Arctic Fuse 3: إيقاف، أو Lucent Glass، أو Lucent Glass على أسود تام."
+
+msgctxt "#32180"
+msgid "The Lucent player screen in Arctic Fuse 3: controls, seek bar, pause card and statistics."
+msgstr "شاشة مشغّل Lucent في Arctic Fuse 3: أزرار التحكم وشريط التقديم وبطاقة الإيقاف المؤقت والإحصاءات."
+
+msgctxt "#32181"
+msgid "Build the side menu and widgets of the Lucent skin from your Arctic Fuse 3 menu."
+msgstr "بناء القائمة الجانبية وودجات واجهة Lucent من قائمة Arctic Fuse 3 لديك."
+
+msgctxt "#32182"
+msgid "Show the plot complete in a glass box on the right side of the Arctic Fuse 3 Home page."
+msgstr "عرض القصة كاملةً في صندوق زجاجي على الجانب الأيمن من الصفحة الرئيسية لـ Arctic Fuse 3."
+
+msgctxt "#32183"
+msgid "Size of the plot text in Arctic Fuse 3: large or small."
+msgstr "حجم نص القصة في Arctic Fuse 3: كبير أو صغير."
+
+msgctxt "#32184"
+msgid "Disc Menu and Normal Player buttons in the player while a Blu-ray ISO plays from a stream."
+msgstr "زرّا قائمة القرص والمشغّل العادي في شاشة التشغيل أثناء تشغيل ملف Blu-ray ISO مبثوث."
+
+msgctxt "#32185"
+msgid "The colour codec, HDR, audio and source badges in the Arctic Fuse 3 player."
+msgstr "الشارات الملوّنة للترميز وHDR والصوت والمصدر في مشغّل Arctic Fuse 3."
+
+msgctxt "#32186"
+msgid "Show a picture of the video while you skip forward or back, with its size and options."
+msgstr "عرض صورة من الفيديو أثناء التقديم أو الترجيع، مع ضبط حجمها وخياراتها."
+
+msgctxt "#32187"
+msgid "Make every font of the current skin smaller, or keep the skin's own sizes."
+msgstr "تصغير جميع خطوط الواجهة الحالية، أو الإبقاء على أحجامها الأصلية."
+
+msgctxt "#32188"
+msgid "Save the settings, menus and views of the current skin as a profile."
+msgstr "حفظ إعدادات الواجهة الحالية وقوائمها وطرق عرضها كملف واجهة."
+
+msgctxt "#32189"
+msgid "Bring back a saved profile of the current skin."
+msgstr "استعادة ملف واجهة محفوظ للواجهة الحالية."
+
+msgctxt "#32190"
+msgid "Classic List View"
+msgstr "عرض القائمة الكلاسيكية"
+
+msgctxt "#32191"
+msgid "Settings View"
+msgstr "عرض الإعدادات"
+
+msgctxt "#32192"
+msgid "Support ABUKARIM"
+msgstr "ادعم ABUKARIM"
+
+msgctxt "#32194"
+msgid "Show AB Tools as the old list of folders. To come back, open \\"Settings View\\" at the end of that list."
+msgstr "عرض AB Tools بشكل قائمة المجلدات القديمة. للعودة، افتح \\"عرض الإعدادات\\" في آخر تلك القائمة."
+

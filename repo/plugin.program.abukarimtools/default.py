@@ -20,126 +20,16 @@ if not ADDON_PATH.endswith('/') and not ADDON_PATH.endswith('\\'):
     ADDON_PATH += '/'
 
 FANART = ADDON_PATH + 'fanart.jpg'
-ICONS  = {
-    'skin_install':   ADDON_PATH + 'resources/icons/skin_installer.png',
-    'skin_switch':    ADDON_PATH + 'resources/icons/skin_switcher.png',
-    'backup':         ADDON_PATH + 'resources/icons/backup.png',
-    'abukarimwizard': ADDON_PATH + 'resources/icons/abukarimwizard.png',
-    'patcher':        ADDON_PATH + 'resources/icons/patcher.png',
-    'binary_install': ADDON_PATH + 'resources/icons/binary_install.png',
-    'first_run':      ADDON_PATH + 'resources/icons/first_run.png',
-    'dplex_toggle':   ADDON_PATH + 'resources/icons/dplex_toggle.png',
-    'korean_toggle':  ADDON_PATH + 'resources/icons/korean_toggle.png',
-    'icons_toggle':   ADDON_PATH + 'resources/icons/icons_toggle.png',
-    'lucent_theme':   ADDON_PATH + 'resources/icons/lucent_theme.png',
-    'af3_trailers':   ADDON_PATH + 'resources/icons/af3_trailers.png',
-    'af3_waves':      ADDON_PATH + 'resources/icons/af3_waves.png',
-    'af3_lucent':     ADDON_PATH + 'resources/icons/af3_lucent.png',
-    'af3_lucentplayer': ADDON_PATH + 'resources/icons/af3_lucentplayer.png',
-    'lucent_from_af3': ADDON_PATH + 'resources/icons/lucent_from_af3.png',
-    'af3_plotright':  ADDON_PATH + 'resources/icons/af3_plotright.png',
-    'af3_plotsize':   ADDON_PATH + 'resources/icons/af3_plotsize.png',
-    'af3_discmenu':   ADDON_PATH + 'resources/icons/af3_discmenu.png',
-    'af3_classicflags': ADDON_PATH + 'resources/icons/af3_classicflags.png',
-    # 4.8.12: Seek Preview
-    'seek_preview':   ADDON_PATH + 'resources/icons/seek_preview.png',
-    'font_scale':     ADDON_PATH + 'resources/icons/font_scale.png',
-    'origin_fix':     ADDON_PATH + 'resources/icons/sources.png',
-    'rebuild_addons33': ADDON_PATH + 'resources/icons/rebuild_addons33.png',
-    'settings_v4':    ADDON_PATH + 'resources/icons/clear_cache.png',
-    'total_clean':    ADDON_PATH + 'resources/icons/total_clean.png',
-    'old_thumbs':     ADDON_PATH + 'resources/icons/old_thumbs.png',
-    'build_cleanup':  ADDON_PATH + 'resources/icons/build_cleanup.png',
-    'speedtest':      ADDON_PATH + 'resources/icons/speedtest.png',
-    'cpu_benchmark':  ADDON_PATH + 'resources/icons/cpu_benchmark.png',
-    'addon_portal':   ADDON_PATH + 'resources/icons/addon_portal.png',
-    'af3_shortcuts':  ADDON_PATH + 'resources/icons/af3_shortcuts.png',
-    'trakt_hubs':     ADDON_PATH + 'resources/icons/trakt_hubs.png',
-    'streaming_rows': ADDON_PATH + 'resources/icons/streaming_rows.png',
-    'phone_setup':    ADDON_PATH + 'resources/icons/phone_setup.png',
-    # 3.2
-    'bootstrap':      ADDON_PATH + 'resources/icons/bootstrap.png',
-    'hw_tuning':      ADDON_PATH + 'resources/icons/hw_tuning.png',
-    'webserver':      ADDON_PATH + 'resources/icons/webserver.png',
-    'log_share':      ADDON_PATH + 'resources/icons/log_share.png',
-    'remote_refresh': ADDON_PATH + 'resources/icons/remote_refresh.png',
-    # 4.8.11: Update TMDb Helper Players
-    'players_update': ADDON_PATH + 'resources/icons/players_update.png',
-    'menu_reconcile': ADDON_PATH + 'resources/icons/menu_reconcile.png',
-    'profile_export': ADDON_PATH + 'resources/icons/profile_export.png',
-    'profile_restore': ADDON_PATH + 'resources/icons/profile_restore.png',
-    'cat_profiles':   ADDON_PATH + 'resources/icons/cat_profiles.png',
-    # category folder icons
-    'cat_setup':      ADDON_PATH + 'resources/icons/install_setup.png',
-    'cat_patch':      ADDON_PATH + 'resources/icons/cat_patch.png',
-    'cat_maint':      ADDON_PATH + 'resources/icons/maintenance.png',
-    'cat_toggle':     ADDON_PATH + 'resources/icons/cat_toggle.png',
-    'support':        ADDON_PATH + 'resources/icons/support.png',
-}
-
-# Grouped menu: each category is (cat_key, category_label_id, icon_key, [items])
-# where each item is (mode, label_id). Folder vs. action is decided per-mode
-# below (only 'skin_switch' is a non-folder top-level action historically;
-# inside a category, every entry is a leaf action).
-CATEGORIES = [
-    ('setup',  30014, 'cat_setup', [
-        ('first_run',      30001),
-        ('phone_setup',    30730),
-        ('backup',         30002),
-        ('skin_install',   30003),
-        ('addon_portal',   30021),
-        ('af3_shortcuts',  30630),
-        ('trakt_hubs',     30660),
-        ('streaming_rows', 30860),
-        ('binary_install', 30004),
-        ('bootstrap',      30590),
-        ('hw_tuning',      30591),
-        ('webserver',      30592),
-    ]),
-    ('patch',  30015, 'cat_patch', [
-        ('patcher',        30005),
-        ('origin_fix',     30007),
-        ('remote_refresh', 30594),
-        ('players_update', 30023),
-    ]),
-    ('maint',  30016, 'cat_maint', [
-        ('abukarimwizard', 30008),
-        ('total_clean',    30012),
-        ('old_thumbs',     30013),
-        ('build_cleanup',  30780),
-        ('rebuild_addons33', 30018),
-        ('settings_v4',    30900),
-        ('speedtest',      30019),
-        ('cpu_benchmark',  30620),
-        ('log_share',      30593),
-        ('menu_reconcile', 30595),
-    ]),
-    ('toggle', 30017, 'cat_toggle', [
-        ('skin_switch',    30009),
-        ('dplex_toggle',   30010),
-        ('korean_toggle',  30011),
-        ('icons_toggle',   30020),
-        ('lucent_theme',   30800),
-        ('af3_trailers',   30430),
-        ('af3_waves',      30603),
-        ('af3_lucent',     30850),
-        ('af3_lucentplayer', 32080),
-        ('lucent_from_af3', 32089),
-        ('af3_plotright',  30890),
-        ('af3_plotsize',   32113),
-        ('af3_discmenu',   32102),
-        ('af3_classicflags', 32127),
-        ('seek_preview',   30024),
-        ('font_scale',     30740),
-    ]),
-    ('profiles', 30598, 'cat_profiles', [
-        ('profile_export',  30596),
-        ('profile_restore', 30597),
-    ]),
-]
+# 4.8.23: icons, categories, on/off states and values live in menu_model.py,
+# shared with the settings window (settings_window.py).
+from resources.lib.menu_model import (CATEGORIES, ICON_FILES,
+                                      switch_state as _switch_state,
+                                      mode_label2 as _mode_label2)
+ICONS = {k: ADDON_PATH + v for k, v in ICON_FILES.items()}
+ICONS['settings_view'] = ICONS['cat_toggle']
 
 # Modes that are leaf actions (run then return), not plugin folders.
-ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
+ACTION_MODES = {'skin_switch', 'settings_view', 'first_run', 'abukarimwizard',
                 'total_clean', 'old_thumbs',
                 # 3.4.28: Clean Unused Items (dialogs only)
                 'build_cleanup',
@@ -354,6 +244,8 @@ def main_menu():
         _mlog('item %s: added' % cat_key)
     # 3.2.33: Buy Me a Coffee (opens a QR)
     _add_item(T(30610), 'support', is_folder=False)
+    # 4.8.23: back to the settings window (the plain launch opens it again)
+    _add_item(T(32191), 'settings_view', is_folder=False)
     xbmcplugin.setContent(HANDLE, 'files')
     _mlog('setContent done - calling endOfDirectory')
     xbmcplugin.endOfDirectory(HANDLE)
@@ -362,68 +254,6 @@ def main_menu():
     # nothing it does can overlap with building the menu.
     _ensure_patches()
     _mlog('sweep queued - done')
-
-
-def _switch_state(mode):
-    """True/False for entries that are an on/off switch, None otherwise."""
-    try:
-        if mode == 'af3_waves':
-            from resources.lib import af3_waves_toggle
-            return bool(af3_waves_toggle.waves_on())
-        if mode == 'af3_plotright':
-            from resources.lib import af3_plotright_toggle
-            return af3_plotright_toggle.plot_right_on()
-        if mode == 'af3_discmenu':
-            from resources.lib import af3_discmenu_toggle
-            return af3_discmenu_toggle.disc_menu_on()
-        if mode == 'af3_classicflags':
-            from resources.lib import af3_classicflags_toggle
-            return af3_classicflags_toggle.toggle_on() and af3_classicflags_toggle.res_ready()
-        if mode == 'seek_preview':
-            from resources.lib.seek_preview import engine as _sp
-            return bool(_sp.load_config()['enabled'])
-        if mode == 'af3_lucentplayer':
-            from resources.lib import af3_lucentplayer_toggle
-            return af3_lucentplayer_toggle.player_on()
-        if mode == 'af3_trailers':
-            from resources.lib.af3_trailers import config as _tcfg
-            return bool(_tcfg.load()['enabled'])
-        if mode in ('dplex_toggle', 'korean_toggle'):
-            from resources.lib import tab_toggle
-            st = tab_toggle._current_state('1104' if mode == 'dplex_toggle' else '1103')
-            return None if st is None else bool(st)
-    except Exception:
-        return None
-    return None
-
-
-def _mode_label2(mode):
-    """label2 for multi-state entries (3.4.6: Font Size shows its mode)."""
-    if mode == 'lucent_theme':
-        try:
-            from resources.lib import lucent_toggle
-            return lucent_toggle.summary()
-        except Exception:
-            return None
-    if mode == 'af3_plotsize':
-        try:
-            from resources.lib import af3_plotsize
-            return af3_plotsize.mode_label()
-        except Exception:
-            return None
-    if mode == 'font_scale':
-        try:
-            from resources.lib import font_scale
-            return font_scale.mode_label()
-        except Exception:
-            return None
-    if mode == 'af3_lucent':
-        try:
-            from resources.lib import af3_lucent_toggle
-            return af3_lucent_toggle.mode_label()
-        except Exception:
-            return None
-    return None
 
 
 def category_menu(cat_key):
@@ -447,7 +277,27 @@ def category_menu(cat_key):
     xbmcplugin.endOfDirectory(HANDLE, cacheToDisc=False)
 
 
+def _wants_settings_window():
+    """True when the user opened the add-on itself (Programs / Add-ons), not
+    when a widget or another container is listing its root path."""
+    if HANDLE < 0:
+        return False
+    try:
+        from resources.lib import settings_window
+        if not settings_window.enabled():
+            return False
+        return bool(xbmc.getCondVisibility(
+            'Window.IsActive(programs) | Window.IsActive(addonbrowser) | '
+            'Window.IsActive(addoninformation)'))
+    except Exception:
+        return False
+
+
 def _end_directory():
+    # 4.8.23: entries started from the settings window run as RunPlugin
+    # (handle -1): there is no listing to end.
+    if HANDLE < 0:
+        return
     xbmcplugin.setContent(HANDLE, 'files')
     xbmcplugin.endOfDirectory(HANDLE, succeeded=True,
                                updateListing=False, cacheToDisc=False)
@@ -466,7 +316,31 @@ def router():
 
     # --- Top-level menu ---
     if mode is None:
+        # 4.8.23: a plain launch opens the settings window (categories on one
+        # side, entries on the other, like the skin's own settings). The
+        # classic listing stays for ?view=list and for any widget / shortcut
+        # that lists this path while its window is not the one being opened.
+        if params.get('view') != 'list' and _wants_settings_window():
+            _continue_addons33_rebuild()
+            _ensure_fallback_font()
+            xbmcplugin.endOfDirectory(HANDLE, succeeded=False)
+            xbmc.executebuiltin('RunPlugin(plugin://%s/?mode=settings_window)' % ADDON_ID)
+            _ensure_patches()
+            return
         main_menu()
+        return
+
+    if mode == 'settings_view':
+        # 4.8.23: classic list -> settings window again
+        from resources.lib import settings_window
+        settings_window.set_enabled(True)
+        xbmc.executebuiltin('RunPlugin(plugin://%s/?mode=settings_window)' % ADDON_ID)
+        return
+
+    if mode == 'settings_window':
+        # 4.8.23: handle -1 invocation; the window runs here until closed.
+        from resources.lib import settings_window
+        settings_window.open_window(params.get('cat'))
         return
 
     if mode == 'menu_sweep':
