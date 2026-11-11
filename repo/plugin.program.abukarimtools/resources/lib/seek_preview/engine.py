@@ -350,6 +350,7 @@ def _loop(monitor):
                 gen = frames.Frames(ff, url, hdr, os.path.join(root, key), cfg['step'], FRAME_W,
                                     remote, STOP, low_mem=LOW_MEM, wait=20 if ahead else 1e12)
                 gen.span_remote = SPAN_FULL if cfg['ahead'] == 2 else SPAN_NEARBY
+                gen.workers = (3 if cfg['ahead'] == 2 else 2) if remote else 1   # 4.8.15
                 gen.report = _reporter()
                 frames.tidy(root, key)
                 gen.start()

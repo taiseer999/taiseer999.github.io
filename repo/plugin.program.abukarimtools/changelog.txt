@@ -1,3 +1,13 @@
+v4.8.15
+- Seek Preview speed on streams (kodi.log 2026-11-11: ~4 s per picture on a
+  4K stream, made one at a time, so most skips showed the waiting card):
+  pictures ahead of time are now made two at a time (three with "More"),
+  and one more slot is kept free for the spot you skip to, so it never
+  waits behind them. The first pass fills a 30-second grid around where you
+  skip, then the 10-second steps in between - a picture is near any spot
+  sooner. Each picture decodes faster (no deblocking, fast scaling) and
+  keeps one HTTP connection per run.
+
 v4.8.14
 - Seek Preview accuracy: the card shows only the picture of the spot you
   skip to (or the 10-second step next to it). Until it is made the card

@@ -8,6 +8,10 @@
 # 4.8.14: the whole picture is kept (fit + black bars, no crop of scope films); smaller
 # probe so a stream opens faster; a prefetch run is cut short when a skip asks for a frame;
 # nearest() only answers within `reach` seconds (no picture from minutes away).
+# 4.8.15: one worker kept free for the frame a skip asks for, plus `workers` prefetch workers
+# running side by side (kodi.log 2026-11-11: ~4 s per frame on a 4K stream, one at a time);
+# prefetch fills a coarse grid first (every 30 s), then the 10 s steps in between; faster
+# decode (no loop filter, fast scaler) and one kept-alive HTTP connection per run.
 # Frame making for Seek Preview. No Kodi imports here, so this file also runs in tests/ on a PC.
 # One ffmpeg run per frame: seek to the nearest keyframe, decode that one picture, scale it, save a small JPEG.
 import os, sys, time, shutil, platform, threading, subprocess
@@ -87,9 +91,11 @@ def command(ffmpeg, url, headers, t, width, height, out):
     if headers:
         cmd += ['-headers', headers]
     # -threads before -i limits the decoder: frame-threaded 4K HEVC holds a set of frames per core (hundreds of MB)
+    if url.startswith(('http://', 'https://')):
+        cmd += ['-multiple_requests', '1', '-seekable', '1']
     cmd += ['-threads', '1', '-probesize', '2000000', '-analyzeduration', '1000000',
-            '-skip_frame', 'nokey', '-ss', str(int(t)), '-noaccurate_seek', '-i', url, '-map', '0:v:0', '-frames:v', '1', '-an', '-sn', '-dn',
-            '-threads', '1', '-vf', 'scale=%d:%d:force_original_aspect_ratio=decrease,pad=%d:%d:(ow-iw)/2:(oh-ih)/2:color=black'
+            '-skip_frame', 'nokey', '-skip_loop_filter', 'all', '-ss', str(int(t)), '-noaccurate_seek', '-i', url, '-map', '0:v:0', '-frames:v', '1', '-an', '-sn', '-dn',
+            '-threads', '1', '-sws_flags', 'fast_bilinear', '-vf', 'scale=%d:%d:force_original_aspect_ratio=decrease,pad=%d:%d:(ow-iw)/2:(oh-ih)/2:color=black'
             % (width, height, width, height), '-q:v', '5', '-f', 'mjpeg', '-y', out]
     return cmd
 
@@ -111,6 +117,11 @@ class Frames(threading.Thread):
         self.report = None          # callable(kind, text) - AB Tools diagnostics
         self.made, self.failed = 0, 0
         self.failed_at = {}         # bucket -> time of its last failure (no retry for 20 s)
+        self.workers = 2            # prefetch workers (one more is kept for asked frames)
+        self.coarse = 30            # prefetch grid of the first pass, seconds
+        self.busy = set()
+        self.lock = threading.Lock()
+        self.ask_ev = threading.Event()
         os.makedirs(folder, exist_ok=True)
 
     def _say(self, kind, text):
@@ -139,13 +150,14 @@ class Frames(threading.Thread):
         b = self.bucket(t)
         if time.time() - self.failed_at.get(b, 0) < 20:
             return
-        if not os.path.exists(self.path(b)):
+        if not os.path.exists(self.path(b)) and b not in self.busy:
             self.want = b
-            self.ev.set()
+            self.ask_ev.set()
 
     def halt(self):
         self.stop = True
         self.ev.set()
+        self.ask_ev.set()
 
     def make(self, b, asked=False):
         p = self.path(b)
@@ -168,15 +180,13 @@ class Frames(threading.Thread):
                     if self.stop or self.all_stop.is_set() or time.time() > end:
                         timed_out = time.time() > end
                         pr.kill(); pr.wait(); break
-                    if not asked and self.want is not None:   # a skip needs a frame now
-                        pr.kill(); pr.wait(); break
                     time.sleep(0.05)
             took = time.time() - started
             if pr.returncode == 0 and os.path.exists(tmp) and os.path.getsize(tmp) > 0:
                 os.replace(tmp, p); self.bad = 0; self.made += 1
                 if self.made == 1 or took > 3:
                     self._say('made', 'frame %ds in %.1fs%s' % (b, took, ' (asked)' if asked else ''))
-            elif not (self.stop or self.all_stop.is_set() or (not asked and self.want is not None)):
+            elif not (self.stop or self.all_stop.is_set()):
                 self.bad += 1; self.failed += 1; self.failed_at[b] = time.time()
                 try:
                     with open(err, 'rb') as ef:
@@ -194,28 +204,64 @@ class Frames(threading.Thread):
             except Exception:
                 pass
 
-    def run(self):
-        while not self.stop and not self.all_stop.is_set():
-            if self.want is not None:
-                b, self.want = self.want, None
-                self.make(b, asked=True)
+    def _alive(self):
+        return not self.stop and not self.all_stop.is_set()
+
+    def _asked_worker(self):
+        while self._alive():
+            self.ask_ev.wait(1)
+            self.ask_ev.clear()
+            b = self.want
+            if b is None:
                 continue
-            # the player allocates most while a film starts (4K decoder, display mode change): prefetch waits
-            if time.time() - self.born < self.wait:
-                self.ev.wait(1); self.ev.clear(); continue
-            # outward from where the film is: the whole file when local, 10 minutes each way when streamed
-            span = self.span_remote if self.remote else max(self.dur, 600)
-            todo = None
-            for d in range(0, int(span) + self.step, self.step):
+            self.want = None
+            with self.lock:
+                if b in self.busy:
+                    continue
+                self.busy.add(b)
+            try:
+                self.make(b, asked=True)
+            finally:
+                with self.lock:
+                    self.busy.discard(b)
+
+    def _todo(self):
+        """Next prefetch bucket outward from self.around: coarse grid first, then every step."""
+        span = self.span_remote if self.remote else max(self.dur, 600)
+        now = time.time()
+        for grid in ((self.coarse, self.step) if self.coarse > self.step else (self.step,)):
+            for d in range(0, int(span) + grid, grid):
                 for b in (self.around + d, self.around - d):
-                    b = self.bucket(b)
-                    if 0 <= b and (not self.dur or b < self.dur) and not os.path.exists(self.path(b)):
-                        todo = b; break
-                if todo is not None:
-                    break
-            if todo is None or self.bad > 5:
+                    b = int(b) // grid * grid
+                    if (0 <= b and (not self.dur or b < self.dur) and b not in self.busy
+                            and now - self.failed_at.get(b, 0) > 20 and not os.path.exists(self.path(b))):
+                        return b
+        return None
+
+    def _prefetch_worker(self):
+        while self._alive():
+            # the player allocates most while a film starts (4K decoder, display mode change): prefetch waits
+            if time.time() - self.born < self.wait or self.bad > 5:
+                self.ev.wait(1); self.ev.clear(); continue
+            with self.lock:
+                b = self._todo()
+                if b is not None:
+                    self.busy.add(b)
+            if b is None:
                 self.ev.wait(2); self.ev.clear(); continue
-            self.make(todo)
+            try:
+                self.make(b)
+            finally:
+                with self.lock:
+                    self.busy.discard(b)
+
+    def run(self):
+        threads = [threading.Thread(target=self._asked_worker, daemon=True)]
+        threads += [threading.Thread(target=self._prefetch_worker, daemon=True) for _ in range(max(0, self.workers))]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
 
 
 def tidy(root, keep, most=3):
