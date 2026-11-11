@@ -1,6 +1,10 @@
-# Seek Preview frame maker - taken unchanged from service.seekpreview 1.2.0 by easter478
+# Seek Preview frame maker - from service.seekpreview 1.2.0 by easter478
 # (https://github.com/easter478/kodi-seek-preview, commit e2b11ad), GPL-3.0-or-later,
 # see LICENSE.txt in this folder. Used by AB Tools "Seek Preview" (resources/lib/seek_preview/engine.py).
+# AB Tools changes (4.8.13): a frame that was asked for (a skip) is always tried, even after
+# failures (prefetch still gives up after 6 in a row); ffmpeg's error text, the time each frame
+# took and low-memory skips are reported through self.report; the streamed prefetch span is a
+# parameter (span_remote).
 # Frame making for Seek Preview. No Kodi imports here, so this file also runs in tests/ on a PC.
 # One ffmpeg run per frame: seek to the nearest keyframe, decode that one picture, scale it, save a small JPEG.
 import os, sys, time, shutil, platform, threading, subprocess
@@ -98,7 +102,18 @@ class Frames(threading.Thread):
         self.all_stop = stop or threading.Event()
         self.ev = threading.Event()
         self.born = time.time()
+        self.span_remote = 600
+        self.report = None          # callable(kind, text) - AB Tools diagnostics
+        self.made, self.failed = 0, 0
+        self.failed_at = {}         # bucket -> time of its last failure (no retry for 20 s)
         os.makedirs(folder, exist_ok=True)
+
+    def _say(self, kind, text):
+        if self.report:
+            try:
+                self.report(kind, text)
+            except Exception:
+                pass
 
     def path(self, b):
         return os.path.join(self.dir, '%06d.jpg' % b)
@@ -117,6 +132,8 @@ class Frames(threading.Thread):
 
     def ask(self, t):
         b = self.bucket(t)
+        if time.time() - self.failed_at.get(b, 0) < 20:
+            return
         if not os.path.exists(self.path(b)):
             self.want = b
             self.ev.set()
@@ -125,43 +142,62 @@ class Frames(threading.Thread):
         self.stop = True
         self.ev.set()
 
-    def make(self, b):
+    def make(self, b, asked=False):
         p = self.path(b)
-        if os.path.exists(p) or self.bad > 5:
+        if os.path.exists(p) or (self.bad > 5 and not asked):
             return
-        if memfree() < self.low_mem:  # never let a preview cost the player its memory
+        free = memfree()
+        if free < self.low_mem:  # never let a preview cost the player its memory
+            self._say('lowmem', '%d MB free (needs %d MB)' % (free >> 20, self.low_mem >> 20))
             self.ev.wait(3); self.ev.clear(); return
         tmp = p + '.tmp'
+        err = p + '.err'
+        started = time.time()
+        timed_out = False
         try:
-            pr = subprocess.Popen(command(self.ffmpeg, self.url, self.headers, b, self.width, self.height, tmp),
-                                  stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, creationflags=NO_WINDOW)
-            end = time.time() + 20
-            while pr.poll() is None:
-                if self.stop or self.all_stop.is_set() or time.time() > end:
-                    pr.kill(); pr.wait(); break
-                time.sleep(0.05)
+            with open(err, 'wb') as ef:
+                pr = subprocess.Popen(command(self.ffmpeg, self.url, self.headers, b, self.width, self.height, tmp),
+                                      stdout=subprocess.DEVNULL, stderr=ef, creationflags=NO_WINDOW)
+                end = time.time() + 20
+                while pr.poll() is None:
+                    if self.stop or self.all_stop.is_set() or time.time() > end:
+                        timed_out = time.time() > end
+                        pr.kill(); pr.wait(); break
+                    time.sleep(0.05)
+            took = time.time() - started
             if pr.returncode == 0 and os.path.exists(tmp) and os.path.getsize(tmp) > 0:
-                os.replace(tmp, p); self.bad = 0
-            else:
-                self.bad += 1
-        except Exception:
-            self.bad += 1
-        try:
-            if os.path.exists(tmp): os.remove(tmp)
-        except Exception:
-            pass
+                os.replace(tmp, p); self.bad = 0; self.made += 1
+                if self.made == 1 or took > 3:
+                    self._say('made', 'frame %ds in %.1fs%s' % (b, took, ' (asked)' if asked else ''))
+            elif not (self.stop or self.all_stop.is_set()):
+                self.bad += 1; self.failed += 1; self.failed_at[b] = time.time()
+                try:
+                    with open(err, 'rb') as ef:
+                        msg = ef.read()[-400:].decode('utf-8', 'replace').strip()
+                except Exception:
+                    msg = ''
+                self._say('fail', 'frame %ds failed after %.1fs (%s, exit %s): %s'
+                          % (b, took, 'timeout' if timed_out else 'error', pr.returncode, msg or '-'))
+        except Exception as e:
+            self.bad += 1; self.failed += 1; self.failed_at[b] = time.time()
+            self._say('fail', 'frame %ds: %s' % (b, e))
+        for x in (tmp, err):
+            try:
+                if os.path.exists(x): os.remove(x)
+            except Exception:
+                pass
 
     def run(self):
         while not self.stop and not self.all_stop.is_set():
             if self.want is not None:
                 b, self.want = self.want, None
-                self.make(b)
+                self.make(b, asked=True)
                 continue
             # the player allocates most while a film starts (4K decoder, display mode change): prefetch waits
             if time.time() - self.born < self.wait:
                 self.ev.wait(1); self.ev.clear(); continue
             # outward from where the film is: the whole file when local, 10 minutes each way when streamed
-            span = 600 if self.remote else max(self.dur, 600)
+            span = self.span_remote if self.remote else max(self.dur, 600)
             todo = None
             for d in range(0, int(span) + self.step, self.step):
                 for b in (self.around + d, self.around - d):

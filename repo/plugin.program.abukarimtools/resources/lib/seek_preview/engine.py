@@ -12,8 +12,11 @@ What AB Tools changed:
   - settings live in addon_data/plugin.program.abukarimtools/seek_preview.json
     and are set from Toggles > Seek Preview;
   - Kodi's own skip settings are never touched;
-  - frames are made ahead of time for local files only by default: on a
-    stream every frame is one more HTTP request on the file being played;
+  - frames made ahead of time: the whole file for local files; on a stream
+    only 3 minutes each way by default (4.8.13; every frame is one more HTTP
+    request on the file being played), 10 minutes with "Always";
+  - 4.8.13: diagnostics in kodi.log (first frame and its time, failures with
+    ffmpeg's error text, low memory) with every URL replaced by <url>;
   - the box is a Lucent-style glass card, fitted to the Lucent Player seek
     bar on Arctic Fuse 3 (skin bool abk.lucentplayer);
   - the playing URL (it can carry a debrid / Silo token) is never logged.
@@ -60,6 +63,8 @@ FRAME_W = 426                   # frames are made once at the largest size
 LUCENT = {'x0': 64, 'x1': 1216, 'bottom': 878 * 2 // 3, 'bottom_osd': 834 * 2 // 3}
 GENERIC = {'x0': 64, 'x1': 1216, 'bottom': 720 - 150, 'bottom_osd': 720 - 210}
 GAP = 10
+LOW_MEM = 250 << 20            # 4.8.13: was 450 MB (the original's default)
+SPAN_NEARBY, SPAN_FULL = 180, 600
 
 STOP = threading.Event()
 _THREAD = [None]
@@ -246,6 +251,29 @@ class Overlay(object):
             self.shown = ''
 
 
+def _clean(text):
+    text = re.sub(r'(https?|smb|nfs)://\S+', '<url>', text)
+    return re.sub(r'(Bearer|token|apikey|api_key)[=: +]+\S+', r'\1 ***', text, flags=re.I)
+
+
+def _reporter():
+    seen = set()
+
+    def report(kind, text):
+        if kind == 'lowmem':
+            if 'lowmem' in seen:
+                return
+            seen.add('lowmem')
+        if kind == 'fail':
+            n = sum(1 for x in seen if x.startswith('fail')) + 1
+            seen.add('fail%d' % n)
+            if n > 3:
+                return              # the count is in "video done"
+        _log('%s: %s' % (kind, ' | '.join(l.strip() for l in _clean(text).splitlines() if l.strip())),
+             xbmc.LOGWARNING if kind in ('fail', 'lowmem') else xbmc.LOGINFO)
+    return report
+
+
 def _loop(monitor):
     player, box = xbmc.Player(), Overlay()
     ff, where = '', ''
@@ -304,19 +332,26 @@ def _loop(monitor):
         if f != cur:
             if gen:
                 gen.halt()
+                _log('video done: %d frames made, %d failed' % (gen.made, gen.failed))
             gen, cur = None, f
             clear()
             url, hdr, remote = source(f) if f and not f.endswith('dummy.mp4') else (None, '', False)
             if url:
                 key = hashlib.md5(('%d:%d:%s' % (FRAME_W, cfg['step'], f.partition('|')[0]))
                                   .encode('utf8', 'replace')).hexdigest()[:16]
-                ahead = cfg['ahead'] == 2 or (cfg['ahead'] == 1 and not remote)
+                ahead = cfg['ahead'] > 0
                 gen = frames.Frames(ff, url, hdr, os.path.join(root, key), cfg['step'], FRAME_W,
-                                    remote, STOP, wait=20 if ahead else 1e12)
+                                    remote, STOP, low_mem=LOW_MEM, wait=20 if ahead else 1e12)
+                gen.span_remote = SPAN_FULL if cfg['ahead'] == 2 else SPAN_NEARBY
+                gen.report = _reporter()
                 frames.tidy(root, key)
                 gen.start()
-                _log('new video: %s, frames ahead %s' % ('stream' if remote else 'file',
-                                                         'on' if ahead else 'off'))
+                _log('new video: %s, frames ahead %s' % (
+                    'stream' if remote else 'file',
+                    'off' if not ahead else ('whole file' if not remote else
+                                             '%d min each way' % (gen.span_remote // 60))))
+            elif f and not f.endswith('dummy.mp4'):
+                _log('no preview for this video (disc, live TV, DRM or unknown source)')
         if not gen:
             monitor.waitForAbort(0.5)
             continue

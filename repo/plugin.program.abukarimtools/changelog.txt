@@ -1,3 +1,15 @@
+v4.8.13
+- Seek Preview on streams: pictures were made only for the spot asked for,
+  which on a 4K stream takes longer than Kodi's skip delay, so the box rarely
+  showed. Now the pictures 3 minutes each way of where you are are made
+  ahead (10 minutes with "More"; local files: the whole file).
+- A picture you skip to is always tried again, even after earlier failures
+  (before, 6 failures in a row stopped the previews for that video).
+- Free-memory floor lowered from 450 to 250 MB.
+- kodi.log: first picture and its time, failed pictures with ffmpeg's
+  error, low memory, and a count per video ([AbukarimTools SeekPreview]).
+  Links and tokens are never written.
+
 v4.8.12
 - New: Toggles > Seek Preview. While you skip forward or back, a picture of
   the spot you are jumping to shows above the seek bar, with its time, in a

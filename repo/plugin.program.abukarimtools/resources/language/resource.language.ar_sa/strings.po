@@ -161,8 +161,8 @@ msgid "Prepare pictures ahead"
 msgstr "تجهيز الصور مسبقاً"
 
 msgctxt "#30045"
-msgid "Local files only"
-msgstr "الملفات المحلية فقط"
+msgid "Normal (3 min on streams)"
+msgstr "عادي (3 دقائق في البث)"
 
 msgctxt "#30046"
 msgid "Seek Preview needs ffmpeg, which is not available on Android."
@@ -177,8 +177,8 @@ msgid "ffmpeg was not found, so Seek Preview stays off. Install FFmpeg Tools (Pr
 msgstr "لم يُعثر على ffmpeg، لذا تبقى معاينة التقديم متوقفة. ثبّت إضافة FFmpeg Tools (إضافات البرامج، مستودع CoreELEC)، ثم أعد تشغيل Kodi وفعّلها من جديد."
 
 msgctxt "#30049"
-msgid "Always (streams too)"
-msgstr "دائماً (والبث أيضاً)"
+msgid "More (10 min on streams)"
+msgstr "أكثر (10 دقائق في البث)"
 
 msgctxt "#30050"
 msgid "Run first-time setup now?[CR][CR]Skin Installer, binaries, backup restore, Add-on Portal, widgets layout, lists and patches.[CR]Do not restart or exit while it runs - Kodi restarts by itself at the end (the box reboots on CoreELEC)."
