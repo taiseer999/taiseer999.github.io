@@ -46,6 +46,7 @@ ID ranges:
   32118-32126  Search All resume screen (4.8.2) + Plot Text Size choices
   32127-32131  AF3 Classic OSD Flags (Toggles)
   32140-32194  Settings window (4.8.23): descriptions, view switch
+  32200-32215  Search All - details of the focused stream (4.8.25)
 """
 
 STRINGS = {
@@ -982,4 +983,21 @@ STRINGS = {
     32191: ('Settings View', 'عرض الإعدادات'),
     32192: ('Support ABUKARIM', 'ادعم ABUKARIM'),
     32194: ('Show AB Tools as the old list of folders. To come back, open "Settings View" at the end of that list.', 'عرض AB Tools بشكل قائمة المجلدات القديمة. للعودة، افتح "عرض الإعدادات" في آخر تلك القائمة.'),
+    # ---- 4.8.25: Search All - details of the focused stream (32200-32215) ----
+    32200: ('Selected stream', 'المصدر المحدد'),
+    32201: ('Resolution', 'الدقة'),
+    32202: ('Size', 'الحجم'),
+    32203: ('Bitrate', 'معدل البت'),
+    32204: ('Video', 'الفيديو'),
+    32205: ('HDR', 'المدى الديناميكي'),
+    32206: ('Audio', 'الصوت'),
+    32207: ('Channels', 'القنوات'),
+    32208: ('Release', 'الإصدار'),
+    32209: ('Service', 'الخدمة'),
+    32210: ('estimated', 'تقديري'),
+    32211: ('Surround', 'صوت محيطي'),
+    32212: ('Stereo', 'ستيريو'),
+    32213: ('Mono', 'أحادي'),
+    32214: ('Add-ons: %d', 'الإضافات: %d'),
+    32215: ('Season pack', 'حزمة موسم'),
 }

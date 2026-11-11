@@ -1,3 +1,18 @@
+v4.8.25
+- Search All: when every add-on has finished and there are results, the
+  add-on list on the left (Red Light 494, Fen Light 444, ...) gives way to
+  the details of the stream under the cursor, in nine glass tiles that
+  follow the cursor:
+    Resolution (4K, 3840 x 2160)   Size            Bitrate (estimated)
+    Video (HEVC, 10-bit)           HDR (Dolby Vision, profile + HDR layer)
+    Audio (DD+, Dolby Atmos)       Channels (5.1, surround)
+    Release (WEB-DL, release group) Service (AllDebrid, how many add-ons)
+  and the languages of the release (UKR · ENG) at the end of the heading.
+  Read from the add-on's info AND the release name, so they show more than
+  the badge row (which keeps 7 badges, one per family). Unknown = "—".
+  While the search runs the add-on list stays as before; the counts per
+  add-on are still on the chips above the results.
+
 v4.8.24
 - Settings page: on a 16:10 screen (MacBook, screenshot 2026-11-11) Kodi
   gives the window a narrower coordinate width than 1920, and the page lost

@@ -943,6 +943,127 @@ def _service_code(provider):
 _SERVICE_ORDER = ('RD', 'AD', 'PM', 'TB', 'OC', 'EN', 'ED', 'DL')
 
 
+# ───────────────────────── stream details (4.8.25) ─────────────────────────
+# When the search is done the left column shows the focused stream in tiles
+# (resolution, size, bitrate, video, HDR, audio, channels, release, service,
+# languages). Read from the add-on's info string AND the release name: the
+# badges row keeps 7 badges and one per family, the tiles want everything.
+_SP_SEP = re.compile(r'[\s._\[\]()|/,]+')
+_SP_RES = {'4K': ('4K', '3840 × 2160'), '1080P': ('1080p', '1920 × 1080'), '720P': ('720p', '1280 × 720'),
+           'SD': ('SD', ''), 'CAM': ('CAM', ''), 'SCR': ('SCR', ''), 'TELE': ('TELESYNC', ''), 'HC': ('HC', '')}
+_SP_REL = (('Remux', r'REMUX\b'), ('Blu-ray', r'\bBLU[- ]?RAY\b|\bBDRIP\b|\bBRRIP\b'),
+           ('WEB-DL', r'\bWEB[- ]?DL\b'), ('WEBRip', r'\bWEB[- ]?RIP\b'), ('WEB', r'\bWEB\b'),
+           ('HDTV', r'\bHDTV\b'), ('DVD', r'\bDVD(?:RIP)?\b'), ('HDRip', r'\bHD[- ]?RIP\b'))
+_SP_VIDEO = (('AV1', r'\bAV1\b'), ('HEVC', r'\bHEVC\b|\b[HX][- ]?265\b'), ('AVC', r'\bAVC\b|\b[HX][- ]?264\b'),
+             ('VP9', r'\bVP9\b'), ('XviD', r'\bXVID\b'), ('MPEG-2', r'\bMPEG[- ]?2\b'))
+_SP_AUDIO = (('TrueHD', r'\bTRUE[- ]?HD\b'), ('DTS:X', r'\bDTS[- ]?X\b|\bDTS:X\b'),
+             ('DTS-HD MA', r'\bDTS[- ]?HD[- ]?MA\b|\bDTS-HDMA\b'), ('DTS-HD', r'\bDTS[- ]?HD\b'), ('DTS', r'\bDTS\b'),
+             ('DD+', r'\bDDP|\bDD\+|\bE[- ]?AC[- ]?3\b|\bDOLBY[- ]?DIGITAL[- ]?PLUS\b|\bDOLBYDIGITALPLUS\b'),
+             ('DD', r'\bDD(?![A-Z+])|\bAC[- ]?3\b|\bDOLBY[- ]?DIGITAL\b'),
+             ('FLAC', r'\bFLAC\b'), ('PCM', r'\bL?PCM\b'), ('AAC', r'\bAAC'), ('Opus', r'\bOPUS\b'),
+             ('MP3', r'\bMP3\b'))
+_SP_AUDIO_LONG = {'TrueHD': 'Dolby TrueHD', 'DD+': 'Dolby Digital Plus', 'DD': 'Dolby Digital',
+                  'DTS-HD MA': 'Master Audio', 'DTS-HD': 'High Resolution', 'DTS:X': 'DTS:X'}
+_SP_CH_TAG = {'8': '7.1', '7': '6.1', '6': '5.1', '2': '2.0', '1': '1.0'}
+_SP_LANG = {'ENG': 'ENG', 'ENGLISH': 'ENG', 'ITA': 'ITA', 'ITALIAN': 'ITA', 'GER': 'GER', 'DEU': 'GER',
+            'GERMAN': 'GER', 'FRE': 'FRE', 'FRA': 'FRE', 'FRENCH': 'FRE', 'VFF': 'FRE', 'SPA': 'SPA',
+            'ESP': 'SPA', 'SPANISH': 'SPA', 'LATINO': 'LAT', 'RUS': 'RUS', 'RUSSIAN': 'RUS', 'UKR': 'UKR',
+            'ARA': 'ARA', 'ARABIC': 'ARA', 'TUR': 'TUR', 'TURKISH': 'TUR', 'JPN': 'JPN', 'JAP': 'JPN',
+            'JAPANESE': 'JPN', 'KOR': 'KOR', 'KOREAN': 'KOR', 'HIN': 'HIN', 'HINDI': 'HIN', 'POR': 'POR',
+            'POL': 'POL', 'CHI': 'CHI', 'MULTI': 'MULTI', 'DUAL': 'DUAL'}
+_SP_GROUP = re.compile(r'-([A-Za-z0-9]{2,15})(?:\.(?:mkv|mp4|avi|ts|m2ts|iso))?\s*$')
+
+
+def _sp_first(table, text):
+    for label, rx in table:
+        if re.search(rx, text):
+            return label
+    return ''
+
+
+def _stream_specs(item, q, rate, provider, n_addons, pack=False):
+    """abs.sp_* properties of one result (value + _sub line per tile)."""
+    name = _clean(item.get('name') or item.get('display_name') or '')
+    raw = '%s | %s' % (_clean(item.get('extraInfo', '')), name)
+    up = raw.upper().replace('D/VISION', 'DOLBY-VISION')
+    text = ' %s ' % _SP_SEP.sub(' ', up)            # tokens, '-' and '+' kept
+    out = {}
+    res = _SP_RES.get(q, (q, ''))
+    out['abs.sp_res'], out['abs.sp_res_sub'] = res
+    out['abs.sp_size'] = _clean(item.get('size_label'))
+    if out['abs.sp_size'].upper() in ('N/A', 'NA', 'NONE', '0', '0 B'):
+        out['abs.sp_size'] = ''
+    out['abs.sp_size_sub'] = T(32215) if pack else ''
+    out['abs.sp_rate'] = ('~%d Mbps' % round(rate)) if rate else ''
+    out['abs.sp_rate_sub'] = T(32210) if rate else ''
+    # video codec + bit depth
+    out['abs.sp_video'] = _sp_first(_SP_VIDEO, text)
+    m = re.search(r'\b(10|12)[- ]?BITS?\b|\bHI10P?\b', text)
+    out['abs.sp_video_sub'] = ('%s-bit' % (m.group(1) or '10')) if m else ''
+    # HDR: Dolby Vision (+ profile) and the HDR layer under it
+    dv = re.search(r'\b(?:DV|DOVI|DOLBY[- ]?VISION|DOLBYVISION)(?:[- ]?P?([4578]))?\b', text)
+    dv2 = re.search(r'\b(?:DV2|DOVI2|DOLBY[- ]?VISION[- ]?2)\b', text)
+    layer = ('HDR10+' if re.search(r'\bHDR10(?:\+|PLUS|P)', text) else
+             'HDR10' if re.search(r'\bHDR10\b', text) else
+             'HDR' if re.search(r'\bHDR\b', text) else
+             'HLG' if re.search(r'\bHLG\b', text) else '')
+    if dv2 or dv:
+        out['abs.sp_hdr'] = 'Dolby Vision 2' if dv2 else 'Dolby Vision'
+        bits = []
+        if dv and dv.group(1):
+            bits.append('P%s' % dv.group(1))
+        if layer:
+            bits.append(layer)
+        elif re.search(r'\bHYBRID\b', text):
+            bits.append('Hybrid')
+        out['abs.sp_hdr_sub'] = ' · '.join(bits)
+    elif layer:
+        out['abs.sp_hdr'], out['abs.sp_hdr_sub'] = layer, ''
+    elif re.search(r'\bSDR\b', text):
+        out['abs.sp_hdr'], out['abs.sp_hdr_sub'] = 'SDR', ''
+    else:
+        out['abs.sp_hdr'] = out['abs.sp_hdr_sub'] = ''
+    # audio codec + Atmos
+    codec = _sp_first(_SP_AUDIO, text)
+    atmos = bool(re.search(r'\bATMOS\b', text))
+    if codec:
+        out['abs.sp_audio'] = codec
+        out['abs.sp_audio_sub'] = 'Dolby Atmos' if atmos else _SP_AUDIO_LONG.get(codec, '')
+    else:
+        out['abs.sp_audio'] = 'Dolby Atmos' if atmos else ''
+        out['abs.sp_audio_sub'] = ''
+    # channels: 5.1 / 7.1 in the name (DDP5.1, "5 1"), else 6CH / AUDIO_8CH tags
+    ch = ''
+    m = re.search(r'(?<![\d.])([1-9])[ ._]([01])(?![\d])', raw)
+    if m and m.group(1) in '125678':
+        ch = '%s.%s' % (m.group(1), m.group(2))
+    if not ch:
+        m = re.search(r'\b(?:AUDIO_)?([12678])CH\b', up)
+        ch = _SP_CH_TAG.get(m.group(1), '') if m else ''
+    out['abs.sp_ch'] = ch
+    out['abs.sp_ch_sub'] = (T(32211) if ch[:1] in '5678' else T(32212) if ch == '2.0'
+                            else T(32213) if ch == '1.0' else '') if ch else ''
+    # release type + group
+    rel = _sp_first(_SP_REL, text)
+    if not rel and q in ('CAM', 'SCR', 'TELE', 'HC'):
+        rel = _SP_RES[q][0]
+    out['abs.sp_rel'] = rel
+    g = _SP_GROUP.search(name)
+    out['abs.sp_rel_sub'] = g.group(1) if g and not re.match(r'^(?:DL|RIP|HD|X|MA|\d+)$', g.group(1), re.I) else ''
+    # service + in how many add-ons
+    up_p = (provider or '').upper()
+    out['abs.sp_svc'] = _PRETTY.get(up_p, provider if up_p not in ('N/A', 'NONE') else '')
+    out['abs.sp_svc_sub'] = (T(32214) % n_addons) if n_addons else ''
+    # languages
+    langs = []
+    for tok in text.split():
+        code = _SP_LANG.get(tok.strip('-+'))
+        if code and code not in langs:
+            langs.append(code)
+    out['abs.sp_lang'] = '  ·  '.join(langs[:5])
+    return out
+
+
 _SERVICE_ICON = {'RD': 'realdebrid', 'AD': 'alldebrid', 'PM': 'premiumize', 'TB': 'torbox',
                  'OC': 'offcloud', 'EN': 'easynews', 'ED': 'easydebrid'}
 
@@ -1120,6 +1241,11 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         self._episode_props()
         self.setProperty('abs.heading', T(30817))
         self.setProperty('abs.addons_heading', T(30818))
+        # 4.8.25: stream details tiles (search done)
+        self.setProperty('abs.spec_heading', T(32200))
+        for key, sid in (('res', 32201), ('size', 32202), ('rate', 32203), ('video', 32204), ('hdr', 32205),
+                         ('audio', 32206), ('ch', 32207), ('rel', 32208), ('svc', 32209)):
+            self.setProperty('abs.sl_%s' % key, T(sid))
         self._view_props()
         r = self._restore
         if r:                                   # 4.8.6: back from a pick that did not play
@@ -1576,6 +1702,12 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         else:
             props['lucent.title'], props['lucent.meta'], found = title, '  ·  '.join(meta), []
             props['lucent.title_full'] = title
+        # 4.8.25: details of this stream for the left-column tiles
+        try:
+            props.update(_stream_specs(item, q, self._mbps(row), provider, len(row['refs']),
+                                       pack=bool(item.get('package') or item.get('pack'))))
+        except Exception as e:
+            _log('stream details: %s' % e, xbmc.LOGDEBUG)
         for n in range(7):
             props['lucent.badge_%d' % (n + 1)] = found[n] if n < len(found) else ''
         for n in range(4):

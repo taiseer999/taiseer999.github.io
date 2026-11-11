@@ -2920,3 +2920,67 @@ msgctxt "#32194"
 msgid "Show AB Tools as the old list of folders. To come back, open \\"Settings View\\" at the end of that list."
 msgstr "عرض AB Tools بشكل قائمة المجلدات القديمة. للعودة، افتح \\"عرض الإعدادات\\" في آخر تلك القائمة."
 
+msgctxt "#32200"
+msgid "Selected stream"
+msgstr "المصدر المحدد"
+
+msgctxt "#32201"
+msgid "Resolution"
+msgstr "الدقة"
+
+msgctxt "#32202"
+msgid "Size"
+msgstr "الحجم"
+
+msgctxt "#32203"
+msgid "Bitrate"
+msgstr "معدل البت"
+
+msgctxt "#32204"
+msgid "Video"
+msgstr "الفيديو"
+
+msgctxt "#32205"
+msgid "HDR"
+msgstr "المدى الديناميكي"
+
+msgctxt "#32206"
+msgid "Audio"
+msgstr "الصوت"
+
+msgctxt "#32207"
+msgid "Channels"
+msgstr "القنوات"
+
+msgctxt "#32208"
+msgid "Release"
+msgstr "الإصدار"
+
+msgctxt "#32209"
+msgid "Service"
+msgstr "الخدمة"
+
+msgctxt "#32210"
+msgid "estimated"
+msgstr "تقديري"
+
+msgctxt "#32211"
+msgid "Surround"
+msgstr "صوت محيطي"
+
+msgctxt "#32212"
+msgid "Stereo"
+msgstr "ستيريو"
+
+msgctxt "#32213"
+msgid "Mono"
+msgstr "أحادي"
+
+msgctxt "#32214"
+msgid "Add-ons: %d"
+msgstr "الإضافات: %d"
+
+msgctxt "#32215"
+msgid "Season pack"
+msgstr "حزمة موسم"
+

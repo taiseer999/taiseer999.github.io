@@ -1556,6 +1556,14 @@ AB_PLOT_H = 266                       # movies: ~8 lines, ends 16 px above the l
 AB_PLOT_H_EP = 140                    # episodes: 4 lines, then the episode name (was 130)
 AB_EP_TOP = AB_PLOT_TOP + AB_PLOT_H_EP + 18            # 440
 AB_LIST_TOP = 566                     # heading; 7 lines of 54 end at 566 + 56 + 378 = 1000
+# 4.8.25: when the search is done the add-on list gives way to the details
+# of the focused stream - 3 x 3 tiles in the same place (y 566 .. ~986).
+AB_SPEC_TILES = (('res', 'res'), ('size', 'size'), ('rate', 'rate'),
+                 ('video', 'video'), ('hdr', 'hdr'), ('audio', 'audio'),
+                 ('ch', 'ch'), ('rel', 'rel'), ('svc', 'svc'))
+AB_SPEC_COLS, AB_SPEC_GAP = 3, 14
+AB_SPEC_W = (700 - (AB_SPEC_COLS - 1) * AB_SPEC_GAP) // AB_SPEC_COLS     # 224
+AB_SPEC_H = 112
 AB_TAGS = 4
 AB_TAG_W = 64
 
@@ -1968,6 +1976,118 @@ def ab_search_window():
                 <top>56</top>%(slots)s
             </control>
         </control>''' % {'heading': W % 'addons_heading', 'slots': ''.join(slots), 'top': AB_LIST_TOP}
+    # 4.8.25: search done + results -> stream details instead of the add-on list
+    done = ('String.IsEqual(Window.Property(abs.empty),true) + '
+            'Integer.IsGreater(Container(2000).NumItems,0)')
+    sp = 'Container(2000).ListItem.Property(abs.sp_%s)'
+    tiles = []
+    for n, (key, _x) in enumerate(AB_SPEC_TILES):
+        col, row = n % AB_SPEC_COLS, n // AB_SPEC_COLS
+        tiles.append('''
+                <control type="group">
+                    <left>%(l)d</left>
+                    <top>%(t)d</top>
+                    <width>%(w)d</width>
+                    <height>%(h)d</height>
+                    <control type="image">
+                        <texture border="32">lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>10</top>
+                        <width>%(iw)d</width>
+                        <height>28</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(abs.sl_%(k)s)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>%(iw)d</width>
+                        <height>38</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[%(v)s][/B]</label>
+                        <visible>!String.IsEmpty(%(v)s)</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>%(iw)d</width>
+                        <height>38</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>String.IsEmpty(%(v)s)</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>76</top>
+                        <width>%(iw)d</width>
+                        <height>28</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[%(sub)s]</label>
+                    </control>
+                </control>''' % {'l': col * (AB_SPEC_W + AB_SPEC_GAP), 't': row * (AB_SPEC_H + AB_SPEC_GAP),
+                                 'w': AB_SPEC_W, 'h': AB_SPEC_H, 'iw': AB_SPEC_W - 24, 'k': key,
+                                 'v': sp % key, 'sub': sp % (key + '_sub')})
+    specs = '''
+        <!-- ============ Left, search done: details of the focused stream (4.8.25) ============ -->
+        <control type="group">
+            <visible>%(done)s</visible>
+            <animation effect="fade" start="0" end="100" time="300">Visible</animation>
+            <animation effect="fade" start="100" end="0" time="150">Hidden</animation>
+            <left>96</left>
+            <top>%(top)d</top>
+            <width>700</width>
+            <control type="label">
+                <width>420</width>
+                <height>40</height>
+                <font>font12</font>
+                <textcolor>FF8F9BA6</textcolor>
+                <label>[B][UPPERCASE]$INFO[Window.Property(abs.spec_heading)][/UPPERCASE][/B]</label>
+            </control>
+            <control type="label">
+                <left>300</left>
+                <width>400</width>
+                <height>40</height>
+                <font>font12</font>
+                <align>right</align>
+                <textcolor>FFBDC8D1</textcolor>
+                <label>[B]$INFO[%(lang)s][/B]</label>
+            </control>
+            <control type="image">
+                <top>44</top>
+                <width>700</width>
+                <height>1</height>
+                <texture>lucent/white.png</texture>
+                <colordiffuse>1AFFFFFF</colordiffuse>
+            </control>
+            <control type="group">
+                <top>56</top>%(tiles)s
+            </control>
+        </control>''' % {'done': done, 'top': AB_LIST_TOP, 'lang': sp % 'lang', 'tiles': ''.join(tiles)}
+    status = status.replace('''
+        <control type="group">
+            <animation effect="fade" start="0" end="100" time="350" delay="200">WindowOpen</animation>''', '''
+        <control type="group">
+            <visible>!$EXP_DONE</visible>
+            <animation effect="fade" start="0" end="100" time="350" delay="200">WindowOpen</animation>''', 1).replace('$EXP_DONE', '[%s]' % done)
     xp = 'String.IsEmpty(%s)' % (W % 'expanded')       # default look
     xx = '!String.IsEmpty(%s)' % (W % 'expanded')      # expanded: streams over the whole page
 
@@ -2077,7 +2197,7 @@ def ab_search_window():
 ''' % {'bg': backdrop('$INFO[Window.Property(lucent.fanart)]'), 'title': hide_left(title_block(ep_title=False, top=AB_TOP, logo_h=AB_LOGO_H,
                                                                           pills_top=AB_LOGO_H + 18)),
        'plot': hide_left(plot), 'episode': hide_left(episode),
-       'status': hide_left(status), 'top': top_title, 'body': body}
+       'status': hide_left(status + specs), 'top': top_title, 'body': body}
     return ab_paths(ab_fonts(xml))
 
 

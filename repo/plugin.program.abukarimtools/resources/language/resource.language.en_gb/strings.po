@@ -2920,3 +2920,67 @@ msgctxt "#32194"
 msgid "Show AB Tools as the old list of folders. To come back, open \\"Settings View\\" at the end of that list."
 msgstr ""
 
+msgctxt "#32200"
+msgid "Selected stream"
+msgstr ""
+
+msgctxt "#32201"
+msgid "Resolution"
+msgstr ""
+
+msgctxt "#32202"
+msgid "Size"
+msgstr ""
+
+msgctxt "#32203"
+msgid "Bitrate"
+msgstr ""
+
+msgctxt "#32204"
+msgid "Video"
+msgstr ""
+
+msgctxt "#32205"
+msgid "HDR"
+msgstr ""
+
+msgctxt "#32206"
+msgid "Audio"
+msgstr ""
+
+msgctxt "#32207"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#32208"
+msgid "Release"
+msgstr ""
+
+msgctxt "#32209"
+msgid "Service"
+msgstr ""
+
+msgctxt "#32210"
+msgid "estimated"
+msgstr ""
+
+msgctxt "#32211"
+msgid "Surround"
+msgstr ""
+
+msgctxt "#32212"
+msgid "Stereo"
+msgstr ""
+
+msgctxt "#32213"
+msgid "Mono"
+msgstr ""
+
+msgctxt "#32214"
+msgid "Add-ons: %d"
+msgstr ""
+
+msgctxt "#32215"
+msgid "Season pack"
+msgstr ""
+

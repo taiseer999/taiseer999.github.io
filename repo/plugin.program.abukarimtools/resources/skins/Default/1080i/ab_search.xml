@@ -248,6 +248,7 @@
             <visible>String.IsEmpty(Window.Property(abs.expanded))</visible>
         <!-- ============ Left: one line per add-on (searching / N streams) ============ -->
         <control type="group">
+            <visible>![String.IsEqual(Window.Property(abs.empty),true) + Integer.IsGreater(Container(2000).NumItems,0)]</visible>
             <animation effect="fade" start="0" end="100" time="350" delay="200">WindowOpen</animation>
             <animation effect="fade" end="0" time="250">WindowClose</animation>
             <left>96</left>
@@ -905,6 +906,581 @@
                     <aligny>center</aligny>
                     <textcolor>FFBDC8D1</textcolor>
                     <label>$INFO[Window.Property(abs.s7.status)]</label>
+                </control>
+            </control>
+        </control>
+        <!-- ============ Left, search done: details of the focused stream (4.8.25) ============ -->
+        <control type="group">
+            <visible>String.IsEqual(Window.Property(abs.empty),true) + Integer.IsGreater(Container(2000).NumItems,0)</visible>
+            <animation effect="fade" start="0" end="100" time="300">Visible</animation>
+            <animation effect="fade" start="100" end="0" time="150">Hidden</animation>
+            <left>96</left>
+            <top>566</top>
+            <width>700</width>
+            <control type="label">
+                <width>420</width>
+                <height>40</height>
+                <font>abk_srch_s</font>
+                <textcolor>FF8F9BA6</textcolor>
+                <label>[B][UPPERCASE]$INFO[Window.Property(abs.spec_heading)][/UPPERCASE][/B]</label>
+            </control>
+            <control type="label">
+                <left>300</left>
+                <width>400</width>
+                <height>40</height>
+                <font>abk_srch_s</font>
+                <align>right</align>
+                <textcolor>FFBDC8D1</textcolor>
+                <label>[B]$INFO[Container(2000).ListItem.Property(abs.sp_lang)][/B]</label>
+            </control>
+            <control type="image">
+                <top>44</top>
+                <width>700</width>
+                <height>1</height>
+                <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/white.png</texture>
+                <colordiffuse>1AFFFFFF</colordiffuse>
+            </control>
+            <control type="group">
+                <top>56</top>
+                <control type="group">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>224</width>
+                    <height>112</height>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>10</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(abs.sl_res)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(abs.sp_res)][/B]</label>
+                        <visible>!String.IsEmpty(Container(2000).ListItem.Property(abs.sp_res))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>String.IsEmpty(Container(2000).ListItem.Property(abs.sp_res))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>76</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(abs.sp_res_sub)]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>238</left>
+                    <top>0</top>
+                    <width>224</width>
+                    <height>112</height>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>10</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(abs.sl_size)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(abs.sp_size)][/B]</label>
+                        <visible>!String.IsEmpty(Container(2000).ListItem.Property(abs.sp_size))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>String.IsEmpty(Container(2000).ListItem.Property(abs.sp_size))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>76</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(abs.sp_size_sub)]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>476</left>
+                    <top>0</top>
+                    <width>224</width>
+                    <height>112</height>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>10</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(abs.sl_rate)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(abs.sp_rate)][/B]</label>
+                        <visible>!String.IsEmpty(Container(2000).ListItem.Property(abs.sp_rate))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>String.IsEmpty(Container(2000).ListItem.Property(abs.sp_rate))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>76</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(abs.sp_rate_sub)]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>0</left>
+                    <top>126</top>
+                    <width>224</width>
+                    <height>112</height>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>10</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(abs.sl_video)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(abs.sp_video)][/B]</label>
+                        <visible>!String.IsEmpty(Container(2000).ListItem.Property(abs.sp_video))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>String.IsEmpty(Container(2000).ListItem.Property(abs.sp_video))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>76</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(abs.sp_video_sub)]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>238</left>
+                    <top>126</top>
+                    <width>224</width>
+                    <height>112</height>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>10</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(abs.sl_hdr)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(abs.sp_hdr)][/B]</label>
+                        <visible>!String.IsEmpty(Container(2000).ListItem.Property(abs.sp_hdr))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>String.IsEmpty(Container(2000).ListItem.Property(abs.sp_hdr))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>76</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(abs.sp_hdr_sub)]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>476</left>
+                    <top>126</top>
+                    <width>224</width>
+                    <height>112</height>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>10</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(abs.sl_audio)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(abs.sp_audio)][/B]</label>
+                        <visible>!String.IsEmpty(Container(2000).ListItem.Property(abs.sp_audio))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>String.IsEmpty(Container(2000).ListItem.Property(abs.sp_audio))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>76</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(abs.sp_audio_sub)]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>0</left>
+                    <top>252</top>
+                    <width>224</width>
+                    <height>112</height>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>10</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(abs.sl_ch)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(abs.sp_ch)][/B]</label>
+                        <visible>!String.IsEmpty(Container(2000).ListItem.Property(abs.sp_ch))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>String.IsEmpty(Container(2000).ListItem.Property(abs.sp_ch))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>76</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(abs.sp_ch_sub)]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>238</left>
+                    <top>252</top>
+                    <width>224</width>
+                    <height>112</height>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>10</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(abs.sl_rel)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(abs.sp_rel)][/B]</label>
+                        <visible>!String.IsEmpty(Container(2000).ListItem.Property(abs.sp_rel))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>String.IsEmpty(Container(2000).ListItem.Property(abs.sp_rel))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>76</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(abs.sp_rel_sub)]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>476</left>
+                    <top>252</top>
+                    <width>224</width>
+                    <height>112</height>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>10</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(abs.sl_svc)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(abs.sp_svc)][/B]</label>
+                        <visible>!String.IsEmpty(Container(2000).ListItem.Property(abs.sp_svc))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>38</top>
+                        <width>200</width>
+                        <height>38</height>
+                        <font>abk_srch_m</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>String.IsEmpty(Container(2000).ListItem.Property(abs.sp_svc))</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>76</top>
+                        <width>200</width>
+                        <height>28</height>
+                        <font>abk_srch_s</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(abs.sp_svc_sub)]</label>
+                    </control>
                 </control>
             </control>
         </control>
