@@ -15,6 +15,10 @@ What AB Tools changed:
   - frames made ahead of time: the whole file for local files; on a stream
     only 3 minutes each way by default (4.8.13; every frame is one more HTTP
     request on the file being played), 10 minutes with "Always";
+  - 4.8.14: only the picture of the spot you skip to (or one step next to
+    it) is shown; until it is made the card shows a waiting picture instead
+    of a picture from minutes away; frames are made around the spot you
+    skip to, not around where the film is playing;
   - 4.8.13: diagnostics in kodi.log (first frame and its time, failures with
     ffmpeg's error text, low memory) with every URL replaced by <url>;
   - the box is a Lucent-style glass card, fitted to the Lucent Player seek
@@ -63,6 +67,8 @@ FRAME_W = 426                   # frames are made once at the largest size
 LUCENT = {'x0': 64, 'x1': 1216, 'bottom': 878 * 2 // 3, 'bottom_osd': 834 * 2 // 3}
 GENERIC = {'x0': 64, 'x1': 1216, 'bottom': 720 - 150, 'bottom_osd': 720 - 210}
 GAP = 10
+WAIT_IMG = os.path.join(MEDIA, 'wait.png')
+SEEK_FOCUS = 30                # s: prefetch stays around the last skip target this long
 LOW_MEM = 250 << 20            # 4.8.13: was 450 MB (the original's default)
 SPAN_NEARBY, SPAN_FULL = 180, 600
 
@@ -280,6 +286,7 @@ def _loop(monitor):
     ff_checked = False
     cfg, cfg_mtime = load_config(), None
     gen, cur, last, root, subs = None, None, 0, None, False
+    seek_t, seek_at = 0, 0
 
     def drop():
         nonlocal gen, cur
@@ -357,15 +364,18 @@ def _loop(monitor):
             continue
         try:
             gen.dur = int(player.getTotalTime())
-            gen.around = int(player.getTime())
+            # frames are made outward from the spot being skipped to while the
+            # person is skipping, else from where the film is playing
+            gen.around = seek_t if now - seek_at < SEEK_FOCUS else int(player.getTime())
         except Exception:
             pass
         if xbmc.getCondVisibility('Player.Seeking'):
             label = xbmc.getInfoLabel('Player.SeekTime')
             t = _secs(label)
             if t >= 0:
+                seek_t, seek_at = t, now
                 gen.ask(t)
-                img = gen.nearest(t)
+                img = gen.nearest(t, reach=gen.step * 2) or WAIT_IMG   # exact spot or one step off
                 if img:
                     if (cfg['hidesubs'] and not subs
                             and xbmc.getCondVisibility('VideoPlayer.SubtitlesEnabled')):

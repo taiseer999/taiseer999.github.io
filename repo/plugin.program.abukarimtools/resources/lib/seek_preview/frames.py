@@ -5,6 +5,9 @@
 # failures (prefetch still gives up after 6 in a row); ffmpeg's error text, the time each frame
 # took and low-memory skips are reported through self.report; the streamed prefetch span is a
 # parameter (span_remote).
+# 4.8.14: the whole picture is kept (fit + black bars, no crop of scope films); smaller
+# probe so a stream opens faster; a prefetch run is cut short when a skip asks for a frame;
+# nearest() only answers within `reach` seconds (no picture from minutes away).
 # Frame making for Seek Preview. No Kodi imports here, so this file also runs in tests/ on a PC.
 # One ffmpeg run per frame: seek to the nearest keyframe, decode that one picture, scale it, save a small JPEG.
 import os, sys, time, shutil, platform, threading, subprocess
@@ -84,8 +87,10 @@ def command(ffmpeg, url, headers, t, width, height, out):
     if headers:
         cmd += ['-headers', headers]
     # -threads before -i limits the decoder: frame-threaded 4K HEVC holds a set of frames per core (hundreds of MB)
-    cmd += ['-threads', '1', '-skip_frame', 'nokey', '-ss', str(int(t)), '-noaccurate_seek', '-i', url, '-map', '0:v:0', '-frames:v', '1', '-an', '-sn', '-dn',
-            '-threads', '1', '-vf', 'scale=%d:%d:force_original_aspect_ratio=increase,crop=%d:%d' % (width, height, width, height), '-q:v', '5', '-f', 'mjpeg', '-y', out]
+    cmd += ['-threads', '1', '-probesize', '2000000', '-analyzeduration', '1000000',
+            '-skip_frame', 'nokey', '-ss', str(int(t)), '-noaccurate_seek', '-i', url, '-map', '0:v:0', '-frames:v', '1', '-an', '-sn', '-dn',
+            '-threads', '1', '-vf', 'scale=%d:%d:force_original_aspect_ratio=decrease,pad=%d:%d:(ow-iw)/2:(oh-ih)/2:color=black'
+            % (width, height, width, height), '-q:v', '5', '-f', 'mjpeg', '-y', out]
     return cmd
 
 
@@ -163,13 +168,15 @@ class Frames(threading.Thread):
                     if self.stop or self.all_stop.is_set() or time.time() > end:
                         timed_out = time.time() > end
                         pr.kill(); pr.wait(); break
+                    if not asked and self.want is not None:   # a skip needs a frame now
+                        pr.kill(); pr.wait(); break
                     time.sleep(0.05)
             took = time.time() - started
             if pr.returncode == 0 and os.path.exists(tmp) and os.path.getsize(tmp) > 0:
                 os.replace(tmp, p); self.bad = 0; self.made += 1
                 if self.made == 1 or took > 3:
                     self._say('made', 'frame %ds in %.1fs%s' % (b, took, ' (asked)' if asked else ''))
-            elif not (self.stop or self.all_stop.is_set()):
+            elif not (self.stop or self.all_stop.is_set() or (not asked and self.want is not None)):
                 self.bad += 1; self.failed += 1; self.failed_at[b] = time.time()
                 try:
                     with open(err, 'rb') as ef:

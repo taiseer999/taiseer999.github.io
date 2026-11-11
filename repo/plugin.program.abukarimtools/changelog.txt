@@ -1,3 +1,16 @@
+v4.8.14
+- Seek Preview accuracy: the card shows only the picture of the spot you
+  skip to (or the 10-second step next to it). Until it is made the card
+  shows a waiting picture - before, the closest picture made so far was
+  shown, which could be from minutes away (the same picture for 13:02 ...
+  14:18 on a 4K stream).
+- The whole picture is shown with black bars; wide (scope) films were
+  cropped to the middle of the frame.
+- Pictures are made around the spot you are skipping to (for 30 s after a
+  skip), not around where the film is playing, and a skip interrupts a
+  picture being made ahead of time.
+- Streams open faster for each picture (smaller probe).
+
 v4.8.13
 - Seek Preview on streams: pictures were made only for the spot asked for,
   which on a 4K stream takes longer than Kodi's skip delay, so the box rarely
