@@ -589,10 +589,10 @@ updated YouTube addon URL
     <description lang="tr_TR">The Movie Database (TMDb), topluluk tarafından oluşturulmuş bir film ve TV veritabanıdır. Her bir veri parçası, 2008 yılına dayanan muhteşem topluluğumuz tarafından eklenmiştir. TMDb'nin güçlü uluslararası odağı ve veri genişliği büyük ölçüde benzersizdir ve inanılmaz derecede gurur duyduğumuz bir şeydir. Basitçe söylemek gerekirse, topluluk içinde yaşıyor ve nefes alıyoruz ve bizi farklı kılan da tam olarak bu.</description>
     <description lang="zh_CN">TMDb 是一个由网络社区创建的影视数据库。每一条数据都是由我们令人惊叹的社区添加的，可以追溯到2008年。TMDb 强大的国际关注度和数据广度在很大程度上是无与伦比的，我们对此感到无比自豪。简单地说，我们生活在社区中，呼吸着社区的气息，这正是我们与众不同的原因。</description>
   </extension>
-</addon><addon id="plugin.program.ABUKARIMwizard" name="AB Wizard" version="4.1" provider-name="Slam, Sarge, Funsterbe, BYB، ABUKARIM">
+</addon><addon id="plugin.program.ABUKARIMwizard" name="AB Wizard" version="4.2" provider-name="Slam, Sarge, Funsterbe, BYB، ABUKARIM">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0.1" />
-		<import addon="plugin.program.abukarimtools" version="3.3.4" />
+		<import addon="plugin.program.abukarimtools" version="4.8.26" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>executable</provides>
@@ -612,7 +612,7 @@ updated YouTube addon URL
 		<website /> 
 		<email />
 		<source />
-		<news>v3.9.52: Startup notification window opens again on Kodi 22 ("XML File for Window is missing": 1080i copies of notify.xml and logview.xml). The service no longer leaves Addon/Dialog objects in memory at exit. Auto Clean log says "next startup" when the frequency is Every startup. v3.9.51: New app icon (Lucent glass: violet gradient ring with glow, shaded wand with glowing tip, sparkles). Dark Lucent look (Violet AMOLED): icon, fanart, banner, clearlogo and all menu icons moved from green to Lucent violet (8B5CF6) on true black (service logos keep their brand colours); menu text colours default to the Lucent palette (new Lucent entries in Color 1/Color 2); ON/OFF, Enabled/Disabled and REMOVE use Lucent green/red/amber; support dialog, notify/log windows, speed test and pop-up dialogs restyled. v3.9.50: Shortcuts update popup now also shows on boxes that never recorded a guiversion (no silent first run); decisions logged as [AB Wizard GuiUpdate]. v3.9.49: Push no-wipe shortcut/menu updates from Builds.txt (guiversion= / guimode=) - boxes get an Update Now / Later / Ignore popup at startup. v3.9.44: The ABUKARIM TOOLS backup before a build install is optional again: Back up / Skip backup / Cancel install. v3.9.43: Build install is safe on a bad connection - the download is checked (complete and a valid zip) BEFORE anything is wiped; if it fails, nothing on the box changes. A stalled server no longer freezes the download or the startup update check (timeouts). Dropbox build links work with dl=0. Needs AB Tools 3.3.4. v3.9.42: Fixed the build update popup never appearing (the startup service was off). Build versions compared numerically (2.10 &gt; 2.9); Ignore skips only that version. v3.9.41: Renamed to AB Wizard, new icon and artwork.</news>
+		<news>v4.2: The wizard opens as a settings page, like the skin's own settings and ABUKARIM TOOLS: categories on one side (Builds, Accounts, Cleaning, Auto Clean, Add-ons, Logs, System, Backup &amp; Restore), the entries on the other with their switch or value - folder sizes, auto-clean frequency, the status of each account - and a description of the focused entry. Mirrored for Arabic; Arctic Fuse 3 shows it in its theme colours. "Classic List View" brings the old list back. Needs ABUKARIM TOOLS 4.8.26. v3.9.52: Startup notification window opens again on Kodi 22. Older versions: see changelog.txt.</news>
 		<assets>
 				<icon>resources/icon.png</icon>
 				<fanart>resources/fanart.jpg</fanart>
@@ -621,7 +621,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.8.28" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.8.40" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -652,7 +652,7 @@ updated YouTube addon URL
     <description lang="en_GB">ABUKARIM TOOLS is an all-in-one utility for managing your Kodi setup. It bundles a Skin Installer and Skin Switcher, full backup and restore of your userdata, and quick access to the ABUKARIM Wizard and its maintenance tools (Total Clean and old thumbnail cleanup). A built-in patcher keeps popular add-ons (Seren, Prism, TinyPPI, Arctic Fuse 3, TMDbHelper, RedLight and more) working correctly on CoreELEC and Kodi, and re-applies its fixes automatically after those add-ons update. Also includes handy maintenance tools such as a speed test, a CPU benchmark and an add-on database rebuild.</description>
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، ووصولاً سريعاً إلى معالج أبوكريم وأدوات الصيانة فيه (التنظيف الشامل وحذف الصور المصغّرة القديمة). كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة واختبار أداء المعالج وإعادة بناء قاعدة بيانات الإضافات.</description>
-    <news>v4.8.25 - Search All: when the search is done, the add-on list on the left gives way to the details of the focused stream in tiles - resolution, size, bitrate, video, HDR, audio, channels, release, service and languages. v4.8.24 - Settings page fits every screen: its content is centred in a fixed width, so a 16:10 screen (MacBook) no longer cuts off the title and the categories. v4.8.23 - New: AB Tools opens as a settings page, like the skin's own settings: categories on one side, the entries on the other with their switches and values, and a description of the focused entry (mirrored for Arabic; Arctic Fuse 3 shows it in its theme colours). "Classic List View" brings the old list back. v4.8.22 - Fix: Play in TMDbHelper no longer does nothing when TMDb is slow; Search All ignores "_" ids; the DexSubtitles AutoSync button in the player works again. Older versions: see changelog.txt.</news>
+    <news>v4.8.27 - Fix: a settings page (AB Tools, AB Wizard) no longer gets stuck after opening a list from it (Build Menu...): the list replaces the page, and opening the add-on again shows the page. v4.8.26 - The settings page became a shared engine: AB Wizard 4.2 opens as the same kind of page, and ABUKARIM Wizard here opens it. v4.8.25 - Search All: when the search is done, the add-on list on the left gives way to the details of the focused stream in tiles - resolution, size, bitrate, video, HDR, audio, channels, release, service and languages. v4.8.24 - Settings page fits every screen: its content is centred in a fixed width, so a 16:10 screen (MacBook) no longer cuts off the title and the categories. v4.8.23 - New: AB Tools opens as a settings page, like the skin's own settings: categories on one side, the entries on the other with their switches and values, and a description of the focused entry (mirrored for Arabic; Arctic Fuse 3 shows it in its theme colours). "Classic List View" brings the old list back. v4.8.22 - Fix: Play in TMDbHelper no longer does nothing when TMDb is slow; Search All ignores "_" ids; the DexSubtitles AutoSync button in the player works again. Older versions: see changelog.txt.</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>

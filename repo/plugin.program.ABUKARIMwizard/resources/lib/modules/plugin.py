@@ -42,10 +42,32 @@ def router(paramstring):
             _install_fallback_font()
         except Exception:
             pass
+        # 4.2: a plain launch opens the settings page (categories on one
+        # side, entries on the other, like the skin's settings / AB Tools).
+        # ?view=list, widgets and shortcuts that list this path keep the list.
+        if p.get_params().get('view') != 'list':
+            from . import settings_page
+            if settings_page.wants_page(HANDLE):
+                xbmcplugin.endOfDirectory(HANDLE, succeeded=False)
+                xbmc.executebuiltin('RunPlugin(plugin://%s/?mode=%d)' % (settings_page.ADDON_ID, settings_page.MODE_PAGE))
+                return
         main_menu()
         xbmcplugin.endOfDirectory(HANDLE)
         return
     
+    elif mode == 500:
+        # 4.2: settings page (handle -1 invocation; runs until closed)
+        from . import settings_page
+        settings_page.open_page(p.get_params().get('cat'))
+        return
+
+    elif mode == 501:
+        # 4.2: classic list -> settings page again
+        from . import settings_page
+        settings_page.set_enabled(True)
+        xbmc.executebuiltin('RunPlugin(plugin://%s/?mode=%d)' % (settings_page.ADDON_ID, settings_page.MODE_PAGE))
+        return
+
     elif mode == 1:
         build_menu()
     

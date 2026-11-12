@@ -1,3 +1,29 @@
+v4.2
+- The wizard opens as a settings page, like the skin's own settings and
+  like ABUKARIM TOOLS. Categories in a column on one side - Builds,
+  Accounts, Cleaning, Auto Clean, Add-ons, Logs, System, Backup & Restore,
+  Settings, Support - and the entries of the chosen one on the other:
+  * switches for Auto Clean (and its cache / thumbnails options), Debug
+    Logging and Unknown Sources;
+  * the current value beside the entry: installed build and its version,
+    an update when there is one, how many builds, the size of the cache,
+    packages and thumbnails (read in the background), the auto-clean
+    frequency, add-on updates mode, errors in the log;
+  * Accounts: one entry per service with its status (account name /
+    Authorized / Not authorized); a click lists that service's Account
+    Manager actions (authorize, account info, re-sync, revoke...);
+  * a description of the focused entry at the bottom.
+  The switches and values update by themselves after an entry has run.
+- Arabic Kodi gets the mirrored layout; Arctic Fuse 3 shows the page in its
+  theme colours. The page is ABUKARIM TOOLS' settings engine (needs AB
+  Tools 4.8.26), so both look and behave the same.
+- Every entry runs exactly as before. Listings (Build Menu, Restore Backup,
+  Remove Addon Data, Enable/Disable Addons, Network / System Information,
+  Videos) open on top of the page, and Back comes back to it.
+- "Classic List View" (end of the categories) brings back the old list;
+  "Settings View" at the end of that list returns to the page. Widgets and
+  shortcuts that list the wizard keep getting the list.
+
 v3.9.55
 - Main menu: "Patch GUI" renamed to Lite Setup (إعداد مخفف) and
   "No Wipe (Option 2)" renamed to Full Setup (إعداد كامل).

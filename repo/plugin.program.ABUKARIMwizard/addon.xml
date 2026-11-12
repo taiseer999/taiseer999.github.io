@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.program.ABUKARIMwizard" name="AB Wizard" version="4.1" provider-name="Slam, Sarge, Funsterbe, BYB، ABUKARIM">
+<addon id="plugin.program.ABUKARIMwizard" name="AB Wizard" version="4.2" provider-name="Slam, Sarge, Funsterbe, BYB، ABUKARIM">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0.1"/>
-		<import addon="plugin.program.abukarimtools" version="3.3.4"/>
+		<import addon="plugin.program.abukarimtools" version="4.8.26"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>executable</provides>
@@ -22,7 +22,7 @@
 		<website></website> 
 		<email></email>
 		<source></source>
-		<news>v3.9.52: Startup notification window opens again on Kodi 22 ("XML File for Window is missing": 1080i copies of notify.xml and logview.xml). The service no longer leaves Addon/Dialog objects in memory at exit. Auto Clean log says "next startup" when the frequency is Every startup. v3.9.51: New app icon (Lucent glass: violet gradient ring with glow, shaded wand with glowing tip, sparkles). Dark Lucent look (Violet AMOLED): icon, fanart, banner, clearlogo and all menu icons moved from green to Lucent violet (8B5CF6) on true black (service logos keep their brand colours); menu text colours default to the Lucent palette (new Lucent entries in Color 1/Color 2); ON/OFF, Enabled/Disabled and REMOVE use Lucent green/red/amber; support dialog, notify/log windows, speed test and pop-up dialogs restyled. v3.9.50: Shortcuts update popup now also shows on boxes that never recorded a guiversion (no silent first run); decisions logged as [AB Wizard GuiUpdate]. v3.9.49: Push no-wipe shortcut/menu updates from Builds.txt (guiversion= / guimode=) - boxes get an Update Now / Later / Ignore popup at startup. v3.9.44: The ABUKARIM TOOLS backup before a build install is optional again: Back up / Skip backup / Cancel install. v3.9.43: Build install is safe on a bad connection - the download is checked (complete and a valid zip) BEFORE anything is wiped; if it fails, nothing on the box changes. A stalled server no longer freezes the download or the startup update check (timeouts). Dropbox build links work with dl=0. Needs AB Tools 3.3.4. v3.9.42: Fixed the build update popup never appearing (the startup service was off). Build versions compared numerically (2.10 > 2.9); Ignore skips only that version. v3.9.41: Renamed to AB Wizard, new icon and artwork.</news>
+		<news>v4.2: The wizard opens as a settings page, like the skin's own settings and ABUKARIM TOOLS: categories on one side (Builds, Accounts, Cleaning, Auto Clean, Add-ons, Logs, System, Backup &amp; Restore), the entries on the other with their switch or value - folder sizes, auto-clean frequency, the status of each account - and a description of the focused entry. Mirrored for Arabic; Arctic Fuse 3 shows it in its theme colours. "Classic List View" brings the old list back. Needs ABUKARIM TOOLS 4.8.26. v3.9.52: Startup notification window opens again on Kodi 22. Older versions: see changelog.txt.</news>
 		<assets>
 				<icon>resources/icon.png</icon>
 				<fanart>resources/fanart.jpg</fanart>

@@ -1358,3 +1358,341 @@ msgstr ""
 msgctxt "#30125"
 msgid "Ignore"
 msgstr ""
+
+#####----- 4.2: settings page (30500-30599) -----#####
+msgctxt "#30500"
+msgid "Builds"
+msgstr ""
+
+msgctxt "#30501"
+msgid "Accounts"
+msgstr ""
+
+msgctxt "#30502"
+msgid "System"
+msgstr ""
+
+msgctxt "#30503"
+msgid "Classic List View"
+msgstr ""
+
+msgctxt "#30504"
+msgid "Settings View"
+msgstr ""
+
+msgctxt "#30505"
+msgid "Support ABUKARIM"
+msgstr ""
+
+msgctxt "#30506"
+msgid "Backup & Restore"
+msgstr ""
+
+msgctxt "#30510"
+msgid "Install a build, update the one you have, or refresh its look without wiping your data."
+msgstr ""
+
+msgctxt "#30512"
+msgid "Free space: cache, packages, thumbnails, crash logs and databases."
+msgstr ""
+
+msgctxt "#30513"
+msgid "What the wizard cleans by itself each time Kodi starts."
+msgstr ""
+
+msgctxt "#30514"
+msgid "Remove, enable or disable add-ons, and refresh the repositories and updates."
+msgstr ""
+
+msgctxt "#30515"
+msgid "Kodi's log: read it, find errors and turn on debug logging."
+msgstr ""
+
+msgctxt "#30516"
+msgid "Network, speed test, add-on options of Kodi, cache presets and repairs."
+msgstr ""
+
+msgctxt "#30517"
+msgid "Back up the build or the GUI and skin settings, and restore them."
+msgstr ""
+
+msgctxt "#30519"
+msgid "Support the work on the wizard and the Piers build. Shows a QR code for Buy Me a Coffee."
+msgstr ""
+
+msgctxt "#30520"
+msgid "Show the wizard as the old list of folders. To come back, open \"Settings View\" at the end of that list."
+msgstr ""
+
+msgctxt "#30530"
+msgid "Update the Build"
+msgstr ""
+
+msgctxt "#30531"
+msgid "Installed Build"
+msgstr ""
+
+msgctxt "#30532"
+msgid "None"
+msgstr ""
+
+msgctxt "#30533"
+msgid "Kodi Version"
+msgstr ""
+
+msgctxt "#30534"
+msgid "Operating System"
+msgstr ""
+
+msgctxt "#30535"
+msgid "Build Changelog"
+msgstr ""
+
+msgctxt "#30536"
+msgid "Videos"
+msgstr ""
+
+msgctxt "#30537"
+msgid "%d builds"
+msgstr ""
+
+msgctxt "#30538"
+msgid "Backup Build"
+msgstr ""
+
+msgctxt "#30539"
+msgid "Restore Backup"
+msgstr ""
+
+msgctxt "#30540"
+msgid "Change Backups Folder"
+msgstr ""
+
+msgctxt "#30541"
+msgid "Reset Backups Folder"
+msgstr ""
+
+msgctxt "#30542"
+msgid "Backup GUI & Skin Settings"
+msgstr ""
+
+msgctxt "#30543"
+msgid "Restore GUI Settings"
+msgstr ""
+
+msgctxt "#30544"
+msgid "Restore Skin Settings"
+msgstr ""
+
+msgctxt "#30545"
+msgid "Restore Build Default GUI Settings"
+msgstr ""
+
+msgctxt "#30546"
+msgid "Restore Build Default Skin Settings"
+msgstr ""
+
+msgctxt "#30547"
+msgid "Advanced Settings"
+msgstr ""
+
+msgctxt "#30550"
+msgid "A new version of your build is out. Installs it over the current one."
+msgstr ""
+
+msgctxt "#30551"
+msgid "Install the build's settings and menus over your current data, then close Kodi."
+msgstr ""
+
+msgctxt "#30552"
+msgid "Video guides for the builds."
+msgstr ""
+
+msgctxt "#30553"
+msgid "The Kodi version on this device."
+msgstr ""
+
+msgctxt "#30554"
+msgid "The operating system and processor type of this device."
+msgstr ""
+
+msgctxt "#30555"
+msgid "Clear the cache, packages and thumbnails in one go."
+msgstr ""
+
+msgctxt "#30556"
+msgid "Delete the temporary files of Kodi and the add-ons."
+msgstr ""
+
+msgctxt "#30557"
+msgid "Clear the function caches of ResolveURL."
+msgstr ""
+
+msgctxt "#30558"
+msgid "Delete all thumbnails; Kodi downloads them again when needed."
+msgstr ""
+
+msgctxt "#30559"
+msgid "Delete the cache of opened archives."
+msgstr ""
+
+msgctxt "#30560"
+msgid "Delete old thumbnails Kodi no longer uses."
+msgstr ""
+
+msgctxt "#30561"
+msgid "Delete Kodi's crash logs."
+msgstr ""
+
+msgctxt "#30562"
+msgid "Empty the databases you choose, to free space or fix errors."
+msgstr ""
+
+msgctxt "#30563"
+msgid "Remove everything except this wizard and return Kodi to a clean state. This cannot be undone."
+msgstr ""
+
+msgctxt "#30564"
+msgid "Clean automatically when Kodi starts."
+msgstr ""
+
+msgctxt "#30565"
+msgid "How often the automatic clean runs."
+msgstr ""
+
+msgctxt "#30566"
+msgid "Include the cache in the automatic clean."
+msgstr ""
+
+msgctxt "#30567"
+msgid "Include old thumbnails in the automatic clean."
+msgstr ""
+
+msgctxt "#30568"
+msgid "Clear the packages folder when Kodi starts, or keep the latest packages."
+msgstr ""
+
+msgctxt "#30569"
+msgid "Choose add-ons to uninstall."
+msgstr ""
+
+msgctxt "#30570"
+msgid "Delete the saved data of add-ons, of uninstalled add-ons, or empty folders."
+msgstr ""
+
+msgctxt "#30571"
+msgid "Turn add-ons on or off one by one."
+msgstr ""
+
+msgctxt "#30572"
+msgid "Make Kodi check every repository for updates now."
+msgstr ""
+
+msgctxt "#30573"
+msgid "Check the repositories and update every add-on now."
+msgstr ""
+
+msgctxt "#30574"
+msgid "Add-ons that are kept when a build is installed or Kodi is wiped."
+msgstr ""
+
+msgctxt "#30575"
+msgid "Write more detail in Kodi's log, to find problems."
+msgstr ""
+
+msgctxt "#30576"
+msgid "Read Kodi's log on screen."
+msgstr ""
+
+msgctxt "#30577"
+msgid "List the errors in Kodi's log."
+msgstr ""
+
+msgctxt "#30578"
+msgid "Show the latest error in Kodi's log."
+msgstr ""
+
+msgctxt "#30579"
+msgid "IP address, gateway and connection of this device."
+msgstr ""
+
+msgctxt "#30580"
+msgid "Measure the speed of your internet connection."
+msgstr ""
+
+msgctxt "#30581"
+msgid "Allow add-ons to be installed from zip files."
+msgstr ""
+
+msgctxt "#30582"
+msgid "How Kodi updates add-ons: automatically, notify only, or never."
+msgstr ""
+
+msgctxt "#30583"
+msgid "Presets for Kodi's cache size, chosen by the memory of this device."
+msgstr ""
+
+msgctxt "#30584"
+msgid "Find file sources that no longer open."
+msgstr ""
+
+msgctxt "#30585"
+msgid "Find repositories that no longer answer."
+msgstr ""
+
+msgctxt "#30586"
+msgid "Replace fixed paths in Kodi's files with special:// paths."
+msgstr ""
+
+msgctxt "#30587"
+msgid "Version, memory, storage and display of this device."
+msgstr ""
+
+msgctxt "#30588"
+msgid "Reload the current skin."
+msgstr ""
+
+msgctxt "#30589"
+msgid "Reload the current Kodi profile."
+msgstr ""
+
+msgctxt "#30590"
+msgid "Close Kodi at once, without saving."
+msgstr ""
+
+msgctxt "#30591"
+msgid "Save a zip of the whole build."
+msgstr ""
+
+msgctxt "#30592"
+msgid "Choose a saved backup and restore it."
+msgstr ""
+
+msgctxt "#30593"
+msgid "Change the folder where backups are saved and read."
+msgstr ""
+
+msgctxt "#30594"
+msgid "Set the backups folder back to its default."
+msgstr ""
+
+msgctxt "#30595"
+msgid "Save your GUI and skin settings."
+msgstr ""
+
+msgctxt "#30596"
+msgid "Bring back your saved GUI settings."
+msgstr ""
+
+msgctxt "#30597"
+msgid "Bring back your saved skin settings."
+msgstr ""
+
+msgctxt "#30598"
+msgid "Bring back the GUI settings the build came with."
+msgstr ""
+
+msgctxt "#30599"
+msgid "Bring back the skin settings the build came with."
+msgstr ""
+

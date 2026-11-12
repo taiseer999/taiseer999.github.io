@@ -11,6 +11,10 @@ Dev tool (not used at runtime). One template, two outputs:
       one - same layout in AF3's theme colours (main_* / overlay_* names
       that every AF3 colour theme defines, Lucent Glass included)
 
+No <defaultcontrol>: in Arabic list 9000 is hidden and Kodi logged "Control
+9000 ... asked to focus, but it can't" (4.8.27); settings_engine focuses the
+shown list itself.
+
 Each file holds the layout twice: left-to-right (lists 9000 / 9001) and the
 mirror for Arabic (9100 / 9101: categories on the right, text aligned
 right). settings_window.py sets Window.Property(dir) and focuses the pair
@@ -251,7 +255,7 @@ def build(p, header):
     body = '\n'.join(bg) + '\n' + side(p, False) + '\n' + side(p, True)
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
            '<!-- %s -->\n'
-           '<window>\n<defaultcontrol always="true">9000</defaultcontrol>\n'
+           '<window>\n'
            '<animation effect="fade" start="0" end="100" time="250">WindowOpen</animation>\n'
            '<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>\n'
            '<controls>\n%s\n</controls>\n</window>\n' % (header, body))

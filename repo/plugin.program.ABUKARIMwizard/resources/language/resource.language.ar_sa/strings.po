@@ -1388,3 +1388,341 @@ msgstr "لاحقًا"
 msgctxt "#30125"
 msgid "Ignore"
 msgstr "تجاهل"
+
+#####----- 4.2: settings page (30500-30599) -----#####
+msgctxt "#30500"
+msgid "Builds"
+msgstr "البيلدات"
+
+msgctxt "#30501"
+msgid "Accounts"
+msgstr "الحسابات"
+
+msgctxt "#30502"
+msgid "System"
+msgstr "النظام"
+
+msgctxt "#30503"
+msgid "Classic List View"
+msgstr "عرض القائمة الكلاسيكية"
+
+msgctxt "#30504"
+msgid "Settings View"
+msgstr "عرض الإعدادات"
+
+msgctxt "#30505"
+msgid "Support ABUKARIM"
+msgstr "ادعم ABUKARIM"
+
+msgctxt "#30506"
+msgid "Backup & Restore"
+msgstr "النسخ الاحتياطي"
+
+msgctxt "#30510"
+msgid "Install a build, update the one you have, or refresh its look without wiping your data."
+msgstr "تثبيت بيلد، أو تحديث البيلد الحالي، أو تحديث مظهره دون مسح بياناتك."
+
+msgctxt "#30512"
+msgid "Free space: cache, packages, thumbnails, crash logs and databases."
+msgstr "تحرير المساحة: الذاكرة المؤقتة والحزم والصور المصغّرة وسجلات الأعطال وقواعد البيانات."
+
+msgctxt "#30513"
+msgid "What the wizard cleans by itself each time Kodi starts."
+msgstr "ما ينظّفه المعالج تلقائيًا عند تشغيل Kodi."
+
+msgctxt "#30514"
+msgid "Remove, enable or disable add-ons, and refresh the repositories and updates."
+msgstr "حذف الإضافات أو تفعيلها أو تعطيلها، وتحديث المستودعات والإضافات."
+
+msgctxt "#30515"
+msgid "Kodi's log: read it, find errors and turn on debug logging."
+msgstr "سجل Kodi: قراءته، والبحث عن الأخطاء، وتفعيل سجل التصحيح."
+
+msgctxt "#30516"
+msgid "Network, speed test, add-on options of Kodi, cache presets and repairs."
+msgstr "الشبكة واختبار السرعة وخيارات الإضافات في Kodi وإعدادات الذاكرة المؤقتة الجاهزة والإصلاحات."
+
+msgctxt "#30517"
+msgid "Back up the build or the GUI and skin settings, and restore them."
+msgstr "أخذ نسخة احتياطية من البيلد أو من إعدادات الواجهة والسكن، واستعادتها."
+
+msgctxt "#30519"
+msgid "Support the work on the wizard and the Piers build. Shows a QR code for Buy Me a Coffee."
+msgstr "ادعم العمل على المعالج وبناء Piers. يعرض رمز QR لصفحة Buy Me a Coffee."
+
+msgctxt "#30520"
+msgid "Show the wizard as the old list of folders. To come back, open \"Settings View\" at the end of that list."
+msgstr "عرض المعالج بشكل قائمة المجلدات القديمة. للعودة، افتح \"عرض الإعدادات\" في آخر تلك القائمة."
+
+msgctxt "#30530"
+msgid "Update the Build"
+msgstr "تحديث البيلد"
+
+msgctxt "#30531"
+msgid "Installed Build"
+msgstr "البيلد المثبّت"
+
+msgctxt "#30532"
+msgid "None"
+msgstr "لا يوجد"
+
+msgctxt "#30533"
+msgid "Kodi Version"
+msgstr "إصدار Kodi"
+
+msgctxt "#30534"
+msgid "Operating System"
+msgstr "نظام التشغيل"
+
+msgctxt "#30535"
+msgid "Build Changelog"
+msgstr "سجل تغييرات البيلد"
+
+msgctxt "#30536"
+msgid "Videos"
+msgstr "الفيديوهات"
+
+msgctxt "#30537"
+msgid "%d builds"
+msgstr "عدد البيلدات: %d"
+
+msgctxt "#30538"
+msgid "Backup Build"
+msgstr "نسخ البيلد احتياطيًا"
+
+msgctxt "#30539"
+msgid "Restore Backup"
+msgstr "استعادة نسخة احتياطية"
+
+msgctxt "#30540"
+msgid "Change Backups Folder"
+msgstr "تغيير مجلد النسخ الاحتياطية"
+
+msgctxt "#30541"
+msgid "Reset Backups Folder"
+msgstr "إعادة تعيين مجلد النسخ الاحتياطية"
+
+msgctxt "#30542"
+msgid "Backup GUI & Skin Settings"
+msgstr "نسخ إعدادات الواجهة والسكن احتياطيًا"
+
+msgctxt "#30543"
+msgid "Restore GUI Settings"
+msgstr "استعادة إعدادات الواجهة"
+
+msgctxt "#30544"
+msgid "Restore Skin Settings"
+msgstr "استعادة إعدادات السكن"
+
+msgctxt "#30545"
+msgid "Restore Build Default GUI Settings"
+msgstr "استعادة إعدادات الواجهة الافتراضية للبيلد"
+
+msgctxt "#30546"
+msgid "Restore Build Default Skin Settings"
+msgstr "استعادة إعدادات السكن الافتراضية للبيلد"
+
+msgctxt "#30547"
+msgid "Advanced Settings"
+msgstr "الإعدادات المتقدمة"
+
+msgctxt "#30550"
+msgid "A new version of your build is out. Installs it over the current one."
+msgstr "صدر إصدار جديد من البيلد لديك. يثبّته فوق الإصدار الحالي."
+
+msgctxt "#30551"
+msgid "Install the build's settings and menus over your current data, then close Kodi."
+msgstr "تثبيت إعدادات البيلد وقوائمه فوق بياناتك الحالية، ثم إغلاق Kodi."
+
+msgctxt "#30552"
+msgid "Video guides for the builds."
+msgstr "مقاطع إرشادية عن البيلدات."
+
+msgctxt "#30553"
+msgid "The Kodi version on this device."
+msgstr "إصدار Kodi على هذا الجهاز."
+
+msgctxt "#30554"
+msgid "The operating system and processor type of this device."
+msgstr "نظام التشغيل ونوع المعالج في هذا الجهاز."
+
+msgctxt "#30555"
+msgid "Clear the cache, packages and thumbnails in one go."
+msgstr "مسح الذاكرة المؤقتة والحزم والصور المصغّرة دفعة واحدة."
+
+msgctxt "#30556"
+msgid "Delete the temporary files of Kodi and the add-ons."
+msgstr "حذف الملفات المؤقتة لـ Kodi والإضافات."
+
+msgctxt "#30557"
+msgid "Clear the function caches of ResolveURL."
+msgstr "مسح ذاكرة الدوال المؤقتة لـ ResolveURL."
+
+msgctxt "#30558"
+msgid "Delete all thumbnails; Kodi downloads them again when needed."
+msgstr "حذف جميع الصور المصغّرة؛ ويعيد Kodi تنزيلها عند الحاجة."
+
+msgctxt "#30559"
+msgid "Delete the cache of opened archives."
+msgstr "حذف الذاكرة المؤقتة للملفات المضغوطة المفتوحة."
+
+msgctxt "#30560"
+msgid "Delete old thumbnails Kodi no longer uses."
+msgstr "حذف الصور المصغّرة القديمة التي لم يعد Kodi يستخدمها."
+
+msgctxt "#30561"
+msgid "Delete Kodi's crash logs."
+msgstr "حذف سجلات أعطال Kodi."
+
+msgctxt "#30562"
+msgid "Empty the databases you choose, to free space or fix errors."
+msgstr "تفريغ قواعد البيانات التي تختارها، لتحرير المساحة أو إصلاح الأخطاء."
+
+msgctxt "#30563"
+msgid "Remove everything except this wizard and return Kodi to a clean state. This cannot be undone."
+msgstr "حذف كل شيء عدا هذا المعالج وإعادة Kodi إلى حالة نظيفة. لا يمكن التراجع عن ذلك."
+
+msgctxt "#30564"
+msgid "Clean automatically when Kodi starts."
+msgstr "التنظيف تلقائيًا عند تشغيل Kodi."
+
+msgctxt "#30565"
+msgid "How often the automatic clean runs."
+msgstr "عدد مرات تشغيل التنظيف التلقائي."
+
+msgctxt "#30566"
+msgid "Include the cache in the automatic clean."
+msgstr "تضمين الذاكرة المؤقتة في التنظيف التلقائي."
+
+msgctxt "#30567"
+msgid "Include old thumbnails in the automatic clean."
+msgstr "تضمين الصور المصغّرة القديمة في التنظيف التلقائي."
+
+msgctxt "#30568"
+msgid "Clear the packages folder when Kodi starts, or keep the latest packages."
+msgstr "مسح مجلد الحزم عند تشغيل Kodi، أو الإبقاء على أحدث الحزم."
+
+msgctxt "#30569"
+msgid "Choose add-ons to uninstall."
+msgstr "اختر إضافات لإزالتها."
+
+msgctxt "#30570"
+msgid "Delete the saved data of add-ons, of uninstalled add-ons, or empty folders."
+msgstr "حذف البيانات المحفوظة للإضافات، أو للإضافات المُزالة، أو المجلدات الفارغة."
+
+msgctxt "#30571"
+msgid "Turn add-ons on or off one by one."
+msgstr "تفعيل الإضافات أو تعطيلها واحدةً واحدة."
+
+msgctxt "#30572"
+msgid "Make Kodi check every repository for updates now."
+msgstr "جعل Kodi يفحص جميع المستودعات بحثًا عن تحديثات الآن."
+
+msgctxt "#30573"
+msgid "Check the repositories and update every add-on now."
+msgstr "فحص المستودعات وتحديث جميع الإضافات الآن."
+
+msgctxt "#30574"
+msgid "Add-ons that are kept when a build is installed or Kodi is wiped."
+msgstr "الإضافات التي يُحتفَظ بها عند تثبيت بيلد أو مسح Kodi."
+
+msgctxt "#30575"
+msgid "Write more detail in Kodi's log, to find problems."
+msgstr "كتابة تفاصيل أكثر في سجل Kodi لتشخيص المشكلات."
+
+msgctxt "#30576"
+msgid "Read Kodi's log on screen."
+msgstr "قراءة سجل Kodi على الشاشة."
+
+msgctxt "#30577"
+msgid "List the errors in Kodi's log."
+msgstr "عرض الأخطاء الموجودة في سجل Kodi."
+
+msgctxt "#30578"
+msgid "Show the latest error in Kodi's log."
+msgstr "عرض آخر خطأ في سجل Kodi."
+
+msgctxt "#30579"
+msgid "IP address, gateway and connection of this device."
+msgstr "عنوان IP والبوابة والاتصال في هذا الجهاز."
+
+msgctxt "#30580"
+msgid "Measure the speed of your internet connection."
+msgstr "قياس سرعة اتصالك بالإنترنت."
+
+msgctxt "#30581"
+msgid "Allow add-ons to be installed from zip files."
+msgstr "السماح بتثبيت الإضافات من ملفات مضغوطة."
+
+msgctxt "#30582"
+msgid "How Kodi updates add-ons: automatically, notify only, or never."
+msgstr "طريقة تحديث Kodi للإضافات: تلقائيًا، أو بالإشعار فقط، أو أبدًا."
+
+msgctxt "#30583"
+msgid "Presets for Kodi's cache size, chosen by the memory of this device."
+msgstr "إعدادات جاهزة لحجم الذاكرة المؤقتة في Kodi بحسب ذاكرة هذا الجهاز."
+
+msgctxt "#30584"
+msgid "Find file sources that no longer open."
+msgstr "البحث عن مصادر الملفات التي لم تعد تُفتح."
+
+msgctxt "#30585"
+msgid "Find repositories that no longer answer."
+msgstr "البحث عن المستودعات التي لم تعد تستجيب."
+
+msgctxt "#30586"
+msgid "Replace fixed paths in Kodi's files with special:// paths."
+msgstr "استبدال المسارات الثابتة في ملفات Kodi بمسارات special://."
+
+msgctxt "#30587"
+msgid "Version, memory, storage and display of this device."
+msgstr "الإصدار والذاكرة والتخزين والشاشة في هذا الجهاز."
+
+msgctxt "#30588"
+msgid "Reload the current skin."
+msgstr "إعادة تحميل الواجهة الحالية."
+
+msgctxt "#30589"
+msgid "Reload the current Kodi profile."
+msgstr "إعادة تحميل ملف Kodi الشخصي الحالي."
+
+msgctxt "#30590"
+msgid "Close Kodi at once, without saving."
+msgstr "إغلاق Kodi فورًا دون حفظ."
+
+msgctxt "#30591"
+msgid "Save a zip of the whole build."
+msgstr "حفظ ملف مضغوط للبيلد كاملًا."
+
+msgctxt "#30592"
+msgid "Choose a saved backup and restore it."
+msgstr "اختر نسخة احتياطية محفوظة واستعدها."
+
+msgctxt "#30593"
+msgid "Change the folder where backups are saved and read."
+msgstr "تغيير المجلد الذي تُحفَظ فيه النسخ الاحتياطية وتُقرأ منه."
+
+msgctxt "#30594"
+msgid "Set the backups folder back to its default."
+msgstr "إعادة مجلد النسخ الاحتياطية إلى موقعه الافتراضي."
+
+msgctxt "#30595"
+msgid "Save your GUI and skin settings."
+msgstr "حفظ إعدادات الواجهة والسكن لديك."
+
+msgctxt "#30596"
+msgid "Bring back your saved GUI settings."
+msgstr "استعادة إعدادات الواجهة المحفوظة."
+
+msgctxt "#30597"
+msgid "Bring back your saved skin settings."
+msgstr "استعادة إعدادات السكن المحفوظة."
+
+msgctxt "#30598"
+msgid "Bring back the GUI settings the build came with."
+msgstr "استعادة إعدادات الواجهة التي جاء بها البيلد."
+
+msgctxt "#30599"
+msgid "Bring back the skin settings the build came with."
+msgstr "استعادة إعدادات السكن التي جاء بها البيلد."
+

@@ -62,6 +62,13 @@ def main_menu():
     
     add_dir(COLOR2(local_string(30015)), '', 9, addon_icon, addon_fanart, COLOR2(local_string(30016)), isFolder=False)  # Settings
     add_dir(COLOR2(local_string(30990)), '', 300, addon_icon, addon_fanart, COLOR2(local_string(30992)), isFolder=False)  # Buy Me a Coffee
+    # 4.2: back to the settings page (only when AB Tools has the page engine)
+    try:
+        from . import settings_page
+        if settings_page.engine():
+            add_dir(COLOR2(local_string(30504)), '', 501, addon_icon, addon_fanart, COLOR2(local_string(30504)), isFolder=False)
+    except Exception:
+        pass
 
 def build_menu():
     xbmc.executebuiltin('Dialog.Close(busydialog)')

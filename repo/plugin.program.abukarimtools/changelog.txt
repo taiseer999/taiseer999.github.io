@@ -1,3 +1,32 @@
+v4.8.27
+- Settings pages (AB Tools, AB Wizard): after opening a list from the page
+  (AB Wizard > Build Menu, kodi.log 2026-11-12 11:35) Back went to the
+  Programs add-on list, and the wizard would not open again until Kodi
+  restarted ("[AB Settings Page] already open"). Opened from Programs, the
+  page sits on top of Programs; ActivateWindow(Programs, list) brought that
+  same Programs window back up, so the page dropped out of the window
+  history while still open, hidden.
+  * An entry that opens a list now closes the page first; open the add-on
+    again to get the page back.
+  * A page that loses the screen to another window (not a dialog, not
+    another settings page) closes itself within ~1.5 s.
+  * "Already open" is a heartbeat the open page refreshes: a page that
+    stopped can no longer block the add-on.
+- Settings window: no <defaultcontrol> (in Arabic the hidden list 9000 was
+  asked for focus: "Control 9000 ... can't" in the log).
+
+v4.8.26
+- The settings page is now a shared engine (resources/lib/settings_engine.py,
+  self-contained: only xbmc / xbmcgui) that any add-on can fill with its own
+  categories and entries. AB Tools' page is one of them (no visible
+  change); AB Wizard 4.2 is the other - it loads the engine by file path
+  and opens as the same kind of page.
+- The engine can also show values that take time (folder sizes) in the
+  background, and add or remove entries while the page is open (a
+  sub-option that only shows when its switch is on).
+- Maintenance > ABUKARIM Wizard opens the wizard's own page when the wizard
+  is 4.2 or newer (older wizards: its maintenance list, as before).
+
 v4.8.25
 - Search All: when every add-on has finished and there are results, the
   add-on list on the left (Red Light 494, Fen Light 444, ...) gives way to
