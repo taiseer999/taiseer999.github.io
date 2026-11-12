@@ -27,13 +27,13 @@ THEMES = {
     'Lucent Glass': {
         'text': 'e8eef2', 'bg': '0b1119', 'dialog_bg': '162532', 'panel_bg': '0b1119',
         'soft': '3c4a56', 'logo': 'bdc8d1', 'nib': '2c3e4c',
-        'overlay': 'e0162532',                 # glass body (Lucent "panel")
+        'overlay': 'f5162532',                 # glass body (Lucent "panel")
         'shadow_back': 'b30b1119',
     },
     'Lucent Glass AMOLED': {
         'text': 'eeeeee', 'bg': '000000', 'dialog_bg': '101010', 'panel_bg': '000000',
         'soft': '2a2a2a', 'logo': 'bdbdbd', 'nib': '222222',
-        'overlay': 'e0101010',
+        'overlay': 'f5101010',
         'shadow_back': 'cc000000',
     },
 }

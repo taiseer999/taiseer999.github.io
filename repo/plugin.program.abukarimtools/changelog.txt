@@ -1,3 +1,16 @@
+v4.8.42
+- AF3 Lucent Look: dialogs and the Options panel no longer show the screen
+  behind them. The glass body was tinted by the active colour theme only
+  (70 percent opaque with AF3's default colours), so 4.8.41's change to the
+  Lucent Glass themes did nothing under other colours. A solid layer in the
+  theme's own dialog colour (dialog_bg_90) is now drawn under the glass body,
+  in every colour theme. Needs a skin reload after the patch is applied.
+
+v4.8.41
+- AF3 Lucent Look: dialogs and side panels (Options menu, settings, info
+  dialogs) are less see-through. The glass body (dialog_overlay) goes from
+  88% to 96% opaque in both Lucent Glass and Lucent Glass AMOLED.
+
 v4.8.27
 - Settings pages (AB Tools, AB Wizard): after opening a list from the page
   (AB Wizard > Build Menu, kodi.log 2026-11-12 11:35) Back went to the

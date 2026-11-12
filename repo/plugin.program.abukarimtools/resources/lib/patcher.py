@@ -1827,6 +1827,20 @@ PATCHES = [
         'already_patched_check': 'Onyx) + !Skin.HasSetting(abk.lucent)',
         'description': 'AF3 Lucent Look - no AF3 glass sheen over the Lucent body',
     },
+    # 4.8.42: the glass body alone (panel.png x dialog_overlay) let the screen
+    # behind show through, and how much depends on the active colour theme
+    # (b3 = 70 percent in AF3's defaults). A solid layer in the theme's own
+    # dialog colour (dialog_bg_90) under it makes dialogs / the Options panel
+    # nearly opaque in every theme. Inserted into the already-patched body.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Dialog_Parts.xml'),
+        'not_found_ok': True,
+        'old': '                    <control type="image">\n                        <texture border="48">abk_lucent/panel.png</texture>\n                        <colordiffuse>dialog_overlay</colordiffuse>\n                    </control>',
+        'new': '                    <control type="image">  <!-- ABUKARIM: Lucent solid underlayer -->\n                        <texture border="48">abk_lucent/panel.png</texture>\n                        <colordiffuse>dialog_bg_90</colordiffuse>\n                    </control>\n                    <control type="image">\n                        <texture border="48">abk_lucent/panel.png</texture>\n                        <colordiffuse>dialog_overlay</colordiffuse>\n                    </control>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent solid underlayer -->',
+        'description': 'AF3 Lucent Look - solid underlayer under the glass body (less see-through)',
+    },
 
     # ── AF3: Lucent Look, phase 2 (4.6.9) - the player ──
     # Thin glass progress bar, glass OSD buttons (white when focused, dark
