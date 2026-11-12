@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.program.ABUKARIMwizard" name="AB Wizard" version="4.2" provider-name="Slam, Sarge, Funsterbe, BYB، ABUKARIM">
+<addon id="plugin.program.ABUKARIMwizard" name="AB Wizard" version="4.2.1" provider-name="Slam, Sarge, Funsterbe, BYB، ABUKARIM">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0.1"/>
-		<import addon="plugin.program.abukarimtools" version="4.8.26"/>
+		<import addon="plugin.program.abukarimtools" version="4.8.40"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>executable</provides>

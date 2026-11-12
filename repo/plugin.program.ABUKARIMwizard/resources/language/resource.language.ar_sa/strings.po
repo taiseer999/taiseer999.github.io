@@ -456,7 +456,7 @@ msgstr "الإعدادات المتقدمة K22"
 
 msgctxt "#30113"
 msgid "Lite Setup"
-msgstr "إعداد مخفف"
+msgstr "تحديث غير ماسح خفيف"
 
 msgctxt "#30114"
 msgid ""
@@ -481,7 +481,7 @@ msgstr "تم تطبيق تحديث الواجهة بنجاح!"
 
 msgctxt "#30118"
 msgid "Full Setup"
-msgstr "إعداد كامل"
+msgstr "تحديث غير ماسح كامل"
 
 msgctxt "#30119"
 msgid "Update applied. Kodi will now close - reopen it to finish."
