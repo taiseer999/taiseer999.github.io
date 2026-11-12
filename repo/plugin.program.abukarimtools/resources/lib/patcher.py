@@ -3237,7 +3237,7 @@ PATCHES = [
         'description': 'TMDbHelper userdata settings.xml – max_threads=3',
     },
     # ── TMDbHelper: forced playback settings (4.8.10) ──
-    # Always on. Resolve library STRM only = on, Dummy duration = 0.5 s,
+    # Always on. Resolve library STRM only = on, Dummy duration = 0.1 s,
     # Resolve delay = 1.5 s. With STRM-only on, the live-handle dummy patch
     # (dummy.py) still answers a waiting Kodi play request, so "Playback
     # failed" stays away while list clicks skip the dummy altogether.
@@ -6298,7 +6298,7 @@ _RESCAN_PENDING = [False]
 # 4.8.10: TMDbHelper playback settings forced by AB Tools (id -> value).
 TMDBH_FORCED_SETTINGS = (
     ('only_resolve_strm', 'true'),   # Resolve library STRM only
-    ('dummy_duration',    '0.5'),    # Dummy duration (s)
+    ('dummy_duration',    '0.1'),    # Dummy duration (s)
     ('dummy_delay',       '1.5'),    # Resolve delay (s)
 )
 
