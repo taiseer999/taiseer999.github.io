@@ -111,6 +111,85 @@ _TMDBH_GENRE_LIST_LANG_BLOCK = (
 )
 
 
+# v3 (4.8.43) of both 6.x genre refreshes. kodi.log 2026-11-12 (AM6B, TMDbHelper
+# 6.21.5): home widgets waited ~90 s at boot. FindQueriesDatabase (ItemQueries.db)
+# never commits its init connection, so its schema step (DELETE FROM expiry ...,
+# PRAGMA user_version) leaves a write transaction open on the connection that
+# create_database() returns. v1 then opened a SECOND connection with the 60 s
+# timeout and waited on that lock - its own - inside TMDbHelper's init mutex:
+# 60 s per process, the stamp was never written, and every widget process
+# tried again. v3: commit the init connection first, do the refresh on that same
+# connection with a 2 s busy timeout, and only once per Kodi session and
+# language (Home window property). A locked database is skipped, not waited on.
+_TMDBH_GENRE_REFRESH_V3_TMPL = """
+    # -- TMDbHelper __TITLE__ v3 (by ABUKARIM TOOLS) --
+    # Genres are cached without a language, so after a language change they
+    # stay in the old one. Once per Kodi session and language, drop them so
+    # they are refetched. Runs on TMDbHelper's own init connection (committed
+    # first) with a 2 s lock timeout: a busy database is skipped, never waited on.
+    def create_database(self):
+        connection = super().create_database()
+        if connection is None:
+            return connection
+        try:
+            connection.commit()
+            self.__METHOD__(connection)
+        except Exception as error:
+            self.kodi_log(f'CACHE: ABK __TITLE__ skipped: {error}', 1)
+        return connection
+
+    def __METHOD__(self, connection):
+        from tmdbhelper.lib.addon.plugin import get_language
+        language = get_language() or 'en-US'
+        prop = '__PROP__'
+        if self.get_window_property(prop) == language:
+            return
+        self.set_window_property(prop, language)
+        cleared = 0
+        connection.execute('PRAGMA busy_timeout = 2000')
+        try:
+            with connection:
+                connection.execute('CREATE TABLE IF NOT EXISTS abk_meta(key TEXT PRIMARY KEY, value TEXT)')
+                row = connection.execute("SELECT value FROM abk_meta WHERE key='__KEY__'").fetchone()
+                if not row or row[0] != language:
+__WORK__                    connection.execute("INSERT OR REPLACE INTO abk_meta(key, value) VALUES ('__KEY__', ?)", (language, ))
+        finally:
+            connection.execute(f'PRAGMA busy_timeout = {int(self._db_timeout * 1000)}')
+        if cleared:
+            self.kodi_log(f'CACHE: ABK __TITLE__ -> {language} ({cleared} rows cleared)', 1)
+"""
+
+_TMDBH_GENRE_LANG_BLOCK_V3 = (
+    _TMDBH_GENRE_REFRESH_V3_TMPL
+    .replace('__TITLE__', 'genre language refresh')
+    .replace('__METHOD__', '_abk_genre_language_refresh')
+    .replace('__PROP__', 'ABK.GenreLanguage6.Checked')
+    .replace('__KEY__', 'genre_language_v2')   # keep the v2 stamp: no extra flush
+    .replace('__WORK__',
+             "                    connection.execute('UPDATE baseitem SET expiry=0 WHERE id IN (SELECT parent_id FROM genre)')\n"
+             "                    cleared = connection.execute('DELETE FROM genre').rowcount\n")
+)
+
+_TMDBH_GENRE_LIST_LANG_BLOCK_V3 = (
+    _TMDBH_GENRE_REFRESH_V3_TMPL
+    .replace('__TITLE__', 'genre list language refresh')
+    .replace('__METHOD__', '_abk_genre_list_language_refresh')
+    .replace('__PROP__', 'ABK.GenreListLanguage6.Checked')
+    .replace('__KEY__', 'genre_list_language')  # keep the v1 stamp: no extra flush
+    .replace('__WORK__',
+             "                    cleared = connection.execute('DELETE FROM genres').rowcount\n"
+             "                    connection.execute(\"DELETE FROM expiry WHERE id='genres'\")\n")
+)
+
+# Stock file, or one carrying any earlier ABK block (v1 / v2): the class line
+# plus the old block, up to its success log line, is replaced by v3.
+_TMDBH_GENRE_V3_PATTERN = (
+    r"(    cache_filename = [\"']__DB__\.db[\"'][ \t]*\r?\n)"
+    r"(?:\r?\n    # -- TMDbHelper __TITLE__(?: v2)? \(by ABUKARIM TOOLS\) --\r?\n"
+    r"[\s\S]*?ABK __TITLE__ -> [^\n]*\n)?"
+)
+
+
 
 
 
@@ -3168,11 +3247,13 @@ PATCHES = [
         'toggle': 'tmdbh_genre_lang',
         # 'old' = a v1-patched file (upgraded in place); a stock file goes
         # through the regex below instead.
-        'old': "    cache_filename = 'ItemDetails.db'\n" + _TMDBH_GENRE_LANG_BLOCK_V1,
-        'new': "    cache_filename = 'ItemDetails.db'\n" + _TMDBH_GENRE_LANG_BLOCK,
-        'already_patched_check': '# -- TMDbHelper genre language refresh v2 (by ABUKARIM TOOLS) --',
-        'fallback_pattern': r"    cache_filename = [\"']ItemDetails\.db[\"'][ \t]*\r?\n(?!\r?\n    # -- TMDbHelper genre language refresh)",
-        'fallback_repl': r'\g<0>' + _TMDBH_GENRE_LANG_BLOCK,
+        # 4.8.43: v3 - stock, v1 and v2 files all go through the regex.
+        'old': '',
+        'new': "    cache_filename = 'ItemDetails.db'\n" + _TMDBH_GENRE_LANG_BLOCK_V3,
+        'already_patched_check': '# -- TMDbHelper genre language refresh v3 (by ABUKARIM TOOLS) --',
+        'fallback_pattern': (_TMDBH_GENRE_V3_PATTERN.replace('__DB__', 'ItemDetails')
+                             .replace('__TITLE__', 'genre language refresh')),
+        'fallback_repl': lambda _m: _m.group(1) + _TMDBH_GENRE_LANG_BLOCK_V3,
         'description': 'TMDbHelper database.py – refresh cached genres when the language changes',
         'max_version': '6.99.99',          # 7.x: see the v7 entry below
     },
@@ -3180,11 +3261,14 @@ PATCHES = [
         'addon_id': 'plugin.video.themoviedb.helper',
         'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'query', 'database', 'database.py'),
         'toggle': 'tmdbh_genre_lang',
-        'old': "    cache_filename = 'ItemQueries.db'\n",
-        'new': "    cache_filename = 'ItemQueries.db'\n" + _TMDBH_GENRE_LIST_LANG_BLOCK,
-        'already_patched_check': '# -- TMDbHelper genre list language refresh (by ABUKARIM TOOLS) --',
-        'fallback_pattern': r"    cache_filename = [\"']ItemQueries\.db[\"'][ \t]*\r?\n",
-        'fallback_repl': r'\g<0>' + _TMDBH_GENRE_LIST_LANG_BLOCK,
+        # 4.8.43: v3 - commits TMDbHelper's init connection, 2 s timeout,
+        # once per session (v1 locked ItemQueries.db for 60 s per widget).
+        'old': '',
+        'new': "    cache_filename = 'ItemQueries.db'\n" + _TMDBH_GENRE_LIST_LANG_BLOCK_V3,
+        'already_patched_check': '# -- TMDbHelper genre list language refresh v3 (by ABUKARIM TOOLS) --',
+        'fallback_pattern': (_TMDBH_GENRE_V3_PATTERN.replace('__DB__', 'ItemQueries')
+                             .replace('__TITLE__', 'genre list language refresh')),
+        'fallback_repl': lambda _m: _m.group(1) + _TMDBH_GENRE_LIST_LANG_BLOCK_V3,
         'description': 'TMDbHelper query database.py \u2013 refresh the global genre list when the language changes',
         'max_version': '6.99.99',          # 7.x: see the v7 entry below
     },

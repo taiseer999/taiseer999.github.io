@@ -1,3 +1,21 @@
+v4.8.43
+- TMDbHelper 6.x: home widgets no longer wait about 90 s after boot
+  (kodi.log 2026-11-12, AM6B, TMDbHelper 6.21.5: 19 widgets at
+  "ItemQueries.db.lockfile Timeout!", then "database is locked", 60 s each).
+  The "Genres Follow Language" patch for ItemQueries.db opened a second
+  connection and waited 60 s on a lock its own process held: TMDbHelper
+  does not commit ItemQueries.db's init connection, so its schema step
+  stayed open. The stamp was never written, so every widget process tried
+  again, and the schema update (user_version 6) rolled back each time.
+  Both 6.x genre refreshes (ItemDetails.db and ItemQueries.db) are now v3:
+  * TMDbHelper's init connection is committed first, then reused - no
+    second connection.
+  * 2 s lock timeout; a busy database is skipped until the next session.
+  * Once per Kodi session and language (Home window property).
+  * Existing stamps are kept: no extra genre flush.
+  Applied by the next patch sweep (stock, v1 and v2 files are upgraded).
+  TMDbHelper 7.x is unchanged.
+
 v4.8.42
 - AF3 Lucent Look: dialogs and the Options panel no longer show the screen
   behind them. The glass body was tinted by the active colour theme only
