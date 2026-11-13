@@ -1,3 +1,68 @@
+v4.8.53
+- AF3 Lucent Look: glass transparency setting. Toggles > AF3: Lucent Look has
+  a "Glass transparency" row: 30 %, 50 %, 70 % (default) or 90 % solid, for
+  dialogs and the Options panel. Changes live (no reload) once the frame
+  patch is in place; the first time the skin reloads once.
+  The glass body in Part_Background now takes its colour from
+  $VAR[ABK_Lucent_Glass] (Includes_ABK_Lucent.xml): the theme's dialog_bg_30 /
+  _50 / _90, or dialog_overlay for 70 %, chosen by Skin.String(abk.lucent.glass).
+
+v4.8.52
+- AF3 Lucent Look: see-through glass. At Lucent's 95 % (4.8.51) the Options
+  panel and dialogs hid the screen behind them completely; the glass body
+  (dialog_overlay) is now Lucent's colour at 70 % (Lucent Glass b31d2c3b,
+  Glass AMOLED b3141414). Takes effect after a skin reload / restart.
+
+v4.8.51
+- Single players (Glass Theme): the stream window of Fen Light, Red Light,
+  POV and Umbrella shows the "Selected stream" tiles of Search All under the
+  plot - resolution, size, bitrate (estimated from the running time), video,
+  HDR, audio, channels, release, service (+ the scraper) and languages - for
+  the focused stream. The plot is shorter (4 lines, scrolls); the filter hint
+  sits under the tiles; Umbrella's Back / uncached pills under the tiles.
+  lucent_theme.stream_specs() (lucent.sp_* item properties, lucent.sl_*
+  labels, Arabic) - a port of Search All's _stream_specs.
+- AF3 Lucent Look: the colours added in 4.8.47 (Lucent accent list) and
+  4.8.48 (Colours window, eight schemes, five extra colour themes) are
+  removed; Toggles > AF3: Lucent Look is the Off / Lucent Glass / Lucent
+  Glass AMOLED menu with the focus-colour switch again. Patch entries take
+  the old highlight / accent lines out of Includes_Colors.xml and delete the
+  five extra colour themes from AF3's colors folder (new 'remove_file'
+  entry type; a regex fallback may now replace with '' to remove lines).
+  If one of the removed themes was active, pick Lucent Glass again.
+- AF3 Lucent Look transparency = the Lucent skin's own: the glass body uses
+  Lucent's "modal" colour (F21D2C3B, 95 %; Glass AMOLED F2141414), no solid
+  layer under it (removed in 4.8.49).
+
+v4.8.50
+- Search All: the active filter chip ("All", an add-on, a quality) was a
+  filled light-blue pill, so on opening the window it looked selected next to
+  the focused first stream (two highlights at once). The active chip is now
+  an outlined pill (faint fill + thin white edge); a filled white pill only
+  where the chip row has the focus. New texture
+  resources/lucent/media/lucent/pill52_edge.png.
+- Single players (Glass Theme): Fen Light, Red Light, POV and Umbrella list
+  their streams in the same order as Search All: quality 4K > 1080p > 720p >
+  SD (2160p / UHD / 8K count as 4K, CAM and the like after SD), the biggest
+  file first, the add-on's own order last; uncached results at the end. The
+  window's results list is sorted in place, so playing a stream and the
+  add-on's fall-back to the next stream follow the same order.
+  New lucent_theme.lucent_sort() + an optional hook on
+  "self.results = kwargs.get('results')" in each window (a fork without that
+  line keeps its own order and still gets the theme).
+
+v4.8.49
+- AF3 Lucent Look: transparency back. Dialogs and the Options panel show
+  the screen behind them again, as before 4.8.41:
+  * the solid layer 4.8.42 drew under the glass body (dialog_bg_90) is
+    removed from Dialog_Parts.xml (a new always-on entry takes it out where
+    it was patched in; the 4.8.42 entry is gone);
+  * the glass body (dialog_overlay) is 88 % opaque again instead of 96 % in
+    every Lucent colour theme (Glass, Glass AMOLED and the five 4.8.48
+    scheme themes).
+  Takes effect after the skin reloads (opening the Colours window and
+  closing it, or a restart).
+
 v4.8.48
 - AF3 Lucent Look: Toggles > AF3: Lucent Look opens a "Colours" window
   (abk_colours.xml, af3_lucent_colours.py) instead of the list:

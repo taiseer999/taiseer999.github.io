@@ -149,6 +149,18 @@ SPECS['umbrella']['hooks'] += [
      'content = lucent_progress(self, content, percent)\n', 'before'),
 ]
 
+# 4.8.50: Search All's stream order in the add-on's own source window
+# (lucent_theme.lucent_sort, in place on the window's results list). Optional:
+# a fork without this line keeps its own order instead of losing the theme.
+_RESULTS_ANCHOR = "\t\tself.results = kwargs.get('results')\n"
+_FEN_SORT = ('try:\n\tfrom modules.lucent_theme import lucent_sort\n\tlucent_sort(self.results, kwargs.get(\'meta\'))\n'
+             'except Exception: pass\n')
+_UMB_SORT = ('try:\n\tfrom resources.lib.modules.lucent_theme import lucent_sort\n\tlucent_sort(self.results, kwargs.get(\'meta\'))\n'
+             'except Exception: pass\n')
+for _key in ('fenlight', 'redlight', 'pov'):
+    SPECS[_key]['hooks'].append((os.path.join(_WIN, 'sources.py'), _RESULTS_ANCHOR, _FEN_SORT, 'after', 'optional'))
+SPECS['umbrella']['hooks'].append((os.path.join(_WIN, 'source_results.py'), _RESULTS_ANCHOR, _UMB_SORT, 'after', 'optional'))
+
 # AB Tools "Search All" (3.4.48): Red Light gets back Fen Light's device-select
 # modes (app_list_sources / app_play_source) so AB Tools can collect and play its
 # sources. Separate from the Glass theme switch: own helper, no windows, hooks

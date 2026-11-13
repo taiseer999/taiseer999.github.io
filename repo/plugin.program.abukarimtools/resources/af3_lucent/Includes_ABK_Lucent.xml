@@ -9,6 +9,16 @@
      Design after the Lucent skin by djdirty60 (github.com/djdirty60/Lucent). -->
 <includes>
 
+    <!-- 4.8.53: glass transparency of dialogs / the Options panel (Lucent glass
+         body in Part_Background). Skin.String(abk.lucent.glass) = 30/50/90;
+         empty = 70 (the theme's dialog_overlay). Live, no reload. -->
+    <variable name="ABK_Lucent_Glass">
+        <value condition="String.IsEqual(Skin.String(abk.lucent.glass),30)">dialog_bg_30</value>
+        <value condition="String.IsEqual(Skin.String(abk.lucent.glass),50)">dialog_bg_50</value>
+        <value condition="String.IsEqual(Skin.String(abk.lucent.glass),90)">dialog_bg_90</value>
+        <value>dialog_overlay</value>
+    </variable>
+
     <!-- OSD buttons: glass circle, solid white when focused -->
     <include name="ABK_Lucent_OSD_Button_Textures">
         <texturefocus colordiffuse="FFFFFFFF">common/circle.png</texturefocus>

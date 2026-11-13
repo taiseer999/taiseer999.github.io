@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Lucent theme helper - injected by AB Tools (plugin.program.abukarimtools).
-# LUCENT_HELPER_VERSION = 13
+# LUCENT_HELPER_VERSION = 14
 #
 # Normalises each add-on's own source-list and meta properties into one shared
 # 'lucent.*' property set, so a single Lucent window layout works for Fen Light,
@@ -101,6 +101,43 @@ def badges(info, quality='', name=''):
 	return result[:_MAX_BADGES]
 
 
+# AB Tools 4.8.50: the stream order of AB Tools Search All, for the add-on's own
+# source window (called from the window's __init__ on its results list, in
+# place, so the add-on's play / next-source fallback follows the same order):
+# quality 4K > 1080p > 720p > SD (8K / 2160p / UHD count as 4K; CAM / SCR etc.
+# after SD), biggest file first, the add-on's own order last. Uncached results, which
+# Search All leaves out, go to the end.
+_QRANK = {'4K': 0, '1080P': 1, '720P': 2, 'SD': 3}
+
+
+def _sort_key(pair):
+	pos, item = pair
+	try:
+		get = item.get
+		q = _clean(get('quality') or 'SD').upper() or 'SD'
+		if q in ('2160P', 'UHD', '8K'): q = '4K'
+		group = q if q in _QRANK else 'SD'
+		try: size = float(get('size') or 0)
+		except Exception: size = 0.0
+		uncached = 'Uncached' in str(get('cache_provider', ''))
+		return (uncached, _QRANK[group], q != group, -size, pos)
+	except Exception:
+		return (True, 9, True, 0.0, pos)
+
+
+def lucent_sort(results, meta=None):
+	"""Sort the add-on's results list in place like Search All. meta: the
+	window's meta (running time for the bitrate tile, 4.8.51)."""
+	_set_runtime(meta)
+	try:
+		if not isinstance(results, list) or len(results) < 2: return results
+		ordered = [item for _pos, item in sorted(enumerate(results), key=_sort_key)]
+		results[:] = ordered
+	except Exception as e:
+		_log('sort: %s' % e)
+	return results
+
+
 # Approximate advance widths (px at 1080p) of a skin's font12. Text is fitted in
 # Python because Kodi trims an overflowing label from the START when the GUI
 # language is right-to-left (Arabic), which hid the first characters.
@@ -193,6 +230,140 @@ def _colored():
 		return _COLORED['on']
 
 
+# ───────────── Selected stream tiles (AB Tools 4.8.51) ─────────────
+# The same 3 x 3 details as AB Tools Search All (ab_search._stream_specs):
+# resolution, size, bitrate, video, HDR, audio, channels, release, service, read
+# from the add-on's info string and the release name. Bitrate = size / running
+# time; the running time comes from the window's meta (lucent_sort / window).
+_RUNTIME = [0]
+_SP_SEP = re.compile(r'[\s._\[\]()|/,]+')
+_SP_RES = {'4K': ('4K', '3840 × 2160'), '1080P': ('1080p', '1920 × 1080'), '720P': ('720p', '1280 × 720'),
+		'SD': ('SD', ''), 'CAM': ('CAM', ''), 'SCR': ('SCR', ''), 'TELE': ('TELESYNC', ''), 'HC': ('HC', '')}
+_SP_REL = (('Remux', r'REMUX\b'), ('Blu-ray', r'\bBLU[- ]?RAY\b|\bBDRIP\b|\bBRRIP\b'),
+		('WEB-DL', r'\bWEB[- ]?DL\b'), ('WEBRip', r'\bWEB[- ]?RIP\b'), ('WEB', r'\bWEB\b'),
+		('HDTV', r'\bHDTV\b'), ('DVD', r'\bDVD(?:RIP)?\b'), ('HDRip', r'\bHD[- ]?RIP\b'))
+_SP_VIDEO = (('AV1', r'\bAV1\b'), ('HEVC', r'\bHEVC\b|\b[HX][- ]?265\b'), ('AVC', r'\bAVC\b|\b[HX][- ]?264\b'),
+		('VP9', r'\bVP9\b'), ('XviD', r'\bXVID\b'), ('MPEG-2', r'\bMPEG[- ]?2\b'))
+_SP_AUDIO = (('TrueHD', r'\bTRUE[- ]?HD\b'), ('DTS:X', r'\bDTS[- ]?X\b|\bDTS:X\b'),
+		('DTS-HD MA', r'\bDTS[- ]?HD[- ]?MA\b|\bDTS-HDMA\b'), ('DTS-HD', r'\bDTS[- ]?HD\b'), ('DTS', r'\bDTS\b'),
+		('DD+', r'\bDDP|\bDD\+|\bE[- ]?AC[- ]?3\b|\bDOLBY[- ]?DIGITAL[- ]?PLUS\b|\bDOLBYDIGITALPLUS\b'),
+		('DD', r'\bDD(?![A-Z+])|\bAC[- ]?3\b|\bDOLBY[- ]?DIGITAL\b'),
+		('FLAC', r'\bFLAC\b'), ('PCM', r'\bL?PCM\b'), ('AAC', r'\bAAC'), ('Opus', r'\bOPUS\b'), ('MP3', r'\bMP3\b'))
+_SP_AUDIO_LONG = {'TrueHD': 'Dolby TrueHD', 'DD+': 'Dolby Digital Plus', 'DD': 'Dolby Digital',
+		'DTS-HD MA': 'Master Audio', 'DTS-HD': 'High Resolution', 'DTS:X': 'DTS:X'}
+_SP_CH_TAG = {'8': '7.1', '7': '6.1', '6': '5.1', '2': '2.0', '1': '1.0'}
+_SP_LANG = {'ENG': 'ENG', 'ENGLISH': 'ENG', 'ITA': 'ITA', 'ITALIAN': 'ITA', 'GER': 'GER', 'DEU': 'GER',
+		'GERMAN': 'GER', 'FRE': 'FRE', 'FRA': 'FRE', 'FRENCH': 'FRE', 'VFF': 'FRE', 'SPA': 'SPA',
+		'ESP': 'SPA', 'SPANISH': 'SPA', 'LATINO': 'LAT', 'RUS': 'RUS', 'RUSSIAN': 'RUS', 'UKR': 'UKR',
+		'ARA': 'ARA', 'ARABIC': 'ARA', 'TUR': 'TUR', 'TURKISH': 'TUR', 'JPN': 'JPN', 'JAP': 'JPN',
+		'JAPANESE': 'JPN', 'KOR': 'KOR', 'KOREAN': 'KOR', 'HIN': 'HIN', 'HINDI': 'HIN', 'POR': 'POR',
+		'POL': 'POL', 'CHI': 'CHI', 'MULTI': 'MULTI', 'DUAL': 'DUAL'}
+_SP_GROUP = re.compile(r'-([A-Za-z0-9]{2,15})(?:\.(?:mkv|mp4|avi|ts|m2ts|iso))?\s*$')
+_SP_PACK = re.compile(r'\b(?:COMPLETE|SEASONS?[ ._-]?\d|S\d{1,2}(?![ ._-]?E\d))\b', re.I)
+_SP_SIZE = re.compile(r'([\d.,]+)\s*([KMGT])I?B', re.I)
+_SP_PRETTY = {'ALLDEBRID': 'AllDebrid', 'AD': 'AllDebrid', 'REAL-DEBRID': 'Real-Debrid', 'REALDEBRID': 'Real-Debrid',
+		'RD': 'Real-Debrid', 'TORBOX': 'TorBox', 'TB': 'TorBox', 'PREMIUMIZE': 'Premiumize', 'PM': 'Premiumize',
+		'OFFCLOUD': 'Offcloud', 'OC': 'Offcloud', 'EASYNEWS': 'Easynews', 'EN': 'Easynews',
+		'EASYDEBRID': 'EasyDebrid', 'ED': 'EasyDebrid', 'DEBRID-LINK': 'Debrid-Link', 'DEBRIDLINK': 'Debrid-Link'}
+_SP_KEYS = ('res', 'size', 'rate', 'video', 'hdr', 'audio', 'ch', 'rel', 'svc')
+_SP_LABELS = (('heading', 'Selected stream'), ('res', 'Resolution'), ('size', 'Size'), ('rate', 'Bitrate'),
+		('video', 'Video'), ('hdr', 'HDR'), ('audio', 'Audio'), ('ch', 'Channels'), ('rel', 'Release'),
+		('svc', 'Service'))
+
+
+def _sp_first(table, text):
+	for label, rx in table:
+		if re.search(rx, text): return label
+	return ''
+
+
+def _set_runtime(meta):
+	"""Running time (minutes) of the title in this window; a new window with no
+	running time clears the previous title's."""
+	if meta is None: return
+	try: _RUNTIME[0] = _minutes(meta.get('duration') or meta.get('runtime')) or 0
+	except Exception: _RUNTIME[0] = 0
+
+
+def _size_gb(label):
+	m = _SP_SIZE.search(label or '')
+	if not m: return 0.0
+	try: value = float(m.group(1).replace(',', '.'))
+	except Exception: return 0.0
+	return value * {'K': 1e-6, 'M': 1e-3, 'G': 1.0, 'T': 1e3}[m.group(2).upper()]
+
+
+def stream_specs(name, info, quality, provider, size_label, site=''):
+	"""lucent.sp_* properties (value + _sub per tile, and the languages line)."""
+	name, info = _clean(name), _clean(info)
+	raw = '%s | %s' % (info, name)
+	up = raw.upper().replace('D/VISION', 'DOLBY-VISION')
+	text = ' %s ' % _SP_SEP.sub(' ', up)
+	q = _clean(quality).upper() or 'SD'
+	if q in ('2160P', 'UHD', '8K'): q = '4K'
+	out = {}
+	out['res'], out['res_sub'] = _SP_RES.get(q, (q, ''))
+	size = _clean(size_label)
+	if size.upper() in ('N/A', 'NA', 'NONE', '0', '0 B'): size = ''
+	pack = bool(_SP_PACK.search(name))
+	out['size'], out['size_sub'] = size, (_t('Season pack') if pack else '')
+	gb, minutes = _size_gb(size), _RUNTIME[0]
+	rate = gb * 8000.0 / (minutes * 60.0) if (gb > 0 and minutes and not pack) else 0
+	out['rate'] = ('~%d Mbps' % round(rate)) if rate else ''
+	out['rate_sub'] = _t('estimated') if rate else ''
+	out['video'] = _sp_first(_SP_VIDEO, text)
+	m = re.search(r'\b(10|12)[- ]?BITS?\b|\bHI10P?\b', text)
+	out['video_sub'] = ('%s-bit' % (m.group(1) or '10')) if m else ''
+	dv = re.search(r'\b(?:DV|DOVI|DOLBY[- ]?VISION|DOLBYVISION)(?:[- ]?P?([4578]))?\b', text)
+	dv2 = re.search(r'\b(?:DV2|DOVI2|DOLBY[- ]?VISION[- ]?2)\b', text)
+	layer = ('HDR10+' if re.search(r'\bHDR10(?:\+|PLUS|P)', text) else
+			'HDR10' if re.search(r'\bHDR10\b', text) else
+			'HDR' if re.search(r'\bHDR\b', text) else
+			'HLG' if re.search(r'\bHLG\b', text) else '')
+	if dv2 or dv:
+		out['hdr'] = 'Dolby Vision 2' if dv2 else 'Dolby Vision'
+		bits = []
+		if dv and dv.group(1): bits.append('P%s' % dv.group(1))
+		if layer: bits.append(layer)
+		elif re.search(r'\bHYBRID\b', text): bits.append('Hybrid')
+		out['hdr_sub'] = ' · '.join(bits)
+	elif layer: out['hdr'], out['hdr_sub'] = layer, ''
+	elif re.search(r'\bSDR\b', text): out['hdr'], out['hdr_sub'] = 'SDR', ''
+	else: out['hdr'] = out['hdr_sub'] = ''
+	codec = _sp_first(_SP_AUDIO, text)
+	atmos = bool(re.search(r'\bATMOS\b', text))
+	if codec:
+		out['audio'] = codec
+		out['audio_sub'] = 'Dolby Atmos' if atmos else _SP_AUDIO_LONG.get(codec, '')
+	else:
+		out['audio'], out['audio_sub'] = ('Dolby Atmos' if atmos else ''), ''
+	ch = ''
+	m = re.search(r'(?<![\d.])([1-9])[ ._]([01])(?![\d])', raw)
+	if m and m.group(1) in '125678': ch = '%s.%s' % (m.group(1), m.group(2))
+	if not ch:
+		m = re.search(r'\b(?:AUDIO_)?([12678])CH\b', up)
+		ch = _SP_CH_TAG.get(m.group(1), '') if m else ''
+	out['ch'] = ch
+	out['ch_sub'] = (_t('Surround') if ch[:1] in '5678' else _t('Stereo') if ch == '2.0'
+			else _t('Mono') if ch == '1.0' else '') if ch else ''
+	rel = _sp_first(_SP_REL, text)
+	if not rel and q in ('CAM', 'SCR', 'TELE', 'HC'): rel = _SP_RES[q][0]
+	out['rel'] = rel
+	g = _SP_GROUP.search(name)
+	out['rel_sub'] = g.group(1) if g and not re.match(r'^(?:DL|RIP|HD|X|MA|\d+)$', g.group(1), re.I) else ''
+	prov = _clean(provider)
+	up_p = prov.upper().replace(' ', '')
+	out['svc'] = _SP_PRETTY.get(up_p, prov if up_p not in ('N/A', 'NA', 'NONE') else '')
+	site = _clean(site)
+	out['svc_sub'] = site if site and site.upper() not in ('N/A', 'NA', 'NONE') and site.upper() != up_p else ''
+	langs = []
+	for tok in text.split():
+		code = _SP_LANG.get(tok.strip('-+'))
+		if code and code not in langs: langs.append(code)
+	out['lang'] = '  ·  '.join(langs[:5])
+	return dict(('lucent.sp_%s' % k, v) for k, v in out.items())
+
+
 def lucent_item(listitem, profile):
 	"""Add lucent.* properties to one source list item (reads the add-on's own ones)."""
 	try:
@@ -223,6 +394,9 @@ def lucent_item(listitem, profile):
 		found = badges(get(keys['info']), quality, get(keys['name']))
 		for n in range(_MAX_BADGES):
 			props['lucent.badge_%d' % (n + 1)] = found[n] if n < len(found) else ''
+		# AB Tools 4.8.51: the selected-stream tiles
+		try: props.update(stream_specs(get(keys['name']), get(keys['info']), quality, provider, size, site))
+		except Exception: pass
 		listitem.setProperties(props)
 	except Exception:
 		pass
@@ -342,6 +516,8 @@ def lucent_window(window, meta, fanart='', clearlogo=None):
 			line1.append(_t('Ends at %s') % _time.strftime('%H:%M', _time.localtime(_time.time() + minutes * 60)))
 		for v in (mpaa, _clean(str(genre).replace(' / ', ', ')), rating):
 			if v: line2.append(v)
+		_set_runtime(meta)
+		for key, text in _SP_LABELS: window.setProperty('lucent.sl_%s' % key, _t(text))   # 4.8.51
 		window.setProperty('lucent.line1', '  |  '.join(line1))
 		window.setProperty('lucent.line2', '  |  '.join(line2))
 	except Exception:
@@ -354,7 +530,12 @@ _AR = {'Filter results': 'تصفية النتائج', 'Show all results': 'عر�
 	'Filter by info (HDR, Atmos ...)...': 'تصفية حسب المعلومات (HDR وAtmos ...)...',
 	'Filter by info': 'تصفية حسب المعلومات', 'Keywords (comma separated)': 'كلمات مفتاحية (مفصولة بفواصل)',
 	'No results': 'لا توجد نتائج', 'Apply': 'تطبيق', '%s results': '%s نتيجة', '%d selected': 'المحدد: %d',
-	'Choose one or more, then Apply': 'اختر عنصرًا أو أكثر ثم اضغط تطبيق', 'Title: %s': 'العنوان: %s'}
+	'Choose one or more, then Apply': 'اختر عنصرًا أو أكثر ثم اضغط تطبيق', 'Title: %s': 'العنوان: %s',
+	# 4.8.51: selected-stream tiles
+	'Selected stream': 'المصدر المحدد', 'Resolution': 'الدقة', 'Size': 'الحجم', 'Bitrate': 'معدل البت',
+	'Video': 'الفيديو', 'HDR': 'المدى الديناميكي', 'Audio': 'الصوت', 'Channels': 'القنوات',
+	'Release': 'الإصدار', 'Service': 'الخدمة', 'estimated': 'تقديري', 'Surround': 'صوت محيطي',
+	'Stereo': 'ستيريو', 'Mono': 'أحادي', 'Season pack': 'حزمة موسم'}
 
 
 def _minutes(value):

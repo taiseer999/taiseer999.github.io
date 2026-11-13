@@ -506,6 +506,127 @@ def stream_list(lid, visible, profile, scroll_id):
            'idle': card('idle', profile), 'dim': card('dim', profile), 'active': card('active', profile)}
 
 
+# 4.8.51: the "Selected stream" tiles of Search All in the single-player window
+# (left column, under a shorter plot). Values come from lucent_theme's
+# lucent.sp_* item properties; only the list the add-on filled has items, so
+# the labels simply join every list's value.
+SP_PLOT_H = 130                        # plot 476 .. 606 (4 lines)
+SP_TOP = 624                           # heading; tiles 680 .. 992
+SP_TILE_H, SP_GAP = 96, 12
+
+
+def sp_panel(list_ids, fade_cond=None):
+    def val(key):
+        return ''.join('$INFO[Container(%s).ListItem.Property(lucent.sp_%s)]' % (lid, key) for lid in list_ids)
+
+    def empty(key):
+        return ' + '.join('String.IsEmpty(Container(%s).ListItem.Property(lucent.sp_%s))' % (lid, key) for lid in list_ids)
+    tiles = []
+    for n, (key, _x) in enumerate(AB_SPEC_TILES):
+        col, row = n % AB_SPEC_COLS, n // AB_SPEC_COLS
+        tiles.append('''
+                <control type="group">
+                    <left>%(l)d</left>
+                    <top>%(t)d</top>
+                    <width>%(w)d</width>
+                    <height>%(h)d</height>
+                    <control type="image">
+                        <texture border="32">lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>6</top>
+                        <width>%(iw)d</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(lucent.sl_%(k)s)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>%(iw)d</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]%(v)s[/B]</label>
+                        <visible>!%(e)s</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>%(iw)d</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>%(e)s</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>66</top>
+                        <width>%(iw)d</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>%(sub)s</label>
+                    </control>
+                </control>''' % {'l': col * (AB_SPEC_W + AB_SPEC_GAP), 't': row * (SP_TILE_H + SP_GAP),
+                                 'w': AB_SPEC_W, 'h': SP_TILE_H, 'iw': AB_SPEC_W - 24, 'k': key,
+                                 'v': val(key), 'e': '[%s]' % empty(key), 'sub': val(key + '_sub')})
+    hide = ''
+    if fade_cond:
+        hide = '\n            <animation effect="fade" end="0" time="200" condition="%s">Conditional</animation>' % fade_cond
+    return '''
+        <!-- ============ Left: details of the focused stream (4.8.51, as in Search All) ============ -->
+        <control type="group">
+            <animation effect="fade" start="0" end="100" time="350" delay="200">WindowOpen</animation>
+            <animation effect="fade" end="0" time="250">WindowClose</animation>%(hide)s
+            <left>96</left>
+            <top>%(top)d</top>
+            <width>700</width>
+            <control type="label">
+                <width>420</width>
+                <height>40</height>
+                <font>font12</font>
+                <textcolor>FF8F9BA6</textcolor>
+                <label>[B][UPPERCASE]$INFO[Window.Property(lucent.sl_heading)][/UPPERCASE][/B]</label>
+            </control>
+            <control type="label">
+                <left>300</left>
+                <width>400</width>
+                <height>40</height>
+                <font>font12</font>
+                <align>right</align>
+                <textcolor>FFBDC8D1</textcolor>
+                <label>[B]%(lang)s[/B]</label>
+            </control>
+            <control type="image">
+                <top>44</top>
+                <width>700</width>
+                <height>1</height>
+                <texture>lucent/white.png</texture>
+                <colordiffuse>1AFFFFFF</colordiffuse>
+            </control>
+            <control type="group">
+                <top>56</top>%(tiles)s
+            </control>
+        </control>''' % {'hide': hide, 'top': SP_TOP, 'lang': val('lang'), 'tiles': ''.join(tiles)}
+
+
 def results_window(profile):
     lists = ''.join(stream_list(lid, vis, profile, sid) for lid, vis, sid in profile['lists'])
     left_extra = profile.get('left_extra', '')
@@ -521,7 +642,7 @@ def results_window(profile):
         <height>1080</height>
     </coordinates>
     <defaultcontrol always="true">%(default)s</defaultcontrol>
-    <controls>%(bg)s%(title)s%(plot)s%(left_extra)s
+    <controls>%(bg)s%(title)s%(plot)s%(specs)s%(left_extra)s
         <!-- ============ Right: glass stream panel ============ -->
         <control type="group">
             <animation effect="fade" start="0" end="100" time="350" delay="150">WindowOpen</animation>
@@ -564,7 +685,8 @@ def results_window(profile):
 ''' % {'name': profile['name'], 'default': profile['lists'][0][0],
            'bg': backdrop('$INFO[Window.Property(lucent.fanart)]'),
            'title': title_block(),
-           'plot': plot_block('$INFO[Window.Property(lucent.plot)]', fade_cond=fade_cond),
+           'plot': plot_block('$INFO[Window.Property(lucent.plot)]', height=SP_PLOT_H, fade_cond=fade_cond),
+           'specs': sp_panel([lid for lid, _v, _s in profile['lists']], fade_cond=fade_cond),
            'left_extra': left_extra, 'glass': glass(0, 0, 984, 968),
            'subhead': profile['subhead'], 'lists': lists, 'hidden': profile.get('hidden', '')}
 
@@ -791,7 +913,7 @@ def fen_results_profile(name):
                 </focusedlayout>
             </control>
             <control type="label">
-                <top>424</top>
+                <top>528</top>
                 <width>700</width>
                 <height>40</height>
                 <font>font12</font>
@@ -800,7 +922,7 @@ def fen_results_profile(name):
                 <visible>!Control.HasFocus(2100) + !String.IsEqual(Window.Property(filter_applied),true)</visible>
             </control>
             <control type="label">
-                <top>424</top>
+                <top>528</top>
                 <width>700</width>
                 <height>40</height>
                 <font>font12</font>
@@ -839,7 +961,7 @@ def pov_results_profile():
         'left_extra': '''
         <control type="label">
             <left>96</left>
-            <top>936</top>
+            <top>1004</top>
             <width>720</width>
             <height>40</height>
             <font>font12</font>
@@ -860,7 +982,7 @@ def umbrella_results_profile(list_id, what, buttons=True):
             <animation effect="fade" start="0" end="100" time="350" delay="150">WindowOpen</animation>
             <animation effect="fade" end="0" time="250">WindowClose</animation>
             <left>96</left>
-            <top>880</top>%s
+            <top>1000</top>%s
         </control>''' % button_row([
             action_button('2051', 'Back', 'String.IsEqual(Window().Property(umbrella.sourcebackbutton),1)'),
             action_button('2001', '$ADDON[plugin.video.umbrella 32639]'),
@@ -872,16 +994,18 @@ def umbrella_results_profile(list_id, what, buttons=True):
         'list_nav': nav,
         'full_prop': 'lucent.never_set', 'full_label': '',
         'subhead': '[UPPERCASE]$INFO[Window().Property(umbrella.total_results)] Results$INFO[Window.Property(lucent.filter_info),  ·  Filter: ,  ·  BACK to clear][/UPPERCASE]',
-        'left_extra': extra + '''
+        # 4.8.51: the stream tiles take the space; the action pills sit under
+        # them, the hint only where there are no pills
+        'left_extra': extra + ('' if buttons else '''
         <control type="label">
             <left>96</left>
-            <top>%d</top>
+            <top>1004</top>
             <width>720</width>
             <height>40</height>
             <font>font12</font>
             <textcolor>FF8F9BA6</textcolor>
             <label>RIGHT to filter  ·  MENU for options  ·  INFO for details</label>
-        </control>''' % (960 if buttons else 936),
+        </control>'''),
     }
 
 
@@ -1684,11 +1808,20 @@ def ab_chip(focused):
                         <colordiffuse>1AFFFFFF</colordiffuse>
                         <visible>String.IsEmpty(ListItem.Property(abs.active))</visible>
                     </control>
+                    <!-- 4.8.50: the active filter is an outlined chip, not a filled
+                         one - a fill read as a second focus next to the stream list -->
                     <control type="image">
                         <width>246</width>
                         <height>52</height>
                         <texture border="26">lucent/pill60.png</texture>
-                        <colordiffuse>66D6F0FF</colordiffuse>
+                        <colordiffuse>1AFFFFFF</colordiffuse>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.active))</visible>
+                    </control>
+                    <control type="image">
+                        <width>246</width>
+                        <height>52</height>
+                        <texture border="26,0,26,0">lucent/pill52_edge.png</texture>
+                        <colordiffuse>99FFFFFF</colordiffuse>
                         <visible>!String.IsEmpty(ListItem.Property(abs.active))</visible>
                     </control>'''
         tc, cc = 'FFFFFFFF', 'FFBDC8D1'

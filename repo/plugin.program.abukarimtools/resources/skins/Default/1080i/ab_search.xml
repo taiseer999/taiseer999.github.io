@@ -1595,11 +1595,20 @@
                         <colordiffuse>1AFFFFFF</colordiffuse>
                         <visible>String.IsEmpty(ListItem.Property(abs.active))</visible>
                     </control>
+                    <!-- 4.8.50: the active filter is an outlined chip, not a filled
+                         one - a fill read as a second focus next to the stream list -->
                     <control type="image">
                         <width>246</width>
                         <height>52</height>
                         <texture border="26">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill60.png</texture>
-                        <colordiffuse>66D6F0FF</colordiffuse>
+                        <colordiffuse>1AFFFFFF</colordiffuse>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.active))</visible>
+                    </control>
+                    <control type="image">
+                        <width>246</width>
+                        <height>52</height>
+                        <texture border="26,0,26,0">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill52_edge.png</texture>
+                        <colordiffuse>99FFFFFF</colordiffuse>
                         <visible>!String.IsEmpty(ListItem.Property(abs.active))</visible>
                     </control>
                     <control type="image">
@@ -1715,11 +1724,20 @@
                         <colordiffuse>1AFFFFFF</colordiffuse>
                         <visible>String.IsEmpty(ListItem.Property(abs.active))</visible>
                     </control>
+                    <!-- 4.8.50: the active filter is an outlined chip, not a filled
+                         one - a fill read as a second focus next to the stream list -->
                     <control type="image">
                         <width>246</width>
                         <height>52</height>
                         <texture border="26">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill60.png</texture>
-                        <colordiffuse>66D6F0FF</colordiffuse>
+                        <colordiffuse>1AFFFFFF</colordiffuse>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.active))</visible>
+                    </control>
+                    <control type="image">
+                        <width>246</width>
+                        <height>52</height>
+                        <texture border="26,0,26,0">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill52_edge.png</texture>
+                        <colordiffuse>99FFFFFF</colordiffuse>
                         <visible>!String.IsEmpty(ListItem.Property(abs.active))</visible>
                     </control>
                     <control type="image">
@@ -3564,11 +3582,20 @@
                         <colordiffuse>1AFFFFFF</colordiffuse>
                         <visible>String.IsEmpty(ListItem.Property(abs.active))</visible>
                     </control>
+                    <!-- 4.8.50: the active filter is an outlined chip, not a filled
+                         one - a fill read as a second focus next to the stream list -->
                     <control type="image">
                         <width>246</width>
                         <height>52</height>
                         <texture border="26">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill60.png</texture>
-                        <colordiffuse>66D6F0FF</colordiffuse>
+                        <colordiffuse>1AFFFFFF</colordiffuse>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.active))</visible>
+                    </control>
+                    <control type="image">
+                        <width>246</width>
+                        <height>52</height>
+                        <texture border="26,0,26,0">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill52_edge.png</texture>
+                        <colordiffuse>99FFFFFF</colordiffuse>
                         <visible>!String.IsEmpty(ListItem.Property(abs.active))</visible>
                     </control>
                     <control type="image">
@@ -3684,11 +3711,20 @@
                         <colordiffuse>1AFFFFFF</colordiffuse>
                         <visible>String.IsEmpty(ListItem.Property(abs.active))</visible>
                     </control>
+                    <!-- 4.8.50: the active filter is an outlined chip, not a filled
+                         one - a fill read as a second focus next to the stream list -->
                     <control type="image">
                         <width>246</width>
                         <height>52</height>
                         <texture border="26">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill60.png</texture>
-                        <colordiffuse>66D6F0FF</colordiffuse>
+                        <colordiffuse>1AFFFFFF</colordiffuse>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.active))</visible>
+                    </control>
+                    <control type="image">
+                        <width>246</width>
+                        <height>52</height>
+                        <texture border="26,0,26,0">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill52_edge.png</texture>
+                        <colordiffuse>99FFFFFF</colordiffuse>
                         <visible>!String.IsEmpty(ListItem.Property(abs.active))</visible>
                     </control>
                     <control type="image">

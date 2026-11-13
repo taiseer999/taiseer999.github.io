@@ -165,7 +165,7 @@
             <top>476</top>
             <control type="textbox">
                 <width>700</width>
-                <height>330</height>
+                <height>130</height>
                 <font>font12</font>
                 <textcolor>FFBDC8D1</textcolor>
                 <label>$INFO[Window.Property(lucent.plot)]</label>
@@ -173,6 +173,581 @@
             </control>
         </control>
 
+        <!-- ============ Left: details of the focused stream (4.8.51, as in Search All) ============ -->
+        <control type="group">
+            <animation effect="fade" start="0" end="100" time="350" delay="200">WindowOpen</animation>
+            <animation effect="fade" end="0" time="250">WindowClose</animation>
+            <animation effect="fade" end="0" time="200" condition="Control.HasFocus(2100)">Conditional</animation>
+            <left>96</left>
+            <top>624</top>
+            <width>700</width>
+            <control type="label">
+                <width>420</width>
+                <height>40</height>
+                <font>font12</font>
+                <textcolor>FF8F9BA6</textcolor>
+                <label>[B][UPPERCASE]$INFO[Window.Property(lucent.sl_heading)][/UPPERCASE][/B]</label>
+            </control>
+            <control type="label">
+                <left>300</left>
+                <width>400</width>
+                <height>40</height>
+                <font>font12</font>
+                <align>right</align>
+                <textcolor>FFBDC8D1</textcolor>
+                <label>[B]$INFO[Container(2000).ListItem.Property(lucent.sp_lang)]$INFO[Container(2001).ListItem.Property(lucent.sp_lang)]$INFO[Container(2002).ListItem.Property(lucent.sp_lang)][/B]</label>
+            </control>
+            <control type="image">
+                <top>44</top>
+                <width>700</width>
+                <height>1</height>
+                <texture>lucent/white.png</texture>
+                <colordiffuse>1AFFFFFF</colordiffuse>
+            </control>
+            <control type="group">
+                <top>56</top>
+                <control type="group">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>224</width>
+                    <height>96</height>
+                    <control type="image">
+                        <texture border="32">lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>6</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(lucent.sl_res)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(lucent.sp_res)]$INFO[Container(2001).ListItem.Property(lucent.sp_res)]$INFO[Container(2002).ListItem.Property(lucent.sp_res)][/B]</label>
+                        <visible>![String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_res)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_res)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_res))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>[String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_res)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_res)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_res))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>66</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(lucent.sp_res_sub)]$INFO[Container(2001).ListItem.Property(lucent.sp_res_sub)]$INFO[Container(2002).ListItem.Property(lucent.sp_res_sub)]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>238</left>
+                    <top>0</top>
+                    <width>224</width>
+                    <height>96</height>
+                    <control type="image">
+                        <texture border="32">lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>6</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(lucent.sl_size)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(lucent.sp_size)]$INFO[Container(2001).ListItem.Property(lucent.sp_size)]$INFO[Container(2002).ListItem.Property(lucent.sp_size)][/B]</label>
+                        <visible>![String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_size)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_size)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_size))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>[String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_size)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_size)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_size))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>66</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(lucent.sp_size_sub)]$INFO[Container(2001).ListItem.Property(lucent.sp_size_sub)]$INFO[Container(2002).ListItem.Property(lucent.sp_size_sub)]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>476</left>
+                    <top>0</top>
+                    <width>224</width>
+                    <height>96</height>
+                    <control type="image">
+                        <texture border="32">lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>6</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(lucent.sl_rate)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(lucent.sp_rate)]$INFO[Container(2001).ListItem.Property(lucent.sp_rate)]$INFO[Container(2002).ListItem.Property(lucent.sp_rate)][/B]</label>
+                        <visible>![String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_rate)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_rate)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_rate))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>[String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_rate)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_rate)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_rate))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>66</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(lucent.sp_rate_sub)]$INFO[Container(2001).ListItem.Property(lucent.sp_rate_sub)]$INFO[Container(2002).ListItem.Property(lucent.sp_rate_sub)]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>0</left>
+                    <top>108</top>
+                    <width>224</width>
+                    <height>96</height>
+                    <control type="image">
+                        <texture border="32">lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>6</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(lucent.sl_video)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(lucent.sp_video)]$INFO[Container(2001).ListItem.Property(lucent.sp_video)]$INFO[Container(2002).ListItem.Property(lucent.sp_video)][/B]</label>
+                        <visible>![String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_video)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_video)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_video))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>[String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_video)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_video)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_video))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>66</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(lucent.sp_video_sub)]$INFO[Container(2001).ListItem.Property(lucent.sp_video_sub)]$INFO[Container(2002).ListItem.Property(lucent.sp_video_sub)]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>238</left>
+                    <top>108</top>
+                    <width>224</width>
+                    <height>96</height>
+                    <control type="image">
+                        <texture border="32">lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>6</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(lucent.sl_hdr)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(lucent.sp_hdr)]$INFO[Container(2001).ListItem.Property(lucent.sp_hdr)]$INFO[Container(2002).ListItem.Property(lucent.sp_hdr)][/B]</label>
+                        <visible>![String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_hdr)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_hdr)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_hdr))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>[String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_hdr)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_hdr)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_hdr))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>66</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(lucent.sp_hdr_sub)]$INFO[Container(2001).ListItem.Property(lucent.sp_hdr_sub)]$INFO[Container(2002).ListItem.Property(lucent.sp_hdr_sub)]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>476</left>
+                    <top>108</top>
+                    <width>224</width>
+                    <height>96</height>
+                    <control type="image">
+                        <texture border="32">lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>6</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(lucent.sl_audio)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(lucent.sp_audio)]$INFO[Container(2001).ListItem.Property(lucent.sp_audio)]$INFO[Container(2002).ListItem.Property(lucent.sp_audio)][/B]</label>
+                        <visible>![String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_audio)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_audio)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_audio))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>[String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_audio)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_audio)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_audio))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>66</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(lucent.sp_audio_sub)]$INFO[Container(2001).ListItem.Property(lucent.sp_audio_sub)]$INFO[Container(2002).ListItem.Property(lucent.sp_audio_sub)]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>0</left>
+                    <top>216</top>
+                    <width>224</width>
+                    <height>96</height>
+                    <control type="image">
+                        <texture border="32">lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>6</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(lucent.sl_ch)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(lucent.sp_ch)]$INFO[Container(2001).ListItem.Property(lucent.sp_ch)]$INFO[Container(2002).ListItem.Property(lucent.sp_ch)][/B]</label>
+                        <visible>![String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_ch)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_ch)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_ch))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>[String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_ch)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_ch)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_ch))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>66</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(lucent.sp_ch_sub)]$INFO[Container(2001).ListItem.Property(lucent.sp_ch_sub)]$INFO[Container(2002).ListItem.Property(lucent.sp_ch_sub)]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>238</left>
+                    <top>216</top>
+                    <width>224</width>
+                    <height>96</height>
+                    <control type="image">
+                        <texture border="32">lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>6</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(lucent.sl_rel)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(lucent.sp_rel)]$INFO[Container(2001).ListItem.Property(lucent.sp_rel)]$INFO[Container(2002).ListItem.Property(lucent.sp_rel)][/B]</label>
+                        <visible>![String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_rel)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_rel)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_rel))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>[String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_rel)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_rel)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_rel))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>66</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(lucent.sp_rel_sub)]$INFO[Container(2001).ListItem.Property(lucent.sp_rel_sub)]$INFO[Container(2002).ListItem.Property(lucent.sp_rel_sub)]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>476</left>
+                    <top>216</top>
+                    <width>224</width>
+                    <height>96</height>
+                    <control type="image">
+                        <texture border="32">lucent/card.png</texture>
+                        <colordiffuse>17FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <texture border="32">lucent/card_edge.png</texture>
+                        <colordiffuse>1FFFFFFF</colordiffuse>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>6</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FF8F9BA6</textcolor>
+                        <label>$INFO[Window.Property(lucent.sl_svc)]</label>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Container(2000).ListItem.Property(lucent.sp_svc)]$INFO[Container(2001).ListItem.Property(lucent.sp_svc)]$INFO[Container(2002).ListItem.Property(lucent.sp_svc)][/B]</label>
+                        <visible>![String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_svc)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_svc)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_svc))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>32</top>
+                        <width>200</width>
+                        <height>36</height>
+                        <font>font27</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>4DFFFFFF</textcolor>
+                        <label>—</label>
+                        <visible>[String.IsEmpty(Container(2000).ListItem.Property(lucent.sp_svc)) + String.IsEmpty(Container(2001).ListItem.Property(lucent.sp_svc)) + String.IsEmpty(Container(2002).ListItem.Property(lucent.sp_svc))]</visible>
+                    </control>
+                    <control type="label">
+                        <left>12</left>
+                        <top>66</top>
+                        <width>200</width>
+                        <height>26</height>
+                        <font>font12</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Container(2000).ListItem.Property(lucent.sp_svc_sub)]$INFO[Container(2001).ListItem.Property(lucent.sp_svc_sub)]$INFO[Container(2002).ListItem.Property(lucent.sp_svc_sub)]</label>
+                    </control>
+                </control>
+            </control>
+        </control>
         <!-- ============ Filters (left of the stream list) ============ -->
         <control type="group">
             <animation effect="fade" start="0" end="100" time="350" delay="150">WindowOpen</animation>
@@ -230,7 +805,7 @@
                 </focusedlayout>
             </control>
             <control type="label">
-                <top>424</top>
+                <top>528</top>
                 <width>700</width>
                 <height>40</height>
                 <font>font12</font>
@@ -239,7 +814,7 @@
                 <visible>!Control.HasFocus(2100) + !String.IsEqual(Window.Property(filter_applied),true)</visible>
             </control>
             <control type="label">
-                <top>424</top>
+                <top>528</top>
                 <width>700</width>
                 <height>40</height>
                 <font>font12</font>

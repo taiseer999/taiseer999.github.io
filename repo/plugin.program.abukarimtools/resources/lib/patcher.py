@@ -1858,57 +1858,6 @@ PATCHES = [
         'inject_source': os.path.join('resources', 'af3_lucent', 'colors', 'Lucent Glass AMOLED.xml'),
         'description': 'AF3 Lucent Look - colour theme Lucent Glass AMOLED',
     },
-    # 4.8.48: the colour themes of the Colours window schemes
-    {
-        'addon_id': 'skin.arctic.fuse.3',
-        'rel_path': os.path.join('colors', 'Lucent Vaporwave.xml'),
-        'inject_file': True,
-        'binary': True,
-        'replace': True,
-        'not_found_ok': True,
-        'inject_source': os.path.join('resources', 'af3_lucent', 'colors', 'Lucent Vaporwave.xml'),
-        'description': 'AF3 Lucent Look - colour theme Lucent Vaporwave',
-    },
-    {
-        'addon_id': 'skin.arctic.fuse.3',
-        'rel_path': os.path.join('colors', 'Lucent Aqua.xml'),
-        'inject_file': True,
-        'binary': True,
-        'replace': True,
-        'not_found_ok': True,
-        'inject_source': os.path.join('resources', 'af3_lucent', 'colors', 'Lucent Aqua.xml'),
-        'description': 'AF3 Lucent Look - colour theme Lucent Aqua',
-    },
-    {
-        'addon_id': 'skin.arctic.fuse.3',
-        'rel_path': os.path.join('colors', 'Lucent Sunset.xml'),
-        'inject_file': True,
-        'binary': True,
-        'replace': True,
-        'not_found_ok': True,
-        'inject_source': os.path.join('resources', 'af3_lucent', 'colors', 'Lucent Sunset.xml'),
-        'description': 'AF3 Lucent Look - colour theme Lucent Sunset',
-    },
-    {
-        'addon_id': 'skin.arctic.fuse.3',
-        'rel_path': os.path.join('colors', 'Lucent Slate.xml'),
-        'inject_file': True,
-        'binary': True,
-        'replace': True,
-        'not_found_ok': True,
-        'inject_source': os.path.join('resources', 'af3_lucent', 'colors', 'Lucent Slate.xml'),
-        'description': 'AF3 Lucent Look - colour theme Lucent Slate',
-    },
-    {
-        'addon_id': 'skin.arctic.fuse.3',
-        'rel_path': os.path.join('colors', 'Lucent Midnight.xml'),
-        'inject_file': True,
-        'binary': True,
-        'replace': True,
-        'not_found_ok': True,
-        'inject_source': os.path.join('resources', 'af3_lucent', 'colors', 'Lucent Midnight.xml'),
-        'description': 'AF3 Lucent Look - colour theme Lucent Midnight',
-    },
     {
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('media', 'abk_lucent', 'panel.png'),
@@ -1957,19 +1906,31 @@ PATCHES = [
         'already_patched_check': 'Onyx) + !Skin.HasSetting(abk.lucent)',
         'description': 'AF3 Lucent Look - no AF3 glass sheen over the Lucent body',
     },
-    # 4.8.42: the glass body alone (panel.png x dialog_overlay) let the screen
-    # behind show through, and how much depends on the active colour theme
-    # (b3 = 70 percent in AF3's defaults). A solid layer in the theme's own
-    # dialog colour (dialog_bg_90) under it makes dialogs / the Options panel
-    # nearly opaque in every theme. Inserted into the already-patched body.
+    # 4.8.49: transparency back. 4.8.42 drew a solid layer (dialog_bg_90)
+    # under the glass body, so dialogs / the Options panel hid the screen
+    # behind them; the user wants the glass see-through again. This entry
+    # REMOVES that layer where 4.8.42 put it (a stock AF3 file never had it,
+    # so it is skipped there).
     {
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('1080i', 'Dialog_Parts.xml'),
         'not_found_ok': True,
-        'old': '                    <control type="image">\n                        <texture border="48">abk_lucent/panel.png</texture>\n                        <colordiffuse>dialog_overlay</colordiffuse>\n                    </control>',
-        'new': '                    <control type="image">  <!-- ABUKARIM: Lucent solid underlayer -->\n                        <texture border="48">abk_lucent/panel.png</texture>\n                        <colordiffuse>dialog_bg_90</colordiffuse>\n                    </control>\n                    <control type="image">\n                        <texture border="48">abk_lucent/panel.png</texture>\n                        <colordiffuse>dialog_overlay</colordiffuse>\n                    </control>',
-        'already_patched_check': '<!-- ABUKARIM: Lucent solid underlayer -->',
-        'description': 'AF3 Lucent Look - solid underlayer under the glass body (less see-through)',
+        'old': '                    <control type="image">  <!-- ABUKARIM: Lucent solid underlayer -->\n                        <texture border="48">abk_lucent/panel.png</texture>\n                        <colordiffuse>dialog_bg_90</colordiffuse>\n                    </control>\n                    <control type="image">\n                        <texture border="48">abk_lucent/panel.png</texture>\n                        <colordiffuse>dialog_overlay</colordiffuse>\n                    </control>',
+        'new': '                    <control type="image">\n                        <texture border="48">abk_lucent/panel.png</texture>\n                        <colordiffuse>dialog_overlay</colordiffuse>\n                    </control>',
+        'already_patched_check': None,       # nothing to look for: 'old' gone = done
+        'description': 'AF3 Lucent Look - transparency back (remove the 4.8.42 solid underlayer)',
+    },
+    # 4.8.53: the glass body reads its colour from $VAR[ABK_Lucent_Glass]
+    # (Includes_ABK_Lucent.xml), so the transparency can be chosen in
+    # Toggles > AF3: Lucent Look. Must stay AFTER the 4.8.49 entry above.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Dialog_Parts.xml'),
+        'not_found_ok': True,
+        'old': '                        <texture border="48">abk_lucent/panel.png</texture>\n                        <colordiffuse>dialog_overlay</colordiffuse>',
+        'new': '                        <texture border="48">abk_lucent/panel.png</texture>\n                        <colordiffuse>$VAR[ABK_Lucent_Glass]</colordiffuse>  <!-- ABUKARIM: Lucent glass transparency -->',
+        'already_patched_check': '<!-- ABUKARIM: Lucent glass transparency -->',
+        'description': 'AF3 Lucent Look - choosable glass transparency',
     },
 
     # ── AF3: Lucent Look, phase 2 (4.6.9) - the player ──
@@ -2218,48 +2179,74 @@ PATCHES = [
         'description': 'AF3 Lucent Look - Lucent focus (ColorSelectedInverted)',
     },
 
-    # ── AF3: Lucent Look (4.8.48) - Colours window highlight ──
-    # Toggles > AF3: Lucent Look opens the Colours window: a scheme (colour
-    # theme + its highlight) and a highlight colour. The highlight is stored
-    # as hex in skin strings and read here ABOVE the Lucent focus value, so
-    # Lucent white stays the fallback and "my own colour" wins as before:
-    #   abk.lucent.focus      ColorHighlight      e.g. ff00b8d4
-    #   abk.lucent.onfocus    ColorSelected       text on the highlight
-    #   abk.lucent.onfocus30  ColorSelected_30    the same at 30 %
-    # Live, no reload. The regex fallback turns the 4.8.47 block (13 named
-    # Lucent accents) into this single line.
+    # ── AF3: Lucent Look (4.8.51) - the 4.8.47 / 4.8.48 colours removed ──
+    # The Lucent accent colours (4.8.47) and the Colours window (4.8.48) are
+    # gone. These entries take their lines out of Includes_Colors.xml where
+    # they were patched in (the Lucent white focus value stays); a stock file
+    # never had them, so they are skipped there.
     {
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('1080i', 'Includes_Colors.xml'),
         'not_found_ok': True,
-        'old': '<variable name="ColorHighlight">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ffffffff</value>',
-        'new': '<variable name="ColorHighlight">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.focus))">$INFO[Skin.String(abk.lucent.focus)]</value>  <!-- ABUKARIM: Lucent highlight -->\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ffffffff</value>',
-        'already_patched_check': '<variable name="ColorHighlight">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.focus))">$INFO[Skin.String(abk.lucent.focus)]</value>  <!-- ABUKARIM: Lucent highlight -->',
-        'fallback_pattern': '(<variable name="ColorHighlight">\\n)(?:        <value condition="[^"\\n]*abk\\.lucent\\.accent\\),[a-z]+\\)">[0-9a-fA-F]{8}</value>  <!-- ABUKARIM: Lucent accent -->\\n)+',
-        'fallback_repl': '\\g<1>        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.focus))">$INFO[Skin.String(abk.lucent.focus)]</value>  <!-- ABUKARIM: Lucent highlight -->\\n',
-        'description': 'AF3 Lucent Look - Colours highlight (ColorHighlight)',
+        'old': '',
+        'new': '',
+        'already_patched_check': None,
+        'fallback_pattern': '[ \\t]*<value condition="[^"\\n]*">[^<\\n]*</value>  <!-- ABUKARIM: Lucent highlight -->\\r?\\n',
+        'fallback_repl': '',
+        'count': 0,
+        'description': 'AF3 Lucent Look - remove the 4.8.4x highlight lines',
     },
     {
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('1080i', 'Includes_Colors.xml'),
         'not_found_ok': True,
-        'old': '<variable name="ColorSelected">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ff0b1119</value>',
-        'new': '<variable name="ColorSelected">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.onfocus))">$INFO[Skin.String(abk.lucent.onfocus)]</value>  <!-- ABUKARIM: Lucent highlight -->\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ff0b1119</value>',
-        'already_patched_check': '<variable name="ColorSelected">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.onfocus))">$INFO[Skin.String(abk.lucent.onfocus)]</value>  <!-- ABUKARIM: Lucent highlight -->',
-        'fallback_pattern': '(<variable name="ColorSelected">\\n)(?:        <value condition="[^"\\n]*abk\\.lucent\\.accent\\),[a-z]+\\)">[0-9a-fA-F]{8}</value>  <!-- ABUKARIM: Lucent accent -->\\n)+',
-        'fallback_repl': '\\g<1>        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.onfocus))">$INFO[Skin.String(abk.lucent.onfocus)]</value>  <!-- ABUKARIM: Lucent highlight -->\\n',
-        'description': 'AF3 Lucent Look - Colours highlight (ColorSelected)',
+        'old': '',
+        'new': '',
+        'already_patched_check': None,
+        'fallback_pattern': '[ \\t]*<value condition="[^"\\n]*">[^<\\n]*</value>  <!-- ABUKARIM: Lucent accent -->\\r?\\n',
+        'fallback_repl': '',
+        'count': 0,
+        'description': 'AF3 Lucent Look - remove the 4.8.4x accent lines',
     },
     {
         'addon_id': 'skin.arctic.fuse.3',
-        'rel_path': os.path.join('1080i', 'Includes_Colors.xml'),
+        'rel_path': os.path.join('colors', 'Lucent Vaporwave.xml'),
+        'remove_file': True,
         'not_found_ok': True,
-        'old': '<variable name="ColorSelected_30">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">4d0b1119</value>',
-        'new': '<variable name="ColorSelected_30">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.onfocus30))">$INFO[Skin.String(abk.lucent.onfocus30)]</value>  <!-- ABUKARIM: Lucent highlight -->\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">4d0b1119</value>',
-        'already_patched_check': '<variable name="ColorSelected_30">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.onfocus30))">$INFO[Skin.String(abk.lucent.onfocus30)]</value>  <!-- ABUKARIM: Lucent highlight -->',
-        'fallback_pattern': '(<variable name="ColorSelected_30">\\n)(?:        <value condition="[^"\\n]*abk\\.lucent\\.accent\\),[a-z]+\\)">[0-9a-fA-F]{8}</value>  <!-- ABUKARIM: Lucent accent -->\\n)+',
-        'fallback_repl': '\\g<1>        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.onfocus30))">$INFO[Skin.String(abk.lucent.onfocus30)]</value>  <!-- ABUKARIM: Lucent highlight -->\\n',
-        'description': 'AF3 Lucent Look - Colours highlight (ColorSelected_30)',
+        'old': '', 'new': '',
+        'description': 'AF3 Lucent Look - remove the 4.8.48 colour theme Lucent Vaporwave',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('colors', 'Lucent Aqua.xml'),
+        'remove_file': True,
+        'not_found_ok': True,
+        'old': '', 'new': '',
+        'description': 'AF3 Lucent Look - remove the 4.8.48 colour theme Lucent Aqua',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('colors', 'Lucent Sunset.xml'),
+        'remove_file': True,
+        'not_found_ok': True,
+        'old': '', 'new': '',
+        'description': 'AF3 Lucent Look - remove the 4.8.48 colour theme Lucent Sunset',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('colors', 'Lucent Slate.xml'),
+        'remove_file': True,
+        'not_found_ok': True,
+        'old': '', 'new': '',
+        'description': 'AF3 Lucent Look - remove the 4.8.48 colour theme Lucent Slate',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('colors', 'Lucent Midnight.xml'),
+        'remove_file': True,
+        'not_found_ok': True,
+        'old': '', 'new': '',
+        'description': 'AF3 Lucent Look - remove the 4.8.48 colour theme Lucent Midnight',
     },
 
     # ── AF3: Lucent Look, phase 5 (4.6.14) - player icons ──
@@ -5393,6 +5380,15 @@ def _apply_patch(patch):
                           'skipping.' % (patch['addon_id'], patch['rel_path']))
         return False, '[%s] Target file not found: %s' % (patch['addon_id'], patch['rel_path'])
 
+    # 4.8.51: 'remove_file' entries delete a file AB Tools itself put there
+    # earlier and no longer ships (the 4.8.48 AF3 colour themes)
+    if patch.get('remove_file'):
+        try:
+            os.remove(target)
+            return True, '[%s] Patched OK: %s' % (patch['addon_id'], patch['description'])
+        except Exception as e:
+            return False, '[%s] cannot remove %s: %s' % (patch['addon_id'], patch['rel_path'], e)
+
     content = _read(target)
 
     # Check if already patched — use explicit sentinel if provided, else 'new' string
@@ -5441,7 +5437,7 @@ def _apply_patch(patch):
     # Fallback: regex replacement
     pattern = patch.get('fallback_pattern')
     repl    = patch.get('fallback_repl')
-    if pattern and repl:
+    if pattern and repl is not None:     # 4.8.51: '' = remove what matches
         _count = patch.get('count', 1)
         # No re.DOTALL by default (3.1.0.15): patterns that must cross lines
         # say so explicitly with [\s\S] / \n. DOTALL turned '.*' into a

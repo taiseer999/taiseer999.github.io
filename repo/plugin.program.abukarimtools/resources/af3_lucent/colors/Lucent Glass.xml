@@ -23,7 +23,7 @@
 
     <!-- Dialogs (glass) -->
     <color name="dialog_nib">ff2c3e4c</color>
-    <color name="dialog_overlay">f5162532</color>
+    <color name="dialog_overlay">b31d2c3b</color>
     <color name="dialog_fg_100">ffe8eef2</color>
     <color name="dialog_fg_90">e7e8eef2</color>
     <color name="dialog_fg_70">b3e8eef2</color>
