@@ -110,6 +110,8 @@ def pick_glass():
     level = GLASS_LEVELS[pick]
     xbmc.executebuiltin('Skin.SetString(%s,%s)' % (GLASS, level) if level else 'Skin.Reset(%s)' % GLASS)
     _log('glass transparency: %s' % (level or '70'))
+    xbmc.sleep(200)                         # the skin string is read back by glass()
+    sync_ppi_glass()                        # 4.8.55: TinyPPI panels follow
     return True
 
 
@@ -167,6 +169,65 @@ def _files_present():
     return all(os.path.isfile(p) for p in need)
 
 
+# ───── 4.8.55: glass TinyPPI panels while the Lucent Look is on ─────
+# TinyPPI draws its panels (codec-logo box, speaker layout, Player Process
+# Info, DV metadata) in colours from its own settings (colour + opacity per
+# panel, published as Home properties by its theme). With the Lucent Look on
+# AB Tools sets those to the Lucent glass colour at the chosen glass
+# transparency; the user's own values are saved first and put back when the
+# Lucent Look goes off.
+PPI_ID = 'script.tinyppi'
+PPI_PANELS = ('background', 'dialog_background', 'channel_background', 'metadata_background',
+              'splash_start_bg', 'splash_osd_bg', 'splash_tinyppi_bg')
+PPI_RGB = {'amoled': '141414'}             # every other mode: Lucent navy
+PPI_RGB_DEFAULT = '1D2C3B'
+
+
+def _ppi_addon():
+    if not xbmc.getCondVisibility('System.HasAddon(%s)' % PPI_ID):
+        return None
+    try:
+        import xbmcaddon
+        return xbmcaddon.Addon(PPI_ID)
+    except Exception:
+        return None
+
+
+def sync_ppi_glass(mode=None):
+    """Glass TinyPPI panels for mode ('off' restores the user's values)."""
+    addon = _ppi_addon()
+    if addon is None:
+        return
+    mode = get_mode() if mode is None else mode
+    state = _load()
+    saved = state.get('ppi_saved')
+    try:
+        if mode == 'off':
+            if not saved:
+                return
+            for key, value in saved.items():
+                addon.setSetting(key, value)
+            state.pop('ppi_saved', None)
+            _save(state)
+            _log('TinyPPI panels restored')
+            return
+        if not saved:
+            saved = {}
+            for panel in PPI_PANELS:
+                for key in ('%s_color' % panel, '%s_opacity' % panel):
+                    saved[key] = addon.getSetting(key)
+            state['ppi_saved'] = saved
+            _save(state)
+        rgb = PPI_RGB.get(mode, PPI_RGB_DEFAULT)
+        opacity = glass() or '70'
+        for panel in PPI_PANELS:
+            addon.setSetting('%s_color' % panel, '[COLOR=FF%s]●[/COLOR] #%s' % (rgb, rgb))
+            addon.setSetting('%s_opacity' % panel, opacity)
+        _log('TinyPPI panels: glass #%s at %s %%' % (rgb, opacity))
+    except Exception as e:
+        _log('TinyPPI glass: %s' % e, xbmc.LOGWARNING)
+
+
 def apply(mode):
     """Switch to mode; returns the notification text."""
     cur_colors = _colors()
@@ -185,6 +246,7 @@ def apply(mode):
         target = dict((m, c) for m, c, _l in MODES)[mode]
         msg = T(30854) % mode_label(mode)
     _log('mode %s: colours %s -> %s' % (mode, cur_colors, target))
+    sync_ppi_glass(mode)                    # 4.8.55
     if target != cur_colors:
         if not _set_colors(target):          # Kodi reloads the skin itself on success
             return msg, True
@@ -200,6 +262,8 @@ def run():
         xbmcgui.Dialog().ok(TITLE, T(30602))          # switch to AF3 first
         return
     current = get_mode()
+    if current != 'off':
+        sync_ppi_glass(current)             # 4.8.55: boxes already on the Lucent Look
     pre = [m for m, _c, _l in MODES].index(current)
     labels = [T(l) for _m, _c, l in MODES]
     # 4.8.53: glass transparency row, then (4.6.12) Lucent white focus or the

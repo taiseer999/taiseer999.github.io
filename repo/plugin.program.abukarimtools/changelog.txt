@@ -1,3 +1,30 @@
+v4.8.55
+- AF3 Lucent Look: glass TinyPPI. With the Lucent Look on, TinyPPI's panels -
+  the codec-logo box (playback start / OSD / overlay), the speaker layout,
+  Player Process Info and the DV metadata view - use the Lucent glass colour
+  (navy 1D2C3B, AMOLED 141414) at the chosen glass transparency, through
+  TinyPPI's own colour / opacity settings. The user's values are saved
+  first and put back when the Lucent Look goes off; a glass transparency
+  change updates them too. Boxes already on the Lucent Look get it the next
+  time Toggles > AF3: Lucent Look is opened.
+- AF3 Lucent Look: a glass pill behind the Home header's system stats (CPU
+  temperature, RAM, network) - Includes_Furniture.xml, include
+  ABK_Lucent_GlassStats; its width follows the temperature text.
+
+v4.8.54
+- AF3 Lucent Look: glass over the photos.
+  * Info pills - the "i" pill and the tag pills on Home / the info page and in
+    the player's info (4K ULTRA HD, DOLBY VISION - DIGITAL PLUS, 5.1) - were
+    solid light-grey plates with dark text; with the Lucent Look on they are
+    see-through glass (22 % white) with white text and white icons.
+  * Spotlight buttons - the unfocused Play / More Information circles were
+    solid white with a dark icon; now a glass circle with a white icon. The
+    focused button keeps the Lucent focus.
+  Five patch entries (Includes_Info.xml Info_Line_Pill_Text / _Icon,
+  Includes_Hubs.xml Hub_Spotlight_Button_Circle) put conditional includes
+  (Includes_ABK_Lucent.xml ABK_Lucent_Glass*) in front of AF3's own tags;
+  with the Lucent Look off AF3 is unchanged. Skin reload / restart needed.
+
 v4.8.53
 - AF3 Lucent Look: glass transparency setting. Toggles > AF3: Lucent Look has
   a "Glass transparency" row: 30 %, 50 %, 70 % (default) or 90 % solid, for

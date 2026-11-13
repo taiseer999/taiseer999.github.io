@@ -1932,6 +1932,67 @@ PATCHES = [
         'already_patched_check': '<!-- ABUKARIM: Lucent glass transparency -->',
         'description': 'AF3 Lucent Look - choosable glass transparency',
     },
+    # 4.8.54: glass on the photos - the info pills (Home Spotlight / info
+    # page / OSD info line: "i", 4K ULTRA HD, DOLBY VISION ...) and the
+    # Spotlight Play / More Information circles become see-through glass with
+    # white text and icons while the Lucent Look is on (conditional includes
+    # in front of AF3's own tags; Includes_ABK_Lucent.xml).
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'not_found_ok': True,
+        'old': '                <width min="$PARAM[min_width]">$PARAM[width]</width>\n                <texturefocus colordiffuse="$PARAM[colordiffuse]_$PARAM[fill]" border="4">flags/blank.png</texturefocus>',
+        'new': '                <width min="$PARAM[min_width]">$PARAM[width]</width>\n                <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_GlassPill</include>  <!-- ABUKARIM: Lucent glass pill text -->\n                <texturefocus colordiffuse="$PARAM[colordiffuse]_$PARAM[fill]" border="4">flags/blank.png</texturefocus>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent glass pill text -->',
+        'description': 'AF3 Lucent Look - glass info pills (text)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'not_found_ok': True,
+        'old': '                <width>$PARAM[width]</width>\n                <control type="image">\n                    <texture colordiffuse="$PARAM[colordiffuse]_90" border="4">flags/blank.png</texture>',
+        'new': '                <width>$PARAM[width]</width>\n                <control type="image">\n                    <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_GlassPillBg</include>  <!-- ABUKARIM: Lucent glass pill icon -->\n                    <texture colordiffuse="$PARAM[colordiffuse]_90" border="4">flags/blank.png</texture>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent glass pill icon -->',
+        'description': 'AF3 Lucent Look - glass info pills (icon plate)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'not_found_ok': True,
+        'old': '                    <control type="image">\n                        <texture colordiffuse="ff1a1a1a">$PARAM[icon]</texture>',
+        'new': '                    <control type="image">\n                        <include content="ABK_Lucent_GlassIcon" condition="Skin.HasSetting(abk.lucent)"><param name="icon">$PARAM[icon]</param></include>  <!-- ABUKARIM: Lucent glass pill glyph -->\n                        <texture colordiffuse="ff1a1a1a">$PARAM[icon]</texture>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent glass pill glyph -->',
+        'description': 'AF3 Lucent Look - glass info pills (white icon)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Hubs.xml'),
+        'not_found_ok': True,
+        'old': '                    <control type="image">\n                        <texture colordiffuse="main_fg_100">diffuse/circle/circle_120.png</texture>',
+        'new': '                    <control type="image">\n                        <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_GlassCircle</include>  <!-- ABUKARIM: Lucent glass spotlight button -->\n                        <texture colordiffuse="main_fg_100">diffuse/circle/circle_120.png</texture>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent glass spotlight button -->',
+        'description': 'AF3 Lucent Look - glass Spotlight buttons (circle)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Hubs.xml'),
+        'not_found_ok': True,
+        'old': '                        <bordersize>$PARAM[bordersize]</bordersize>\n                        <texture background="true" colordiffuse="main_bg_90">$PARAM[image]</texture>',
+        'new': '                        <bordersize>$PARAM[bordersize]</bordersize>\n                        <include content="ABK_Lucent_GlassCircleIcon" condition="Skin.HasSetting(abk.lucent)"><param name="image">$PARAM[image]</param></include>  <!-- ABUKARIM: Lucent glass spotlight icon -->\n                        <texture background="true" colordiffuse="main_bg_90">$PARAM[image]</texture>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent glass spotlight icon -->',
+        'description': 'AF3 Lucent Look - glass Spotlight buttons (white icon)',
+    },
+    # 4.8.55: glass pill behind the Home header's system stats (drawn
+    # before the stats grouplist, so it sits behind them)
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Furniture.xml'),
+        'not_found_ok': True,
+        'old': '            <control type="grouplist">\n                <visible>Skin.HasSetting(Furniture.Network_RAM)</visible>',
+        'new': '            <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_GlassStats</include>  <!-- ABUKARIM: Lucent glass stats -->\n            <control type="grouplist">\n                <visible>Skin.HasSetting(Furniture.Network_RAM)</visible>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent glass stats -->',
+        'description': 'AF3 Lucent Look - glass pill behind the system stats (Home header)',
+    },
 
     # ── AF3: Lucent Look, phase 2 (4.6.9) - the player ──
     # Thin glass progress bar, glass OSD buttons (white when focused, dark

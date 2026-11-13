@@ -12,6 +12,66 @@
     <!-- 4.8.53: glass transparency of dialogs / the Options panel (Lucent glass
          body in Part_Background). Skin.String(abk.lucent.glass) = 30/50/90;
          empty = 70 (the theme's dialog_overlay). Live, no reload. -->
+    <!-- 4.8.54: glass info pills (Home / info page / OSD info line) and glass
+         Spotlight buttons. Used through conditional includes placed BEFORE
+         AF3's own texture / textcolor tags (Kodi takes the first one). -->
+    <include name="ABK_Lucent_GlassPill">
+        <texturefocus colordiffuse="38FFFFFF" border="4">flags/blank.png</texturefocus>
+        <texturenofocus colordiffuse="38FFFFFF" border="4">flags/blank.png</texturenofocus>
+        <textcolor>FFFFFFFF</textcolor>
+    </include>
+    <include name="ABK_Lucent_GlassPillBg">
+        <texture colordiffuse="38FFFFFF" border="4">flags/blank.png</texture>
+    </include>
+    <include name="ABK_Lucent_GlassIcon">
+        <param name="icon"></param>
+        <definition>
+            <texture colordiffuse="FFFFFFFF">$PARAM[icon]</texture>
+        </definition>
+    </include>
+    <include name="ABK_Lucent_GlassCircle">
+        <texture colordiffuse="38FFFFFF">diffuse/circle/circle_120.png</texture>
+    </include>
+    <include name="ABK_Lucent_GlassCircleIcon">
+        <param name="image"></param>
+        <definition>
+            <texture background="true" colordiffuse="FFFFFFFF">$PARAM[image]</texture>
+        </definition>
+    </include>
+
+    <!-- 4.8.55: glass pill behind the Home header's system stats (CPU
+         temperature, RAM, network; Furniture_Header_Right). Width follows the
+         temperature text: empty / normal / "Not available". -->
+    <include name="ABK_Lucent_GlassStats">
+        <control type="group">
+            <visible>Skin.HasSetting(Furniture.Network_RAM)</visible>
+            <right>0</right>
+            <top>-36</top>
+            <height>56</height>
+            <control type="image">
+                <right>0</right>
+                <width>200</width>
+                <texture border="28">abk_lucent/pill60.png</texture>
+                <colordiffuse>$VAR[ABK_Lucent_Glass]</colordiffuse>
+                <visible>String.IsEmpty(System.CPUTemperature)</visible>
+            </control>
+            <control type="image">
+                <right>0</right>
+                <width>370</width>
+                <texture border="28">abk_lucent/pill60.png</texture>
+                <colordiffuse>$VAR[ABK_Lucent_Glass]</colordiffuse>
+                <visible>String.IsEqual(System.CPUTemperature,$LOCALIZE[10005])</visible>
+            </control>
+            <control type="image">
+                <right>0</right>
+                <width>262</width>
+                <texture border="28">abk_lucent/pill60.png</texture>
+                <colordiffuse>$VAR[ABK_Lucent_Glass]</colordiffuse>
+                <visible>!String.IsEmpty(System.CPUTemperature) + !String.IsEqual(System.CPUTemperature,$LOCALIZE[10005])</visible>
+            </control>
+        </control>
+    </include>
+
     <variable name="ABK_Lucent_Glass">
         <value condition="String.IsEqual(Skin.String(abk.lucent.glass),30)">dialog_bg_30</value>
         <value condition="String.IsEqual(Skin.String(abk.lucent.glass),50)">dialog_bg_50</value>
