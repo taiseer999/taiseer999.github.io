@@ -1,3 +1,15 @@
+v4.8.44
+- TMDbHelper genre shortcuts rebuilt: nodes/Movies_Geners.json and
+  nodes/TV_Shows_Geners.json now open TMDb discover lists (TMDb genre ids,
+  with_id=True, popularity) instead of Trakt most-played lists; Anime and
+  Superhero use TMDb keywords. TV History, Horror, Romance and Thriller have
+  no TMDb TV genre and stay on Trakt.
+- Always-on patch entries (no toggle): shipped in resources/tmdbhelper_nodes/
+  and written to userdata/addon_data/plugin.video.themoviedb.helper/nodes/,
+  replacing any differing copy on the boot sweep, Apply Patches and the
+  30-minute verify sweep. Identical files are skipped. Skipped while
+  TMDbHelper is not installed.
+
 v4.8.43
 - TMDbHelper 6.x: home widgets no longer wait about 90 s after boot
   (kodi.log 2026-11-12, AM6B, TMDbHelper 6.21.5: 19 widgets at
