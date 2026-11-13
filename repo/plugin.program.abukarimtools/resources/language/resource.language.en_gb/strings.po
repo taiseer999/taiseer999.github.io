@@ -2861,7 +2861,7 @@ msgid "The waves animation that Arctic Fuse 3 shows while something loads."
 msgstr ""
 
 msgctxt "#32179"
-msgid "Navy glass colours for Arctic Fuse 3: off, Lucent Glass, or Lucent Glass on true black."
+msgid "Glass look for Arctic Fuse 3 with colour schemes and a highlight colour (Colours window)."
 msgstr ""
 
 msgctxt "#32180"
@@ -2982,5 +2982,129 @@ msgstr ""
 
 msgctxt "#32215"
 msgid "Season pack"
+msgstr ""
+
+msgctxt "#32216"
+msgid "Colours"
+msgstr ""
+
+msgctxt "#32217"
+msgid "COLOUR SCHEME AND HIGHLIGHT COLOUR"
+msgstr ""
+
+msgctxt "#32218"
+msgid "A scheme sets the background and its highlight; a colour changes only the highlight. Schemes apply on close."
+msgstr ""
+
+msgctxt "#32219"
+msgid "Turn off"
+msgstr ""
+
+msgctxt "#32220"
+msgid "More colours"
+msgstr ""
+
+msgctxt "#32221"
+msgid "Custom colour (hex, e.g. 00B8D4)"
+msgstr ""
+
+msgctxt "#32222"
+msgid "My own colour (Arctic Fuse 3)"
+msgstr ""
+
+msgctxt "#32223"
+msgid "Glass AMOLED"
+msgstr ""
+
+msgctxt "#32224"
+msgid "Bright White"
+msgstr ""
+
+msgctxt "#32225"
+msgid "Miami Vaporwave"
+msgstr ""
+
+msgctxt "#32226"
+msgid "Aqua Classic"
+msgstr ""
+
+msgctxt "#32227"
+msgid "Tropical Sunset"
+msgstr ""
+
+msgctxt "#32228"
+msgid "Blue Slate"
+msgstr ""
+
+msgctxt "#32229"
+msgid "Midnight Purple"
+msgstr ""
+
+msgctxt "#32230"
+msgid "Glass"
+msgstr ""
+
+msgctxt "#32231"
+msgid "White"
+msgstr ""
+
+msgctxt "#32232"
+msgid "Crimson"
+msgstr ""
+
+msgctxt "#32233"
+msgid "Emerald"
+msgstr ""
+
+msgctxt "#32234"
+msgid "Ocean"
+msgstr ""
+
+msgctxt "#32235"
+msgid "Violet"
+msgstr ""
+
+msgctxt "#32236"
+msgid "Amber"
+msgstr ""
+
+msgctxt "#32237"
+msgid "Gold"
+msgstr ""
+
+msgctxt "#32238"
+msgid "Rose"
+msgstr ""
+
+msgctxt "#32239"
+msgid "Rose Gold"
+msgstr ""
+
+msgctxt "#32240"
+msgid "Copper"
+msgstr ""
+
+msgctxt "#32241"
+msgid "Jade"
+msgstr ""
+
+msgctxt "#32242"
+msgid "Arctic Blue"
+msgstr ""
+
+msgctxt "#32243"
+msgid "Graphite"
+msgstr ""
+
+msgctxt "#32244"
+msgid "That is not a colour - use six hex digits, e.g. 00B8D4."
+msgstr ""
+
+msgctxt "#32245"
+msgid "Lucent Look: %s"
+msgstr ""
+
+msgctxt "#32246"
+msgid "Lucent colours (Lucent skin)"
 msgstr ""
 

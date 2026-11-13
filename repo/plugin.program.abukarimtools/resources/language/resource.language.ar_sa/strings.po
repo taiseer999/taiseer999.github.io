@@ -2861,8 +2861,8 @@ msgid "The waves animation that Arctic Fuse 3 shows while something loads."
 msgstr "حركة الأمواج التي تعرضها Arctic Fuse 3 أثناء التحميل."
 
 msgctxt "#32179"
-msgid "Navy glass colours for Arctic Fuse 3: off, Lucent Glass, or Lucent Glass on true black."
-msgstr "ألوان زجاجية كحلية لـ Arctic Fuse 3: إيقاف، أو Lucent Glass، أو Lucent Glass على أسود تام."
+msgid "Glass look for Arctic Fuse 3 with colour schemes and a highlight colour (Colours window)."
+msgstr "مظهر زجاجي لـ Arctic Fuse 3 مع أنظمة ألوان ولون إبراز (نافذة الألوان)."
 
 msgctxt "#32180"
 msgid "The Lucent player screen in Arctic Fuse 3: controls, seek bar, pause card and statistics."
@@ -2983,4 +2983,128 @@ msgstr "الإضافات: %d"
 msgctxt "#32215"
 msgid "Season pack"
 msgstr "حزمة موسم"
+
+msgctxt "#32216"
+msgid "Colours"
+msgstr "الألوان"
+
+msgctxt "#32217"
+msgid "COLOUR SCHEME AND HIGHLIGHT COLOUR"
+msgstr "نظام الألوان ولون الإبراز"
+
+msgctxt "#32218"
+msgid "A scheme sets the background and its highlight; a colour changes only the highlight. Schemes apply on close."
+msgstr "يحدد النظام الخلفية ولون إبرازها، ويغيّر اللون الإبراز وحده. يُطبَّق النظام عند الإغلاق."
+
+msgctxt "#32219"
+msgid "Turn off"
+msgstr "إيقاف"
+
+msgctxt "#32220"
+msgid "More colours"
+msgstr "مزيد من الألوان"
+
+msgctxt "#32221"
+msgid "Custom colour (hex, e.g. 00B8D4)"
+msgstr "لون مخصص (بالصيغة الست عشرية، مثل 00B8D4)"
+
+msgctxt "#32222"
+msgid "My own colour (Arctic Fuse 3)"
+msgstr "لوني الخاص (Arctic Fuse 3)"
+
+msgctxt "#32223"
+msgid "Glass AMOLED"
+msgstr "زجاج AMOLED"
+
+msgctxt "#32224"
+msgid "Bright White"
+msgstr "أبيض ساطع"
+
+msgctxt "#32225"
+msgid "Miami Vaporwave"
+msgstr "موجة ميامي"
+
+msgctxt "#32226"
+msgid "Aqua Classic"
+msgstr "الأزرق المائي الكلاسيكي"
+
+msgctxt "#32227"
+msgid "Tropical Sunset"
+msgstr "غروب استوائي"
+
+msgctxt "#32228"
+msgid "Blue Slate"
+msgstr "أزرق إردوازي"
+
+msgctxt "#32229"
+msgid "Midnight Purple"
+msgstr "بنفسجي منتصف الليل"
+
+msgctxt "#32230"
+msgid "Glass"
+msgstr "زجاجي"
+
+msgctxt "#32231"
+msgid "White"
+msgstr "أبيض"
+
+msgctxt "#32232"
+msgid "Crimson"
+msgstr "قرمزي"
+
+msgctxt "#32233"
+msgid "Emerald"
+msgstr "زمردي"
+
+msgctxt "#32234"
+msgid "Ocean"
+msgstr "محيطي"
+
+msgctxt "#32235"
+msgid "Violet"
+msgstr "بنفسجي"
+
+msgctxt "#32236"
+msgid "Amber"
+msgstr "كهرماني"
+
+msgctxt "#32237"
+msgid "Gold"
+msgstr "ذهبي"
+
+msgctxt "#32238"
+msgid "Rose"
+msgstr "وردي"
+
+msgctxt "#32239"
+msgid "Rose Gold"
+msgstr "ذهبي وردي"
+
+msgctxt "#32240"
+msgid "Copper"
+msgstr "نحاسي"
+
+msgctxt "#32241"
+msgid "Jade"
+msgstr "يشمي"
+
+msgctxt "#32242"
+msgid "Arctic Blue"
+msgstr "أزرق قطبي"
+
+msgctxt "#32243"
+msgid "Graphite"
+msgstr "غرافيتي"
+
+msgctxt "#32244"
+msgid "That is not a colour - use six hex digits, e.g. 00B8D4."
+msgstr "هذا ليس لونًا صالحًا - استخدم ستة أرقام ست عشرية، مثل 00B8D4."
+
+msgctxt "#32245"
+msgid "Lucent Look: %s"
+msgstr "مظهر Lucent: %s"
+
+msgctxt "#32246"
+msgid "Lucent colours (Lucent skin)"
+msgstr "ألوان Lucent (من واجهة Lucent)"
 

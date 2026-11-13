@@ -12,6 +12,7 @@ white text (bg 0B1119, panel 162532, text DCE2E7..FFFFFF, hairline white 18 %).
 
 Run:  python3 tools/gen_af3_lucent.py
 """
+import importlib.util
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,6 +38,15 @@ THEMES = {
         'shadow_back': 'cc000000',
     },
 }
+
+
+# 4.8.48: the themes of the Colours window schemes (resources/lib/af3_lucent_schemes.py)
+_spec = importlib.util.spec_from_file_location(
+    'schemes', os.path.join(ROOT, 'resources', 'lib', 'af3_lucent_schemes.py'))
+_schemes = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_schemes)
+for _name, _t in _schemes.THEMES.items():
+    THEMES[_name] = dict(_t, credit='the AB Tools Colours window scheme %s' % _name)
 
 
 def theme_xml(name, t):
@@ -80,8 +90,9 @@ def theme_xml(name, t):
              '    <color name="rating_3">ffe5534b</color>']
     return ('<?xml version="1.0" encoding="UTF-8"?>\n'
             '<!-- %s - AF3 colour theme by ABUKARIM TOOLS (tools/gen_af3_lucent.py).\n'
-            '     Palette after the Lucent skin by djdirty60. -->\n'
-            '<colors>\n%s\n</colors>\n' % (name, '\n'.join(rows)))
+            '     Palette after %s. -->\n'
+            '<colors>\n%s\n</colors>\n' % (name, t.get('credit', 'the Lucent skin by djdirty60'),
+                                            '\n'.join(rows)))
 
 
 def build():

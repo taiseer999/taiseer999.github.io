@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Lucent Sunset - AF3 colour theme by ABUKARIM TOOLS (tools/gen_af3_lucent.py).
+     Palette after the AB Tools Colours window scheme Lucent Sunset. -->
+<colors>
+    <!-- Main -->
+    <color name="main_fg_100">fff6eef2</color>
+    <color name="main_fg_90">e7f6eef2</color>
+    <color name="main_fg_70">b3f6eef2</color>
+    <color name="main_fg_50">80f6eef2</color>
+    <color name="main_fg_30">4df6eef2</color>
+    <color name="main_fg_12">1ff6eef2</color>
+    <color name="main_fg_06">0ff6eef2</color>
+    <color name="main_bg_100">ff1c0c1e</color>
+    <color name="main_bg_90">e71c0c1e</color>
+    <color name="main_bg_70">b31c0c1e</color>
+    <color name="main_bg_50">801c0c1e</color>
+    <color name="main_bg_30">4d1c0c1e</color>
+    <color name="main_bg_12">1f1c0c1e</color>
+    <color name="main_soft">4d5a3550</color>
+    <color name="main_hard">b35a3550</color>
+    <color name="main_back">ff5a3550</color>
+    <color name="main_logo">ffdccbd5</color>
+
+    <!-- Dialogs (glass) -->
+    <color name="dialog_nib">ff4e2443</color>
+    <color name="dialog_overlay">f533182e</color>
+    <color name="dialog_fg_100">fff6eef2</color>
+    <color name="dialog_fg_90">e7f6eef2</color>
+    <color name="dialog_fg_70">b3f6eef2</color>
+    <color name="dialog_fg_50">80f6eef2</color>
+    <color name="dialog_fg_30">4df6eef2</color>
+    <color name="dialog_fg_12">1ff6eef2</color>
+    <color name="dialog_fg_06">0ff6eef2</color>
+    <color name="dialog_bg_100">ff33182e</color>
+    <color name="dialog_bg_90">e733182e</color>
+    <color name="dialog_bg_70">b333182e</color>
+    <color name="dialog_bg_50">8033182e</color>
+    <color name="dialog_bg_30">4d33182e</color>
+    <color name="dialog_bg_12">1f33182e</color>
+    <!-- Panels -->
+    <color name="panel_bg_100">ff1c0c1e</color>
+    <color name="panel_bg_90">e71c0c1e</color>
+    <color name="panel_bg_70">b31c0c1e</color>
+    <color name="panel_bg_50">801c0c1e</color>
+    <color name="panel_bg_30">4d1c0c1e</color>
+    <color name="panel_bg_12">1f1c0c1e</color>
+    <color name="panel_fg_100">fff6eef2</color>
+    <color name="panel_fg_90">e7f6eef2</color>
+    <color name="panel_fg_70">b3f6eef2</color>
+    <color name="panel_fg_50">80f6eef2</color>
+    <color name="panel_fg_30">4df6eef2</color>
+    <color name="panel_fg_12">1ff6eef2</color>
+
+    <!-- Overlay / glass -->
+    <color name="overlay_soft">14ffffff</color>
+    <color name="overlay_hard">2effffff</color>
+
+    <!-- Shadow -->
+    <color name="shadow_soft">1a000000</color>
+    <color name="shadow_hard">99000000</color>
+    <color name="shadow_full">c0000000</color>
+    <color name="shadow_back">b31c0c1e</color>
+
+    <!-- Misc -->
+    <color name="yellow_star">d7f2b84b</color>
+    <color name="rating_9">ff32a0ee</color>
+    <color name="rating_8">ff4cc38a</color>
+    <color name="rating_7">ffa4c05b</color>
+    <color name="rating_6">ffb8b252</color>
+    <color name="rating_5">ffc39c4d</color>
+    <color name="rating_4">ffce8748</color>
+    <color name="rating_3">ffe5534b</color>
+</colors>

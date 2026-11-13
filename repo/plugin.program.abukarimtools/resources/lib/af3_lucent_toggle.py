@@ -9,6 +9,12 @@ Fuse 3 (design after the Lucent skin by djdirty60):
   Lucent Glass         navy glass colour theme + glass dialog frames
   Lucent Glass AMOLED  the same on true black
 
+4.8.48: the entry opens the Colours window (af3_lucent_colours.py): eight
+colour schemes (an AF3 colour theme + its highlight, af3_lucent_schemes.py)
+and a highlight colour. The highlight lives in skin strings (hex) read by the
+AF3 focus variables, so it changes live; a scheme's colour theme is applied
+when the window closes.
+
 The always-on patcher entries (patcher.py, "AF3: Lucent Look") install the two
 colour themes into skin.arctic.fuse.3/colors/, the glass textures into
 media/abk_lucent/, and make Part_Background draw the Lucent glass body while
@@ -23,15 +29,21 @@ import xbmc
 import xbmcgui
 import xbmcvfs
 
+from resources.lib.af3_lucent_schemes import SCHEMES
 from resources.lib.i18n import T
 
 SKIN_ID = 'skin.arctic.fuse.3'
 SETTING = 'abk.lucent'
 OWNFOCUS = 'abk.lucent.ownfocus'      # 4.6.12: keep the user's focus colour
+SCHEME = 'abk.lucent.scheme'          # 4.8.48: scheme id (two share a colour theme)
+FOCUS = 'abk.lucent.focus'            # 4.8.48: highlight, hex aarrggbb
+ONFOCUS = 'abk.lucent.onfocus'        #         text on the highlight
+ONFOCUS30 = 'abk.lucent.onfocus30'    #         the same at 30 %
 TITLE = 'ABUKARIM TOOLS'
 COLORS_KEY = 'lookandfeel.skincolors'
 # (mode, colour theme file name without .xml, label id)
-MODES = (('off', None, 30851), ('glass', 'Lucent Glass', 30852), ('amoled', 'Lucent Glass AMOLED', 30853))
+MODES = ((('off', None, 30851),) +
+         tuple((sc['id'], sc['theme'], sc['label']) for sc in SCHEMES))     # 4.8.48
 OURS = {c for _m, c, _l in MODES if c}
 _STATE = os.path.join(xbmcvfs.translatePath('special://profile/addon_data/'),
                       'plugin.program.abukarimtools', 'af3_lucent.json')
@@ -82,10 +94,15 @@ def _save(data):
 
 
 def get_mode():
-    """'off' / 'glass' / 'amoled' (AF3 must be the active skin to tell)."""
+    """'off' or a scheme id (AF3 must be the active skin to tell)."""
     if xbmc.getSkinDir() != SKIN_ID or not xbmc.getCondVisibility('Skin.HasSetting(%s)' % SETTING):
         return 'off'
-    return 'amoled' if _colors() == 'Lucent Glass AMOLED' else 'glass'
+    cur = _colors()
+    ids = [sc['id'] for sc in SCHEMES if sc['theme'] == cur]
+    saved = xbmc.getInfoLabel('Skin.String(%s)' % SCHEME)
+    if saved in ids:
+        return saved
+    return ids[0] if ids else 'glass'
 
 
 def own_focus():
@@ -97,6 +114,21 @@ def set_own_focus(on):
     """Live: the AF3 focus variables read the bool on every frame, no reload."""
     xbmc.executebuiltin('Skin.SetBool(%s)' % OWNFOCUS if on else 'Skin.Reset(%s)' % OWNFOCUS)
     _log('focus colour: %s' % ('own' if on else 'Lucent white'))
+
+
+def highlight():
+    """Current highlight colour (hex aarrggbb), '' = Lucent white."""
+    return xbmc.getInfoLabel('Skin.String(%s)' % FOCUS).strip().lower()
+
+
+def set_highlight(focus, onfocus):
+    """Live: the AF3 focus variables read these strings on every frame."""
+    set_own_focus(False)
+    xbmc.executebuiltin('Skin.Reset(abk.lucent.accent)')          # 4.8.47 leftover
+    xbmc.executebuiltin('Skin.SetString(%s,%s)' % (FOCUS, focus))
+    xbmc.executebuiltin('Skin.SetString(%s,%s)' % (ONFOCUS, onfocus))
+    xbmc.executebuiltin('Skin.SetString(%s,4d%s)' % (ONFOCUS30, onfocus[-6:]))
+    _log('highlight %s, text %s' % (focus, onfocus))
 
 
 def mode_label(mode=None):
@@ -142,8 +174,14 @@ def _files_present():
     return all(os.path.isfile(p) for p in need)
 
 
-def apply(mode):
-    """Switch to mode; returns the notification text."""
+def apply(mode, with_highlight=True):
+    """Switch to mode; returns the notification text. with_highlight: also
+    set the scheme's own highlight (the Colours window sets it itself)."""
+    if mode != 'off':
+        sc = next(x for x in SCHEMES if x['id'] == mode)
+        xbmc.executebuiltin('Skin.SetString(%s,%s)' % (SCHEME, mode))
+        if with_highlight and not own_focus():
+            set_highlight(sc['focus'], sc['onfocus'])
     cur_colors = _colors()
     state = _load()
     if mode == 'off':
@@ -174,29 +212,20 @@ def run():
     if xbmc.getSkinDir() != SKIN_ID:
         xbmcgui.Dialog().ok(TITLE, T(30602))          # switch to AF3 first
         return
-    current = get_mode()
-    pre = [m for m, _c, _l in MODES].index(current)
-    labels = [T(l) for _m, _c, l in MODES]
-    # 4.6.12: last row - Lucent white focus or the user's own focus colour
-    labels.append(T(30859) if own_focus() else T(30858))
-    pick = xbmcgui.Dialog().select(T(30850), labels, preselect=pre)
-    if pick < 0:
-        return
-    if pick == len(MODES):
-        set_own_focus(not own_focus())
-        xbmcgui.Dialog().notification(TITLE, T(30859) if own_focus() else T(30858),
-                                      xbmcgui.NOTIFICATION_INFO, 3000)
-        xbmc.executebuiltin('Container.Refresh')
-        return
-    if MODES[pick][0] == current:
-        return
-    mode = MODES[pick][0]
+    # 4.8.48: the Colours window. The patch run comes first, so the live
+    # highlight already works while the window is open.
     _ok, xml_changed = _ensure_patch()
-    if mode != 'off' and not _files_present():
+    if not _files_present():
         _log('files missing after the patch run', xbmc.LOGWARNING)
         xbmcgui.Dialog().ok(TITLE, T(30856))
         return
-    msg, reload_self = apply(mode)
+    from resources.lib import af3_lucent_colours
+    mode = af3_lucent_colours.show()
+    if mode is None:                       # only the highlight changed (live)
+        if xml_changed:
+            xbmc.executebuiltin('ReloadSkin()')
+        return
+    msg, reload_self = apply(mode, with_highlight=False)
     xbmcgui.Dialog().notification(TITLE, msg, xbmcgui.NOTIFICATION_INFO, 3000)
     # One reload at most: a colour change already reloads the skin.
     if reload_self or (reload_self is None and xml_changed):

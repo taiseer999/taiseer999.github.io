@@ -47,6 +47,7 @@ ID ranges:
   32127-32131  AF3 Classic OSD Flags (Toggles)
   32140-32194  Settings window (4.8.23): descriptions, view switch
   32200-32215  Search All - details of the focused stream (4.8.25)
+  32216-32246  AF3 Lucent Look - Colours window (4.8.48)
 """
 
 STRINGS = {
@@ -968,7 +969,7 @@ STRINGS = {
     32176: ('Glass source windows in Fen Light, Red Light, POV and Umbrella, set for each add-on.', 'نوافذ مصادر زجاجية في Fen Light وRed Light وPOV وUmbrella، تُضبَط لكل إضافة على حدة.'),
     32177: ("Play a title's trailer when the cursor rests on it in Arctic Fuse 3, with its sound, delay and quality.", 'تشغيل تريلر العنوان عند توقّف المؤشر عليه في Arctic Fuse 3، مع ضبط الصوت والمهلة والجودة.'),
     32178: ('The waves animation that Arctic Fuse 3 shows while something loads.', 'حركة الأمواج التي تعرضها Arctic Fuse 3 أثناء التحميل.'),
-    32179: ('Navy glass colours for Arctic Fuse 3: off, Lucent Glass, or Lucent Glass on true black.', 'ألوان زجاجية كحلية لـ Arctic Fuse 3: إيقاف، أو Lucent Glass، أو Lucent Glass على أسود تام.'),
+    32179: ('Glass look for Arctic Fuse 3 with colour schemes and a highlight colour (Colours window).', 'مظهر زجاجي لـ Arctic Fuse 3 مع أنظمة ألوان ولون إبراز (نافذة الألوان).'),
     32180: ('The Lucent player screen in Arctic Fuse 3: controls, seek bar, pause card and statistics.', 'شاشة مشغّل Lucent في Arctic Fuse 3: أزرار التحكم وشريط التقديم وبطاقة الإيقاف المؤقت والإحصاءات.'),
     32181: ('Build the side menu and widgets of the Lucent skin from your Arctic Fuse 3 menu.', 'بناء القائمة الجانبية وودجات واجهة Lucent من قائمة Arctic Fuse 3 لديك.'),
     32182: ('Show the plot complete in a glass box on the right side of the Arctic Fuse 3 Home page.', 'عرض القصة كاملةً في صندوق زجاجي على الجانب الأيمن من الصفحة الرئيسية لـ Arctic Fuse 3.'),
@@ -1000,4 +1001,37 @@ STRINGS = {
     32213: ('Mono', 'أحادي'),
     32214: ('Add-ons: %d', 'الإضافات: %d'),
     32215: ('Season pack', 'حزمة موسم'),
+    # ---- 4.8.48: AF3 Lucent Look - Colours window (32216-32246) ----
+    32216: ('Colours', 'الألوان'),
+    32217: ('COLOUR SCHEME AND HIGHLIGHT COLOUR', 'نظام الألوان ولون الإبراز'),
+    32218: ('A scheme sets the background and its highlight; a colour changes only the highlight. Schemes apply on close.',
+            'يحدد النظام الخلفية ولون إبرازها، ويغيّر اللون الإبراز وحده. يُطبَّق النظام عند الإغلاق.'),
+    32219: ('Turn off', 'إيقاف'),
+    32220: ('More colours', 'مزيد من الألوان'),
+    32221: ('Custom colour (hex, e.g. 00B8D4)', 'لون مخصص (بالصيغة الست عشرية، مثل 00B8D4)'),
+    32222: ('My own colour (Arctic Fuse 3)', 'لوني الخاص (Arctic Fuse 3)'),
+    32223: ('Glass AMOLED', 'زجاج AMOLED'),
+    32224: ('Bright White', 'أبيض ساطع'),
+    32225: ('Miami Vaporwave', 'موجة ميامي'),
+    32226: ('Aqua Classic', 'الأزرق المائي الكلاسيكي'),
+    32227: ('Tropical Sunset', 'غروب استوائي'),
+    32228: ('Blue Slate', 'أزرق إردوازي'),
+    32229: ('Midnight Purple', 'بنفسجي منتصف الليل'),
+    32230: ('Glass', 'زجاجي'),
+    32231: ('White', 'أبيض'),
+    32232: ('Crimson', 'قرمزي'),
+    32233: ('Emerald', 'زمردي'),
+    32234: ('Ocean', 'محيطي'),
+    32235: ('Violet', 'بنفسجي'),
+    32236: ('Amber', 'كهرماني'),
+    32237: ('Gold', 'ذهبي'),
+    32238: ('Rose', 'وردي'),
+    32239: ('Rose Gold', 'ذهبي وردي'),
+    32240: ('Copper', 'نحاسي'),
+    32241: ('Jade', 'يشمي'),
+    32242: ('Arctic Blue', 'أزرق قطبي'),
+    32243: ('Graphite', 'غرافيتي'),
+    32244: ('That is not a colour - use six hex digits, e.g. 00B8D4.', 'هذا ليس لونًا صالحًا - استخدم ستة أرقام ست عشرية، مثل 00B8D4.'),
+    32245: ('Lucent Look: %s', 'مظهر Lucent: %s'),
+    32246: ('Lucent colours (Lucent skin)', 'ألوان Lucent (من واجهة Lucent)'),
 }

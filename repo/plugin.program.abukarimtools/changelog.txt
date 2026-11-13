@@ -1,3 +1,23 @@
+v4.8.48
+- AF3 Lucent Look: Toggles > AF3: Lucent Look opens a "Colours" window
+  (abk_colours.xml, af3_lucent_colours.py) instead of the list:
+  * colour scheme cards: Lucent Glass, Glass AMOLED, Bright White, Miami
+    Vaporwave, Aqua Classic, Tropical Sunset, Blue Slate, Midnight Purple.
+    A scheme = an AF3 colour theme + its highlight colour. Five new AF3
+    colour themes (Lucent Vaporwave / Aqua / Sunset / Slate / Midnight) are
+    installed by always-on patch entries. The theme is applied when the
+    window closes (one skin reload at most).
+  * highlight colour swatches (cyan, orange, pink, blue, purple, white):
+    live, no reload.
+  * palette: the 14 Lucent skin colours, a custom hex colour, or your own
+    Arctic Fuse 3 focus colour.
+  * Turn off: Lucent Look off, previous colours back.
+- The highlight is stored as hex in Skin.String(abk.lucent.focus /
+  onfocus / onfocus30) and read by ColorHighlight / ColorSelected /
+  ColorSelected_30; replaces the 4.8.47 named-accent block (converted in
+  place by the patch fallback).
+- Textures: resources/skins/Default/media/abk_col/ (tools/gen_af3_colours.py).
+
 v4.8.46
 - NewPipe (plugin.video.newpipe) linked to its origin, repository.twilight0
   (kodi.log 2026-11-13 09:28:58: repository.twilight0 2.0.2 installed, then

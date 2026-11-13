@@ -1858,6 +1858,57 @@ PATCHES = [
         'inject_source': os.path.join('resources', 'af3_lucent', 'colors', 'Lucent Glass AMOLED.xml'),
         'description': 'AF3 Lucent Look - colour theme Lucent Glass AMOLED',
     },
+    # 4.8.48: the colour themes of the Colours window schemes
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('colors', 'Lucent Vaporwave.xml'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_lucent', 'colors', 'Lucent Vaporwave.xml'),
+        'description': 'AF3 Lucent Look - colour theme Lucent Vaporwave',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('colors', 'Lucent Aqua.xml'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_lucent', 'colors', 'Lucent Aqua.xml'),
+        'description': 'AF3 Lucent Look - colour theme Lucent Aqua',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('colors', 'Lucent Sunset.xml'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_lucent', 'colors', 'Lucent Sunset.xml'),
+        'description': 'AF3 Lucent Look - colour theme Lucent Sunset',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('colors', 'Lucent Slate.xml'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_lucent', 'colors', 'Lucent Slate.xml'),
+        'description': 'AF3 Lucent Look - colour theme Lucent Slate',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('colors', 'Lucent Midnight.xml'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'af3_lucent', 'colors', 'Lucent Midnight.xml'),
+        'description': 'AF3 Lucent Look - colour theme Lucent Midnight',
+    },
     {
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('media', 'abk_lucent', 'panel.png'),
@@ -2165,6 +2216,50 @@ PATCHES = [
         'fallback_pattern': '(<variable name="ColorSelectedInverted">\\n)        <value condition="Skin\\.HasSetting\\(abk\\.lucent\\)">[0-9a-fA-F]{8}</value>  <!-- ABUKARIM: Lucent focus -->\\n',
         'fallback_repl': '\\g<1>        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ffffffff</value>  <!-- ABUKARIM: Lucent focus -->\n',
         'description': 'AF3 Lucent Look - Lucent focus (ColorSelectedInverted)',
+    },
+
+    # ── AF3: Lucent Look (4.8.48) - Colours window highlight ──
+    # Toggles > AF3: Lucent Look opens the Colours window: a scheme (colour
+    # theme + its highlight) and a highlight colour. The highlight is stored
+    # as hex in skin strings and read here ABOVE the Lucent focus value, so
+    # Lucent white stays the fallback and "my own colour" wins as before:
+    #   abk.lucent.focus      ColorHighlight      e.g. ff00b8d4
+    #   abk.lucent.onfocus    ColorSelected       text on the highlight
+    #   abk.lucent.onfocus30  ColorSelected_30    the same at 30 %
+    # Live, no reload. The regex fallback turns the 4.8.47 block (13 named
+    # Lucent accents) into this single line.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Colors.xml'),
+        'not_found_ok': True,
+        'old': '<variable name="ColorHighlight">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ffffffff</value>',
+        'new': '<variable name="ColorHighlight">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.focus))">$INFO[Skin.String(abk.lucent.focus)]</value>  <!-- ABUKARIM: Lucent highlight -->\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ffffffff</value>',
+        'already_patched_check': '<variable name="ColorHighlight">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.focus))">$INFO[Skin.String(abk.lucent.focus)]</value>  <!-- ABUKARIM: Lucent highlight -->',
+        'fallback_pattern': '(<variable name="ColorHighlight">\\n)(?:        <value condition="[^"\\n]*abk\\.lucent\\.accent\\),[a-z]+\\)">[0-9a-fA-F]{8}</value>  <!-- ABUKARIM: Lucent accent -->\\n)+',
+        'fallback_repl': '\\g<1>        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.focus))">$INFO[Skin.String(abk.lucent.focus)]</value>  <!-- ABUKARIM: Lucent highlight -->\\n',
+        'description': 'AF3 Lucent Look - Colours highlight (ColorHighlight)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Colors.xml'),
+        'not_found_ok': True,
+        'old': '<variable name="ColorSelected">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ff0b1119</value>',
+        'new': '<variable name="ColorSelected">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.onfocus))">$INFO[Skin.String(abk.lucent.onfocus)]</value>  <!-- ABUKARIM: Lucent highlight -->\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">ff0b1119</value>',
+        'already_patched_check': '<variable name="ColorSelected">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.onfocus))">$INFO[Skin.String(abk.lucent.onfocus)]</value>  <!-- ABUKARIM: Lucent highlight -->',
+        'fallback_pattern': '(<variable name="ColorSelected">\\n)(?:        <value condition="[^"\\n]*abk\\.lucent\\.accent\\),[a-z]+\\)">[0-9a-fA-F]{8}</value>  <!-- ABUKARIM: Lucent accent -->\\n)+',
+        'fallback_repl': '\\g<1>        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.onfocus))">$INFO[Skin.String(abk.lucent.onfocus)]</value>  <!-- ABUKARIM: Lucent highlight -->\\n',
+        'description': 'AF3 Lucent Look - Colours highlight (ColorSelected)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Colors.xml'),
+        'not_found_ok': True,
+        'old': '<variable name="ColorSelected_30">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">4d0b1119</value>',
+        'new': '<variable name="ColorSelected_30">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.onfocus30))">$INFO[Skin.String(abk.lucent.onfocus30)]</value>  <!-- ABUKARIM: Lucent highlight -->\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus)">4d0b1119</value>',
+        'already_patched_check': '<variable name="ColorSelected_30">\n        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.onfocus30))">$INFO[Skin.String(abk.lucent.onfocus30)]</value>  <!-- ABUKARIM: Lucent highlight -->',
+        'fallback_pattern': '(<variable name="ColorSelected_30">\\n)(?:        <value condition="[^"\\n]*abk\\.lucent\\.accent\\),[a-z]+\\)">[0-9a-fA-F]{8}</value>  <!-- ABUKARIM: Lucent accent -->\\n)+',
+        'fallback_repl': '\\g<1>        <value condition="Skin.HasSetting(abk.lucent) + !Skin.HasSetting(abk.lucent.ownfocus) + !String.IsEmpty(Skin.String(abk.lucent.onfocus30))">$INFO[Skin.String(abk.lucent.onfocus30)]</value>  <!-- ABUKARIM: Lucent highlight -->\\n',
+        'description': 'AF3 Lucent Look - Colours highlight (ColorSelected_30)',
     },
 
     # ── AF3: Lucent Look, phase 5 (4.6.14) - player icons ──
