@@ -87,7 +87,8 @@ def get_channel(
 
     base_url = ""
     if channel_url:
-        base_url = channel_url
+        # The tab path is appended below; tolerate callers passing it.
+        base_url = re.sub(r"/(videos|shorts|streams)/?$", "", channel_url.rstrip("/"))
     elif channel_id:
         base_url = f"https://www.youtube.com/channel/{channel_id}"
     elif channel_username:
@@ -98,7 +99,10 @@ def get_channel(
         content_type=content_type,
     )
     api_endpoint = "https://www.youtube.com/youtubei/v1/browse"
-    videos = get_videos(url, api_endpoint, "contents", type_property_map[content_type], limit, sleep, proxies, sort_by, content_type, cookies)
+    # Unknown content types (layout churn, new tabs, typos) yield nothing
+    # instead of raising KeyError inside the generator.
+    selector_item = type_property_map.get(content_type, "videoRenderer")
+    videos = get_videos(url, api_endpoint, "contents", selector_item, limit, sleep, proxies, sort_by, content_type, cookies)
     for video in videos:
         yield video
 
@@ -314,6 +318,25 @@ def get_videos(
     while True:
         if is_first:
             html = get_initial_data(session, url)
+            for attempt in range(3):
+                if "INNERTUBE_CONTEXT" in html:
+                    break
+                # YouTube intermittently answers channel pages with the
+                # consent wall instead of the page; retry with a fresh
+                # session, carrying the SOCS opt-out cookie from the
+                # second attempt on.
+                time.sleep(2 * (attempt + 1))
+                retry_cookies = _parse_cookies(cookies)
+                if attempt >= 1:
+                    retry_cookies.setdefault("SOCS", "CAI")
+                retry = get_session(proxies, retry_cookies)
+                html = get_initial_data(retry, url)
+                retry.close()
+            else:
+                raise RuntimeError(
+                    "YouTube answered with the consent wall "
+                    "(INNERTUBE_CONTEXT missing); retry later"
+                )
             client = json.loads(
                 get_json_from_html(html, "INNERTUBE_CONTEXT", 2, '"}},') + '"}}'
             )["client"]
