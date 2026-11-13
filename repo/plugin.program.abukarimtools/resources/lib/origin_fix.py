@@ -86,13 +86,20 @@ PINNED_ORIGINS = {
     'resource.images.arctic.splash':  'repository.jurialmunkey',
     'script.skinvariables':           'repository.jurialmunkey',
     'plugin.video.themoviedb.helper': 'repository.jurialmunkey',
+    # 4.8.46: NewPipe updates from its author's repository (Twilight0), the
+    # way it was installed by hand on 2026-11-13 (kodi.log 09:28:58:
+    # repository.twilight0 2.0.2, then plugin.video.newpipe 1.2.0 from it).
+    'plugin.video.newpipe':           'repository.twilight0',
 }
 # Pins whose repository wins even when it carries an OLDER version than the
 # one installed (the 4.7.5 "don't freeze a newer add-on" guard is skipped):
 # a Kodi 21 box that took AF3 from the Piers repo must still move to
 # repository.taiseer. Kodi never downgrades, so it simply waits there until
 # repository.taiseer ships a higher AF3 version.
-FORCED_PINS = {'skin.arctic.fuse.3'}
+# 4.8.46: NewPipe too - linked to repository.twilight0 even where a higher
+# build from another repo is installed; Kodi never downgrades, so such a box
+# stays on it until Twilight0 publishes a higher version.
+FORCED_PINS = {'skin.arctic.fuse.3', 'plugin.video.newpipe'}
 
 _PINNED_REPO_BASE = {
     'repository.taiseerKODI22': ('https://raw.githubusercontent.com/taiseer999/'
@@ -101,6 +108,9 @@ _PINNED_REPO_BASE = {
                                  'taiseer999.github.io/main/repo/zips/'),
     'repository.jurialmunkey':  ('https://raw.githubusercontent.com/jurialmunkey/'
                                  'repository.jurialmunkey/master/repo/zips/'),
+    # datadir of repository.twilight0 2.0.2 (its own addon.xml)
+    'repository.twilight0':     ('https://raw.githubusercontent.com/Twilight0/'
+                                 'repository.twilight0/master/repo_dir/'),
 }
 _REPO_INSTALL_TRIED = set()     # one network attempt per repo per session
 

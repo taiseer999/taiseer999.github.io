@@ -1,3 +1,11 @@
+v4.8.46
+- NewPipe (plugin.video.newpipe) linked to its origin, repository.twilight0
+  (kodi.log 2026-11-13 09:28:58: repository.twilight0 2.0.2 installed, then
+  NewPipe 1.2.0 from it). Origin Fix installs repository.twilight0 from
+  github.com/Twilight0/repository.twilight0 when it is missing, then sets
+  NewPipe's origin to it - a forced pin, applied even when another origin is
+  recorded or a higher build from another repo is installed.
+
 v4.8.45
 - TMDbHelper genre shortcuts rebuilt: "nodes/Movies Geners.json" and
   "nodes/TV Shows Geners.json" now open TMDb discover lists (TMDb genre ids,
