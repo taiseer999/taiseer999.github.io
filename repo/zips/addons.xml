@@ -793,53 +793,6 @@ v6.5.1
         <news>INFO: For latest changes see Changelog within Tools of add-on.</news>
     </extension>
 
-</addon><addon id="plugin.video.newpipe" name="NewPipe" version="1.5.0" provider-name="Twilight0">
-    <requires>
-        <import addon="xbmc.python" version="3.0.0" />
-        <import addon="script.module.tulip" version="4.1.5" />
-        <import addon="script.module.urldispatcher" version="1.1.0" />
-        <import addon="script.module.scrapetube" version="2.8.6" />
-        <import addon="script.module.unicache" version="1.0.0" />
-        <import addon="script.module.resolveurl" version="5.1.210" />
-        <import addon="script.module.resolveurl.pluginsgr" version="0.2.5" />
-        <import addon="script.module.qrcode" version="6.1.0" />
-    </requires>
-    <extension point="xbmc.python.pluginsource" library="main.py">
-        <provides>video audio</provides>
-    </extension>
-    <extension point="xbmc.service" library="resources/service.py" start="login" />
-    <extension point="xbmc.addon.metadata">
-        <platform>all</platform>
-        <summary lang="en">NewPipe: privacy-first YouTube client</summary>
-        <description lang="en">Browse and watch YouTube without an account or the official API. Search, channels, playlists and local subscriptions; everything (subscriptions, history) stays on your device. Playback is resolved locally via PluginsGR.</description>
-        <disclaimer lang="en">This addon does not host or distribute any content; it only browses publicly available YouTube pages. No account, no tracking, no data leaves your device except the page requests needed to list and play videos.</disclaimer>
-        <language>en</language>
-        <license>GPL-3.0-only</license>
-        <source>https://github.com/Twilight0/plugin.video.newpipe</source>
-        <news>[B]1.2.0[/B]
-- Main menu rework: My YouTube first, then Search, Trending, Live, Bookmarks and local History; a Menu settings tab toggles every folder (Random music and Trailers are now opt-in), Settings carries a Clear cache context action
-- Scrapetube requirement 2.8.6 (tab-layout churn no longer crashes folders)
-
-[B]1.1.0[/B]
-- Pagination control (Off/show-all, 10/25/50, default off); playlists hard-capped at 300
-- Watch Later list, per-item history removal, subscription channels/feed views, saved playlists, account history
-- YouTube TV device-link login (QR + manual code), personal/brand account switching, My channel entry for own uploads, background sync service, disconnect
-- Content country/language settings with localized categories, trailer language/version, quality caps, fast start
-- Random music folder with native Kodi queue, trailers browser, live category setting
-- Interface language override incl. full Greek translation, 13 shipped UI languages
-- Arctic Fuse landscape artwork, stable per-video thumbnails
-- HLS streams pin inputstream.adaptive chooser to the configured resolution family
-- Faster listings (subscriptions resolved once per folder); English-first defaults throughout
-
-[B]1.0.0[/B]
-- Initial release: search, channels (videos/shorts/live/playlists), playlists, local subscriptions with feed, local watch/search history, audio-only mode</news>
-        <assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
-            <banner>resources/media/banner.jpg</banner>
-            <clearlogo>resources/media/clearlogo.png</clearlogo>
-        </assets>
-    </extension>
 </addon><addon id="plugin.video.screenrec" name="Screen Rec." version="1.0.22" provider-name="i_Meshal">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -4386,68 +4339,6 @@ Version 0.1.18 (September 27th, 2026)
         <source>https://github.com/tamland/kodi-plugin-routing</source>
         <assets>
             <icon>resources/icon.png</icon>
-        </assets>
-    </extension>
-</addon><addon id="script.module.scrapetube" name="Scrapetube" version="2.8.6" provider-name="dermasmid, Twilight0">
-    <requires>
-        <import addon="xbmc.python" version="3.0.0" />
-        <import addon="script.module.requests" version="2.19.1" />
-    </requires>
-    <extension point="xbmc.python.module" library="resources/lib" />
-    <extension point="xbmc.addon.metadata">
-        <summary lang="en">Scrapetube</summary>
-        <description lang="en">This module will help you scrape YouTube without the official YouTube API and without selenium.</description>
-        <platform>all</platform>
-        <license>MIT License</license>
-        <source>https://github.com/Twilight0/script.module.scrapetube</source>
-        <news>[B]2.8.6[/B]
-- get_channel: unknown or renamed content_type yields nothing (folder) instead of KeyError
-- Test suite in the upstream repo: parsing fixtures, live channels/search/playlists, cookies-gated WL/history checks
-
-[B]2.8.5[/B]
-- Tolerate channel URLs already carrying a tab path (/videos, /shorts, /streams) instead of appending it twice
-- Retry first-page fetch with backoff (fresh session, SOCS opt-out cookie) when YouTube intermittently answers with the consent wall
-
-[B]2.8.4[/B]
-- Channel playlists tab: parse lockupViewModel playlist nodes for the gridPlaylistRenderer selector (same as search)
-
-[B]2.8.3[/B]
-- New get_video_details(id, cookies): full videoDetails record (title, description, keywords, length, views, author, thumbnails, live/private flags) with one retry on throttled stub pages; wrapper.video_details() helper
-
-[B]2.8.2[/B]
-- Fix 'type str is not subscriptable' TypeError on minimal environments / Kodi Python by importing Literal from standard typing first and providing a safe subscriptable fallback when missing
-
-[B]2.8.1[/B]
-- Fix playlist search (results_type='playlist'): parse current lockupViewModel playlist nodes (contentType LOCKUP_CONTENT_TYPE_PLAYLIST, id in contentId) with title/thumbnail/channel enrichment; get_videos_items yields them for the playlistRenderer selector
-
-[B]2.8.0[/B]
-- Sync core with merged upstream (peoyli + ahai72160 fixes for YouTube layout changes)
-- Wrapper hardened for new lockupViewModel/shorts shapes (tolerant title/thumbnail/duration)
-- Fixed get_channel positional-arg and list_playlists get_videos arity bugs
-- duration_converter handles H:MM:SS, live and missing durations
-- Optional login cookies on all core calls and wrapper list_* helpers, for own/private videos
-- Authenticated youtubei continuations via SAPISIDHASH headers
-- Parse logged-in page layout (yt-initial-data script tag)
-
-[B]2.6.0[/B]
-- Updated to last upstream version (2.6.0)
-
-[B]2.5.1[/B]
-- Bump to 2.5.1 version including all commits adapted for older Kodi versions
-
-[B]2.3.1.X[/B]
-- Some fixes brought from upstream
-- Removed is_py3 as it was not used
-
-[B]2.2.2.X[/B]
-Copied from upstream (version 2.2.2): https://github.com/dermasmid/scrapetube
-Changes made:
-1) Backported to work on Python 2.7
-2) Added list formation module to help get videos in a more simple way for Kodi development
-3) Updated user agent string to Firefox/Windows (version 101)
-</news>
-        <assets>
-            <icon>icon.png</icon>
         </assets>
     </extension>
 </addon><addon id="script.module.sidedata" name="Sidedata" version="1.4.2" provider-name="matthane">
