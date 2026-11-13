@@ -1,6 +1,6 @@
-v4.8.44
-- TMDbHelper genre shortcuts rebuilt: nodes/Movies_Geners.json and
-  nodes/TV_Shows_Geners.json now open TMDb discover lists (TMDb genre ids,
+v4.8.45
+- TMDbHelper genre shortcuts rebuilt: "nodes/Movies Geners.json" and
+  "nodes/TV Shows Geners.json" now open TMDb discover lists (TMDb genre ids,
   with_id=True, popularity) instead of Trakt most-played lists; Anime and
   Superhero use TMDb keywords. TV History, Horror, Romance and Thriller have
   no TMDb TV genre and stay on Trakt.

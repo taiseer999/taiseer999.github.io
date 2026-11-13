@@ -3750,23 +3750,23 @@ PATCHES = [
      'requires_addon': 'plugin.video.aiostreams', 'old': '', 'new': '',
      'inject_content': _AIOSTREAMS_PLAYER_JSON,
      'description': 'TMDbHelper players/aiostreams.json - AIOStreams player (installed and enabled)'},
-    # 4.8.44: genre shortcut nodes rebuilt on TMDb discover (with_genres ids,
+    # 4.8.45: genre shortcut nodes rebuilt on TMDb discover (with_genres ids,
     # with_id=True) instead of Trakt most-played lists. Always on: shipped
     # under resources/tmdbhelper_nodes/ and forced into TMDbHelper's nodes/
     # folder, replacing a differing copy (byte-compare, so a settled box
     # writes nothing). Skipped while TMDbHelper is not installed.
     {'addon_id': 'plugin.video.themoviedb.helper', 'base': 'addon_data', 'not_found_ok': True,
-     'rel_path': os.path.join('nodes', 'Movies_Geners.json'), 'inject_file': True,
+     'rel_path': os.path.join('nodes', 'Movies Geners.json'), 'inject_file': True,
      'binary': True, 'replace': True, 'requires_addon': 'plugin.video.themoviedb.helper',
-     'inject_source': os.path.join('resources', 'tmdbhelper_nodes', 'Movies_Geners.json'),
+     'inject_source': os.path.join('resources', 'tmdbhelper_nodes', 'Movies Geners.json'),
      'old': '', 'new': '',
-     'description': 'TMDbHelper nodes/Movies_Geners.json - Movie genres on TMDb discover'},
+     'description': 'TMDbHelper nodes/Movies Geners.json - Movie genres on TMDb discover'},
     {'addon_id': 'plugin.video.themoviedb.helper', 'base': 'addon_data', 'not_found_ok': True,
-     'rel_path': os.path.join('nodes', 'TV_Shows_Geners.json'), 'inject_file': True,
+     'rel_path': os.path.join('nodes', 'TV Shows Geners.json'), 'inject_file': True,
      'binary': True, 'replace': True, 'requires_addon': 'plugin.video.themoviedb.helper',
-     'inject_source': os.path.join('resources', 'tmdbhelper_nodes', 'TV_Shows_Geners.json'),
+     'inject_source': os.path.join('resources', 'tmdbhelper_nodes', 'TV Shows Geners.json'),
      'old': '', 'new': '',
-     'description': 'TMDbHelper nodes/TV_Shows_Geners.json - TV genres on TMDb discover'},
+     'description': 'TMDbHelper nodes/TV Shows Geners.json - TV genres on TMDb discover'},
     # 4.6.33: TMDbHelper 6.20.1 (nextmeta.py get_item_queue) reads
     # sd.sync_succeeded on the Trakt module's TraktSyncDataGetterAllUnHidden
     # ShowsInProgress, which only gained it in script.module.tmdbhelper.sync.
