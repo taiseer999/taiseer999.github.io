@@ -3,6 +3,22 @@
      (github.com/djdirty60/Lucent, GPL-2.0-or-later), ported to Arctic Fuse 3:
      OSD, seek bar / pause screen, buffering, info screen. Shown while the skin bool
      abk.lucentplayer is set; live TV keeps the AF3 player. Generated - do not hand-edit. --><includes>
+    <!-- 4.8.74: OSD extras in the Lucent Player rows (af3_flagstyle.py) -->
+    <variable name="ABK_LP_ExtraDir">
+        <value condition="String.IsEqual(Skin.String(abk.flagstyle),colorful) + System.AddonIsEnabled(resource.images.af3.classicflags)">resource://resource.images.af3.classicflags/colorful</value>
+        <value condition="!String.IsEmpty(Skin.String(abk.flagstyle)) + System.AddonIsEnabled(resource.images.af3.frbadges)">resource://resource.images.af3.frbadges/$INFO[Skin.String(abk.flagstyle)]</value>
+        <value condition="System.AddonIsEnabled(resource.images.af3.frbadges)">resource://resource.images.af3.frbadges/lucent</value>
+        <value condition="System.AddonIsEnabled(resource.images.af3.classicflags)">resource://resource.images.af3.classicflags/colorful</value>
+        <value>flags/colorful</value>
+    </variable>
+    <variable name="ABK_LP_ExtraSource">
+        <value condition="[String.Contains(Player.Filename,bluray) | String.Contains(Player.Filename,blu-ray) | String.Contains(Player.Filename,remux) | String.Contains(Player.Filename,bdrip) | String.Contains(Player.Filename,brrip)] + [String.Contains(Player.Filename,2160p) | String.Contains(Player.Filename,uhd)]">other/4k_bluray</value>
+        <value condition="String.Contains(Player.Filename,bluray) | String.Contains(Player.Filename,blu-ray) | String.Contains(Player.Filename,remux) | String.Contains(Player.Filename,bdrip) | String.Contains(Player.Filename,brrip)">other/bluray</value>
+        <value condition="String.Contains(Player.Filename,web-dl) | String.Contains(Player.Filename,webdl) | String.Contains(Player.Filename,webrip) | String.Contains(Player.Filename,.web.)">other/web-dl</value>
+        <value condition="String.Contains(Player.Filename,hdtv)">other/hdtv</value>
+        <value condition="String.Contains(Player.Filename,dvd)">other/dvd</value>
+    </variable>
+
     <!-- 4.8.69: AF3 OSD Flags Style (af3_flagstyle.py) -->
     <variable name="ABK_LP_FlagDir">
         <value condition="!String.IsEmpty(Skin.String(abk.flagstyle)) + System.AddonIsEnabled(resource.images.af3.frbadges)">resource://resource.images.af3.frbadges/$INFO[Skin.String(abk.flagstyle)]/lucent_player</value>
@@ -244,7 +260,7 @@
         </control>
 
         <!-- ABK_LP_AF3_LAYOUT: format flags (Lucent pause card) --><control type="grouplist">
-                    <top>772</top><left>96</left><width>1100</width>
+                    <top>772</top><left>96</left><width>1728</width>
                     <height>51</height>
                     <orientation>horizontal</orientation>
                     <itemgap>12</itemgap>
@@ -290,6 +306,35 @@
                     <aspectratio>keep</aspectratio>
                     <texture>$VAR[ABK_LP_NuvioFlagImg_ch]</texture>
                     <visible>String.IsEqual(VideoPlayer.AudioChannels,8) | String.IsEqual(VideoPlayer.AudioChannels,7) | String.IsEqual(VideoPlayer.AudioChannels,6) | String.IsEqual(VideoPlayer.AudioChannels,2) | String.IsEqual(VideoPlayer.AudioChannels,1)</visible>
+                </control>
+<!-- ABK_LP_EXTRAS -->
+                <control type="image">
+                    <width>132</width>
+                    <height>51</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_ExtraDir]/$VAR[ABK_LP_ExtraSource].png</texture>
+                    <visible>!String.IsEmpty($VAR[ABK_LP_ExtraSource])</visible>
+                </control>
+                <control type="image">
+                    <width>110</width>
+                    <height>51</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_ExtraDir]/aspectratio/$INFO[VideoPlayer.VideoAspect].png</texture>
+                    <visible>!String.IsEmpty(VideoPlayer.VideoAspect)</visible>
+                </control>
+                <control type="image">
+                    <width>160</width>
+                    <height>51</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true" fallback="$VAR[ABK_LP_ExtraDir]/other/language/fallback.png">$VAR[ABK_LP_ExtraDir]/other/language/$INFO[VideoPlayer.AudioLanguage].png</texture>
+                    <visible>!String.IsEmpty(VideoPlayer.AudioLanguage)</visible>
+                </control>
+                <control type="image">
+                    <width>160</width>
+                    <height>51</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true" fallback="$VAR[ABK_LP_ExtraDir]/other/language/fallback.png">$VAR[ABK_LP_ExtraDir]/other/language/$INFO[VideoPlayer.SubtitlesLanguage].png</texture>
+                    <visible>VideoPlayer.SubtitlesEnabled + !String.IsEmpty(VideoPlayer.SubtitlesLanguage)</visible>
                 </control>
                 </control>
             <control type="label">
@@ -520,7 +565,7 @@
             <control type="grouplist" id="14500">
                 <left>140</left>
                 <top>150</top>
-                <width>1100</width>
+                <width>1640</width>
                 <height>700</height>
                 <orientation>vertical</orientation>
                 <itemgap>14</itemgap>
@@ -576,7 +621,7 @@
                     <label/>
                 <font>abk_lp_font12</font><textcolor>FFFFFFFF</textcolor><shadowcolor>00FFFFFF</shadowcolor><aligny>center</aligny></control>
                 <control type="grouplist" id="14600">
-                    <width>1100</width>
+                    <width>1640</width>
                     <height>51</height>
                     <orientation>horizontal</orientation>
                     <itemgap>12</itemgap>
@@ -622,6 +667,35 @@
                     <aspectratio>keep</aspectratio>
                     <texture>$VAR[ABK_LP_NuvioFlagImg_ch]</texture>
                     <visible>String.IsEqual(VideoPlayer.AudioChannels,8) | String.IsEqual(VideoPlayer.AudioChannels,7) | String.IsEqual(VideoPlayer.AudioChannels,6) | String.IsEqual(VideoPlayer.AudioChannels,2) | String.IsEqual(VideoPlayer.AudioChannels,1)</visible>
+                </control>
+<!-- ABK_LP_EXTRAS -->
+                <control type="image">
+                    <width>132</width>
+                    <height>51</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_ExtraDir]/$VAR[ABK_LP_ExtraSource].png</texture>
+                    <visible>!String.IsEmpty($VAR[ABK_LP_ExtraSource])</visible>
+                </control>
+                <control type="image">
+                    <width>110</width>
+                    <height>51</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_ExtraDir]/aspectratio/$INFO[VideoPlayer.VideoAspect].png</texture>
+                    <visible>!String.IsEmpty(VideoPlayer.VideoAspect)</visible>
+                </control>
+                <control type="image">
+                    <width>160</width>
+                    <height>51</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true" fallback="$VAR[ABK_LP_ExtraDir]/other/language/fallback.png">$VAR[ABK_LP_ExtraDir]/other/language/$INFO[VideoPlayer.AudioLanguage].png</texture>
+                    <visible>!String.IsEmpty(VideoPlayer.AudioLanguage)</visible>
+                </control>
+                <control type="image">
+                    <width>160</width>
+                    <height>51</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true" fallback="$VAR[ABK_LP_ExtraDir]/other/language/fallback.png">$VAR[ABK_LP_ExtraDir]/other/language/$INFO[VideoPlayer.SubtitlesLanguage].png</texture>
+                    <visible>VideoPlayer.SubtitlesEnabled + !String.IsEmpty(VideoPlayer.SubtitlesLanguage)</visible>
                 </control>
                 </control>
             </control>
@@ -703,7 +777,7 @@
             <control type="grouplist" id="14500">
                 <left>140</left>
                 <top>110</top>
-                <width>1100</width>
+                <width>1640</width>
                 <height>700</height>
                 <orientation>vertical</orientation>
                 <itemgap>14</itemgap>
@@ -759,7 +833,7 @@
                     <label/>
                 <font>abk_lp_font12</font><textcolor>FFFFFFFF</textcolor><shadowcolor>00FFFFFF</shadowcolor><aligny>center</aligny></control>
                 <control type="grouplist" id="14600">
-                    <width>1100</width>
+                    <width>1640</width>
                     <height>51</height>
                     <orientation>horizontal</orientation>
                     <itemgap>12</itemgap>
@@ -805,6 +879,35 @@
                     <aspectratio>keep</aspectratio>
                     <texture>$VAR[ABK_LP_NuvioFlagImg_ch]</texture>
                     <visible>String.IsEqual(VideoPlayer.AudioChannels,8) | String.IsEqual(VideoPlayer.AudioChannels,7) | String.IsEqual(VideoPlayer.AudioChannels,6) | String.IsEqual(VideoPlayer.AudioChannels,2) | String.IsEqual(VideoPlayer.AudioChannels,1)</visible>
+                </control>
+<!-- ABK_LP_EXTRAS -->
+                <control type="image">
+                    <width>132</width>
+                    <height>51</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_ExtraDir]/$VAR[ABK_LP_ExtraSource].png</texture>
+                    <visible>!String.IsEmpty($VAR[ABK_LP_ExtraSource])</visible>
+                </control>
+                <control type="image">
+                    <width>110</width>
+                    <height>51</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_ExtraDir]/aspectratio/$INFO[VideoPlayer.VideoAspect].png</texture>
+                    <visible>!String.IsEmpty(VideoPlayer.VideoAspect)</visible>
+                </control>
+                <control type="image">
+                    <width>160</width>
+                    <height>51</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true" fallback="$VAR[ABK_LP_ExtraDir]/other/language/fallback.png">$VAR[ABK_LP_ExtraDir]/other/language/$INFO[VideoPlayer.AudioLanguage].png</texture>
+                    <visible>!String.IsEmpty(VideoPlayer.AudioLanguage)</visible>
+                </control>
+                <control type="image">
+                    <width>160</width>
+                    <height>51</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true" fallback="$VAR[ABK_LP_ExtraDir]/other/language/fallback.png">$VAR[ABK_LP_ExtraDir]/other/language/$INFO[VideoPlayer.SubtitlesLanguage].png</texture>
+                    <visible>VideoPlayer.SubtitlesEnabled + !String.IsEmpty(VideoPlayer.SubtitlesLanguage)</visible>
                 </control>
                 </control>
                 <control type="label" id="14508">

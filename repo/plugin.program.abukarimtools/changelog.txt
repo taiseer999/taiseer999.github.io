@@ -1,3 +1,23 @@
+v4.8.75  (2026-11-14)
+- AF3: OSD Flags Style - the remaining FR-Badges sets: Solid, Frost,
+  Icon Dark, Icon Light, Split, Neon Icon, Text White and Text Black (Neon
+  stays out). 16 choices, each with its sample picture. Their aspect-ratio
+  badges and the compact Lucent Player badges are redrawn with each set's
+  own icon, pill and colours (tools/frbadges/relabel.py).
+- Requires resource.images.af3.frbadges 1.0.5: 14 sets; every PNG
+  palette-compressed (libimagequant, tools/frbadges/quant.py) so the add-on
+  stays far under GitHub's 100 MB file limit.
+
+v4.8.74  (2026-11-14)
+- AF3 Lucent Player: the OSD extras flags now show in its rows too - source
+  (Blu-ray / 4K Blu-ray / WEB-DL / HDTV / DVD, from the file name), aspect
+  ratio, audio language and subtitle language (while subtitles are on).
+  They live in AF3's own seek-bar group (Includes_Extra.xml ExtraOSD),
+  which the Lucent Player hides, so they never appeared with it on. Drawn
+  in the chosen OSD Flags Style (ABK_LP_ExtraDir: Classic, the FR-Badges
+  style, or the Lucent glass set for Automatic / Lucent); rows widened to
+  fit (pause card, info panel). tools/lucent_player/af3_flagstyle.py.
+
 v4.8.73  (2026-11-14)
 - AF3: OSD Flags Style - Neon is gone; new Black & White style (black glass
   pills, white text; FR-Badges Black & White), listed after White & Black.

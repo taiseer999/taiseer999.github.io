@@ -621,7 +621,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.8.73" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.8.75" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -640,7 +640,7 @@ updated YouTube addon URL
     <import addon="script.module.parsers" version="1.0.0" />
     <import addon="script.module.python.twitch" version="3.0.2" />
     
-    <import addon="resource.images.af3.frbadges" version="1.0.4" />
+    <import addon="resource.images.af3.frbadges" version="1.0.5" />
   </requires>
 
   <extension point="xbmc.python.pluginsource" library="default.py">
@@ -2345,16 +2345,16 @@ By using or contributing to this repository, you agree that the developer is not
             <icon>icon.png</icon>
         </assets>
     </extension>
-</addon><addon id="resource.images.af3.frbadges" name="AF3 OSD Flags Styles (FR-Badges)" version="1.0.4" provider-name="ABUKARIM">
+</addon><addon id="resource.images.af3.frbadges" name="AF3 OSD Flags Styles (FR-Badges)" version="1.0.5" provider-name="ABUKARIM">
     <requires>
         <import addon="kodi.resource" version="1.0.0" />
     </requires>
     <extension point="kodi.resource.images" compile="false" type="flags" />
     <extension point="xbmc.addon.metadata">
-        <summary lang="en_GB">Lucent, Glass, White &amp; Black, Black &amp; White, Minimal and Light media-flag badges for Arctic Fuse 3 (Piers)</summary>
-        <summary lang="ar_SA">شارات الوسائط بأنماط لوسنت وزجاجي وأبيض وأسود وأسود وأبيض وبسيط وفاتح لواجهة Arctic Fuse 3 (Piers)</summary>
-        <description lang="en_GB">Six looks for the codec, HDR, audio, channel, source, aspect-ratio and language badges in the Arctic Fuse 3 Piers player OSD and footer, laid out like resource.images.af3.classicflags/colorful. Chosen in AB Tools (Toggles &gt; AF3: OSD Flags Style). Badge artwork: FR-Badges by farizmohd70 (MIT licence, github.com/farizmohd70/FR-Badges); aspect-ratio badges drawn to match. Each style also carries a lucent_player/ copy named like the AF3 Lucent Player pills; lucent/lucent_player holds the Lucent pills themselves (from the Lucent skin by djdirty60, GPL-2.0-or-later).</description>
-        <description lang="ar_SA">ستة أنماط لشارات الترميز وHDR والصوت والقنوات والمصدر ونسبة العرض واللغة في شاشة التشغيل وأسفل الشاشة في نسخة Piers من Arctic Fuse 3، بنفس ترتيب مجلدات الشارات الكلاسيكية. يُختار النمط من AB Tools (التبديلات &gt; AF3: نمط شارات التشغيل). رسوم الشارات: FR-Badges من farizmohd70 (رخصة MIT).</description>
+        <summary lang="en_GB">Lucent plus 13 FR-Badges styles of media-flag badges for Arctic Fuse 3 (Piers)</summary>
+        <summary lang="ar_SA">شارات الوسائط بنمط لوسنت و13 نمطاً من FR-Badges لواجهة Arctic Fuse 3 (Piers)</summary>
+        <description lang="en_GB">Fourteen looks for the codec, HDR, audio, channel, source, aspect-ratio and language badges in the Arctic Fuse 3 Piers player OSD and footer, laid out like resource.images.af3.classicflags/colorful. Chosen in AB Tools (Toggles &gt; AF3: OSD Flags Style). Badge artwork: FR-Badges by farizmohd70 (MIT licence, github.com/farizmohd70/FR-Badges); aspect-ratio badges drawn to match. Each style also carries a lucent_player/ copy named like the AF3 Lucent Player pills; lucent/lucent_player holds the Lucent pills themselves (from the Lucent skin by djdirty60, GPL-2.0-or-later).</description>
+        <description lang="ar_SA">أربعة عشر نمطاً لشارات الترميز وHDR والصوت والقنوات والمصدر ونسبة العرض واللغة في شاشة التشغيل وأسفل الشاشة في نسخة Piers من Arctic Fuse 3، بنفس ترتيب مجلدات الشارات الكلاسيكية. يُختار النمط من AB Tools (التبديلات &gt; AF3: نمط شارات التشغيل). رسوم الشارات: FR-Badges من farizmohd70 (رخصة MIT).</description>
         <platform>all</platform>
         <license>MIT</license>
         <source>https://github.com/farizmohd70/FR-Badges</source>

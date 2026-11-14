@@ -4,11 +4,13 @@ for the box are redrawn as a compact single-label pill in the same colours."""
 import os, sys
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from relabel import relabel, GEO
 FR, CL, OUT = sys.argv[1], sys.argv[2], sys.argv[3]
 FONT = '/usr/share/fonts/opentype/inter/Inter-Black.otf'
 CW, CH, PH = 176, 68, 60            # canvas, pill height inside it
 MAXR = CW / PH                      # widest content that still fits at full height
-STY = {'glass': 'Badges', 'blackwhite': 'Badges-Black-White', 'whiteblack': 'Badges-White-Black', 'minimal': 'Badges-Minimal', 'light': 'Badges-Light'}
+STY = {'glass': 'Badges', 'blackwhite': 'Badges-Black-White', 'solid': 'Badges-Solid', 'icondark': 'Badges-Icon-Dark', 'split': 'Badges-Split', 'frost': 'Badges-Frost', 'neonicon': 'Badges-Neon-Icon', 'iconlight': 'Badges-Icon-Light', 'textwhite': 'Badges-Text-White', 'textblack': 'Badges-Text-Black', 'whiteblack': 'Badges-White-Black', 'minimal': 'Badges-Minimal', 'light': 'Badges-Light'}
 SRC = {'4K': ['4k'], '8K': ['8k'], '1080P': ['1080p'], '720P': ['720p'], 'SD': ['480p'], 'DV': ['dolby-vision'], 'DV2': ['dolby-vision'],
        'HDR10': ['hdr10'], 'HDR10+': ['hdr10plus'], 'HLG': ['hlg'], 'HEVC': ['hevc'], 'AVC': ['avc'], 'AV1': ['av1'], 'VP9': ['vp9'],
        'ATMOS': ['atmos'], 'TRUEHD': ['truehd'], 'DTS-X': ['dtsx'], 'DTS-HDMA': ['dtshd-ma'], 'DTS-HDHR': ['dtshd-hra'], 'DTS': ['dts'],
@@ -36,6 +38,8 @@ def fit_font(text, maxw, size):
 
 def compact(style, src, label):
     """Redraw the badge as one label on its own pill (same caps + colours)."""
+    if style in GEO:
+        return relabel(style, src, label, MAXR * 0.98)
     im = Image.open(src).convert('RGBA'); w, h = im.size; a = np.array(im)
     target_w = int(h * MAXR * 0.98)
     if style == 'neon':

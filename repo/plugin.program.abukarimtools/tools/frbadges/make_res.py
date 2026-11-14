@@ -1,7 +1,9 @@
 import os, sys, shutil
 from PIL import Image
 FR, CLS, OUT = sys.argv[1], sys.argv[2], sys.argv[3]
-STYLES = {'glass':'Badges','blackwhite':'Badges-Black-White','whiteblack':'Badges-White-Black','minimal':'Badges-Minimal','light':'Badges-Light','lucent':'Badges-Text-White'}
+STYLES = {'glass':'Badges','blackwhite':'Badges-Black-White','whiteblack':'Badges-White-Black','minimal':'Badges-Minimal','light':'Badges-Light','lucent':'Badges-Text-White',
+          'solid':'Badges-Solid','icondark':'Badges-Icon-Dark','split':'Badges-Split','frost':'Badges-Frost',
+          'neonicon':'Badges-Neon-Icon','iconlight':'Badges-Icon-Light','textwhite':'Badges-Text-White','textblack':'Badges-Text-Black'}
 H = 110
 M = {}
 def m(cands, *targets):
@@ -69,8 +71,8 @@ def lucent_pill(im):
 def conv(src, dst, style):
     im = Image.open(src).convert('RGBA')
     if style == 'lucent': im = lucent_pill(im)
-    if style == 'neon':  # pad to the 309-tall canvas the other styles use, so it sits at the same size
-        w, h = im.size; nh = int(h * 309 / 227); c = Image.new('RGBA', (w, nh), (0,0,0,0)); c.paste(im, (0, (nh-h)//2)); im = c
+    if style in ('neon', 'neonicon'):  # pad to the 309-tall canvas the other styles use, so it sits at the same size
+        w, h = im.size; nh = int(h * 309 / (227 if style == 'neon' else 184)); c = Image.new('RGBA', (w, nh), (0,0,0,0)); c.paste(im, (0, (nh-h)//2)); im = c
     w, h = im.size; im = im.resize((max(1, round(w*H/h)), H), Image.LANCZOS)
     im.save(dst, optimize=True)
 SKIP = ('mpaa/', 'ratings/', 'language/')

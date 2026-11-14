@@ -3097,7 +3097,7 @@ msgid "This Arctic Fuse 3 version does not support flag styles yet. Update the s
 msgstr ""
 
 msgctxt "#32240"
-msgid "The look of the codec, HDR, audio and source badges in the Arctic Fuse 3 player and footer: Automatic, classic colourful, Lucent, Glass, White & Black, Black & White, Minimal or Light. Any choice except Automatic wins over the Lucent Look."
+msgid "The look of the codec, HDR, audio and source badges in the Arctic Fuse 3 player and footer: Automatic, classic colourful, Lucent or one of the FR-Badges styles (Glass, Solid, Frost, White & Black, Black & White, Minimal, Light, Icon Dark, Icon Light, Split, Neon Icon, Text White, Text Black). Any choice except Automatic wins over the Lucent Look."
 msgstr ""
 
 msgctxt "#32241"
@@ -3138,5 +3138,69 @@ msgstr ""
 
 msgctxt "#32250"
 msgid "Soft pastel pills"
+msgstr ""
+
+msgctxt "#32251"
+msgid "Solid"
+msgstr ""
+
+msgctxt "#32252"
+msgid "Vivid gradient fills"
+msgstr ""
+
+msgctxt "#32253"
+msgid "Frost"
+msgstr ""
+
+msgctxt "#32254"
+msgid "See-through frosted glass that suits the picture"
+msgstr ""
+
+msgctxt "#32255"
+msgid "Icon Dark"
+msgstr ""
+
+msgctxt "#32256"
+msgid "Colour icon tiles on dark glass"
+msgstr ""
+
+msgctxt "#32257"
+msgid "Icon Light"
+msgstr ""
+
+msgctxt "#32258"
+msgid "Colour icon tiles on soft pastel"
+msgstr ""
+
+msgctxt "#32259"
+msgid "Split"
+msgstr ""
+
+msgctxt "#32260"
+msgid "A colour icon part joined to a dark label"
+msgstr ""
+
+msgctxt "#32261"
+msgid "Neon Icon"
+msgstr ""
+
+msgctxt "#32262"
+msgid "Glowing icons and text, no background"
+msgstr ""
+
+msgctxt "#32263"
+msgid "Text White"
+msgstr ""
+
+msgctxt "#32264"
+msgid "White text only, no background"
+msgstr ""
+
+msgctxt "#32265"
+msgid "Text Black"
+msgstr ""
+
+msgctxt "#32266"
+msgid "Black text only, no background (for light screens)"
 msgstr ""
 

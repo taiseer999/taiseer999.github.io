@@ -50,7 +50,7 @@ ID ranges:
   32216-32217  AB Tools glass look (4.8.57, test)
   32218-32219  What's New screen (4.8.61)
   32220-32229  AF3 player - focused button names (4.8.65)
-  32230-32250  AF3 OSD Flags Style (4.8.68, FR-Badges; Lucent + samples 4.8.69)
+  32230-32266  AF3 OSD Flags Style (4.8.68, FR-Badges; Lucent + samples 4.8.69; all sets 4.8.75)
 """
 
 STRINGS = {
@@ -1034,7 +1034,7 @@ STRINGS = {
     32237: ('OSD flags style: %s', 'نمط شارات التشغيل: %s'),
     32238: ('The flags style add-on could not be installed. Check the connection and try again.', 'تعذّر تثبيت إضافة نمط الشارات. تحقّق من الاتصال ثم أعد المحاولة.'),
     32239: ('This Arctic Fuse 3 version does not support flag styles yet. Update the skin, then choose the style again.', 'لا يدعم هذا الإصدار من Arctic Fuse 3 أنماط الشارات بعد. حدِّث الواجهة ثم اختر النمط مرة أخرى.'),
-    32240: ('The look of the codec, HDR, audio and source badges in the Arctic Fuse 3 player and footer: Automatic, classic colourful, Lucent, Glass, White & Black, Black & White, Minimal or Light. Any choice except Automatic wins over the Lucent Look.', 'مظهر شارات الترميز وHDR والصوت والمصدر في مشغّل Arctic Fuse 3 وأسفل الشاشة: تلقائي أو الملوّنة الكلاسيكية أو لوسنت أو زجاجي أو أبيض وأسود أو أسود وأبيض أو بسيط أو فاتح. أيّ اختيار غير «تلقائي» يتقدّم على مظهر لوسنت.'),
+    32240: ('The look of the codec, HDR, audio and source badges in the Arctic Fuse 3 player and footer: Automatic, classic colourful, Lucent or one of the FR-Badges styles (Glass, Solid, Frost, White & Black, Black & White, Minimal, Light, Icon Dark, Icon Light, Split, Neon Icon, Text White, Text Black). Any choice except Automatic wins over the Lucent Look.', 'مظهر شارات الترميز وHDR والصوت والمصدر في مشغّل Arctic Fuse 3 وأسفل الشاشة: تلقائي أو الملوّنة الكلاسيكية أو لوسنت أو أحد أنماط FR-Badges (زجاجي، مصمت، زجاج مُثلَّج، أبيض وأسود، أسود وأبيض، بسيط، فاتح، أيقونات داكنة، أيقونات فاتحة، مقسوم، أيقونات نيون، نص أبيض، نص أسود). أيّ اختيار غير «تلقائي» يتقدّم على مظهر لوسنت.'),
     32241: ('Lucent', 'لوسنت'),
     32242: ('Automatic', 'تلقائي'),
     32243: ('Lucent badges while the Lucent Look is on, classic colourful otherwise', 'شارات لوسنت عند تفعيل مظهر لوسنت، والملوّنة الكلاسيكية في غير ذلك'),
@@ -1045,5 +1045,21 @@ STRINGS = {
     32248: ('White glass pills with black text', 'أقراص زجاجية بيضاء بنص أسود'),
     32249: ('Flat dark pills with a coloured dot', 'أقراص داكنة مسطّحة بنقطة ملوّنة'),
     32250: ('Soft pastel pills', 'أقراص بألوان هادئة فاتحة'),
+    32251: ('Solid', 'مصمت'),
+    32252: ('Vivid gradient fills', 'تعبئة بتدرّجات زاهية'),
+    32253: ('Frost', 'زجاج مُثلَّج'),
+    32254: ('See-through frosted glass that suits the picture', 'زجاج مُثلَّج شفاف يلائم الصورة'),
+    32255: ('Icon Dark', 'أيقونات داكنة'),
+    32256: ('Colour icon tiles on dark glass', 'أيقونات ملوّنة على زجاج داكن'),
+    32257: ('Icon Light', 'أيقونات فاتحة'),
+    32258: ('Colour icon tiles on soft pastel', 'أيقونات ملوّنة على ألوان هادئة فاتحة'),
+    32259: ('Split', 'مقسوم'),
+    32260: ('A colour icon part joined to a dark label', 'جزء أيقونة ملوّن متصل بعنوان داكن'),
+    32261: ('Neon Icon', 'أيقونات نيون'),
+    32262: ('Glowing icons and text, no background', 'أيقونات ونص متوهّجة بلا خلفية'),
+    32263: ('Text White', 'نص أبيض'),
+    32264: ('White text only, no background', 'نص أبيض فقط بلا خلفية'),
+    32265: ('Text Black', 'نص أسود'),
+    32266: ('Black text only, no background (for light screens)', 'نص أسود فقط بلا خلفية (للشاشات الفاتحة)'),
     32217: ('AB Tools in glass: white icons with no background and a see-through window.', 'أدوات AB بمظهر زجاجي: أيقونات بيضاء بلا خلفية ونافذة شفافة.'),
 }

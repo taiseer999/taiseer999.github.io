@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-af3_flagstyle.py - ABUKARIM TOOLS (4.8.68, Lucent + samples 4.8.69, Black & White replaces Neon 4.8.73)
+af3_flagstyle.py - ABUKARIM TOOLS (4.8.68, Lucent + samples 4.8.69, Black & White replaces Neon 4.8.73,
+                    the remaining FR-Badges sets 4.8.75)
 
 Toggles entry "AF3: OSD Flags Style" - a selection dialog with a sample
 picture of every option (resources/flagstyle_samples/<style>.png):
@@ -63,8 +64,11 @@ DEFAULT = 'auto'
 CLASSIC = 'colorful'
 # (style, label id, description id shown under the label in the picker)
 STYLES = (('auto', 32242, 32243), ('colorful', 32231, 32244), ('lucent', 32241, 32245),
-          ('glass', 32232, 32246), ('whiteblack', 32234, 32248), ('blackwhite', 32233, 32247),
-          ('minimal', 32235, 32249), ('light', 32236, 32250))
+          ('glass', 32232, 32246), ('solid', 32251, 32252), ('frost', 32253, 32254),
+          ('whiteblack', 32234, 32248), ('blackwhite', 32233, 32247),
+          ('minimal', 32235, 32249), ('light', 32236, 32250),
+          ('icondark', 32255, 32256), ('iconlight', 32257, 32258), ('split', 32259, 32260),
+          ('neonicon', 32261, 32262), ('textwhite', 32263, 32264), ('textblack', 32265, 32266))
 _LABEL = {k: l for k, l, _d in STYLES}
 _SAMPLES = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
                         'resources', 'flagstyle_samples')

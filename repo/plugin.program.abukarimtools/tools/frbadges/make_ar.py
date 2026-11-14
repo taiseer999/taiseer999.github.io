@@ -54,11 +54,13 @@ def lucent(text):
     c = Image.new('RGBA', (t.width, 241)); c.alpha_composite(t, (0, 45))
     c.putpixel((0, 0), (255, 255, 255, 30)); c.putpixel((0, 240), (255, 255, 255, 30))
     return lucent_pill(c)
-for style in ('glass', 'whiteblack', 'blackwhite', 'light', 'minimal', 'lucent'):
+from relabel import relabel, GEO
+for style in ('glass', 'whiteblack', 'blackwhite', 'light', 'minimal', 'lucent') + tuple(GEO):
     d = os.path.join(OUT, style, 'aspectratio')
     for f in sorted(os.listdir(d)):
         t = f[:-4]
         if t in ('fallback', '0.00'): continue
-        im = neon(t) if style == 'neon' else lucent(t) if style == 'lucent' else pill(style, t)
+        im = (relabel(style, '%s/%s/sdr.png' % (FR, GEO[style][0]), t) if style in GEO else
+              neon(t) if style == 'neon' else lucent(t) if style == 'lucent' else pill(style, t))
         w, h = im.size; im.resize((round(w * H / h), H), Image.LANCZOS).save(os.path.join(d, f), optimize=True)
 print('ok')

@@ -3097,8 +3097,8 @@ msgid "This Arctic Fuse 3 version does not support flag styles yet. Update the s
 msgstr "لا يدعم هذا الإصدار من Arctic Fuse 3 أنماط الشارات بعد. حدِّث الواجهة ثم اختر النمط مرة أخرى."
 
 msgctxt "#32240"
-msgid "The look of the codec, HDR, audio and source badges in the Arctic Fuse 3 player and footer: Automatic, classic colourful, Lucent, Glass, White & Black, Black & White, Minimal or Light. Any choice except Automatic wins over the Lucent Look."
-msgstr "مظهر شارات الترميز وHDR والصوت والمصدر في مشغّل Arctic Fuse 3 وأسفل الشاشة: تلقائي أو الملوّنة الكلاسيكية أو لوسنت أو زجاجي أو أبيض وأسود أو أسود وأبيض أو بسيط أو فاتح. أيّ اختيار غير «تلقائي» يتقدّم على مظهر لوسنت."
+msgid "The look of the codec, HDR, audio and source badges in the Arctic Fuse 3 player and footer: Automatic, classic colourful, Lucent or one of the FR-Badges styles (Glass, Solid, Frost, White & Black, Black & White, Minimal, Light, Icon Dark, Icon Light, Split, Neon Icon, Text White, Text Black). Any choice except Automatic wins over the Lucent Look."
+msgstr "مظهر شارات الترميز وHDR والصوت والمصدر في مشغّل Arctic Fuse 3 وأسفل الشاشة: تلقائي أو الملوّنة الكلاسيكية أو لوسنت أو أحد أنماط FR-Badges (زجاجي، مصمت، زجاج مُثلَّج، أبيض وأسود، أسود وأبيض، بسيط، فاتح، أيقونات داكنة، أيقونات فاتحة، مقسوم، أيقونات نيون، نص أبيض، نص أسود). أيّ اختيار غير «تلقائي» يتقدّم على مظهر لوسنت."
 
 msgctxt "#32241"
 msgid "Lucent"
@@ -3139,4 +3139,68 @@ msgstr "أقراص داكنة مسطّحة بنقطة ملوّنة"
 msgctxt "#32250"
 msgid "Soft pastel pills"
 msgstr "أقراص بألوان هادئة فاتحة"
+
+msgctxt "#32251"
+msgid "Solid"
+msgstr "مصمت"
+
+msgctxt "#32252"
+msgid "Vivid gradient fills"
+msgstr "تعبئة بتدرّجات زاهية"
+
+msgctxt "#32253"
+msgid "Frost"
+msgstr "زجاج مُثلَّج"
+
+msgctxt "#32254"
+msgid "See-through frosted glass that suits the picture"
+msgstr "زجاج مُثلَّج شفاف يلائم الصورة"
+
+msgctxt "#32255"
+msgid "Icon Dark"
+msgstr "أيقونات داكنة"
+
+msgctxt "#32256"
+msgid "Colour icon tiles on dark glass"
+msgstr "أيقونات ملوّنة على زجاج داكن"
+
+msgctxt "#32257"
+msgid "Icon Light"
+msgstr "أيقونات فاتحة"
+
+msgctxt "#32258"
+msgid "Colour icon tiles on soft pastel"
+msgstr "أيقونات ملوّنة على ألوان هادئة فاتحة"
+
+msgctxt "#32259"
+msgid "Split"
+msgstr "مقسوم"
+
+msgctxt "#32260"
+msgid "A colour icon part joined to a dark label"
+msgstr "جزء أيقونة ملوّن متصل بعنوان داكن"
+
+msgctxt "#32261"
+msgid "Neon Icon"
+msgstr "أيقونات نيون"
+
+msgctxt "#32262"
+msgid "Glowing icons and text, no background"
+msgstr "أيقونات ونص متوهّجة بلا خلفية"
+
+msgctxt "#32263"
+msgid "Text White"
+msgstr "نص أبيض"
+
+msgctxt "#32264"
+msgid "White text only, no background"
+msgstr "نص أبيض فقط بلا خلفية"
+
+msgctxt "#32265"
+msgid "Text Black"
+msgstr "نص أسود"
+
+msgctxt "#32266"
+msgid "Black text only, no background (for light screens)"
+msgstr "نص أسود فقط بلا خلفية (للشاشات الفاتحة)"
 
