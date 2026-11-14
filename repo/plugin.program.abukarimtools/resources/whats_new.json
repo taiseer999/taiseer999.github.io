@@ -2,73 +2,23 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
-   "v": "4.8.63",
-   "from": "4.8.63",
+   "v": "4.8.64",
+   "from": "4.8.56",
    "en": [
-    "Lucent Look: a light glass pill sits behind the Home system stats (temperature, RAM, network), exactly as wide as the stats."
-   ],
-   "ar": [
-    "مظهر Lucent: خلف إحصاءات النظام في الرئيسية (الحرارة والذاكرة والشبكة) شريط زجاجي فاتح بعرض الإحصاءات تمامًا."
-   ]
-  },
-  {
-   "v": "4.8.62",
-   "from": "4.8.62",
-   "en": [
-    "Fen Light, Red Light, POV and Umbrella: the stream windows show the black and white service logos and the smaller Selected Stream text of Search All."
-   ],
-   "ar": [
-    "Fen Light وRed Light وPOV وUmbrella: نوافذ المصادر تعرض شعارات الخدمات بالأبيض والأسود ونص المصدر المحدد بالحجم الأصغر كما في البحث الشامل."
-   ]
-  },
-  {
-   "v": "4.8.61",
-   "from": "4.8.61",
-   "en": [
+    "Lucent Look: white menu icons (Fen Light, Red Light, AB Tools nodes, AB Last Played) turn dark on the focused tile; add-on tiles keep their colours.",
+    "Lucent Look: no background behind the Home system stats.",
+    "New switch in Toggles: AB Tools Glass Look (test) - white glass icons with no background and a see-through window, for AB Tools and AB Wizard.",
+    "Black and white service logos (RD, AD, PM, TB, OC, EN, ED) in Search All and in the Fen Light, Red Light, POV and Umbrella stream windows.",
+    "Fen Light, Red Light, POV and Umbrella: the Selected Stream details use the smaller text of Search All.",
     "What's New: after an update, the first time AB Tools is opened it shows what changed in the last 10 versions."
    ],
    "ar": [
+    "مظهر Lucent: أيقونات القوائم البيضاء (Fen Light وRed Light وعُقد أدوات AB وAB Last Played) تصبح داكنة على البطاقة المحددة، وتحتفظ بطاقات الإضافات بألوانها.",
+    "مظهر Lucent: لا خلفية خلف إحصاءات النظام في الرئيسية.",
+    "مفتاح جديد في المفاتيح: المظهر الزجاجي لأدوات AB (تجريبي) - أيقونات زجاجية بيضاء بلا خلفية ونافذة شفافة، لأدوات AB ومعالج AB.",
+    "شعارات خدمات بالأبيض والأسود (RD وAD وPM وTB وOC وEN وED) في البحث الشامل وفي نوافذ المصادر لـ Fen Light وRed Light وPOV وUmbrella.",
+    "Fen Light وRed Light وPOV وUmbrella: تفاصيل المصدر المحدد بالنص الأصغر نفسه في البحث الشامل.",
     "ما الجديد: بعد كل تحديث، تعرض أدوات AB عند فتحها أول مرة ما تغيّر في آخر عشرة إصدارات."
-   ]
-  },
-  {
-   "v": "4.8.60",
-   "from": "4.8.59",
-   "en": [
-    "Lucent Look: AB Last Played's menu icons and the glass icons of AB Tools and AB Wizard turn dark on the focused tile, so they stay readable."
-   ],
-   "ar": [
-    "مظهر Lucent: أيقونات قوائم AB Last Played والأيقونات الزجاجية لأدوات AB ومعالج AB تصبح داكنة على البطاقة المحددة فتبقى واضحة."
-   ]
-  },
-  {
-   "v": "4.8.58",
-   "from": "4.8.58",
-   "en": [
-    "Search All: the debrid service logos (RD, AD, PM, TB, OC, EN, ED) are black and white, on the stream cards and the service filters."
-   ],
-   "ar": [
-    "البحث الشامل: شعارات خدمات Debrid (RD وAD وPM وTB وOC وEN وED) أصبحت بالأبيض والأسود على بطاقات المصادر وأزرار تصفية الخدمات."
-   ]
-  },
-  {
-   "v": "4.8.57",
-   "from": "4.8.57",
-   "en": [
-    "New switch in Toggles: AB Tools Glass Look (test) - white glass icons with no background and a see-through window, for AB Tools and AB Wizard."
-   ],
-   "ar": [
-    "مفتاح جديد في المفاتيح: المظهر الزجاجي لأدوات AB (تجريبي) - أيقونات زجاجية بيضاء بلا خلفية ونافذة شفافة، لأدوات AB ومعالج AB."
-   ]
-  },
-  {
-   "v": "4.8.56",
-   "from": "4.8.56",
-   "en": [
-    "Lucent Look: the white menu icons of Fen Light, Red Light and the AB Tools nodes (Korean and others) turn dark on the focused tile."
-   ],
-   "ar": [
-    "مظهر Lucent: أيقونات القوائم البيضاء في Fen Light وRed Light وعُقد أدوات AB (الكورية وغيرها) تصبح داكنة على البطاقة المحددة."
    ]
   },
   {

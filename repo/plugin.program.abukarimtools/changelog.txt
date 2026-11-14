@@ -1,72 +1,34 @@
-v4.8.63
-- AF3 Lucent Look: the glass pill behind the Home header's system stats
-  (4.8.55) was too dark and far wider than the stats ("Not available"
-  temperature). It is now light glass like the info pills (38FFFFFF) and
-  sizes itself to the stats: a disabled button with an auto width whose
-  invisible label is the temperature + RAM text in the same font, with
-  textoffsetx making room for the three icons and 20 px padding.
-
-v4.8.62
-- Single players (Glass Theme: Fen Light, Red Light, POV, Umbrella): the
-  service logos on the stream cards are the black and white set of Search
-  All (lucent_theme._provider_icon -> lucent/providers_bw, copied with the
-  textures), and the Selected Stream tiles on the left use Search All's
-  sizes (abk_srch_s labels, abk_srch_m values, in place of the skin's
-  font12 / font27).
-
-v4.8.61
-- What's New screen: after AB Tools updates, the first time the user opens
-  the add-on (settings window or classic list - not widgets, services or
-  RunPlugin calls) a screen shows what changed in the last 10 versions,
-  then the add-on opens. Once per update; a fresh install only records the
-  version. The text is resources/whats_new.json: the final result of each
-  release or run of releases (in-between fixes left out), English and
-  Arabic by Kodi's language, scrolling by itself (Up / Down by hand, OK /
-  Back close). whats_new.py, abk_whatsnew.xml, strings 32218-32219;
-  ?mode=whats_new&force=1 shows it any time. selftest: the newest
-  whats_new.json entry must be addon.xml's version.
-
-v4.8.60
-- Fix (4.8.59): the AB Last Played add-on tile (Add-ons, Home add-on
-  rows) went almost black when focused - its colour add-on icon
-  (resources/media/icon.png) was taken for a black and white menu icon
-  and tinted dark. Only Last Played's menu icons are tinted now.
-
-v4.8.59
-- AF3 Lucent Look: the glyph icons that turn dark on the focused tile
-  (4.8.56) now also take AB Last Played's black and white menu icons
-  (1.0.16) and the glass icons of AB Tools / AB Wizard (icons_glass) in
-  the classic lists.
-
-v4.8.58
-- Search All: the debrid service logos (Real-Debrid, AllDebrid,
-  Premiumize, TorBox, Offcloud, Easynews, EasyDebrid) are black & white
-  glass, like AB Wizard's glass icons - on the stream cards and the
-  service chips. New set resources/lucent/media/lucent/providers_bw
-  (tools/gen_glass_providers.py: white, no background, a thin cut where
-  two colours meet so Premiumize's tick and TorBox's cube keep their
-  shape). On the focused (white) chip the logo turns dark. Always on,
-  not tied to the Glass Look switch.
-
-v4.8.57
-- AB Tools: Glass Look (test) - new switch in Toggles. AB Tools' own icons
-  in black & white glass: no tile background, white glyphs, coloured parts
-  frosted (45%) where the icon also has solid white parts (toggle knobs,
-  hearts, pages). resources/icons_glass is generated from resources/icons
-  by tools/gen_glass_icons.py (512 px). The settings window gets a
-  see-through background (70% navy; AF3: dialog_overlay) and the focused
-  icon turns dark on the white card. Applies to the settings window, the
-  classic list and the on/off switch lists; flag: addon_data/glass_look.txt.
-
-v4.8.56
-- AF3 Lucent Look: glyph icons now turn dark on focus. AF3 only tints Kodi's
-  own Default*.png icons; plugin icons (Fen Light / Red Light menu icons from
-  imgur, AB Tools nodes using special://skin/extras/icons/ such as the Korean
-  nodes) were drawn untinted, so they stayed white on the light focus tile.
-  Includes_Objects.xml (Object_Layout_Image_Rectangle) now takes
-  $VAR[ABK_Lucent_GlyphFocus] on the focused item, and the fork's
-  Exp_Focus_IconTileOnWhite no longer hides the focus tile for those icons.
-  Colour add-on logos are untouched.
+v4.8.64  (all changes of 2026-11-14: 4.8.56 - 4.8.64)
+- AF3 Lucent Look - icons on the focused tile: white menu icons turn dark on
+  the light focus tile, like the label beside them - Fen Light / Red Light
+  menu icons, the skin's extras/icons used by AB Tools nodes (Korean ...),
+  AB Last Played's menu icons and the glass icons of AB Tools / AB Wizard.
+  Colour add-on icons (add-on tiles, logos) keep their colours.
+  Includes_ABK_Lucent.xml ABK_Lucent_GlyphTile / ABK_Lucent_GlyphFocus;
+  Includes_Objects.xml Object_Layout_Image_Rectangle takes the colour on the
+  focused item; Exp_Focus_IconTileOnWhite keeps the focus tile for them.
+- AF3 Lucent Look - Home system stats: no background behind them. The glass
+  pill of 4.8.55 is taken back out of Includes_Furniture.xml (removal
+  entry); ABK_Lucent_GlassStats stays as an empty include.
+- AB Tools Glass Look (test) - Toggles > AB Tools: Glass Look: AB Tools'
+  icons in black and white glass with no background (resources/icons_glass,
+  tools/gen_glass_icons.py), the settings window see-through (70 % navy;
+  AF3: dialog_overlay) with the focused icon dark on the white card. Settings
+  window, classic list and switch lists. AB Wizard 4.2.2 follows the same
+  switch (flag addon_data/plugin.program.abukarimtools/glass_look.txt).
+- Black and white service logos (RD, AD, PM, TB, OC, EN, ED) in Search All
+  (stream cards, service filters - dark on the focused white filter) and in
+  the Fen Light / Red Light / POV / Umbrella stream windows:
+  lucent/providers_bw (tools/gen_glass_providers.py), copied to the add-ons
+  with the Glass Theme textures.
+- Fen Light / Red Light / POV / Umbrella stream windows: the Selected Stream
+  tiles use Search All's text sizes (abk_srch_s / abk_srch_m).
+- What's New screen: after an update, the first time AB Tools is opened
+  (settings window or classic list) it shows the final results of the last
+  10 versions, English or Arabic, scrolling by itself (Up / Down by hand,
+  OK / Back close); once per update, not on a fresh install. Text in
+  resources/whats_new.json (selftest: newest entry = addon.xml version);
+  ?mode=whats_new&force=1 shows it any time.
 
 v4.8.55
 - AF3 Lucent Look: glass TinyPPI. With the Lucent Look on, TinyPPI's panels -

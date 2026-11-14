@@ -1982,16 +1982,17 @@ PATCHES = [
         'already_patched_check': '<!-- ABUKARIM: Lucent glass spotlight icon -->',
         'description': 'AF3 Lucent Look - glass Spotlight buttons (white icon)',
     },
-    # 4.8.55: glass pill behind the Home header's system stats (drawn
-    # before the stats grouplist, so it sits behind them)
+    # 4.8.64: the glass pill behind the Home header's system stats (4.8.55)
+    # is gone - this entry takes its include line back out where 4.8.55 put it
+    # (stock AF3 never had it, so it is skipped there).
     {
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('1080i', 'Includes_Furniture.xml'),
         'not_found_ok': True,
-        'old': '            <control type="grouplist">\n                <visible>Skin.HasSetting(Furniture.Network_RAM)</visible>',
-        'new': '            <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_GlassStats</include>  <!-- ABUKARIM: Lucent glass stats -->\n            <control type="grouplist">\n                <visible>Skin.HasSetting(Furniture.Network_RAM)</visible>',
-        'already_patched_check': '<!-- ABUKARIM: Lucent glass stats -->',
-        'description': 'AF3 Lucent Look - glass pill behind the system stats (Home header)',
+        'old': '            <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_GlassStats</include>  <!-- ABUKARIM: Lucent glass stats -->\n',
+        'new': '',
+        'already_patched_check': None,       # nothing to look for: 'old' gone = done
+        'description': 'AF3 Lucent Look - remove the glass pill behind the system stats',
     },
 
     # 4.8.56: glyph icons (Fen Light menu icons, AB Tools node icons) never

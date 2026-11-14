@@ -39,37 +39,10 @@
         </definition>
     </include>
 
-    <!-- 4.8.55 / 4.8.63: glass pill behind the Home header's system stats
-         (CPU temperature, RAM, network; Furniture_Header_Right). The pill
-         is a disabled button with an auto width: its invisible label holds
-         the same texts in the same font, and textoffsetx (72 each side)
-         adds the three icons (~104 px) plus 20 px of padding per side - so
-         it is exactly as wide as the stats, whatever the temperature says.
-         Light glass like the info pills (38FFFFFF). -->
-    <include name="ABK_Lucent_GlassStats">
-        <control type="grouplist">
-            <visible>Skin.HasSetting(Furniture.Network_RAM)</visible>
-            <right>-5</right>
-            <top>-36</top>
-            <width>700</width>
-            <height>56</height>
-            <orientation>horizontal</orientation>
-            <align>right</align>
-            <control type="button">
-                <width>auto</width>
-                <height>56</height>
-                <enable>false</enable>
-                <font>font_tiny</font>
-                <textoffsetx>72</textoffsetx>
-                <textcolor>00000000</textcolor>
-                <disabledcolor>00000000</disabledcolor>
-                <focusedcolor>00000000</focusedcolor>
-                <texturenofocus border="28" colordiffuse="38FFFFFF">abk_lucent/pill60.png</texturenofocus>
-                <texturefocus border="28" colordiffuse="38FFFFFF">abk_lucent/pill60.png</texturefocus>
-                <label>$INFO[System.CPUTemperature]$INFO[system.memory(used.percent)]</label>
-            </control>
-        </control>
-    </include>
+    <!-- 4.8.64: the glass pill behind the system stats is gone; the empty
+         include stays so a Furniture file not yet cleaned by the patcher
+         does not log a missing include. -->
+    <include name="ABK_Lucent_GlassStats" />
 
     <!-- Glyph icons (Fen Light / Red Light menu icons, the skin's own
          extras/icons used by AB Tools nodes, the glass icons of AB Tools /
