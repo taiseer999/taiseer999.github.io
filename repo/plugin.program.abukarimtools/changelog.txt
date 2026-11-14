@@ -1,4 +1,13 @@
-v4.8.64  (all changes of 2026-11-14: 4.8.56 - 4.8.64)
+v4.8.66  (all changes of 2026-11-14: 4.8.56 - 4.8.66)
+- AF3 player: the name of the focused button shows under the button row,
+  like the Lucent Player - Play / Pause, Previous / Next (or Previous /
+  Next chapter, Skip back / forward - what the button does right now),
+  Stop, Information, Audio, Subtitles, Sync subtitles, Next subtitle,
+  Subtitle look, Video settings, Statistics, Player process info; TV guide
+  and Record for live TV. VideoOSD.xml gets ABK_OSD_ButtonLabel
+  (Includes_ABK_Lucent.xml, variable ABK_OSD_ButtonName, strings
+  32220-32229). Shown with the Lucent Player on as well (its own buttons
+  have other ids, so nothing doubles).
 - AF3 Lucent Look - icons on the focused tile: white menu icons turn dark on
   the light focus tile, like the label beside them - Fen Light / Red Light
   menu icons, the skin's extras/icons used by AB Tools nodes (Korean ...),

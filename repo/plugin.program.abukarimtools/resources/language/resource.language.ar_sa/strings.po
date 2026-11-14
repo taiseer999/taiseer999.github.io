@@ -3016,3 +3016,43 @@ msgctxt "#32219"
 msgid "OK or Back to continue"
 msgstr "اضغط موافق أو رجوع للمتابعة"
 
+msgctxt "#32220"
+msgid "Play"
+msgstr "تشغيل"
+
+msgctxt "#32221"
+msgid "Previous chapter"
+msgstr "الفصل السابق"
+
+msgctxt "#32222"
+msgid "Next chapter"
+msgstr "الفصل التالي"
+
+msgctxt "#32223"
+msgid "Skip back"
+msgstr "قفزة إلى الخلف"
+
+msgctxt "#32224"
+msgid "Skip forward"
+msgstr "قفزة إلى الأمام"
+
+msgctxt "#32225"
+msgid "Sync subtitles"
+msgstr "مزامنة الترجمة"
+
+msgctxt "#32226"
+msgid "Next subtitle"
+msgstr "الترجمة التالية"
+
+msgctxt "#32227"
+msgid "Subtitle look"
+msgstr "مظهر الترجمة"
+
+msgctxt "#32228"
+msgid "Player process info"
+msgstr "معلومات معالجة المشغّل"
+
+msgctxt "#32229"
+msgid "TV guide"
+msgstr "دليل البرامج"
+

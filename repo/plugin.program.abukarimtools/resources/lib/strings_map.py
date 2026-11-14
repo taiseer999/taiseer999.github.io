@@ -49,6 +49,7 @@ ID ranges:
   32200-32215  Search All - details of the focused stream (4.8.25)
   32216-32217  AB Tools glass look (4.8.57, test)
   32218-32219  What's New screen (4.8.61)
+  32220-32229  AF3 player - focused button names (4.8.65)
 """
 
 STRINGS = {
@@ -1010,5 +1011,16 @@ STRINGS = {
     32216: ('AB Tools: Glass Look (test)', 'أدوات AB: المظهر الزجاجي (تجريبي)'),
     32218: ("What's New in AB Tools", 'ما الجديد في أدوات AB'),
     32219: ('OK or Back to continue', 'اضغط موافق أو رجوع للمتابعة'),
+    # ---- 4.8.65: AF3 player - focused button names (32220-32229) ----
+    32220: ('Play', 'تشغيل'),
+    32221: ('Previous chapter', 'الفصل السابق'),
+    32222: ('Next chapter', 'الفصل التالي'),
+    32223: ('Skip back', 'قفزة إلى الخلف'),
+    32224: ('Skip forward', 'قفزة إلى الأمام'),
+    32225: ('Sync subtitles', 'مزامنة الترجمة'),
+    32226: ('Next subtitle', 'الترجمة التالية'),
+    32227: ('Subtitle look', 'مظهر الترجمة'),
+    32228: ('Player process info', 'معلومات معالجة المشغّل'),
+    32229: ('TV guide', 'دليل البرامج'),
     32217: ('AB Tools in glass: white icons with no background and a see-through window.', 'أدوات AB بمظهر زجاجي: أيقونات بيضاء بلا خلفية ونافذة شفافة.'),
 }

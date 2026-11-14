@@ -147,4 +147,48 @@
         <itemgap>14</itemgap>
     </include>
 
+
+    <!-- 4.8.65: the name of the focused button under the AF3 player's button
+         row (VideoOSD.xml, ABK_OSD_ButtonLabel), like the Lucent Player. Ids:
+         AF3 6001-6008, PPI 6009, AB Tools 6010-6013. Prev / Next say what
+         they do now: chapter, playlist item or a big step. -->
+    <variable name="ABK_OSD_ButtonName">
+        <value condition="Control.HasFocus(6001) + Player.Paused">$ADDON[plugin.program.abukarimtools 32220]</value>
+        <value condition="Control.HasFocus(6001)">$ADDON[plugin.program.abukarimtools 32009]</value>
+        <value condition="Control.HasFocus(6002) + VideoPlayer.Content(livetv)">$ADDON[plugin.program.abukarimtools 32229]</value>
+        <value condition="Control.HasFocus(6002) + !String.IsEmpty(Player.Chapter) + !String.IsEqual(Player.Chapter,00) + !String.IsEmpty(Player.ChapterCount) + !String.IsEqual(Player.ChapterCount,00) + !String.IsEqual(Player.Chapter,01)">$ADDON[plugin.program.abukarimtools 32221]</value>
+        <value condition="Control.HasFocus(6002) + Integer.IsGreater(VideoPlayer.PlaylistPosition,1) + Integer.IsGreater(VideoPlayer.PlaylistLength,1)">$ADDON[plugin.program.abukarimtools 32007]</value>
+        <value condition="Control.HasFocus(6002)">$ADDON[plugin.program.abukarimtools 32223]</value>
+        <value condition="Control.HasFocus(6003) + VideoPlayer.Content(livetv)">$ADDON[plugin.program.abukarimtools 32035]</value>
+        <value condition="Control.HasFocus(6003) + !String.IsEmpty(Player.Chapter) + !String.IsEqual(Player.Chapter,00) + !String.IsEmpty(Player.ChapterCount) + !String.IsEqual(Player.ChapterCount,00) + !String.IsEqual(Player.Chapter,Player.ChapterCount)">$ADDON[plugin.program.abukarimtools 32222]</value>
+        <value condition="Control.HasFocus(6003) + Integer.IsLess(VideoPlayer.PlaylistPosition,VideoPlayer.PlaylistLength)">$ADDON[plugin.program.abukarimtools 32006]</value>
+        <value condition="Control.HasFocus(6003) + !String.IsEmpty(Container(450).ListItem.FileNameAndPath) + Integer.IsLess(Player.TimeRemaining(mins),10)">$ADDON[plugin.program.abukarimtools 32006]</value>
+        <value condition="Control.HasFocus(6003)">$ADDON[plugin.program.abukarimtools 32224]</value>
+        <value condition="Control.HasFocus(6004)">$ADDON[plugin.program.abukarimtools 32005]</value>
+        <value condition="Control.HasFocus(6005)">$ADDON[plugin.program.abukarimtools 32008]</value>
+        <value condition="Control.HasFocus(6006)">$ADDON[plugin.program.abukarimtools 32002]</value>
+        <value condition="Control.HasFocus(6007)">$ADDON[plugin.program.abukarimtools 32001]</value>
+        <value condition="Control.HasFocus(6010)">$ADDON[plugin.program.abukarimtools 32225]</value>
+        <value condition="Control.HasFocus(6011)">$ADDON[plugin.program.abukarimtools 32226]</value>
+        <value condition="Control.HasFocus(6012)">$ADDON[plugin.program.abukarimtools 32227]</value>
+        <value condition="Control.HasFocus(6008)">$ADDON[plugin.program.abukarimtools 32003]</value>
+        <value condition="Control.HasFocus(6013)">$ADDON[plugin.program.abukarimtools 32014]</value>
+        <value condition="Control.HasFocus(6009)">$ADDON[plugin.program.abukarimtools 32228]</value>
+    </variable>
+    <include name="ABK_OSD_ButtonLabel">
+        <control type="label">
+            <centerleft>50%</centerleft>
+            <width>1200</width>
+            <top>1030</top>
+            <height>40</height>
+            <font>font_tiny</font>
+            <textcolor>CCFFFFFF</textcolor>
+            <align>center</align>
+            <aligny>center</aligny>
+            <label>$VAR[ABK_OSD_ButtonName]</label>
+            <!-- 4.8.66: no Lucent Player condition - its own buttons have other
+                 ids, so the name is empty there; with it on, AF3's row was
+                 left without names (log 2026-11-14 11:59) -->
+        </control>
+    </include>
 </includes>

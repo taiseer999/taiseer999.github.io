@@ -3016,3 +3016,43 @@ msgctxt "#32219"
 msgid "OK or Back to continue"
 msgstr ""
 
+msgctxt "#32220"
+msgid "Play"
+msgstr ""
+
+msgctxt "#32221"
+msgid "Previous chapter"
+msgstr ""
+
+msgctxt "#32222"
+msgid "Next chapter"
+msgstr ""
+
+msgctxt "#32223"
+msgid "Skip back"
+msgstr ""
+
+msgctxt "#32224"
+msgid "Skip forward"
+msgstr ""
+
+msgctxt "#32225"
+msgid "Sync subtitles"
+msgstr ""
+
+msgctxt "#32226"
+msgid "Next subtitle"
+msgstr ""
+
+msgctxt "#32227"
+msgid "Subtitle look"
+msgstr ""
+
+msgctxt "#32228"
+msgid "Player process info"
+msgstr ""
+
+msgctxt "#32229"
+msgid "TV guide"
+msgstr ""
+

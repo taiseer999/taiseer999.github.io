@@ -2,9 +2,10 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
-   "v": "4.8.64",
+   "v": "4.8.66",
    "from": "4.8.56",
    "en": [
+    "AF3 player: the name of the focused button shows under the buttons (Play, Pause, Next chapter, Audio, Subtitles...), as in the Lucent Player.",
     "Lucent Look: white menu icons (Fen Light, Red Light, AB Tools nodes, AB Last Played) turn dark on the focused tile; add-on tiles keep their colours.",
     "Lucent Look: no background behind the Home system stats.",
     "New switch in Toggles: AB Tools Glass Look (test) - white glass icons with no background and a see-through window, for AB Tools and AB Wizard.",
@@ -13,6 +14,7 @@
     "What's New: after an update, the first time AB Tools is opened it shows what changed in the last 10 versions."
    ],
    "ar": [
+    "مشغّل AF3: يظهر اسم الزر المحدد تحت الأزرار (تشغيل، إيقاف مؤقت، الفصل التالي، الصوت، الترجمة...) كما في مشغّل Lucent.",
     "مظهر Lucent: أيقونات القوائم البيضاء (Fen Light وRed Light وعُقد أدوات AB وAB Last Played) تصبح داكنة على البطاقة المحددة، وتحتفظ بطاقات الإضافات بألوانها.",
     "مظهر Lucent: لا خلفية خلف إحصاءات النظام في الرئيسية.",
     "مفتاح جديد في المفاتيح: المظهر الزجاجي لأدوات AB (تجريبي) - أيقونات زجاجية بيضاء بلا خلفية ونافذة شفافة، لأدوات AB ومعالج AB.",

@@ -1982,6 +1982,17 @@ PATCHES = [
         'already_patched_check': '<!-- ABUKARIM: Lucent glass spotlight icon -->',
         'description': 'AF3 Lucent Look - glass Spotlight buttons (white icon)',
     },
+    # 4.8.65: the name of the focused button under the AF3 player's buttons
+    # (Includes_ABK_Lucent.xml ABK_OSD_ButtonLabel), like the Lucent Player.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'not_found_ok': True,
+        'old': '                        <include>PPI_Button</include>\n                    </control>\n                </control>\n',
+        'new': '                        <include>PPI_Button</include>\n                    </control>\n                    <include>ABK_OSD_ButtonLabel</include>  <!-- ABUKARIM: OSD button names -->\n                </control>\n',
+        'already_patched_check': '<!-- ABUKARIM: OSD button names -->',
+        'description': 'AF3 player - name of the focused button under the button row',
+    },
     # 4.8.64: the glass pill behind the Home header's system stats (4.8.55)
     # is gone - this entry takes its include line back out where 4.8.55 put it
     # (stock AF3 never had it, so it is skipped there).
