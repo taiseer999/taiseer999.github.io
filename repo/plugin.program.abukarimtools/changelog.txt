@@ -1,3 +1,17 @@
+v4.8.77  (2026-11-14)
+- "AF3: Classic OSD Flags" is gone from Toggles: one entry, "AF3: OSD Flags
+  Style", now controls all the badges. Its new last choice "Off (stock
+  AF3)" hides AF3's badge rows (OSD extras + footer codecs): AB Tools adds
+  "+ not Off" to AF3's Exp_ABK_ClassicFlags gate once and sets
+  Skin.String(abk.flagstyle) to off; the Lucent Player, Search All and the
+  source windows keep the Lucent pills. resource.images.af3.classicflags is
+  now required (addon.xml) and always enabled. A box that had the old
+  switch Off and never picked a style moves to Off.
+- AF3 Lucent Player: the source badge in the extras is now AF3's own
+  Image_VideoPlayer_RipSource (also HD-DVD, VHS, SDTV, BD25 and the
+  FallbackSourceFlag skin setting); ABK_LP_ExtraSource removed. Needs AF3
+  50.11.68 or later (resource:// flag paths).
+
 v4.8.76  (2026-11-14)
 - AF3: OSD Flags Style now also changes the stream badges in Search All and
   in the Fen Light / Red Light / POV / Umbrella source windows (Glass Theme).

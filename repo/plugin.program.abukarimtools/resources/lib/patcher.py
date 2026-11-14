@@ -5617,7 +5617,8 @@ TOGGLE_GROUPS = [
     ('dexhub_entry',     'DexHub: Plugin Entry Fix (Kodi 22)'),
     # 4.8.17: no patch entries - the state of the Toggles menu switch
     # "AF3: Classic OSD Flags" (af3_classicflags_toggle.py); listed so the
-    # phone setup / presets keep it as a known id.
+    # phone setup / presets keep it as a known id. 4.8.77: the switch is gone
+    # (now "Off" in AF3: OSD Flags Style); an old Off is migrated once.
     ('af3_classicflags', 'AF3: Classic OSD Flags'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)

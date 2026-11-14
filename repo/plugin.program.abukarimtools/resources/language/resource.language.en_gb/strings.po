@@ -3097,7 +3097,7 @@ msgid "This Arctic Fuse 3 version does not support flag styles yet. Update the s
 msgstr ""
 
 msgctxt "#32240"
-msgid "The look of the codec, HDR, audio and source badges in the Arctic Fuse 3 player and footer: Automatic, classic colourful, Lucent or one of the FR-Badges styles (Glass, Solid, Frost, White & Black, Black & White, Minimal, Light, Icon Dark, Icon Light, Split, Neon Icon, Text White, Text Black). Any choice except Automatic wins over the Lucent Look."
+msgid "The look of the codec, HDR, audio and source badges in the Arctic Fuse 3 player and footer: Automatic, classic colourful, Lucent or one of the FR-Badges styles (Glass, Solid, Frost, White & Black, Black & White, Minimal, Light, Icon Dark, Icon Light, Split, Neon Icon, Text White, Text Black), or Off. Any choice except Automatic wins over the Lucent Look."
 msgstr ""
 
 msgctxt "#32241"
@@ -3202,5 +3202,13 @@ msgstr ""
 
 msgctxt "#32266"
 msgid "Black text only, no background (for light screens)"
+msgstr ""
+
+msgctxt "#32267"
+msgid "Off (stock AF3)"
+msgstr ""
+
+msgctxt "#32268"
+msgid "No badge rows in the AF3 player and footer; the Lucent pills elsewhere"
 msgstr ""
 

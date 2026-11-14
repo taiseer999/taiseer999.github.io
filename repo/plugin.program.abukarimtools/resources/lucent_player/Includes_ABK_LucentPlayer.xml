@@ -6,21 +6,15 @@
     <!-- 4.8.74: OSD extras in the Lucent Player rows (af3_flagstyle.py) -->
     <variable name="ABK_LP_ExtraDir">
         <value condition="String.IsEqual(Skin.String(abk.flagstyle),colorful) + System.AddonIsEnabled(resource.images.af3.classicflags)">resource://resource.images.af3.classicflags/colorful</value>
-        <value condition="!String.IsEmpty(Skin.String(abk.flagstyle)) + System.AddonIsEnabled(resource.images.af3.frbadges)">resource://resource.images.af3.frbadges/$INFO[Skin.String(abk.flagstyle)]</value>
+        <value condition="!String.IsEmpty(Skin.String(abk.flagstyle)) + !String.IsEqual(Skin.String(abk.flagstyle),off) + System.AddonIsEnabled(resource.images.af3.frbadges)">resource://resource.images.af3.frbadges/$INFO[Skin.String(abk.flagstyle)]</value>
         <value condition="System.AddonIsEnabled(resource.images.af3.frbadges)">resource://resource.images.af3.frbadges/lucent</value>
         <value condition="System.AddonIsEnabled(resource.images.af3.classicflags)">resource://resource.images.af3.classicflags/colorful</value>
         <value>flags/colorful</value>
     </variable>
-    <variable name="ABK_LP_ExtraSource">
-        <value condition="[String.Contains(Player.Filename,bluray) | String.Contains(Player.Filename,blu-ray) | String.Contains(Player.Filename,remux) | String.Contains(Player.Filename,bdrip) | String.Contains(Player.Filename,brrip)] + [String.Contains(Player.Filename,2160p) | String.Contains(Player.Filename,uhd)]">other/4k_bluray</value>
-        <value condition="String.Contains(Player.Filename,bluray) | String.Contains(Player.Filename,blu-ray) | String.Contains(Player.Filename,remux) | String.Contains(Player.Filename,bdrip) | String.Contains(Player.Filename,brrip)">other/bluray</value>
-        <value condition="String.Contains(Player.Filename,web-dl) | String.Contains(Player.Filename,webdl) | String.Contains(Player.Filename,webrip) | String.Contains(Player.Filename,.web.)">other/web-dl</value>
-        <value condition="String.Contains(Player.Filename,hdtv)">other/hdtv</value>
-        <value condition="String.Contains(Player.Filename,dvd)">other/dvd</value>
-    </variable>
 
     <!-- 4.8.69: AF3 OSD Flags Style (af3_flagstyle.py) -->
     <variable name="ABK_LP_FlagDir">
+        <value condition="String.IsEqual(Skin.String(abk.flagstyle),off)">abk_lp/flags</value>
         <value condition="!String.IsEmpty(Skin.String(abk.flagstyle)) + System.AddonIsEnabled(resource.images.af3.frbadges)">resource://resource.images.af3.frbadges/$INFO[Skin.String(abk.flagstyle)]/lucent_player</value>
         <value>abk_lp/flags</value>
     </variable>
@@ -312,8 +306,8 @@
                     <width>132</width>
                     <height>51</height>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">$VAR[ABK_LP_ExtraDir]/$VAR[ABK_LP_ExtraSource].png</texture>
-                    <visible>!String.IsEmpty($VAR[ABK_LP_ExtraSource])</visible>
+                    <texture background="true">$VAR[Image_VideoPlayer_RipSource]</texture>
+                    <visible>!String.IsEmpty($VAR[Image_VideoPlayer_RipSource])</visible>
                 </control>
                 <control type="image">
                     <width>110</width>
@@ -673,8 +667,8 @@
                     <width>132</width>
                     <height>51</height>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">$VAR[ABK_LP_ExtraDir]/$VAR[ABK_LP_ExtraSource].png</texture>
-                    <visible>!String.IsEmpty($VAR[ABK_LP_ExtraSource])</visible>
+                    <texture background="true">$VAR[Image_VideoPlayer_RipSource]</texture>
+                    <visible>!String.IsEmpty($VAR[Image_VideoPlayer_RipSource])</visible>
                 </control>
                 <control type="image">
                     <width>110</width>
@@ -885,8 +879,8 @@
                     <width>132</width>
                     <height>51</height>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">$VAR[ABK_LP_ExtraDir]/$VAR[ABK_LP_ExtraSource].png</texture>
-                    <visible>!String.IsEmpty($VAR[ABK_LP_ExtraSource])</visible>
+                    <texture background="true">$VAR[Image_VideoPlayer_RipSource]</texture>
+                    <visible>!String.IsEmpty($VAR[Image_VideoPlayer_RipSource])</visible>
                 </control>
                 <control type="image">
                     <width>110</width>

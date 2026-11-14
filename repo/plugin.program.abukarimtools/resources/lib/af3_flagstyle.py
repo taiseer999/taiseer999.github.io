@@ -68,7 +68,11 @@ STYLES = (('auto', 32242, 32243), ('colorful', 32231, 32244), ('lucent', 32241, 
           ('whiteblack', 32234, 32248), ('blackwhite', 32233, 32247),
           ('minimal', 32235, 32249), ('light', 32236, 32250),
           ('icondark', 32255, 32256), ('iconlight', 32257, 32258), ('split', 32259, 32260),
-          ('neonicon', 32261, 32262), ('textwhite', 32263, 32264), ('textblack', 32265, 32266))
+          ('neonicon', 32261, 32262), ('textwhite', 32263, 32264), ('textblack', 32265, 32266),
+          ('off', 32267, 32268))
+OFF = 'off'
+_GATE_RE = re.compile(r'(<expression name="Exp_ABK_ClassicFlags">)(.*?)(</expression>)', re.S)
+_GATE_ADD = ' + !String.IsEqual(Skin.String(abk.flagstyle),off)'
 _LABEL = {k: l for k, l, _d in STYLES}
 _SAMPLES = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
                         'resources', 'flagstyle_samples')
@@ -183,7 +187,7 @@ def apply_to_text(content, style):
     if not m:
         return content, 'novar'
     body = _MARK_LINE_RE.sub('', m.group(2))
-    if style != CLASSIC:
+    if style not in (CLASSIC, OFF):
         if 'resource://' not in body:
             return content[:m.start(2)] + body + content[m.end(2):], 'oldskin'
         indent = re.search(r'\n([ \t]*)<value', body)
@@ -201,7 +205,33 @@ def apply_to_text(content, style):
 def lp_style(style=None):
     """Value of Skin.String(abk.flagstyle) for the Lucent Player pills."""
     style = style or get_style()
-    return '' if style in (DEFAULT, 'lucent') else style
+    return '' if style in (DEFAULT, 'lucent') else style     # 'off' is kept: the skin gates on it
+
+
+def gate_text(content):
+    """4.8.77: AF3's badge rows (OSD extras + footer codecs) are gated on
+    Exp_ABK_ClassicFlags; add "+ not Off" to it once. """
+    m = _GATE_RE.search(content)
+    if not m or _GATE_ADD.strip() in m.group(2):
+        return content, False
+    body = '[%s]%s' % (m.group(2).strip(), _GATE_ADD)
+    return content[:m.start(2)] + body + content[m.end(2):], True
+
+
+def _migrate():
+    """The retired "AF3: Classic OSD Flags" switch: an Off there becomes the
+    Off style (only when no style was ever picked), then the old id goes."""
+    try:
+        from resources.lib import patcher
+        disabled = set(patcher._load_disabled())
+        if 'af3_classicflags' in disabled:
+            if not os.path.exists(_STATE):
+                set_style(OFF)
+                _log('migrated: Classic OSD Flags was off -> style Off')
+            disabled.discard('af3_classicflags')
+            patcher._save_disabled(disabled)
+    except Exception as e:
+        _log('migrate: %s' % e, xbmc.LOGWARNING)
 
 
 def sync_skin_string(style=None):
@@ -228,7 +258,20 @@ def reconcile(skin_dir=None):
     path = os.path.join(skin_dir, '1080i', 'Includes_Colors.xml')
     if not os.path.isfile(path):
         return True, '[flag style] Includes_Colors.xml not found - skipping.', False
+    _migrate()
     style = get_style()
+    gate_wrote = False
+    try:
+        gpath = os.path.join(skin_dir, '1080i', 'Includes_Expressions.xml')
+        if os.path.isfile(gpath):
+            with open(gpath, 'r', encoding='utf-8') as f:
+                g = f.read()
+            g2, gate_wrote = gate_text(g)
+            if gate_wrote:
+                with open(gpath, 'w', encoding='utf-8') as f:
+                    f.write(g2)
+    except Exception as e:
+        _log('gate: %s' % e, xbmc.LOGWARNING)
     try:
         sync_skin_string(style)
     except Exception as e:
@@ -238,11 +281,12 @@ def reconcile(skin_dir=None):
             content = f.read()
         new, status = apply_to_text(content, style)
         if status == 'novar':
-            return True, '[flag style] Flags_Badge_Directory not in this AF3 - skipping.', False
+            return True, '[flag style] Flags_Badge_Directory not in this AF3 - skipping.', gate_wrote
         wrote = new != content
         if wrote:
             with open(path, 'w', encoding='utf-8') as f:
                 f.write(new)
+        wrote = wrote or gate_wrote
         if status == 'oldskin':
             return True, '[flag style] %s: this AF3 has no resource:// flags (pre-50.11.68) - classic kept.' % style, wrote
         return True, ('[flag style] Patched OK: %s.' if wrote else '[flag style] %s - nothing to change.') % style, wrote
@@ -287,11 +331,10 @@ def run():
     if not ensure():
         xbmcgui.Dialog().ok(TITLE, T(32238))
         return
-    # the OSD extras row and footer codec row are gated on the classic add-on
+    # the OSD extras row and footer codec row are gated on the classic add-on (+ not Off)
     try:
         from resources.lib import af3_classicflags_toggle as cf
-        if not (cf.toggle_on() and cf.res_ready()):
-            cf._save_toggle(True)
+        if not cf.res_ready():          # required add-on; make sure it is there
             cf.ensure()
     except Exception as e:
         _log('classic flags switch-on failed: %s' % e, xbmc.LOGWARNING)

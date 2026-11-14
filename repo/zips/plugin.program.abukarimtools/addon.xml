@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="AB Tools"
-       version="4.8.76"
+       version="4.8.77"
        provider-name="Abukarim">
 
   <requires>
@@ -22,6 +22,8 @@
     <import addon="script.module.python.twitch" version="3.0.2"/>
     <!-- 4.8.69: AF3 OSD Flags Style badges (a must; same repo as AF3) -->
     <import addon="resource.images.af3.frbadges" version="1.0.6"/>
+    <!-- 4.8.77: the classic colour badges are required too ("AF3: Classic OSD Flags" retired) -->
+    <import addon="resource.images.af3.classicflags" version="1.0.0"/>
   </requires>
 
   <extension point="xbmc.python.pluginsource" library="default.py">

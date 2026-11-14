@@ -621,7 +621,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.8.76" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.8.77" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -641,6 +641,8 @@ updated YouTube addon URL
     <import addon="script.module.python.twitch" version="3.0.2" />
     
     <import addon="resource.images.af3.frbadges" version="1.0.6" />
+    
+    <import addon="resource.images.af3.classicflags" version="1.0.0" />
   </requires>
 
   <extension point="xbmc.python.pluginsource" library="default.py">

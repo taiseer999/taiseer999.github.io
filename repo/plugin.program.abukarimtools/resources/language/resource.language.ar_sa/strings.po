@@ -3097,8 +3097,8 @@ msgid "This Arctic Fuse 3 version does not support flag styles yet. Update the s
 msgstr "لا يدعم هذا الإصدار من Arctic Fuse 3 أنماط الشارات بعد. حدِّث الواجهة ثم اختر النمط مرة أخرى."
 
 msgctxt "#32240"
-msgid "The look of the codec, HDR, audio and source badges in the Arctic Fuse 3 player and footer: Automatic, classic colourful, Lucent or one of the FR-Badges styles (Glass, Solid, Frost, White & Black, Black & White, Minimal, Light, Icon Dark, Icon Light, Split, Neon Icon, Text White, Text Black). Any choice except Automatic wins over the Lucent Look."
-msgstr "مظهر شارات الترميز وHDR والصوت والمصدر في مشغّل Arctic Fuse 3 وأسفل الشاشة: تلقائي أو الملوّنة الكلاسيكية أو لوسنت أو أحد أنماط FR-Badges (زجاجي، مصمت، زجاج مُثلَّج، أبيض وأسود، أسود وأبيض، بسيط، فاتح، أيقونات داكنة، أيقونات فاتحة، مقسوم، أيقونات نيون، نص أبيض، نص أسود). أيّ اختيار غير «تلقائي» يتقدّم على مظهر لوسنت."
+msgid "The look of the codec, HDR, audio and source badges in the Arctic Fuse 3 player and footer: Automatic, classic colourful, Lucent or one of the FR-Badges styles (Glass, Solid, Frost, White & Black, Black & White, Minimal, Light, Icon Dark, Icon Light, Split, Neon Icon, Text White, Text Black), or Off. Any choice except Automatic wins over the Lucent Look."
+msgstr "مظهر شارات الترميز وHDR والصوت والمصدر في مشغّل Arctic Fuse 3 وأسفل الشاشة: تلقائي أو الملوّنة الكلاسيكية أو لوسنت أو أحد أنماط FR-Badges (زجاجي، مصمت، زجاج مُثلَّج، أبيض وأسود، أسود وأبيض، بسيط، فاتح، أيقونات داكنة، أيقونات فاتحة، مقسوم، أيقونات نيون، نص أبيض، نص أسود) أو إيقاف. أيّ اختيار غير «تلقائي» يتقدّم على مظهر لوسنت."
 
 msgctxt "#32241"
 msgid "Lucent"
@@ -3203,4 +3203,12 @@ msgstr "نص أسود"
 msgctxt "#32266"
 msgid "Black text only, no background (for light screens)"
 msgstr "نص أسود فقط بلا خلفية (للشاشات الفاتحة)"
+
+msgctxt "#32267"
+msgid "Off (stock AF3)"
+msgstr "إيقاف (AF3 الأصلية)"
+
+msgctxt "#32268"
+msgid "No badge rows in the AF3 player and footer; the Lucent pills elsewhere"
+msgstr "بلا صفوف شارات في مشغّل AF3 وأسفل الشاشة، وأقراص لوسنت في غيرهما"
 

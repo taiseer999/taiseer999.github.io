@@ -3,6 +3,8 @@ route every Lucent pill texture (abk_lp/flags/X.png) through ABK_LP_FlagDir so
 "AF3: OSD Flags Style" can swap the Lucent Player's pills for another badge set
 (resource.images.af3.frbadges/<style>/lucent_player/X.png, same file names).
 Skin.String(abk.flagstyle) empty = the Lucent pills (Automatic / Lucent).
+4.8.77: "Off" keeps the Lucent pills; the source badge is AF3's own
+Image_VideoPlayer_RipSource (needs AF3 50.11.68+, resource:// flag paths).
 4.8.74: the player rows also get the AF3 "OSD extras" flags the Lucent
 Player hid (AF3's DialogSeekBar group, ExtraOSD included, is off while the
 Lucent Player is on): source (from the file name), aspect ratio, audio
@@ -14,6 +16,7 @@ import sys
 
 VAR = '''<!-- 4.8.69: AF3 OSD Flags Style (af3_flagstyle.py) -->
     <variable name="ABK_LP_FlagDir">
+        <value condition="String.IsEqual(Skin.String(abk.flagstyle),off)">abk_lp/flags</value>
         <value condition="!String.IsEmpty(Skin.String(abk.flagstyle)) + System.AddonIsEnabled(resource.images.af3.frbadges)">resource://resource.images.af3.frbadges/$INFO[Skin.String(abk.flagstyle)]/lucent_player</value>
         <value>abk_lp/flags</value>
     </variable>
@@ -23,17 +26,10 @@ VAR = '''<!-- 4.8.69: AF3 OSD Flags Style (af3_flagstyle.py) -->
 EXTRA_VARS = '''<!-- 4.8.74: OSD extras in the Lucent Player rows (af3_flagstyle.py) -->
     <variable name="ABK_LP_ExtraDir">
         <value condition="String.IsEqual(Skin.String(abk.flagstyle),colorful) + System.AddonIsEnabled(resource.images.af3.classicflags)">resource://resource.images.af3.classicflags/colorful</value>
-        <value condition="!String.IsEmpty(Skin.String(abk.flagstyle)) + System.AddonIsEnabled(resource.images.af3.frbadges)">resource://resource.images.af3.frbadges/$INFO[Skin.String(abk.flagstyle)]</value>
+        <value condition="!String.IsEmpty(Skin.String(abk.flagstyle)) + !String.IsEqual(Skin.String(abk.flagstyle),off) + System.AddonIsEnabled(resource.images.af3.frbadges)">resource://resource.images.af3.frbadges/$INFO[Skin.String(abk.flagstyle)]</value>
         <value condition="System.AddonIsEnabled(resource.images.af3.frbadges)">resource://resource.images.af3.frbadges/lucent</value>
         <value condition="System.AddonIsEnabled(resource.images.af3.classicflags)">resource://resource.images.af3.classicflags/colorful</value>
         <value>flags/colorful</value>
-    </variable>
-    <variable name="ABK_LP_ExtraSource">
-        <value condition="[String.Contains(Player.Filename,bluray) | String.Contains(Player.Filename,blu-ray) | String.Contains(Player.Filename,remux) | String.Contains(Player.Filename,bdrip) | String.Contains(Player.Filename,brrip)] + [String.Contains(Player.Filename,2160p) | String.Contains(Player.Filename,uhd)]">other/4k_bluray</value>
-        <value condition="String.Contains(Player.Filename,bluray) | String.Contains(Player.Filename,blu-ray) | String.Contains(Player.Filename,remux) | String.Contains(Player.Filename,bdrip) | String.Contains(Player.Filename,brrip)">other/bluray</value>
-        <value condition="String.Contains(Player.Filename,web-dl) | String.Contains(Player.Filename,webdl) | String.Contains(Player.Filename,webrip) | String.Contains(Player.Filename,.web.)">other/web-dl</value>
-        <value condition="String.Contains(Player.Filename,hdtv)">other/hdtv</value>
-        <value condition="String.Contains(Player.Filename,dvd)">other/dvd</value>
     </variable>
 '''
 
@@ -53,7 +49,9 @@ def _img(w, texture, visible, fallback=''):
 
 
 EXTRAS = (EXTRA_MARK + '\n'
-          + _img(132, '$VAR[ABK_LP_ExtraDir]/$VAR[ABK_LP_ExtraSource].png', '!String.IsEmpty($VAR[ABK_LP_ExtraSource])')
+          # 4.8.77: AF3's own source badge (Blu-ray, UHD, WEB-DL, HD-DVD, VHS, SDTV,
+          # Skin.String(FallbackSourceFlag)) - full path via Flags_Badge_Directory
+          + _img(132, '$VAR[Image_VideoPlayer_RipSource]', '!String.IsEmpty($VAR[Image_VideoPlayer_RipSource])')
           + _img(110, '$VAR[ABK_LP_ExtraDir]/aspectratio/$INFO[VideoPlayer.VideoAspect].png', '!String.IsEmpty(VideoPlayer.VideoAspect)')
           + _img(160, '$VAR[ABK_LP_ExtraDir]/other/language/$INFO[VideoPlayer.AudioLanguage].png', '!String.IsEmpty(VideoPlayer.AudioLanguage)',
                  '$VAR[ABK_LP_ExtraDir]/other/language/fallback.png')

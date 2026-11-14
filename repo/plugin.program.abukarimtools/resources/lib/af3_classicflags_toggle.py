@@ -63,12 +63,11 @@ def res_ready():
 
 
 def toggle_on():
-    """On unless the user switched it off (default ON keeps the current look)."""
-    try:
-        from resources.lib import patcher
-        return TOGGLE_ID not in patcher._load_disabled()
-    except Exception:
-        return True
+    """4.8.77: always on - the add-on is required by AB Tools and the on/off
+    moved to "AF3: OSD Flags Style" > Off (which hides AF3's badge rows via
+    Skin.String(abk.flagstyle) instead of disabling this add-on). An old Off
+    in the shared disabled set is migrated by af3_flagstyle._migrate()."""
+    return True
 
 
 def _save_toggle(on):

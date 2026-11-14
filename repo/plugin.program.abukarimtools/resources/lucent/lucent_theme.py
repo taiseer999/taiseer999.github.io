@@ -231,7 +231,7 @@ def _badge_dir():
 				style = json.load(f).get('style') or ''
 		except Exception:
 			style = ''
-		if style and style not in ('auto', 'lucent') and re.match(r'^[a-z]+$', style) and \
+		if style and style not in ('auto', 'lucent', 'off') and re.match(r'^[a-z]+$', style) and \
 				xbmc.getCondVisibility('System.AddonIsEnabled(resource.images.af3.frbadges)'):
 			folder = _FR_RES % style
 		_STYLE_CACHE[0], _STYLE_CACHE[1] = folder, now

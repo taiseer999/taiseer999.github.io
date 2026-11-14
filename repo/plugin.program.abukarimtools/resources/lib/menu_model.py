@@ -64,7 +64,6 @@ CATEGORIES = [
         ('af3_plotright',  30890),
         ('af3_plotsize',   32113),
         ('af3_discmenu',   32102),
-        ('af3_classicflags', 32127),
         ('af3_flagstyle',  32230),
         ('seek_preview',   30024),
         ('font_scale',     30740),
@@ -97,7 +96,6 @@ ICON_FILES = {
     'af3_plotright':  'resources/icons/af3_plotright.png',
     'af3_plotsize':   'resources/icons/af3_plotsize.png',
     'af3_discmenu':   'resources/icons/af3_discmenu.png',
-    'af3_classicflags': 'resources/icons/af3_classicflags.png',
     'af3_flagstyle':  'resources/icons/af3_flagstyle.png',
     'seek_preview':   'resources/icons/seek_preview.png',
     'font_scale':     'resources/icons/font_scale.png',
@@ -150,7 +148,7 @@ DESC = {
     'lucent_theme': 32176, 'af3_trailers': 32177, 'af3_waves': 32178,
     'af3_lucent': 32179, 'af3_lucentplayer': 32180, 'lucent_from_af3': 32181,
     'af3_plotright': 32182, 'af3_plotsize': 32183, 'af3_discmenu': 32184,
-    'af3_classicflags': 32185, 'seek_preview': 32186, 'font_scale': 32187,
+    'seek_preview': 32186, 'font_scale': 32187,
     'profile_export': 32188, 'profile_restore': 32189,
     'ab_glass': 32217, 'af3_flagstyle': 32240,
 }
@@ -195,9 +193,6 @@ def switch_state(mode):
         if mode == 'af3_discmenu':
             from resources.lib import af3_discmenu_toggle
             return af3_discmenu_toggle.disc_menu_on()
-        if mode == 'af3_classicflags':
-            from resources.lib import af3_classicflags_toggle
-            return af3_classicflags_toggle.toggle_on() and af3_classicflags_toggle.res_ready()
         if mode == 'seek_preview':
             from resources.lib.seek_preview import engine as _sp
             return bool(_sp.load_config()['enabled'])
