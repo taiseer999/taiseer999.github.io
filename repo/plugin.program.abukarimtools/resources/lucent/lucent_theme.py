@@ -179,9 +179,9 @@ _PROVIDER_OF = {alias: icon for icon, aliases in _PROVIDERS for alias in aliases
 def _provider_icon(*names):
 	for name in names:
 		key = _clean(name).upper().strip()
-		if key in _PROVIDER_OF: return 'lucent/providers/%s.png' % _PROVIDER_OF[key]
+		if key in _PROVIDER_OF: return 'lucent/providers_bw/%s.png' % _PROVIDER_OF[key]
 		for alias, icon in _PROVIDER_OF.items():
-			if len(alias) > 3 and alias in key: return 'lucent/providers/%s.png' % icon
+			if len(alias) > 3 and alias in key: return 'lucent/providers_bw/%s.png' % icon
 	return ''
 
 

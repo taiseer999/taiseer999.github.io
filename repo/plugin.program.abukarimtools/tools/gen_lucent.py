@@ -543,7 +543,7 @@ def sp_panel(list_ids, fade_cond=None):
                         <top>6</top>
                         <width>%(iw)d</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FF8F9BA6</textcolor>
@@ -554,7 +554,7 @@ def sp_panel(list_ids, fade_cond=None):
                         <top>32</top>
                         <width>%(iw)d</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -566,7 +566,7 @@ def sp_panel(list_ids, fade_cond=None):
                         <top>32</top>
                         <width>%(iw)d</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>4DFFFFFF</textcolor>
@@ -578,7 +578,7 @@ def sp_panel(list_ids, fade_cond=None):
                         <top>66</top>
                         <width>%(iw)d</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFBDC8D1</textcolor>
@@ -601,7 +601,7 @@ def sp_panel(list_ids, fade_cond=None):
             <control type="label">
                 <width>420</width>
                 <height>40</height>
-                <font>font12</font>
+                <font>abk_srch_s</font>
                 <textcolor>FF8F9BA6</textcolor>
                 <label>[B][UPPERCASE]$INFO[Window.Property(lucent.sl_heading)][/UPPERCASE][/B]</label>
             </control>
@@ -609,7 +609,7 @@ def sp_panel(list_ids, fade_cond=None):
                 <left>300</left>
                 <width>400</width>
                 <height>40</height>
-                <font>font12</font>
+                <font>abk_srch_s</font>
                 <align>right</align>
                 <textcolor>FFBDC8D1</textcolor>
                 <label>[B]%(lang)s[/B]</label>

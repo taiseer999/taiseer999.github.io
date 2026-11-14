@@ -1,3 +1,11 @@
+v4.8.62
+- Single players (Glass Theme: Fen Light, Red Light, POV, Umbrella): the
+  service logos on the stream cards are the black and white set of Search
+  All (lucent_theme._provider_icon -> lucent/providers_bw, copied with the
+  textures), and the Selected Stream tiles on the left use Search All's
+  sizes (abk_srch_s labels, abk_srch_m values, in place of the skin's
+  font12 / font27).
+
 v4.8.61
 - What's New screen: after AB Tools updates, the first time the user opens
   the add-on (settings window or classic list - not widgets, services or

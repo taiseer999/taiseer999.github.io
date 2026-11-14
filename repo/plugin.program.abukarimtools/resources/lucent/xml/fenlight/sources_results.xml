@@ -184,7 +184,7 @@
             <control type="label">
                 <width>420</width>
                 <height>40</height>
-                <font>font12</font>
+                <font>abk_srch_s</font>
                 <textcolor>FF8F9BA6</textcolor>
                 <label>[B][UPPERCASE]$INFO[Window.Property(lucent.sl_heading)][/UPPERCASE][/B]</label>
             </control>
@@ -192,7 +192,7 @@
                 <left>300</left>
                 <width>400</width>
                 <height>40</height>
-                <font>font12</font>
+                <font>abk_srch_s</font>
                 <align>right</align>
                 <textcolor>FFBDC8D1</textcolor>
                 <label>[B]$INFO[Container(2000).ListItem.Property(lucent.sp_lang)]$INFO[Container(2001).ListItem.Property(lucent.sp_lang)]$INFO[Container(2002).ListItem.Property(lucent.sp_lang)][/B]</label>
@@ -224,7 +224,7 @@
                         <top>6</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FF8F9BA6</textcolor>
@@ -235,7 +235,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -247,7 +247,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>4DFFFFFF</textcolor>
@@ -259,7 +259,7 @@
                         <top>66</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFBDC8D1</textcolor>
@@ -284,7 +284,7 @@
                         <top>6</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FF8F9BA6</textcolor>
@@ -295,7 +295,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -307,7 +307,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>4DFFFFFF</textcolor>
@@ -319,7 +319,7 @@
                         <top>66</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFBDC8D1</textcolor>
@@ -344,7 +344,7 @@
                         <top>6</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FF8F9BA6</textcolor>
@@ -355,7 +355,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -367,7 +367,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>4DFFFFFF</textcolor>
@@ -379,7 +379,7 @@
                         <top>66</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFBDC8D1</textcolor>
@@ -404,7 +404,7 @@
                         <top>6</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FF8F9BA6</textcolor>
@@ -415,7 +415,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -427,7 +427,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>4DFFFFFF</textcolor>
@@ -439,7 +439,7 @@
                         <top>66</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFBDC8D1</textcolor>
@@ -464,7 +464,7 @@
                         <top>6</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FF8F9BA6</textcolor>
@@ -475,7 +475,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -487,7 +487,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>4DFFFFFF</textcolor>
@@ -499,7 +499,7 @@
                         <top>66</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFBDC8D1</textcolor>
@@ -524,7 +524,7 @@
                         <top>6</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FF8F9BA6</textcolor>
@@ -535,7 +535,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -547,7 +547,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>4DFFFFFF</textcolor>
@@ -559,7 +559,7 @@
                         <top>66</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFBDC8D1</textcolor>
@@ -584,7 +584,7 @@
                         <top>6</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FF8F9BA6</textcolor>
@@ -595,7 +595,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -607,7 +607,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>4DFFFFFF</textcolor>
@@ -619,7 +619,7 @@
                         <top>66</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFBDC8D1</textcolor>
@@ -644,7 +644,7 @@
                         <top>6</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FF8F9BA6</textcolor>
@@ -655,7 +655,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -667,7 +667,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>4DFFFFFF</textcolor>
@@ -679,7 +679,7 @@
                         <top>66</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFBDC8D1</textcolor>
@@ -704,7 +704,7 @@
                         <top>6</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FF8F9BA6</textcolor>
@@ -715,7 +715,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
@@ -727,7 +727,7 @@
                         <top>32</top>
                         <width>200</width>
                         <height>36</height>
-                        <font>font27</font>
+                        <font>abk_srch_m</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>4DFFFFFF</textcolor>
@@ -739,7 +739,7 @@
                         <top>66</top>
                         <width>200</width>
                         <height>26</height>
-                        <font>font12</font>
+                        <font>abk_srch_s</font>
                         <align>center</align>
                         <aligny>center</aligny>
                         <textcolor>FFBDC8D1</textcolor>
