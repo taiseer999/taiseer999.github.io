@@ -953,8 +953,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_1)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_1)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_1))</visible>
                             </control>
                             <control type="image">
@@ -962,8 +962,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_2)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_2)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_2))</visible>
                             </control>
                             <control type="image">
@@ -971,8 +971,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_3)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_3)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_3))</visible>
                             </control>
                             <control type="image">
@@ -980,8 +980,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_4)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_4)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_4))</visible>
                             </control>
                             <control type="image">
@@ -989,8 +989,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_5)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_5)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_5))</visible>
                             </control>
                             <control type="image">
@@ -998,8 +998,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_6)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_6)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_6))</visible>
                             </control>
                             <control type="image">
@@ -1007,8 +1007,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_7)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_7)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_7))</visible>
                             </control>
                         </control>
@@ -1136,8 +1136,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_1)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_1)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_1))</visible>
                             </control>
                             <control type="image">
@@ -1145,8 +1145,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_2)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_2)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_2))</visible>
                             </control>
                             <control type="image">
@@ -1154,8 +1154,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_3)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_3)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_3))</visible>
                             </control>
                             <control type="image">
@@ -1163,8 +1163,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_4)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_4)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_4))</visible>
                             </control>
                             <control type="image">
@@ -1172,8 +1172,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_5)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_5)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_5))</visible>
                             </control>
                             <control type="image">
@@ -1181,8 +1181,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_6)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_6)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_6))</visible>
                             </control>
                             <control type="image">
@@ -1190,8 +1190,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_7)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_7)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_7))</visible>
                             </control>
                         </control>
@@ -1328,8 +1328,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_1)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_1)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_1))</visible>
                             </control>
                             <control type="image">
@@ -1337,8 +1337,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_2)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_2)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_2))</visible>
                             </control>
                             <control type="image">
@@ -1346,8 +1346,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_3)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_3)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_3))</visible>
                             </control>
                             <control type="image">
@@ -1355,8 +1355,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_4)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_4)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_4))</visible>
                             </control>
                             <control type="image">
@@ -1364,8 +1364,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_5)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_5)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_5))</visible>
                             </control>
                             <control type="image">
@@ -1373,8 +1373,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_6)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_6)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_6))</visible>
                             </control>
                             <control type="image">
@@ -1382,8 +1382,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_7)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_7)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_7))</visible>
                             </control>
                         </control>
@@ -1546,8 +1546,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_1)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_1)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_1))</visible>
                             </control>
                             <control type="image">
@@ -1555,8 +1555,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_2)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_2)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_2))</visible>
                             </control>
                             <control type="image">
@@ -1564,8 +1564,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_3)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_3)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_3))</visible>
                             </control>
                             <control type="image">
@@ -1573,8 +1573,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_4)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_4)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_4))</visible>
                             </control>
                             <control type="image">
@@ -1582,8 +1582,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_5)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_5)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_5))</visible>
                             </control>
                             <control type="image">
@@ -1591,8 +1591,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_6)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_6)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_6))</visible>
                             </control>
                             <control type="image">
@@ -1600,8 +1600,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_7)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_7)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_7))</visible>
                             </control>
                         </control>
@@ -1729,8 +1729,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_1)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_1)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_1))</visible>
                             </control>
                             <control type="image">
@@ -1738,8 +1738,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_2)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_2)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_2))</visible>
                             </control>
                             <control type="image">
@@ -1747,8 +1747,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_3)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_3)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_3))</visible>
                             </control>
                             <control type="image">
@@ -1756,8 +1756,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_4)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_4)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_4))</visible>
                             </control>
                             <control type="image">
@@ -1765,8 +1765,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_5)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_5)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_5))</visible>
                             </control>
                             <control type="image">
@@ -1774,8 +1774,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_6)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_6)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_6))</visible>
                             </control>
                             <control type="image">
@@ -1783,8 +1783,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_7)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_7)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_7))</visible>
                             </control>
                         </control>
@@ -1921,8 +1921,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_1)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_1)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_1))</visible>
                             </control>
                             <control type="image">
@@ -1930,8 +1930,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_2)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_2)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_2))</visible>
                             </control>
                             <control type="image">
@@ -1939,8 +1939,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_3)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_3)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_3))</visible>
                             </control>
                             <control type="image">
@@ -1948,8 +1948,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_4)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_4)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_4))</visible>
                             </control>
                             <control type="image">
@@ -1957,8 +1957,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_5)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_5)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_5))</visible>
                             </control>
                             <control type="image">
@@ -1966,8 +1966,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_6)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_6)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_6))</visible>
                             </control>
                             <control type="image">
@@ -1975,8 +1975,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_7)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_7)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_7))</visible>
                             </control>
                         </control>
@@ -2139,8 +2139,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_1)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_1)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_1))</visible>
                             </control>
                             <control type="image">
@@ -2148,8 +2148,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_2)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_2)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_2))</visible>
                             </control>
                             <control type="image">
@@ -2157,8 +2157,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_3)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_3)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_3))</visible>
                             </control>
                             <control type="image">
@@ -2166,8 +2166,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_4)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_4)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_4))</visible>
                             </control>
                             <control type="image">
@@ -2175,8 +2175,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_5)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_5)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_5))</visible>
                             </control>
                             <control type="image">
@@ -2184,8 +2184,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_6)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_6)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_6))</visible>
                             </control>
                             <control type="image">
@@ -2193,8 +2193,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_7)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_7)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_7))</visible>
                             </control>
                         </control>
@@ -2322,8 +2322,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_1)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_1)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_1))</visible>
                             </control>
                             <control type="image">
@@ -2331,8 +2331,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_2)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_2)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_2))</visible>
                             </control>
                             <control type="image">
@@ -2340,8 +2340,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_3)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_3)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_3))</visible>
                             </control>
                             <control type="image">
@@ -2349,8 +2349,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_4)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_4)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_4))</visible>
                             </control>
                             <control type="image">
@@ -2358,8 +2358,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_5)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_5)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_5))</visible>
                             </control>
                             <control type="image">
@@ -2367,8 +2367,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_6)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_6)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_6))</visible>
                             </control>
                             <control type="image">
@@ -2376,8 +2376,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_7)].png</texture>
-                                <colordiffuse>99FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_7)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgedim)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_7))</visible>
                             </control>
                         </control>
@@ -2514,8 +2514,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_1)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_1)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_1))</visible>
                             </control>
                             <control type="image">
@@ -2523,8 +2523,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_2)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_2)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_2))</visible>
                             </control>
                             <control type="image">
@@ -2532,8 +2532,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_3)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_3)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_3))</visible>
                             </control>
                             <control type="image">
@@ -2541,8 +2541,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_4)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_4)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_4))</visible>
                             </control>
                             <control type="image">
@@ -2550,8 +2550,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_5)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_5)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_5))</visible>
                             </control>
                             <control type="image">
@@ -2559,8 +2559,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_6)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_6)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_6))</visible>
                             </control>
                             <control type="image">
@@ -2568,8 +2568,8 @@
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_7)].png</texture>
-                                <colordiffuse>E6FFFFFF</colordiffuse>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_7)]</texture>
+                                <colordiffuse>$INFO[ListItem.Property(lucent.badgelit)]</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_7))</visible>
                             </control>
                         </control>

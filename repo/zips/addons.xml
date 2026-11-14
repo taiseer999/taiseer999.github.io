@@ -621,7 +621,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.8.75" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.8.76" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -640,7 +640,7 @@ updated YouTube addon URL
     <import addon="script.module.parsers" version="1.0.0" />
     <import addon="script.module.python.twitch" version="3.0.2" />
     
-    <import addon="resource.images.af3.frbadges" version="1.0.5" />
+    <import addon="resource.images.af3.frbadges" version="1.0.6" />
   </requires>
 
   <extension point="xbmc.python.pluginsource" library="default.py">
@@ -2345,7 +2345,7 @@ By using or contributing to this repository, you agree that the developer is not
             <icon>icon.png</icon>
         </assets>
     </extension>
-</addon><addon id="resource.images.af3.frbadges" name="AF3 OSD Flags Styles (FR-Badges)" version="1.0.5" provider-name="ABUKARIM">
+</addon><addon id="resource.images.af3.frbadges" name="AF3 OSD Flags Styles (FR-Badges)" version="1.0.6" provider-name="ABUKARIM">
     <requires>
         <import addon="kodi.resource" version="1.0.0" />
     </requires>

@@ -207,6 +207,51 @@ def _read_state():
 		return {}
 
 
+# AB Tools 4.8.76: the stream badges follow Toggles > AF3: OSD Flags Style.
+# The style lives in AB Tools' addon_data (af3_flagstyle.json) - read here so
+# this module, copied into each add-on, needs no AB Tools import. Automatic and
+# Lucent keep the Lucent pills; any other style uses its set in
+# resource.images.af3.frbadges/<style>/lucent_player/ (same file names).
+_STYLE_CACHE = [None, 0.0]
+_FR_RES = 'resource://resource.images.af3.frbadges/%s/lucent_player/'
+
+
+def _badge_dir():
+	"""Folder (with trailing slash) of the chosen badge style, '' = Lucent pills."""
+	try:
+		import json, os, time, xbmc, xbmcvfs
+		now = time.time()
+		if _STYLE_CACHE[0] is not None and now - _STYLE_CACHE[1] < 5:
+			return _STYLE_CACHE[0]
+		folder = ''
+		path = os.path.join(xbmcvfs.translatePath('special://profile/addon_data/'),
+							'plugin.program.abukarimtools', 'af3_flagstyle.json')
+		try:
+			with open(path, 'r', encoding='utf-8') as f:
+				style = json.load(f).get('style') or ''
+		except Exception:
+			style = ''
+		if style and style not in ('auto', 'lucent') and re.match(r'^[a-z]+$', style) and \
+				xbmc.getCondVisibility('System.AddonIsEnabled(resource.images.af3.frbadges)'):
+			folder = _FR_RES % style
+		_STYLE_CACHE[0], _STYLE_CACHE[1] = folder, now
+		return folder
+	except Exception:
+		return ''
+
+
+def badge_path(name, default_dir='lucent/flags/'):
+	"""Texture of a badge name: the chosen style's file, else the Lucent pill."""
+	if not name:
+		return ''
+	return (_badge_dir() or default_dir) + name + '.png'
+
+
+def badge_diffuse():
+	"""(unfocused, focused) colordiffuse of the stream badges."""
+	return ('FFFFFFFF', 'FFFFFFFF') if _badge_dir() else ('99FFFFFF', 'E6FFFFFF')
+
+
 def _read_colored():
 	# AB Tools 4.6.0: coloured resolution flags / service icons removed - the
 	# option is gone from Toggles > Glass Theme, always plain now
@@ -394,6 +439,9 @@ def lucent_item(listitem, profile):
 		found = badges(get(keys['info']), quality, get(keys['name']))
 		for n in range(_MAX_BADGES):
 			props['lucent.badge_%d' % (n + 1)] = found[n] if n < len(found) else ''
+			props['lucent.badgepath_%d' % (n + 1)] = badge_path(found[n]) if n < len(found) else ''
+		# 4.8.76: Lucent pills are dimmed glass; a chosen style shows in full colour
+		props['lucent.badgedim'], props['lucent.badgelit'] = badge_diffuse()
 		# AB Tools 4.8.51: the selected-stream tiles
 		try: props.update(stream_specs(get(keys['name']), get(keys['info']), quality, provider, size, site))
 		except Exception: pass

@@ -1711,6 +1711,14 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             _log('stream details: %s' % e, xbmc.LOGDEBUG)
         for n in range(7):
             props['lucent.badge_%d' % (n + 1)] = found[n] if n < len(found) else ''
+            # 4.8.76: the badge in the chosen OSD Flags Style (Lucent pill otherwise)
+            name = found[n] if n < len(found) else ''
+            if name and th is not None and hasattr(th, 'badge_path'):
+                props['lucent.badgepath_%d' % (n + 1)] = th.badge_path(name, MEDIA + 'lucent/flags/')
+            else:
+                props['lucent.badgepath_%d' % (n + 1)] = (MEDIA + 'lucent/flags/%s.png' % name) if name else ''
+        dim = th.badge_diffuse() if th is not None and hasattr(th, 'badge_diffuse') else ('99FFFFFF', 'E6FFFFFF')
+        props['lucent.badgedim'], props['lucent.badgelit'] = dim
         for n in range(4):
             key = row['refs'][n][0] if n < len(row['refs']) else ''
             props['abs.tag_%d' % (n + 1)] = key

@@ -286,7 +286,7 @@ def badge_row(diffuse):
                                 <width>88</width>
                                 <height>34</height>
                                 <aspectratio>keep</aspectratio>
-                                <texture>lucent/flags/$INFO[ListItem.Property(lucent.badge_%d)].png</texture>
+                                <texture>$INFO[ListItem.Property(lucent.badgepath_%d)]</texture>
                                 <colordiffuse>%s</colordiffuse>
                                 <visible>!String.IsEmpty(ListItem.Property(lucent.badge_%d))</visible>
                             </control>''' % ((n - 1) * 96, n, diffuse, n))
@@ -337,7 +337,7 @@ def card(state, profile):
     pill_text = 'FF%s' % BG if active else 'FFDCE2E7'
     title_color = 'FFFFFFFF' if active else 'CCFFFFFF'
     meta_color = 'FFDCE2E7' if active else 'FF8F9BA6'
-    badge_diffuse = 'E6FFFFFF' if active else '99FFFFFF'
+    badge_diffuse = '$INFO[ListItem.Property(lucent.badgelit)]' if active else '$INFO[ListItem.Property(lucent.badgedim)]'  # 4.8.76
     title_label = '[B]$INFO[ListItem.Property(lucent.title)][/B]' if active else '$INFO[ListItem.Property(lucent.title)]'
     scroll = ''
     full_label = profile['full_label']

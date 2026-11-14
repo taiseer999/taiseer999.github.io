@@ -1,3 +1,19 @@
+v4.8.76  (2026-11-14)
+- AF3: OSD Flags Style now also changes the stream badges in Search All and
+  in the Fen Light / Red Light / POV / Umbrella source windows (Glass Theme).
+  Their XML took the badge from lucent/flags/<NAME>.png; it now reads
+  ListItem.Property(lucent.badgepath_N), which lucent_theme.badge_path()
+  fills: the chosen style's file in resource.images.af3.frbadges, or the
+  Lucent pill for Automatic / Lucent (style read from addon_data, so the
+  copy inside each add-on needs no AB Tools import). A chosen style shows in
+  full colour (lucent.badgedim / badgelit); the Lucent pills keep their
+  dimmed glass. Takes effect on the next patch pass (the add-ons get the
+  new lucent_theme.py and window XML).
+- Requires resource.images.af3.frbadges 1.0.6: every style now carries all
+  52 Lucent stream badge names (REMUX, BLURAY, WEB, CAM, HDR, HYBRID, 3D ...)
+  in its lucent_player/ set; badges a set has no artwork for use the Lucent
+  pill.
+
 v4.8.75  (2026-11-14)
 - AF3: OSD Flags Style - the remaining FR-Badges sets: Solid, Frost,
   Icon Dark, Icon Light, Split, Neon Icon, Text White and Text Black (Neon

@@ -7,6 +7,8 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from relabel import relabel, GEO
 FR, CL, OUT = sys.argv[1], sys.argv[2], sys.argv[3]
+LUCENT = sys.argv[4]                # AB Tools resources/lucent/media/lucent/flags (all 52 Lucent pills)
+import shutil
 FONT = '/usr/share/fonts/opentype/inter/Inter-Black.otf'
 CW, CH, PH = 176, 68, 60            # canvas, pill height inside it
 MAXR = CW / PH                      # widest content that still fits at full height
@@ -15,8 +17,15 @@ SRC = {'4K': ['4k'], '8K': ['8k'], '1080P': ['1080p'], '720P': ['720p'], 'SD': [
        'HDR10': ['hdr10'], 'HDR10+': ['hdr10plus'], 'HLG': ['hlg'], 'HEVC': ['hevc'], 'AVC': ['avc'], 'AV1': ['av1'], 'VP9': ['vp9'],
        'ATMOS': ['atmos'], 'TRUEHD': ['truehd'], 'DTS-X': ['dtsx'], 'DTS-HDMA': ['dtshd-ma'], 'DTS-HDHR': ['dtshd-hra'], 'DTS': ['dts'],
        'DD+': ['ddplus'], 'DD': ['dd'], 'AAC': ['aac'], 'FLAC': ['flac'], 'OPUS': ['opus'], 'PCM': ['pcm'], 'MP3': ['mp3'],
-       '7.1': ['7-1'], '6.1': ['6-1'], '5.1': ['5-1'], '2.0': ['2-0'], '1.0': ['1-0']}
-LABEL = {'DTS-HDMA': 'DTS-HD MA', 'DTS-HDHR': 'DTS-HD HR', 'DTS-X': 'DTS:X', '1080P': '1080p', '720P': '720p', 'DV2': 'DV',
+       '7.1': ['7-1'], '6.1': ['6-1'], '5.1': ['5-1'], '2.0': ['2-0'], '1.0': ['1-0'],
+       # 4.8.76: the rest of the Lucent stream badges (Search All + the add-ons' source windows)
+       '3D': ['3d', 'vid-3d'], 'BLURAY': ['source-bluray', 'src-bluray'], 'REMUX': ['source-remux', 'src-remux'],
+       'WEB': ['source-webdl', 'src-webdl'], 'HDTV': ['source-hdtv', 'src-hdtv'], 'PDTV': ['source-tvrip', 'src-tvrip'],
+       'HD-RIP': ['hdrip'], 'DVDRIP': ['source-dvd', 'src-dvd'], 'CAM': ['cam', 'src-cam'], 'SCR': ['scr', 'src-scr'],
+       'HC': ['hc-hdrip'], 'HDR': ['hdr'], 'SDR': ['sdr'], 'HYBRID': ['hybrid', 'edit-hybrid'], 'DIVX': ['divx'],
+       'XVID': ['xvid'], 'MPEG': ['mpeg2'], 'MP4': ['mp4', 'cont-mp4'], 'WMV': ['wmv'], 'WMA': ['wma'],
+       'DTS-HD': ['dtshd-ma']}
+LABEL = {'DTS-HD': 'DTS-HD', 'DVDRIP': 'DVD', 'HD-RIP': 'HDRip', 'DTS-HDMA': 'DTS-HD MA', 'DTS-HDHR': 'DTS-HD HR', 'DTS-X': 'DTS:X', '1080P': '1080p', '720P': '720p', 'DV2': 'DV',
          'TRUEHD': 'TrueHD', 'ATMOS': 'ATMOS', 'HDR10+': 'HDR10+'}
 
 def tight(im):
@@ -83,7 +92,10 @@ def place(im):
 for style, folder in STY.items():
     d = os.path.join(OUT, style, 'lucent_player'); os.makedirs(d, exist_ok=True)
     for name, cands in SRC.items():
-        src = next(p for p in (os.path.join(FR, folder, c + '.png') for c in cands) if os.path.isfile(p))
+        src = next((p for p in (os.path.join(FR, folder, c + '.png') for c in cands) if os.path.isfile(p)), None)
+        if src is None:                          # not in this FR set: the Lucent pill
+            shutil.copyfile(os.path.join(LUCENT, name + '.png'), os.path.join(d, name + '.png'))
+            continue
         im = tight(Image.open(src).convert('RGBA'))
         if im.width / im.height > MAXR:
             im = compact(style, src, LABEL.get(name, name))
@@ -93,8 +105,18 @@ MAPC = {'DD+':'audio/eac3','DD':'audio/ac3','1.0':'channels/1','DTS-X':'audio/dt
 '7.1':'channels/8','ATMOS':'audio/atmos','AAC':'audio/aac','DTS-HDMA':'audio/dtshd_ma','HDR10':'other/hdr10','1080P':'resolution/1080','8K':'resolution/8k',
 'VP9':'source/webm','DTS-HDHR':'audio/dtshd_hra','MP3':'audio/mp3','HDR10+':'other/hdr10plus','AV1':'source/av1','6.1':'channels/7','DTS':'audio/dts',
 'AVC':'source/avc','SD':'resolution/480','PCM':'audio/pcm','TRUEHD':'audio/truehd','HEVC':'source/hevc','FLAC':'audio/flac','DV':'other/dolbyvision',
-'DV2':'other/dolbyvision','2.0':'channels/2','5.1':'channels/6','4K':'resolution/4k'}
+'DV2':'other/dolbyvision','2.0':'channels/2','5.1':'channels/6','4K':'resolution/4k',
+'3D':'other/3d','BLURAY':'other/bluray','REMUX':'other/bluray','WEB':'other/web-dl','HDTV':'other/hdtv','PDTV':'other/hdtv',
+'DVDRIP':'other/dvd','HDR':'other/hdr','SDR':'other/sdr','DIVX':'source/divx','XVID':'source/xvid','MPEG':'source/mpeg2',
+'MP4':'source/mp4v','WMV':'source/wmv3','WMA':'audio/wma','DTS-HD':'audio/dtshd_ma'}
 d = os.path.join(OUT, 'colorful', 'lucent_player'); os.makedirs(d, exist_ok=True)
-for n, k in MAPC.items():
-    place(Image.open(os.path.join(CL, k + '.png')).convert('RGBA')).save(os.path.join(d, n + '.png'), optimize=True)
+for n in SRC:
+    if n in MAPC:
+        place(Image.open(os.path.join(CL, MAPC[n] + '.png')).convert('RGBA')).save(os.path.join(d, n + '.png'), optimize=True)
+    else:                                       # CAM / SCR / HC / HD-RIP / HYBRID: no classic badge
+        shutil.copyfile(os.path.join(LUCENT, n + '.png'), os.path.join(d, n + '.png'))
+# Lucent: the Lucent pills themselves
+d = os.path.join(OUT, 'lucent', 'lucent_player'); os.makedirs(d, exist_ok=True)
+for f in os.listdir(LUCENT):
+    shutil.copyfile(os.path.join(LUCENT, f), os.path.join(d, f))
 print('ok')
