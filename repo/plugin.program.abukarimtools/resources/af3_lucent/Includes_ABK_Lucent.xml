@@ -39,35 +39,34 @@
         </definition>
     </include>
 
-    <!-- 4.8.55: glass pill behind the Home header's system stats (CPU
-         temperature, RAM, network; Furniture_Header_Right). Width follows the
-         temperature text: empty / normal / "Not available". -->
+    <!-- 4.8.55 / 4.8.63: glass pill behind the Home header's system stats
+         (CPU temperature, RAM, network; Furniture_Header_Right). The pill
+         is a disabled button with an auto width: its invisible label holds
+         the same texts in the same font, and textoffsetx (72 each side)
+         adds the three icons (~104 px) plus 20 px of padding per side - so
+         it is exactly as wide as the stats, whatever the temperature says.
+         Light glass like the info pills (38FFFFFF). -->
     <include name="ABK_Lucent_GlassStats">
-        <control type="group">
+        <control type="grouplist">
             <visible>Skin.HasSetting(Furniture.Network_RAM)</visible>
-            <right>0</right>
+            <right>-5</right>
             <top>-36</top>
+            <width>700</width>
             <height>56</height>
-            <control type="image">
-                <right>0</right>
-                <width>200</width>
-                <texture border="28">abk_lucent/pill60.png</texture>
-                <colordiffuse>$VAR[ABK_Lucent_Glass]</colordiffuse>
-                <visible>String.IsEmpty(System.CPUTemperature)</visible>
-            </control>
-            <control type="image">
-                <right>0</right>
-                <width>370</width>
-                <texture border="28">abk_lucent/pill60.png</texture>
-                <colordiffuse>$VAR[ABK_Lucent_Glass]</colordiffuse>
-                <visible>String.IsEqual(System.CPUTemperature,$LOCALIZE[10005])</visible>
-            </control>
-            <control type="image">
-                <right>0</right>
-                <width>262</width>
-                <texture border="28">abk_lucent/pill60.png</texture>
-                <colordiffuse>$VAR[ABK_Lucent_Glass]</colordiffuse>
-                <visible>!String.IsEmpty(System.CPUTemperature) + !String.IsEqual(System.CPUTemperature,$LOCALIZE[10005])</visible>
+            <orientation>horizontal</orientation>
+            <align>right</align>
+            <control type="button">
+                <width>auto</width>
+                <height>56</height>
+                <enable>false</enable>
+                <font>font_tiny</font>
+                <textoffsetx>72</textoffsetx>
+                <textcolor>00000000</textcolor>
+                <disabledcolor>00000000</disabledcolor>
+                <focusedcolor>00000000</focusedcolor>
+                <texturenofocus border="28" colordiffuse="38FFFFFF">abk_lucent/pill60.png</texturenofocus>
+                <texturefocus border="28" colordiffuse="38FFFFFF">abk_lucent/pill60.png</texturefocus>
+                <label>$INFO[System.CPUTemperature]$INFO[system.memory(used.percent)]</label>
             </control>
         </control>
     </include>

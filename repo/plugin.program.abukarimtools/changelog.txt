@@ -1,3 +1,11 @@
+v4.8.63
+- AF3 Lucent Look: the glass pill behind the Home header's system stats
+  (4.8.55) was too dark and far wider than the stats ("Not available"
+  temperature). It is now light glass like the info pills (38FFFFFF) and
+  sizes itself to the stats: a disabled button with an auto width whose
+  invisible label is the temperature + RAM text in the same font, with
+  textoffsetx making room for the three icons and 20 px padding.
+
 v4.8.62
 - Single players (Glass Theme: Fen Light, Red Light, POV, Umbrella): the
   service logos on the stream cards are the black and white set of Search

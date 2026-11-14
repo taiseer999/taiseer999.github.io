@@ -2,6 +2,16 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
+   "v": "4.8.63",
+   "from": "4.8.63",
+   "en": [
+    "Lucent Look: a light glass pill sits behind the Home system stats (temperature, RAM, network), exactly as wide as the stats."
+   ],
+   "ar": [
+    "مظهر Lucent: خلف إحصاءات النظام في الرئيسية (الحرارة والذاكرة والشبكة) شريط زجاجي فاتح بعرض الإحصاءات تمامًا."
+   ]
+  },
+  {
    "v": "4.8.62",
    "from": "4.8.62",
    "en": [
@@ -65,10 +75,10 @@
    "v": "4.8.55",
    "from": "4.8.55",
    "en": [
-    "Lucent Look: TinyPPI's panels (codec box, speaker layout, Player Process Info) are glass, and a glass pill sits behind the Home system stats."
+    "Lucent Look: TinyPPI's panels (codec box, speaker layout, Player Process Info) are glass."
    ],
    "ar": [
-    "مظهر Lucent: لوحات TinyPPI (صندوق الترميز ومخطط السماعات ومعلومات المشغّل) أصبحت زجاجية، وخلف إحصاءات النظام في الرئيسية شريط زجاجي."
+    "مظهر Lucent: لوحات TinyPPI (صندوق الترميز ومخطط السماعات ومعلومات المشغّل) أصبحت زجاجية."
    ]
   },
   {
