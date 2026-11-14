@@ -47,13 +47,13 @@ PALETTES = {
     'generic': {
         'BG': 'FF0B1119', 'FG100': 'FFE8EEF2', 'FG70': 'B3E8EEF2', 'FG50': '80E8EEF2',
         'FG30': '4DE8EEF2', 'FG12': '1FE8EEF2', 'FG06': '0FE8EEF2',
-        'GLASS': '14FFFFFF', 'EDGE': '1FFFFFFF',
+        'GLASS': '14FFFFFF', 'EDGE': '1FFFFFFF', 'BG_GLASS': 'B30B1119',
         
     },
     'af3': {
         'BG': 'main_bg_100', 'FG100': 'main_fg_100', 'FG70': 'main_fg_70', 'FG50': 'main_fg_50',
         'FG30': 'main_fg_30', 'FG12': 'main_fg_12', 'FG06': 'main_fg_06',
-        'GLASS': 'overlay_soft', 'EDGE': 'main_fg_12',
+        'GLASS': 'overlay_soft', 'EDGE': 'main_fg_12', 'BG_GLASS': 'dialog_overlay',
         
     },
 }
@@ -73,6 +73,22 @@ LST = dict(x=500, y=200, w=1040, h=652)     # entries list inside it
 DSC = dict(x=480, y=892, w=1080, h=132)     # description strip
 CAT_ROW = 92
 ROW = 92
+# 4.8.57 (test): AB Tools glass look - Window.Property(glass) is set by
+# settings_engine when the model asks for it: see-through background and
+# white glass icons (resources/icons_glass) that turn dark on the white card.
+GL = 'String.IsEqual(Window.Property(glass),1)'
+
+
+def icon(w, rtl, dark_when=None, dark='FF0B1119'):
+    """The entry icon; on the focused card it turns dark in the glass look."""
+    ex = '<aspectratio>keep</aspectratio>'
+    if not dark_when:
+        return image(22, 20, 52, 52, '$INFO[ListItem.Icon]', 'FFFFFFFF', w, rtl, extra=ex)
+    cond = '%s + %s' % (GL, dark_when)
+    return '\n'.join((
+        image(22, 20, 52, 52, '$INFO[ListItem.Icon]', dark, w, rtl, extra=ex, visible=cond),
+        image(22, 20, 52, 52, '$INFO[ListItem.Icon]', 'FFFFFFFF', w, rtl, extra=ex,
+              visible='![%s]' % cond)))
 
 
 def mx(x, w, pw, rtl):
@@ -111,8 +127,7 @@ def cat_layout(p, rtl, focused, list_id):
     if focused:
         out.append(image(0, 4, w, CAT_ROW - 8, TEX['card'], p['FG100'], w, rtl, border=24, visible=has))
         out.append(image(0, 4, w, CAT_ROW - 8, TEX['card'], p['FG12'], w, rtl, border=24, visible='!' + has))
-    out.append(image(22, 20, 52, 52, '$INFO[ListItem.Icon]', 'FFFFFFFF', w, rtl,
-                     extra='<aspectratio>keep</aspectratio>'))
+    out.append(icon(w, rtl, has if focused else None, p['BG'] if p['BG'].startswith('FF') else 'FF0B1119'))
     if focused:
         out.append(label(96, 0, w - 120, CAT_ROW, '[B]$INFO[ListItem.Label][/B]', 'abk_set_m',
                          p['BG'], 'left', w, rtl, visible=has, scroll=True))
@@ -134,8 +149,7 @@ def row_layout(p, rtl, focused, list_id):
     fg_main, fg_dim = (p['FG100'], p['FG70'])
     dk_main, dk_dim = (p['BG'], p['BG'])
     # icon
-    out.append(image(22, 20, 52, 52, '$INFO[ListItem.Icon]', 'FFFFFFFF', w, rtl,
-                     extra='<aspectratio>keep</aspectratio>'))
+    out.append(icon(w, rtl, on_dark if focused else None))
     is_sw = '!String.IsEmpty(ListItem.Property(switch))'
     no_sw = 'String.IsEmpty(ListItem.Property(switch))'
     has_val = '!String.IsEmpty(ListItem.Label2)'
@@ -247,11 +261,12 @@ def side(p, rtl):
 def build(p, header):
     full = ('<control type="image"><left>0</left><top>%s</top><width>100%%</width><height>%s</height>'
             '<texture colordiffuse="%s">%s</texture></control>')
-    bg = [
-        full % (0, '100%', p['BG'], TEX['white']),
-        full % ('40%', '60%', p['BG'], TEX['grad_bottom']),
-        full % (0, '100%', '99000000', TEX['vignette']),
-    ]
+    solid = ('<control type="group"><visible>!%s</visible>\n' % GL
+             + full % (0, '100%', p['BG'], TEX['white']) + '\n'
+             + full % ('40%', '60%', p['BG'], TEX['grad_bottom']) + '\n</control>')
+    glass = ('<control type="group"><visible>%s</visible>\n' % GL
+             + full % (0, '100%', p['BG_GLASS'], TEX['white']) + '\n</control>')
+    bg = [solid, glass, full % (0, '100%', '99000000', TEX['vignette'])]
     body = '\n'.join(bg) + '\n' + side(p, False) + '\n' + side(p, True)
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
            '<!-- %s -->\n'

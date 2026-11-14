@@ -20,8 +20,16 @@ ICON_OFF = os.path.join(paths.ADDON_PATH, 'resources', 'icons', 'toggle_off.png'
 ICON_DONE = os.path.join(paths.ADDON_PATH, 'resources', 'icons', 'patcher.png')
 
 
+def _g(path):
+    try:
+        from resources.lib import glass_look
+        return glass_look.icon(path)
+    except Exception:
+        return path
+
+
 def icon(on):
-    return ICON_ON if on else ICON_OFF
+    return _g(ICON_ON if on else ICON_OFF)
 
 
 def state_text(on):
@@ -53,7 +61,7 @@ def switch_list(title, rows, done_label=None, confirm_back=None):
     pos, quick = 0, 0
     while True:
         lis = [xbmcgui.ListItem(done, offscreen=True)]
-        lis[0].setArt({'icon': ICON_DONE, 'thumb': ICON_DONE})
+        lis[0].setArt({'icon': _g(ICON_DONE), 'thumb': _g(ICON_DONE)})
         lis += [item(l, o) for _k, l, o in states]
         started = time.monotonic()
         choice = xbmcgui.Dialog().select(title, lis, preselect=pos, useDetails=True)
@@ -92,7 +100,7 @@ def option_list(title, rows, done_label=None):
     done = done_label or T(30604)
     while True:
         lis = [xbmcgui.ListItem(done, offscreen=True)]
-        lis[0].setArt({'icon': ICON_DONE, 'thumb': ICON_DONE})
+        lis[0].setArt({'icon': _g(ICON_DONE), 'thumb': _g(ICON_DONE)})
         for _k, l, v, c in states:
             if c is None:
                 lis.append(item(l, bool(v)))

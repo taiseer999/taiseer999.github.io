@@ -1844,8 +1844,9 @@ def ab_chip(focused):
                         <height>28</height>
                         <aspectratio>keep</aspectratio>
                         <texture>$INFO[ListItem.Property(abs.chipicon)]</texture>
+                        <colordiffuse>%s</colordiffuse>
                         <visible>!String.IsEmpty(ListItem.Property(abs.chipicon))</visible>
-                    </control>'''
+                    </control>''' % cc   # 4.8.58: B&W logo, dark on the white chip
     return '''%(bg)s%(dots)s
                     <control type="image">
                         <left>16</left>

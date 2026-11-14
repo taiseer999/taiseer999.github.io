@@ -3000,3 +3000,11 @@ msgctxt "#32215"
 msgid "Season pack"
 msgstr ""
 
+msgctxt "#32216"
+msgid "AB Tools: Glass Look (test)"
+msgstr ""
+
+msgctxt "#32217"
+msgid "AB Tools in glass: white icons with no background and a see-through window."
+msgstr ""
+

@@ -1681,6 +1681,7 @@
                         <height>28</height>
                         <aspectratio>keep</aspectratio>
                         <texture>$INFO[ListItem.Property(abs.chipicon)]</texture>
+                        <colordiffuse>FFBDC8D1</colordiffuse>
                         <visible>!String.IsEmpty(ListItem.Property(abs.chipicon))</visible>
                     </control>
                     <control type="image">
@@ -1810,6 +1811,7 @@
                         <height>28</height>
                         <aspectratio>keep</aspectratio>
                         <texture>$INFO[ListItem.Property(abs.chipicon)]</texture>
+                        <colordiffuse>FFBDC8D1</colordiffuse>
                         <visible>!String.IsEmpty(ListItem.Property(abs.chipicon))</visible>
                     </control>
                     <control type="image">
@@ -1922,6 +1924,7 @@
                         <height>28</height>
                         <aspectratio>keep</aspectratio>
                         <texture>$INFO[ListItem.Property(abs.chipicon)]</texture>
+                        <colordiffuse>FF0B1119</colordiffuse>
                         <visible>!String.IsEmpty(ListItem.Property(abs.chipicon))</visible>
                     </control>
                     <control type="image">
@@ -3668,6 +3671,7 @@
                         <height>28</height>
                         <aspectratio>keep</aspectratio>
                         <texture>$INFO[ListItem.Property(abs.chipicon)]</texture>
+                        <colordiffuse>FFBDC8D1</colordiffuse>
                         <visible>!String.IsEmpty(ListItem.Property(abs.chipicon))</visible>
                     </control>
                     <control type="image">
@@ -3797,6 +3801,7 @@
                         <height>28</height>
                         <aspectratio>keep</aspectratio>
                         <texture>$INFO[ListItem.Property(abs.chipicon)]</texture>
+                        <colordiffuse>FFBDC8D1</colordiffuse>
                         <visible>!String.IsEmpty(ListItem.Property(abs.chipicon))</visible>
                     </control>
                     <control type="image">
@@ -3909,6 +3914,7 @@
                         <height>28</height>
                         <aspectratio>keep</aspectratio>
                         <texture>$INFO[ListItem.Property(abs.chipicon)]</texture>
+                        <colordiffuse>FF0B1119</colordiffuse>
                         <visible>!String.IsEmpty(ListItem.Property(abs.chipicon))</visible>
                     </control>
                     <control type="image">

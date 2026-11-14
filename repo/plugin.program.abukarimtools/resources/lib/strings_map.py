@@ -47,6 +47,7 @@ ID ranges:
   32127-32131  AF3 Classic OSD Flags (Toggles)
   32140-32194  Settings window (4.8.23): descriptions, view switch
   32200-32215  Search All - details of the focused stream (4.8.25)
+  32216-32217  AB Tools glass look (4.8.57, test)
 """
 
 STRINGS = {
@@ -1004,4 +1005,7 @@ STRINGS = {
     32213: ('Mono', 'أحادي'),
     32214: ('Add-ons: %d', 'الإضافات: %d'),
     32215: ('Season pack', 'حزمة موسم'),
+    # ---- 4.8.57: AB Tools glass look (test) ----
+    32216: ('AB Tools: Glass Look (test)', 'أدوات AB: المظهر الزجاجي (تجريبي)'),
+    32217: ('AB Tools in glass: white icons with no background and a see-through window.', 'أدوات AB بمظهر زجاجي: أيقونات بيضاء بلا خلفية ونافذة شفافة.'),
 }

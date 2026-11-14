@@ -72,6 +72,16 @@
         </control>
     </include>
 
+    <!-- Glyph icons (Fen Light / Red Light menu icons, the skin's own
+         extras/icons used by AB Tools nodes, the glass icons of AB Tools /
+         AB Wizard and Last Played's black and white menu icons): white line art that must turn
+         dark on the light Lucent focus tile, like the label does -->
+    <expression name="ABK_Lucent_GlyphTile">[Skin.HasSetting(abk.lucent) + [String.StartsWith(ListItem.Icon,special://skin/extras/icons/) | String.Contains(ListItem.Icon,/icons_glass/) | [String.Contains(ListItem.Icon,plugin.video.abukarim.lastplayed/resources/media/) + !String.EndsWith(ListItem.Icon,/icon.png)] | [String.IsEmpty(ListItem.DBType) + String.Contains(ListItem.Icon,i.imgur.com) + [String.Contains(ListItem.FolderPath,plugin.video.fenlight) | String.Contains(ListItem.FolderPath,plugin.video.redlight)]]]]</expression>
+    <variable name="ABK_Lucent_GlyphFocus">
+        <value condition="$EXP[ABK_Lucent_GlyphTile]">FF0B1119</value>
+        <value>FFFFFFFF</value>
+    </variable>
+
     <variable name="ABK_Lucent_Glass">
         <value condition="String.IsEqual(Skin.String(abk.lucent.glass),30)">dialog_bg_30</value>
         <value condition="String.IsEqual(Skin.String(abk.lucent.glass),50)">dialog_bg_50</value>

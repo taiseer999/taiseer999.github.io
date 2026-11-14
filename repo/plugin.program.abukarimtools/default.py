@@ -22,10 +22,10 @@ if not ADDON_PATH.endswith('/') and not ADDON_PATH.endswith('\\'):
 FANART = ADDON_PATH + 'fanart.jpg'
 # 4.8.23: icons, categories, on/off states and values live in menu_model.py,
 # shared with the settings window (settings_window.py).
-from resources.lib.menu_model import (CATEGORIES, ICON_FILES,
+from resources.lib.menu_model import (CATEGORIES, ICON_FILES, icon_rel as _icon_rel,
                                       switch_state as _switch_state,
                                       mode_label2 as _mode_label2)
-ICONS = {k: ADDON_PATH + v for k, v in ICON_FILES.items()}
+ICONS = {k: ADDON_PATH + _icon_rel(k) for k in ICON_FILES}
 ICONS['settings_view'] = ICONS['cat_toggle']
 
 # Modes that are leaf actions (run then return), not plugin folders.
@@ -46,6 +46,8 @@ ACTION_MODES = {'skin_switch', 'settings_view', 'first_run', 'abukarimwizard',
                 'af3_discmenu',
                 # 4.8.17: AF3 Classic OSD Flags (on/off switch)
                 'af3_classicflags',
+                # 4.8.57: AB Tools glass look (on/off switch, test)
+                'ab_glass',
                 # 4.8.12: Seek Preview (options page)
                 'seek_preview',
                 # 4.6.14: AF3 Streaming Services (dialogs only)
@@ -102,6 +104,8 @@ def _add_item(label, mode, is_folder=True, switch=None, label2=None):
         li = toggle_ui.item(label, switch)
         # feature glyph + switch badge (<mode>_on/off.png) when there is one
         own = ADDON_PATH + 'resources/icons/%s_%s.png' % (mode, 'on' if switch else 'off')
+        from resources.lib import glass_look
+        own = glass_look.icon(own)
         if os.path.isfile(own):
             li.setArt({'icon': own, 'thumb': own})
         li.setArt({'fanart': FANART})
@@ -517,6 +521,11 @@ def router():
         _end_directory()
         from resources.lib import korean_toggle
         korean_toggle.run()
+
+    elif mode == 'ab_glass':
+        from resources.lib import glass_look
+        glass_look.toggle()
+        xbmc.executebuiltin('Container.Refresh')
 
     elif mode == 'icons_toggle':
         _end_directory()

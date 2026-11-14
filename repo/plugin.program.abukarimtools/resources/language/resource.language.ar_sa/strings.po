@@ -3000,3 +3000,11 @@ msgctxt "#32215"
 msgid "Season pack"
 msgstr "حزمة موسم"
 
+msgctxt "#32216"
+msgid "AB Tools: Glass Look (test)"
+msgstr "أدوات AB: المظهر الزجاجي (تجريبي)"
+
+msgctxt "#32217"
+msgid "AB Tools in glass: white icons with no background and a see-through window."
+msgstr "أدوات AB بمظهر زجاجي: أيقونات بيضاء بلا خلفية ونافذة شفافة."
+

@@ -54,6 +54,7 @@ CATEGORIES = [
         ('dplex_toggle',   30010),
         ('korean_toggle',  30011),
         ('icons_toggle',   30020),
+        ('ab_glass',       32216),
         ('lucent_theme',   30800),
         ('af3_trailers',   30430),
         ('af3_waves',      30603),
@@ -85,6 +86,7 @@ ICON_FILES = {
     'dplex_toggle':   'resources/icons/dplex_toggle.png',
     'korean_toggle':  'resources/icons/korean_toggle.png',
     'icons_toggle':   'resources/icons/icons_toggle.png',
+    'ab_glass':       'resources/icons/lucent_theme.png',
     'lucent_theme':   'resources/icons/lucent_theme.png',
     'af3_trailers':   'resources/icons/af3_trailers.png',
     'af3_waves':      'resources/icons/af3_waves.png',
@@ -148,7 +150,19 @@ DESC = {
     'af3_plotright': 32182, 'af3_plotsize': 32183, 'af3_discmenu': 32184,
     'af3_classicflags': 32185, 'seek_preview': 32186, 'font_scale': 32187,
     'profile_export': 32188, 'profile_restore': 32189,
+    'ab_glass': 32217,
 }
+
+
+def icon_rel(key):
+    """Icon of an entry relative to the add-on folder; the glass copy while
+    AB Tools' glass look is on (4.8.57)."""
+    rel = ICON_FILES.get(key, '')
+    try:
+        from resources.lib import glass_look
+        return glass_look.icon(rel)
+    except Exception:
+        return rel
 
 
 def visible(mode):
@@ -167,6 +181,9 @@ def visible(mode):
 def switch_state(mode):
     """True/False for entries that are an on/off switch, None otherwise."""
     try:
+        if mode == 'ab_glass':
+            from resources.lib import glass_look
+            return glass_look.is_on()
         if mode == 'af3_waves':
             from resources.lib import af3_waves_toggle
             return bool(af3_waves_toggle.waves_on())

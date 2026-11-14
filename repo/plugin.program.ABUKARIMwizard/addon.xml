@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.program.ABUKARIMwizard" name="AB Wizard" version="4.2.1" provider-name="Slam, Sarge, Funsterbe, BYB، ABUKARIM">
+<addon id="plugin.program.ABUKARIMwizard" name="AB Wizard" version="4.2.2" provider-name="Slam, Sarge, Funsterbe, BYB، ABUKARIM">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0.1"/>
 		<import addon="plugin.program.abukarimtools" version="4.8.40"/>
@@ -22,7 +22,7 @@
 		<website></website> 
 		<email></email>
 		<source></source>
-		<news>v4.2: The wizard opens as a settings page, like the skin's own settings and ABUKARIM TOOLS: categories on one side (Builds, Accounts, Cleaning, Auto Clean, Add-ons, Logs, System, Backup &amp; Restore), the entries on the other with their switch or value - folder sizes, auto-clean frequency, the status of each account - and a description of the focused entry. Mirrored for Arabic; Arctic Fuse 3 shows it in its theme colours. "Classic List View" brings the old list back. Needs ABUKARIM TOOLS 4.8.26. v3.9.52: Startup notification window opens again on Kodi 22. Older versions: see changelog.txt.</news>
+		<news>v4.2.2: Glass Look (test) - with AB Tools 4.8.57 Toggles > AB Tools: Glass Look on, the wizard's icons are white glass with no background and its page is see-through. v4.2: The wizard opens as a settings page, like the skin's own settings and ABUKARIM TOOLS: categories on one side (Builds, Accounts, Cleaning, Auto Clean, Add-ons, Logs, System, Backup &amp; Restore), the entries on the other with their switch or value - folder sizes, auto-clean frequency, the status of each account - and a description of the focused entry. Mirrored for Arabic; Arctic Fuse 3 shows it in its theme colours. "Classic List View" brings the old list back. Needs ABUKARIM TOOLS 4.8.26. v3.9.52: Startup notification window opens again on Kodi 22. Older versions: see changelog.txt.</news>
 		<assets>
 				<icon>resources/icon.png</icon>
 				<fanart>resources/fanart.jpg</fanart>

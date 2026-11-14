@@ -63,8 +63,9 @@ def _am():
 
 def _am_icon(key):
     # Bundled service logos in their original brand colours (resources/media/icons/svc_*.png)
+    from .glass_look import icon as _glass
     path = os.path.join(addon_path, 'resources', 'media', 'icons', f'svc_{key}.png')
-    return path if os.path.isfile(path) else DEBRID_ICON
+    return _glass(path if os.path.isfile(path) else DEBRID_ICON)
 
 
 # Services added to AM after its first release: shown only when the installed AM ships them.

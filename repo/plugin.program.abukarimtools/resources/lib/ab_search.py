@@ -1070,7 +1070,7 @@ _SERVICE_ICON = {'RD': 'realdebrid', 'AD': 'alldebrid', 'PM': 'premiumize', 'TB'
 
 def _service_icon(code):
     name = _SERVICE_ICON.get(code or '')
-    return (MEDIA + 'lucent/providers/%s.png' % name) if name else ''
+    return (MEDIA + 'lucent/providers_bw/%s.png' % name) if name else ''
 
 
 def _row_service(row):
@@ -1695,7 +1695,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 # 4.6.1: no resolution flags; service icon (AB Wizard
                 # artwork, lucent/providers) under the quality pill
                 icon = th._provider_icon(provider, site)
-                props['abs.svcicon'] = (MEDIA + icon) if icon else ''
+                # 4.8.58: black & white glass logos (providers_bw)
+                props['abs.svcicon'] = (MEDIA + icon.replace('/providers/', '/providers_bw/')) if icon else ''
                 found = self._badges(row)
             except Exception:
                 found = []

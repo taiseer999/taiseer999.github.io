@@ -1994,6 +1994,29 @@ PATCHES = [
         'description': 'AF3 Lucent Look - glass pill behind the system stats (Home header)',
     },
 
+    # 4.8.56: glyph icons (Fen Light menu icons, AB Tools node icons) never
+    # turned dark on focus: AF3 only tints Kodi's Default*.png icons, and the
+    # fork's Exp_Focus_IconTileOnWhite even hides the light tile for plugin
+    # PNG folders. With Lucent on, glyphs keep the light tile and turn dark.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Objects.xml'),
+        'not_found_ok': True,
+        'old': '            <control type="image">\n                <texture background="true" diffuse="$PARAM[diffuse]">$PARAM[icon]</texture>\n                <aspectratio scalediffuse="false">$PARAM[aspectratio]</aspectratio>\n                <visible>![String.IsEqual($PARAM[listitem].Art(thumb),$PARAM[listitem].Icon)',
+        'new': '            <control type="image">\n                <include content="Object_ColorDiffuse" condition="$PARAM[selected]">  <!-- ABUKARIM: Lucent glyph focus -->\n                    <param name="colordiffuse">$VAR[ABK_Lucent_GlyphFocus]</param>\n                </include>\n                <texture background="true" diffuse="$PARAM[diffuse]">$PARAM[icon]</texture>\n                <aspectratio scalediffuse="false">$PARAM[aspectratio]</aspectratio>\n                <visible>![String.IsEqual($PARAM[listitem].Art(thumb),$PARAM[listitem].Icon)',
+        'already_patched_check': '<!-- ABUKARIM: Lucent glyph focus -->',
+        'description': 'AF3 Lucent Look - glyph icons turn dark on focus',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Expressions.xml'),
+        'not_found_ok': True,
+        'old': '+ !String.StartsWith(ListItem.Icon,Default)]</expression>',
+        'new': '+ !String.StartsWith(ListItem.Icon,Default) + !$EXP[ABK_Lucent_GlyphTile]]</expression>  <!-- ABUKARIM: Lucent glyph tile -->',
+        'already_patched_check': '<!-- ABUKARIM: Lucent glyph tile -->',
+        'description': 'AF3 Lucent Look - keep the focus tile behind glyph icons',
+    },
+
     # ── AF3: Lucent Look, phase 2 (4.6.9) - the player ──
     # Thin glass progress bar, glass OSD buttons (white when focused, dark
     # icon), bold time / dimmed duration. Definitions live in our own

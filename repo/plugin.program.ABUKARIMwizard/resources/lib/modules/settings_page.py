@@ -112,7 +112,16 @@ class WizardModel(object):
 
     def icon(self, name):
         path = os.path.join(self.icons, name + '.png')
-        return path if os.path.isfile(path) else self.addon_icon
+        if not os.path.isfile(path):
+            return self.addon_icon
+        from . import glass_look
+        return glass_look.icon(path)
+
+    @staticmethod
+    def glass_on():
+        """4.2.2: AB Tools' glass look (the page reads Window.Property(glass))."""
+        from . import glass_look
+        return glass_look.is_on()
 
     # ── categories ────────────────────────────────────────────────────────
     def categories(self):
@@ -175,7 +184,7 @@ class WizardModel(object):
         from . import authorize as au
         e = self.e
         if au._am() is None:
-            return [e('am_missing', S(30402), au.DEBRID_ICON, S(30403), run(41))]
+            return [e('am_missing', S(30402), self.icon('accounts'), S(30403), run(41))]
         out = []
         for key, label, _ids, _acct, _sup in au.SERVICES:
             if not au._am_supports(key):
@@ -183,7 +192,7 @@ class WizardModel(object):
             out.append(e('svc_' + key, label, au._am_icon(key), self._svc_desc(key, label),
                          (lambda page, k=key: _account_actions(k)),
                          value=(lambda k=key: _account_state(k))))
-        out.append(e('revoke_all', S(30420), au.DEBRID_ICON, S(30421), 'RunScript(%s, action=allRevoke)' % au.AM_ID))
+        out.append(e('revoke_all', S(30420), self.icon('accounts'), S(30421), 'RunScript(%s, action=allRevoke)' % au.AM_ID))
         out.append(e('am_settings', S(30422), self.icon('advanced'), S(30423), run(40)))
         return out
 

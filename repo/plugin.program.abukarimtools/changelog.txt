@@ -1,3 +1,45 @@
+v4.8.60
+- Fix (4.8.59): the AB Last Played add-on tile (Add-ons, Home add-on
+  rows) went almost black when focused - its colour add-on icon
+  (resources/media/icon.png) was taken for a black and white menu icon
+  and tinted dark. Only Last Played's menu icons are tinted now.
+
+v4.8.59
+- AF3 Lucent Look: the glyph icons that turn dark on the focused tile
+  (4.8.56) now also take AB Last Played's black and white menu icons
+  (1.0.16) and the glass icons of AB Tools / AB Wizard (icons_glass) in
+  the classic lists.
+
+v4.8.58
+- Search All: the debrid service logos (Real-Debrid, AllDebrid,
+  Premiumize, TorBox, Offcloud, Easynews, EasyDebrid) are black & white
+  glass, like AB Wizard's glass icons - on the stream cards and the
+  service chips. New set resources/lucent/media/lucent/providers_bw
+  (tools/gen_glass_providers.py: white, no background, a thin cut where
+  two colours meet so Premiumize's tick and TorBox's cube keep their
+  shape). On the focused (white) chip the logo turns dark. Always on,
+  not tied to the Glass Look switch.
+
+v4.8.57
+- AB Tools: Glass Look (test) - new switch in Toggles. AB Tools' own icons
+  in black & white glass: no tile background, white glyphs, coloured parts
+  frosted (45%) where the icon also has solid white parts (toggle knobs,
+  hearts, pages). resources/icons_glass is generated from resources/icons
+  by tools/gen_glass_icons.py (512 px). The settings window gets a
+  see-through background (70% navy; AF3: dialog_overlay) and the focused
+  icon turns dark on the white card. Applies to the settings window, the
+  classic list and the on/off switch lists; flag: addon_data/glass_look.txt.
+
+v4.8.56
+- AF3 Lucent Look: glyph icons now turn dark on focus. AF3 only tints Kodi's
+  own Default*.png icons; plugin icons (Fen Light / Red Light menu icons from
+  imgur, AB Tools nodes using special://skin/extras/icons/ such as the Korean
+  nodes) were drawn untinted, so they stayed white on the light focus tile.
+  Includes_Objects.xml (Object_Layout_Image_Rectangle) now takes
+  $VAR[ABK_Lucent_GlyphFocus] on the focused item, and the fork's
+  Exp_Focus_IconTileOnWhite no longer hides the focus tile for those icons.
+  Colour add-on logos are untouched.
+
 v4.8.55
 - AF3 Lucent Look: glass TinyPPI. With the Lucent Look on, TinyPPI's panels -
   the codec-logo box (playback start / OSD / overlay), the speaker layout,

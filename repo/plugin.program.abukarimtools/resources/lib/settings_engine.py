@@ -177,6 +177,26 @@ class Page(xbmcgui.WindowXML):
         self._fill(self._entries(cat['key']))
         xbmcgui.Window(10000).setProperty(self.home_cat, cat['key'])
 
+    def _set_glass(self):
+        fn = getattr(self.model, 'glass_on', None)
+        self.setProperty('glass', '1' if fn and _call(fn, False) else '')
+
+    def restyle(self):
+        """Look changed (4.8.57 glass): new icons, same place."""
+        self._set_glass()
+        try:
+            self.cats = list(self.model.categories() or [])
+        except Exception:
+            return
+        cl = self.getControl(self.cat_id)
+        pos = max(0, cl.getSelectedPosition())
+        cl.reset()
+        cl.addItems(self._cat_items())
+        cl.selectItem(min(pos, len(self.cats) - 1))
+        cat = self.cats[self.cat_pos] if 0 <= self.cat_pos < len(self.cats) else None
+        if cat and not cat.get('run'):
+            self._fill(self._entries(cat['key']), keep_pos=True)
+
     # ── Kodi callbacks ────────────────────────────────────────────────────
     def onInit(self):
         try:
@@ -186,6 +206,7 @@ class Page(xbmcgui.WindowXML):
         self.setProperty('dir', self.dir)
         self.setProperty('title', getattr(self.model, 'title', ''))
         self.setProperty('version', getattr(self.model, 'version', ''))
+        self._set_glass()
         try:
             self.cats = list(self.model.categories() or [])
         except Exception as e:

@@ -37,7 +37,11 @@ def _menu_icon(name, mode, icon):
     except Exception:
         return icon
     if icon != addon_icon:
-        return icon
+        try:
+            from .glass_look import icon as _glass   # 4.2.2: wizard icons in glass
+            return _glass(icon)
+        except Exception:
+            return icon
     import os
     m = str(mode)
     key = None
@@ -47,7 +51,10 @@ def _menu_icon(name, mode, icon):
     if not key:
         return icon
     path = os.path.join(addon_path, 'resources', 'media', 'icons', key + '.png')
-    return path if os.path.isfile(path) else icon
+    if not os.path.isfile(path):
+        return icon
+    from .glass_look import icon as _glass
+    return _glass(path)
 
 
 def add_dir(name,url,mode,icon,fanart,description, name2='', version='', kodi='', addcontext=False,isFolder=True):

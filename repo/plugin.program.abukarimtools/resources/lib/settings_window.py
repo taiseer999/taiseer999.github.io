@@ -86,8 +86,13 @@ class ToolsModel(object):
         self.path = p if p.endswith(('/', '\\')) else p + os.sep
 
     def _icon(self, key):
-        rel = menu_model.ICON_FILES.get(key)
+        rel = menu_model.icon_rel(key)
         return self.path + rel if rel else ''
+
+    @staticmethod
+    def glass_on():
+        from resources.lib import glass_look
+        return glass_look.is_on()
 
     def categories(self):
         out = [{'key': key, 'label': T(label_id), 'icon': self._icon(icon_key),
@@ -109,7 +114,8 @@ class ToolsModel(object):
                     continue
                 e = {'id': mode, 'label': T(label_id), 'icon': self._icon(mode),
                      'desc': T(menu_model.DESC[mode]) if mode in menu_model.DESC else '',
-                     'run': _run_wizard if mode == 'abukarimwizard' else _plugin(mode)}
+                     'run': _run_wizard if mode == 'abukarimwizard' else
+                            _toggle_glass if mode == 'ab_glass' else _plugin(mode)}
                 if menu_model.switch_state(mode) is not None:
                     e['switch'] = (lambda m=mode: menu_model.switch_state(m))
                 else:
@@ -117,6 +123,13 @@ class ToolsModel(object):
                 out.append(e)
             return out
         return []
+
+
+def _toggle_glass(page):
+    """4.8.57: flip AB Tools' glass look and redraw the page in place."""
+    from resources.lib import glass_look
+    glass_look.toggle()
+    page.restyle()
 
 
 def open_window(start_cat=None):
