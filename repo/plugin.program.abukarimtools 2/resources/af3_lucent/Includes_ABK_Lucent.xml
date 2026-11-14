@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AB Tools "AF3: Lucent Look" - player (4.6.9) and info page (4.6.10).
+     Installed into skin.arctic.fuse.3/1080i/ and registered in Includes.xml by
+     the AB Tools patcher. Every use is gated on Skin.HasSetting(abk.lucent):
+     the toggle sets that bool and changes the skin colours, which reloads the
+     skin, so include conditions are re-read on every switch.
+     Kodi takes the FIRST texture / textcolor / font tag of a control, so the
+     includes below are placed before AF3's own tags and win only when on.
+     Design after the Lucent skin by djdirty60 (github.com/djdirty60/Lucent). -->
+<includes>
+
+    <!-- 4.8.53: glass transparency of dialogs / the Options panel (Lucent glass
+         body in Part_Background). Skin.String(abk.lucent.glass) = 30/50/90;
+         empty = 70 (the theme's dialog_overlay). Live, no reload. -->
+    <!-- 4.8.54: glass info pills (Home / info page / OSD info line) and glass
+         Spotlight buttons. Used through conditional includes placed BEFORE
+         AF3's own texture / textcolor tags (Kodi takes the first one). -->
+    <include name="ABK_Lucent_GlassPill">
+        <texturefocus colordiffuse="38FFFFFF" border="4">flags/blank.png</texturefocus>
+        <texturenofocus colordiffuse="38FFFFFF" border="4">flags/blank.png</texturenofocus>
+        <textcolor>FFFFFFFF</textcolor>
+    </include>
+    <include name="ABK_Lucent_GlassPillBg">
+        <texture colordiffuse="38FFFFFF" border="4">flags/blank.png</texture>
+    </include>
+    <include name="ABK_Lucent_GlassIcon">
+        <param name="icon"></param>
+        <definition>
+            <texture colordiffuse="FFFFFFFF">$PARAM[icon]</texture>
+        </definition>
+    </include>
+    <include name="ABK_Lucent_GlassCircle">
+        <texture colordiffuse="38FFFFFF">diffuse/circle/circle_120.png</texture>
+    </include>
+    <include name="ABK_Lucent_GlassCircleIcon">
+        <param name="image"></param>
+        <definition>
+            <texture background="true" colordiffuse="FFFFFFFF">$PARAM[image]</texture>
+        </definition>
+    </include>
+
+    <!-- 4.8.64: the glass pill behind the system stats is gone; the empty
+         include stays so a Furniture file not yet cleaned by the patcher
+         does not log a missing include. -->
+    <include name="ABK_Lucent_GlassStats" />
+
+    <!-- Glyph icons (Fen Light / Red Light menu icons, the skin's own
+         extras/icons used by AB Tools nodes, the glass icons of AB Tools /
+         AB Wizard and Last Played's black and white menu icons): white line art that must turn
+         dark on the light Lucent focus tile, like the label does -->
+    <expression name="ABK_Lucent_GlyphTile">[Skin.HasSetting(abk.lucent) + [String.StartsWith(ListItem.Icon,special://skin/extras/icons/) | String.Contains(ListItem.Icon,/icons_glass/) | [String.Contains(ListItem.Icon,plugin.video.abukarim.lastplayed/resources/media/) + !String.EndsWith(ListItem.Icon,/icon.png)] | [String.IsEmpty(ListItem.DBType) + String.Contains(ListItem.Icon,i.imgur.com) + [String.Contains(ListItem.FolderPath,plugin.video.fenlight) | String.Contains(ListItem.FolderPath,plugin.video.redlight)]]]]</expression>
+    <variable name="ABK_Lucent_GlyphFocus">
+        <value condition="$EXP[ABK_Lucent_GlyphTile]">FF0B1119</value>
+        <value>FFFFFFFF</value>
+    </variable>
+
+    <variable name="ABK_Lucent_Glass">
+        <value condition="String.IsEqual(Skin.String(abk.lucent.glass),30)">dialog_bg_30</value>
+        <value condition="String.IsEqual(Skin.String(abk.lucent.glass),50)">dialog_bg_50</value>
+        <value condition="String.IsEqual(Skin.String(abk.lucent.glass),90)">dialog_bg_90</value>
+        <value>dialog_overlay</value>
+    </variable>
+
+    <!-- OSD buttons: glass circle, solid white when focused -->
+    <include name="ABK_Lucent_OSD_Button_Textures">
+        <texturefocus colordiffuse="FFFFFFFF">common/circle.png</texturefocus>
+        <texturenofocus colordiffuse="26FFFFFF">common/circle.png</texturenofocus>
+    </include>
+
+    <!-- OSD button icon on the white focus circle: dark, like Lucent
+         (placed before AF3's own texture tag of the focused icon) -->
+    <include name="ABK_Lucent_IconFocus">
+        <definition>
+            <texture colordiffuse="FF0B1119" flipx="$PARAM[flipx]">$PARAM[icon]</texture>
+        </definition>
+    </include>
+
+    <!-- Time bold white, duration dimmed -->
+    <include name="ABK_Lucent_TimeLabel">
+        <textcolor>panel_fg_100</textcolor>
+        <font>font_main_bold</font>
+    </include>
+    <include name="ABK_Lucent_DurationLabel">
+        <textcolor>panel_fg_70</textcolor>
+    </include>
+
+    <!-- Thin glass progress bar: track, cache, progress (6 px pills) -->
+    <include name="ABK_Lucent_Progress">
+        <control type="group">
+            <height>6</height>
+            <centertop>50%</centertop>
+            <control type="image">
+                <texture border="3" colordiffuse="26FFFFFF">abk_lucent/pill6.png</texture>
+            </control>
+            <control type="progress">
+                <width>100%</width>
+                <height>6</height>
+                <info>Player.ProgressCache</info>
+                <texturebg border="3" colordiffuse="00FFFFFF">abk_lucent/pill6.png</texturebg>
+                <lefttexture />
+                <midtexture border="3" colordiffuse="40FFFFFF">abk_lucent/pill6.png</midtexture>
+                <righttexture />
+                <overlaytexture />
+                <visible>[Player.Playing | Player.Paused | Player.Caching] + !Player.Seeking + Player.HasMedia + !Pvr.IsPlayingTv</visible>
+            </control>
+            <control type="progress">
+                <width>100%</width>
+                <height>6</height>
+                <info>Player.Progress</info>
+                <texturebg border="3" colordiffuse="00FFFFFF">abk_lucent/pill6.png</texturebg>
+                <lefttexture />
+                <midtexture border="3" colordiffuse="panel_fg_100">abk_lucent/pill6.png</midtexture>
+                <righttexture />
+                <overlaytexture />
+                <visible>Player.HasMedia + !Pvr.IsPlayingTv</visible>
+            </control>
+            <control type="progress">
+                <width>100%</width>
+                <height>6</height>
+                <info>PVR.EpgEventProgress</info>
+                <texturebg border="3" colordiffuse="00FFFFFF">abk_lucent/pill6.png</texturebg>
+                <lefttexture />
+                <midtexture border="3" colordiffuse="panel_fg_100">abk_lucent/pill6.png</midtexture>
+                <righttexture />
+                <overlaytexture />
+                <visible>Pvr.IsPlayingTv</visible>
+            </control>
+        </control>
+    </include>
+
+    <!-- Info page / plot dialog action buttons (Button_Underline_Switcher):
+         Lucent pills - glass when idle, solid white with dark text when
+         focused, a brighter glass pill for the active tab (alt texture). -->
+    <include name="ABK_Lucent_PillButton">
+        <height>56</height>
+        <aligny>center</aligny>
+        <textoffsetx>30</textoffsetx>
+        <textcolor>dialog_fg_70</textcolor>
+        <focusedcolor>FF0B1119</focusedcolor>
+        <texturefocus border="28" colordiffuse="FFFFFFFF">abk_lucent/pill60.png</texturefocus>
+        <texturenofocus border="28" colordiffuse="1AFFFFFF">abk_lucent/pill60.png</texturenofocus>
+        <alttexturefocus border="28" colordiffuse="FFFFFFFF">abk_lucent/pill60.png</alttexturefocus>
+        <alttexturenofocus border="28" colordiffuse="3DFFFFFF">abk_lucent/pill60.png</alttexturenofocus>
+    </include>
+    <!-- pills sit closer than AF3's underlined labels -->
+    <include name="ABK_Lucent_PillGap">
+        <itemgap>14</itemgap>
+    </include>
+
+
+    <!-- 4.8.65: the name of the focused button under the AF3 player's button
+         row (VideoOSD.xml, ABK_OSD_ButtonLabel), like the Lucent Player. Ids:
+         AF3 6001-6008, PPI 6009, AB Tools 6010-6013. Prev / Next say what
+         they do now: chapter, playlist item or a big step. -->
+    <variable name="ABK_OSD_ButtonName">
+        <value condition="Control.HasFocus(6001) + Player.Paused">$ADDON[plugin.program.abukarimtools 32220]</value>
+        <value condition="Control.HasFocus(6001)">$ADDON[plugin.program.abukarimtools 32009]</value>
+        <value condition="Control.HasFocus(6002) + VideoPlayer.Content(livetv)">$ADDON[plugin.program.abukarimtools 32229]</value>
+        <value condition="Control.HasFocus(6002) + !String.IsEmpty(Player.Chapter) + !String.IsEqual(Player.Chapter,00) + !String.IsEmpty(Player.ChapterCount) + !String.IsEqual(Player.ChapterCount,00) + !String.IsEqual(Player.Chapter,01)">$ADDON[plugin.program.abukarimtools 32221]</value>
+        <value condition="Control.HasFocus(6002) + Integer.IsGreater(VideoPlayer.PlaylistPosition,1) + Integer.IsGreater(VideoPlayer.PlaylistLength,1)">$ADDON[plugin.program.abukarimtools 32007]</value>
+        <value condition="Control.HasFocus(6002)">$ADDON[plugin.program.abukarimtools 32223]</value>
+        <value condition="Control.HasFocus(6003) + VideoPlayer.Content(livetv)">$ADDON[plugin.program.abukarimtools 32035]</value>
+        <value condition="Control.HasFocus(6003) + !String.IsEmpty(Player.Chapter) + !String.IsEqual(Player.Chapter,00) + !String.IsEmpty(Player.ChapterCount) + !String.IsEqual(Player.ChapterCount,00) + !String.IsEqual(Player.Chapter,Player.ChapterCount)">$ADDON[plugin.program.abukarimtools 32222]</value>
+        <value condition="Control.HasFocus(6003) + Integer.IsLess(VideoPlayer.PlaylistPosition,VideoPlayer.PlaylistLength)">$ADDON[plugin.program.abukarimtools 32006]</value>
+        <value condition="Control.HasFocus(6003) + !String.IsEmpty(Container(450).ListItem.FileNameAndPath) + Integer.IsLess(Player.TimeRemaining(mins),10)">$ADDON[plugin.program.abukarimtools 32006]</value>
+        <value condition="Control.HasFocus(6003)">$ADDON[plugin.program.abukarimtools 32224]</value>
+        <value condition="Control.HasFocus(6004)">$ADDON[plugin.program.abukarimtools 32005]</value>
+        <value condition="Control.HasFocus(6005)">$ADDON[plugin.program.abukarimtools 32008]</value>
+        <value condition="Control.HasFocus(6006)">$ADDON[plugin.program.abukarimtools 32002]</value>
+        <value condition="Control.HasFocus(6007)">$ADDON[plugin.program.abukarimtools 32001]</value>
+        <value condition="Control.HasFocus(6010)">$ADDON[plugin.program.abukarimtools 32225]</value>
+        <value condition="Control.HasFocus(6011)">$ADDON[plugin.program.abukarimtools 32226]</value>
+        <value condition="Control.HasFocus(6012)">$ADDON[plugin.program.abukarimtools 32227]</value>
+        <value condition="Control.HasFocus(6008)">$ADDON[plugin.program.abukarimtools 32003]</value>
+        <value condition="Control.HasFocus(6013)">$ADDON[plugin.program.abukarimtools 32014]</value>
+        <value condition="Control.HasFocus(6009)">$ADDON[plugin.program.abukarimtools 32228]</value>
+    </variable>
+    <include name="ABK_OSD_ButtonLabel">
+        <control type="label">
+            <centerleft>50%</centerleft>
+            <width>1200</width>
+            <top>1030</top>
+            <height>40</height>
+            <font>font_tiny</font>
+            <textcolor>CCFFFFFF</textcolor>
+            <align>center</align>
+            <aligny>center</aligny>
+            <label>$VAR[ABK_OSD_ButtonName]</label>
+            <!-- 4.8.66: no Lucent Player condition - its own buttons have other
+                 ids, so the name is empty there; with it on, AF3's row was
+                 left without names (log 2026-11-14 11:59) -->
+        </control>
+    </include>
+</includes>

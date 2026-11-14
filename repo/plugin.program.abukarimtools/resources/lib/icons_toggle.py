@@ -207,4 +207,5 @@ def run():
     # the nodes repaint with the new files (no full restart needed).
     _bust_texture_cache(live_dir)
     xbmc.sleep(300)
-    xbmc.executebuiltin('ReloadSkin()')
+    from resources.lib.settings_engine import safe_reload_skin   # 4.8.72: never under the page
+    safe_reload_skin()

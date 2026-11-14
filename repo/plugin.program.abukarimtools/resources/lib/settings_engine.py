@@ -55,6 +55,12 @@ WAIT = '…'
 PYTHON_WINDOWS = 13000          # script windows get ids from here (other pages)
 AWAY_CLOSE = 1.5                # s on a non-page window before the page closes
 BEAT_STALE = 6.0                # s without a heartbeat = the page is gone
+# 4.8.72: ReloadSkin under the open page crashed Kodi (its worker thread kept
+# touching the page's controls while the skin was torn down; kodi.log ends on
+# "Control 9101 in window 13002 has been asked to focus"). An entry that needs
+# a reload calls safe_reload_skin(): the page closes first, the skin reloads,
+# then the page opens again on the same category.
+RELOAD_REQ = 'abk.page.reload_req'
 
 
 def _log(msg, level=xbmc.LOGINFO):
@@ -324,6 +330,10 @@ class Page(xbmcgui.WindowXML):
             if monitor.waitForAbort(0.3) or self.closing:
                 break
             home.setProperty(self.beat, '%.1f' % time.time())
+            if home.getProperty(RELOAD_REQ):
+                _log('skin reload requested - closing the page first')
+                self.close()
+                break
             # 4.8.27: navigated elsewhere (an entry or a shortcut opened
             # another window) -> close instead of waiting hidden forever
             if self._away():
@@ -399,3 +409,39 @@ def open_page(model, start_cat=None):
         del win
     finally:
         home.clearProperty(guard)
+
+
+def _page_open(key='tools'):
+    try:
+        beat = float(xbmcgui.Window(10000).getProperty('abk.page.%s.open' % key) or 0)
+    except ValueError:
+        beat = 0.0
+    return bool(beat) and time.time() - beat < BEAT_STALE
+
+
+def safe_reload_skin(reopen=True, key='tools'):
+    """ReloadSkin() that never runs under the open AB Tools page (4.8.72).
+    Closes the page, waits until it is really gone, reloads, then opens the
+    page again (it comes back on the category it was showing)."""
+    home = xbmcgui.Window(10000)
+    monitor = xbmc.Monitor()
+    was_open = _page_open(key)
+    if was_open:
+        home.setProperty(RELOAD_REQ, '1')
+        guard = 'abk.page.%s.open' % key
+        for _ in range(40):                 # up to 8 s
+            if not home.getProperty(guard) or monitor.waitForAbort(0.2):
+                break
+        monitor.waitForAbort(0.4)           # let doModal return and the window go
+        home.clearProperty(RELOAD_REQ)
+    _log('ReloadSkin (page was %s)' % ('open' if was_open else 'closed'))
+    xbmc.executebuiltin('ReloadSkin()')
+    if was_open and reopen:
+        for _ in range(30):                 # wait for the new skin's first window
+            if monitor.waitForAbort(0.3):
+                return
+            if xbmcgui.getCurrentWindowId() != 9999 and \
+                    not xbmc.getCondVisibility('Window.IsActive(busydialog) | Window.IsActive(busydialognocancel)'):
+                break
+        monitor.waitForAbort(1.0)
+        xbmc.executebuiltin('RunPlugin(plugin://%s/?mode=settings_window)' % TOOLS_ID)

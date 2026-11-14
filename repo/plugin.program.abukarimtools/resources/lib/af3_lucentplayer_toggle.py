@@ -92,4 +92,5 @@ def run():
                                   xbmcgui.NOTIFICATION_INFO, 3000)
     # the OSD hooks are conditional includes: always reload
     xbmc.sleep(300)
-    xbmc.executebuiltin('ReloadSkin()')
+    from resources.lib.settings_engine import safe_reload_skin   # 4.8.72: never under the page
+    safe_reload_skin()

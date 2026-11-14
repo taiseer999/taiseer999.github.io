@@ -6765,6 +6765,24 @@ def apply_set(group=None, addon_ids=None):
             if _is_active_skin('skin.arctic.fuse.3'):
                 _mark_skin_reload()
 
+    # 4.8.68: AF3 OSD Flags Style (FR-Badges styles) on Flags_Badge_Directory
+    if not addon_ids or 'skin.arctic.fuse.3' in _scope:
+        try:
+            from resources.lib import af3_flagstyle
+            ok, msg, wrote = af3_flagstyle.reconcile(_resolve_addon_dir('skin.arctic.fuse.3'))
+        except Exception as e:
+            ok, msg, wrote = False, '[flag style] %s' % e, False
+        _log(msg)
+        results.append((ok, msg))
+        if ok:
+            succeeded += 1
+        else:
+            failed += 1
+        if wrote:
+            changed += 1
+            if _is_active_skin('skin.arctic.fuse.3'):
+                _mark_skin_reload()
+
     # 4.7.7: Search All's own fixed-size fonts in the active skin (before the
     # Font Size pass, so the chosen mode scales them like every other font).
     if not addon_ids or any(_is_active_skin(a) for a in _scope):

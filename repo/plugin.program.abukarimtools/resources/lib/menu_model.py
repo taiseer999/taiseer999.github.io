@@ -65,6 +65,7 @@ CATEGORIES = [
         ('af3_plotsize',   32113),
         ('af3_discmenu',   32102),
         ('af3_classicflags', 32127),
+        ('af3_flagstyle',  32230),
         ('seek_preview',   30024),
         ('font_scale',     30740),
     ]),
@@ -97,6 +98,7 @@ ICON_FILES = {
     'af3_plotsize':   'resources/icons/af3_plotsize.png',
     'af3_discmenu':   'resources/icons/af3_discmenu.png',
     'af3_classicflags': 'resources/icons/af3_classicflags.png',
+    'af3_flagstyle':  'resources/icons/af3_flagstyle.png',
     'seek_preview':   'resources/icons/seek_preview.png',
     'font_scale':     'resources/icons/font_scale.png',
     'origin_fix':     'resources/icons/sources.png',
@@ -150,7 +152,7 @@ DESC = {
     'af3_plotright': 32182, 'af3_plotsize': 32183, 'af3_discmenu': 32184,
     'af3_classicflags': 32185, 'seek_preview': 32186, 'font_scale': 32187,
     'profile_export': 32188, 'profile_restore': 32189,
-    'ab_glass': 32217,
+    'ab_glass': 32217, 'af3_flagstyle': 32240,
 }
 
 
@@ -223,6 +225,9 @@ def mode_label2(mode):
         if mode == 'af3_plotsize':
             from resources.lib import af3_plotsize
             return af3_plotsize.mode_label()
+        if mode == 'af3_flagstyle':
+            from resources.lib import af3_flagstyle
+            return af3_flagstyle.mode_label()
         if mode == 'font_scale':
             from resources.lib import font_scale
             return font_scale.mode_label()

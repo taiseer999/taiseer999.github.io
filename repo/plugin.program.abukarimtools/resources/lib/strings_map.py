@@ -50,6 +50,7 @@ ID ranges:
   32216-32217  AB Tools glass look (4.8.57, test)
   32218-32219  What's New screen (4.8.61)
   32220-32229  AF3 player - focused button names (4.8.65)
+  32230-32250  AF3 OSD Flags Style (4.8.68, FR-Badges; Lucent + samples 4.8.69)
 """
 
 STRINGS = {
@@ -1022,5 +1023,27 @@ STRINGS = {
     32227: ('Subtitle look', 'مظهر الترجمة'),
     32228: ('Player process info', 'معلومات معالجة المشغّل'),
     32229: ('TV guide', 'دليل البرامج'),
+    # ---- 4.8.68: AF3 OSD Flags Style (32230-32240) ----
+    32230: ('AF3: OSD Flags Style', 'AF3: نمط شارات التشغيل'),
+    32231: ('Classic colourful', 'الملوّنة الكلاسيكية'),
+    32232: ('Glass', 'زجاجي'),
+    32233: ('Black & White', 'أسود وأبيض'),
+    32234: ('White & Black', 'أبيض وأسود'),
+    32235: ('Minimal', 'بسيط'),
+    32236: ('Light', 'فاتح'),
+    32237: ('OSD flags style: %s', 'نمط شارات التشغيل: %s'),
+    32238: ('The flags style add-on could not be installed. Check the connection and try again.', 'تعذّر تثبيت إضافة نمط الشارات. تحقّق من الاتصال ثم أعد المحاولة.'),
+    32239: ('This Arctic Fuse 3 version does not support flag styles yet. Update the skin, then choose the style again.', 'لا يدعم هذا الإصدار من Arctic Fuse 3 أنماط الشارات بعد. حدِّث الواجهة ثم اختر النمط مرة أخرى.'),
+    32240: ('The look of the codec, HDR, audio and source badges in the Arctic Fuse 3 player and footer: Automatic, classic colourful, Lucent, Glass, White & Black, Black & White, Minimal or Light. Any choice except Automatic wins over the Lucent Look.', 'مظهر شارات الترميز وHDR والصوت والمصدر في مشغّل Arctic Fuse 3 وأسفل الشاشة: تلقائي أو الملوّنة الكلاسيكية أو لوسنت أو زجاجي أو أبيض وأسود أو أسود وأبيض أو بسيط أو فاتح. أيّ اختيار غير «تلقائي» يتقدّم على مظهر لوسنت.'),
+    32241: ('Lucent', 'لوسنت'),
+    32242: ('Automatic', 'تلقائي'),
+    32243: ('Lucent badges while the Lucent Look is on, classic colourful otherwise', 'شارات لوسنت عند تفعيل مظهر لوسنت، والملوّنة الكلاسيكية في غير ذلك'),
+    32244: ('The original colour badges, also with the Lucent Look on', 'الشارات الملوّنة الأصلية، حتى مع تفعيل مظهر لوسنت'),
+    32245: ('The Lucent Player pills; white glass pills in the AF3 player', 'أقراص مشغّل لوسنت، وأقراص زجاجية بيضاء في مشغّل AF3'),
+    32246: ('Dark tinted glass pills with colour accents', 'أقراص زجاجية داكنة بلمسات ملوّنة'),
+    32247: ('Black glass pills with white text', 'أقراص زجاجية سوداء بنص أبيض'),
+    32248: ('White glass pills with black text', 'أقراص زجاجية بيضاء بنص أسود'),
+    32249: ('Flat dark pills with a coloured dot', 'أقراص داكنة مسطّحة بنقطة ملوّنة'),
+    32250: ('Soft pastel pills', 'أقراص بألوان هادئة فاتحة'),
     32217: ('AB Tools in glass: white icons with no background and a see-through window.', 'أدوات AB بمظهر زجاجي: أيقونات بيضاء بلا خلفية ونافذة شفافة.'),
 }

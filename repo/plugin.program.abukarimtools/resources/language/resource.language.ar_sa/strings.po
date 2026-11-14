@@ -3056,3 +3056,87 @@ msgctxt "#32229"
 msgid "TV guide"
 msgstr "دليل البرامج"
 
+msgctxt "#32230"
+msgid "AF3: OSD Flags Style"
+msgstr "AF3: نمط شارات التشغيل"
+
+msgctxt "#32231"
+msgid "Classic colourful"
+msgstr "الملوّنة الكلاسيكية"
+
+msgctxt "#32232"
+msgid "Glass"
+msgstr "زجاجي"
+
+msgctxt "#32233"
+msgid "Black & White"
+msgstr "أسود وأبيض"
+
+msgctxt "#32234"
+msgid "White & Black"
+msgstr "أبيض وأسود"
+
+msgctxt "#32235"
+msgid "Minimal"
+msgstr "بسيط"
+
+msgctxt "#32236"
+msgid "Light"
+msgstr "فاتح"
+
+msgctxt "#32237"
+msgid "OSD flags style: %s"
+msgstr "نمط شارات التشغيل: %s"
+
+msgctxt "#32238"
+msgid "The flags style add-on could not be installed. Check the connection and try again."
+msgstr "تعذّر تثبيت إضافة نمط الشارات. تحقّق من الاتصال ثم أعد المحاولة."
+
+msgctxt "#32239"
+msgid "This Arctic Fuse 3 version does not support flag styles yet. Update the skin, then choose the style again."
+msgstr "لا يدعم هذا الإصدار من Arctic Fuse 3 أنماط الشارات بعد. حدِّث الواجهة ثم اختر النمط مرة أخرى."
+
+msgctxt "#32240"
+msgid "The look of the codec, HDR, audio and source badges in the Arctic Fuse 3 player and footer: Automatic, classic colourful, Lucent, Glass, White & Black, Black & White, Minimal or Light. Any choice except Automatic wins over the Lucent Look."
+msgstr "مظهر شارات الترميز وHDR والصوت والمصدر في مشغّل Arctic Fuse 3 وأسفل الشاشة: تلقائي أو الملوّنة الكلاسيكية أو لوسنت أو زجاجي أو أبيض وأسود أو أسود وأبيض أو بسيط أو فاتح. أيّ اختيار غير «تلقائي» يتقدّم على مظهر لوسنت."
+
+msgctxt "#32241"
+msgid "Lucent"
+msgstr "لوسنت"
+
+msgctxt "#32242"
+msgid "Automatic"
+msgstr "تلقائي"
+
+msgctxt "#32243"
+msgid "Lucent badges while the Lucent Look is on, classic colourful otherwise"
+msgstr "شارات لوسنت عند تفعيل مظهر لوسنت، والملوّنة الكلاسيكية في غير ذلك"
+
+msgctxt "#32244"
+msgid "The original colour badges, also with the Lucent Look on"
+msgstr "الشارات الملوّنة الأصلية، حتى مع تفعيل مظهر لوسنت"
+
+msgctxt "#32245"
+msgid "The Lucent Player pills; white glass pills in the AF3 player"
+msgstr "أقراص مشغّل لوسنت، وأقراص زجاجية بيضاء في مشغّل AF3"
+
+msgctxt "#32246"
+msgid "Dark tinted glass pills with colour accents"
+msgstr "أقراص زجاجية داكنة بلمسات ملوّنة"
+
+msgctxt "#32247"
+msgid "Black glass pills with white text"
+msgstr "أقراص زجاجية سوداء بنص أبيض"
+
+msgctxt "#32248"
+msgid "White glass pills with black text"
+msgstr "أقراص زجاجية بيضاء بنص أسود"
+
+msgctxt "#32249"
+msgid "Flat dark pills with a coloured dot"
+msgstr "أقراص داكنة مسطّحة بنقطة ملوّنة"
+
+msgctxt "#32250"
+msgid "Soft pastel pills"
+msgstr "أقراص بألوان هادئة فاتحة"
+

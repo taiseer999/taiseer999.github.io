@@ -1478,6 +1478,15 @@ def main():
         _log('Classic OSD flags check failed to start (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
+    # 4.8.68: AF3 OSD Flags Style - reinstall resource.images.af3.frbadges
+    # when an FR-Badges style is chosen and the add-on is missing. Fenced.
+    try:
+        from resources.lib import af3_flagstyle
+        af3_flagstyle.start_boot_ensure(monitor)
+    except Exception:
+        _log('Flag style check failed to start (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
     # 3.3.2: AF3 Subtitle Buttons - make sure script.subtitle.cycler is
     # installed (repository.taiseer) so its OSD button works. Background
     # thread, delayed, waits out first-run and playback. Fenced.

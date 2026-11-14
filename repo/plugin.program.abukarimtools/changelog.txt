@@ -1,3 +1,67 @@
+v4.8.73  (2026-11-14)
+- AF3: OSD Flags Style - Neon is gone; new Black & White style (black glass
+  pills, white text; FR-Badges Black & White), listed after White & Black.
+  A box that had Neon picked falls back to Automatic. Requires
+  resource.images.af3.frbadges 1.0.4 (neon set removed, blackwhite added,
+  incl. its Lucent Player copy). New sample picture and menu icon.
+
+v4.8.72  (2026-11-14)
+- Fixed: Kodi closed (crashed) right after picking an option in a Toggles
+  entry that reloads the skin from the AB Tools settings page (seen with
+  AF3: OSD Flags Style). ReloadSkin ran while the page was still open and
+  its refresh thread kept touching the page's controls as the skin was torn
+  down (log ended on "Control 9101 in window 13002 has been asked to
+  focus"). New settings_engine.safe_reload_skin(): the page closes first,
+  the skin reloads, then the page opens again on the same category. Used by
+  OSD Flags Style, Classic OSD Flags, Plot Text Size, Plot on the Right,
+  Waves, Disc Menu, Lucent Player, Lucent Look, Icons and Lucent from AF3.
+- OSD Flags Style: no skin reload when the picked style is already applied.
+
+v4.8.71  (2026-11-14)
+- AF3: OSD Flags Style - Lucent Player badges all the same height. The
+  player draws every badge in a 132x51 box, so the wide ones (HEVC H.265,
+  7.1 SURROUND, DTS-HD MA) came out smaller than 4K / HDR10. Requires
+  resource.images.af3.frbadges 1.0.3: its lucent_player/ sets are now laid
+  out on the Lucent pill canvas (176x68, same pill height), and badges too
+  wide for the box are drawn as one-label pills in the same colours
+  (HEVC, 7.1, DTS-HD MA ...). Generator: tools in the add-on build.
+
+v4.8.70  (2026-11-14)
+- AF3: OSD Flags Style now also changes the AF3 Lucent Player's badges
+  (OSD, pause card and footer row). They were drawn from the player's own
+  pills (media/abk_lp/flags) and never read the style, so picking a style
+  changed nothing while the Lucent Player was on. Includes_ABK_LucentPlayer.xml
+  now takes them through ABK_LP_FlagDir (tools/lucent_player/af3_flagstyle.py):
+  Automatic / Lucent keep the Lucent pills, every other choice (Classic
+  included) uses resource.images.af3.frbadges/<style>/lucent_player/.
+  AB Tools sets Skin.String(abk.flagstyle) for it on every pick and patch pass.
+- Requires resource.images.af3.frbadges 1.0.2 (adds the lucent_player sets).
+
+v4.8.69  (2026-11-14)
+- AF3: OSD Flags Style - every option shows a sample picture in the picker
+  (resources/flagstyle_samples) with a one-line description under it.
+- New "Lucent" style: white text on see-through glass pills, like the
+  Lucent info pills. New default "Automatic" follows "AF3: Lucent Look"
+  (Lucent badges while it is on, classic colourful otherwise); any other
+  choice, Classic included, wins over the Lucent Look.
+- resource.images.af3.frbadges (1.0.1, adds the lucent set) is now a must:
+  required in addon.xml and put back at boot whenever it is missing or
+  disabled. Strings 32241-32250.
+
+v4.8.68  (2026-11-14)
+- New Toggles entry "AF3: OSD Flags Style": the codec, HDR, audio, channel,
+  source and language badges in the AF3 player OSD and footer in six
+  looks - Classic colourful (as before), Glass, Neon, White & Black,
+  Minimal, Light. The five new looks come from FR-Badges (MIT,
+  farizmohd70) in a new add-on, resource.images.af3.frbadges, installed
+  from AF3's repo when a style is picked (and again at boot if missing).
+  af3_flagstyle.py puts one marked line first in AF3's
+  Flags_Badge_Directory (Includes_Colors.xml), gated on the add-on, so
+  the skin falls back to the classic badges without it; every patch pass
+  puts it back after an AF3 update. Picking a new look also switches
+  "AF3: Classic OSD Flags" on (the OSD extras row is gated on it).
+  Strings 32230-32240.
+
 v4.8.67  (all changes of 2026-11-14: 4.8.56 - 4.8.67)
 - NewPipe: search, Trending, Live and Trailers no longer come back empty
   when pagination is off (yt.py compared the result count with no limit

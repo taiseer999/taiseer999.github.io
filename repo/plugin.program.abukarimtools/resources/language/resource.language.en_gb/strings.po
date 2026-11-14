@@ -3056,3 +3056,87 @@ msgctxt "#32229"
 msgid "TV guide"
 msgstr ""
 
+msgctxt "#32230"
+msgid "AF3: OSD Flags Style"
+msgstr ""
+
+msgctxt "#32231"
+msgid "Classic colourful"
+msgstr ""
+
+msgctxt "#32232"
+msgid "Glass"
+msgstr ""
+
+msgctxt "#32233"
+msgid "Black & White"
+msgstr ""
+
+msgctxt "#32234"
+msgid "White & Black"
+msgstr ""
+
+msgctxt "#32235"
+msgid "Minimal"
+msgstr ""
+
+msgctxt "#32236"
+msgid "Light"
+msgstr ""
+
+msgctxt "#32237"
+msgid "OSD flags style: %s"
+msgstr ""
+
+msgctxt "#32238"
+msgid "The flags style add-on could not be installed. Check the connection and try again."
+msgstr ""
+
+msgctxt "#32239"
+msgid "This Arctic Fuse 3 version does not support flag styles yet. Update the skin, then choose the style again."
+msgstr ""
+
+msgctxt "#32240"
+msgid "The look of the codec, HDR, audio and source badges in the Arctic Fuse 3 player and footer: Automatic, classic colourful, Lucent, Glass, White & Black, Black & White, Minimal or Light. Any choice except Automatic wins over the Lucent Look."
+msgstr ""
+
+msgctxt "#32241"
+msgid "Lucent"
+msgstr ""
+
+msgctxt "#32242"
+msgid "Automatic"
+msgstr ""
+
+msgctxt "#32243"
+msgid "Lucent badges while the Lucent Look is on, classic colourful otherwise"
+msgstr ""
+
+msgctxt "#32244"
+msgid "The original colour badges, also with the Lucent Look on"
+msgstr ""
+
+msgctxt "#32245"
+msgid "The Lucent Player pills; white glass pills in the AF3 player"
+msgstr ""
+
+msgctxt "#32246"
+msgid "Dark tinted glass pills with colour accents"
+msgstr ""
+
+msgctxt "#32247"
+msgid "Black glass pills with white text"
+msgstr ""
+
+msgctxt "#32248"
+msgid "White glass pills with black text"
+msgstr ""
+
+msgctxt "#32249"
+msgid "Flat dark pills with a coloured dot"
+msgstr ""
+
+msgctxt "#32250"
+msgid "Soft pastel pills"
+msgstr ""
+

@@ -186,7 +186,8 @@ def run():
         if len(dropped) > 12:
             msg += '[CR]…'
     xbmcgui.Dialog().ok(TITLE, msg)
-    xbmc.executebuiltin('ReloadSkin()')
+    from resources.lib.settings_engine import safe_reload_skin   # 4.8.72: never under the page
+    safe_reload_skin()
 
 
 if __name__ == '__main__':

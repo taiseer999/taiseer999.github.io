@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ABK QR v2 (ABUKARIM TOOLS 4.7.9) - TMDb Helper sign-in window.
+     Compact card (950 x 470, centred) instead of the 1100 x 750 one, and only
+     fonts every skin defines (font10 / font12 / font13): the old font27 /
+     font37 / font_tiny are not in Arctic Fuse 3, so Kodi drew them all at its
+     fallback size. Loaded from TMDb Helper's own skin folder, so white.png is
+     the one AB Tools ships there.
+     Properties: user_code, qr_image, progress_width (0..530), expires_label,
+     optional qr_title / qr_url (MDbList; empty = Trakt). -->
+<window type="dialog">
+    <zorder>2</zorder>
+    <coordinates>
+        <left>0</left>
+        <top>0</top>
+        <width>1920</width>
+        <height>1080</height>
+    </coordinates>
+    <controls>
+
+        <!-- dim -->
+        <control type="image">
+            <left>0</left><top>0</top>
+            <width>1920</width><height>1080</height>
+            <texture background="true">white.png</texture>
+            <colordiffuse>C8000000</colordiffuse>
+        </control>
+
+        <!-- card -->
+        <control type="image">
+            <left>485</left><top>305</top>
+            <width>950</width><height>470</height>
+            <texture background="true">white.png</texture>
+            <colordiffuse>F2161A20</colordiffuse>
+        </control>
+        <control type="image">
+            <left>485</left><top>305</top>
+            <width>950</width><height>5</height>
+            <texture background="true">white.png</texture>
+            <colordiffuse>FF00B964</colordiffuse>
+        </control>
+
+        <!-- title -->
+        <control type="label">
+            <left>485</left><top>325</top>
+            <width>950</width><height>44</height>
+            <align>center</align><aligny>center</aligny>
+            <font>font13</font>
+            <textcolor>FFFFFFFF</textcolor>
+            <label>[B]Trakt[/B]</label>
+            <visible>String.IsEmpty(Window().Property(qr_title))</visible>
+        </control>
+        <control type="label">
+            <left>485</left><top>325</top>
+            <width>950</width><height>44</height>
+            <align>center</align><aligny>center</aligny>
+            <font>font13</font>
+            <textcolor>FFFFFFFF</textcolor>
+            <label>[B]$INFO[Window().Property(qr_title)][/B]</label>
+            <visible>!String.IsEmpty(Window().Property(qr_title))</visible>
+        </control>
+
+        <!-- QR on white (quiet zone is part of the PNG) -->
+        <control type="image">
+            <left>525</left><top>390</top>
+            <width>300</width><height>300</height>
+            <texture background="true">white.png</texture>
+            <colordiffuse>FFFFFFFF</colordiffuse>
+        </control>
+        <control type="image">
+            <left>533</left><top>398</top>
+            <width>284</width><height>284</height>
+            <aspectratio>keep</aspectratio>
+            <texture>$INFO[Window().Property(qr_image)]</texture>
+        </control>
+
+        <!-- right column: 865 .. 1395 (530 wide = the progress bar width) -->
+        <control type="label">
+            <left>865</left><top>392</top>
+            <width>530</width><height>32</height>
+            <font>font10</font>
+            <textcolor>FFA0A8B4</textcolor>
+            <label>Scan the code or open:</label>
+            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+        </control>
+        <control type="label">
+            <left>865</left><top>392</top>
+            <width>530</width><height>32</height>
+            <font>font10</font>
+            <textcolor>FFA0A8B4</textcolor>
+            <label>امسح الرمز أو افتح:</label>
+            <visible>String.StartsWith(System.Language,Arabic)</visible>
+        </control>
+        <control type="label">
+            <left>865</left><top>426</top>
+            <width>530</width><height>36</height>
+            <font>font12</font>
+            <textcolor>FF00B964</textcolor>
+            <label>trakt.tv/activate</label>
+            <visible>String.IsEmpty(Window().Property(qr_url))</visible>
+        </control>
+        <control type="label">
+            <left>865</left><top>426</top>
+            <width>530</width><height>36</height>
+            <font>font12</font>
+            <textcolor>FF00B964</textcolor>
+            <label>$INFO[Window().Property(qr_url)]</label>
+            <visible>!String.IsEmpty(Window().Property(qr_url))</visible>
+        </control>
+
+        <control type="image">
+            <left>865</left><top>474</top>
+            <width>530</width><height>2</height>
+            <texture background="true">white.png</texture>
+            <colordiffuse>33FFFFFF</colordiffuse>
+        </control>
+
+        <control type="label">
+            <left>865</left><top>488</top>
+            <width>530</width><height>32</height>
+            <font>font10</font>
+            <textcolor>FFA0A8B4</textcolor>
+            <label>Then enter this code:</label>
+            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+        </control>
+        <control type="label">
+            <left>865</left><top>488</top>
+            <width>530</width><height>32</height>
+            <font>font10</font>
+            <textcolor>FFA0A8B4</textcolor>
+            <label>ثم أدخل هذا الرمز:</label>
+            <visible>String.StartsWith(System.Language,Arabic)</visible>
+        </control>
+
+        <!-- code box -->
+        <control type="image">
+            <left>865</left><top>526</top>
+            <width>530</width><height>76</height>
+            <texture background="true">white.png</texture>
+            <colordiffuse>FF00B964</colordiffuse>
+        </control>
+        <control type="image">
+            <left>868</left><top>529</top>
+            <width>524</width><height>70</height>
+            <texture background="true">white.png</texture>
+            <colordiffuse>FF0F1216</colordiffuse>
+        </control>
+        <control type="label">
+            <left>865</left><top>526</top>
+            <width>530</width><height>76</height>
+            <align>center</align><aligny>center</aligny>
+            <font>font13</font>
+            <textcolor>FFFFFFFF</textcolor>
+            <label>[B]$INFO[Window().Property(user_code)][/B]</label>
+        </control>
+
+        <!-- time left -->
+        <control type="image">
+            <left>865</left><top>628</top>
+            <width>530</width><height>6</height>
+            <texture background="true">white.png</texture>
+            <colordiffuse>33FFFFFF</colordiffuse>
+        </control>
+        <control type="image">
+            <left>865</left><top>628</top>
+            <width>$INFO[Window().Property(progress_width)]</width><height>6</height>
+            <texture background="true">white.png</texture>
+            <colordiffuse>FF00B964</colordiffuse>
+        </control>
+        <control type="label">
+            <left>865</left><top>644</top>
+            <width>530</width><height>30</height>
+            <font>font10</font>
+            <textcolor>FF7C8592</textcolor>
+            <label>$INFO[Window().Property(expires_label)]</label>
+        </control>
+
+        <!-- hint -->
+        <control type="label">
+            <left>485</left><top>720</top>
+            <width>950</width><height>34</height>
+            <align>center</align><aligny>center</aligny>
+            <font>font10</font>
+            <textcolor>FF6B7380</textcolor>
+            <label>Press Back to cancel</label>
+            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+        </control>
+        <control type="label">
+            <left>485</left><top>720</top>
+            <width>950</width><height>34</height>
+            <align>center</align><aligny>center</aligny>
+            <font>font10</font>
+            <textcolor>FF6B7380</textcolor>
+            <label>اضغط رجوع للإلغاء</label>
+            <visible>String.StartsWith(System.Language,Arabic)</visible>
+        </control>
+
+    </controls>
+</window>

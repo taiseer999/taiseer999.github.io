@@ -58,6 +58,7 @@ def run():
     xbmcgui.Dialog().notification(TITLE, msg, xbmcgui.NOTIFICATION_INFO, 3000)
     if reload_needed:
         xbmc.sleep(300)
-        xbmc.executebuiltin('ReloadSkin()')
+        from resources.lib.settings_engine import safe_reload_skin   # 4.8.72: never under the page
+        safe_reload_skin()
     else:
         xbmc.executebuiltin('Container.Refresh')

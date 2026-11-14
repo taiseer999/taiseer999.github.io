@@ -279,7 +279,8 @@ def run():
             xbmcgui.Dialog().notification(TITLE, T(30849) % glass_label(), xbmcgui.NOTIFICATION_INFO, 3000)
             if xml_changed:                       # first time: the frame edit needs a reload
                 xbmc.sleep(300)
-                xbmc.executebuiltin('ReloadSkin()')
+                from resources.lib.settings_engine import safe_reload_skin   # 4.8.72: never under the page
+                safe_reload_skin()
         return
     if pick == len(MODES) + 1:
         set_own_focus(not own_focus())
@@ -300,6 +301,7 @@ def run():
     # One reload at most: a colour change already reloads the skin.
     if reload_self or (reload_self is None and xml_changed):
         xbmc.sleep(300)
-        xbmc.executebuiltin('ReloadSkin()')
+        from resources.lib.settings_engine import safe_reload_skin   # 4.8.72: never under the page
+        safe_reload_skin()
     elif reload_self is None:
         xbmc.executebuiltin('Container.Refresh')

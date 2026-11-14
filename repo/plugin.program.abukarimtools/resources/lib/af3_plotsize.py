@@ -214,6 +214,7 @@ def run():
         except Exception:
             pass
         xbmc.sleep(300)
-        xbmc.executebuiltin('ReloadSkin()')
+        from resources.lib.settings_engine import safe_reload_skin   # 4.8.72: never under the page
+        safe_reload_skin()
     else:
         xbmc.executebuiltin('Container.Refresh')

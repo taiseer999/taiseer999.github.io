@@ -3,6 +3,12 @@
      (github.com/djdirty60/Lucent, GPL-2.0-or-later), ported to Arctic Fuse 3:
      OSD, seek bar / pause screen, buffering, info screen. Shown while the skin bool
      abk.lucentplayer is set; live TV keeps the AF3 player. Generated - do not hand-edit. --><includes>
+    <!-- 4.8.69: AF3 OSD Flags Style (af3_flagstyle.py) -->
+    <variable name="ABK_LP_FlagDir">
+        <value condition="!String.IsEmpty(Skin.String(abk.flagstyle)) + System.AddonIsEnabled(resource.images.af3.frbadges)">resource://resource.images.af3.frbadges/$INFO[Skin.String(abk.flagstyle)]/lucent_player</value>
+        <value>abk_lp/flags</value>
+    </variable>
+
 <include name="ABK_LP_GlassPanel">
         <param name="left">0</param>
         <param name="top">0</param>
@@ -59,78 +65,78 @@
     </include>
 <variable name="ABK_LP_NuvioFlagImg_acodec">
         <value condition="String.StartsWith(VideoPlayer.AudioCodec,dtshd_ma_x) + !String.IsEmpty(Skin.String(abk.lp.flag.dtsx))">$INFO[Skin.String(abk.lp.flag.dtsx)]</value>
-        <value condition="String.StartsWith(VideoPlayer.AudioCodec,dtshd_ma_x)">abk_lp/flags/DTS-X.png</value>
+        <value condition="String.StartsWith(VideoPlayer.AudioCodec,dtshd_ma_x)">$VAR[ABK_LP_FlagDir]/DTS-X.png</value>
         <value condition="String.StartsWith(VideoPlayer.AudioCodec,truehd) + !String.IsEmpty(Skin.String(abk.lp.flag.truehd))">$INFO[Skin.String(abk.lp.flag.truehd)]</value>
-        <value condition="String.StartsWith(VideoPlayer.AudioCodec,truehd)">abk_lp/flags/TRUEHD.png</value>
+        <value condition="String.StartsWith(VideoPlayer.AudioCodec,truehd)">$VAR[ABK_LP_FlagDir]/TRUEHD.png</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + !String.IsEmpty(Skin.String(abk.lp.flag.dtshd_ma))">$INFO[Skin.String(abk.lp.flag.dtshd_ma)]</value>
-        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)">abk_lp/flags/DTS-HDMA.png</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)">$VAR[ABK_LP_FlagDir]/DTS-HDMA.png</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) + !String.IsEmpty(Skin.String(abk.lp.flag.dtshd_hra))">$INFO[Skin.String(abk.lp.flag.dtshd_hra)]</value>
-        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)">abk_lp/flags/DTS-HDHR.png</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)">$VAR[ABK_LP_FlagDir]/DTS-HDHR.png</value>
         <value condition="String.StartsWith(VideoPlayer.AudioCodec,dts) + !String.IsEmpty(Skin.String(abk.lp.flag.dts))">$INFO[Skin.String(abk.lp.flag.dts)]</value>
-        <value condition="String.StartsWith(VideoPlayer.AudioCodec,dts)">abk_lp/flags/DTS.png</value>
+        <value condition="String.StartsWith(VideoPlayer.AudioCodec,dts)">$VAR[ABK_LP_FlagDir]/DTS.png</value>
         <value condition="String.StartsWith(VideoPlayer.AudioCodec,eac3) + !String.IsEmpty(Skin.String(abk.lp.flag.eac3))">$INFO[Skin.String(abk.lp.flag.eac3)]</value>
-        <value condition="String.StartsWith(VideoPlayer.AudioCodec,eac3)">abk_lp/flags/DD+.png</value>
+        <value condition="String.StartsWith(VideoPlayer.AudioCodec,eac3)">$VAR[ABK_LP_FlagDir]/DD+.png</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,ac3) + !String.IsEmpty(Skin.String(abk.lp.flag.ac3))">$INFO[Skin.String(abk.lp.flag.ac3)]</value>
-        <value condition="String.IsEqual(VideoPlayer.AudioCodec,ac3)">abk_lp/flags/DD.png</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,ac3)">$VAR[ABK_LP_FlagDir]/DD.png</value>
         <value condition="[String.StartsWith(VideoPlayer.AudioCodec,aac) | String.StartsWith(VideoPlayer.AudioCodec,he_aac)] + !String.IsEmpty(Skin.String(abk.lp.flag.aac))">$INFO[Skin.String(abk.lp.flag.aac)]</value>
-        <value condition="[String.StartsWith(VideoPlayer.AudioCodec,aac) | String.StartsWith(VideoPlayer.AudioCodec,he_aac)]">abk_lp/flags/AAC.png</value>
+        <value condition="[String.StartsWith(VideoPlayer.AudioCodec,aac) | String.StartsWith(VideoPlayer.AudioCodec,he_aac)]">$VAR[ABK_LP_FlagDir]/AAC.png</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,flac) + !String.IsEmpty(Skin.String(abk.lp.flag.flac))">$INFO[Skin.String(abk.lp.flag.flac)]</value>
-        <value condition="String.IsEqual(VideoPlayer.AudioCodec,flac)">abk_lp/flags/FLAC.png</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,flac)">$VAR[ABK_LP_FlagDir]/FLAC.png</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,opus) + !String.IsEmpty(Skin.String(abk.lp.flag.opus))">$INFO[Skin.String(abk.lp.flag.opus)]</value>
-        <value condition="String.IsEqual(VideoPlayer.AudioCodec,opus)">abk_lp/flags/OPUS.png</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,opus)">$VAR[ABK_LP_FlagDir]/OPUS.png</value>
         <value condition="String.StartsWith(VideoPlayer.AudioCodec,pcm) + !String.IsEmpty(Skin.String(abk.lp.flag.pcm))">$INFO[Skin.String(abk.lp.flag.pcm)]</value>
-        <value condition="String.StartsWith(VideoPlayer.AudioCodec,pcm)">abk_lp/flags/PCM.png</value>
+        <value condition="String.StartsWith(VideoPlayer.AudioCodec,pcm)">$VAR[ABK_LP_FlagDir]/PCM.png</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp3) + !String.IsEmpty(Skin.String(abk.lp.flag.mp3))">$INFO[Skin.String(abk.lp.flag.mp3)]</value>
-        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp3)">abk_lp/flags/MP3.png</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp3)">$VAR[ABK_LP_FlagDir]/MP3.png</value>
     </variable>
 <variable name="ABK_LP_NuvioFlagImg_atmos">
         <value condition="[String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos) | String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)] + !String.IsEmpty(Skin.String(abk.lp.flag.atmos))">$INFO[Skin.String(abk.lp.flag.atmos)]</value>
-        <value condition="[String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos) | String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)]">abk_lp/flags/ATMOS.png</value>
+        <value condition="[String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos) | String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)]">$VAR[ABK_LP_FlagDir]/ATMOS.png</value>
     </variable>
 <variable name="ABK_LP_NuvioFlagImg_ch">
         <value condition="String.IsEqual(VideoPlayer.AudioChannels,8) + !String.IsEmpty(Skin.String(abk.lp.flag.71))">$INFO[Skin.String(abk.lp.flag.71)]</value>
-        <value condition="String.IsEqual(VideoPlayer.AudioChannels,8)">abk_lp/flags/7.1.png</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioChannels,8)">$VAR[ABK_LP_FlagDir]/7.1.png</value>
         <value condition="String.IsEqual(VideoPlayer.AudioChannels,7) + !String.IsEmpty(Skin.String(abk.lp.flag.61))">$INFO[Skin.String(abk.lp.flag.61)]</value>
-        <value condition="String.IsEqual(VideoPlayer.AudioChannels,7)">abk_lp/flags/6.1.png</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioChannels,7)">$VAR[ABK_LP_FlagDir]/6.1.png</value>
         <value condition="String.IsEqual(VideoPlayer.AudioChannels,6) + !String.IsEmpty(Skin.String(abk.lp.flag.51))">$INFO[Skin.String(abk.lp.flag.51)]</value>
-        <value condition="String.IsEqual(VideoPlayer.AudioChannels,6)">abk_lp/flags/5.1.png</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioChannels,6)">$VAR[ABK_LP_FlagDir]/5.1.png</value>
         <value condition="String.IsEqual(VideoPlayer.AudioChannels,2) + !String.IsEmpty(Skin.String(abk.lp.flag.20))">$INFO[Skin.String(abk.lp.flag.20)]</value>
-        <value condition="String.IsEqual(VideoPlayer.AudioChannels,2)">abk_lp/flags/2.0.png</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioChannels,2)">$VAR[ABK_LP_FlagDir]/2.0.png</value>
         <value condition="String.IsEqual(VideoPlayer.AudioChannels,1) + !String.IsEmpty(Skin.String(abk.lp.flag.10))">$INFO[Skin.String(abk.lp.flag.10)]</value>
-        <value condition="String.IsEqual(VideoPlayer.AudioChannels,1)">abk_lp/flags/1.0.png</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioChannels,1)">$VAR[ABK_LP_FlagDir]/1.0.png</value>
     </variable>
 <variable name="ABK_LP_NuvioFlagImg_hdr">
-        <value condition="$EXP[ABK_LP_LucentDV2Named]">abk_lp/flags/DV2.png</value>
+        <value condition="$EXP[ABK_LP_LucentDV2Named]">$VAR[ABK_LP_FlagDir]/DV2.png</value>
         <value condition="String.IsEqual(VideoPlayer.HdrType,dolbyvision) + !String.IsEmpty(Skin.String(abk.lp.flag.dolbyvision))">$INFO[Skin.String(abk.lp.flag.dolbyvision)]</value>
-        <value condition="String.IsEqual(VideoPlayer.HdrType,dolbyvision)">abk_lp/flags/DV.png</value>
+        <value condition="String.IsEqual(VideoPlayer.HdrType,dolbyvision)">$VAR[ABK_LP_FlagDir]/DV.png</value>
         <value condition="String.IsEqual(VideoPlayer.HdrType,hdr10plus) + !String.IsEmpty(Skin.String(abk.lp.flag.hdr10plus))">$INFO[Skin.String(abk.lp.flag.hdr10plus)]</value>
-        <value condition="String.IsEqual(VideoPlayer.HdrType,hdr10plus)">abk_lp/flags/HDR10+.png</value>
+        <value condition="String.IsEqual(VideoPlayer.HdrType,hdr10plus)">$VAR[ABK_LP_FlagDir]/HDR10+.png</value>
         <value condition="String.IsEqual(VideoPlayer.HdrType,hdr10) + !String.IsEmpty(Skin.String(abk.lp.flag.hdr10))">$INFO[Skin.String(abk.lp.flag.hdr10)]</value>
-        <value condition="String.IsEqual(VideoPlayer.HdrType,hdr10)">abk_lp/flags/HDR10.png</value>
+        <value condition="String.IsEqual(VideoPlayer.HdrType,hdr10)">$VAR[ABK_LP_FlagDir]/HDR10.png</value>
         <value condition="String.IsEqual(VideoPlayer.HdrType,hlg) + !String.IsEmpty(Skin.String(abk.lp.flag.hlg))">$INFO[Skin.String(abk.lp.flag.hlg)]</value>
-        <value condition="String.IsEqual(VideoPlayer.HdrType,hlg)">abk_lp/flags/HLG.png</value>
+        <value condition="String.IsEqual(VideoPlayer.HdrType,hlg)">$VAR[ABK_LP_FlagDir]/HLG.png</value>
     </variable>
 <variable name="ABK_LP_NuvioFlagImg_res">
         <value condition="String.IsEqual(VideoPlayer.VideoResolution,8K) + !String.IsEmpty(Skin.String(abk.lp.flag.8k))">$INFO[Skin.String(abk.lp.flag.8k)]</value>
-        <value condition="String.IsEqual(VideoPlayer.VideoResolution,8K)">abk_lp/flags/8K.png</value>
+        <value condition="String.IsEqual(VideoPlayer.VideoResolution,8K)">$VAR[ABK_LP_FlagDir]/8K.png</value>
         <value condition="String.IsEqual(VideoPlayer.VideoResolution,4K) + !String.IsEmpty(Skin.String(abk.lp.flag.4k))">$INFO[Skin.String(abk.lp.flag.4k)]</value>
-        <value condition="String.IsEqual(VideoPlayer.VideoResolution,4K)">abk_lp/flags/4K.png</value>
+        <value condition="String.IsEqual(VideoPlayer.VideoResolution,4K)">$VAR[ABK_LP_FlagDir]/4K.png</value>
         <value condition="String.IsEqual(VideoPlayer.VideoResolution,1080) + !String.IsEmpty(Skin.String(abk.lp.flag.1080))">$INFO[Skin.String(abk.lp.flag.1080)]</value>
-        <value condition="String.IsEqual(VideoPlayer.VideoResolution,1080)">abk_lp/flags/1080P.png</value>
+        <value condition="String.IsEqual(VideoPlayer.VideoResolution,1080)">$VAR[ABK_LP_FlagDir]/1080P.png</value>
         <value condition="String.IsEqual(VideoPlayer.VideoResolution,720) + !String.IsEmpty(Skin.String(abk.lp.flag.720))">$INFO[Skin.String(abk.lp.flag.720)]</value>
-        <value condition="String.IsEqual(VideoPlayer.VideoResolution,720)">abk_lp/flags/720P.png</value>
+        <value condition="String.IsEqual(VideoPlayer.VideoResolution,720)">$VAR[ABK_LP_FlagDir]/720P.png</value>
         <value condition="[String.IsEqual(VideoPlayer.VideoResolution,480) | String.IsEqual(VideoPlayer.VideoResolution,540) | String.IsEqual(VideoPlayer.VideoResolution,576)] + !String.IsEmpty(Skin.String(abk.lp.flag.sd))">$INFO[Skin.String(abk.lp.flag.sd)]</value>
-        <value condition="[String.IsEqual(VideoPlayer.VideoResolution,480) | String.IsEqual(VideoPlayer.VideoResolution,540) | String.IsEqual(VideoPlayer.VideoResolution,576)]">abk_lp/flags/SD.png</value>
+        <value condition="[String.IsEqual(VideoPlayer.VideoResolution,480) | String.IsEqual(VideoPlayer.VideoResolution,540) | String.IsEqual(VideoPlayer.VideoResolution,576)]">$VAR[ABK_LP_FlagDir]/SD.png</value>
     </variable>
 <variable name="ABK_LP_NuvioFlagImg_vcodec">
         <value condition="String.IsEqual(VideoPlayer.VideoCodec,hevc) + !String.IsEmpty(Skin.String(abk.lp.flag.hevc))">$INFO[Skin.String(abk.lp.flag.hevc)]</value>
-        <value condition="String.IsEqual(VideoPlayer.VideoCodec,hevc)">abk_lp/flags/HEVC.png</value>
+        <value condition="String.IsEqual(VideoPlayer.VideoCodec,hevc)">$VAR[ABK_LP_FlagDir]/HEVC.png</value>
         <value condition="String.IsEqual(VideoPlayer.VideoCodec,av1) + !String.IsEmpty(Skin.String(abk.lp.flag.av1))">$INFO[Skin.String(abk.lp.flag.av1)]</value>
-        <value condition="String.IsEqual(VideoPlayer.VideoCodec,av1)">abk_lp/flags/AV1.png</value>
+        <value condition="String.IsEqual(VideoPlayer.VideoCodec,av1)">$VAR[ABK_LP_FlagDir]/AV1.png</value>
         <value condition="String.IsEqual(VideoPlayer.VideoCodec,h264) + !String.IsEmpty(Skin.String(abk.lp.flag.h264))">$INFO[Skin.String(abk.lp.flag.h264)]</value>
-        <value condition="String.IsEqual(VideoPlayer.VideoCodec,h264)">abk_lp/flags/AVC.png</value>
+        <value condition="String.IsEqual(VideoPlayer.VideoCodec,h264)">$VAR[ABK_LP_FlagDir]/AVC.png</value>
         <value condition="String.IsEqual(VideoPlayer.VideoCodec,vp9) + !String.IsEmpty(Skin.String(abk.lp.flag.vp9))">$INFO[Skin.String(abk.lp.flag.vp9)]</value>
-        <value condition="String.IsEqual(VideoPlayer.VideoCodec,vp9)">abk_lp/flags/VP9.png</value>
+        <value condition="String.IsEqual(VideoPlayer.VideoCodec,vp9)">$VAR[ABK_LP_FlagDir]/VP9.png</value>
     </variable>
 <variable name="ABK_LP_OSDButtonLabel">
         <value condition="Control.HasFocus(7101)">$ADDON[plugin.program.abukarimtools 32007]</value>
@@ -917,7 +923,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/8K.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/8K.png</texture>
                     <visible>[String.IsEqual($PARAM[il_videoresolution],8K)]</visible>
                 </control>
                 <control type="image">
@@ -925,7 +931,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/4K.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/4K.png</texture>
                     <visible>[String.IsEqual($PARAM[il_videoresolution],4K)] + ![String.IsEqual($PARAM[il_videoresolution],8K)]</visible>
                 </control>
                 <control type="image">
@@ -933,7 +939,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/1080P.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/1080P.png</texture>
                     <visible>[String.IsEqual($PARAM[il_videoresolution],1080)] + ![String.IsEqual($PARAM[il_videoresolution],8K)] + ![String.IsEqual($PARAM[il_videoresolution],4K)]</visible>
                 </control>
                 <control type="image">
@@ -941,7 +947,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/720P.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/720P.png</texture>
                     <visible>[String.IsEqual($PARAM[il_videoresolution],720)] + ![String.IsEqual($PARAM[il_videoresolution],8K)] + ![String.IsEqual($PARAM[il_videoresolution],4K)] + ![String.IsEqual($PARAM[il_videoresolution],1080)]</visible>
                 </control>
                 <control type="image">
@@ -949,7 +955,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/SD.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/SD.png</texture>
                     <visible>[[String.IsEqual($PARAM[il_videoresolution],480) | String.IsEqual($PARAM[il_videoresolution],540) | String.IsEqual($PARAM[il_videoresolution],576)]] + ![String.IsEqual($PARAM[il_videoresolution],8K)] + ![String.IsEqual($PARAM[il_videoresolution],4K)] + ![String.IsEqual($PARAM[il_videoresolution],1080)] + ![String.IsEqual($PARAM[il_videoresolution],720)]</visible>
                 </control>
                 <control type="image">
@@ -957,7 +963,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/DV.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/DV.png</texture>
                     <visible>[String.IsEqual($PARAM[il_hdrtype],dolbyvision)]</visible>
                 </control>
                 <control type="image">
@@ -965,7 +971,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/HDR10+.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/HDR10+.png</texture>
                     <visible>[String.IsEqual($PARAM[il_hdrtype],hdr10plus)] + ![String.IsEqual($PARAM[il_hdrtype],dolbyvision)]</visible>
                 </control>
                 <control type="image">
@@ -973,7 +979,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/HDR10.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/HDR10.png</texture>
                     <visible>[String.IsEqual($PARAM[il_hdrtype],hdr10)] + ![String.IsEqual($PARAM[il_hdrtype],dolbyvision)] + ![String.IsEqual($PARAM[il_hdrtype],hdr10plus)]</visible>
                 </control>
                 <control type="image">
@@ -981,7 +987,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/HLG.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/HLG.png</texture>
                     <visible>[String.IsEqual($PARAM[il_hdrtype],hlg)] + ![String.IsEqual($PARAM[il_hdrtype],dolbyvision)] + ![String.IsEqual($PARAM[il_hdrtype],hdr10plus)] + ![String.IsEqual($PARAM[il_hdrtype],hdr10)]</visible>
                 </control>
                 <control type="image">
@@ -989,7 +995,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/HEVC.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/HEVC.png</texture>
                     <visible>[String.IsEqual($PARAM[il_videocodec],hevc)]</visible>
                 </control>
                 <control type="image">
@@ -997,7 +1003,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/AV1.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/AV1.png</texture>
                     <visible>[String.IsEqual($PARAM[il_videocodec],av1)] + ![String.IsEqual($PARAM[il_videocodec],hevc)]</visible>
                 </control>
                 <control type="image">
@@ -1005,7 +1011,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/AVC.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/AVC.png</texture>
                     <visible>[String.IsEqual($PARAM[il_videocodec],h264)] + ![String.IsEqual($PARAM[il_videocodec],hevc)] + ![String.IsEqual($PARAM[il_videocodec],av1)]</visible>
                 </control>
                 <control type="image">
@@ -1013,7 +1019,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/VP9.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/VP9.png</texture>
                     <visible>[String.IsEqual($PARAM[il_videocodec],vp9)] + ![String.IsEqual($PARAM[il_videocodec],hevc)] + ![String.IsEqual($PARAM[il_videocodec],av1)] + ![String.IsEqual($PARAM[il_videocodec],h264)]</visible>
                 </control>
                 <control type="image">
@@ -1021,7 +1027,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/ATMOS.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/ATMOS.png</texture>
                     <visible>[[String.IsEqual($PARAM[il_audiocodec],truehd_atmos) | String.IsEqual($PARAM[il_audiocodec],eac3_ddp_atmos)]]</visible>
                 </control>
                 <control type="image">
@@ -1029,7 +1035,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/DTS-X.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/DTS-X.png</texture>
                     <visible>[String.StartsWith($PARAM[il_audiocodec],dtshd_ma_x)]</visible>
                 </control>
                 <control type="image">
@@ -1037,7 +1043,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/TRUEHD.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/TRUEHD.png</texture>
                     <visible>[String.StartsWith($PARAM[il_audiocodec],truehd)] + ![String.StartsWith($PARAM[il_audiocodec],dtshd_ma_x)]</visible>
                 </control>
                 <control type="image">
@@ -1045,7 +1051,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/DTS-HDMA.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/DTS-HDMA.png</texture>
                     <visible>[String.IsEqual($PARAM[il_audiocodec],dtshd_ma)] + ![String.StartsWith($PARAM[il_audiocodec],dtshd_ma_x)] + ![String.StartsWith($PARAM[il_audiocodec],truehd)]</visible>
                 </control>
                 <control type="image">
@@ -1053,7 +1059,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/DTS-HDHR.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/DTS-HDHR.png</texture>
                     <visible>[String.IsEqual($PARAM[il_audiocodec],dtshd_hra)] + ![String.StartsWith($PARAM[il_audiocodec],dtshd_ma_x)] + ![String.StartsWith($PARAM[il_audiocodec],truehd)] + ![String.IsEqual($PARAM[il_audiocodec],dtshd_ma)]</visible>
                 </control>
                 <control type="image">
@@ -1061,7 +1067,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/DTS.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/DTS.png</texture>
                     <visible>[String.StartsWith($PARAM[il_audiocodec],dts)] + ![String.StartsWith($PARAM[il_audiocodec],dtshd_ma_x)] + ![String.StartsWith($PARAM[il_audiocodec],truehd)] + ![String.IsEqual($PARAM[il_audiocodec],dtshd_ma)] + ![String.IsEqual($PARAM[il_audiocodec],dtshd_hra)]</visible>
                 </control>
                 <control type="image">
@@ -1069,7 +1075,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/DD+.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/DD+.png</texture>
                     <visible>[String.StartsWith($PARAM[il_audiocodec],eac3)] + ![String.StartsWith($PARAM[il_audiocodec],dtshd_ma_x)] + ![String.StartsWith($PARAM[il_audiocodec],truehd)] + ![String.IsEqual($PARAM[il_audiocodec],dtshd_ma)] + ![String.IsEqual($PARAM[il_audiocodec],dtshd_hra)] + ![String.StartsWith($PARAM[il_audiocodec],dts)]</visible>
                 </control>
                 <control type="image">
@@ -1077,7 +1083,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/DD.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/DD.png</texture>
                     <visible>[String.IsEqual($PARAM[il_audiocodec],ac3)] + ![String.StartsWith($PARAM[il_audiocodec],dtshd_ma_x)] + ![String.StartsWith($PARAM[il_audiocodec],truehd)] + ![String.IsEqual($PARAM[il_audiocodec],dtshd_ma)] + ![String.IsEqual($PARAM[il_audiocodec],dtshd_hra)] + ![String.StartsWith($PARAM[il_audiocodec],dts)] + ![String.StartsWith($PARAM[il_audiocodec],eac3)]</visible>
                 </control>
                 <control type="image">
@@ -1085,7 +1091,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/AAC.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/AAC.png</texture>
                     <visible>[[String.StartsWith($PARAM[il_audiocodec],aac) | String.StartsWith($PARAM[il_audiocodec],he_aac)]] + ![String.StartsWith($PARAM[il_audiocodec],dtshd_ma_x)] + ![String.StartsWith($PARAM[il_audiocodec],truehd)] + ![String.IsEqual($PARAM[il_audiocodec],dtshd_ma)] + ![String.IsEqual($PARAM[il_audiocodec],dtshd_hra)] + ![String.StartsWith($PARAM[il_audiocodec],dts)] + ![String.StartsWith($PARAM[il_audiocodec],eac3)] + ![String.IsEqual($PARAM[il_audiocodec],ac3)]</visible>
                 </control>
                 <control type="image">
@@ -1093,7 +1099,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/FLAC.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/FLAC.png</texture>
                     <visible>[String.IsEqual($PARAM[il_audiocodec],flac)] + ![String.StartsWith($PARAM[il_audiocodec],dtshd_ma_x)] + ![String.StartsWith($PARAM[il_audiocodec],truehd)] + ![String.IsEqual($PARAM[il_audiocodec],dtshd_ma)] + ![String.IsEqual($PARAM[il_audiocodec],dtshd_hra)] + ![String.StartsWith($PARAM[il_audiocodec],dts)] + ![String.StartsWith($PARAM[il_audiocodec],eac3)] + ![String.IsEqual($PARAM[il_audiocodec],ac3)] + ![[String.StartsWith($PARAM[il_audiocodec],aac) | String.StartsWith($PARAM[il_audiocodec],he_aac)]]</visible>
                 </control>
                 <control type="image">
@@ -1101,7 +1107,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/OPUS.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/OPUS.png</texture>
                     <visible>[String.IsEqual($PARAM[il_audiocodec],opus)] + ![String.StartsWith($PARAM[il_audiocodec],dtshd_ma_x)] + ![String.StartsWith($PARAM[il_audiocodec],truehd)] + ![String.IsEqual($PARAM[il_audiocodec],dtshd_ma)] + ![String.IsEqual($PARAM[il_audiocodec],dtshd_hra)] + ![String.StartsWith($PARAM[il_audiocodec],dts)] + ![String.StartsWith($PARAM[il_audiocodec],eac3)] + ![String.IsEqual($PARAM[il_audiocodec],ac3)] + ![[String.StartsWith($PARAM[il_audiocodec],aac) | String.StartsWith($PARAM[il_audiocodec],he_aac)]] + ![String.IsEqual($PARAM[il_audiocodec],flac)]</visible>
                 </control>
                 <control type="image">
@@ -1109,7 +1115,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/PCM.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/PCM.png</texture>
                     <visible>[String.StartsWith($PARAM[il_audiocodec],pcm)] + ![String.StartsWith($PARAM[il_audiocodec],dtshd_ma_x)] + ![String.StartsWith($PARAM[il_audiocodec],truehd)] + ![String.IsEqual($PARAM[il_audiocodec],dtshd_ma)] + ![String.IsEqual($PARAM[il_audiocodec],dtshd_hra)] + ![String.StartsWith($PARAM[il_audiocodec],dts)] + ![String.StartsWith($PARAM[il_audiocodec],eac3)] + ![String.IsEqual($PARAM[il_audiocodec],ac3)] + ![[String.StartsWith($PARAM[il_audiocodec],aac) | String.StartsWith($PARAM[il_audiocodec],he_aac)]] + ![String.IsEqual($PARAM[il_audiocodec],flac)] + ![String.IsEqual($PARAM[il_audiocodec],opus)]</visible>
                 </control>
                 <control type="image">
@@ -1117,7 +1123,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/MP3.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/MP3.png</texture>
                     <visible>[String.IsEqual($PARAM[il_audiocodec],mp3)] + ![String.StartsWith($PARAM[il_audiocodec],dtshd_ma_x)] + ![String.StartsWith($PARAM[il_audiocodec],truehd)] + ![String.IsEqual($PARAM[il_audiocodec],dtshd_ma)] + ![String.IsEqual($PARAM[il_audiocodec],dtshd_hra)] + ![String.StartsWith($PARAM[il_audiocodec],dts)] + ![String.StartsWith($PARAM[il_audiocodec],eac3)] + ![String.IsEqual($PARAM[il_audiocodec],ac3)] + ![[String.StartsWith($PARAM[il_audiocodec],aac) | String.StartsWith($PARAM[il_audiocodec],he_aac)]] + ![String.IsEqual($PARAM[il_audiocodec],flac)] + ![String.IsEqual($PARAM[il_audiocodec],opus)] + ![String.StartsWith($PARAM[il_audiocodec],pcm)]</visible>
                 </control>
                 <control type="image">
@@ -1125,7 +1131,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/7.1.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/7.1.png</texture>
                     <visible>[String.IsEqual($PARAM[il_audiochannels],8)]</visible>
                 </control>
                 <control type="image">
@@ -1133,7 +1139,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/6.1.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/6.1.png</texture>
                     <visible>[String.IsEqual($PARAM[il_audiochannels],7)] + ![String.IsEqual($PARAM[il_audiochannels],8)]</visible>
                 </control>
                 <control type="image">
@@ -1141,7 +1147,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/5.1.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/5.1.png</texture>
                     <visible>[String.IsEqual($PARAM[il_audiochannels],6)] + ![String.IsEqual($PARAM[il_audiochannels],8)] + ![String.IsEqual($PARAM[il_audiochannels],7)]</visible>
                 </control>
                 <control type="image">
@@ -1149,7 +1155,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/2.0.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/2.0.png</texture>
                     <visible>[String.IsEqual($PARAM[il_audiochannels],2)] + ![String.IsEqual($PARAM[il_audiochannels],8)] + ![String.IsEqual($PARAM[il_audiochannels],7)] + ![String.IsEqual($PARAM[il_audiochannels],6)]</visible>
                 </control>
                 <control type="image">
@@ -1157,7 +1163,7 @@
                     <height>$PARAM[height]</height>
                     <centertop>50%</centertop>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">abk_lp/flags/1.0.png</texture>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/1.0.png</texture>
                     <visible>[String.IsEqual($PARAM[il_audiochannels],1)] + ![String.IsEqual($PARAM[il_audiochannels],8)] + ![String.IsEqual($PARAM[il_audiochannels],7)] + ![String.IsEqual($PARAM[il_audiochannels],6)] + ![String.IsEqual($PARAM[il_audiochannels],2)]</visible>
                 </control>
             </control>

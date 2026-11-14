@@ -1,0 +1,307 @@
+# -*- coding: utf-8 -*-
+"""
+af3_lucent_toggle.py - ABUKARIM TOOLS (4.6.8)
+
+Toggles entry "AF3: Lucent Look" - phase 1 of the Lucent port to Arctic
+Fuse 3 (design after the Lucent skin by djdirty60):
+
+  Off                  AF3 exactly as it is (bool reset, previous colours back)
+  Lucent Glass         navy glass colour theme + glass dialog frames
+  Lucent Glass AMOLED  the same on true black
+
+The always-on patcher entries (patcher.py, "AF3: Lucent Look") install the two
+colour themes into skin.arctic.fuse.3/colors/, the glass textures into
+media/abk_lucent/, and make Part_Background draw the Lucent glass body while
+the skin bool abk.lucent is set. This module only flips that bool and the
+lookandfeel.skincolors setting; changing skincolors makes Kodi reload the skin
+by itself, so there is at most ONE skin reload per switch.
+"""
+import json
+import os
+
+import xbmc
+import xbmcgui
+import xbmcvfs
+
+from resources.lib.i18n import T
+
+SKIN_ID = 'skin.arctic.fuse.3'
+SETTING = 'abk.lucent'
+OWNFOCUS = 'abk.lucent.ownfocus'      # 4.6.12: keep the user's focus colour
+GLASS = 'abk.lucent.glass'            # 4.8.53: glass opacity 30/50/90, '' = 70
+GLASS_LEVELS = ('30', '50', '', '90')
+TITLE = 'ABUKARIM TOOLS'
+COLORS_KEY = 'lookandfeel.skincolors'
+# (mode, colour theme file name without .xml, label id)
+MODES = (('off', None, 30851), ('glass', 'Lucent Glass', 30852), ('amoled', 'Lucent Glass AMOLED', 30853))
+OURS = {c for _m, c, _l in MODES if c}
+_STATE = os.path.join(xbmcvfs.translatePath('special://profile/addon_data/'),
+                      'plugin.program.abukarimtools', 'af3_lucent.json')
+
+
+def _log(msg, level=xbmc.LOGINFO):
+    xbmc.log('[AbukarimTools AF3 Lucent] %s' % msg, level)
+
+
+def _rpc(method, params):
+    try:
+        out = json.loads(xbmc.executeJSONRPC(json.dumps(
+            {'jsonrpc': '2.0', 'id': 1, 'method': method, 'params': params})))
+    except Exception as e:
+        _log('%s failed: %s' % (method, e), xbmc.LOGWARNING)
+        return None
+    if 'error' in out:
+        _log('%s error: %s' % (method, out['error']), xbmc.LOGWARNING)
+        return None
+    return out.get('result')
+
+
+def _colors():
+    res = _rpc('Settings.GetSettingValue', {'setting': COLORS_KEY})
+    return (res or {}).get('value') or 'SKINDEFAULT'
+
+
+def _set_colors(value):
+    return _rpc('Settings.SetSettingValue', {'setting': COLORS_KEY, 'value': value}) is not None
+
+
+def _load():
+    try:
+        with open(_STATE, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
+
+
+def _save(data):
+    try:
+        os.makedirs(os.path.dirname(_STATE), exist_ok=True)
+        with open(_STATE, 'w', encoding='utf-8') as f:
+            json.dump(data, f)
+    except Exception as e:
+        _log('state not saved: %s' % e, xbmc.LOGWARNING)
+
+
+def get_mode():
+    """'off' / 'glass' / 'amoled' (AF3 must be the active skin to tell)."""
+    if xbmc.getSkinDir() != SKIN_ID or not xbmc.getCondVisibility('Skin.HasSetting(%s)' % SETTING):
+        return 'off'
+    return 'amoled' if _colors() == 'Lucent Glass AMOLED' else 'glass'
+
+
+def glass_label(level=None):
+    level = glass() if level is None else level
+    return T(30877) % 70 if not level else T(30876) % int(level)
+
+
+def glass():
+    cur = xbmc.getInfoLabel('Skin.String(%s)' % GLASS)
+    return cur if cur in GLASS_LEVELS else ''
+
+
+def pick_glass():
+    """Glass transparency picker. Live: $VAR[ABK_Lucent_Glass] reads the string."""
+    cur = glass()
+    labels = [glass_label(l) for l in GLASS_LEVELS]
+    pick = xbmcgui.Dialog().select(T(30875), labels, preselect=GLASS_LEVELS.index(cur))
+    if pick < 0 or GLASS_LEVELS[pick] == cur:
+        return False
+    level = GLASS_LEVELS[pick]
+    xbmc.executebuiltin('Skin.SetString(%s,%s)' % (GLASS, level) if level else 'Skin.Reset(%s)' % GLASS)
+    _log('glass transparency: %s' % (level or '70'))
+    xbmc.sleep(200)                         # the skin string is read back by glass()
+    sync_ppi_glass()                        # 4.8.55: TinyPPI panels follow
+    return True
+
+
+def own_focus():
+    """True when the user keeps their own focus colour under the Lucent Look."""
+    return bool(xbmc.getCondVisibility('Skin.HasSetting(%s)' % OWNFOCUS))
+
+
+def set_own_focus(on):
+    """Live: the AF3 focus variables read the bool on every frame, no reload."""
+    xbmc.executebuiltin('Skin.SetBool(%s)' % OWNFOCUS if on else 'Skin.Reset(%s)' % OWNFOCUS)
+    _log('focus colour: %s' % ('own' if on else 'Lucent white'))
+
+
+def mode_label(mode=None):
+    mode = mode or get_mode()
+    if mode == 'off':
+        return T(30857)
+    return T(dict((m, l) for m, _c, l in MODES)[mode])
+
+
+def _ensure_patch():
+    """(installed_ok, xml_changed) - applies the AF3 entries now."""
+    try:
+        from resources.lib import patcher
+        _ok, failed, changed, _r = patcher.apply_set(addon_ids=[SKIN_ID])
+        return failed == 0, changed > 0
+    except Exception as exc:
+        _log('skin patch failed: %s' % exc, xbmc.LOGWARNING)
+        return False, False
+
+
+def _files_present():
+    skin = xbmcvfs.translatePath('special://home/addons/%s/' % SKIN_ID)
+    need = [os.path.join(skin, 'colors', c + '.xml') for c in OURS] + \
+           [os.path.join(skin, 'media', 'abk_lucent', t)
+            for t in ('panel.png', 'panel_edge.png', 'panel_shadow.png', 'pill6.png', 'pill60.png')] + \
+           [os.path.join(skin, '1080i', 'Includes_ABK_Lucent.xml')] + \
+           [os.path.join(skin, 'media', 'abk_lucent', 'icons', i + '.png')          # 4.6.14
+            for i in ('play', 'pause', 'forward', 'rewind', 'prev', 'next', 'stop', 'info',
+                      'audio', 'subtitles', 'video', 'list', 'record',
+                      'subcycler', 'dexsync', 'substyle', 'ppi')]   # 4.6.22
+    # 4.6.9: the player include file must also be registered, or the
+    # Lucent player includes would be missing once the bool is set
+    marks = (('Dialog_Parts.xml', '<!-- ABUKARIM: Lucent glass dialogs -->'),
+             ('Includes.xml', 'Includes_ABK_Lucent.xml'),
+             ('Includes_Images.xml', '<!-- ABUKARIM: Lucent icons'))
+    for name, mark in marks:
+        try:
+            with open(os.path.join(skin, '1080i', name), 'r', encoding='utf-8') as f:
+                if mark not in f.read():
+                    return False
+        except Exception:
+            return False
+    return all(os.path.isfile(p) for p in need)
+
+
+# ───── 4.8.55: glass TinyPPI panels while the Lucent Look is on ─────
+# TinyPPI draws its panels (codec-logo box, speaker layout, Player Process
+# Info, DV metadata) in colours from its own settings (colour + opacity per
+# panel, published as Home properties by its theme). With the Lucent Look on
+# AB Tools sets those to the Lucent glass colour at the chosen glass
+# transparency; the user's own values are saved first and put back when the
+# Lucent Look goes off.
+PPI_ID = 'script.tinyppi'
+PPI_PANELS = ('background', 'dialog_background', 'channel_background', 'metadata_background',
+              'splash_start_bg', 'splash_osd_bg', 'splash_tinyppi_bg')
+PPI_RGB = {'amoled': '141414'}             # every other mode: Lucent navy
+PPI_RGB_DEFAULT = '1D2C3B'
+
+
+def _ppi_addon():
+    if not xbmc.getCondVisibility('System.HasAddon(%s)' % PPI_ID):
+        return None
+    try:
+        import xbmcaddon
+        return xbmcaddon.Addon(PPI_ID)
+    except Exception:
+        return None
+
+
+def sync_ppi_glass(mode=None):
+    """Glass TinyPPI panels for mode ('off' restores the user's values)."""
+    addon = _ppi_addon()
+    if addon is None:
+        return
+    mode = get_mode() if mode is None else mode
+    state = _load()
+    saved = state.get('ppi_saved')
+    try:
+        if mode == 'off':
+            if not saved:
+                return
+            for key, value in saved.items():
+                addon.setSetting(key, value)
+            state.pop('ppi_saved', None)
+            _save(state)
+            _log('TinyPPI panels restored')
+            return
+        if not saved:
+            saved = {}
+            for panel in PPI_PANELS:
+                for key in ('%s_color' % panel, '%s_opacity' % panel):
+                    saved[key] = addon.getSetting(key)
+            state['ppi_saved'] = saved
+            _save(state)
+        rgb = PPI_RGB.get(mode, PPI_RGB_DEFAULT)
+        opacity = glass() or '70'
+        for panel in PPI_PANELS:
+            addon.setSetting('%s_color' % panel, '[COLOR=FF%s]●[/COLOR] #%s' % (rgb, rgb))
+            addon.setSetting('%s_opacity' % panel, opacity)
+        _log('TinyPPI panels: glass #%s at %s %%' % (rgb, opacity))
+    except Exception as e:
+        _log('TinyPPI glass: %s' % e, xbmc.LOGWARNING)
+
+
+def apply(mode):
+    """Switch to mode; returns the notification text."""
+    cur_colors = _colors()
+    state = _load()
+    if mode == 'off':
+        xbmc.executebuiltin('Skin.Reset(%s)' % SETTING)
+        target = state.get('prev_colors') or 'SKINDEFAULT'
+        if cur_colors not in OURS:          # the user picked other colours meanwhile: keep them
+            target = cur_colors
+        msg = T(30855)
+    else:
+        if cur_colors not in OURS:          # remember what to go back to
+            state['prev_colors'] = cur_colors
+            _save(state)
+        xbmc.executebuiltin('Skin.SetBool(%s)' % SETTING)
+        target = dict((m, c) for m, c, _l in MODES)[mode]
+        msg = T(30854) % mode_label(mode)
+    _log('mode %s: colours %s -> %s' % (mode, cur_colors, target))
+    sync_ppi_glass(mode)                    # 4.8.55
+    if target != cur_colors:
+        if not _set_colors(target):          # Kodi reloads the skin itself on success
+            return msg, True
+        return msg, False
+    return msg, None
+
+
+def run():
+    if not xbmc.getCondVisibility('System.HasAddon(%s)' % SKIN_ID):
+        xbmcgui.Dialog().ok(TITLE, T(30440))          # AF3 is not installed
+        return
+    if xbmc.getSkinDir() != SKIN_ID:
+        xbmcgui.Dialog().ok(TITLE, T(30602))          # switch to AF3 first
+        return
+    current = get_mode()
+    if current != 'off':
+        sync_ppi_glass(current)             # 4.8.55: boxes already on the Lucent Look
+    pre = [m for m, _c, _l in MODES].index(current)
+    labels = [T(l) for _m, _c, l in MODES]
+    # 4.8.53: glass transparency row, then (4.6.12) Lucent white focus or the
+    # user's own focus colour
+    labels.append(T(30849) % glass_label())
+    labels.append(T(30859) if own_focus() else T(30858))
+    pick = xbmcgui.Dialog().select(T(30850), labels, preselect=pre)
+    if pick < 0:
+        return
+    if pick == len(MODES):
+        _ok, xml_changed = _ensure_patch()
+        if pick_glass():
+            xbmcgui.Dialog().notification(TITLE, T(30849) % glass_label(), xbmcgui.NOTIFICATION_INFO, 3000)
+            if xml_changed:                       # first time: the frame edit needs a reload
+                xbmc.sleep(300)
+                from resources.lib.settings_engine import safe_reload_skin   # 4.8.72: never under the page
+                safe_reload_skin()
+        return
+    if pick == len(MODES) + 1:
+        set_own_focus(not own_focus())
+        xbmcgui.Dialog().notification(TITLE, T(30859) if own_focus() else T(30858),
+                                      xbmcgui.NOTIFICATION_INFO, 3000)
+        xbmc.executebuiltin('Container.Refresh')
+        return
+    if MODES[pick][0] == current:
+        return
+    mode = MODES[pick][0]
+    _ok, xml_changed = _ensure_patch()
+    if mode != 'off' and not _files_present():
+        _log('files missing after the patch run', xbmc.LOGWARNING)
+        xbmcgui.Dialog().ok(TITLE, T(30856))
+        return
+    msg, reload_self = apply(mode)
+    xbmcgui.Dialog().notification(TITLE, msg, xbmcgui.NOTIFICATION_INFO, 3000)
+    # One reload at most: a colour change already reloads the skin.
+    if reload_self or (reload_self is None and xml_changed):
+        xbmc.sleep(300)
+        from resources.lib.settings_engine import safe_reload_skin   # 4.8.72: never under the page
+        safe_reload_skin()
+    elif reload_self is None:
+        xbmc.executebuiltin('Container.Refresh')

@@ -80,6 +80,7 @@ PINNED_ORIGINS = {
     'skin.arctic.fuse.3': AF3_REPO,
     # 4.8.17: AF3's classic OSD flag badges ship next to AF3 in the same repo
     'resource.images.af3.classicflags': AF3_REPO,
+    'resource.images.af3.frbadges': AF3_REPO,
     # 3.4.20: AF3's own dependencies update from their author's repository
     # (jurialmunkey), not from the taiseer repos.
     'script.texturemaker':            'repository.jurialmunkey',

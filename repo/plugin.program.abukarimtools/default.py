@@ -46,6 +46,8 @@ ACTION_MODES = {'skin_switch', 'settings_view', 'first_run', 'abukarimwizard',
                 'af3_discmenu',
                 # 4.8.17: AF3 Classic OSD Flags (on/off switch)
                 'af3_classicflags',
+                # 4.8.68: AF3 OSD Flags Style (picker)
+                'af3_flagstyle',
                 # 4.8.57: AB Tools glass look (on/off switch, test)
                 'ab_glass',
                 # 4.8.12: Seek Preview (options page)
@@ -573,6 +575,9 @@ def router():
     elif mode == 'af3_classicflags':
         from resources.lib import af3_classicflags_toggle
         af3_classicflags_toggle.run()
+    elif mode == 'af3_flagstyle':
+        from resources.lib import af3_flagstyle
+        af3_flagstyle.run()
     elif mode == 'af3_lucentplayer':
         from resources.lib import af3_lucentplayer_toggle
         af3_lucentplayer_toggle.run()

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AB Tools "What's New" (4.8.61, whats_new.py). Properties: title, version,
+     text, hint, dir (ltr / rtl). The text scrolls by itself; Up / Down
+     scroll it by hand (whats_new.py), OK / Back close. -->
+<window type="dialog">
+    <defaultcontrol always="true">9100</defaultcontrol>
+    <zorder>3</zorder>
+    <animation effect="fade" start="0" end="100" time="250">WindowOpen</animation>
+    <animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+    <controls>
+        <control type="image">
+            <left>0</left><top>0</top><width>100%</width><height>100%</height>
+            <texture colordiffuse="F20B1119">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/white.png</texture>
+        </control>
+        <control type="image">
+            <left>0</left><top>0</top><width>100%</width><height>100%</height>
+            <texture colordiffuse="99000000">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/vignette.png</texture>
+        </control>
+        <control type="group">
+            <centerleft>50%</centerleft><top>0</top><width>1400</width><height>1080</height>
+            <!-- header -->
+            <control type="label">
+                <left>0</left><top>70</top><width>1400</width><height>80</height>
+                <font>abk_set_xl</font><textcolor>FFE8EEF2</textcolor>
+                <align>center</align><aligny>center</aligny>
+                <label>[B]$INFO[Window.Property(title)][/B]</label>
+            </control>
+            <control type="label">
+                <left>0</left><top>148</top><width>1400</width><height>44</height>
+                <font>abk_set_m</font><textcolor>B3E8EEF2</textcolor>
+                <align>center</align><aligny>center</aligny>
+                <label>$INFO[Window.Property(version)]</label>
+            </control>
+            <!-- glass panel -->
+            <control type="image">
+                <left>0</left><top>220</top><width>1400</width><height>720</height>
+                <texture border="40" colordiffuse="14FFFFFF">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/panel.png</texture>
+            </control>
+            <control type="image">
+                <left>0</left><top>220</top><width>1400</width><height>720</height>
+                <texture border="40" colordiffuse="1FFFFFFF">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/panel_edge.png</texture>
+            </control>
+            <control type="textbox" id="100">
+                <left>60</left><top>250</top><width>1280</width><height>660</height>
+                <font>abk_set_m</font><textcolor>FFE8EEF2</textcolor>
+                <align>left</align>
+                <autoscroll delay="5000" time="2500" repeat="8000">true</autoscroll>
+                <label>$INFO[Window.Property(text)]</label>
+                <visible>!String.IsEqual(Window.Property(dir),rtl)</visible>
+            </control>
+            <control type="textbox" id="101">
+                <left>60</left><top>250</top><width>1280</width><height>660</height>
+                <font>abk_set_m</font><textcolor>FFE8EEF2</textcolor>
+                <align>right</align>
+                <autoscroll delay="5000" time="2500" repeat="8000">true</autoscroll>
+                <label>$INFO[Window.Property(text)]</label>
+                <visible>String.IsEqual(Window.Property(dir),rtl)</visible>
+            </control>
+            <!-- hint -->
+            <control type="label">
+                <left>0</left><top>970</top><width>1400</width><height>50</height>
+                <font>abk_set_s</font><textcolor>80E8EEF2</textcolor>
+                <align>center</align><aligny>center</aligny>
+                <label>$INFO[Window.Property(hint)]</label>
+            </control>
+        </control>
+        <control type="button" id="9100">
+            <left>-10</left><top>-10</top><width>1</width><height>1</height>
+            <texturefocus /><texturenofocus /><label></label>
+        </control>
+    </controls>
+</window>
