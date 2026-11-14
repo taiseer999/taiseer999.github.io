@@ -3008,3 +3008,11 @@ msgctxt "#32217"
 msgid "AB Tools in glass: white icons with no background and a see-through window."
 msgstr ""
 
+msgctxt "#32218"
+msgid "What's New in AB Tools"
+msgstr ""
+
+msgctxt "#32219"
+msgid "OK or Back to continue"
+msgstr ""
+

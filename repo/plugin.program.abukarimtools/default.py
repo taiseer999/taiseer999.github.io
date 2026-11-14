@@ -332,6 +332,17 @@ def router():
             _ensure_patches()
             return
         main_menu()
+        # 4.8.61: classic list opened by the user after an update
+        if HANDLE >= 0 and xbmc.getCondVisibility('Window.IsActive(programs) | Window.IsActive(addonbrowser)'):
+            xbmc.executebuiltin('RunPlugin(plugin://%s/?mode=whats_new)' % ADDON_ID)
+        return
+
+    if mode == 'whats_new':
+        from resources.lib import whats_new
+        if params.get('force'):
+            whats_new.show()
+        else:
+            whats_new.maybe_show()
         return
 
     if mode == 'settings_view':
@@ -343,6 +354,10 @@ def router():
 
     if mode == 'settings_window':
         # 4.8.23: handle -1 invocation; the window runs here until closed.
+        # 4.8.61: after an update, What's New first (once).
+        if not params.get('cat'):
+            from resources.lib import whats_new
+            whats_new.maybe_show()
         from resources.lib import settings_window
         settings_window.open_window(params.get('cat'))
         return

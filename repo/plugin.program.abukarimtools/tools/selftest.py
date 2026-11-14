@@ -71,6 +71,21 @@ except Exception as e:
     fail('addon.xml / changelog.txt: %s' % e)
     version = '?'
 
+# ── What's New (4.8.61): every release covered, Arabic beside English ───────
+try:
+    import json as _json
+    with open(os.path.join(ROOT, 'resources', 'whats_new.json'), encoding='utf-8') as f:
+        _wn = _json.load(f).get('entries', [])
+    _vt = lambda v: tuple(int(x) for x in v.split('.'))
+    if not _wn or _vt(_wn[0]['v']) != _vt(version):
+        fail('whats_new.json: newest entry is %s, addon.xml is %s - write the '
+             'final result of this release there' % (_wn[0]['v'] if _wn else '-', version))
+    for _e in _wn:
+        if not _e.get('en') or not _e.get('ar') or len(_e['en']) != len(_e['ar']):
+            fail('whats_new.json: %s needs matching "en" and "ar" lines' % _e.get('v'))
+except Exception as e:
+    fail('whats_new.json: %s' % e)
+
 # ── Python syntax ────────────────────────────────────────────────────────────
 py_files = list(walk('.py'))
 for p in py_files:

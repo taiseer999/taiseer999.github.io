@@ -1,3 +1,15 @@
+v4.8.61
+- What's New screen: after AB Tools updates, the first time the user opens
+  the add-on (settings window or classic list - not widgets, services or
+  RunPlugin calls) a screen shows what changed in the last 10 versions,
+  then the add-on opens. Once per update; a fresh install only records the
+  version. The text is resources/whats_new.json: the final result of each
+  release or run of releases (in-between fixes left out), English and
+  Arabic by Kodi's language, scrolling by itself (Up / Down by hand, OK /
+  Back close). whats_new.py, abk_whatsnew.xml, strings 32218-32219;
+  ?mode=whats_new&force=1 shows it any time. selftest: the newest
+  whats_new.json entry must be addon.xml's version.
+
 v4.8.60
 - Fix (4.8.59): the AB Last Played add-on tile (Add-ons, Home add-on
   rows) went almost black when focused - its colour add-on icon

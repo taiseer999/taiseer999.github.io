@@ -48,6 +48,7 @@ ID ranges:
   32140-32194  Settings window (4.8.23): descriptions, view switch
   32200-32215  Search All - details of the focused stream (4.8.25)
   32216-32217  AB Tools glass look (4.8.57, test)
+  32218-32219  What's New screen (4.8.61)
 """
 
 STRINGS = {
@@ -1007,5 +1008,7 @@ STRINGS = {
     32215: ('Season pack', 'حزمة موسم'),
     # ---- 4.8.57: AB Tools glass look (test) ----
     32216: ('AB Tools: Glass Look (test)', 'أدوات AB: المظهر الزجاجي (تجريبي)'),
+    32218: ("What's New in AB Tools", 'ما الجديد في أدوات AB'),
+    32219: ('OK or Back to continue', 'اضغط موافق أو رجوع للمتابعة'),
     32217: ('AB Tools in glass: white icons with no background and a see-through window.', 'أدوات AB بمظهر زجاجي: أيقونات بيضاء بلا خلفية ونافذة شفافة.'),
 }
