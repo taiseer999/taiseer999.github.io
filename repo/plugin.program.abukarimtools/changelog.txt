@@ -1,4 +1,9 @@
-v4.8.66  (all changes of 2026-11-14: 4.8.56 - 4.8.66)
+v4.8.67  (all changes of 2026-11-14: 4.8.56 - 4.8.67)
+- NewPipe: search, Trending, Live and Trailers no longer come back empty
+  when pagination is off (yt.py compared the result count with no limit
+  and the error was hidden). Patcher entry, always on.
+- addon.xml: xbmc.service is active again (it was commented out, so the
+  service only started late through the Guardian).
 - AF3 player: the name of the focused button shows under the button row,
   like the Lucent Player - Play / Pause, Previous / Next (or Previous /
   Next chapter, Skip back / forward - what the button does right now),

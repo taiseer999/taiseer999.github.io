@@ -5575,6 +5575,24 @@ def _apply_patch(patch):
 
 import json
 
+# 4.8.67: NewPipe search / Trending / Live / Trailers came back empty with
+# pagination off. routes._build_paged passes limit=None ("show all") and
+# yt._video_results compares len(results) >= None -> TypeError, swallowed by
+# _build_paged (debug-only log) -> 0 items although the scrape got hundreds.
+PATCHES += [
+    {
+        'addon_id': 'plugin.video.newpipe',
+        'rel_path': os.path.join('resources', 'lib', 'yt.py'),
+        'not_found_ok': True,
+        'old': "        results.append((item, '', ''))\n        if len(results) >= limit:\n            break\n",
+        'new': "        results.append((item, '', ''))\n        # -- NewPipe no-limit fix (by ABUKARIM TOOLS) --\n        if limit and len(results) >= limit:\n            break\n",
+        'already_patched_check': '# -- NewPipe no-limit fix (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r'\n(\s*)if len\(results\) >= limit:',
+        'fallback_repl': r'\n\1# -- NewPipe no-limit fix (by ABUKARIM TOOLS) --\n\1if limit and len(results) >= limit:',
+        'description': 'NewPipe - search/Trending/Live/Trailers empty when pagination is off',
+    },
+]
+
 # Ordered list of (toggle_id, display label). Order = order shown in the dialog.
 TOGGLE_GROUPS = [
     ('tmdbh_trakt_auth', 'TMDbHelper Trakt Auth QR'),
