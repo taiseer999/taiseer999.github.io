@@ -44,15 +44,6 @@ EXTRA_VARS = '''<!-- 4.8.85: the source badge of a Search All pick (abk.lp.src =
         <value condition="System.AddonIsEnabled(resource.images.af3.classicflags)">resource://resource.images.af3.classicflags/colorful</value>
         <value>flags/colorful</value>
     </variable>
-    <!-- 4.8.98: language pills live in <style>/lang/ (other/language holds the
-         classic flags AF3's own OSD row draws inside its audio/subtitle badges) -->
-    <variable name="ABK_LP_LangDir">
-        <value condition="String.IsEqual(Skin.String(abk.flagstyle),colorful) + System.AddonIsEnabled(resource.images.af3.classicflags)">resource://resource.images.af3.classicflags/colorful/other/language</value>
-        <value condition="!String.IsEmpty(Skin.String(abk.flagstyle)) + !String.IsEqual(Skin.String(abk.flagstyle),off) + System.AddonIsEnabled(resource.images.af3.frbadges)">resource://resource.images.af3.frbadges/$INFO[Skin.String(abk.flagstyle)]/lang</value>
-        <value condition="System.AddonIsEnabled(resource.images.af3.frbadges)">resource://resource.images.af3.frbadges/lucent/lang</value>
-        <value condition="System.AddonIsEnabled(resource.images.af3.classicflags)">resource://resource.images.af3.classicflags/colorful/other/language</value>
-        <value>flags/colorful/other/language</value>
-    </variable>
 '''
 
 EXTRA_MARK = '<!-- ABK_LP_EXTRAS -->'
@@ -77,11 +68,11 @@ EXTRAS = (EXTRA_MARK + '\n'
           # 4.8.88: IMAX
           + _img(132, '$VAR[ABK_LP_FlagDir]/IMAX.png', 'String.Contains(Player.FileNameAndPath,imax) | !String.IsEmpty(Window(Home).Property(abk.lp.imax))')
           + _img(110, '$VAR[ABK_LP_ExtraDir]/aspectratio/$INFO[VideoPlayer.VideoAspect].png', '!String.IsEmpty(VideoPlayer.VideoAspect)')
-          + _img(160, '$VAR[ABK_LP_LangDir]/$INFO[VideoPlayer.AudioLanguage].png', '!String.IsEmpty(VideoPlayer.AudioLanguage)',
-                 '$VAR[ABK_LP_LangDir]/fallback.png')
-          + _img(160, '$VAR[ABK_LP_LangDir]/$INFO[VideoPlayer.SubtitlesLanguage].png',
+          + _img(160, '$VAR[ABK_LP_ExtraDir]/other/language/$INFO[VideoPlayer.AudioLanguage].png', '!String.IsEmpty(VideoPlayer.AudioLanguage)',
+                 '$VAR[ABK_LP_ExtraDir]/other/language/fallback.png')
+          + _img(160, '$VAR[ABK_LP_ExtraDir]/other/language/$INFO[VideoPlayer.SubtitlesLanguage].png',
                  'VideoPlayer.SubtitlesEnabled + !String.IsEmpty(VideoPlayer.SubtitlesLanguage)',
-                 '$VAR[ABK_LP_LangDir]/fallback.png'))
+                 '$VAR[ABK_LP_ExtraDir]/other/language/fallback.png'))
 
 
 def _add_extras(s):

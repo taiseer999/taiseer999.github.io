@@ -1,24 +1,3 @@
-v4.8.98  (2026-11-15)
-- AF3's own OSD extras row with an FR-Badges style (CoreELEC screenshot,
-  Icon Dark): three of its slots are not plain badges - AF3 writes the frame
-  rate on other/fps.png and puts a 33x24 country flag on other/soun.png and
-  other/subt(d).png, and other/language/ holds those flags. The styles had
-  FR badges there (HFR with "23.976" written over it, MULTI SUB under a flag,
-  "ARA | Arabic" pills squeezed to 33x24). resource.images.af3.frbadges
-  1.0.12 puts the classic pictures back in those four slots and the classic
-  flags in other/language/; the language pills move to <style>/lang/.
-- AF3 Lucent Player: the audio / subtitle language badges read the new
-  <style>/lang/ folder (ABK_LP_LangDir; the classic flags for Classic).
-- frbadges 1.0.12 also gives every badge in AF3's own rows (footer codec row,
-  OSD extras) the same height: each sits on one canvas (Lucent pill
-  proportions, 285x110), badges too wide for it (AVC|H.264, 2.0|STEREO,
-  DTS-HD MA) are redrawn as one-label pills in their own colours
-  (tools/frbadges/make_fit.py). Solid's redrawn labels and aspect-ratio
-  badges are white again (were washed out).
-- Requires resource.images.af3.frbadges 1.0.12 (rebuilt on 1.0.6 + make_iso,
-  make_dv2_imax, uniform_width, make_aspect - i.e. everything up to 1.0.10 -
-  then the fixes above).
-
 v4.8.94  (2026-11-15)
 - Lucent source windows (Fen Light / Red Light): the totals screen ("Choose
   what to show": quality x service) no longer opens by itself. Every search

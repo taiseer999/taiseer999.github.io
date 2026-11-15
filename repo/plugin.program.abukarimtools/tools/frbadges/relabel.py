@@ -46,8 +46,6 @@ def relabel(style, src, label, max_ratio=None):
     im = Image.open(src).convert('RGBA'); w, h = im.size; a = np.array(im)
     xL = max(1, int(xt * h) - 10); xR = min(w - 1, int(w - rp * h) + 10)
     c_top, c_bot = _colours(a, xL, xR, dark)
-    if style == 'solid':                      # white text on the bright fills (sampling picked the fill)
-        c_top = c_bot = (255, 255, 255)
     size = int(capf * h / _cap_ratio())
     font = ImageFont.truetype(FONT, size)
     if max_ratio:
