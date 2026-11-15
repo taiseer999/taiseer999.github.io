@@ -1,4 +1,11 @@
-v4.8.85  (2026-11-15)
+v4.8.86  (2026-11-15)
+- Disc Menu with AllDebrid: the button showed but the disc did not open -
+  "AllDebrid: File not available due to no peer" (kodi.log 2026-11-15
+  06:47, John Wick 4). The magnet was uploaded again by its bare hash; now
+  the torrent the source add-on already added is found in the account
+  (v4.1/magnet/status, same hash, statusCode 4 = ready) and only a missing
+  one is uploaded, as a full magnet link. Each AllDebrid step (status,
+  upload, files) logs its own error code.
 - AF3 Lucent Player source badge for Search All picks: debrid links often
   carry no release name (kodi.log 2026-11-15: .../00278.m2ts, John Wick 4),
   so AF3's file-name test (Image_VideoPlayer_RipSource) finds nothing. Search

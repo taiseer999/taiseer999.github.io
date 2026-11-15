@@ -124,25 +124,62 @@ def _magnet(hsh):
 # AllDebrid (api.alldebrid.com v4): upload the magnet (instant when cached),
 # its files as a tree (n = name, s = size, l = link, e = entries of a folder),
 # each link unlocked when it is read.
+def _ad_err(step, res):
+    err = (res or {}).get('error') or {}
+    return DebridError('AllDebrid %s: %s %s' % (step, err.get('code', ''), err.get('message', '')))
+
+
+def _ad_find(hsh, tok):
+    """The magnet already in the account (the source add-on added it to play the
+    film), ready (statusCode 4): its id, else None."""
+    res = _call('%s/v4.1/magnet/status?%s' % (AD_API, urllib.parse.urlencode({'agent': AGENT})), tok)
+    if res.get('status') != 'success':
+        _log('AllDebrid magnet/status: %s' % (res.get('error') or {}), xbmc.LOGWARNING)
+        return None
+    mags = (res.get('data') or {}).get('magnets') or []
+    if isinstance(mags, dict):
+        mags = list(mags.values()) if 'id' not in mags else [mags]
+    for m in mags:
+        if str(m.get('hash') or '').lower() == hsh and int(m.get('statusCode') or 0) == 4:
+            return m.get('id')
+    return None
+
+
 def _ad_files(hsh, tok):
-    q = urllib.parse.urlencode({'agent': AGENT, 'magnets[]': hsh})
-    up = _call('%s/v4/magnet/upload?%s' % (AD_API, q), tok)
-    if up.get('status') != 'success':
-        raise DebridError('AllDebrid: %s' % (up.get('error') or {}).get('message', 'upload failed'))
-    mag = ((up.get('data') or {}).get('magnets') or [{}])[0]
-    if mag.get('error'):
-        raise DebridError('AllDebrid: %s' % mag['error'].get('message', ''))
-    mid = mag.get('id')
-    if not mag.get('ready', True):
-        raise DebridError('AllDebrid: the torrent is not cached')
+    mid = None
+    try:
+        mid = _ad_find(hsh, tok)
+    except Exception as e:
+        _log('AllDebrid magnet/status: %s' % e, xbmc.LOGWARNING)
+    if mid is None:
+        q = urllib.parse.urlencode({'agent': AGENT, 'magnets[]': _magnet(hsh)})
+        up = _call('%s/v4/magnet/upload?%s' % (AD_API, q), tok)
+        if up.get('status') != 'success':
+            raise _ad_err('upload', up)
+        mag = ((up.get('data') or {}).get('magnets') or [{}])[0]
+        if mag.get('error'):
+            raise _ad_err('upload', mag)
+        if not mag.get('ready', True):
+            raise DebridError('AllDebrid: the torrent is not cached')
+        mid = mag.get('id')
+        _log('AllDebrid: magnet uploaded (id %s)' % mid)
+    else:
+        _log('AllDebrid: magnet already in the account (id %s)' % mid)
     tree = []
     try:
         res = _call('%s/v4/magnet/files?%s' % (AD_API, urllib.parse.urlencode({'agent': AGENT, 'id[]': mid})), tok)
-        tree = (((res.get('data') or {}).get('magnets') or [{}])[0]).get('files') or []
+        if res.get('status') != 'success':
+            raise _ad_err('files', res)
+        first = (((res.get('data') or {}).get('magnets') or [{}])[0])
+        if first.get('error'):
+            raise _ad_err('files', first)
+        tree = first.get('files') or []
     except Exception as e:
         _log('AllDebrid magnet/files: %s' % e, xbmc.LOGWARNING)
     if not tree:
         res = _call('%s/v4.1/magnet/status?%s' % (AD_API, urllib.parse.urlencode({'agent': AGENT, 'id': mid})), tok)
+        if res.get('status') != 'success':
+            raise _ad_err('status', res)
         mags = (res.get('data') or {}).get('magnets') or {}
         mags = mags[0] if isinstance(mags, list) and mags else mags
         tree = mags.get('files') or []
