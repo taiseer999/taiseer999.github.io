@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """Stand-alone launcher for the AF3 auto-trailers engine (ABUKARIM TOOLS 3.1.17).
 
 Kodi does not always start this add-on's xbmc.service (some boots it simply

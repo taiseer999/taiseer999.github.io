@@ -1,4 +1,27 @@
-v4.8.79  (2026-11-15)
+v4.8.81  (2026-11-15)
+- Whole Blu-ray discs that come as a folder (BDMV/...) in a debrid torrent
+  open in their menus. Red Light & co. play only the largest file of such a
+  release (BDMV/STREAM/00278.m2ts - kodi.log 2026-11-15, John Wick 3/4 from
+  AllDebrid): the main movie, no menus. Now, after a Search All pick from
+  AllDebrid, TorBox or Premiumize, the AF3 "Disc Menu" button shows while
+  that .m2ts plays. It lists the torrent's files from the account linked in
+  Account Manager (alldebrid.token / torbox.token / premiumize.token), serves
+  the disc folder on 127.0.0.1 (each file a redirect to its debrid link,
+  unlocked when Kodi first reads it; index, MovieObject and playlists at
+  once) and reopens the film as bluray://.../menu - on CoreELEC with Java
+  menus. "Normal Player" goes back to the main movie at the same point.
+  New resources/lib/disc_debrid.py; Search All keeps the picked release's
+  torrent hash (Home abk.disc.pick). Real-Debrid lists a torrent's files
+  only as a new download, so it is not offered.
+- VideoOSD disc buttons v5 (v4 removed).
+- Licence: AB Tools is free software under the GNU GPL, version 3 or later.
+  New LICENSE.txt (the GPL-3.0 text) and THIRD-PARTY-NOTICES.txt (every
+  bundled part by others and its licence: Segno BSD, Seek Preview GPL-3.0,
+  speedtest Apache-2.0, pystone, Dex Hub trailers MIT, Lucent GPL-2.0+,
+  Arctic Fuse 3 skin files CC BY-NC-SA, Figtree OFL). addon.xml <license>
+  GPL-3.0-or-later; an SPDX line at the top of every AB Tools .py file.
+- To do: resources/fonts/Noto-*.ttf are Amazon Ember V2, which may not be
+  redistributed without Amazon's permission - to be replaced by an OFL font.
 - Whole Blu-ray discs (.iso images) from a stream - Debrid, TorBox, Usenet
   through AIOStreams - play as discs, with their menus, chapters, languages
   and subtitles, without downloading the image first. Part of Toggles >

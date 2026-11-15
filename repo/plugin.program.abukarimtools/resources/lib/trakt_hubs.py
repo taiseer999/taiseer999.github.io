@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """
 trakt_hubs.py - "My Lists" (قوائمي; "Trakt Lists" before 3.3.5): which Trakt
 lists the Arctic Fuse 3 Movies / TV Shows / Korean hubs carry, and (3.3.6)

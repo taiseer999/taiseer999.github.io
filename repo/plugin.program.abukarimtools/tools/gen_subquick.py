@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 # Generates resources/skins/Default/1080i/abk_subquick.xml (AB Tools 4.6.27)
 import sys
 out = sys.argv[1]

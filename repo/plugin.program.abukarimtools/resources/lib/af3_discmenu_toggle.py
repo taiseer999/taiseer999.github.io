@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """
 af3_discmenu_toggle.py - ABUKARIM TOOLS (4.7.36)
 
@@ -19,7 +21,7 @@ from resources.lib.i18n import T
 SKIN_ID = 'skin.arctic.fuse.3'
 SETTING = 'abk.discmenu'
 TITLE = 'ABUKARIM TOOLS'
-MARK = '<!-- ABUKARIM: AF3 disc menu buttons v4 -->'
+MARK = '<!-- ABUKARIM: AF3 disc menu buttons v5 -->'
 
 
 def _log(msg, level=xbmc.LOGINFO):

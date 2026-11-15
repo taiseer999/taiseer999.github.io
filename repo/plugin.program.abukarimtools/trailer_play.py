@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """AF3 Trailer buttons through the auto-trailer sources (ABUKARIM TOOLS 3.2.52).
 
 Arctic Fuse 3's own "Trailer" shortcuts - the Trailer button of the info page,

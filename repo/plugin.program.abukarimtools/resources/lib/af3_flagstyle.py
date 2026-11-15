@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """
 af3_flagstyle.py - ABUKARIM TOOLS (4.8.68, Lucent + samples 4.8.69, Black & White replaces Neon 4.8.73,
                     the remaining FR-Badges sets 4.8.75)

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """
 ab_search.py - ABUKARIM TOOLS (3.4.48, EasyNews 4.7.16)
 
@@ -2085,6 +2087,13 @@ def _after_pick(session, addons, media, picked):
         search_nextep.mark_pick(media)
     except Exception as e:
         _log('next-episode mark: %s' % e)
+    try:                                             # 4.8.81: whole discs in a debrid torrent
+        from resources.lib import disc_debrid
+        with session.lock:
+            item = (list(session.state.get(key, {}).get('results') or []) + [None] * (index + 1))[index]
+        disc_debrid.remember_pick(item or {}, _service_code(_provider(item or {})))
+    except Exception as e:
+        _log('disc pick: %s' % e)
     if key == 'aio':
         return _aio_play(session, index)
     if key == 'en':

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """glass_look.py - ABUKARIM TOOLS (4.8.57, test)
 
 AB Tools' own glass look: white glass icons with no background

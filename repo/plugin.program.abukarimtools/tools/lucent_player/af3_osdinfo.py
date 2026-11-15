@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """4.7.33: the DV2 test of the Lucent Player (4.7.35: the OSD info part is gone -
 the OSD shows AF3's own expanded info, window 1153, see patcher.py).
 

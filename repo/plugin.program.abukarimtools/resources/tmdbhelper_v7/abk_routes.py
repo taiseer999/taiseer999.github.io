@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 # -- TMDbHelper 6.20 skin routes v1 (by ABUKARIM TOOLS) --
 # The multiservice TMDb Helper 7.x has no sync_watchedon / mdblist_officiallist
 # routes; Arctic Fuse 3 (built against jurialmunkey's 6.20) calls both, and every

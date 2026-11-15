@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """AB Tools "AF3: Lucent Player" - the sleep timer of the player menu (the moon button).
 Port of scripts/sleep.py from the Lucent skin by djdirty60 (github.com/djdirty60/Lucent, GPL-2.0-or-later),
 English / Arabic (Fusha) instead of English / Dutch.

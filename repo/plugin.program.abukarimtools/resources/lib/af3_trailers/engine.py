@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """AF3 auto-trailers: the background engine (ABUKARIM TOOLS).
 
 3.2.48 - ARTWORK mode (the new default), Dex Hub's way of showing a trailer:

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """whats_new.py - ABUKARIM TOOLS (4.8.61)
 
 "What's New" screen: after AB Tools updates, the first time the user opens

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """settings_engine.py - ABUKARIM TOOLS (4.8.26, 4.8.27)
 
 A settings page like the skin's own settings, for any add-on: categories in

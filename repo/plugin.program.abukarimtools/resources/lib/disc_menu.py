@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """
 disc_menu.py - ABUKARIM TOOLS (4.7.36)
 
@@ -296,6 +298,21 @@ def _served(iso, playing=''):
             return disc
     _busy(True)
     try:
+        if iso.startswith('debrid:'):
+            # 4.8.81: a whole disc in a debrid torrent (disc_debrid)
+            from resources.lib import disc_debrid
+            try:
+                return disc_debrid.open_disc(disc_debrid.current_pick(), playing)
+            except disc_debrid.DebridError as e:
+                _log('debrid disc: %s' % e, xbmc.LOGWARNING)
+                text = T(e.sid)
+                if '%s' in text:
+                    text = text % e.arg
+                xbmcgui.Dialog().notification(TITLE, text, xbmcgui.NOTIFICATION_WARNING, 6000)
+                return False
+            except Exception as e:
+                _log('debrid disc failed: %s' % e, xbmc.LOGWARNING)
+                return None
         return disc_stream.open_image(iso)
     finally:
         _busy(False)
@@ -312,15 +329,19 @@ def _to_menu(iso, playing=''):
         pos = player.getTime()
     except Exception:
         pos = 0.0
-    if _on_coreelec():
+    if _on_coreelec() and not iso.startswith('debrid:'):
         _ensure_jre()
         path = _bluray_base(iso) + 'menu'
     else:
         disc = _served(iso, playing)
+        if disc is False:                   # already said why
+            return
         if not disc:
             xbmcgui.Dialog().notification(TITLE, T(32271), xbmcgui.NOTIFICATION_WARNING, 4000)
             return
-        if disc['java']:
+        if _on_coreelec():
+            _ensure_jre()
+        elif disc['java']:
             # libbluray without Java stops at the first Java title
             _log('Java (BD-J) menus - only CoreELEC / LibreELEC run them')
             xbmcgui.Dialog().notification(TITLE, T(32270), xbmcgui.NOTIFICATION_WARNING, 5000)
@@ -351,7 +372,7 @@ def _to_normal(iso, playing=''):
         except ValueError:
             start = 0.0
     win.clearProperty(key)
-    if _on_coreelec():
+    if _on_coreelec() and not iso.startswith('debrid:'):
         base = _bluray_base(iso)
         _busy(True)
         try:
@@ -361,6 +382,9 @@ def _to_normal(iso, playing=''):
     else:
         disc = _served(iso, playing)
         path = (disc['base'] + 'BDMV/PLAYLIST/' + disc['main']) if disc and disc.get('main') else ''
+        if not path and iso.startswith('debrid:'):
+            xbmcgui.Dialog().notification(TITLE, T(32109), xbmcgui.NOTIFICATION_WARNING, 4000)
+            return
     if not path:
         # Not readable here: the plain ISO as the stream add-on played it
         # (Kodi's own Blu-ray playback mode decides; no resume point).
@@ -378,6 +402,16 @@ def run(go):
         return
     path = _playing_path()
     iso = _iso_url(path) if path else ''
+    if not iso:
+        # 4.8.81: one .m2ts of a whole disc in a debrid torrent picked in Search All
+        from resources.lib import disc_debrid
+        try:
+            raw = xbmc.Player().getPlayingFile() or ''
+        except Exception:
+            raw = ''
+        pick = disc_debrid.current_pick()
+        if go == 'menu' and pick and disc_debrid.is_disc_part(raw):
+            path, iso = raw, disc_debrid.source_id(pick)
     if not iso:
         _log('not an ISO stream: %r' % path)
         xbmcgui.Dialog().notification(TITLE, T(32106), xbmcgui.NOTIFICATION_WARNING, 3000)

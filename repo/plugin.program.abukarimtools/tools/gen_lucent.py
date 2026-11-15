@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """Generate the Lucent window XMLs for Fen Light, Red Light, POV and Umbrella.
 
 Dev tool (not used at runtime). Output: resources/lucent/xml/<profile>/<file>.xml

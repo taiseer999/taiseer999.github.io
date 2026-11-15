@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """Generate resource.language strings.po files from strings_map.STRINGS.
 Run from the addon root:  python3 tools/gen_po.py
 """

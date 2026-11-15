@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """
 wizard_runner.py  -  hand-off to the ABUKARIM Wizard (plugin.program.ABUKARIMwizard).
 

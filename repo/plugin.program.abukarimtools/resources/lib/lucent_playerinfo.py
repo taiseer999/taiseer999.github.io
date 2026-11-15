@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """AB Tools "AF3: Lucent Player" - the Statistics window of the player (OSD > Statistics, and Kodi's player
 process info while Lucent Player is on). Port of scripts/playerinfo.py from the Lucent skin by djdirty60
 (github.com/djdirty60/Lucent, GPL-2.0-or-later): English / Arabic (Fusha) instead of English / Dutch, the window is

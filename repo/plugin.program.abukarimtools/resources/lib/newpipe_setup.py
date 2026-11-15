@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """4.8.78: NewPipe (AF3 Auto Trailers) - repository.twilight0 FIRST, then NewPipe.
 
 plugin.video.newpipe and the libraries it needs (tulip, scrapetube, unicache,

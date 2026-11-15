@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """
 tmdbh_auth.py - Installation Wizard: link Trakt and MDbList in TMDb Helper (4.7.9).
 

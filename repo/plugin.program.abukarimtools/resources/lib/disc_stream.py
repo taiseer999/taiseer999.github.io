@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """
 disc_stream.py - ABUKARIM TOOLS (4.8.79)
 
@@ -332,6 +334,15 @@ def open_image(link, size=0):
     return {'key': key, 'base': base, 'java': java, 'main': main, 'link': link}
 
 
+def remember_debrid(source, code, files, java, main):
+    """disc_debrid: a disc folder from a debrid torrent; each file is a redirect
+    to its debrid link (files[rel]['url'], else resolved when Kodi asks)."""
+    key = hashlib.sha1(source.encode('utf-8')).hexdigest()[:12]
+    _remember(key, {'kind': 'debrid', 'svc': code, 'link': source, 'files': files,
+                    'java': java, 'main': main})
+    return key
+
+
 def disc_info(key):
     """An opened disc again, by its key (the OSD buttons while it plays)."""
     disc = disc_for(key)
@@ -399,6 +410,8 @@ def _handler():
                         name, entry = k, v
                         break
             if entry is not None and not entry.get('dir'):
+                if disc.get('kind') == 'debrid':
+                    return self._redirect(disc, entry, head)
                 return self._file(disc, entry, head)
             prefix = name if not name or name.endswith('/') else name + '/'
             kids = set()
@@ -413,6 +426,20 @@ def _handler():
                               for k in sorted(kids))
                     + '</pre></body></html>\n').encode('utf-8')
             return self._plain(200, page, head=head)
+
+        def _redirect(self, disc, entry, head):
+            url = entry.get('url') or ''
+            if not url:
+                try:
+                    from resources.lib import disc_debrid
+                    url = disc_debrid.resolve(disc.get('svc'), entry.get('ref'))
+                except Exception as e:
+                    _log('debrid link: %s' % e, xbmc.LOGWARNING)
+                    return self._plain(502, head=head)
+            self.send_response(302)
+            self.send_header('Location', url)
+            self.send_header('Content-Length', '0')
+            self.end_headers()
 
         def _file(self, disc, entry, head):
             size = int(entry.get('size') or 0)

@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 import os, sys
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter

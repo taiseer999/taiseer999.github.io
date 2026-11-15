@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """Settings of the AF3 auto-trailers, shared by the Toggles menu and the service.
 
 Stored as one small JSON file in addon_data so the menu (a short-lived plugin

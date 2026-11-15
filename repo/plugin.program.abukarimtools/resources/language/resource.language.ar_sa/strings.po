@@ -3224,3 +3224,19 @@ msgctxt "#32271"
 msgid "The disc image could not be read from this link"
 msgstr "تعذّرت قراءة صورة القرص من هذا الرابط"
 
+msgctxt "#32272"
+msgid "Disc menu not available: %s"
+msgstr "قائمة القرص غير متاحة: %s"
+
+msgctxt "#32273"
+msgid "Disc menu: link your %s account in Account Manager first"
+msgstr "قائمة القرص: اربط حساب %s في مدير الحسابات أولًا"
+
+msgctxt "#32274"
+msgid "This release is not a whole Blu-ray disc - it has no disc menu"
+msgstr "هذا الإصدار ليس قرص Blu-ray كاملًا، فلا قائمة له"
+
+msgctxt "#32275"
+msgid "Disc menus of a disc folder work with AllDebrid, TorBox and Premiumize"
+msgstr "قوائم مجلد القرص تعمل مع AllDebrid وTorBox وPremiumize"
+

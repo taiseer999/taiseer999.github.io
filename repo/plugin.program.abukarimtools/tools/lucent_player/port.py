@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 # Lucent -> AF3 "Lucent Player" port generator (AB Tools 4.7.25)
 import re, sys, os, json
 from lxml import etree as ET

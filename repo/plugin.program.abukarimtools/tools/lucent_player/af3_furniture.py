@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """4.7.29: Lucent format pills for AF3's furniture codec logos.
 
 Run after port.py / af3_layout.py:

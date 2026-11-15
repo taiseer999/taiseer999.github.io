@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """Which ABUKARIM TOOLS service copy is the live one (3.2.18).
 
 Window(Home).Property(abukarimtools.service.alive) holds '<version>/<origin>/<token>'.

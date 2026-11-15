@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """menu_model.py - ABUKARIM TOOLS (4.8.23)
 
 What the AB Tools menu holds, shared by the two ways of showing it:

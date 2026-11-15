@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 """
 Single source of truth for all user-facing strings in ABUKARIM TOOLS.
 
@@ -51,7 +53,7 @@ ID ranges:
   32218-32219  What's New screen (4.8.61)
   32220-32229  AF3 player - focused button names (4.8.65)
   32230-32268  AF3 OSD Flags Style (4.8.68, FR-Badges; Lucent + samples 4.8.69; all sets 4.8.75)
-  32269-32271  Blu-ray disc images from a stream (4.8.79, disc_stream)
+  32269-32275  Blu-ray disc images / folders from a stream (4.8.79, 4.8.81)
 """
 
 STRINGS = {
@@ -920,6 +922,10 @@ STRINGS = {
     32270: ('This disc has Java (BD-J) menus - they open on CoreELEC / LibreELEC only. The main movie keeps playing.',
             'قوائم هذا القرص مكتوبة بلغة Java (BD-J)، ولا تُفتح إلا على CoreELEC أو LibreELEC. يستمر عرض الفيلم الرئيسي.'),
     32271: ('The disc image could not be read from this link', 'تعذّرت قراءة صورة القرص من هذا الرابط'),
+    32272: ('Disc menu not available: %s', 'قائمة القرص غير متاحة: %s'),
+    32273: ('Disc menu: link your %s account in Account Manager first', 'قائمة القرص: اربط حساب %s في مدير الحسابات أولًا'),
+    32274: ('This release is not a whole Blu-ray disc - it has no disc menu', 'هذا الإصدار ليس قرص Blu-ray كاملًا، فلا قائمة له'),
+    32275: ('Disc menus of a disc folder work with AllDebrid, TorBox and Premiumize', 'قوائم مجلد القرص تعمل مع AllDebrid وTorBox وPremiumize'),
     # ---- 4.7.41: AF3 Plot Text Size (32113-32117) ----
     32113: ('AF3: Plot Text Size', 'AF3: حجم خط القصة'),
     32114: ('Large', 'كبير'),
