@@ -2349,7 +2349,7 @@ By using or contributing to this repository, you agree that the developer is not
             <icon>icon.png</icon>
         </assets>
     </extension>
-</addon><addon id="resource.images.af3.frbadges" name="AF3 OSD Flags Styles (FR-Badges)" version="1.0.10" provider-name="ABUKARIM">
+</addon><addon id="resource.images.af3.frbadges" name="AF3 OSD Flags Styles (FR-Badges)" version="1.0.8" provider-name="ABUKARIM">
     <requires>
         <import addon="kodi.resource" version="1.0.0" />
     </requires>
