@@ -1,4 +1,18 @@
-v4.8.84  (2026-11-15)
+v4.8.85  (2026-11-15)
+- AF3 Lucent Player source badge for Search All picks: debrid links often
+  carry no release name (kodi.log 2026-11-15: .../00278.m2ts, John Wick 4),
+  so AF3's file-name test (Image_VideoPlayer_RipSource) finds nothing. Search
+  All now keeps the picked release's type (Home abk.lp.src: ISO / REMUX /
+  BLURAY / WEB / HDTV ..., the Lucent 'src' badge of the release) and the
+  three source slots show it from the chosen badge style (new variable
+  ABK_LP_RipSource; AF3's own badge otherwise). The Lucent Player pill set
+  (media/abk_lp/flags) gets the source pills ISO, REMUX, BLURAY, WEB, HDTV,
+  PDTV, HD-RIP, DVDRIP, CAM, SCR, HC. Cleared when another file plays (kept
+  for a disc reopened from that pick).
+- Disc Menu button: kodi.log now says why it is or is not shown for an http
+  .m2ts / .iso ("Disc Menu button for 00278.m2ts: toggle on=..., disc
+  pick=..., skin buttons v5=...") and whether the Search All pick could be
+  kept for it (service, torrent hash).
 - AF3 Lucent Player: the source badge (Blu-ray, UHD, WEB-DL, DVD, HDTV...)
   never showed. Its slots were gated on !String.IsEmpty($VAR[...RipSource]),
   and Kodi does not expand $VAR inside String.IsEmpty() in a visible

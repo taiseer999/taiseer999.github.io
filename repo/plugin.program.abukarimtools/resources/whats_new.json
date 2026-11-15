@@ -2,14 +2,14 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
-   "v": "4.8.84",
+   "v": "4.8.85",
    "from": "4.8.68",
    "en": [
     "Whole Blu-ray discs (.iso) from Debrid, TorBox or Usenet play as discs, with their menus, chapters, languages and subtitles, without downloading the disc first (Toggles > AF3: Disc Menu for ISO Streams).",
     "A disc link that would not play opens again as a disc by itself. Java (BD-J) disc menus open on CoreELEC and LibreELEC; elsewhere those discs start on the main movie.",
     "A whole Blu-ray disc in a torrent from AllDebrid, TorBox or Premiumize: while its main movie plays, the Disc Menu button in the player opens the disc with its menus.",
     "An ISO badge marks disc images in Search All and in the stream windows.",
-    "The AF3 Lucent Player shows the source badge (Blu-ray, UHD, WEB-DL...) again.",
+    "The AF3 Lucent Player shows the source badge (ISO, REMUX, Blu-ray, WEB...) again - for Search All picks even when the link has no release name.",
     "New Toggles entry AF3: OSD Flags Style - pick the look of the codec, HDR, audio and source badges (FR-Badges sets, Lucent, Black & White, or Off). One choice changes the badges in the AF3 player, the Lucent Player, Search All and the stream windows.",
     "NewPipe for AF3 Auto Trailers installs by itself from repository.twilight0.",
     "Fixed: Kodi could close right after picking an option in Toggles.",
@@ -20,7 +20,7 @@
     "رابط القرص الذي يتعذّر تشغيله يُعاد فتحه كقرص تلقائيًا. تُفتح قوائم الأقراص المكتوبة بلغة Java (BD-J) على CoreELEC وLibreELEC، وفي غيرهما تبدأ هذه الأقراص بالفيلم الرئيسي.",
     "قرص Blu-ray كامل في تورنت من AllDebrid أو TorBox أو Premiumize: أثناء عرض فيلمه الرئيسي يفتح زر «قائمة القرص» في المشغّل القرصَ بقوائمه.",
     "شارة ISO تميّز صور الأقراص في «بحث الكل» وفي نوافذ المصادر.",
-    "يعرض مشغّل Lucent في AF3 شارة المصدر (Blu-ray وUHD وWEB-DL...) مجددًا.",
+    "يعرض مشغّل Lucent في AF3 شارة المصدر (ISO وREMUX وBlu-ray وWEB...) مجددًا، حتى لمصادر «بحث الكل» التي لا يحمل رابطها اسم الإصدار.",
     "مفتاح جديد: AF3: نمط شارات الشاشة، لاختيار شكل شارات الترميز وHDR والصوت والمصدر (مجموعات FR-Badges، أو Lucent، أو الأبيض والأسود، أو إيقافها). اختيار واحد يغيّر الشارات في مشغّل AF3 ومشغّل Lucent وبحث الكل ونوافذ المصادر.",
     "يُثبَّت NewPipe لإعلانات AF3 التلقائية من مستودع repository.twilight0 تلقائيًا.",
     "إصلاح: كان Kodi قد يُغلَق مباشرةً بعد اختيار أحد الخيارات في المفاتيح.",

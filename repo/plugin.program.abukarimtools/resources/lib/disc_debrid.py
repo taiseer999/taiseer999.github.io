@@ -70,8 +70,11 @@ def remember_pick(item, code):
     if code in SERVICES and re.match(r'^[0-9a-f]{40}$', hsh):
         home.setProperty(PICK_PROP, json.dumps({'hash': hsh, 'svc': code, 'ts': int(time.time()),
                                                 'name': str(item.get('name') or '')[:200]}))
+        _log('pick kept for the Disc Menu button: %s %s' % (code, hsh[:8]))
     else:
         home.clearProperty(PICK_PROP)
+        _log('pick not usable for the Disc Menu button (service %r, hash %s)'
+             % (code or '', 'ok' if re.match(r'^[0-9a-f]{40}$', hsh) else (repr(hsh[:12]) if hsh else 'none')))
 
 
 def current_pick():

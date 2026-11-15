@@ -3,6 +3,13 @@
      (github.com/djdirty60/Lucent, GPL-2.0-or-later), ported to Arctic Fuse 3:
      OSD, seek bar / pause screen, buffering, info screen. Shown while the skin bool
      abk.lucentplayer is set; live TV keeps the AF3 player. Generated - do not hand-edit. --><includes>
+    <!-- 4.8.85: the source badge of a Search All pick (abk.lp.src = ISO / REMUX / BLURAY / WEB ...,
+         set by AB Tools from the release name) when the playing file name has no source word
+         (debrid links such as .../00278.m2ts); otherwise AF3's own Image_VideoPlayer_RipSource. -->
+    <variable name="ABK_LP_RipSource">
+        <value condition="!String.IsEmpty(Window(Home).Property(abk.lp.src))">$VAR[ABK_LP_FlagDir]/$INFO[Window(Home).Property(abk.lp.src)].png</value>
+        <value>$VAR[Image_VideoPlayer_RipSource]</value>
+    </variable>
     <!-- 4.8.84: Kodi does not expand $VAR inside String.IsEmpty() in a visible condition, so
          !String.IsEmpty($VAR[Image_VideoPlayer_RipSource]) was always false and the source badge never
          showed. Same keywords as Image_VideoPlayer_RipSource / AF3 ExtraOSD (Includes_Extra.xml). -->
@@ -310,8 +317,8 @@
                     <width>132</width>
                     <height>51</height>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">$VAR[Image_VideoPlayer_RipSource]</texture>
-                    <visible>$EXP[ABK_LP_HasRipSource]</visible>
+                    <texture background="true">$VAR[ABK_LP_RipSource]</texture>
+                    <visible>$EXP[ABK_LP_HasRipSource] | !String.IsEmpty(Window(Home).Property(abk.lp.src))</visible>
                 </control>
                 <control type="image">
                     <width>110</width>
@@ -671,8 +678,8 @@
                     <width>132</width>
                     <height>51</height>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">$VAR[Image_VideoPlayer_RipSource]</texture>
-                    <visible>$EXP[ABK_LP_HasRipSource]</visible>
+                    <texture background="true">$VAR[ABK_LP_RipSource]</texture>
+                    <visible>$EXP[ABK_LP_HasRipSource] | !String.IsEmpty(Window(Home).Property(abk.lp.src))</visible>
                 </control>
                 <control type="image">
                     <width>110</width>
@@ -883,8 +890,8 @@
                     <width>132</width>
                     <height>51</height>
                     <aspectratio>keep</aspectratio>
-                    <texture background="true">$VAR[Image_VideoPlayer_RipSource]</texture>
-                    <visible>$EXP[ABK_LP_HasRipSource]</visible>
+                    <texture background="true">$VAR[ABK_LP_RipSource]</texture>
+                    <visible>$EXP[ABK_LP_HasRipSource] | !String.IsEmpty(Window(Home).Property(abk.lp.src))</visible>
                 </control>
                 <control type="image">
                     <width>110</width>

@@ -2075,6 +2075,31 @@ def _publish_meta(rid, meta, runtime):
         _log('publish meta: %s' % e)
 
 
+SRC_PROP = 'abk.lp.src'          # ISO / REMUX / BLURAY / WEB ... of the picked release
+SRC_TS_PROP = 'abk.lp.src.ts'
+
+
+def _remember_src(item):
+    """4.8.85: the picked release's type (the Lucent badge of the 'src' family)
+    for the Lucent Player's source badge - debrid links often carry no release
+    name (.../00278.m2ts), so AF3's file-name test finds nothing. Cleared by the
+    service when another file plays (disc_stream)."""
+    home = xbmcgui.Window(10000)
+    src = ''
+    th = _theme()
+    if th and item:
+        found = th.badges(item.get('extraInfo', ''), _quality(item),
+                          item.get('name') or item.get('display_name') or '')
+        src = next((b for b in found if th._FAMILY.get(b) == 'src'), '')
+    if src:
+        home.setProperty(SRC_PROP, src)
+        home.setProperty(SRC_TS_PROP, str(int(time.time())))
+    else:
+        home.clearProperty(SRC_PROP)
+        home.clearProperty(SRC_TS_PROP)
+    _log('source badge for the pick: %s' % (src or 'none'))
+
+
 def _after_pick(session, addons, media, picked):
     """Hand the pick to its add-on. True = sent, False = nothing to send."""
     if not picked:
@@ -2096,6 +2121,10 @@ def _after_pick(session, addons, media, picked):
         disc_debrid.remember_pick(item or {}, _service_code(_provider(item or {})))
     except Exception as e:
         _log('disc pick: %s' % e)
+    try:                                             # 4.8.85: release type for the player's source badge
+        _remember_src(item or {})
+    except Exception as e:
+        _log('source badge: %s' % e)
     if key == 'aio':
         return _aio_play(session, index)
     if key == 'en':

@@ -25,7 +25,14 @@ VAR = '''<!-- 4.8.69: AF3 OSD Flags Style (af3_flagstyle.py) -->
 '''
 
 
-EXTRA_VARS = '''<!-- 4.8.84: Kodi does not expand $VAR inside String.IsEmpty() in a visible condition, so
+EXTRA_VARS = '''<!-- 4.8.85: the source badge of a Search All pick (abk.lp.src = ISO / REMUX / BLURAY / WEB ...,
+         set by AB Tools from the release name) when the playing file name has no source word
+         (debrid links such as .../00278.m2ts); otherwise AF3's own Image_VideoPlayer_RipSource. -->
+    <variable name="ABK_LP_RipSource">
+        <value condition="!String.IsEmpty(Window(Home).Property(abk.lp.src))">$VAR[ABK_LP_FlagDir]/$INFO[Window(Home).Property(abk.lp.src)].png</value>
+        <value>$VAR[Image_VideoPlayer_RipSource]</value>
+    </variable>
+    <!-- 4.8.84: Kodi does not expand $VAR inside String.IsEmpty() in a visible condition, so
          !String.IsEmpty($VAR[Image_VideoPlayer_RipSource]) was always false and the source badge never
          showed. Same keywords as Image_VideoPlayer_RipSource / AF3 ExtraOSD (Includes_Extra.xml). -->
     <expression name="ABK_LP_HasRipSource">String.Contains(Player.FileNameAndPath,2160p) | String.Contains(Player.FileNameAndPath,UHD) | String.Contains(Player.FileNameAndPath,UltraHD) | String.Contains(Player.FileNameAndPath,Ultra-HD) | String.Contains(Player.FileNameAndPath,4K) | String.Contains(Player.FileNameAndPath,web-dl) | String.Contains(Player.FileNameAndPath,webdl) | String.Contains(Player.FileNameAndPath,WEBRip) | String.Contains(Player.FileNameAndPath,blu-ray) | String.Contains(Player.FileNameAndPath,bluray) | String.Contains(Player.FileNameAndPath,bdrip) | String.Contains(Player.FileNameAndPath,bd25) | String.Contains(Player.FileNameAndPath,bd50) | String.Contains(Player.FileNameAndPath,dvd) | String.Contains(Player.FileNameAndPath,vhs) | String.Contains(Player.FileNameAndPath,vhsrip) | String.Contains(Player.FileNameAndPath,hdtv) | String.Contains(Player.FileNameAndPath,pdtv) | String.Contains(Player.FileNameAndPath,dsr) | !String.IsEmpty(Skin.String(FallbackSourceFlag))</expression>
@@ -57,7 +64,7 @@ def _img(w, texture, visible, fallback=''):
 EXTRAS = (EXTRA_MARK + '\n'
           # 4.8.77: AF3's own source badge (Blu-ray, UHD, WEB-DL, HD-DVD, VHS, SDTV,
           # Skin.String(FallbackSourceFlag)) - full path via Flags_Badge_Directory
-          + _img(132, '$VAR[Image_VideoPlayer_RipSource]', '$EXP[ABK_LP_HasRipSource]')
+          + _img(132, '$VAR[ABK_LP_RipSource]', '$EXP[ABK_LP_HasRipSource] | !String.IsEmpty(Window(Home).Property(abk.lp.src))')
           + _img(110, '$VAR[ABK_LP_ExtraDir]/aspectratio/$INFO[VideoPlayer.VideoAspect].png', '!String.IsEmpty(VideoPlayer.VideoAspect)')
           + _img(160, '$VAR[ABK_LP_ExtraDir]/other/language/$INFO[VideoPlayer.AudioLanguage].png', '!String.IsEmpty(VideoPlayer.AudioLanguage)',
                  '$VAR[ABK_LP_ExtraDir]/other/language/fallback.png')

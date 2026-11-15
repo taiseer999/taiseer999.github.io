@@ -565,9 +565,14 @@ class _Rescue(xbmc.Player):
                 _home().clearProperty(SOURCE_PROP)           # another file: no disc now
         if self.path and enabled() and maybe_disc(self.path):
             self._remember_item(self.path)
+        _clear_old_source_badge(path)
 
     def onAVStarted(self):
         self.av = True
+        try:
+            _explain_disc_button(self.getPlayingFile())
+        except Exception:
+            pass
 
     def onPlayBackError(self):
         self._failed('error')
@@ -627,6 +632,49 @@ class _Rescue(xbmc.Player):
             xbmc.executebuiltin('Dialog.Close(busydialognocancel,true)')
             home.clearProperty(BUSY_PROP)
             self.busy = False
+
+
+def _clear_old_source_badge(path):
+    """4.8.85: abk.lp.src (Search All pick's release type) belongs to the file
+    that pick starts - drop it when something else plays (a disc reopened from
+    that pick keeps it)."""
+    home = _home()
+    if not home.getProperty('abk.lp.src'):
+        return
+    low = str(path or '').lower()
+    if low.startswith(('bluray://', 'udf://')) or ('/%s/' % PATH_MARK) in low:
+        return
+    try:
+        age = time.time() - float(home.getProperty('abk.lp.src.ts') or 0)
+    except ValueError:
+        age = 1e9
+    if age > 180:
+        home.clearProperty('abk.lp.src')
+        home.clearProperty('abk.lp.src.ts')
+
+
+def _explain_disc_button(path):
+    """4.8.85: one log line saying why the AF3 Disc Menu button is (not) shown
+    for an http .m2ts / .iso (the skin evaluates the same conditions)."""
+    low = str(path or '').lower().split('|', 1)[0]
+    if not low.startswith('http') or not (low.endswith('.m2ts') or '.iso' in low or PATH_MARK in low):
+        return
+    cond = xbmc.getCondVisibility
+    parts = {'toggle on': cond('Skin.HasSetting(abk.discmenu)'),
+             'disc pick': bool(_home().getProperty('abk.disc.pick')),
+             'iso path': '.iso' in low,
+             'skin buttons v5': _skin_has_buttons()}
+    _log('Disc Menu button for %s: %s' % (low.rsplit('/', 1)[-1][:60],
+                                         ', '.join('%s=%s' % kv for kv in parts.items())))
+
+
+def _skin_has_buttons():
+    try:
+        p = xbmcvfs.translatePath('special://skin/1080i/VideoOSD.xml')
+        with open(p, 'r', encoding='utf-8') as f:
+            return '<!-- ABUKARIM: AF3 disc menu buttons v5 -->' in f.read()
+    except Exception:
+        return None
 
 
 def _last_opened_from_log():
