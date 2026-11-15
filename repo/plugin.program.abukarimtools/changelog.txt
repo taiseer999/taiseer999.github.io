@@ -1,4 +1,9 @@
-v4.8.90  (2026-11-15)
+v4.8.91  (2026-11-15)
+- AF3 Lucent Player: the flag row (resolution, HDR, codec, audio, channels,
+  source, IMAX, aspect ratio, languages) is 20% narrower: each badge is drawn
+  at 80% of its old size (pills 132x51 -> 106x41, aspect 110 -> 88, language
+  160 -> 128) and the gap between them 12 -> 10, in the pause card and both
+  info-panel rows (tools/lucent_player/af3_flagstyle.py _scale_rows).
 - Empty badge slot after the source badge (Primetime, kodi.log 08:26: "texture
   file loading failed ... frbadges/glass/aspectratio/1.50.png"). Kodi 22 names
   a picture's ratio from a fixed vocabulary (utils/AspectRatioVocabulary.cpp:
