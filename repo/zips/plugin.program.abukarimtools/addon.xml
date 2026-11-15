@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="AB Tools"
-       version="4.8.77"
+       version="4.8.78"
        provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" optional="true"/>
     <import addon="script.module.six" optional="true"/>
-    <!-- 3.2.43~beta2: AF3 Auto Trailers through NewPipe (all on repository.taiseer) -->
-    <import addon="plugin.video.newpipe" version="1.0.0~beta1"/>
+    <!-- 3.2.43~beta2: AF3 Auto Trailers through NewPipe -->
+    <!-- 4.8.78: NewPipe and scrapetube live on repository.twilight0 only, and Kodi resolves
+         every import BEFORE installing AB Tools, so both are optional now.
+         resources/lib/newpipe_setup.py installs repository.twilight0 FIRST, then NewPipe from
+         it (Kodi pulls scrapetube & co from twilight0 with it). -->
+    <import addon="plugin.video.newpipe" version="1.0.0~beta1" optional="true"/>
     <import addon="script.module.unicache" version="1.0.1"/>
     <import addon="script.module.urldispatcher" version="1.1.0"/>
-    <import addon="script.module.scrapetube" version="2.8.2"/>
+    <import addon="script.module.scrapetube" version="2.8.2" optional="true"/>
     <import addon="script.module.resolveurl" version="5.1.210"/>
     <import addon="script.module.resolveurl.pluginsgr" version="0.2.5"/>
     <import addon="script.module.websocket" version="1.6.4"/>

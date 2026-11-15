@@ -621,17 +621,18 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.8.77" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.8.78" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
     <import addon="script.module.requests" optional="true" />
     <import addon="script.module.six" optional="true" />
     
-    <import addon="plugin.video.newpipe" version="1.0.0~beta1" />
+    
+    <import addon="plugin.video.newpipe" version="1.0.0~beta1" optional="true" />
     <import addon="script.module.unicache" version="1.0.1" />
     <import addon="script.module.urldispatcher" version="1.1.0" />
-    <import addon="script.module.scrapetube" version="2.8.2" />
+    <import addon="script.module.scrapetube" version="2.8.2" optional="true" />
     <import addon="script.module.resolveurl" version="5.1.210" />
     <import addon="script.module.resolveurl.pluginsgr" version="0.2.5" />
     <import addon="script.module.websocket" version="1.6.4" />

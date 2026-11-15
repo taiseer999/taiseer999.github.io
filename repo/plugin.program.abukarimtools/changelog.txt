@@ -1,3 +1,16 @@
+v4.8.78  (2026-11-15)
+- NewPipe (AF3 Auto Trailers) now installs in the right order:
+  repository.twilight0 first, then plugin.video.newpipe from it.
+  plugin.video.newpipe and script.module.scrapetube are optional imports in
+  addon.xml (they exist only on Twilight0's repository; as hard imports a box
+  without that repo could not install AB Tools). New
+  resources/lib/newpipe_setup.py: on boot (background, after first-run setup
+  and playback) and when "NewPipe (YouTube)" is picked as the trailer
+  source, it installs repository.twilight0 2.0.2 from its own repo_dir zip,
+  enables it, refreshes the repositories, waits until its listing carries
+  NewPipe, then installs NewPipe through Kodi (its libraries come from
+  Twilight0's repos), enables it and pins its origin to repository.twilight0.
+
 v4.8.77  (2026-11-14)
 - "AF3: Classic OSD Flags" is gone from Toggles: one entry, "AF3: OSD Flags
   Style", now controls all the badges. Its new last choice "Off (stock

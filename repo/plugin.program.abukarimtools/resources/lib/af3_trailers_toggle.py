@@ -204,10 +204,17 @@ def _run():
                                   _slabel)
             config.save(cfg)
             _log('trailers source: %s' % cfg['source'])
-            if (cfg['source'] == 'newpipe' and not xbmc.getCondVisibility(
-                    'System.HasAddon(plugin.video.newpipe) + '
-                    'System.AddonIsEnabled(plugin.video.newpipe)')):
-                DIALOG.ok(ADDON_NAME, T(30453))
+            if cfg['source'] == 'newpipe':
+                # 4.8.78: install it now - repository.twilight0 first, then NewPipe
+                from resources.lib import newpipe_setup
+                if not newpipe_setup.ready():
+                    xbmc.executebuiltin('ActivateWindow(busydialognocancel)')
+                    try:
+                        newpipe_setup.ensure()
+                    finally:
+                        xbmc.executebuiltin('Dialog.Close(busydialognocancel,true)')
+                if not newpipe_setup.ready():
+                    DIALOG.ok(ADDON_NAME, T(30453))
             if (cfg.get('show') == 'background' and xbmc.getSkinDir() == SKIN_ID
                     and xbmc.getCondVisibility('Skin.HasSetting(Background.DisableVideo)')):
                 DIALOG.ok(ADDON_NAME, T(30442))
