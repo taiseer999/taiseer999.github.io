@@ -1,4 +1,12 @@
-v4.8.89  (2026-11-15)
+v4.8.90  (2026-11-15)
+- Empty badge slot after the source badge (Primetime, kodi.log 08:26: "texture
+  file loading failed ... frbadges/glass/aspectratio/1.50.png"). Kodi 22 names
+  a picture's ratio from a fixed vocabulary (utils/AspectRatioVocabulary.cpp:
+  1.00 1.19 1.33 1.37 1.43 1.50 1.66 1.78 1.85 1.90 2.00 2.20 2.35 2.40 2.55
+  2.76); the styles had no 1.00, 1.19, 1.43, 1.50 or 1.90 picture, so the
+  aspect-ratio slot showed but stayed blank. Needs resource.images.af3.frbadges
+  1.0.10, which adds those five in every style, drawn from the style's own 1.78
+  badge with the number replaced (tools/frbadges/make_aspect.py).
 - Even badge spacing: needs resource.images.af3.frbadges 1.0.9. A Kodi image
   slot is fixed-width, so a narrow badge (7.1, 3D, 4K, ISO) left wide empty
   margins and the AF3 Lucent Player / Search All rows looked unevenly

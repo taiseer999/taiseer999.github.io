@@ -165,7 +165,11 @@ def redraw(style, src, word):
             f[y, L:R + 1] = (1 - t) * top + t * bot
     need = int(font.getlength(word)) + int(cap * .1)
     band = max(0, need - (x1 - x0 + 1))
-    if style == 'lucent':                            # roomy pill: same size, text centred
+    if band and globals().get('NO_WIDEN'):           # same pill: shrink the word a little instead
+        k = (x1 - x0 + 1) / float(need)
+        newcap = max(8, int(cap * k)); y0 += (cap - newcap) // 2; cap = newcap
+        font = font_for(cap); band = 0
+    if style == 'lucent' and 'aspectratio' not in src:   # roomy pill: same size, text centred
         band, x0 = 0, int((w - int(font.getlength(word))) / 2)
     at = (x0 + x1) // 2
     if len(above) or ya > int(h * .3):               # a small line above (DOLBY): widen past its end
