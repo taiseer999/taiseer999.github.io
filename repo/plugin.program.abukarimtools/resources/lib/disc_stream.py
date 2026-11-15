@@ -661,6 +661,7 @@ def _clear_old_source_badge(path):
     if age > 180:
         home.clearProperty('abk.lp.src')
         home.clearProperty('abk.lp.src.ts')
+        home.clearProperty('abk.lp.imax')
 
 
 def _source_badge_fallback(path):

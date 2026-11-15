@@ -1,4 +1,25 @@
-v4.8.87  (2026-11-15)
+v4.8.89  (2026-11-15)
+- Even badge spacing: needs resource.images.af3.frbadges 1.0.9. A Kodi image
+  slot is fixed-width, so a narrow badge (7.1, 3D, 4K, ISO) left wide empty
+  margins and the AF3 Lucent Player / Search All rows looked unevenly
+  spread (80-176 px of visible badge in a 176 px slot). In the 10 pill styles
+  (Glass, Black & White, Light, Solid, White & Black, Frost, Icon Dark, Icon
+  Light, Minimal, Split) every lucent_player/ badge now fills the full width:
+  the pill is rebuilt clean, stretched in its middle, and the label put back
+  centred (left, with its icon, in the icon styles) - tools/frbadges/
+  uniform_width.py. The Lucent pills were already uniform; the text-only
+  styles (Text White / Black, Neon Icon) have no pill to widen.
+- IMAX and Dolby Vision 2 badges in every OSD Flags Style. Needs
+  resource.images.af3.frbadges 1.0.8: each style's lucent_player/ set gets
+  IMAX.png (drawn from that style's own 3D badge) and a real DV2.png (its
+  DOLBY VISION badge with VISION 2 / DV 2 - until now DV2 was a copy of the
+  DV picture in all 13 FR styles), tools/frbadges/make_dv2_imax.py. Lucent
+  and Colorful use the Lucent IMAX pill (also shipped in AB Tools' own pill
+  sets).
+- IMAX is read from release names (lucent_theme: "IMAX", "IMAX Enhanced"),
+  so Search All and the Fen Light / Red Light / POV / Umbrella source windows
+  show it next to the release type. The AF3 Lucent Player gets an IMAX slot
+  (file name, or the Search All pick's release name - Home abk.lp.imax).
 - Disc Menu without Search All: on the Mac (kodi.log 07:07) the film was
   picked in Red Light's own source window, so there was no torrent hash and
   the button stayed hidden. The service now gives every disc stream from a

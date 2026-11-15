@@ -320,6 +320,14 @@
                     <texture background="true">$VAR[ABK_LP_RipSource]</texture>
                     <visible>$EXP[ABK_LP_HasRipSource] | !String.IsEmpty(Window(Home).Property(abk.lp.src))</visible>
                 </control>
+                <!-- 4.8.88: IMAX (release name of a Search All pick, or the file name) -->
+                <control type="image">
+                    <width>132</width>
+                    <height>51</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/IMAX.png</texture>
+                    <visible>String.Contains(Player.FileNameAndPath,imax) | !String.IsEmpty(Window(Home).Property(abk.lp.imax))</visible>
+                </control>
                 <control type="image">
                     <width>110</width>
                     <height>51</height>
@@ -681,6 +689,14 @@
                     <texture background="true">$VAR[ABK_LP_RipSource]</texture>
                     <visible>$EXP[ABK_LP_HasRipSource] | !String.IsEmpty(Window(Home).Property(abk.lp.src))</visible>
                 </control>
+                <!-- 4.8.88: IMAX (release name of a Search All pick, or the file name) -->
+                <control type="image">
+                    <width>132</width>
+                    <height>51</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/IMAX.png</texture>
+                    <visible>String.Contains(Player.FileNameAndPath,imax) | !String.IsEmpty(Window(Home).Property(abk.lp.imax))</visible>
+                </control>
                 <control type="image">
                     <width>110</width>
                     <height>51</height>
@@ -892,6 +908,14 @@
                     <aspectratio>keep</aspectratio>
                     <texture background="true">$VAR[ABK_LP_RipSource]</texture>
                     <visible>$EXP[ABK_LP_HasRipSource] | !String.IsEmpty(Window(Home).Property(abk.lp.src))</visible>
+                </control>
+                <!-- 4.8.88: IMAX (release name of a Search All pick, or the file name) -->
+                <control type="image">
+                    <width>132</width>
+                    <height>51</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/IMAX.png</texture>
+                    <visible>String.Contains(Player.FileNameAndPath,imax) | !String.IsEmpty(Window(Home).Property(abk.lp.imax))</visible>
                 </control>
                 <control type="image">
                     <width>110</width>

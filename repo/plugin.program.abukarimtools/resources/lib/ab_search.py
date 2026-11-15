@@ -2086,11 +2086,16 @@ def _remember_src(item):
     service when another file plays (disc_stream)."""
     home = xbmcgui.Window(10000)
     src = ''
+    found = []
     th = _theme()
     if th and item:
         found = th.badges(item.get('extraInfo', ''), _quality(item),
                           item.get('name') or item.get('display_name') or '')
         src = next((b for b in found if th._FAMILY.get(b) == 'src'), '')
+    if th and item and 'IMAX' in found:                # 4.8.88: IMAX badge in the player
+        home.setProperty('abk.lp.imax', '1')
+    else:
+        home.clearProperty('abk.lp.imax')
     if src:
         home.setProperty(SRC_PROP, src)
         home.setProperty(SRC_TS_PROP, str(int(time.time())))

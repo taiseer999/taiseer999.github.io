@@ -34,7 +34,7 @@ _BADGES = {
 	'AVC': 'AVC', 'H264': 'AVC', 'H.264': 'AVC', 'X264': 'AVC', 'CODEC_H264': 'AVC',
 	'AV1': 'AV1', 'CODEC_AV1': 'AV1', 'VP9': 'VP9', 'XVID': 'XVID', 'DIVX': 'DIVX',
 	'MPEG': 'MPEG', 'WMV': 'WMV', 'MP4': 'MP4',
-	'3D': '3D', 'VIDEO_3D': '3D',
+	'3D': '3D', 'VIDEO_3D': '3D', 'IMAX': 'IMAX', 'IMAX_ENHANCED': 'IMAX',
 	'REMUX': 'REMUX', 'BLURAY': 'BLURAY', 'BLU-RAY': 'BLURAY', 'BDRIP': 'BLURAY',
 	'WEB': 'WEB', 'WEB-DL': 'WEB', 'WEBDL': 'WEB', 'WEBRIP': 'WEB',
 	'HDTV': 'HDTV', 'PDTV': 'PDTV', 'HDRIP': 'HD-RIP', 'HD-RIP': 'HD-RIP', 'DVD': 'DVDRIP', 'DVDRIP': 'DVDRIP',
@@ -53,7 +53,7 @@ _BADGES = {
 	'1CH': '1.0', '1.0': '1.0', 'MONO': '1.0', 'AUDIO_1CH': '1.0',
 }
 # Display order: release type, picture, codec, audio, channels, extras.
-_ORDER = ('CAM', 'SCR', 'HC', 'ISO', 'REMUX', 'BLURAY', 'WEB', 'HDTV', 'PDTV', 'HD-RIP', 'DVDRIP',
+_ORDER = ('CAM', 'SCR', 'HC', 'ISO', 'REMUX', 'BLURAY', 'WEB', 'HDTV', 'PDTV', 'HD-RIP', 'DVDRIP', 'IMAX',
 		'DV2', 'DV', 'HDR10+', 'HDR10', 'HDR', 'HLG', 'HYBRID', 'SDR', 'HEVC', 'AV1', 'AVC', 'VP9', 'XVID', 'DIVX', 'MPEG', 'WMV', 'MP4',
 		'ATMOS', 'TRUEHD', 'DTS-X', 'DTS-HDMA', 'DTS-HDHR', 'DTS-HD', 'DTS', 'DD+', 'DD', 'PCM', 'FLAC', 'AAC', 'OPUS', 'MP3', 'WMA',
 		'7.1', '6.1', '5.1', '2.0', '1.0', '3D')
@@ -76,6 +76,8 @@ def _clean(text):
 
 # Dolby Vision 2 in a release name (no add-on parser has a tag for it yet).
 _DV2_RE = re.compile(r'(?<![A-Z0-9])(?:DV2|DOVI2|DOLBY[ ._-]?VISION[ ._-]?2)(?![A-Z0-9])', re.I)
+# AB Tools 4.8.88: IMAX (IMAX / IMAX Enhanced) in a release name.
+_IMAX_RE = re.compile(r'(?<![A-Za-z0-9])IMAX(?![A-Za-z0-9])', re.I)
 # AB Tools 4.8.82: a disc image (ISO, BDISO, UHD.ISO, movie.iso). No add-on
 # parser has a tag for it, so the release name and the info string are read -
 # the same test as Search All's "ISO only" filter. It takes the release-type
@@ -90,6 +92,7 @@ def badges(info, quality='', name=''):
 	found = []
 	if name and _DV2_RE.search(_clean(name)): found.append('DV2')
 	if _ISO_RE.search(_clean(name) + ' ' + _clean(info)): found.append('ISO')
+	if _IMAX_RE.search(_clean(name)): found.append('IMAX')
 	text = _clean(info).upper().replace('D/VISION', 'DV')
 	for token in _SPLIT_RE.split(text):
 		token = token.strip()

@@ -65,6 +65,8 @@ EXTRAS = (EXTRA_MARK + '\n'
           # 4.8.77: AF3's own source badge (Blu-ray, UHD, WEB-DL, HD-DVD, VHS, SDTV,
           # Skin.String(FallbackSourceFlag)) - full path via Flags_Badge_Directory
           + _img(132, '$VAR[ABK_LP_RipSource]', '$EXP[ABK_LP_HasRipSource] | !String.IsEmpty(Window(Home).Property(abk.lp.src))')
+          # 4.8.88: IMAX
+          + _img(132, '$VAR[ABK_LP_FlagDir]/IMAX.png', 'String.Contains(Player.FileNameAndPath,imax) | !String.IsEmpty(Window(Home).Property(abk.lp.imax))')
           + _img(110, '$VAR[ABK_LP_ExtraDir]/aspectratio/$INFO[VideoPlayer.VideoAspect].png', '!String.IsEmpty(VideoPlayer.VideoAspect)')
           + _img(160, '$VAR[ABK_LP_ExtraDir]/other/language/$INFO[VideoPlayer.AudioLanguage].png', '!String.IsEmpty(VideoPlayer.AudioLanguage)',
                  '$VAR[ABK_LP_ExtraDir]/other/language/fallback.png')
