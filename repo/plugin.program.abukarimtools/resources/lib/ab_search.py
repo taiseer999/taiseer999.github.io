@@ -1103,7 +1103,9 @@ _BITRATES = ((40, 1e9, 30837), (20, 40, 30838), (10, 20, 30839), (0, 10, 30840))
 
 # 4.7.25 (restored 4.7.39): ISO / BDISO disc images ("Movie.2023.BDISO",
 # "...COMPLETE.UHD.BLURAY.ISO", "movie.iso")
-_ISO_RE = re.compile(r'(?<![a-z0-9])(?:bd|uhd|dvd)?iso(?![a-z0-9])', re.I)
+# 4.8.82: upper-case ISO tag, BDISO / UHDISO / DVDISO, or a .iso file name - a title
+# word ("Iso", "Isolation") is not a disc image
+_ISO_RE = re.compile(r'(?<![A-Za-z0-9])(?:(?i:bd|uhd|dvd)(?i:iso)|ISO)(?![A-Za-z0-9])|(?i:\.iso)\s*$')
 
 
 def _is_iso(item):

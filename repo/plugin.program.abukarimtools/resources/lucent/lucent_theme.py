@@ -53,7 +53,7 @@ _BADGES = {
 	'1CH': '1.0', '1.0': '1.0', 'MONO': '1.0', 'AUDIO_1CH': '1.0',
 }
 # Display order: release type, picture, codec, audio, channels, extras.
-_ORDER = ('CAM', 'SCR', 'HC', 'REMUX', 'BLURAY', 'WEB', 'HDTV', 'PDTV', 'HD-RIP', 'DVDRIP',
+_ORDER = ('CAM', 'SCR', 'HC', 'ISO', 'REMUX', 'BLURAY', 'WEB', 'HDTV', 'PDTV', 'HD-RIP', 'DVDRIP',
 		'DV2', 'DV', 'HDR10+', 'HDR10', 'HDR', 'HLG', 'HYBRID', 'SDR', 'HEVC', 'AV1', 'AVC', 'VP9', 'XVID', 'DIVX', 'MPEG', 'WMV', 'MP4',
 		'ATMOS', 'TRUEHD', 'DTS-X', 'DTS-HDMA', 'DTS-HDHR', 'DTS-HD', 'DTS', 'DD+', 'DD', 'PCM', 'FLAC', 'AAC', 'OPUS', 'MP3', 'WMA',
 		'7.1', '6.1', '5.1', '2.0', '1.0', '3D')
@@ -62,7 +62,7 @@ _RANK = {b: n for n, b in enumerate(_ORDER)}
 _FAMILY = {'DTS-X': 'dts', 'DTS-HDMA': 'dts', 'DTS-HDHR': 'dts', 'DTS-HD': 'dts', 'DTS': 'dts',
 		'DD+': 'dd', 'DD': 'dd', '7.1': 'ch', '6.1': 'ch', '5.1': 'ch', '2.0': 'ch', '1.0': 'ch',
 		'DV2': 'dv', 'DV': 'dv', 'HDR10+': 'hdr', 'HDR10': 'hdr', 'HDR': 'hdr', 'HLG': 'hdr',
-		'REMUX': 'src', 'BLURAY': 'src', 'WEB': 'src', 'HDTV': 'src', 'PDTV': 'src', 'HD-RIP': 'src', 'DVDRIP': 'src'}
+		'ISO': 'src', 'REMUX': 'src', 'BLURAY': 'src', 'WEB': 'src', 'HDTV': 'src', 'PDTV': 'src', 'HD-RIP': 'src', 'DVDRIP': 'src'}
 _MAX_BADGES = 7
 _LOWQ = ('CAM', 'SCR', 'TELE', 'HC')
 _TAG_RE = re.compile(r'\[/?(?:B|I|UPPERCASE|LOWERCASE|CAPITALIZE|COLOR[^\]]*)\]', re.I)
@@ -76,12 +76,22 @@ def _clean(text):
 
 # Dolby Vision 2 in a release name (no add-on parser has a tag for it yet).
 _DV2_RE = re.compile(r'(?<![A-Z0-9])(?:DV2|DOVI2|DOLBY[ ._-]?VISION[ ._-]?2)(?![A-Z0-9])', re.I)
+# AB Tools 4.8.82: a disc image (ISO, BDISO, UHD.ISO, movie.iso). No add-on
+# parser has a tag for it, so the release name and the info string are read -
+# the same test as Search All's "ISO only" filter. It takes the release-type
+# slot (an ISO is the whole disc, so it beats REMUX / BLU-RAY there).
+# 4.8.82: upper-case ISO tag, BDISO / UHDISO / DVDISO, or a .iso file name - a title
+# word ("Iso", "Isolation") is not a disc image
+_ISO_RE = re.compile(r'(?<![A-Za-z0-9])(?:(?i:bd|uhd|dvd)(?i:iso)|ISO)(?![A-Za-z0-9])|(?i:\.iso)\s*$')
+# badges an FR-Badges style has no picture for: the Lucent pill is shown
+_LUCENT_ONLY = ('ISO',)
 
 
 def badges(info, quality='', name=''):
 	"""Ordered list of Lucent badge names for an info string (+ release name)."""
 	found = []
 	if name and _DV2_RE.search(_clean(name)): found.append('DV2')
+	if _ISO_RE.search(_clean(name) + ' ' + _clean(info)): found.append('ISO')
 	text = _clean(info).upper().replace('D/VISION', 'DV')
 	for token in _SPLIT_RE.split(text):
 		token = token.strip()
@@ -246,6 +256,8 @@ def badge_path(name, default_dir='lucent/flags/'):
 	"""Texture of a badge name: the chosen style's file, else the Lucent pill."""
 	if not name:
 		return ''
+	if name in _LUCENT_ONLY:
+		return default_dir + name + '.png'
 	return (_badge_dir() or default_dir) + name + '.png'
 
 

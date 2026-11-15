@@ -1,4 +1,14 @@
-v4.8.81  (2026-11-15)
+v4.8.82  (2026-11-15)
+- ISO badge: disc images (an upper-case ISO tag, BDISO / UHDISO / DVDISO, or
+  a .iso file name) now show an "ISO" badge in Search All and in the Lucent
+  source windows of Fen Light, Red Light, POV and Umbrella. No add-on parser
+  tags ISO, so the release name is read (resources/lucent/lucent_theme.py).
+  It takes the release-type slot (beats REMUX / BLU-RAY). New Lucent pill
+  resources/lucent/media/lucent/flags/ISO.png in the REMUX look; with an
+  FR-Badges style the ISO badge uses that Lucent pill (the FR sets have no
+  ISO picture).
+- Search All "ISO only" / "Hide ISO" filter: the same stricter test - a
+  title word such as "Iso" or "Isolation" no longer counts as a disc image.
 - Whole Blu-ray discs that come as a folder (BDMV/...) in a debrid torrent
   open in their menus. Red Light & co. play only the largest file of such a
   release (BDMV/STREAM/00278.m2ts - kodi.log 2026-11-15, John Wick 3/4 from
