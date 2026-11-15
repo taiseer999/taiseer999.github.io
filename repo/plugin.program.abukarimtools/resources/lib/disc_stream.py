@@ -570,7 +570,17 @@ class _Rescue(xbmc.Player):
     def onAVStarted(self):
         self.av = True
         try:
-            _explain_disc_button(self.getPlayingFile())
+            path = self.getPlayingFile()
+        except Exception:
+            path = ''
+        try:
+            from resources.lib import disc_debrid
+            disc_debrid.bind_playing(path)
+        except Exception as e:
+            _log('disc pick: %s' % e, xbmc.LOGWARNING)
+        _source_badge_fallback(path)
+        try:
+            _explain_disc_button(path)
         except Exception:
             pass
 
@@ -651,6 +661,24 @@ def _clear_old_source_badge(path):
     if age > 180:
         home.clearProperty('abk.lp.src')
         home.clearProperty('abk.lp.src.ts')
+
+
+def _source_badge_fallback(path):
+    """4.8.87: no Search All pick to name the release type - the file type
+    does: a Blu-ray stream (.m2ts, bluray://) is BLURAY, a disc image ISO."""
+    home = _home()
+    if home.getProperty('abk.lp.src'):
+        return
+    low = str(path or '').lower().split('|', 1)[0]
+    bare = urllib.parse.urlsplit(low).path if low.startswith('http') else low
+    src = ''
+    if low.startswith('udf://') or bare.endswith('.iso'):
+        src = 'ISO'
+    elif low.startswith('bluray://') or bare.endswith(('.m2ts', '.mts')):
+        src = 'BLURAY'
+    if src:
+        home.setProperty('abk.lp.src', src)
+        home.setProperty('abk.lp.src.ts', str(int(time.time())))
 
 
 def _explain_disc_button(path):

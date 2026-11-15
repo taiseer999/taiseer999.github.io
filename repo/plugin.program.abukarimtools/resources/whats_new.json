@@ -2,7 +2,7 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
-   "v": "4.8.86",
+   "v": "4.8.87",
    "from": "4.8.68",
    "en": [
     "Whole Blu-ray discs (.iso) from Debrid, TorBox or Usenet play as discs, with their menus, chapters, languages and subtitles, without downloading the disc first (Toggles > AF3: Disc Menu for ISO Streams).",

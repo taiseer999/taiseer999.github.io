@@ -3240,3 +3240,7 @@ msgctxt "#32275"
 msgid "Disc menus of a disc folder work with AllDebrid, TorBox and Premiumize"
 msgstr ""
 
+msgctxt "#32276"
+msgid "Premiumize: pick this release in Search All to open its disc menu"
+msgstr ""
+

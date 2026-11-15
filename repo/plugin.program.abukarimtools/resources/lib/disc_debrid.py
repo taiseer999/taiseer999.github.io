@@ -78,13 +78,61 @@ def remember_pick(item, code):
 
 
 def current_pick():
+    """The pick the Disc Menu button works on: a Search All pick (torrent hash)
+    or, 4.8.87, the playing disc stream itself (service, file name - the
+    torrent is then found in the account by that file, see bind_playing)."""
     try:
         pick = json.loads(xbmcgui.Window(10000).getProperty(PICK_PROP) or '{}')
     except ValueError:
         return {}
-    if not pick.get('hash') or time.time() - float(pick.get('ts') or 0) > PICK_MAX_AGE:
+    if not (pick.get('hash') or pick.get('file')) or time.time() - float(pick.get('ts') or 0) > PICK_MAX_AGE:
         return {}
     return pick
+
+
+def service_of(url):
+    """Debrid service of a download link, by its host."""
+    host = urllib.parse.urlsplit(str(url or '').split('|', 1)[0]).netloc.lower()
+    if host.endswith(('debrid.it', 'alldebrid.com', 'alldebrid.fr')):
+        return 'AD'
+    if 'torbox' in host or host.endswith('tb-cdn.st'):
+        return 'TB'
+    if 'premiumize' in host or host.endswith('energycdn.com'):
+        return 'PM'
+    return ''
+
+
+def _base(url):
+    return urllib.parse.unquote(urllib.parse.urlsplit(str(url).split('|', 1)[0]).path).rsplit('/', 1)[-1]
+
+
+def bind_playing(path):
+    """Service, when a stream starts (4.8.87). A disc stream (.../00278.m2ts)
+    from a debrid host gets a pick for the Disc Menu button whatever started it
+    (Search All, or the add-on's own source window): a Search All pick made in
+    the last 3 minutes is tied to this file (it has the torrent hash); otherwise
+    the pick is the file itself (service + name), and the button finds the
+    torrent in the account by name and size. Anything else drops the pick."""
+    home = xbmcgui.Window(10000)
+    if not is_disc_part(path):
+        low = str(path or '').lower()
+        if not (low.startswith(('bluray://', 'udf://')) or '/abkdisc/' in low):
+            home.clearProperty(PICK_PROP)
+        return
+    name, code = _base(path), service_of(path)
+    pick = current_pick()
+    if pick.get('hash') and not pick.get('file') and time.time() - float(pick.get('ts') or 0) < 180:
+        pick['file'] = name
+    elif not (pick.get('file') == name and pick.get('svc') == (code or pick.get('svc'))):
+        if code not in SERVICES:
+            home.clearProperty(PICK_PROP)
+            _log('disc stream %s: not from AllDebrid / TorBox / Premiumize - no Disc Menu' % name)
+            return
+        pick = {'svc': code, 'file': name, 'ts': int(time.time())}
+    pick['link'] = str(path).split('|', 1)[0]
+    home.setProperty(PICK_PROP, json.dumps(pick))
+    _log('disc stream %s (%s): Disc Menu %s' % (name, pick['svc'], 'by torrent hash' if pick.get('hash')
+                                                 else 'finds the torrent by this file'))
 
 
 def is_disc_part(path):
@@ -96,7 +144,7 @@ def is_disc_part(path):
 
 
 def source_id(pick):
-    return 'debrid:%s:%s' % (pick['svc'], pick['hash'])
+    return 'debrid:%s:%s' % (pick['svc'], pick.get('hash') or 'file:' + str(pick.get('link') or pick.get('file')))
 
 
 # ───────────────────────── accounts ─────────────────────────
@@ -252,6 +300,65 @@ def _pm_files(hsh, tok):
              'link': c.get('link')} for c in res.get('content') or [] if c.get('link')]
 
 
+def _size_of(url):
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'Kodi', 'Range': 'bytes=0-0'})
+        with urllib.request.urlopen(req, timeout=20) as r:
+            total = str(r.headers.get('Content-Range') or '').rsplit('/', 1)[-1]
+            return int(total) if total.isdigit() else int(r.headers.get('Content-Length') or 0)
+    except Exception as e:
+        _log('size of the playing file: %s' % e, xbmc.LOGWARNING)
+        return 0
+
+
+def _ad_hash_by_file(name, size, tok):
+    res = _call('%s/v4.1/magnet/status?%s' % (AD_API, urllib.parse.urlencode({'agent': AGENT})), tok)
+    mags = (res.get('data') or {}).get('magnets') or []
+    if isinstance(mags, dict):
+        mags = list(mags.values()) if 'id' not in mags else [mags]
+    ready = [m for m in mags if int(m.get('statusCode') or 0) == 4]
+    ready.sort(key=lambda m: -int(m.get('completionDate') or m.get('uploadDate') or 0))
+    ready = ready[:40]
+    if not ready:
+        return ''
+    q = [('agent', AGENT)] + [('id[]', m.get('id')) for m in ready]
+    res = _call('%s/v4/magnet/files?%s' % (AD_API, urllib.parse.urlencode(q)), tok)
+    by_id = {str(m.get('id')): m.get('files') or [] for m in (res.get('data') or {}).get('magnets') or []}
+
+    def has(nodes, depth=0):
+        found_name = found_index = False
+        for n in nodes or []:
+            if 'e' in n:
+                a, b = has(n.get('e'), depth + 1)
+                found_name, found_index = found_name or a, found_index or b
+            else:
+                nm = str(n.get('n') or '')
+                if nm == name and (not size or int(n.get('s') or 0) == size):
+                    found_name = True
+                if nm.lower() == 'index.bdmv':
+                    found_index = True
+        return found_name, found_index
+
+    for m in ready:
+        a, b = has(by_id.get(str(m.get('id'))))
+        if a and b:
+            return str(m.get('hash') or '').lower()
+    return ''
+
+
+def _tb_hash_by_file(name, size, tok):
+    res = _call('%s/torrents/mylist?bypass_cache=true' % TB_API, tok)
+    for t in res.get('data') or []:
+        files = t.get('files') or []
+        names = [str(f.get('name') or '') for f in files]
+        hit = any(n.rsplit('/', 1)[-1] == name and (not size or int(f.get('size') or 0) == size)
+                  for n, f in zip(names, files))
+        if hit and any(n.lower().endswith('bdmv/index.bdmv') for n in names):
+            return str(t.get('hash') or '').lower()
+    return ''
+
+
+_BY_FILE = {'AD': _ad_hash_by_file, 'TB': _tb_hash_by_file}
 _FILES = {'AD': _ad_files, 'TB': _tb_files, 'PM': _pm_files}
 _RESOLVE = {'AD': _ad_resolve, 'TB': _tb_resolve, 'PM': lambda ref, tok: ref}
 
@@ -310,7 +417,17 @@ def open_disc(pick, playing):
     if not number:
         raise DebridError('the disc server is not running')
     started = time.time()
-    files = _FILES[code](pick['hash'], tok)
+    hsh = pick.get('hash') or ''
+    if not hsh:
+        if code not in _BY_FILE:
+            raise DebridError('%s: pick the release in Search All for its disc menu' % SERVICES[code], 32276, '')
+        size = _size_of(pick.get('link') or playing)
+        hsh = _BY_FILE[code](pick.get('file') or _base(playing), size, tok)
+        if not hsh:
+            raise DebridError('%s: no torrent with %s and a BDMV folder in the account'
+                              % (SERVICES[code], pick.get('file')), 32274, '')
+        _log('%s: torrent found by %s (%d bytes): %s' % (SERVICES[code], pick.get('file'), size, hsh[:8]))
+    files = _FILES[code](hsh, tok)
     root = _disc_root(files, playing)
     if root is None:
         raise DebridError('not a whole disc (no BDMV/index.bdmv in the torrent)', 32274, '')
@@ -365,7 +482,7 @@ def open_disc(pick, playing):
         java = True
     names = [k.rsplit('/', 1)[-1] for k in tree if k.lower().startswith('bdmv/playlist/') and not tree[k].get('dir')]
     main, seconds = disc_stream.main_playlist(names, lambda n: small('BDMV/PLAYLIST/' + n))
-    sid = source_id(pick)
+    sid = source_id(dict(pick, hash=hsh))
     key = disc_stream.remember_debrid(sid, code, tree, java, main)
     _log('%s disc: %d files in %.1fs, %s menus, main %s (%.0f min)'
          % (SERVICES[code], len(tree), time.time() - started, 'Java' if java else 'HDMV',

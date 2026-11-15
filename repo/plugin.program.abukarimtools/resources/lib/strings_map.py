@@ -53,7 +53,7 @@ ID ranges:
   32218-32219  What's New screen (4.8.61)
   32220-32229  AF3 player - focused button names (4.8.65)
   32230-32268  AF3 OSD Flags Style (4.8.68, FR-Badges; Lucent + samples 4.8.69; all sets 4.8.75)
-  32269-32275  Blu-ray disc images / folders from a stream (4.8.79, 4.8.81)
+  32269-32276  Blu-ray disc images / folders from a stream (4.8.79, 4.8.81, 4.8.87)
 """
 
 STRINGS = {
@@ -926,6 +926,7 @@ STRINGS = {
     32273: ('Disc menu: link your %s account in Account Manager first', 'قائمة القرص: اربط حساب %s في مدير الحسابات أولًا'),
     32274: ('This release is not a whole Blu-ray disc - it has no disc menu', 'هذا الإصدار ليس قرص Blu-ray كاملًا، فلا قائمة له'),
     32275: ('Disc menus of a disc folder work with AllDebrid, TorBox and Premiumize', 'قوائم مجلد القرص تعمل مع AllDebrid وTorBox وPremiumize'),
+    32276: ('Premiumize: pick this release in Search All to open its disc menu', 'Premiumize: اختر هذا الإصدار من «بحث الكل» لفتح قائمة قرصه'),
     # ---- 4.7.41: AF3 Plot Text Size (32113-32117) ----
     32113: ('AF3: Plot Text Size', 'AF3: حجم خط القصة'),
     32114: ('Large', 'كبير'),

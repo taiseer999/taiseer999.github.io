@@ -1,4 +1,15 @@
-v4.8.86  (2026-11-15)
+v4.8.87  (2026-11-15)
+- Disc Menu without Search All: on the Mac (kodi.log 07:07) the film was
+  picked in Red Light's own source window, so there was no torrent hash and
+  the button stayed hidden. The service now gives every disc stream from a
+  debrid host (.../00278.m2ts on debrid.it, TorBox, Premiumize) a pick when
+  it starts; a Search All pick from the last 3 minutes is tied to that file.
+  Without a hash the button finds the torrent in the AllDebrid / TorBox
+  account by the playing file's name and size plus a BDMV/index.bdmv
+  (Premiumize still needs the Search All pick). A pick is dropped when an
+  unrelated file plays.
+- Source badge fallback: with no Search All pick the file type names the
+  release - .m2ts / bluray:// = BLU-RAY, .iso / udf:// = ISO.
 - Disc Menu with AllDebrid: the button showed but the disc did not open -
   "AllDebrid: File not available due to no peer" (kodi.log 2026-11-15
   06:47, John Wick 4). The magnet was uploaded again by its bare hash; now

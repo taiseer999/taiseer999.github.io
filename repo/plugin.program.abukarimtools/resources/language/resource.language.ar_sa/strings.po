@@ -3240,3 +3240,7 @@ msgctxt "#32275"
 msgid "Disc menus of a disc folder work with AllDebrid, TorBox and Premiumize"
 msgstr "قوائم مجلد القرص تعمل مع AllDebrid وTorBox وPremiumize"
 
+msgctxt "#32276"
+msgid "Premiumize: pick this release in Search All to open its disc menu"
+msgstr "Premiumize: اختر هذا الإصدار من «بحث الكل» لفتح قائمة قرصه"
+
