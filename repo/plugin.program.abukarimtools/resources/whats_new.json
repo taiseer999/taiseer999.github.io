@@ -2,7 +2,7 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
-   "v": "4.8.92",
+   "v": "4.8.94",
    "from": "4.8.68",
    "en": [
     "Whole Blu-ray discs (.iso) from Debrid, TorBox or Usenet play as discs, with their menus, chapters, languages and subtitles, without downloading the disc first (Toggles > AF3: Disc Menu for ISO Streams).",
@@ -17,7 +17,7 @@
     "Fixed: Kodi could close right after picking an option in Toggles.",
     "AB Tools is now free software under the GNU GPL 3.0 (LICENSE.txt), with the licence of every part by others in THIRD-PARTY-NOTICES.txt.",
     "The badge row in the AF3 Lucent Player is smaller and takes 20% less width.",
-    "Stream windows: the \"Choose what to show\" screen no longer opens when you search from inside a video add-on; it still opens for searches from the home screen and TMDbHelper."
+    "Stream windows open straight on the full list: the \"Choose what to show\" screen no longer appears by itself (RIGHT still filters)."
    ],
    "ar": [
     "تُشغَّل أقراص Blu-ray الكاملة (ملفات ISO) من Debrid أو TorBox أو Usenet كأقراص حقيقية بقوائمها وفصولها ولغاتها وترجماتها، دون تنزيل القرص أولًا (المفاتيح > AF3: قائمة القرص لملفات ISO المبثوثة).",
@@ -32,7 +32,7 @@
     "إصلاح: كان Kodi قد يُغلَق مباشرةً بعد اختيار أحد الخيارات في المفاتيح.",
     "أصبحت AB Tools برنامجًا حرًّا برخصة GNU GPL 3.0 ‏(LICENSE.txt)، مع ترخيص كل جزء من أعمال الآخرين في THIRD-PARTY-NOTICES.txt.",
     "صار صف الشارات في مشغّل AF3 Lucent أصغر حجمًا، ويشغل عرضًا أقل بنسبة 20%.",
-    "نوافذ المصادر: لم تعد شاشة «اختر ما تريد عرضه» تظهر عند البحث من داخل إضافة فيديو، وتبقى تظهر عند البحث من الشاشة الرئيسية أو من TMDbHelper."
+    "تُفتح نوافذ المصادر على القائمة كاملة مباشرة: لم تعد شاشة «اختر ما تريد عرضه» تظهر من تلقاء نفسها، ويبقى زر اليمين للتصفية."
    ]
   },
   {

@@ -1,9 +1,11 @@
-v4.8.92  (2026-11-15)
+v4.8.94  (2026-11-15)
 - Lucent source windows (Fen Light / Red Light): the totals screen ("Choose
-  what to show": quality x service) is skipped when the search was started
-  from a video add-on's own menus (Container.FolderPath plugin://plugin.video.*,
-  TMDbHelper excepted); it still opens for searches from the skin (home
-  widgets, info screen, TMDbHelper). lucent_theme._from_video_addon.
+  what to show": quality x service) no longer opens by itself. Every search
+  reaches the window through a video add-on - its own menus, or TMDbHelper's
+  player for home widgets and the info screen (kodi.log 14:22: Waves from a
+  home widget, VideoPlayer::OpenFile plugin.video.themoviedb.helper info=play,
+  Container.FolderPath empty, so 4.8.93 still showed it). RIGHT on the list
+  still filters. lucent_theme._from_video_addon.
 - AF3 Lucent Player: the flag row (resolution, HDR, codec, audio, channels,
   source, IMAX, aspect ratio, languages) is 20% narrower: each badge is drawn
   at 80% of its old size (pills 132x51 -> 106x41, aspect 110 -> 88, language

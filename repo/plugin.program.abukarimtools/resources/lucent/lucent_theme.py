@@ -998,22 +998,13 @@ def lucent_layer1(window):
 		return False
 
 
-_NOT_VIDEO_ADDON = ('plugin.video.themoviedb.helper',)
-
-
 def _from_video_addon():
-	"""True when the search was started while browsing a video add-on (Red Light,
-	Fen Light... menus), not from the skin (home widgets, info screen, TMDbHelper)."""
-	try:
-		import xbmc
-		path = xbmc.getInfoLabel('Container.FolderPath') or ''
-		if not path.startswith('plugin://plugin.video.'): return False
-		addon = path[len('plugin://'):].split('/')[0].split('?')[0]
-		if addon in _NOT_VIDEO_ADDON: return False
-		_log('totals screen skipped: search started from %s' % addon)
-		return True
-	except Exception:
-		return False
+	"""Every stream search reaches this window through a video add-on: its own
+	menus, or TMDbHelper's player (home widgets, info screen) - kodi.log
+	14:22, Waves from a home widget via plugin.video.themoviedb.helper info=play.
+	So the totals screen no longer opens by itself."""
+	_log('totals screen skipped: search started from a video add-on')
+	return True
 
 
 def lucent_layer1_open(window):
