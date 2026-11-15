@@ -2897,7 +2897,7 @@ msgid "Size of the plot text in Arctic Fuse 3: large or small."
 msgstr ""
 
 msgctxt "#32184"
-msgid "Disc Menu and Normal Player buttons in the player while a Blu-ray ISO plays from a stream."
+msgid "Disc Menu and Normal Player buttons while a Blu-ray ISO plays from a stream; disc links that would not play open as discs."
 msgstr ""
 
 msgctxt "#32185"
@@ -3210,5 +3210,17 @@ msgstr ""
 
 msgctxt "#32268"
 msgid "No badge rows in the AF3 player and footer; the Lucent pills elsewhere"
+msgstr ""
+
+msgctxt "#32269"
+msgid "Blu-ray disc image - opening it as a disc..."
+msgstr ""
+
+msgctxt "#32270"
+msgid "This disc has Java (BD-J) menus - they open on CoreELEC / LibreELEC only. The main movie keeps playing."
+msgstr ""
+
+msgctxt "#32271"
+msgid "The disc image could not be read from this link"
 msgstr ""
 

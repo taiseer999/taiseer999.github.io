@@ -61,7 +61,15 @@ def _host(url, proto):
 
 
 def _iso_url(path):
-    """The stream URL of the ISO behind a raw / udf:// / bluray:// path."""
+    """The stream URL of the ISO behind a raw / udf:// / bluray:// path, or a
+    disc served by disc_stream (4.8.79: also links with no .iso in them that
+    the rescue opened as a disc - Home abk.disc.source)."""
+    from resources.lib import disc_stream
+    key = disc_stream.key_of(path)
+    if key:
+        disc = disc_stream.disc_for(key)
+        return (disc or {}).get('link', '')
+    source = xbmcgui.Window(_HOME).getProperty(disc_stream.SOURCE_PROP)
     for _ in range(3):
         low = path.lower()
         if low.startswith('bluray://'):
@@ -73,6 +81,8 @@ def _iso_url(path):
     low = path.lower()
     if low.startswith('http') and '.iso' in low:
         return path
+    if source and low.startswith('http') and path.split('|', 1)[0] == source.split('|', 1)[0]:
+        return source
     return ''
 
 
@@ -274,21 +284,55 @@ def _ensure_jre():
     return True
 
 
-def _to_menu(iso):
-    _ensure_jre()
+def _served(iso, playing=''):
+    """4.8.79: away from CoreELEC / LibreELEC, Kodi hangs on a streamed udf://
+    image - the disc is served as a folder by disc_stream instead.
+    {'base', 'java', 'main', ...} or None."""
+    from resources.lib import disc_stream
+    key = disc_stream.key_of(playing)
+    if key:
+        disc = disc_stream.disc_info(key)
+        if disc:
+            return disc
+    _busy(True)
+    try:
+        return disc_stream.open_image(iso)
+    finally:
+        _busy(False)
+
+
+def _on_coreelec():
+    from resources.lib import disc_stream
+    return disc_stream.on_coreelec()
+
+
+def _to_menu(iso, playing=''):
     player = xbmc.Player()
     try:
         pos = player.getTime()
     except Exception:
         pos = 0.0
+    if _on_coreelec():
+        _ensure_jre()
+        path = _bluray_base(iso) + 'menu'
+    else:
+        disc = _served(iso, playing)
+        if not disc:
+            xbmcgui.Dialog().notification(TITLE, T(32271), xbmcgui.NOTIFICATION_WARNING, 4000)
+            return
+        if disc['java']:
+            # libbluray without Java stops at the first Java title
+            _log('Java (BD-J) menus - only CoreELEC / LibreELEC run them')
+            xbmcgui.Dialog().notification(TITLE, T(32270), xbmcgui.NOTIFICATION_WARNING, 5000)
+            return
+        path = disc['base'] + 'menu'
     xbmcgui.Window(_HOME).setProperty(_POS_PROP % _key(iso), '%.3f' % pos)
-    path = _bluray_base(iso) + 'menu'
     _log('to disc menu (left the main movie at %.0fs): %s' % (pos, path))
     xbmcgui.Dialog().notification(TITLE, T(32107), xbmcgui.NOTIFICATION_INFO, 2500)
     _play(path, _listitem(path))
 
 
-def _to_normal(iso):
+def _to_normal(iso, playing=''):
     player = xbmc.Player()
     win = xbmcgui.Window(_HOME)
     key = _POS_PROP % _key(iso)
@@ -307,12 +351,16 @@ def _to_normal(iso):
         except ValueError:
             start = 0.0
     win.clearProperty(key)
-    base = _bluray_base(iso)
-    _busy(True)
-    try:
-        path = _main_playlist(base)
-    finally:
-        _busy(False)
+    if _on_coreelec():
+        base = _bluray_base(iso)
+        _busy(True)
+        try:
+            path = _main_playlist(base)
+        finally:
+            _busy(False)
+    else:
+        disc = _served(iso, playing)
+        path = (disc['base'] + 'BDMV/PLAYLIST/' + disc['main']) if disc and disc.get('main') else ''
     if not path:
         # Not readable here: the plain ISO as the stream add-on played it
         # (Kodi's own Blu-ray playback mode decides; no resume point).
@@ -335,6 +383,6 @@ def run(go):
         xbmcgui.Dialog().notification(TITLE, T(32106), xbmcgui.NOTIFICATION_WARNING, 3000)
         return
     if go == 'normal':
-        _to_normal(iso)
+        _to_normal(iso, path)
     else:
-        _to_menu(iso)
+        _to_menu(iso, path)

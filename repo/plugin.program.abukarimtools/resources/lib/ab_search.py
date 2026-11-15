@@ -1869,6 +1869,8 @@ def _pick_busy():
     cond = xbmc.getCondVisibility
     if cond('System.HasActiveModalDialog') or _real_file():     # a file opening (not TMDbHelper's dummy)
         return True
+    if xbmcgui.Window(10000).getProperty('abk.disc.busy'):     # 4.8.79: a disc image being reopened
+        return True
     return any(cond('Window.IsVisible(%s)' % w) for w in _PICK_WINDOWS)
 
 

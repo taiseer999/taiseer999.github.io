@@ -735,7 +735,9 @@ _AF3_SUBSTYLE_POPUP_XML = _osdbtn_slots(_AF3_SUBSTYLE_POPUP_XML_V1)
 # 1-4, left-aligned) do not move. The right bar's "left" goes to the visible one.
 _AF3_DISCMENU_VIS = ('Skin.HasSetting(abk.discmenu) + !VideoPlayer.Content(livetv)'
                      ' + String.Contains(Player.Filenameandpath,http)'
-                     ' + String.Contains(Player.Filenameandpath,.iso)')
+                     ' + [String.Contains(Player.Filenameandpath,.iso)'
+                     ' | String.Contains(Player.Filenameandpath,abkdisc)'
+                     ' | !String.IsEmpty(Window(Home).Property(abk.disc.source))]')
 _AF3_DISCMENU_ANCHOR = (
     '                            <param name="groupid">6104</param>\n'
     '                            <param name="itemgap">osd_itemgap</param>\n'
@@ -782,12 +784,12 @@ def _af3_discmenu_button(cid, gid, vis, icon, arg):
 
 
 _AF3_DISCMENU_XML = (
-    '\n\n                        <!-- ABUKARIM: AF3 disc menu buttons v3 -->'
+    '\n\n                        <!-- ABUKARIM: AF3 disc menu buttons v4 -->'
     + _af3_discmenu_button(6015, 6115, _AF3_DISCMENU_VIS + ' + !VideoPlayer.HasMenu',
                            '$VAR[ABK_LucentIcon_discmenu]', 'menu')
     + _af3_discmenu_button(6016, 6116, _AF3_DISCMENU_VIS + ' + VideoPlayer.HasMenu',
                            '$VAR[ABK_LucentIcon_normalplayer]', 'normal')
-    + '                        <!-- /ABUKARIM: AF3 disc menu buttons v3 -->'
+    + '                        <!-- /ABUKARIM: AF3 disc menu buttons v4 -->'
 )
 # Icons: Lucent Look line icons while abk.lucent is on, AF3's own otherwise.
 # Own variable block (not the Lucent one), so it exists on every AF3.
@@ -3786,13 +3788,26 @@ PATCHES = [
         'fallback_repl': r'\1',
         'description': 'AF3 Disc Menu - remove the 4.7.36-4.7.42 buttons (v2)',
     },
+    # 4.8.79: v3 out; v4 also shows on discs served by disc_stream (abkdisc)
+    # and on disc links with no .iso that the rescue opened (abk.disc.source)
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': None,
+        'fallback_pattern': r'(</include>)\n\n {24}<!-- ABUKARIM: AF3 disc menu buttons v3 -->[\s\S]*?<!-- /ABUKARIM: AF3 disc menu buttons v3 -->',
+        'fallback_repl': r'\1',
+        'description': 'AF3 Disc Menu - remove the 4.7.43-4.8.78 buttons (v3)',
+    },
     {
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
         'not_found_ok': True,
         'old': _AF3_DISCMENU_ANCHOR,
         'new': _AF3_DISCMENU_ANCHOR + _AF3_DISCMENU_XML,
-        'already_patched_check': '<!-- ABUKARIM: AF3 disc menu buttons v3 -->',
+        'already_patched_check': '<!-- ABUKARIM: AF3 disc menu buttons v4 -->',
         'description': 'AF3 Disc Menu - OSD buttons (disc menu / normal player) for ISO streams',
     },
     {

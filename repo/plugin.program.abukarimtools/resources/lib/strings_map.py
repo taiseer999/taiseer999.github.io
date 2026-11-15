@@ -51,6 +51,7 @@ ID ranges:
   32218-32219  What's New screen (4.8.61)
   32220-32229  AF3 player - focused button names (4.8.65)
   32230-32268  AF3 OSD Flags Style (4.8.68, FR-Badges; Lucent + samples 4.8.69; all sets 4.8.75)
+  32269-32271  Blu-ray disc images from a stream (4.8.79, disc_stream)
 """
 
 STRINGS = {
@@ -914,6 +915,11 @@ STRINGS = {
     32111: ('"JRE for BD-J menus" could not be installed from your repositories. Install tools.jre.zulu from its zip (Add-ons > Install from zip file); simple (HDMV) disc menus still open without it.',
             'تعذّر تثبيت «JRE for BD-J menus» من المستودعات. ثبّت tools.jre.zulu من ملفه المضغوط (الإضافات > التثبيت من ملف مضغوط)؛ وتبقى قوائم الأقراص البسيطة (HDMV) تعمل بدونها.'),
     32112: ('Java installed - opening the disc menu', 'ثُبِّتت Java، جارٍ فتح قائمة القرص'),
+    # ---- 4.8.79: Blu-ray disc images from a stream (32269-32271) ----
+    32269: ('Blu-ray disc image - opening it as a disc...', 'صورة قرص Blu-ray، جارٍ فتحها كقرص...'),
+    32270: ('This disc has Java (BD-J) menus - they open on CoreELEC / LibreELEC only. The main movie keeps playing.',
+            'قوائم هذا القرص مكتوبة بلغة Java (BD-J)، ولا تُفتح إلا على CoreELEC أو LibreELEC. يستمر عرض الفيلم الرئيسي.'),
+    32271: ('The disc image could not be read from this link', 'تعذّرت قراءة صورة القرص من هذا الرابط'),
     # ---- 4.7.41: AF3 Plot Text Size (32113-32117) ----
     32113: ('AF3: Plot Text Size', 'AF3: حجم خط القصة'),
     32114: ('Large', 'كبير'),
@@ -981,7 +987,7 @@ STRINGS = {
     32181: ('Build the side menu and widgets of the Lucent skin from your Arctic Fuse 3 menu.', 'بناء القائمة الجانبية وودجات واجهة Lucent من قائمة Arctic Fuse 3 لديك.'),
     32182: ('Show the plot complete in a glass box on the right side of the Arctic Fuse 3 Home page.', 'عرض القصة كاملةً في صندوق زجاجي على الجانب الأيمن من الصفحة الرئيسية لـ Arctic Fuse 3.'),
     32183: ('Size of the plot text in Arctic Fuse 3: large or small.', 'حجم نص القصة في Arctic Fuse 3: كبير أو صغير.'),
-    32184: ('Disc Menu and Normal Player buttons in the player while a Blu-ray ISO plays from a stream.', 'زرّا قائمة القرص والمشغّل العادي في شاشة التشغيل أثناء تشغيل ملف Blu-ray ISO مبثوث.'),
+    32184: ('Disc Menu and Normal Player buttons while a Blu-ray ISO plays from a stream; disc links that would not play open as discs.', 'زرّا قائمة القرص والمشغّل العادي أثناء تشغيل ملف Blu-ray ISO مبثوث، وتُفتح روابط الأقراص التي يتعذّر تشغيلها كأقراص.'),
     32185: ('The colour codec, HDR, audio and source badges in the Arctic Fuse 3 player.', 'الشارات الملوّنة للترميز وHDR والصوت والمصدر في مشغّل Arctic Fuse 3.'),
     32186: ('Show a picture of the video while you skip forward or back, with its size and options.', 'عرض صورة من الفيديو أثناء التقديم أو الترجيع، مع ضبط حجمها وخياراتها.'),
     32187: ("Make every font of the current skin smaller, or keep the skin's own sizes.", 'تصغير جميع خطوط الواجهة الحالية، أو الإبقاء على أحجامها الأصلية.'),

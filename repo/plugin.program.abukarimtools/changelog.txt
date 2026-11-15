@@ -1,4 +1,26 @@
-v4.8.78  (2026-11-15)
+v4.8.79  (2026-11-15)
+- Whole Blu-ray discs (.iso images) from a stream - Debrid, TorBox, Usenet
+  through AIOStreams - play as discs, with their menus, chapters, languages
+  and subtitles, without downloading the image first. Part of Toggles >
+  "AF3: Disc Menu for ISO Streams".
+  * New resources/lib/disc_udf.py: reads the image's UDF file system (UDF
+    2.50 metadata partition included) over a few ranged reads of the link.
+  * New resources/lib/disc_stream.py: a disc server on 127.0.0.1 (started by
+    the service) serves BDMV/ and CERTIFICATE/ as a folder; each file Kodi
+    reads is the same range of the image link. Kodi opens
+    bluray://<server>/menu, or the main movie (longest playlist).
+  * Rescue: a disc link with no .iso in it (debrid / AIOStreams resolver
+    links) that Kodi handed to FFmpeg and that failed to start is checked
+    (ISO 9660 / UDF marks at sector 16) and opened again as a disc:
+    udf:// on CoreELEC / LibreELEC (Java menus with tools.jre.zulu), the
+    disc server elsewhere (Kodi on the Mac hangs on a streamed udf:// image).
+  * Away from CoreELEC / LibreELEC there is no Java: a disc with BD-J titles
+    opens on its main movie and the Disc Menu button says so. Kodi's
+    "Blu-ray playback mode = Play main movie" is followed everywhere.
+  * OSD buttons (VideoOSD v4) also show on discs from the server and on
+    rescued links; Search All waits while a disc is reopened.
+- Fixed: Toggles > AF3: Disc Menu for ISO Streams checked for the v2 OSD
+  marker (v3 since 4.7.43), so turning it on said AF3 could not be patched.
 - NewPipe (AF3 Auto Trailers) now installs in the right order:
   repository.twilight0 first, then plugin.video.newpipe from it.
   plugin.video.newpipe and script.module.scrapetube are optional imports in

@@ -1518,6 +1518,16 @@ def main():
         _log('Search All next-episode listener failed to start (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
+    # 4.8.79: Blu-ray disc images from a stream - the 127.0.0.1 disc server
+    # (menus on any system) and the rescue of a disc link Kodi handed to
+    # FFmpeg. Idles while Toggles > AF3: Disc Menu for ISO Streams is off.
+    try:
+        from resources.lib import disc_stream
+        disc_stream.start(monitor)
+    except Exception:
+        _log('Disc streams failed to start (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
     # 4.7.32: AF3 Lucent Player Back keymap follows the toggle / active skin
     # (a skin switch or a skin-settings reset leaves no stale keymap behind).
     try:

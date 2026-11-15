@@ -2897,8 +2897,8 @@ msgid "Size of the plot text in Arctic Fuse 3: large or small."
 msgstr "حجم نص القصة في Arctic Fuse 3: كبير أو صغير."
 
 msgctxt "#32184"
-msgid "Disc Menu and Normal Player buttons in the player while a Blu-ray ISO plays from a stream."
-msgstr "زرّا قائمة القرص والمشغّل العادي في شاشة التشغيل أثناء تشغيل ملف Blu-ray ISO مبثوث."
+msgid "Disc Menu and Normal Player buttons while a Blu-ray ISO plays from a stream; disc links that would not play open as discs."
+msgstr "زرّا قائمة القرص والمشغّل العادي أثناء تشغيل ملف Blu-ray ISO مبثوث، وتُفتح روابط الأقراص التي يتعذّر تشغيلها كأقراص."
 
 msgctxt "#32185"
 msgid "The colour codec, HDR, audio and source badges in the Arctic Fuse 3 player."
@@ -3211,4 +3211,16 @@ msgstr "إيقاف (AF3 الأصلية)"
 msgctxt "#32268"
 msgid "No badge rows in the AF3 player and footer; the Lucent pills elsewhere"
 msgstr "بلا صفوف شارات في مشغّل AF3 وأسفل الشاشة، وأقراص لوسنت في غيرهما"
+
+msgctxt "#32269"
+msgid "Blu-ray disc image - opening it as a disc..."
+msgstr "صورة قرص Blu-ray، جارٍ فتحها كقرص..."
+
+msgctxt "#32270"
+msgid "This disc has Java (BD-J) menus - they open on CoreELEC / LibreELEC only. The main movie keeps playing."
+msgstr "قوائم هذا القرص مكتوبة بلغة Java (BD-J)، ولا تُفتح إلا على CoreELEC أو LibreELEC. يستمر عرض الفيلم الرئيسي."
+
+msgctxt "#32271"
+msgid "The disc image could not be read from this link"
+msgstr "تعذّرت قراءة صورة القرص من هذا الرابط"
 
