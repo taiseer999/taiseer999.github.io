@@ -92,20 +92,6 @@ def _add_extras(s):
     return s
 
 
-# 4.8.91: the player flag row 20% narrower (whole pills scaled to 80%, aspect kept)
-SCALE = {132: 106, 110: 88, 160: 128}
-ROW_H, ROW_GAP = 41, 10
-
-
-def _scale_rows(s):
-    import re
-    s = re.sub(r'<width>(132|110|160)</width>(\s*)<height>51</height>',
-               lambda m: '<width>%d</width>%s<height>%d</height>' % (SCALE[int(m.group(1))], m.group(2), ROW_H), s)
-    s = re.sub(r'(<width>(?:1728|1640)</width>\s*)<height>51</height>(\s*<orientation>horizontal</orientation>\s*)<itemgap>12</itemgap>',
-               r'\g<1><height>%d</height>\g<2><itemgap>%d</itemgap>' % (ROW_H, ROW_GAP), s)
-    return s
-
-
 def main(path):
     s = open(path, encoding='utf-8').read()
     s = s.replace('abk_lp/flags/', '$VAR[ABK_LP_FlagDir]/')
@@ -116,7 +102,6 @@ def main(path):
         i = s.index('<includes>') + len('<includes>')
         s = s[:i] + '\n    ' + EXTRA_VARS + s[i:]
     s = _add_extras(s)
-    s = _scale_rows(s)
     open(path, 'w', encoding='utf-8').write(s)
 
 

@@ -998,21 +998,10 @@ def lucent_layer1(window):
 		return False
 
 
-def _from_video_addon():
-	"""Every stream search reaches this window through a video add-on: its own
-	menus, or TMDbHelper's player (home widgets, info screen) - kodi.log
-	14:22, Waves from a home widget via plugin.video.themoviedb.helper info=play.
-	So the totals screen no longer opens by itself."""
-	_log('totals screen skipped: search started from a video add-on')
-	return True
-
-
 def lucent_layer1_open(window):
-	"""onInit hook: totals first; leaving it closes the stream list.
-	Not when the search was started from a video add-on's own menus."""
+	"""onInit hook: totals first; leaving it closes the stream list."""
 	if getattr(window, '_lucent_layer1_done', False): return
 	window._lucent_layer1_done = True
-	if _from_video_addon(): return
 	if lucent_layer1(window) == 'back':
 		window.selected = (None, '')
 		window.close()
