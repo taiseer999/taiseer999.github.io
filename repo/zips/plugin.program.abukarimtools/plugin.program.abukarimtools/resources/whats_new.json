@@ -1,0 +1,105 @@
+{
+ "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
+ "entries": [
+  {
+   "v": "4.8.94",
+   "from": "4.8.68",
+   "en": [
+    "Whole Blu-ray discs (.iso) from Debrid, TorBox or Usenet play as discs, with their menus, chapters, languages and subtitles, without downloading the disc first (Toggles > AF3: Disc Menu for ISO Streams).",
+    "A disc link that would not play opens again as a disc by itself. Java (BD-J) disc menus open on CoreELEC and LibreELEC; elsewhere those discs start on the main movie.",
+    "A whole Blu-ray disc in a torrent from AllDebrid, TorBox or Premiumize: while its main movie plays, the Disc Menu button in the player opens the disc with its menus.",
+    "An ISO badge marks disc images in Search All and in the stream windows.",
+    "New IMAX and Dolby Vision 2 badges in every badge style, in Search All, the stream windows and the AF3 Lucent Player.",
+    "Badges in the player and in Search All are now evenly spaced: every pill badge has the same width.",
+    "The AF3 Lucent Player shows the source badge (ISO, REMUX, Blu-ray, WEB...) again - for Search All picks even when the link has no release name.",
+    "New Toggles entry AF3: OSD Flags Style - pick the look of the codec, HDR, audio and source badges (FR-Badges sets, Lucent, Black & White, or Off). One choice changes the badges in the AF3 player, the Lucent Player, Search All and the stream windows.",
+    "NewPipe for AF3 Auto Trailers installs by itself from repository.twilight0.",
+    "Fixed: Kodi could close right after picking an option in Toggles.",
+    "AB Tools is now free software under the GNU GPL 3.0 (LICENSE.txt), with the licence of every part by others in THIRD-PARTY-NOTICES.txt.",
+    "The badge row in the AF3 Lucent Player is smaller and takes 20% less width.",
+    "Stream windows open straight on the full list: the \"Choose what to show\" screen no longer appears by itself (RIGHT still filters)."
+   ],
+   "ar": [
+    "تُشغَّل أقراص Blu-ray الكاملة (ملفات ISO) من Debrid أو TorBox أو Usenet كأقراص حقيقية بقوائمها وفصولها ولغاتها وترجماتها، دون تنزيل القرص أولًا (المفاتيح > AF3: قائمة القرص لملفات ISO المبثوثة).",
+    "رابط القرص الذي يتعذّر تشغيله يُعاد فتحه كقرص تلقائيًا. تُفتح قوائم الأقراص المكتوبة بلغة Java (BD-J) على CoreELEC وLibreELEC، وفي غيرهما تبدأ هذه الأقراص بالفيلم الرئيسي.",
+    "قرص Blu-ray كامل في تورنت من AllDebrid أو TorBox أو Premiumize: أثناء عرض فيلمه الرئيسي يفتح زر «قائمة القرص» في المشغّل القرصَ بقوائمه.",
+    "شارة ISO تميّز صور الأقراص في «بحث الكل» وفي نوافذ المصادر.",
+    "شارتا IMAX وDolby Vision 2 جديدتان في كل أنماط الشارات، في «بحث الكل» ونوافذ المصادر ومشغّل Lucent في AF3.",
+    "صارت المسافات بين الشارات متساوية في المشغّل وفي «بحث الكل»، فكل شارة بطاقية بالعرض نفسه.",
+    "يعرض مشغّل Lucent في AF3 شارة المصدر (ISO وREMUX وBlu-ray وWEB...) مجددًا، حتى لمصادر «بحث الكل» التي لا يحمل رابطها اسم الإصدار.",
+    "مفتاح جديد: AF3: نمط شارات الشاشة، لاختيار شكل شارات الترميز وHDR والصوت والمصدر (مجموعات FR-Badges، أو Lucent، أو الأبيض والأسود، أو إيقافها). اختيار واحد يغيّر الشارات في مشغّل AF3 ومشغّل Lucent وبحث الكل ونوافذ المصادر.",
+    "يُثبَّت NewPipe لإعلانات AF3 التلقائية من مستودع repository.twilight0 تلقائيًا.",
+    "إصلاح: كان Kodi قد يُغلَق مباشرةً بعد اختيار أحد الخيارات في المفاتيح.",
+    "أصبحت AB Tools برنامجًا حرًّا برخصة GNU GPL 3.0 ‏(LICENSE.txt)، مع ترخيص كل جزء من أعمال الآخرين في THIRD-PARTY-NOTICES.txt.",
+    "صار صف الشارات في مشغّل AF3 Lucent أصغر حجمًا، ويشغل عرضًا أقل بنسبة 20%.",
+    "تُفتح نوافذ المصادر على القائمة كاملة مباشرة: لم تعد شاشة «اختر ما تريد عرضه» تظهر من تلقاء نفسها، ويبقى زر اليمين للتصفية."
+   ]
+  },
+  {
+   "v": "4.8.67",
+   "from": "4.8.56",
+   "en": [
+    "NewPipe: search, Trending, Live and Trailers show results again when pagination is off.",
+    "AF3 player: the name of the focused button shows under the buttons (Play, Pause, Next chapter, Audio, Subtitles...), as in the Lucent Player.",
+    "Lucent Look: white menu icons (Fen Light, Red Light, AB Tools nodes, AB Last Played) turn dark on the focused tile; add-on tiles keep their colours.",
+    "Lucent Look: no background behind the Home system stats.",
+    "New switch in Toggles: AB Tools Glass Look (test) - white glass icons with no background and a see-through window, for AB Tools and AB Wizard.",
+    "Black and white service logos (RD, AD, PM, TB, OC, EN, ED) in Search All and in the Fen Light, Red Light, POV and Umbrella stream windows.",
+    "Fen Light, Red Light, POV and Umbrella: the Selected Stream details use the smaller text of Search All.",
+    "What's New: after an update, the first time AB Tools is opened it shows what changed in the last 10 versions."
+   ],
+   "ar": [
+    "NewPipe: يعود البحث والرائج والبث المباشر والإعلانات إلى عرض النتائج عند إيقاف تقسيم الصفحات.",
+    "مشغّل AF3: يظهر اسم الزر المحدد تحت الأزرار (تشغيل، إيقاف مؤقت، الفصل التالي، الصوت، الترجمة...) كما في مشغّل Lucent.",
+    "مظهر Lucent: أيقونات القوائم البيضاء (Fen Light وRed Light وعُقد أدوات AB وAB Last Played) تصبح داكنة على البطاقة المحددة، وتحتفظ بطاقات الإضافات بألوانها.",
+    "مظهر Lucent: لا خلفية خلف إحصاءات النظام في الرئيسية.",
+    "مفتاح جديد في المفاتيح: المظهر الزجاجي لأدوات AB (تجريبي) - أيقونات زجاجية بيضاء بلا خلفية ونافذة شفافة، لأدوات AB ومعالج AB.",
+    "شعارات خدمات بالأبيض والأسود (RD وAD وPM وTB وOC وEN وED) في البحث الشامل وفي نوافذ المصادر لـ Fen Light وRed Light وPOV وUmbrella.",
+    "Fen Light وRed Light وPOV وUmbrella: تفاصيل المصدر المحدد بالنص الأصغر نفسه في البحث الشامل.",
+    "ما الجديد: بعد كل تحديث، تعرض أدوات AB عند فتحها أول مرة ما تغيّر في آخر عشرة إصدارات."
+   ]
+  },
+  {
+   "v": "4.8.55",
+   "from": "4.8.55",
+   "en": [
+    "Lucent Look: TinyPPI's panels (codec box, speaker layout, Player Process Info) are glass."
+   ],
+   "ar": [
+    "مظهر Lucent: لوحات TinyPPI (صندوق الترميز ومخطط السماعات ومعلومات المشغّل) أصبحت زجاجية."
+   ]
+  },
+  {
+   "v": "4.8.54",
+   "from": "4.8.54",
+   "en": [
+    "Lucent Look: the info pills (4K, Dolby Vision, 5.1...) and the Spotlight Play / More Information buttons are see-through glass with white text and icons."
+   ],
+   "ar": [
+    "مظهر Lucent: شارات المعلومات (4K وDolby Vision و5.1...) وزرّا التشغيل والمزيد من المعلومات في Spotlight أصبحت زجاجية شفافة بنص وأيقونات بيضاء."
+   ]
+  },
+  {
+   "v": "4.8.53",
+   "from": "4.8.52",
+   "en": [
+    "Lucent Look: dialogs and the Options panel are see-through glass. Toggles > AF3: Lucent Look > Glass transparency: 30%, 50%, 70% (default) or 90% solid."
+   ],
+   "ar": [
+    "مظهر Lucent: النوافذ الحوارية ولوحة الخيارات زجاجية شفافة. المفاتيح > AF3: مظهر Lucent > شفافية الزجاج: 30٪ أو 50٪ أو 70٪ (الافتراضي) أو 90٪ معتم."
+   ]
+  },
+  {
+   "v": "4.8.51",
+   "from": "4.8.51",
+   "en": [
+    "Fen Light, Red Light, POV and Umbrella: the stream window shows the Selected Stream details under the plot - resolution, size, bitrate, video, HDR, audio, channels, release, service and languages.",
+    "Lucent Look: the menu is Off / Lucent Glass / Lucent Glass AMOLED with the focus-colour switch; the extra colour schemes are gone."
+   ],
+   "ar": [
+    "Fen Light وRed Light وPOV وUmbrella: نافذة المصادر تعرض تفاصيل المصدر المحدد تحت القصة - الدقة والحجم ومعدل البت والفيديو وHDR والصوت والقنوات والإصدار والخدمة واللغات.",
+    "مظهر Lucent: القائمة إيقاف / Lucent Glass / Lucent Glass AMOLED مع مفتاح لون التحديد، وأُزيلت أنظمة الألوان الإضافية."
+   ]
+  }
+ ]
+}

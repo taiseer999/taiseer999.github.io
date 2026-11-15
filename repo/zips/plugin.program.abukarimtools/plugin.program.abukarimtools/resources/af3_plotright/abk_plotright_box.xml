@@ -1,0 +1,783 @@
+<include name="ABK_PlotRight_Box">
+        <!-- ABUKARIM: plot on the right - shared glass plot box (AB Tools 4.8.20) for the library views,
+             the combined views and the search page; the same box the Home hub / Spotlight draw.
+             item = the list item to read (ListItem, Container(id).ListItem); idbase = unique numeric prefix
+             for the seven fit probes; font follows AB Tools "AF3: Plot Text Size" (af3_plotsize). -->
+        <param name="item">ListItem</param>
+        <param name="idbase">9450</param>
+        <param name="font">font_main_plot</param>  <!-- ABUKARIM: plot box font (af3_plotsize) -->
+        <param name="visible">true</param>
+        <param name="right">120</param>  <!-- right-anchored like the Home box; negative inside a narrower parent -->
+        <param name="top">179</param>
+        <definition>
+            <control type="group">
+                <visible>Skin.HasSetting(abk.plotright) + [$PARAM[visible]] + !String.IsEmpty($PARAM[item].Plot)</visible>
+                <right>$PARAM[right]</right>
+                <width>700</width>
+                <top>$PARAM[top]</top>
+                <height>283</height>
+                <!-- probes: invisible copies of the plot, one per line count (line = 35 px);
+                     Container(id).NumPages = 1 when the plot fits that height -->
+                <control type="textbox" id="$PARAM[idbase]1">
+                    <width>700</width>
+                    <height>38</height>
+                    <font>$PARAM[font]</font>
+                    <textcolor>00FFFFFF</textcolor>
+                    <label>$INFO[$PARAM[item].Plot]</label>
+                </control>
+                <control type="textbox" id="$PARAM[idbase]2">
+                    <width>700</width>
+                    <height>73</height>
+                    <font>$PARAM[font]</font>
+                    <textcolor>00FFFFFF</textcolor>
+                    <label>$INFO[$PARAM[item].Plot]</label>
+                </control>
+                <control type="textbox" id="$PARAM[idbase]3">
+                    <width>700</width>
+                    <height>108</height>
+                    <font>$PARAM[font]</font>
+                    <textcolor>00FFFFFF</textcolor>
+                    <label>$INFO[$PARAM[item].Plot]</label>
+                </control>
+                <control type="textbox" id="$PARAM[idbase]4">
+                    <width>700</width>
+                    <height>143</height>
+                    <font>$PARAM[font]</font>
+                    <textcolor>00FFFFFF</textcolor>
+                    <label>$INFO[$PARAM[item].Plot]</label>
+                </control>
+                <control type="textbox" id="$PARAM[idbase]5">
+                    <width>700</width>
+                    <height>178</height>
+                    <font>$PARAM[font]</font>
+                    <textcolor>00FFFFFF</textcolor>
+                    <label>$INFO[$PARAM[item].Plot]</label>
+                </control>
+                <control type="textbox" id="$PARAM[idbase]6">
+                    <width>700</width>
+                    <height>213</height>
+                    <font>$PARAM[font]</font>
+                    <textcolor>00FFFFFF</textcolor>
+                    <label>$INFO[$PARAM[item].Plot]</label>
+                </control>
+                <control type="textbox" id="$PARAM[idbase]7">
+                    <width>700</width>
+                    <height>248</height>
+                    <font>$PARAM[font]</font>
+                    <textcolor>00FFFFFF</textcolor>
+                    <label>$INFO[$PARAM[item].Plot]</label>
+                </control>
+                <!-- the box: the smallest height that holds the plot, centred on the info column -->
+                <control type="group">
+                    <visible>!String.IsEqual($PARAM[item].DBType,episode) + String.IsEqual(Container($PARAM[idbase]1).NumPages,1)</visible>
+                    <top>122</top>
+                    <height>38</height>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel.png</texture>
+                        <colordiffuse>panel_bg_50</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel_edge.png</texture>
+                        <colordiffuse>overlay_soft</colordiffuse>
+                    </control>
+                    <control type="grouplist">
+                        <orientation>vertical</orientation>
+                        <itemgap>10</itemgap>
+                        <control type="textbox">
+                            <height>38</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>right</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                        <control type="textbox">
+                            <height>38</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>left</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>!String.IsEqual($PARAM[item].DBType,episode) + String.IsEqual(Container($PARAM[idbase]2).NumPages,1) + !String.IsEqual(Container($PARAM[idbase]1).NumPages,1)</visible>
+                    <top>105</top>
+                    <height>73</height>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel.png</texture>
+                        <colordiffuse>panel_bg_50</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel_edge.png</texture>
+                        <colordiffuse>overlay_soft</colordiffuse>
+                    </control>
+                    <control type="grouplist">
+                        <orientation>vertical</orientation>
+                        <itemgap>10</itemgap>
+                        <control type="textbox">
+                            <height>73</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>right</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                        <control type="textbox">
+                            <height>73</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>left</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>!String.IsEqual($PARAM[item].DBType,episode) + String.IsEqual(Container($PARAM[idbase]3).NumPages,1) + !String.IsEqual(Container($PARAM[idbase]2).NumPages,1)</visible>
+                    <top>87</top>
+                    <height>108</height>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel.png</texture>
+                        <colordiffuse>panel_bg_50</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel_edge.png</texture>
+                        <colordiffuse>overlay_soft</colordiffuse>
+                    </control>
+                    <control type="grouplist">
+                        <orientation>vertical</orientation>
+                        <itemgap>10</itemgap>
+                        <control type="textbox">
+                            <height>108</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>right</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                        <control type="textbox">
+                            <height>108</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>left</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>!String.IsEqual($PARAM[item].DBType,episode) + String.IsEqual(Container($PARAM[idbase]4).NumPages,1) + !String.IsEqual(Container($PARAM[idbase]3).NumPages,1)</visible>
+                    <top>70</top>
+                    <height>143</height>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel.png</texture>
+                        <colordiffuse>panel_bg_50</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel_edge.png</texture>
+                        <colordiffuse>overlay_soft</colordiffuse>
+                    </control>
+                    <control type="grouplist">
+                        <orientation>vertical</orientation>
+                        <itemgap>10</itemgap>
+                        <control type="textbox">
+                            <height>143</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>right</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                        <control type="textbox">
+                            <height>143</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>left</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>!String.IsEqual($PARAM[item].DBType,episode) + String.IsEqual(Container($PARAM[idbase]5).NumPages,1) + !String.IsEqual(Container($PARAM[idbase]4).NumPages,1)</visible>
+                    <top>52</top>
+                    <height>178</height>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel.png</texture>
+                        <colordiffuse>panel_bg_50</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel_edge.png</texture>
+                        <colordiffuse>overlay_soft</colordiffuse>
+                    </control>
+                    <control type="grouplist">
+                        <orientation>vertical</orientation>
+                        <itemgap>10</itemgap>
+                        <control type="textbox">
+                            <height>178</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>right</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                        <control type="textbox">
+                            <height>178</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>left</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>!String.IsEqual($PARAM[item].DBType,episode) + String.IsEqual(Container($PARAM[idbase]6).NumPages,1) + !String.IsEqual(Container($PARAM[idbase]5).NumPages,1)</visible>
+                    <top>35</top>
+                    <height>213</height>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel.png</texture>
+                        <colordiffuse>panel_bg_50</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel_edge.png</texture>
+                        <colordiffuse>overlay_soft</colordiffuse>
+                    </control>
+                    <control type="grouplist">
+                        <orientation>vertical</orientation>
+                        <itemgap>10</itemgap>
+                        <control type="textbox">
+                            <height>213</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>right</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                        <control type="textbox">
+                            <height>213</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>left</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>!String.IsEqual($PARAM[item].DBType,episode) + String.IsEqual(Container($PARAM[idbase]7).NumPages,1) + !String.IsEqual(Container($PARAM[idbase]6).NumPages,1)</visible>
+                    <top>17</top>
+                    <height>248</height>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel.png</texture>
+                        <colordiffuse>panel_bg_50</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel_edge.png</texture>
+                        <colordiffuse>overlay_soft</colordiffuse>
+                    </control>
+                    <control type="grouplist">
+                        <orientation>vertical</orientation>
+                        <itemgap>10</itemgap>
+                        <control type="textbox">
+                            <height>248</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>right</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                        <control type="textbox">
+                            <height>248</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>left</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>!String.IsEqual($PARAM[item].DBType,episode) + !String.IsEqual(Container($PARAM[idbase]7).NumPages,1)</visible>
+                    <top>0</top>
+                    <height>283</height>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel.png</texture>
+                        <colordiffuse>panel_bg_50</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel_edge.png</texture>
+                        <colordiffuse>overlay_soft</colordiffuse>
+                    </control>
+                    <control type="grouplist">
+                        <orientation>vertical</orientation>
+                        <itemgap>10</itemgap>
+                        <control type="textbox">
+                            <height>283</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>right</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <autoscroll delay="8000" time="3000" repeat="10000">true</autoscroll>
+                            <visible>String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                        <control type="textbox">
+                            <height>283</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>left</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <autoscroll delay="8000" time="3000" repeat="10000">true</autoscroll>
+                            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>String.IsEqual($PARAM[item].DBType,episode) + String.IsEqual(Container($PARAM[idbase]1).NumPages,1)</visible>
+                    <top>95</top>
+                    <height>92</height>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel.png</texture>
+                        <colordiffuse>panel_bg_50</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel_edge.png</texture>
+                        <colordiffuse>overlay_soft</colordiffuse>
+                    </control>
+                    <control type="grouplist">
+                        <orientation>vertical</orientation>
+                        <itemgap>10</itemgap>
+                        <control type="label">
+                            <height>44</height>
+                            <font>font_main_bold</font>
+                            <textcolor>main_fg_100</textcolor>
+                            <label>$INFO[$PARAM[item].Season,S,]$INFO[$PARAM[item].Episode,E, · ]$INFO[$PARAM[item].Title]</label>
+                        </control>
+                        <control type="textbox">
+                            <height>38</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>right</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                        <control type="textbox">
+                            <height>38</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>left</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>String.IsEqual($PARAM[item].DBType,episode) + String.IsEqual(Container($PARAM[idbase]2).NumPages,1) + !String.IsEqual(Container($PARAM[idbase]1).NumPages,1)</visible>
+                    <top>78</top>
+                    <height>127</height>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel.png</texture>
+                        <colordiffuse>panel_bg_50</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel_edge.png</texture>
+                        <colordiffuse>overlay_soft</colordiffuse>
+                    </control>
+                    <control type="grouplist">
+                        <orientation>vertical</orientation>
+                        <itemgap>10</itemgap>
+                        <control type="label">
+                            <height>44</height>
+                            <font>font_main_bold</font>
+                            <textcolor>main_fg_100</textcolor>
+                            <label>$INFO[$PARAM[item].Season,S,]$INFO[$PARAM[item].Episode,E, · ]$INFO[$PARAM[item].Title]</label>
+                        </control>
+                        <control type="textbox">
+                            <height>73</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>right</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                        <control type="textbox">
+                            <height>73</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>left</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>String.IsEqual($PARAM[item].DBType,episode) + String.IsEqual(Container($PARAM[idbase]3).NumPages,1) + !String.IsEqual(Container($PARAM[idbase]2).NumPages,1)</visible>
+                    <top>60</top>
+                    <height>162</height>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel.png</texture>
+                        <colordiffuse>panel_bg_50</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel_edge.png</texture>
+                        <colordiffuse>overlay_soft</colordiffuse>
+                    </control>
+                    <control type="grouplist">
+                        <orientation>vertical</orientation>
+                        <itemgap>10</itemgap>
+                        <control type="label">
+                            <height>44</height>
+                            <font>font_main_bold</font>
+                            <textcolor>main_fg_100</textcolor>
+                            <label>$INFO[$PARAM[item].Season,S,]$INFO[$PARAM[item].Episode,E, · ]$INFO[$PARAM[item].Title]</label>
+                        </control>
+                        <control type="textbox">
+                            <height>108</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>right</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                        <control type="textbox">
+                            <height>108</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>left</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>String.IsEqual($PARAM[item].DBType,episode) + String.IsEqual(Container($PARAM[idbase]4).NumPages,1) + !String.IsEqual(Container($PARAM[idbase]3).NumPages,1)</visible>
+                    <top>43</top>
+                    <height>197</height>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel.png</texture>
+                        <colordiffuse>panel_bg_50</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel_edge.png</texture>
+                        <colordiffuse>overlay_soft</colordiffuse>
+                    </control>
+                    <control type="grouplist">
+                        <orientation>vertical</orientation>
+                        <itemgap>10</itemgap>
+                        <control type="label">
+                            <height>44</height>
+                            <font>font_main_bold</font>
+                            <textcolor>main_fg_100</textcolor>
+                            <label>$INFO[$PARAM[item].Season,S,]$INFO[$PARAM[item].Episode,E, · ]$INFO[$PARAM[item].Title]</label>
+                        </control>
+                        <control type="textbox">
+                            <height>143</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>right</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                        <control type="textbox">
+                            <height>143</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>left</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>String.IsEqual($PARAM[item].DBType,episode) + String.IsEqual(Container($PARAM[idbase]5).NumPages,1) + !String.IsEqual(Container($PARAM[idbase]4).NumPages,1)</visible>
+                    <top>25</top>
+                    <height>232</height>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel.png</texture>
+                        <colordiffuse>panel_bg_50</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel_edge.png</texture>
+                        <colordiffuse>overlay_soft</colordiffuse>
+                    </control>
+                    <control type="grouplist">
+                        <orientation>vertical</orientation>
+                        <itemgap>10</itemgap>
+                        <control type="label">
+                            <height>44</height>
+                            <font>font_main_bold</font>
+                            <textcolor>main_fg_100</textcolor>
+                            <label>$INFO[$PARAM[item].Season,S,]$INFO[$PARAM[item].Episode,E, · ]$INFO[$PARAM[item].Title]</label>
+                        </control>
+                        <control type="textbox">
+                            <height>178</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>right</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                        <control type="textbox">
+                            <height>178</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>left</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>String.IsEqual($PARAM[item].DBType,episode) + String.IsEqual(Container($PARAM[idbase]6).NumPages,1) + !String.IsEqual(Container($PARAM[idbase]5).NumPages,1)</visible>
+                    <top>8</top>
+                    <height>267</height>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel.png</texture>
+                        <colordiffuse>panel_bg_50</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel_edge.png</texture>
+                        <colordiffuse>overlay_soft</colordiffuse>
+                    </control>
+                    <control type="grouplist">
+                        <orientation>vertical</orientation>
+                        <itemgap>10</itemgap>
+                        <control type="label">
+                            <height>44</height>
+                            <font>font_main_bold</font>
+                            <textcolor>main_fg_100</textcolor>
+                            <label>$INFO[$PARAM[item].Season,S,]$INFO[$PARAM[item].Episode,E, · ]$INFO[$PARAM[item].Title]</label>
+                        </control>
+                        <control type="textbox">
+                            <height>213</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>right</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                        <control type="textbox">
+                            <height>213</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>left</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>String.IsEqual($PARAM[item].DBType,episode) + String.IsEqual(Container($PARAM[idbase]7).NumPages,1) + !String.IsEqual(Container($PARAM[idbase]6).NumPages,1)</visible>
+                    <top>0</top>
+                    <height>283</height>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel.png</texture>
+                        <colordiffuse>panel_bg_50</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel_edge.png</texture>
+                        <colordiffuse>overlay_soft</colordiffuse>
+                    </control>
+                    <control type="grouplist">
+                        <orientation>vertical</orientation>
+                        <itemgap>10</itemgap>
+                        <control type="label">
+                            <height>44</height>
+                            <font>font_main_bold</font>
+                            <textcolor>main_fg_100</textcolor>
+                            <label>$INFO[$PARAM[item].Season,S,]$INFO[$PARAM[item].Episode,E, · ]$INFO[$PARAM[item].Title]</label>
+                        </control>
+                        <control type="textbox">
+                            <height>229</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>right</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <autoscroll delay="8000" time="3000" repeat="10000">true</autoscroll>
+                            <visible>String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                        <control type="textbox">
+                            <height>229</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>left</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <autoscroll delay="8000" time="3000" repeat="10000">true</autoscroll>
+                            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>String.IsEqual($PARAM[item].DBType,episode) + !String.IsEqual(Container($PARAM[idbase]7).NumPages,1)</visible>
+                    <top>0</top>
+                    <height>283</height>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel.png</texture>
+                        <colordiffuse>panel_bg_50</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <left>-40</left>
+                        <top>-30</top>
+                        <right>-40</right>
+                        <bottom>-30</bottom>
+                        <texture border="48">abk_lucent/panel_edge.png</texture>
+                        <colordiffuse>overlay_soft</colordiffuse>
+                    </control>
+                    <control type="grouplist">
+                        <orientation>vertical</orientation>
+                        <itemgap>10</itemgap>
+                        <control type="label">
+                            <height>44</height>
+                            <font>font_main_bold</font>
+                            <textcolor>main_fg_100</textcolor>
+                            <label>$INFO[$PARAM[item].Season,S,]$INFO[$PARAM[item].Episode,E, · ]$INFO[$PARAM[item].Title]</label>
+                        </control>
+                        <control type="textbox">
+                            <height>229</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>right</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <autoscroll delay="8000" time="3000" repeat="10000">true</autoscroll>
+                            <visible>String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                        <control type="textbox">
+                            <height>229</height>
+                            <font>$PARAM[font]</font>
+                            <textcolor>main_fg_90</textcolor>
+                            <align>left</align>
+                            <label>$INFO[$PARAM[item].Plot]</label>
+                            <autoscroll delay="8000" time="3000" repeat="10000">true</autoscroll>
+                            <visible>!String.StartsWith(System.Language,Arabic)</visible>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>

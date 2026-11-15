@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0D1116">
+<title>أدوات أبوكريم</title>
+<style>
+:root{--bg:#0D1116;--card:#151B24;--line:#232C3A;--txt:#E8EEF7;--mut:#8A9BB8;--blue:#1E8FFF;--orange:#FF7A1A;--ok:#2FBF71;--bad:#FF5A5A}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,"Segoe UI",Tahoma,"Noto Sans Arabic",sans-serif;font-size:16px;line-height:1.55}
+header{padding:20px 16px 8px;text-align:center}
+header h1{margin:0;font-size:22px;letter-spacing:.3px}
+header .bar{display:flex;justify-content:center;margin:10px 0 6px}
+header .bar i{display:block;width:56px;height:3px;background:var(--blue)}header .bar i+i{background:var(--orange)}
+header p{margin:0;color:var(--mut);font-size:13px}
+main{max-width:640px;margin:0 auto;padding:8px 16px 120px}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0}
+section h2{margin:0 0 4px;font-size:18px;display:flex;align-items:center;gap:8px}
+section h2 .done{font-size:12px;color:var(--ok);border:1px solid var(--ok);border-radius:999px;padding:0 8px;display:none}
+section h2 .done.on{display:inline-block}
+section .sub{color:var(--mut);font-size:14px;margin:0 0 12px}
+button{font:inherit;border:0;border-radius:10px;padding:12px 16px;background:var(--blue);color:#fff;font-weight:600;width:100%;margin-top:10px;cursor:pointer}
+button.alt{background:transparent;border:1px solid var(--line);color:var(--txt)}
+button.warn{background:var(--orange)}
+button:disabled{opacity:.45}
+.row{display:flex;align-items:center;gap:12px;padding:10px 4px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row input{width:22px;height:22px;accent-color:var(--orange);flex:none}
+.row .t{flex:1;min-width:0}
+.row .t b{display:block;font-weight:600;overflow-wrap:anywhere}
+.row .t small{display:block;color:var(--mut);font-size:12.5px;overflow-wrap:anywhere}
+.tag{font-size:11.5px;border-radius:999px;padding:1px 8px;border:1px solid var(--line);color:var(--mut);white-space:nowrap}
+.tag.on{border-color:var(--ok);color:var(--ok)}.tag.like{border-color:var(--orange);color:var(--orange)}
+.choices{display:grid;gap:10px}
+.choice{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.choice input{margin-top:4px;accent-color:var(--orange);width:20px;height:20px;flex:none}
+.choice.sel{border-color:var(--blue);background:#13233a}
+.choice b{display:block}.choice small{color:var(--mut)}
+.cat{margin-top:14px}.cat h3{font-size:15px;margin:0 0 4px;color:var(--orange)}
+.note{background:#1d1710;border:1px solid #4a3218;color:#ffcf9e;border-radius:10px;padding:10px 12px;font-size:14px;margin:8px 0}
+select{width:100%;font:inherit;padding:10px;border-radius:10px;background:var(--bg);color:var(--txt);border:1px solid var(--line);margin-top:8px}
+#job{position:fixed;inset:auto 0 0 0;background:#0a0e13ee;border-top:1px solid var(--line);padding:14px 16px calc(14px + env(safe-area-inset-bottom));display:none;backdrop-filter:blur(6px)}
+#job.on{display:block}
+#job .lbl{display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px;gap:10px}
+#job .lbl span:last-child{color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60%}
+.prog{height:8px;background:var(--line);border-radius:999px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--orange));transition:width .3s}
+.msg{margin-top:10px;font-size:14px;border-radius:10px;padding:10px 12px;display:none}
+.msg.on{display:block}.msg.ok{background:#10251a;color:#9be7bf}.msg.bad{background:#2a1214;color:#ffb3b3}
+.msg a{color:#fff;font-weight:700}
+footer{max-width:640px;margin:0 auto;padding:0 16px 40px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<header>
+  <h1>أدوات أبوكريم</h1>
+  <div class="bar"><i></i><i></i></div>
+  <p id="dev">الإعداد من الجوال</p>
+</header>
+<main>
+
+<section id="s-backup">
+  <h2>النسخ الاحتياطي <span class="done" data-done="backup restore">تم</span></h2>
+  <p class="sub">احفظ إعدادات الجهاز وقوائمه وودجاته في ملف على جوالك، أو أعِدها من ملف سابق.</p>
+  <button id="b-backup">تنزيل نسخة احتياطية إلى الجوال</button>
+  <button class="alt" id="b-restore">استعادة نسخة احتياطية من الجوال</button>
+  <input type="file" id="f-restore" accept=".zip,application/zip" class="hidden">
+  <div class="msg" id="m-backup"></div>
+</section>
+
+<section id="s-addons">
+  <h2>الإضافات <span class="done" data-done="addons">تم</span></h2>
+  <p class="sub">حدّد الإضافات التي تريد تثبيتها، وتُثبَّت من مستودعاتها مع ما تحتاجه.</p>
+  <div id="l-addons"></div>
+  <button id="b-addons">تثبيت المحدَّد</button>
+  <div class="msg" id="m-addons"></div>
+</section>
+
+<section id="s-layout">
+  <h2>ترتيب الودجات <span class="done" data-done="layout">تم</span></h2>
+  <p class="sub">قوائم Arctic Fuse 3 وودجاته.</p>
+  <div class="choices" id="c-layout">
+    <label class="choice"><input type="radio" name="layout" value="light"><div><b>خفيف</b><small>تبقى قوائمك وودجاتك الحالية كما هي.</small></div></label>
+    <label class="choice"><input type="radio" name="layout" value="moderate"><div><b>متوسط</b><small>تُستبدل القوائم والودجات بترتيب أبوكريم الأول، وتُحفظ نسختك الحالية أولًا.</small></div></label>
+    <label class="choice"><input type="radio" name="layout" value="full"><div><b>كامل</b><small>تُستبدل القوائم والودجات بترتيب أبوكريم الكامل، وتُحفظ نسختك الحالية أولًا.</small></div></label>
+  </div>
+  <button id="b-layout">تطبيق</button>
+  <div class="msg" id="m-layout"></div>
+</section>
+
+<section id="s-lists">
+  <h2>قوائمي <span class="done" data-done="lists">تم</span></h2>
+  <p class="sub">قوائم أقسام الأفلام والمسلسلات والكوري.</p>
+  <div class="choices">
+    <label class="choice"><input type="radio" name="lists" value="original"><div><b>الأصلي</b><small>قوائم البيلد كما هي دون أي تغيير.</small></div></label>
+    <label class="choice"><input type="radio" name="lists" value="custom"><div><b>تراكت</b><small>القوائم التي أعجبتك في تراكت وأفضل قوائم تراكت التي تختارها.</small></div></label>
+  </div>
+  <div id="trakt" class="hidden">
+    <div class="note hidden" id="n-link">حسابك في تراكت غير مربوط بإضافة TMDb Helper. اضغط «ربط تراكت» ثم امسح الرمز الذي يظهر على التلفاز، وبعدها اجلب القوائم.</div>
+    <button class="alt hidden" id="b-link">ربط تراكت (يظهر الرمز على التلفاز)</button>
+    <button class="alt" id="b-fetch">جلب القوائم من تراكت</button>
+    <div id="l-lists"></div>
+    <div id="wm" class="hidden">
+      <select id="wmode">
+        <option value="add">إضافة القوائم بعد ودجات الأقسام الحالية</option>
+        <option value="replace">استبدال ودجات الأقسام الحالية بالقوائم المختارة</option>
+      </select>
+    </div>
+  </div>
+  <button id="b-lists">تطبيق</button>
+  <div class="msg" id="m-lists"></div>
+</section>
+
+<section id="s-anime">
+  <h2>أنمي <span class="done" data-done="anime">تم</span></h2>
+  <p class="sub">قوائم الأنمي من إضافة Otaku، تُضاف ودجات في الصفحة الرئيسية. تُثبَّت Otaku تلقائيًا إن لم تكن موجودة.</p>
+  <div id="l-anime"></div>
+  <button id="b-anime">تطبيق</button>
+  <div class="msg" id="m-anime"></div>
+</section>
+
+<section id="s-patches">
+  <h2>الترقيعات <span class="done" data-done="patches">تم</span></h2>
+  <p class="sub">إصلاحات أبوكريم للإضافات والسمة. الإصلاح غير المحدَّد لا يُطبَّق.</p>
+  <div id="l-patches"></div>
+  <button id="b-patches">حفظ وتطبيق</button>
+  <div class="msg" id="m-patches"></div>
+</section>
+
+</main>
+<footer>
+  <button class="warn" id="b-reboot">إعادة تشغيل الجهاز</button>
+  <button class="alt" id="b-finish">إنهاء الإعداد من الجوال</button>
+  <div class="msg" id="m-end"></div>
+</footer>
+
+<div id="job"><div class="lbl"><span id="j-name">جارٍ التنفيذ...</span><span id="j-msg"></span></div><div class="prog"><i id="j-bar"></i></div></div>
+
+<script>
+(function(){
+const T=new URLSearchParams(location.search).get('t')||'';
+const $=id=>document.getElementById(id);
+const NAMES={backup:'جارٍ إنشاء النسخة الاحتياطية',restore:'جارٍ استعادة النسخة الاحتياطية والإضافات',addons:'جارٍ تثبيت الإضافات',layout:'جارٍ تطبيق ترتيب الودجات',lists_fetch:'جارٍ جلب القوائم من تراكت',lists:'جارٍ تطبيق القوائم',anime:'جارٍ تطبيق قوائم الأنمي',patches:'جارٍ تطبيق الترقيعات'};
+const ERR={busy:'هناك عملية أخرى قيد التنفيذ، انتظر انتهاءها.',token:'انتهت الجلسة. امسح الرمز من التلفاز من جديد.',zip:'الملف ليس نسخة احتياطية صالحة (zip).',size:'الملف أكبر من المسموح.',nolink:'حسابك في تراكت غير مربوط.',tmdbh:'إضافة TMDb Helper غير مثبّتة.',offline:'تعذّر الاتصال بتراكت.',empty:'لم يُعثر على قوائم.',otaku:'تعذّر تثبيت Otaku.',none:'لم تحدِّد شيئًا.'};
+let info=null,lists=null,waiter=null;
+
+function url(p){return p+(p.includes('?')?'&':'?')+'t='+encodeURIComponent(T)}
+async function api(p,body){
+  const r=await fetch(url(p),{method:body===undefined?'GET':'POST',headers:{'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});
+  let j={};try{j=await r.json()}catch(e){}
+  if(!r.ok&&!j.error)j.error='http'+r.status;
+  return j;
+}
+function say(id,text,ok){const m=$(id);m.className='msg on '+(ok?'ok':'bad');m.innerHTML=text;m.scrollIntoView({behavior:'smooth',block:'nearest'})}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function row(name,label,small,checked,tag,value,smallHtml){
+  const sm=smallHtml||(small?esc(small):'');
+  return '<label class="row"><input type="checkbox" name="'+name+'" value="'+esc(value)+'"'+(checked?' checked':'')+'><span class="t"><b><bdi>'+esc(label)+'</bdi></b>'+(sm?'<small>'+sm+'</small>':'')+'</span>'+(tag||'')+'</label>';
+}
+function listInfo(it){return (it.src?'<bdi>'+esc(it.src)+'</bdi> • ':'')+'بواسطة <bdi>'+esc(it.by)+'</bdi> • '+it.likes+' إعجاب • '+it.count+' عنصر'}
+function checked(name){return [...document.querySelectorAll('input[name="'+name+'"]:checked')].map(i=>i.value)}
+function markDone(){(info.done||[]).forEach(d=>document.querySelectorAll('[data-done]').forEach(e=>{if(e.dataset.done.split(' ').includes(d))e.classList.add('on')}))}
+function setRadio(name,v){document.querySelectorAll('input[name="'+name+'"]').forEach(i=>{i.checked=(i.value===v);i.closest('.choice').classList.toggle('sel',i.checked)})}
+document.addEventListener('change',e=>{if(e.target.type==='radio'){setRadio(e.target.name,e.target.value);if(e.target.name==='lists')$('trakt').classList.toggle('hidden',e.target.value!=='custom')}});
+
+async function load(){
+  info=await api('/api/info');
+  if(info.error){say('m-end',ERR[info.error]||info.error,false);return}
+  $('dev').textContent=(info.device?info.device+' • ':'')+'Kodi '+info.kodi+' • '+info.skin+' • أدوات أبوكريم '+info.version;
+  $('l-addons').innerHTML=info.portal.map(a=>row('addon',a.name,a.repo+(a.note?' • '+a.note:''),false,a.installed?'<span class="tag on">مثبّتة</span>':'',a.id)).join('');
+  setRadio('layout',info.layout||'light');
+  setRadio('lists',info.lists_mode==='custom'?'custom':'original');
+  $('trakt').classList.toggle('hidden',info.lists_mode!=='custom');
+  $('n-link').classList.toggle('hidden',info.trakt_linked);$('b-link').classList.toggle('hidden',info.trakt_linked);
+  $('l-anime').innerHTML=info.anime.map(a=>row('anime',a.label,a.route==='next_up'?'يتطلب ربط حساب الأنمي في Otaku':'',a.on,'',a.route)).join('')+(info.otaku?'':'<div class="note">إضافة Otaku غير مثبّتة، وتُثبَّت عند التطبيق.</div>');
+  $('l-patches').innerHTML=info.toggles.map(t=>row('patch',t.label,'',t.on,'',t.id)).join('');
+  markDone();
+}
+
+function lockAll(on){document.querySelectorAll('button').forEach(b=>{if(b.id!=='b-finish')b.disabled=on})}
+async function run(path,body,msgId,onDone){
+  const r=await api(path,body);
+  if(r.error){say(msgId,ERR[r.error]||('خطأ: '+r.error),false);return}
+  lockAll(true);$('job').classList.add('on');
+  return new Promise(res=>{
+    clearInterval(waiter);
+    waiter=setInterval(async()=>{
+      const j=await api('/api/job');
+      $('j-name').textContent=NAMES[j.name]||'جارٍ التنفيذ...';$('j-msg').textContent=j.msg||'';$('j-bar').style.width=(j.pct||0)+'%';
+      if(!j.running){clearInterval(waiter);$('job').classList.remove('on');lockAll(false);
+        try{await onDone(j)}catch(e){say(msgId,'خطأ: '+e,false)}
+        info=await api('/api/info');markDone();res(j)}
+    },1000);
+  });
+}
+
+$('b-backup').onclick=()=>run('/api/backup',{},'m-backup',j=>{
+  if(!j.ok)return say('m-backup','تعذّر إنشاء النسخة الاحتياطية.',false);
+  const mb=(j.result.size/1048576).toFixed(1);
+  say('m-backup','النسخة جاهزة ('+j.result.files+' ملفًا، '+mb+' ميغابايت). <a href="'+url(j.result.download)+'">اضغط هنا لتنزيلها</a> واحفظها في مكان آمن.',true);
+  location.href=url(j.result.download);
+});
+$('b-restore').onclick=()=>$('f-restore').click();
+$('f-restore').onchange=()=>{
+  const f=$('f-restore').files[0];if(!f)return;
+  say('m-backup','الملف المختار: '+esc(f.name)+' ('+(f.size/1048576).toFixed(1)+' ميغابايت)',true);
+  if(!confirm('ستُستبدل إعدادات الجهاز بما في النسخة «'+f.name+'». هل تريد المتابعة؟'))return;
+  lockAll(true);$('job').classList.add('on');$('j-name').textContent='جارٍ رفع النسخة إلى الجهاز';
+  const x=new XMLHttpRequest();x.open('POST',url('/api/restore'));
+  x.upload.onprogress=e=>{if(e.lengthComputable){$('j-bar').style.width=(e.loaded*100/e.total)+'%';$('j-msg').textContent=(e.loaded/1048576).toFixed(1)+' / '+(e.total/1048576).toFixed(1)+' ميغابايت'}};
+  x.onload=()=>{let r={};try{r=JSON.parse(x.responseText)}catch(e){}
+    $('job').classList.remove('on');lockAll(false);$('f-restore').value='';
+    if(x.status!==202)return say('m-backup',ERR[r.error]||'تعذّر رفع الملف.',false);
+    $('job').classList.add('on');lockAll(true);
+    clearInterval(waiter);waiter=setInterval(async()=>{const j=await api('/api/job');$('j-name').textContent=NAMES.restore;$('j-msg').textContent=j.msg||'';$('j-bar').style.width=(j.pct||0)+'%';
+      if(!j.running){clearInterval(waiter);$('job').classList.remove('on');lockAll(false);
+        const r=j.result||{};
+        say('m-backup',j.ok?('تمت الاستعادة: '+(r.files||0)+' ملفًا'+(r.installed?'، وثُبِّتت '+r.installed+' من الإضافات':'')+(r.settings?'، و'+r.settings+' إعدادًا من إعدادات كودي':'')+(r.skin?'، وأُعيدت السمة '+esc(r.skin):'')+'.'+((r.failed&&r.failed.length)?'<br>تعذّر تثبيت: '+r.failed.map(esc).join('، '):'')+'<br>أعد تشغيل الجهاز الآن ليُطبَّق كل شيء.<button class="warn" id="b-reboot2">إعادة تشغيل الجهاز الآن</button>'):'تعذّرت الاستعادة.',j.ok);
+        const b2=$('b-reboot2');if(b2)b2.onclick=()=>$('b-reboot').click();
+        $('m-backup').scrollIntoView({behavior:'smooth',block:'center'});info=await api('/api/info');markDone()}},1000);
+  };
+  x.onerror=()=>{$('job').classList.remove('on');lockAll(false);say('m-backup','انقطع الاتصال بالجهاز أثناء الرفع.',false)};
+  x.send(f);
+};
+$('b-addons').onclick=()=>{const ids=checked('addon');if(!ids.length)return say('m-addons',ERR.none,false);
+  run('/api/addons',{ids},'m-addons',j=>{const rs=(j.result&&j.result.results)||[];
+    say('m-addons',rs.map(r=>(r.ok?'✓ ':'✗ ')+esc(r.name)+(r.note?' — '+esc(r.note):'')).join('<br>')||'انتهى.',j.ok);load()})};
+$('b-layout').onclick=()=>{const m=checked('layout')[0]||'light';
+  run('/api/layout',{mode:m},'m-layout',j=>say('m-layout',j.ok?'تم تطبيق ترتيب الودجات.':'تعذّر تطبيق الترتيب، وبقي كما هو.',j.ok))};
+$('b-link').onclick=async()=>{await api('/api/lists/link',{});say('m-lists','امسح الرمز الذي ظهر على التلفاز بجوالك، ثم اضغط «جلب القوائم من تراكت».',true)};
+$('b-fetch').onclick=()=>run('/api/lists/fetch',{},'m-lists',j=>{
+  if(!j.ok)return say('m-lists',ERR[(j.result||{}).error]||'تعذّر جلب القوائم.',false);
+  lists=j.result.cats;let h='';
+  for(const k in lists){const c=lists[k];if(!c.items.length)continue;
+    h+='<div class="cat"><h3>'+esc(c.title)+'</h3>'+c.items.map(it=>row('l-'+k,it.name,'',false,it.mine?'<span class="tag like">قائمتي</span>':(it.liked?'<span class="tag like">أعجبتني</span>':''),it.key,listInfo(it))).join('')+'</div>'}
+  $('l-lists').innerHTML=h;$('wm').classList.remove('hidden');$('m-lists').className='msg';
+});
+$('b-lists').onclick=()=>{const m=checked('lists')[0]||'original';
+  if(m==='original')return run('/api/lists/apply',{mode:'original'},'m-lists',j=>say('m-lists',j.ok?'طُبّقت القوائم الأصلية.':'تعذّر التطبيق.',j.ok));
+  if(!lists)return say('m-lists','اجلب القوائم من تراكت أولًا.',false);
+  const keys={};for(const k in lists)keys[k]=checked('l-'+k);
+  run('/api/lists/apply',{mode:'custom',keys,wmode:$('wmode').value},'m-lists',j=>say('m-lists',j.ok?'أُضيفت القوائم المختارة ودجات في الأقسام.':'تعذّر التطبيق.',j.ok))};
+$('b-anime').onclick=()=>run('/api/anime',{routes:checked('anime')},'m-anime',j=>say('m-anime',j.ok?(checked('anime').length?'أُضيفت قوائم الأنمي إلى الصفحة الرئيسية.':'أُزيلت قوائم الأنمي من الصفحة الرئيسية.'):(ERR[(j.result||{}).error]||'تعذّر التطبيق.'),j.ok)).then(()=>{const n=document.querySelector('#l-anime .note');if(info&&info.otaku&&n)n.remove()});
+$('b-patches').onclick=()=>{const on=new Set(checked('patch'));const disabled=info.toggles.filter(t=>!on.has(t.id)).map(t=>t.id);
+  run('/api/patches',{disabled},'m-patches',j=>say('m-patches',j.ok?'حُفظت الترقيعات وطُبّقت ('+j.result.written+' ملفًا كُتب).':'طُبّقت الترقيعات مع بعض الأخطاء ('+((j.result||{}).failed||0)+').',j.ok))};
+$('b-reboot').onclick=async()=>{if(!confirm('هل تريد إعادة تشغيل الجهاز الآن؟'))return;await api('/api/reboot',{});say('m-end','يُعاد تشغيل الجهاز الآن. يمكنك إغلاق هذه الصفحة.',true);lockAll(true)};
+$('b-finish').onclick=async()=>{await api('/api/finish',{});say('m-end','انتهى الإعداد من الجوال، وأُغلق الرمز على التلفاز. يمكنك إغلاق هذه الصفحة.',true);lockAll(true);$('b-finish').disabled=true};
+load();
+})();
+</script>
+</body>
+</html>

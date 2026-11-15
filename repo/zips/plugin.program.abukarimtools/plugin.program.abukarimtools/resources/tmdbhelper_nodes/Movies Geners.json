@@ -1,0 +1,101 @@
+{
+  "name": "movies genres",
+  "icon": "",
+  "list": [
+    {
+      "name": "Action-حركة",
+      "icon": "special://skin/extras/icons/Action.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=28&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "Adventure-مغامرات",
+      "icon": "special://skin/extras/icons/Adventure.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=12&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "Animation-رسوم متحركة",
+      "icon": "special://skin/extras/icons/Animation.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=16&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "Anime-انمي",
+      "icon": "special://skin/extras/icons/Anime.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=16&with_keywords=210024&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "Comedy-كوميديا",
+      "icon": "special://skin/extras/icons/Comedy.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=35&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "Crime-جريمة",
+      "icon": "special://skin/extras/icons/Crime.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=80&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "Documentary-وثائقي",
+      "icon": "special://skin/extras/icons/Documentary.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=99&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "Drama-دراما",
+      "icon": "special://skin/extras/icons/Drama.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=18&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "Family-عائلي",
+      "icon": "special://skin/extras/icons/Family.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=10751&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "Fantasy-خيال",
+      "icon": "special://skin/extras/icons/Fantasy.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=14&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "History-تاريخ",
+      "icon": "special://skin/extras/icons/History.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=36&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "Horror-رعب",
+      "icon": "special://skin/extras/icons/Horror.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=27&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "Mystery-غموض",
+      "icon": "special://skin/extras/icons/Mystery.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=9648&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "Romance-رومانسي",
+      "icon": "special://skin/extras/icons/Romance.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=10749&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "Science Fiction-خيال علمي",
+      "icon": "special://skin/extras/icons/Science Fiction.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=878&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "Superhero-ابطال خارقون",
+      "icon": "special://skin/extras/icons/Superhero.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_keywords=9715&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "Thriller-اثارة",
+      "icon": "special://skin/extras/icons/Thriller.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=53&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "War-حربي",
+      "icon": "special://skin/extras/icons/War.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=10752&sort_by=popularity.desc&with_id=True"
+    },
+    {
+      "name": "Western-الغرب الأمريكي",
+      "icon": "special://skin/extras/icons/Western.png",
+      "path": "plugin://plugin.video.themoviedb.helper/?info=discover&tmdb_type=movie&with_genres=37&sort_by=popularity.desc&with_id=True"
+    }
+  ]
+}
