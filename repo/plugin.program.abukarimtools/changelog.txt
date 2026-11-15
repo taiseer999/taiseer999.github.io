@@ -1,4 +1,16 @@
-v4.8.82  (2026-11-15)
+v4.8.84  (2026-11-15)
+- AF3 Lucent Player: the source badge (Blu-ray, UHD, WEB-DL, DVD, HDTV...)
+  never showed. Its slots were gated on !String.IsEmpty($VAR[...RipSource]),
+  and Kodi does not expand $VAR inside String.IsEmpty() in a visible
+  condition, so the test was always false (the same bug the Piers AF3 fixed
+  in Includes_Extra.xml ExtraOSD). The three slots now use the expression
+  ABK_LP_HasRipSource with the same file-name keywords + FallbackSourceFlag.
+- ISO badge in every OSD Flags Style: resource.images.af3.frbadges 1.0.7
+  has lucent_player/ISO.png in all 15 styles, each redrawn from that style's
+  own BLU-RAY badge (disc icon, pill, colours) with the label "ISO"
+  (tools/frbadges/make_iso.py); lucent and colorful use the Lucent ISO pill.
+  AB Tools now needs frbadges 1.0.7, and the ISO badge no longer falls back to
+  the Lucent pill with an FR style.
 - ISO badge: disc images (an upper-case ISO tag, BDISO / UHDISO / DVDISO, or
   a .iso file name) now show an "ISO" badge in Search All and in the Lucent
   source windows of Fen Light, Red Light, POV and Umbrella. No add-on parser

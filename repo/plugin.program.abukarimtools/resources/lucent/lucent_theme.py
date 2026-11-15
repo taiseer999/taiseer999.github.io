@@ -83,8 +83,6 @@ _DV2_RE = re.compile(r'(?<![A-Z0-9])(?:DV2|DOVI2|DOLBY[ ._-]?VISION[ ._-]?2)(?![
 # 4.8.82: upper-case ISO tag, BDISO / UHDISO / DVDISO, or a .iso file name - a title
 # word ("Iso", "Isolation") is not a disc image
 _ISO_RE = re.compile(r'(?<![A-Za-z0-9])(?:(?i:bd|uhd|dvd)(?i:iso)|ISO)(?![A-Za-z0-9])|(?i:\.iso)\s*$')
-# badges an FR-Badges style has no picture for: the Lucent pill is shown
-_LUCENT_ONLY = ('ISO',)
 
 
 def badges(info, quality='', name=''):
@@ -256,8 +254,6 @@ def badge_path(name, default_dir='lucent/flags/'):
 	"""Texture of a badge name: the chosen style's file, else the Lucent pill."""
 	if not name:
 		return ''
-	if name in _LUCENT_ONLY:
-		return default_dir + name + '.png'
 	return (_badge_dir() or default_dir) + name + '.png'
 
 
