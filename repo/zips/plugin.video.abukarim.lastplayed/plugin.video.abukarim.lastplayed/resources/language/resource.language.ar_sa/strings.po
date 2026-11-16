@@ -1,0 +1,169 @@
+# Last Played (ABUKARIM)
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ar_SA\n"
+
+msgctxt "#30000"
+msgid "Recording"
+msgstr "التسجيل"
+
+msgctxt "#30001"
+msgid "Record movies"
+msgstr "تسجيل الأفلام"
+
+msgctxt "#30002"
+msgid "Record episodes"
+msgstr "تسجيل الحلقات"
+
+msgctxt "#30003"
+msgid "Record other videos (no movie/episode info)"
+msgstr "تسجيل فيديوهات أخرى (بدون معلومات فيلم/حلقة)"
+
+msgctxt "#30004"
+msgid "Seconds of playback before an item is saved"
+msgstr "عدد ثواني التشغيل قبل حفظ العنصر"
+
+msgctxt "#30005"
+msgid "Maximum items kept"
+msgstr "أقصى عدد للعناصر المحفوظة"
+
+msgctxt "#30006"
+msgid "Exclude add-ons (comma separated ids or names)"
+msgstr "استثناء إضافات (معرّفات أو أسماء مفصولة بفاصلة)"
+
+msgctxt "#30007"
+msgid "Extra debug logging"
+msgstr "سجل تصحيح إضافي"
+
+msgctxt "#30010"
+msgid "All"
+msgstr "الكل"
+
+msgctxt "#30011"
+msgid "Movies"
+msgstr "الأفلام"
+
+msgctxt "#30012"
+msgid "Episodes"
+msgstr "الحلقات"
+
+msgctxt "#30013"
+msgid "In progress"
+msgstr "قيد المشاهدة"
+
+msgctxt "#30014"
+msgid "Other videos"
+msgstr "فيديوهات أخرى"
+
+msgctxt "#30050"
+msgid "Remove from Last Played"
+msgstr "إزالة من آخر ما شوهد"
+
+msgctxt "#30051"
+msgid "Clear Last Played"
+msgstr "مسح آخر ما شوهد"
+
+msgctxt "#30052"
+msgid "Settings"
+msgstr "الإعدادات"
+
+msgctxt "#30053"
+msgid "Remove every item from the list?"
+msgstr "حذف جميع العناصر من القائمة؟"
+
+msgctxt "#30060"
+msgid "Today"
+msgstr "اليوم"
+
+msgctxt "#30061"
+msgid "Yesterday"
+msgstr "أمس"
+
+msgctxt "#30070"
+msgid "Support ABUKARIM - Buy Me a Coffee"
+msgstr "ادعم ABUKARIM - اشترِ لي قهوة"
+
+msgctxt "#30071"
+msgid "Buy Me a Coffee"
+msgstr "اشترِ لي قهوة"
+
+msgctxt "#30072"
+msgid "Enjoying the Piers build and ABUKARIM add-ons?[CR]Scan the code with your phone to support the work."
+msgstr "عاجبك بيلد Piers وإضافات ABUKARIM؟[CR]امسح الكود بجوالك لدعم الشغل."
+
+msgctxt "#30073"
+msgid "Press OK or BACK to close"
+msgstr "اضغط OK أو رجوع للإغلاق"
+
+msgctxt "#30020"
+msgid "Playback"
+msgstr "التشغيل"
+
+msgctxt "#30021"
+msgid "When an item is selected"
+msgstr "لما تختار عنصر"
+
+msgctxt "#30022"
+msgid "Ask every time"
+msgstr "اسألني كل مرة"
+
+msgctxt "#30023"
+msgid "Saved link first (sources if expired)"
+msgstr "الرابط المحفوظ أول (المصادر إذا انتهى)"
+
+msgctxt "#30024"
+msgid "Always from sources (add-on)"
+msgstr "دايماً من المصادر (الإضافة)"
+
+msgctxt "#30025"
+msgid "Saved link replays the exact stream that played last time - instant, no source scraping. Debrid/temporary links expire; the add-on then falls back to sources."
+msgstr "الرابط المحفوظ يشغّل نفس الستريم اللي اشتغل آخر مرة - فوري وبدون بحث مصادر. روابط الديبريد المؤقتة بتنتهي، ووقتها بيرجع للمصادر تلقائياً."
+
+msgctxt "#30026"
+msgid "Check saved link before playing"
+msgstr "افحص الرابط المحفوظ قبل التشغيل"
+
+msgctxt "#30027"
+msgid "Quick test that the saved stream still answers; an expired one goes straight to sources instead of a playback error."
+msgstr "فحص سريع إن الستريم المحفوظ لسا شغّال؛ إذا منتهي بيروح للمصادر بدل ما يطلع خطأ تشغيل."
+
+msgctxt "#30080"
+msgid "Resume from %s"
+msgstr "كمّل من %s"
+
+msgctxt "#30081"
+msgid "Play from start"
+msgstr "شغّل من البداية"
+
+msgctxt "#30082"
+msgid "Resume saved link (%s)"
+msgstr "كمّل بالرابط المحفوظ (%s)"
+
+msgctxt "#30083"
+msgid "Play saved link"
+msgstr "شغّل الرابط المحفوظ"
+
+msgctxt "#30084"
+msgid "Play from sources - %s"
+msgstr "شغّل من المصادر - %s"
+
+msgctxt "#30085"
+msgid "Saved link expired - playing from sources"
+msgstr "الرابط المحفوظ منتهي - جاري التشغيل من المصادر"
+
+msgctxt "#30086"
+msgid "No saved link for this item"
+msgstr "ما في رابط محفوظ لهذا العنصر"
+
+msgctxt "#30087"
+msgid "Play from sources"
+msgstr "شغّل من المصادر"
+
+msgctxt "#30088"
+msgid "Play saved link"
+msgstr "شغّل الرابط المحفوظ"
+
+msgctxt "#30089"
+msgid "Play from sources (add-on)"
+msgstr "شغّل من المصادر (الإضافة)"
