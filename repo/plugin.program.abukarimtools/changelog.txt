@@ -1,3 +1,8 @@
+v4.10.1  (2026-11-17)
+- Search All: my folders - picking a folder opens a dialog titled with its
+  name and path: Rename, Change the path, Index again, Remove (it was a
+  small context menu that was easy to miss). Changing the path re-indexes.
+
 v4.10.0  (2026-11-17)
 - Search All: My folders. Folders on this device or on the network (smb://,
   nfs://, any path Kodi reads) are searched next to the add-ons, with no

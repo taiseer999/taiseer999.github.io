@@ -306,6 +306,7 @@ def run():
         rows = [xbmcgui.ListItem('[B]+ %s[/B]' % T(32295))]
         for f in items:
             li = xbmcgui.ListItem(f['name'], f['path'])
+            li.setArt({'icon': 'DefaultFolder.png'})
             rows.append(li)
         if items:
             rows.append(xbmcgui.ListItem(T(32300)))
@@ -330,15 +331,28 @@ def run():
             _reindex(items)
             continue
         f = items[pick - 1]
-        act = xbmcgui.Dialog().contextmenu([T(32299), T(32300), T(32298)])
+        # 4.10.1: a full dialog titled with the folder (the context menu was easy to miss)
+        acts = [T(32299), T(32308), T(32300), T(32298)]
+        act = xbmcgui.Dialog().select('%s  -  %s' % (f['name'], f['path']), acts)
         if act == 0:
             name = xbmcgui.Dialog().input(T(32297), f['name']).strip()
-            if name:
+            if name and name != f['name']:
                 f['name'] = name
                 _save(items)
+                xbmcgui.Dialog().notification('AB Search All', name, xbmcgui.NOTIFICATION_INFO, 2500)
         elif act == 1:
+            path = _slash(_ask_path())
+            if not path or path == f['path'] or any(x['path'] == path for x in items):
+                continue
+            if not _check(path):
+                xbmcgui.Dialog().ok('AB Search All', T(32302) % path)
+                continue
+            f['path'] = path
+            _save(items)
             _reindex([f])
-        elif act == 2 and xbmcgui.Dialog().yesno('AB Search All', '%s[CR]%s' % (f['name'], f['path']),
+        elif act == 2:
+            _reindex([f])
+        elif act == 3 and xbmcgui.Dialog().yesno('AB Search All', '%s[CR]%s' % (f['name'], f['path']),
                                                  nolabel=T(32290), yeslabel=T(32298)):
             items.remove(f)
             _save(items)

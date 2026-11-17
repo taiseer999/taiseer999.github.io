@@ -964,6 +964,7 @@ STRINGS = {
     32305: ('%d folders', 'عدد المجلدات: %d'),
     32306: ('Choose the folder', 'اختر المجلد'),
     32307: ('Browse sources (add a network location there)', 'تصفّح المصادر (ومنها إضافة موقع شبكة)'),
+    32308: ('Change the path', 'تغيير المسار'),
     # ---- 4.7.41: AF3 Plot Text Size (32113-32117) ----
     32113: ('AF3: Plot Text Size', 'AF3: حجم خط القصة'),
     32114: ('Large', 'كبير'),

@@ -3368,3 +3368,7 @@ msgctxt "#32307"
 msgid "Browse sources (add a network location there)"
 msgstr "تصفّح المصادر (ومنها إضافة موقع شبكة)"
 
+msgctxt "#32308"
+msgid "Change the path"
+msgstr "تغيير المسار"
+
