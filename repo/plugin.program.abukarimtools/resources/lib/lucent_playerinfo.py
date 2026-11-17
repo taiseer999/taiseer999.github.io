@@ -58,6 +58,36 @@ def info(name):
 DV2_NAME = re.compile(r"(?i)(?<![a-z0-9])(?:dv2|dovi[ ._-]?2|dolby[ ._-]?vision[ ._-]?2)(?![a-z0-9])")
 
 
+def bit_depth(hdr="", detail="", layer=""):
+    """4.9.6: video bit depth, 0 when unknown. Same sources as the PPI and
+    in this order: Kodi 22 video.bitdepth, the Amlogic pixel format, the
+    generic pixel format (p010 / yuv420p10le / ...). HDR transfer (PQ, HLG,
+    Dolby Vision) is never under 10 bits, so it raises a missing or 8-bit
+    reading (VideoToolbox reports no depth); a Dolby Vision FEL stream is 12."""
+    n = 0
+    v = xbmc.getInfoLabel("Player.Process(video.bitdepth)")
+    m = re.search(r"\d+", v or "")
+    if m:
+        n = int(m.group())
+    if not n:
+        for lab in ("Player.Process(amlogic.pixformat)", "Player.Process(pixformat)"):
+            f = (xbmc.getInfoLabel(lab) or "").lower()
+            m = re.search(r"(12|10|8)\s*-?\s*bit", f) or re.search(r"(?:p0|p)(12|10|16)(?:le|be)?\b", f) \
+                or re.search(r"yuv\w*?(12|10)(?:le|be)?\b", f)
+            if m:
+                n = int(m.group(1)); n = 10 if n == 16 else n
+                break
+            if re.search(r"\b(nv12|yuv420p|yuvj420p|rgb24|bgra|8bit)\b", f):
+                n = 8
+                break
+    h = (hdr or "").lower()
+    if h in ("hdr10", "hdr10plus", "hlg", "dolbyvision") and n < 10:
+        n = 10
+    if h == "dolbyvision" and "FEL" in ((layer or "") + (detail or "")).upper():
+        n = max(n, 12)
+    return n
+
+
 def dv_from_name(name):
     """What the release name says about Dolby Vision: Dolby Vision 2, the profile (P5 / P7 / P8) and the layer (FEL / MEL)."""
     name = name or ""
@@ -307,7 +337,8 @@ def tick():
     prof = re.search(r"(\d+)", detail or "")
     layer = "FEL" if "FEL" in (detail or "").upper() else "MEL" if "MEL" in (detail or "").upper() else ""
     pix = info("Player.Process(pixformat)")
-    ten = bool(re.search(r"10|12", pix or ""))
+    bits = bit_depth(hdr, detail, layer)
+    ten = bits >= 10
     vcodec = info("VideoPlayer.VideoCodec").lower()
     vname = VCODEC.get(vcodec, vcodec.upper())
     fname = info("Player.Filename")
@@ -337,7 +368,7 @@ def tick():
     else:
         put("b.dv", "")
         put("b.hdr", {"hdr10": "HDR10", "hdr10plus": "HDR10+", "hlg": "HLG"}.get(hdr, ""))
-    put("b.vc", f"{vname} 10-bit" if vname and ten else vname)
+    put("b.vc", f"{vname} {bits}-bit" if vname and ten else vname)
     put("b.remux", "REMUX" if re.search(r"remux", fname or "", re.I) else "")
     put("b.ac", ABADGE.get(acodec, acodec.upper()))
     put("b.imm", f"ATMOS {chs}".strip() if atmos else f"DTS:X {chs}".strip() if dtsx else "")
@@ -561,10 +592,13 @@ def video_tab(v):
     put("v.c1", t("Colours: ", "الألوان: ") + ("[COLOR FFFFFFFF][B]BT.2020[/B][/COLOR]" if wide else "[COLOR FFFFFFFF][B]BT.709[/B][/COLOR]"))
     transfer = {"dolbyvision": "PQ", "hdr10": "PQ", "hdr10plus": "PQ", "hlg": "HLG"}.get(hdr, "SDR (gamma)")
     put("v.c2", t("Transfer: ", "النقل: ") + f"[COLOR FFFFFFFF][B]{transfer}[/B][/COLOR]")
-    put("v.c3", ("[COLOR FFFFFFFF][B]10-bit[/B][/COLOR] · " + t("1 billion colours", "مليار لون")) if ten
-        else ("[COLOR FFFFFFFF][B]8-bit[/B][/COLOR] · " + t("16.7 million colours", "16.7 مليون لون")))
+    bits = v.get("bits", 10 if ten else 8) or (10 if wide else 8)
+    put("v.c3", "[COLOR FFFFFFFF][B]%d-bit[/B][/COLOR] · " % bits + (
+        t("68.7 billion colours", "68.7 مليار لون") if bits >= 12 else
+        t("1 billion colours", "مليار لون") if bits == 10 else
+        t("16.7 million colours", "16.7 مليون لون")))
     put("v.p1k", t("File", "الملف"))
-    put("v.p1", f"{vname} 10-bit" if vname and ten else vname or "–")
+    put("v.p1", f"{vname} {bits}-bit" if vname and ten else vname or "–")
     put("v.p1s", pix)
     put("v.p2k", "Decoder")
     put("v.p2", info("Player.Process(videodecoder)") or "–")
