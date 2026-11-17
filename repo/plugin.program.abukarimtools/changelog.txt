@@ -1,3 +1,22 @@
+v4.10.0  (2026-11-17)
+- Search All: My folders. Folders on this device or on the network (smb://,
+  nfs://, any path Kodi reads) are searched next to the add-ons, with no
+  Fen Light / Red Light folder scraper needed. Mods > Search All: my
+  folders adds (browse the sources - "Add network location" is there - or
+  type the path), renames, removes and re-indexes them.
+  * Each folder is indexed once (video files, 6 levels deep) and again
+    after 6 hours or on demand; a search reads the index, not the share.
+  * Matching is EasyNews' rule: the title's words then the year (+-1) for
+    movies, SxxEyy / 1x02 for episodes, on the file name and on it with its
+    folder(s) in front - "Movie (2017)/movie-2160p.mkv" and
+    "Show/Season 1/S01E02.mkv" both match. Samples, trailers and Extras
+    folders are left out. Arabic titles are searched by their English name.
+  * The rows show the folder's name as the source (lime dot, tag MY); the
+    quality comes from the name (2160p / 1080p / ...) or, without one, from
+    the size. A pick plays the file itself with the title, year and TMDb /
+    IMDb ids, so resume points and the player badges work.
+- whats_new.json: entry for this release.
+
 v4.9.9  (2026-11-17)
 - Lucent Player badge row (pause card, info panel, full-screen info): new
   badges and a new order - source (REMUX / BluRay / WEB), IMAX, resolution,

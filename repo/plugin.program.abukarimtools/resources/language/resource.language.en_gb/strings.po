@@ -3308,3 +3308,63 @@ msgctxt "#32292"
 msgid "Disc menu: AllDebrid does not have the whole disc of this release cached"
 msgstr ""
 
+msgctxt "#32293"
+msgid "Search All: my folders"
+msgstr ""
+
+msgctxt "#32294"
+msgid "Folders on this device or on the network (SMB, NFS) that Search All searches along with the add-ons. Files are matched by title and year, or by SxxEyy for episodes."
+msgstr ""
+
+msgctxt "#32295"
+msgid "Add a folder"
+msgstr ""
+
+msgctxt "#32296"
+msgid "Type a network path (smb://, nfs://)"
+msgstr ""
+
+msgctxt "#32297"
+msgid "Name shown in the results"
+msgstr ""
+
+msgctxt "#32298"
+msgid "Remove"
+msgstr ""
+
+msgctxt "#32299"
+msgid "Rename"
+msgstr ""
+
+msgctxt "#32300"
+msgid "Index the files again now"
+msgstr ""
+
+msgctxt "#32301"
+msgid "%d videos indexed in %d folders"
+msgstr ""
+
+msgctxt "#32302"
+msgid "Folder not reachable: %s"
+msgstr ""
+
+msgctxt "#32303"
+msgid "My folders"
+msgstr ""
+
+msgctxt "#32304"
+msgid "No folders yet"
+msgstr ""
+
+msgctxt "#32305"
+msgid "%d folders"
+msgstr ""
+
+msgctxt "#32306"
+msgid "Choose the folder"
+msgstr ""
+
+msgctxt "#32307"
+msgid "Browse sources (add a network location there)"
+msgstr ""
+

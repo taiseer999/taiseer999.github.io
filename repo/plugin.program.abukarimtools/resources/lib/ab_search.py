@@ -92,7 +92,8 @@ ADDONS = (('rl', 'plugin.video.redlight', 'Red Light', 'RL'),
           ('pov', 'plugin.video.pov', 'POV', 'POV'),
           ('aio', 'plugin.video.aiostreams', 'AIOStreams', 'AIO'),
           ('dex', 'plugin.video.dexhub', 'Dex Hub', 'DEX'),
-          ('en', 'plugin.video.easynewsx', 'EasyNews', 'EN'))
+          ('en', 'plugin.video.easynewsx', 'EasyNews', 'EN'),
+          ('loc', '', 'My folders', 'MY'))   # 4.10.0: local / SMB / NFS folders (local_folders.py)
 _MODULES = os.path.join('resources', 'lib', 'modules')
 # file that carries the device-select modes (relative to the add-on), and the text that proves it
 _SUPPORT = {'fl': (os.path.join(_MODULES, 'router.py'), 'app_list_sources'),
@@ -153,6 +154,9 @@ def _supported(key, aid):
         return bool(_aio_manifest())
     if key == 'en':                         # no bridge: needs only the EasyNews login
         return all(_en_login())
+    if key == 'loc':                        # 4.10.0: no add-on, only the folder list
+        from resources.lib import local_folders
+        return local_folders.configured()
     try:
         rel, mark = _SUPPORT[key]
         with open(os.path.join(_addon_dir(aid), rel), 'r', encoding='utf-8', errors='replace') as f:
@@ -177,6 +181,10 @@ def available_addons():
     """[(key, aid, name, tag, supported)] for the installed add-ons."""
     out = []
     for key, aid, name, tag in ADDONS:
+        if key == 'loc':                    # 4.10.0: listed once folders are set
+            if _supported(key, aid):
+                out.append((key, aid, T(32303), tag, True))
+            continue
         if not xbmc.getCondVisibility('System.HasAddon(%s)' % aid):
             continue
         _ensure_bridge(key, aid)
@@ -252,6 +260,8 @@ class Session(object):
             return self._run_aio(name)
         if key == 'en':
             return self._run_en(name)
+        if key == 'loc':
+            return self._run_loc(name)
         rid = self.request_id(key)
         if key == 'umb':
             self.umb_media = _english_names(self.media)
@@ -332,6 +342,31 @@ class Session(object):
         with self.lock:
             self.state['en'] = {'state': 'done' if found else 'failed', 'results': results,
                                 'took': time.time() - t0}
+        listener = self.listener
+        if listener and not self.closed:
+            try:
+                listener()
+            except Exception as e:
+                _log('update failed: %s' % e, xbmc.LOGWARNING)
+
+
+    def _run_loc(self, name):
+        """4.10.0: My folders - the file index of each folder, EasyNews' title match."""
+        t0 = time.time()
+        results, found = [], False
+        try:
+            from resources.lib import local_folders
+            media = dict(self.media)
+            if any('\u0600' <= ch <= '\u06ff' for ch in (media.get('tvshowtitle') or media.get('title') or '')):
+                media = _english_names(self.media)      # Arabic UI: file names are English
+            results = local_folders.search(media, _en_words, _en_match)
+            found = True
+            _log('%s: %d sources in %.1fs' % (name, len(results), time.time() - t0))
+        except Exception as e:
+            _log('%s: failed after %.1fs - %s' % (name, time.time() - t0, e), xbmc.LOGWARNING)
+        with self.lock:
+            self.state['loc'] = {'state': 'done' if found else 'failed', 'results': results,
+                                 'took': time.time() - t0}
         listener = self.listener
         if listener and not self.closed:
             try:
@@ -2134,6 +2169,9 @@ def _after_pick(session, addons, media, picked):
         return _aio_play(session, index)
     if key == 'en':
         return _en_play(session, index)
+    if key == 'loc':                                 # 4.10.0: play the file itself
+        from resources.lib import local_folders
+        return local_folders.play(item or {}, media)
     aid = dict((k, a) for k, a, _n, _t, _ok in addons)[key]
     url = session.url(key, aid, 'play', index)
     _log('play: %s' % url)

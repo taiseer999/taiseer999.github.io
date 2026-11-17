@@ -3308,3 +3308,63 @@ msgctxt "#32292"
 msgid "Disc menu: AllDebrid does not have the whole disc of this release cached"
 msgstr "قائمة القرص: القرص الكامل لهذا الإصدار غير مخزَّن مؤقتًا في AllDebrid"
 
+msgctxt "#32293"
+msgid "Search All: my folders"
+msgstr "البحث الشامل: مجلداتي"
+
+msgctxt "#32294"
+msgid "Folders on this device or on the network (SMB, NFS) that Search All searches along with the add-ons. Files are matched by title and year, or by SxxEyy for episodes."
+msgstr "مجلدات على هذا الجهاز أو على الشبكة (SMB أو NFS) يبحث فيها البحث الشامل إلى جانب الإضافات. تُطابَق الملفات بالعنوان والسنة، أو بصيغة SxxEyy للحلقات."
+
+msgctxt "#32295"
+msgid "Add a folder"
+msgstr "إضافة مجلد"
+
+msgctxt "#32296"
+msgid "Type a network path (smb://, nfs://)"
+msgstr "كتابة مسار شبكة (smb:// أو nfs://)"
+
+msgctxt "#32297"
+msgid "Name shown in the results"
+msgstr "الاسم الذي يظهر في النتائج"
+
+msgctxt "#32298"
+msgid "Remove"
+msgstr "إزالة"
+
+msgctxt "#32299"
+msgid "Rename"
+msgstr "إعادة التسمية"
+
+msgctxt "#32300"
+msgid "Index the files again now"
+msgstr "إعادة فهرسة الملفات الآن"
+
+msgctxt "#32301"
+msgid "%d videos indexed in %d folders"
+msgstr "فُهرس %d ملف فيديو في %d من المجلدات"
+
+msgctxt "#32302"
+msgid "Folder not reachable: %s"
+msgstr "تعذّر الوصول إلى المجلد: %s"
+
+msgctxt "#32303"
+msgid "My folders"
+msgstr "مجلداتي"
+
+msgctxt "#32304"
+msgid "No folders yet"
+msgstr "لا توجد مجلدات بعد"
+
+msgctxt "#32305"
+msgid "%d folders"
+msgstr "عدد المجلدات: %d"
+
+msgctxt "#32306"
+msgid "Choose the folder"
+msgstr "اختر المجلد"
+
+msgctxt "#32307"
+msgid "Browse sources (add a network location there)"
+msgstr "تصفّح المصادر (ومنها إضافة موقع شبكة)"
+

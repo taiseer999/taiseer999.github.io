@@ -61,6 +61,7 @@ CATEGORIES = [
         ('grp_tabs',       32277),
         ('grp_fonts',      32280),
         ('seek_preview',   30024),
+        ('search_folders', 32293),        # 4.10.0
     ]),
     ('profiles', 30598, 'cat_profiles', [
         ('profile_export',  30596),
@@ -111,6 +112,7 @@ ICON_FILES = {
     'af3_discmenu':   'resources/icons/af3_discmenu.png',
     'af3_flagstyle':  'resources/icons/af3_flagstyle.png',
     'seek_preview':   'resources/icons/seek_preview.png',
+    'search_folders': 'resources/icons/sources.png',
     'font_scale':     'resources/icons/font_scale.png',
     'origin_fix':     'resources/icons/sources.png',
     'rebuild_addons33': 'resources/icons/rebuild_addons33.png',
@@ -165,7 +167,7 @@ DESC = {
     'lucent_theme': 32176, 'af3_trailers': 32177, 'af3_waves': 32178,
     'af3_lucent': 32179, 'af3_lucentplayer': 32180, 'lucent_from_af3': 32181,
     'af3_plotright': 32182, 'af3_plotsize': 32183, 'af3_discmenu': 32184,
-    'seek_preview': 32186, 'font_scale': 32187,
+    'seek_preview': 32186, 'font_scale': 32187, 'search_folders': 32294,
     'profile_export': 32188, 'profile_restore': 32189,
     'ab_glass': 32217, 'af3_flagstyle': 32240,
     'grp_tabs': 32281, 'grp_af3': 32282, 'grp_lucent': 32283, 'grp_fonts': 32284,
@@ -257,6 +259,9 @@ def mode_label2(mode):
         if mode == 'af3_lucent':
             from resources.lib import af3_lucent_toggle
             return af3_lucent_toggle.mode_label()
+        if mode == 'search_folders':
+            from resources.lib import local_folders
+            return local_folders.summary()
     except Exception as e:
         xbmc.log('[AbukarimTools Menu] value of %s: %s' % (mode, e), xbmc.LOGDEBUG)
     return None

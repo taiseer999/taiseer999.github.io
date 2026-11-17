@@ -53,6 +53,8 @@ ACTION_MODES = {'skin_switch', 'settings_view', 'first_run', 'abukarimwizard',
                 'ab_glass',
                 # 4.8.12: Seek Preview (options page)
                 'seek_preview',
+                # 4.10.0: Search All - My folders (dialogs only)
+                'search_folders',
                 # 4.6.14: AF3 Streaming Services (dialogs only)
                 'streaming_rows',
                 # 4.6.8: AF3 Lucent Look (Off / Glass / AMOLED picker)
@@ -574,6 +576,9 @@ def router():
     elif mode == 'seek_preview':
         from resources.lib import seek_preview_toggle
         seek_preview_toggle.run()
+    elif mode == 'search_folders':
+        from resources.lib import local_folders
+        local_folders.run()
 
     elif mode == 'af3_discmenu':
         from resources.lib import af3_discmenu_toggle

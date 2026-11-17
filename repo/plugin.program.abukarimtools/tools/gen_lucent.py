@@ -1667,7 +1667,8 @@ AB_MEDIA = 'special://home/addons/plugin.program.abukarimtools/resources/lucent/
 AB_ADDONS = (('rl', 'FFE5484D'), ('fl', 'FF3E9BFF'), ('umb', 'FF9B6BFF'), ('pov', 'FF2BC48A'),
              ('aio', 'FFF5A524'),      # 4.6.32 AIOStreams (orange)
              ('dex', 'FFEC4899'),      # 4.7.13 Dex Hub (pink)
-             ('en', 'FF22D3EE'))       # 4.7.16 EasyNews (cyan)
+             ('en', 'FF22D3EE'),       # 4.7.16 EasyNews (cyan)
+             ('loc', 'FFA3E635'))      # 4.10.0 My folders (lime)
 AB_SLOTS = len(AB_ADDONS)             # one status line per add-on (abs.s1 .. abs.sN)
 AB_SLOT_PITCH = 54                    # 4.7.40: bigger lines (26 px), 7 fit under the plot (was 40)
 AB_DOT = 20
