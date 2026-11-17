@@ -286,6 +286,31 @@ def _ensure_jre():
     return True
 
 
+def _free_ad_slots(limit):
+    """4.9.7: AllDebrid is full of unfinished transfers - say so plainly and,
+    if the user agrees, remove them. True when a slot was freed."""
+    from resources.lib import disc_debrid
+    _busy(False)
+    try:
+        stalled = disc_debrid.ad_stalled()
+    except Exception as e:
+        _log('AllDebrid active list: %s' % e, xbmc.LOGWARNING)
+        stalled = []
+    if not stalled:
+        xbmcgui.Dialog().ok(TITLE, T(32287) % limit)
+        return False
+    if not xbmcgui.Dialog().yesno(TITLE, T(32288) % (limit, len(stalled)),
+                                  nolabel=T(32290), yeslabel=T(32289)):
+        return False
+    _busy(True)
+    gone = disc_debrid.ad_delete([m['id'] for m in stalled])
+    if not gone:
+        xbmcgui.Dialog().notification(TITLE, T(32287) % limit, xbmcgui.NOTIFICATION_WARNING, 6000)
+        return False
+    xbmcgui.Dialog().notification(TITLE, T(32291) % gone, xbmcgui.NOTIFICATION_INFO, 3000)
+    return True
+
+
 def _served(iso, playing=''):
     """4.8.79: away from CoreELEC / LibreELEC, Kodi hangs on a streamed udf://
     image - the disc is served as a folder by disc_stream instead.
@@ -302,7 +327,14 @@ def _served(iso, playing=''):
             # 4.8.81: a whole disc in a debrid torrent (disc_debrid)
             from resources.lib import disc_debrid
             try:
-                return disc_debrid.open_disc(disc_debrid.current_pick(), playing)
+                try:
+                    return disc_debrid.open_disc(disc_debrid.current_pick(), playing)
+                except disc_debrid.SlotsFull as e:
+                    # 4.9.7: offer to clear the stalled transfers, then try once more
+                    _log('debrid disc: %s' % e, xbmc.LOGWARNING)
+                    if not _free_ad_slots(e.arg):
+                        return False
+                    return disc_debrid.open_disc(disc_debrid.current_pick(), playing)
             except disc_debrid.DebridError as e:
                 _log('debrid disc: %s' % e, xbmc.LOGWARNING)
                 text = T(e.sid)

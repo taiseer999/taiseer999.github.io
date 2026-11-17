@@ -1,3 +1,18 @@
+v4.9.8  (2026-11-17)
+- Disc Menu (AllDebrid): "the torrent is not cached" for a disc that was
+  playing from AllDebrid. AllDebrid now answers ready=false right after the
+  upload even for cached torrents; the disc menu waits up to 12 s for the
+  magnet to turn ready before giving up, and removes a magnet that really
+  is uncached so it does not take one of the 30 active slots. The message
+  is in Arabic too.
+
+v4.9.7  (2026-11-17)
+- Disc Menu (AllDebrid): when the account already holds its maximum of 30
+  unfinished transfers, AllDebrid refuses the disc's magnet and the menu
+  only showed the raw "MAGNET_TOO_MANY_ACTIVE" code. Now it says what it
+  means and offers to remove the unfinished transfers (queued or still
+  downloading; finished ones are kept), then opens the disc menu.
+
 v4.9.6  (2026-11-17)
 - Lucent Player Statistics, Video tab: the colour card showed "8-bit · 16.7
   million colours" for HDR10 files on players that report no depth in the

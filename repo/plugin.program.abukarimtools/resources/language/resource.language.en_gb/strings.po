@@ -3284,3 +3284,27 @@ msgctxt "#32286"
 msgid "Done"
 msgstr ""
 
+msgctxt "#32287"
+msgid "Disc menu: your AllDebrid account already has %s unfinished transfers (its limit), so the disc cannot be added. Remove some at alldebrid.com > Magnets."
+msgstr ""
+
+msgctxt "#32288"
+msgid "Your AllDebrid account is at its limit of %s unfinished transfers, so the disc menu cannot add this disc.[CR][CR]Remove the %d unfinished transfers (queued or still downloading) and open the disc menu?"
+msgstr ""
+
+msgctxt "#32289"
+msgid "Remove them"
+msgstr ""
+
+msgctxt "#32290"
+msgid "Cancel"
+msgstr ""
+
+msgctxt "#32291"
+msgid "AllDebrid: %d unfinished transfers removed"
+msgstr ""
+
+msgctxt "#32292"
+msgid "Disc menu: AllDebrid does not have the whole disc of this release cached"
+msgstr ""
+

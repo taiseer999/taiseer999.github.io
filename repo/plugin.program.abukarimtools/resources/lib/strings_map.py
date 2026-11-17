@@ -938,6 +938,15 @@ STRINGS = {
     32284: ('Font size, the AF3 waves and the section icons.', 'حجم الخط، وأمواج AF3، وأيقونات الأقسام.'),
     32285: ('Back', 'رجوع'),
     32286: ('Done', 'تم'),
+    # ---- 4.9.7: AllDebrid full of unfinished transfers (Disc Menu) ----
+    32287: ('Disc menu: your AllDebrid account already has %s unfinished transfers (its limit), so the disc cannot be added. Remove some at alldebrid.com > Magnets.',
+            'قائمة القرص: في حسابك على AllDebrid %s عملية تنزيل غير مكتملة، وهو الحد الأقصى، فلا يمكن إضافة القرص. احذف بعضها من alldebrid.com ثم Magnets.'),
+    32288: ('Your AllDebrid account is at its limit of %s unfinished transfers, so the disc menu cannot add this disc.[CR][CR]Remove the %d unfinished transfers (queued or still downloading) and open the disc menu?',
+            'وصل حسابك على AllDebrid إلى الحد الأقصى، وهو %s عملية تنزيل غير مكتملة، فلا تستطيع قائمة القرص إضافة هذا القرص.[CR][CR]هل تريد حذف عمليات التنزيل غير المكتملة وعددها %d (في الانتظار أو قيد التنزيل) ثم فتح قائمة القرص؟'),
+    32289: ('Remove them', 'احذفها'),
+    32290: ('Cancel', 'إلغاء'),
+    32291: ('AllDebrid: %d unfinished transfers removed', 'AllDebrid: حُذفت %d عملية تنزيل غير مكتملة'),
+    32292: ('Disc menu: AllDebrid does not have the whole disc of this release cached', 'قائمة القرص: القرص الكامل لهذا الإصدار غير مخزَّن مؤقتًا في AllDebrid'),
     # ---- 4.7.41: AF3 Plot Text Size (32113-32117) ----
     32113: ('AF3: Plot Text Size', 'AF3: حجم خط القصة'),
     32114: ('Large', 'كبير'),

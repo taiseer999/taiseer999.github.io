@@ -172,9 +172,93 @@ def _magnet(hsh):
 # AllDebrid (api.alldebrid.com v4): upload the magnet (instant when cached),
 # its files as a tree (n = name, s = size, l = link, e = entries of a folder),
 # each link unlocked when it is read.
+class SlotsFull(DebridError):
+    """4.9.7: AllDebrid MAGNET_TOO_MANY_ACTIVE - the account already has its
+    maximum of unfinished transfers, so the disc's magnet cannot be added."""
+
+
 def _ad_err(step, res):
     err = (res or {}).get('error') or {}
-    return DebridError('AllDebrid %s: %s %s' % (step, err.get('code', ''), err.get('message', '')))
+    text = 'AllDebrid %s: %s %s' % (step, err.get('code', ''), err.get('message', ''))
+    if err.get('code') == 'MAGNET_TOO_MANY_ACTIVE':
+        m = re.search(r'\((\d+)\)', str(err.get('message') or ''))
+        return SlotsFull(text, 32287, m.group(1) if m else '30')
+    return DebridError(text)
+
+
+def _ad_wait_ready(mid, tok, wait=12.0):
+    """True once the magnet reaches statusCode 4 (ready) within `wait` s;
+    False when it is still queued / downloading or failed."""
+    if mid is None:
+        return False
+    end = time.time() + wait
+    mon = xbmc.Monitor()
+    while True:
+        try:
+            res = _call('%s/v4.1/magnet/status?%s' % (AD_API, urllib.parse.urlencode({'agent': AGENT, 'id': mid})), tok)
+            m = (res.get('data') or {}).get('magnets') or {}
+            m = m[0] if isinstance(m, list) and m else m
+            code = int((m or {}).get('statusCode') or 0)
+            if code == 4:
+                _log('AllDebrid: magnet %s ready after the upload' % mid)
+                return True
+            if code > 4:
+                _log('AllDebrid: magnet %s failed (%s)' % (mid, (m or {}).get('status')), xbmc.LOGWARNING)
+                return False
+        except Exception as e:
+            _log('AllDebrid magnet/status %s: %s' % (mid, e), xbmc.LOGWARNING)
+        if time.time() >= end or mon.waitForAbort(1.0):
+            _log('AllDebrid: magnet %s not ready after %.0fs - not cached' % (mid, wait), xbmc.LOGWARNING)
+            return False
+
+
+def ad_stalled():
+    """4.9.7: the account's unfinished AllDebrid transfers (statusCode 0-3:
+    queued / downloading / compressing / uploading), oldest first:
+    [{'id', 'name', 'status', 'date'}]."""
+    tok = token('AD')
+    if not tok:
+        return []
+    res = _call('%s/v4.1/magnet/status?%s' % (AD_API, urllib.parse.urlencode({'agent': AGENT, 'status': 'active'})), tok)
+    if res.get('status') != 'success':
+        _log('AllDebrid magnet/status (active): %s' % (res.get('error') or {}), xbmc.LOGWARNING)
+        return []
+    mags = (res.get('data') or {}).get('magnets') or []
+    if isinstance(mags, dict):
+        mags = list(mags.values()) if 'id' not in mags else [mags]
+    out = [{'id': m.get('id'), 'name': str(m.get('filename') or m.get('hash') or ''),
+            'status': str(m.get('status') or ''), 'date': int(m.get('uploadDate') or 0)}
+           for m in mags if m.get('id') is not None and int(m.get('statusCode') or 0) < 4]
+    out.sort(key=lambda m: m['date'])
+    return out
+
+
+def ad_delete(ids):
+    """4.9.7: remove these transfers from the AllDebrid account; how many went."""
+    tok = token('AD')
+    if not tok or not ids:
+        return 0
+    gone = 0
+    for i in range(0, len(ids), 20):
+        part = ids[i:i + 20]
+        try:
+            res = _call('%s/v4/magnet/delete' % AD_API, tok,
+                        data={'agent': AGENT, 'ids[]': [str(x) for x in part]})
+            if res.get('status') == 'success':
+                gone += len(part)
+                continue
+            _log('AllDebrid magnet/delete (ids[]): %s' % (res.get('error') or {}), xbmc.LOGWARNING)
+        except Exception as e:
+            _log('AllDebrid magnet/delete (ids[]): %s' % e, xbmc.LOGWARNING)
+        for x in part:                      # older API: one id per call
+            try:
+                res = _call('%s/v4/magnet/delete?%s' % (AD_API, urllib.parse.urlencode({'agent': AGENT, 'id': x})), tok)
+                if res.get('status') == 'success':
+                    gone += 1
+            except Exception as e:
+                _log('AllDebrid magnet/delete %s: %s' % (x, e), xbmc.LOGWARNING)
+    _log('AllDebrid: %d unfinished transfer(s) removed' % gone)
+    return gone
 
 
 def _ad_find(hsh, tok):
@@ -207,9 +291,15 @@ def _ad_files(hsh, tok):
         mag = ((up.get('data') or {}).get('magnets') or [{}])[0]
         if mag.get('error'):
             raise _ad_err('upload', mag)
-        if not mag.get('ready', True):
-            raise DebridError('AllDebrid: the torrent is not cached')
         mid = mag.get('id')
+        if not mag.get('ready', True):
+            # 4.9.8: AllDebrid often answers ready=false even for a cached
+            # torrent and finishes it a moment later - wait for statusCode 4
+            # before calling it uncached; an uncached one is removed again so
+            # it does not take one of the account's 30 active slots.
+            if not _ad_wait_ready(mid, tok):
+                ad_delete([mid])
+                raise DebridError('AllDebrid: the torrent is not cached', 32292, '')
         _log('AllDebrid: magnet uploaded (id %s)' % mid)
     else:
         _log('AllDebrid: magnet already in the account (id %s)' % mid)
