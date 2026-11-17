@@ -270,6 +270,24 @@
                     <orientation>horizontal</orientation>
                     <itemgap>10</itemgap>
                     <visible>true</visible>
+                <!-- ABK_LP_ROW_499 -->
+<!-- ABK_LP_EXTRAS -->
+                <!-- 4.9.9 order: source, resolution, HDR, bit depth, audio, DTS core, video codec, container, channels, aspect, language, multi audio, subtitles -->
+                <control type="image">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_RipSource]</texture>
+                    <visible>$EXP[ABK_LP_HasRipSource] | !String.IsEmpty(Window(Home).Property(abk.lp.src))</visible>
+                </control>
+                <!-- 4.8.88: IMAX (release name of a Search All pick, or the file name) -->
+                <control type="image">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/IMAX.png</texture>
+                    <visible>String.Contains(Player.FileNameAndPath,imax) | !String.IsEmpty(Window(Home).Property(abk.lp.imax))</visible>
+                </control>
                 <control type="image">
                     <width>106</width>
                     <height>41</height>
@@ -288,8 +306,8 @@
                     <width>106</width>
                     <height>41</height>
                     <aspectratio>keep</aspectratio>
-                    <texture>$VAR[ABK_LP_NuvioFlagImg_vcodec]</texture>
-                    <visible>String.IsEqual(VideoPlayer.VideoCodec,hevc) | String.IsEqual(VideoPlayer.VideoCodec,av1) | String.IsEqual(VideoPlayer.VideoCodec,h264) | String.IsEqual(VideoPlayer.VideoCodec,vp9)</visible>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/$INFO[Window(Home).Property(abk.lp.bits)]-BIT.png</texture>
+                    <visible>!String.IsEmpty(Window(Home).Property(abk.lp.bits))</visible>
                 </control>
                 <control type="image">
                     <width>106</width>
@@ -309,24 +327,29 @@
                     <width>106</width>
                     <height>41</height>
                     <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/DTS.png</texture>
+                    <visible>String.StartsWith(VideoPlayer.AudioCodec,dtshd)</visible>
+                </control>
+                <control type="image">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$VAR[ABK_LP_NuvioFlagImg_vcodec]</texture>
+                    <visible>String.IsEqual(VideoPlayer.VideoCodec,hevc) | String.IsEqual(VideoPlayer.VideoCodec,av1) | String.IsEqual(VideoPlayer.VideoCodec,h264) | String.IsEqual(VideoPlayer.VideoCodec,vp9)</visible>
+                </control>
+                <control type="image">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/$INFO[Window(Home).Property(abk.lp.cont)].png</texture>
+                    <visible>!String.IsEmpty(Window(Home).Property(abk.lp.cont))</visible>
+                </control>
+                <control type="image">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
                     <texture>$VAR[ABK_LP_NuvioFlagImg_ch]</texture>
                     <visible>String.IsEqual(VideoPlayer.AudioChannels,8) | String.IsEqual(VideoPlayer.AudioChannels,7) | String.IsEqual(VideoPlayer.AudioChannels,6) | String.IsEqual(VideoPlayer.AudioChannels,2) | String.IsEqual(VideoPlayer.AudioChannels,1)</visible>
-                </control>
-<!-- ABK_LP_EXTRAS -->
-                <control type="image">
-                    <width>106</width>
-                    <height>41</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture background="true">$VAR[ABK_LP_RipSource]</texture>
-                    <visible>$EXP[ABK_LP_HasRipSource] | !String.IsEmpty(Window(Home).Property(abk.lp.src))</visible>
-                </control>
-                <!-- 4.8.88: IMAX (release name of a Search All pick, or the file name) -->
-                <control type="image">
-                    <width>106</width>
-                    <height>41</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture background="true">$VAR[ABK_LP_FlagDir]/IMAX.png</texture>
-                    <visible>String.Contains(Player.FileNameAndPath,imax) | !String.IsEmpty(Window(Home).Property(abk.lp.imax))</visible>
                 </control>
                 <control type="image">
                     <width>88</width>
@@ -341,6 +364,13 @@
                     <aspectratio>keep</aspectratio>
                     <texture background="true" fallback="$VAR[ABK_LP_ExtraDir]/other/language/fallback.png">$VAR[ABK_LP_ExtraDir]/other/language/$INFO[VideoPlayer.AudioLanguage].png</texture>
                     <visible>!String.IsEmpty(VideoPlayer.AudioLanguage)</visible>
+                </control>
+                <control type="image">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/MULTI.png</texture>
+                    <visible>String.IsEqual(Window(Home).Property(abk.lp.multi),1)</visible>
                 </control>
                 <control type="image">
                     <width>128</width>
@@ -639,49 +669,9 @@
                     <orientation>horizontal</orientation>
                     <itemgap>10</itemgap>
                     <visible>true</visible>
-                <control type="image" id="14601">
-                    <width>106</width>
-                    <height>41</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture>$VAR[ABK_LP_NuvioFlagImg_res]</texture>
-                    <visible>String.IsEqual(VideoPlayer.VideoResolution,8K) | String.IsEqual(VideoPlayer.VideoResolution,4K) | String.IsEqual(VideoPlayer.VideoResolution,1080) | String.IsEqual(VideoPlayer.VideoResolution,720) | [String.IsEqual(VideoPlayer.VideoResolution,480) | String.IsEqual(VideoPlayer.VideoResolution,540) | String.IsEqual(VideoPlayer.VideoResolution,576)]</visible>
-                </control>
-                <control type="image" id="14602">
-                    <width>106</width>
-                    <height>41</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture>$VAR[ABK_LP_NuvioFlagImg_hdr]</texture>
-                    <visible>String.IsEqual(VideoPlayer.HdrType,dolbyvision) | String.IsEqual(VideoPlayer.HdrType,hdr10plus) | String.IsEqual(VideoPlayer.HdrType,hdr10) | String.IsEqual(VideoPlayer.HdrType,hlg)</visible>
-                </control>
-                <control type="image" id="14603">
-                    <width>106</width>
-                    <height>41</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture>$VAR[ABK_LP_NuvioFlagImg_vcodec]</texture>
-                    <visible>String.IsEqual(VideoPlayer.VideoCodec,hevc) | String.IsEqual(VideoPlayer.VideoCodec,av1) | String.IsEqual(VideoPlayer.VideoCodec,h264) | String.IsEqual(VideoPlayer.VideoCodec,vp9)</visible>
-                </control>
-                <control type="image" id="14604">
-                    <width>106</width>
-                    <height>41</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture>$VAR[ABK_LP_NuvioFlagImg_atmos]</texture>
-                    <visible>[String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos) | String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)]</visible>
-                </control>
-                <control type="image" id="14605">
-                    <width>106</width>
-                    <height>41</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture>$VAR[ABK_LP_NuvioFlagImg_acodec]</texture>
-                    <visible>String.StartsWith(VideoPlayer.AudioCodec,dtshd_ma_x) | String.StartsWith(VideoPlayer.AudioCodec,truehd) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.StartsWith(VideoPlayer.AudioCodec,dts) | String.StartsWith(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | [String.StartsWith(VideoPlayer.AudioCodec,aac) | String.StartsWith(VideoPlayer.AudioCodec,he_aac)] | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.StartsWith(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,mp3)</visible>
-                </control>
-                <control type="image" id="14606">
-                    <width>106</width>
-                    <height>41</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture>$VAR[ABK_LP_NuvioFlagImg_ch]</texture>
-                    <visible>String.IsEqual(VideoPlayer.AudioChannels,8) | String.IsEqual(VideoPlayer.AudioChannels,7) | String.IsEqual(VideoPlayer.AudioChannels,6) | String.IsEqual(VideoPlayer.AudioChannels,2) | String.IsEqual(VideoPlayer.AudioChannels,1)</visible>
-                </control>
+                <!-- ABK_LP_ROW_499 -->
 <!-- ABK_LP_EXTRAS -->
+                <!-- 4.9.9 order: source, resolution, HDR, bit depth, audio, DTS core, video codec, container, channels, aspect, language, multi audio, subtitles -->
                 <control type="image">
                     <width>106</width>
                     <height>41</height>
@@ -697,6 +687,69 @@
                     <texture background="true">$VAR[ABK_LP_FlagDir]/IMAX.png</texture>
                     <visible>String.Contains(Player.FileNameAndPath,imax) | !String.IsEmpty(Window(Home).Property(abk.lp.imax))</visible>
                 </control>
+                <control type="image" id="14601">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$VAR[ABK_LP_NuvioFlagImg_res]</texture>
+                    <visible>String.IsEqual(VideoPlayer.VideoResolution,8K) | String.IsEqual(VideoPlayer.VideoResolution,4K) | String.IsEqual(VideoPlayer.VideoResolution,1080) | String.IsEqual(VideoPlayer.VideoResolution,720) | [String.IsEqual(VideoPlayer.VideoResolution,480) | String.IsEqual(VideoPlayer.VideoResolution,540) | String.IsEqual(VideoPlayer.VideoResolution,576)]</visible>
+                </control>
+                <control type="image" id="14602">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$VAR[ABK_LP_NuvioFlagImg_hdr]</texture>
+                    <visible>String.IsEqual(VideoPlayer.HdrType,dolbyvision) | String.IsEqual(VideoPlayer.HdrType,hdr10plus) | String.IsEqual(VideoPlayer.HdrType,hdr10) | String.IsEqual(VideoPlayer.HdrType,hlg)</visible>
+                </control>
+                <control type="image">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/$INFO[Window(Home).Property(abk.lp.bits)]-BIT.png</texture>
+                    <visible>!String.IsEmpty(Window(Home).Property(abk.lp.bits))</visible>
+                </control>
+                <control type="image" id="14604">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$VAR[ABK_LP_NuvioFlagImg_atmos]</texture>
+                    <visible>[String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos) | String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)]</visible>
+                </control>
+                <control type="image" id="14605">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$VAR[ABK_LP_NuvioFlagImg_acodec]</texture>
+                    <visible>String.StartsWith(VideoPlayer.AudioCodec,dtshd_ma_x) | String.StartsWith(VideoPlayer.AudioCodec,truehd) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.StartsWith(VideoPlayer.AudioCodec,dts) | String.StartsWith(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | [String.StartsWith(VideoPlayer.AudioCodec,aac) | String.StartsWith(VideoPlayer.AudioCodec,he_aac)] | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.StartsWith(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,mp3)</visible>
+                </control>
+                <control type="image">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/DTS.png</texture>
+                    <visible>String.StartsWith(VideoPlayer.AudioCodec,dtshd)</visible>
+                </control>
+                <control type="image" id="14603">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$VAR[ABK_LP_NuvioFlagImg_vcodec]</texture>
+                    <visible>String.IsEqual(VideoPlayer.VideoCodec,hevc) | String.IsEqual(VideoPlayer.VideoCodec,av1) | String.IsEqual(VideoPlayer.VideoCodec,h264) | String.IsEqual(VideoPlayer.VideoCodec,vp9)</visible>
+                </control>
+                <control type="image">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/$INFO[Window(Home).Property(abk.lp.cont)].png</texture>
+                    <visible>!String.IsEmpty(Window(Home).Property(abk.lp.cont))</visible>
+                </control>
+                <control type="image" id="14606">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$VAR[ABK_LP_NuvioFlagImg_ch]</texture>
+                    <visible>String.IsEqual(VideoPlayer.AudioChannels,8) | String.IsEqual(VideoPlayer.AudioChannels,7) | String.IsEqual(VideoPlayer.AudioChannels,6) | String.IsEqual(VideoPlayer.AudioChannels,2) | String.IsEqual(VideoPlayer.AudioChannels,1)</visible>
+                </control>
                 <control type="image">
                     <width>88</width>
                     <height>41</height>
@@ -710,6 +763,13 @@
                     <aspectratio>keep</aspectratio>
                     <texture background="true" fallback="$VAR[ABK_LP_ExtraDir]/other/language/fallback.png">$VAR[ABK_LP_ExtraDir]/other/language/$INFO[VideoPlayer.AudioLanguage].png</texture>
                     <visible>!String.IsEmpty(VideoPlayer.AudioLanguage)</visible>
+                </control>
+                <control type="image">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/MULTI.png</texture>
+                    <visible>String.IsEqual(Window(Home).Property(abk.lp.multi),1)</visible>
                 </control>
                 <control type="image">
                     <width>128</width>
@@ -859,49 +919,9 @@
                     <orientation>horizontal</orientation>
                     <itemgap>10</itemgap>
                     <visible>true</visible>
-                <control type="image" id="14601">
-                    <width>106</width>
-                    <height>41</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture>$VAR[ABK_LP_NuvioFlagImg_res]</texture>
-                    <visible>String.IsEqual(VideoPlayer.VideoResolution,8K) | String.IsEqual(VideoPlayer.VideoResolution,4K) | String.IsEqual(VideoPlayer.VideoResolution,1080) | String.IsEqual(VideoPlayer.VideoResolution,720) | [String.IsEqual(VideoPlayer.VideoResolution,480) | String.IsEqual(VideoPlayer.VideoResolution,540) | String.IsEqual(VideoPlayer.VideoResolution,576)]</visible>
-                </control>
-                <control type="image" id="14602">
-                    <width>106</width>
-                    <height>41</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture>$VAR[ABK_LP_NuvioFlagImg_hdr]</texture>
-                    <visible>String.IsEqual(VideoPlayer.HdrType,dolbyvision) | String.IsEqual(VideoPlayer.HdrType,hdr10plus) | String.IsEqual(VideoPlayer.HdrType,hdr10) | String.IsEqual(VideoPlayer.HdrType,hlg)</visible>
-                </control>
-                <control type="image" id="14603">
-                    <width>106</width>
-                    <height>41</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture>$VAR[ABK_LP_NuvioFlagImg_vcodec]</texture>
-                    <visible>String.IsEqual(VideoPlayer.VideoCodec,hevc) | String.IsEqual(VideoPlayer.VideoCodec,av1) | String.IsEqual(VideoPlayer.VideoCodec,h264) | String.IsEqual(VideoPlayer.VideoCodec,vp9)</visible>
-                </control>
-                <control type="image" id="14604">
-                    <width>106</width>
-                    <height>41</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture>$VAR[ABK_LP_NuvioFlagImg_atmos]</texture>
-                    <visible>[String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos) | String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)]</visible>
-                </control>
-                <control type="image" id="14605">
-                    <width>106</width>
-                    <height>41</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture>$VAR[ABK_LP_NuvioFlagImg_acodec]</texture>
-                    <visible>String.StartsWith(VideoPlayer.AudioCodec,dtshd_ma_x) | String.StartsWith(VideoPlayer.AudioCodec,truehd) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.StartsWith(VideoPlayer.AudioCodec,dts) | String.StartsWith(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | [String.StartsWith(VideoPlayer.AudioCodec,aac) | String.StartsWith(VideoPlayer.AudioCodec,he_aac)] | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.StartsWith(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,mp3)</visible>
-                </control>
-                <control type="image" id="14606">
-                    <width>106</width>
-                    <height>41</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture>$VAR[ABK_LP_NuvioFlagImg_ch]</texture>
-                    <visible>String.IsEqual(VideoPlayer.AudioChannels,8) | String.IsEqual(VideoPlayer.AudioChannels,7) | String.IsEqual(VideoPlayer.AudioChannels,6) | String.IsEqual(VideoPlayer.AudioChannels,2) | String.IsEqual(VideoPlayer.AudioChannels,1)</visible>
-                </control>
+                <!-- ABK_LP_ROW_499 -->
 <!-- ABK_LP_EXTRAS -->
+                <!-- 4.9.9 order: source, resolution, HDR, bit depth, audio, DTS core, video codec, container, channels, aspect, language, multi audio, subtitles -->
                 <control type="image">
                     <width>106</width>
                     <height>41</height>
@@ -917,6 +937,69 @@
                     <texture background="true">$VAR[ABK_LP_FlagDir]/IMAX.png</texture>
                     <visible>String.Contains(Player.FileNameAndPath,imax) | !String.IsEmpty(Window(Home).Property(abk.lp.imax))</visible>
                 </control>
+                <control type="image" id="14601">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$VAR[ABK_LP_NuvioFlagImg_res]</texture>
+                    <visible>String.IsEqual(VideoPlayer.VideoResolution,8K) | String.IsEqual(VideoPlayer.VideoResolution,4K) | String.IsEqual(VideoPlayer.VideoResolution,1080) | String.IsEqual(VideoPlayer.VideoResolution,720) | [String.IsEqual(VideoPlayer.VideoResolution,480) | String.IsEqual(VideoPlayer.VideoResolution,540) | String.IsEqual(VideoPlayer.VideoResolution,576)]</visible>
+                </control>
+                <control type="image" id="14602">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$VAR[ABK_LP_NuvioFlagImg_hdr]</texture>
+                    <visible>String.IsEqual(VideoPlayer.HdrType,dolbyvision) | String.IsEqual(VideoPlayer.HdrType,hdr10plus) | String.IsEqual(VideoPlayer.HdrType,hdr10) | String.IsEqual(VideoPlayer.HdrType,hlg)</visible>
+                </control>
+                <control type="image">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/$INFO[Window(Home).Property(abk.lp.bits)]-BIT.png</texture>
+                    <visible>!String.IsEmpty(Window(Home).Property(abk.lp.bits))</visible>
+                </control>
+                <control type="image" id="14604">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$VAR[ABK_LP_NuvioFlagImg_atmos]</texture>
+                    <visible>[String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos) | String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)]</visible>
+                </control>
+                <control type="image" id="14605">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$VAR[ABK_LP_NuvioFlagImg_acodec]</texture>
+                    <visible>String.StartsWith(VideoPlayer.AudioCodec,dtshd_ma_x) | String.StartsWith(VideoPlayer.AudioCodec,truehd) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.StartsWith(VideoPlayer.AudioCodec,dts) | String.StartsWith(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | [String.StartsWith(VideoPlayer.AudioCodec,aac) | String.StartsWith(VideoPlayer.AudioCodec,he_aac)] | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.StartsWith(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,mp3)</visible>
+                </control>
+                <control type="image">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/DTS.png</texture>
+                    <visible>String.StartsWith(VideoPlayer.AudioCodec,dtshd)</visible>
+                </control>
+                <control type="image" id="14603">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$VAR[ABK_LP_NuvioFlagImg_vcodec]</texture>
+                    <visible>String.IsEqual(VideoPlayer.VideoCodec,hevc) | String.IsEqual(VideoPlayer.VideoCodec,av1) | String.IsEqual(VideoPlayer.VideoCodec,h264) | String.IsEqual(VideoPlayer.VideoCodec,vp9)</visible>
+                </control>
+                <control type="image">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/$INFO[Window(Home).Property(abk.lp.cont)].png</texture>
+                    <visible>!String.IsEmpty(Window(Home).Property(abk.lp.cont))</visible>
+                </control>
+                <control type="image" id="14606">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$VAR[ABK_LP_NuvioFlagImg_ch]</texture>
+                    <visible>String.IsEqual(VideoPlayer.AudioChannels,8) | String.IsEqual(VideoPlayer.AudioChannels,7) | String.IsEqual(VideoPlayer.AudioChannels,6) | String.IsEqual(VideoPlayer.AudioChannels,2) | String.IsEqual(VideoPlayer.AudioChannels,1)</visible>
+                </control>
                 <control type="image">
                     <width>88</width>
                     <height>41</height>
@@ -930,6 +1013,13 @@
                     <aspectratio>keep</aspectratio>
                     <texture background="true" fallback="$VAR[ABK_LP_ExtraDir]/other/language/fallback.png">$VAR[ABK_LP_ExtraDir]/other/language/$INFO[VideoPlayer.AudioLanguage].png</texture>
                     <visible>!String.IsEmpty(VideoPlayer.AudioLanguage)</visible>
+                </control>
+                <control type="image">
+                    <width>106</width>
+                    <height>41</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true">$VAR[ABK_LP_FlagDir]/MULTI.png</texture>
+                    <visible>String.IsEqual(Window(Home).Property(abk.lp.multi),1)</visible>
                 </control>
                 <control type="image">
                     <width>128</width>

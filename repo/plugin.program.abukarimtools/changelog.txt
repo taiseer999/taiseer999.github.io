@@ -1,3 +1,22 @@
+v4.9.9  (2026-11-17)
+- Lucent Player badge row (pause card, info panel, full-screen info): new
+  badges and a new order - source (REMUX / BluRay / WEB), IMAX, resolution,
+  HDR, bit depth, audio codec, DTS core (under DTS-HD MA / HR / DTS:X),
+  video codec, container, channels, aspect ratio, audio language, MULTI
+  AUDIO, subtitle language.
+  * Bit depth (8 / 10 / 12-BIT) is the Statistics screen's reading
+    (Kodi 22 video.bitdepth, the Amlogic pixel format, the pixel format;
+    HDR never under 10-bit, Dolby Vision FEL 12-bit); no badge when unknown.
+  * Container (MKV / MP4 / TS / AVI) from the file name; Blu-ray .m2ts is TS.
+  * MULTI AUDIO when the file has more than one audio language (JSON-RPC -
+    Kodi has no infolabel for it).
+  These three are set by the service when a video starts (stream_badges.py,
+  Home properties abk.lp.bits / abk.lp.cont / abk.lp.multi).
+- Needs AF3 OSD Flags Styles (FR-Badges) 1.0.14: the new pills in every
+  style, from FR-Badges' own 8bit / 10bit / 12bit / mkv / ts / avi /
+  multi-audio badges; the Lucent look and the classic colourful set get new
+  Lucent pills.
+
 v4.9.8  (2026-11-17)
 - Disc Menu (AllDebrid): "the torrent is not cached" for a disc that was
   playing from AllDebrid. AllDebrid now answers ready=false right after the

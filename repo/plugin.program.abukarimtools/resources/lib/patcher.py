@@ -4703,6 +4703,14 @@ _LP_MEDIA = (
     'flags/SD.png',
     'flags/TRUEHD.png',
     'flags/VP9.png',
+    'flags/8-BIT.png',          # 4.9.9
+    'flags/10-BIT.png',          # 4.9.9
+    'flags/12-BIT.png',          # 4.9.9
+    'flags/MKV.png',          # 4.9.9
+    'flags/MP4.png',          # 4.9.9
+    'flags/TS.png',          # 4.9.9
+    'flags/AVI.png',          # 4.9.9
+    'flags/MULTI.png',          # 4.9.9
     'mask_circle.png',
     'osd_grad_bottom.png',
     'osd_grad_left.png',

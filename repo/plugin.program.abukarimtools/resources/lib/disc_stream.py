@@ -580,6 +580,11 @@ class _Rescue(xbmc.Player):
             _log('disc pick: %s' % e, xbmc.LOGWARNING)
         _source_badge_fallback(path)
         try:
+            from resources.lib import stream_badges      # 4.9.9: bit depth / container / multi audio
+            stream_badges.started(path)
+        except Exception as e:
+            _log('stream badges: %s' % e, xbmc.LOGWARNING)
+        try:
             _explain_disc_button(path)
         except Exception:
             pass
@@ -589,8 +594,10 @@ class _Rescue(xbmc.Player):
 
     def onPlayBackStopped(self):
         self.path, self.item = '', None            # the user stopped it: never reopen
+        _clear_stream_badges()
 
     def onPlayBackEnded(self):
+        _clear_stream_badges()
         self._failed('ended')
 
     def _failed(self, how):
@@ -642,6 +649,14 @@ class _Rescue(xbmc.Player):
             xbmc.executebuiltin('Dialog.Close(busydialognocancel,true)')
             home.clearProperty(BUSY_PROP)
             self.busy = False
+
+
+def _clear_stream_badges():
+    try:
+        from resources.lib import stream_badges
+        stream_badges.clear()
+    except Exception:
+        pass
 
 
 def _clear_old_source_badge(path):
