@@ -128,6 +128,21 @@ def set_own_focus(on):
     _log('focus colour: %s' % ('own' if on else 'Lucent white'))
 
 
+def focus_default():
+    """4.9.5: the skin's own focus colour is the default under the Lucent
+    Look (and in the OSD); Lucent white is the option. Done once per
+    profile, while AF3 is the skin (Skin.SetBool writes the current skin)."""
+    try:
+        state = _load()
+        if state.get('focus_v2') or xbmc.getSkinDir() != SKIN_ID:
+            return
+        set_own_focus(True)
+        state['focus_v2'] = True
+        _save(state)
+    except Exception as e:
+        _log('focus default: %s' % e, xbmc.LOGWARNING)
+
+
 def mode_label(mode=None):
     mode = mode or get_mode()
     if mode == 'off':
@@ -263,6 +278,7 @@ def run():
     if xbmc.getSkinDir() != SKIN_ID:
         xbmcgui.Dialog().ok(TITLE, T(30602))          # switch to AF3 first
         return
+    focus_default()                         # 4.9.5
     current = get_mode()
     if current != 'off':
         sync_ppi_glass(current)             # 4.8.55: boxes already on the Lucent Look

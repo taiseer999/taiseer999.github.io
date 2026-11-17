@@ -110,6 +110,8 @@ class Page(xbmcgui.WindowXML):
         self.cats = []
         self.cat_pos = -1
         self.rows = []              # [(entry, ListItem)] of the shown category
+        self.sub = None             # 4.9.3: open group of the category (or None)
+        self.sub_pos = 0            # its row in the category, to come back to
         self.lock = threading.Lock()
         self.closing = False
         self.refresh_until = 0.0
@@ -172,11 +174,54 @@ class Page(xbmcgui.WindowXML):
             _log('entries of %s: %s' % (key, e), xbmc.LOGWARNING)
             return []
 
+    # ── 4.9.3: groups (an entry with 'open') open in place, Back returns ──
+    def _back_entry(self):
+        arrow = 'abk_back_rtl.png' if self.dir == 'rtl' else 'abk_back_ltr.png'
+        path = getattr(self.model, 'path', '')
+        glass = _call(getattr(self.model, 'glass_on', None), False)
+        icon = os.path.join(path, 'resources', 'icons_glass' if glass else 'icons', arrow) if path else arrow
+        return {'id': '__back', 'label': getattr(self.model, 'back_label', '') or '<', 'icon': icon,
+                'desc': '', 'back': True}
+
+    def _current_entries(self):
+        if self.sub:
+            return [self._back_entry()] + self._entries(self.sub)
+        cat = self.cats[self.cat_pos] if 0 <= self.cat_pos < len(self.cats) else None
+        return self._entries(cat['key']) if cat and not cat.get('run') else []
+
+    def _title(self):
+        cat = self.cats[self.cat_pos] if 0 <= self.cat_pos < len(self.cats) else {}
+        t = cat.get('label', '')
+        if self.sub:
+            fn = getattr(self.model, 'group', None)
+            g = _call(lambda: fn(self.sub), '') if fn else ''
+            t = '%s  ›  %s' % (t, g) if g else t
+        self.setProperty('cat.title', t)
+
+    def _open_group(self, entry, pos):
+        self.sub = entry['open']
+        self.sub_pos = pos
+        self._title()
+        self._fill(self._current_entries())
+        lst = self.getControl(self.item_id)
+        if lst.size() > 1:
+            lst.selectItem(1)
+        self.setFocusId(self.item_id)
+
+    def _close_group(self):
+        self.sub = None
+        self._title()
+        self._fill(self._current_entries())
+        lst = self.getControl(self.item_id)
+        if lst.size():
+            lst.selectItem(min(self.sub_pos, lst.size() - 1))
+
     def _show_category(self, pos):
         if pos < 0 or pos >= len(self.cats):
             return
         cat = self.cats[pos]
         self.cat_pos = pos
+        self.sub = None
         self.setProperty('cat.title', cat.get('label', ''))
         if cat.get('run'):
             # an action "category" (Support, ...): nothing to list
@@ -203,7 +248,7 @@ class Page(xbmcgui.WindowXML):
         cl.selectItem(min(pos, len(self.cats) - 1))
         cat = self.cats[self.cat_pos] if 0 <= self.cat_pos < len(self.cats) else None
         if cat and not cat.get('run'):
-            self._fill(self._entries(cat['key']), keep_pos=True)
+            self._fill(self._current_entries(), keep_pos=True)
 
     # ── Kodi callbacks ────────────────────────────────────────────────────
     def onInit(self):
@@ -235,6 +280,10 @@ class Page(xbmcgui.WindowXML):
 
     def onAction(self, action):
         if action.getId() in (ACTION_PREVIOUS_MENU, ACTION_NAV_BACK):
+            if self.sub:                    # 4.9.3: Back leaves the group first
+                self._close_group()
+                self.setFocusId(self.item_id)
+                return
             self.close()
             return
         self._follow_category()
@@ -258,6 +307,12 @@ class Page(xbmcgui.WindowXML):
             pos = self.getControl(self.item_id).getSelectedPosition()
             with self.lock:
                 row = self.rows[pos] if 0 <= pos < len(self.rows) else None
+            if row and row[0].get('back'):
+                self._close_group()
+                return
+            if row and row[0].get('open'):
+                self._open_group(row[0], pos)
+                return
             if row and row[0].get('run'):
                 self._run(row[0]['run'])
 
@@ -299,7 +354,7 @@ class Page(xbmcgui.WindowXML):
         # entries that come and go (a sub-option of a switch)
         cat = self.cats[self.cat_pos] if 0 <= self.cat_pos < len(self.cats) else None
         if cat and not cat.get('run'):
-            fresh = self._entries(cat['key'])
+            fresh = self._current_entries()
             with self.lock:
                 old_ids = [e.get('id') for e, _li in self.rows]
             if [e.get('id') for e in fresh] != old_ids:

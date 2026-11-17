@@ -69,7 +69,7 @@ msgid "Maintenance"
 msgstr ""
 
 msgctxt "#30017"
-msgid "Toggles"
+msgid "التخصيصات"
 msgstr ""
 
 msgctxt "#30018"
@@ -1809,7 +1809,7 @@ msgid "Focus colour: Lucent white"
 msgstr ""
 
 msgctxt "#30859"
-msgid "Focus colour: my own colour"
+msgid "Focus colour: the skin's own (default)"
 msgstr ""
 
 msgctxt "#30860"
@@ -2733,7 +2733,7 @@ msgid "Cleaning, repairs and tests: free space, repair the add-on database and t
 msgstr ""
 
 msgctxt "#32143"
-msgid "Features you switch on and off or set: the look of Arctic Fuse 3, glass windows, trailers, seek preview and font size."
+msgid "Mods: the skin switcher, Arctic Fuse 3 changes, the Lucent look, tabs, fonts and waves, and seek preview."
 msgstr ""
 
 msgctxt "#32144"
@@ -3242,5 +3242,45 @@ msgstr ""
 
 msgctxt "#32276"
 msgid "Premiumize: pick this release in Search All to open its disc menu"
+msgstr ""
+
+msgctxt "#32277"
+msgid "Tabs"
+msgstr ""
+
+msgctxt "#32278"
+msgid "AF3 changes"
+msgstr ""
+
+msgctxt "#32279"
+msgid "Lucent"
+msgstr ""
+
+msgctxt "#32280"
+msgid "Fonts and waves"
+msgstr ""
+
+msgctxt "#32281"
+msgid "Show or hide the DPlex and Korean content tabs on the AF3 home."
+msgstr ""
+
+msgctxt "#32282"
+msgid "Arctic Fuse 3 changes: badge style, plot on the right, plot size, disc menu and trailers."
+msgstr ""
+
+msgctxt "#32283"
+msgid "The Lucent look: AF3 Lucent Look, Lucent Player, widgets from AF3, glass source windows and the AB Tools glass look."
+msgstr ""
+
+msgctxt "#32284"
+msgid "Font size, the AF3 waves and the section icons."
+msgstr ""
+
+msgctxt "#32285"
+msgid "Back"
+msgstr ""
+
+msgctxt "#32286"
+msgid "Done"
 msgstr ""
 

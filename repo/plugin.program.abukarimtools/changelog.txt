@@ -1,3 +1,45 @@
+v4.9.5  (2026-11-17)
+- Lucent Look: the skin's own focus colour is now the default, in menus and
+  in the OSD (buttons, focused icons, pill tabs, glyph tiles). "Lucent
+  white" stays as the option in AF3: Lucent Look. Existing installs switch
+  to the skin's colour once; pick Lucent white again to go back.
+- Arabic: "Mods" is now "التخصيصات"; Lucent is written "لوسنت" and Lucent
+  Glass "زجاج لوسنت" across the Arabic strings.
+
+v4.9.4  (2026-11-17)
+- Fix: Kodi crashed when Back was pressed in a picture grid (Flags Style,
+  Icons, Skin switcher). The grid's own "Close" on Back was read as Back
+  again and looped until Kodi ran out of stack. Back is now handled only
+  by the add-on, which closes the grid.
+
+v4.9.3  (2026-11-17)
+- Toggles is now "Mods". Related mods are grouped under one entry each:
+  AF3 changes (flags style, plot right/size, disc menu, trailers),
+  Lucent (AF3 Lucent, Lucent Player, Lucent from AF3, Lucent theme, Glass),
+  Tabs (DPlex, Korean) and Fonts and waves (font scale, waves, icons).
+  A group opens in place with a Back row at the top; Back leaves the group
+  first. Each group shows how many of its mods are on.
+- Pickers with pictures are grids now: Flags Style, Icons (coloured / mono)
+  and Skin switcher (fanart or icon cards, current one ticked).
+- Switch lists (Glass add-ons, "choose what to patch", ...) open in a new
+  window: tapping a row flips it in place and "Done" is a button at the
+  top, no longer the first row of the list.
+
+v4.9.2  (2026-11-17)
+- Flags Style picker cards: the player mock-up (title and plot lines) is gone;
+  each card now shows three rows of that style's badges instead - 4K, HDR10,
+  Dolby Vision, HDR10+ / Atmos, TrueHD, DTS:X, DD+ / HEVC, AV1, 7.1, Remux.
+
+v4.9.1  (2026-11-17)
+- AF3: OSD Flags Style opens a grid of preview cards instead of the list
+  (abk_flagstyle.xml): each card is a small player mock-up with a row of
+  that style's own badges (4K, Dolby Vision, Atmos, HEVC) and the name under
+  it; the focused card's description shows under the title, and a green tick
+  marks the style in use. Automatic shows Classic on the left half and Lucent
+  on the right; Off shows the faded badges with a "no" sign. Cards are made
+  by tools/frbadges/make_previews.py from frbadges 1.0.13 into
+  resources/flagstyle_previews/. The old list stays as the fallback.
+
 v4.8.94  (2026-11-15)
 - Lucent source windows (Fen Light / Red Light): the totals screen ("Choose
   what to show": quality x service) no longer opens by itself. Every search

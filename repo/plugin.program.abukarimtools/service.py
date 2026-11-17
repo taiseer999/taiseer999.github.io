@@ -1480,6 +1480,14 @@ def main():
         _log('Classic OSD flags check failed to start (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
+    # 4.9.5: the skin's own focus colour becomes the Lucent default (once).
+    try:
+        from resources.lib import af3_lucent_toggle
+        af3_lucent_toggle.focus_default()
+    except Exception:
+        _log('Lucent focus default failed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
     # 4.8.68: AF3 OSD Flags Style - reinstall resource.images.af3.frbadges
     # when an FR-Badges style is chosen and the add-on is missing. Fenced.
     try:

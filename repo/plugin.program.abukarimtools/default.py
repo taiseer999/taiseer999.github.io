@@ -24,7 +24,7 @@ if not ADDON_PATH.endswith('/') and not ADDON_PATH.endswith('\\'):
 FANART = ADDON_PATH + 'fanart.jpg'
 # 4.8.23: icons, categories, on/off states and values live in menu_model.py,
 # shared with the settings window (settings_window.py).
-from resources.lib.menu_model import (CATEGORIES, ICON_FILES, icon_rel as _icon_rel,
+from resources.lib.menu_model import (CATEGORIES, GROUPS, ICON_FILES, icon_rel as _icon_rel,
                                       switch_state as _switch_state,
                                       mode_label2 as _mode_label2)
 ICONS = {k: ADDON_PATH + _icon_rel(k) for k in ICON_FILES}
@@ -265,10 +265,15 @@ def main_menu():
 
 def category_menu(cat_key):
     from resources.lib.i18n import T
-    for c_key, _label_id, _icon, items in CATEGORIES:
+    # 4.9.3: a group of the Mods category lists like a category of its own
+    cats = list(CATEGORIES) + [(k, g[0], k, g[2]) for k, g in GROUPS.items()]
+    for c_key, _label_id, _icon, items in cats:
         if c_key != cat_key:
             continue
         for mode, label_id in items:
+            if mode in GROUPS:
+                _add_folder(T(label_id), mode, mode)
+                continue
             # 4.6.31: listed only on a box whose Kodi rejects newer
             # addon_data settings.xml files (see settings_downgrade.py)
             if mode == 'settings_v4':

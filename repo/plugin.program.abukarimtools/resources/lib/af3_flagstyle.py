@@ -76,6 +76,8 @@ OFF = 'off'
 _GATE_RE = re.compile(r'(<expression name="Exp_ABK_ClassicFlags">)(.*?)(</expression>)', re.S)
 _GATE_ADD = ' + !String.IsEqual(Skin.String(abk.flagstyle),off)'
 _LABEL = {k: l for k, l, _d in STYLES}
+_PREVIEWS = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                         'resources', 'flagstyle_previews')
 _SAMPLES = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
                         'resources', 'flagstyle_samples')
 MARK = '<!-- ABUKARIM: flag style -->'
@@ -311,19 +313,27 @@ def _reload_af3():
     safe_reload_skin()
 
 
+def _choose(current):
+    """Index of the picked style, -1 = cancelled: a grid of preview cards
+    (grid_ui, 4.9.1; the plain list if the window cannot be shown)."""
+    from resources.lib import grid_ui
+    keys = [k for k, _l, _d in STYLES]
+    items = []
+    for k, l, d in STYLES:
+        img = os.path.join(_PREVIEWS, '%s.png' % k)
+        if not os.path.isfile(img):
+            img = os.path.join(_SAMPLES, '%s.png' % k)
+        items.append({'label': T(l), 'desc': T(d), 'art': img, 'current': k == current})
+    return grid_ui.pick(T(32230), items, keys.index(current) if current in keys else 0)
+
+
 def run():
     if not xbmc.getCondVisibility('System.HasAddon(%s)' % SKIN_ID):
         xbmcgui.Dialog().ok(TITLE, T(30440))          # AF3 is not installed
         return
     current = get_style()
     keys = [k for k, _l, _d in STYLES]
-    items = []
-    for k, l, d in STYLES:
-        li = xbmcgui.ListItem(T(l), T(d))
-        img = os.path.join(_SAMPLES, '%s.png' % k)
-        li.setArt({'icon': img, 'thumb': img})
-        items.append(li)
-    pick = xbmcgui.Dialog().select(T(32230), items, preselect=keys.index(current), useDetails=True)
+    pick = _choose(current)
     if pick < 0:
         return
     style = keys[pick]

@@ -51,30 +51,41 @@ CATEGORIES = [
         ('log_share',      30593),
         ('menu_reconcile', 30595),
     ]),
+    # 4.9.3: "Mods" (was Toggles); like entries are grouped - a group opens
+    # in place on the settings page (settings_engine) or as a folder in the
+    # classic list (default.py ?cat=<group>)
     ('toggle', 30017, 'cat_toggle', [
         ('skin_switch',    30009),
-        ('dplex_toggle',   30010),
-        ('korean_toggle',  30011),
-        ('icons_toggle',   30020),
-        ('ab_glass',       32216),
-        ('lucent_theme',   30800),
-        ('af3_trailers',   30430),
-        ('af3_waves',      30603),
-        ('af3_lucent',     30850),
-        ('af3_lucentplayer', 32080),
-        ('lucent_from_af3', 32089),
-        ('af3_plotright',  30890),
-        ('af3_plotsize',   32113),
-        ('af3_discmenu',   32102),
-        ('af3_flagstyle',  32230),
+        ('grp_af3',        32278),
+        ('grp_lucent',     32279),
+        ('grp_tabs',       32277),
+        ('grp_fonts',      32280),
         ('seek_preview',   30024),
-        ('font_scale',     30740),
     ]),
     ('profiles', 30598, 'cat_profiles', [
         ('profile_export',  30596),
         ('profile_restore', 30597),
     ]),
 ]
+
+# 4.9.3: groups inside a category - key: (label id, description id, entries)
+GROUPS = {
+    'grp_tabs':   (32277, 32281, [('dplex_toggle', 30010), ('korean_toggle', 30011)]),
+    'grp_af3':    (32278, 32282, [('af3_flagstyle', 32230), ('af3_plotright', 30890),
+                                  ('af3_plotsize', 32113), ('af3_discmenu', 32102),
+                                  ('af3_trailers', 30430)]),
+    'grp_lucent': (32279, 32283, [('af3_lucent', 30850), ('af3_lucentplayer', 32080),
+                                  ('lucent_from_af3', 32089), ('lucent_theme', 30800),
+                                  ('ab_glass', 32216)]),
+    'grp_fonts':  (32280, 32284, [('font_scale', 30740), ('af3_waves', 30603),
+                                  ('icons_toggle', 30020)]),
+}
+
+
+def group_items(key):
+    g = GROUPS.get(key)
+    return list(g[2]) if g else []
+
 
 # Icon of every entry, relative to the add-on folder.
 ICON_FILES = {
@@ -129,6 +140,10 @@ ICON_FILES = {
     'cat_maint':      'resources/icons/maintenance.png',
     'cat_toggle':     'resources/icons/cat_toggle.png',
     'support':        'resources/icons/support.png',
+    'grp_tabs':       'resources/icons/grp_tabs.png',
+    'grp_af3':        'resources/icons/grp_af3.png',
+    'grp_lucent':     'resources/icons/lucent_theme.png',
+    'grp_fonts':      'resources/icons/grp_fonts.png',
 }
 
 # Settings-window description of each entry / category (strings 32140-32199).
@@ -153,6 +168,7 @@ DESC = {
     'seek_preview': 32186, 'font_scale': 32187,
     'profile_export': 32188, 'profile_restore': 32189,
     'ab_glass': 32217, 'af3_flagstyle': 32240,
+    'grp_tabs': 32281, 'grp_af3': 32282, 'grp_lucent': 32283, 'grp_fonts': 32284,
 }
 
 
@@ -213,8 +229,18 @@ def switch_state(mode):
     return None
 
 
+def group_summary(key):
+    """'3 / 5' = switches on / entries of a group (4.9.3)."""
+    items = [m for m, _l in group_items(key) if visible(m)]
+    sw = [switch_state(m) for m in items]
+    sw = [x for x in sw if x is not None]
+    return '%d / %d' % (sum(1 for x in sw if x), len(sw)) if sw else '%d' % len(items)
+
+
 def mode_label2(mode):
     """Value text for multi-state entries (3.4.6: Font Size shows its mode)."""
+    if mode in GROUPS:
+        return group_summary(mode)
     try:
         if mode == 'lucent_theme':
             from resources.lib import lucent_toggle

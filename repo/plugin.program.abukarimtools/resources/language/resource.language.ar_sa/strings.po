@@ -69,8 +69,8 @@ msgid "Maintenance"
 msgstr "الصيانة والتنظيف"
 
 msgctxt "#30017"
-msgid "Toggles"
-msgstr "التبديلات"
+msgid "التخصيصات"
+msgstr "التخصيصات"
 
 msgctxt "#30018"
 msgid "Rebuild Add-on Database"
@@ -1774,7 +1774,7 @@ msgstr "شفافية الزجاج: %s"
 
 msgctxt "#30850"
 msgid "AF3: Lucent Look"
-msgstr "AF3: مظهر Lucent"
+msgstr "AF3: مظهر لوسنت"
 
 msgctxt "#30851"
 msgid "Off (Arctic Fuse 3 as it is)"
@@ -1782,23 +1782,23 @@ msgstr "إيقاف (واجهة Arctic Fuse 3 كما هي)"
 
 msgctxt "#30852"
 msgid "Lucent Glass"
-msgstr "زجاج Lucent"
+msgstr "زجاج لوسنت"
 
 msgctxt "#30853"
 msgid "Lucent Glass AMOLED (true black)"
-msgstr "زجاج Lucent بأسود AMOLED"
+msgstr "زجاج لوسنت بأسود AMOLED"
 
 msgctxt "#30854"
 msgid "Lucent Look turned on: %s"
-msgstr "تم تشغيل مظهر Lucent: %s"
+msgstr "تم تشغيل مظهر لوسنت: %s"
 
 msgctxt "#30855"
 msgid "Lucent Look turned off - your previous colours are back"
-msgstr "تم إيقاف مظهر Lucent وأُعيدت ألوانك السابقة"
+msgstr "تم إيقاف مظهر لوسنت وأُعيدت ألوانك السابقة"
 
 msgctxt "#30856"
 msgid "Lucent Look: the files could not be installed into Arctic Fuse 3. Run Apply Patches and try again."
-msgstr "مظهر Lucent: تعذّر تثبيت الملفات في واجهة Arctic Fuse 3. شغّل تطبيق الترقيعات ثم أعد المحاولة."
+msgstr "مظهر لوسنت: تعذّر تثبيت الملفات في واجهة Arctic Fuse 3. شغّل تطبيق الترقيعات ثم أعد المحاولة."
 
 msgctxt "#30857"
 msgid "Off"
@@ -1806,11 +1806,11 @@ msgstr "متوقف"
 
 msgctxt "#30858"
 msgid "Focus colour: Lucent white"
-msgstr "لون التركيز: أبيض Lucent"
+msgstr "لون التركيز: أبيض لوسنت"
 
 msgctxt "#30859"
-msgid "Focus colour: my own colour"
-msgstr "لون التركيز: لوني الخاص"
+msgid "Focus colour: the skin's own (default)"
+msgstr "لون التركيز: لون الواجهة (الافتراضي)"
 
 msgctxt "#30860"
 msgid "AF3: Streaming Services"
@@ -2538,23 +2538,23 @@ msgstr "قيد التشغيل"
 
 msgctxt "#32080"
 msgid "AF3: Lucent Player"
-msgstr "AF3: مشغّل Lucent"
+msgstr "AF3: مشغّل لوسنت"
 
 msgctxt "#32081"
 msgid "Lucent Player turned on (OSD, pause card and statistics)"
-msgstr "تم تشغيل مشغّل Lucent (شريط التحكم وبطاقة الإيقاف المؤقت والإحصائيات)"
+msgstr "تم تشغيل مشغّل لوسنت (شريط التحكم وبطاقة الإيقاف المؤقت والإحصائيات)"
 
 msgctxt "#32082"
 msgid "Lucent Player turned off - the Arctic Fuse 3 player is back"
-msgstr "تم إيقاف مشغّل Lucent، وعاد مشغّل Arctic Fuse 3"
+msgstr "تم إيقاف مشغّل لوسنت، وعاد مشغّل Arctic Fuse 3"
 
 msgctxt "#32083"
 msgid "Lucent Player files are not in the skin yet - run Apply Patches first"
-msgstr "ملفات مشغّل Lucent ليست في المظهر بعد؛ شغّل تطبيق التصحيحات أولًا"
+msgstr "ملفات مشغّل لوسنت ليست في المظهر بعد؛ شغّل تطبيق التصحيحات أولًا"
 
 msgctxt "#32089"
 msgid "Lucent: Widgets from AF3"
-msgstr "Lucent: الودجات من AF3"
+msgstr "لوسنت: الودجات من AF3"
 
 msgctxt "#32090"
 msgid "Search"
@@ -2574,7 +2574,7 @@ msgstr "إيقاف التشغيل"
 
 msgctxt "#32094"
 msgid "Switch to the Lucent skin first, then run this again."
-msgstr "انتقل إلى مظهر Lucent أولًا، ثم أعد تشغيل هذا الخيار."
+msgstr "انتقل إلى مظهر لوسنت أولًا، ثم أعد تشغيل هذا الخيار."
 
 msgctxt "#32095"
 msgid "No Arctic Fuse 3 menu was found on this device."
@@ -2582,19 +2582,19 @@ msgstr "لم يُعثر على قائمة Arctic Fuse 3 على هذا الجها
 
 msgctxt "#32096"
 msgid "Build the Lucent menu and widgets from your Arctic Fuse 3 hubs and widgets?[CR][CR]This replaces the current Lucent menu."
-msgstr "هل تريد بناء قائمة Lucent وودجاتها من أقسام Arctic Fuse 3 وودجاتها؟[CR][CR]سيحلّ هذا محلّ قائمة Lucent الحالية."
+msgstr "هل تريد بناء قائمة لوسنت وودجاتها من أقسام Arctic Fuse 3 وودجاتها؟[CR][CR]سيحلّ هذا محلّ قائمة لوسنت الحالية."
 
 msgctxt "#32097"
 msgid "Could not build the Lucent menu: %s"
-msgstr "تعذّر بناء قائمة Lucent: %s"
+msgstr "تعذّر بناء قائمة لوسنت: %s"
 
 msgctxt "#32098"
 msgid "Lucent menu ready: %d tabs, %d widgets."
-msgstr "قائمة Lucent جاهزة: %d تبويبًا و%d ودجة."
+msgstr "قائمة لوسنت جاهزة: %d تبويبًا و%d ودجة."
 
 msgctxt "#32099"
 msgid "Left out (Lucent has at most 12 tabs and 10 widgets per tab):"
-msgstr "لم تُضَف (يتّسع Lucent لـ 12 تبويبًا و10 ودجات لكل تبويب على الأكثر):"
+msgstr "لم تُضَف (يتّسع لوسنت لـ 12 تبويبًا و10 ودجات لكل تبويب على الأكثر):"
 
 msgctxt "#32100"
 msgid "PASSTHROUGH"
@@ -2733,8 +2733,8 @@ msgid "Cleaning, repairs and tests: free space, repair the add-on database and t
 msgstr "التنظيف والإصلاح والاختبار: تحرير المساحة، وإصلاح قاعدة بيانات الإضافات والقوائم، واختبار الشبكة والمعالج، ومشاركة السجل."
 
 msgctxt "#32143"
-msgid "Features you switch on and off or set: the look of Arctic Fuse 3, glass windows, trailers, seek preview and font size."
-msgstr "ميزات تُفعَّل وتُعطَّل أو تُضبَط: مظهر Arctic Fuse 3، والنوافذ الزجاجية، والتريلرات، ومعاينة التقديم، وحجم الخط."
+msgid "Mods: the skin switcher, Arctic Fuse 3 changes, the Lucent look, tabs, fonts and waves, and seek preview."
+msgstr "التخصيصات: مبدّل الواجهات، وتغييرات Arctic Fuse 3، ومظهر لوسنت، والتبويبات، والخطوط والأمواج، ومعاينة التقديم."
 
 msgctxt "#32144"
 msgid "Save the look of the current skin (settings, menus, views) or bring back a saved copy."
@@ -2878,15 +2878,15 @@ msgstr "حركة الأمواج التي تعرضها Arctic Fuse 3 أثناء �
 
 msgctxt "#32179"
 msgid "Navy glass colours for Arctic Fuse 3: off, Lucent Glass, or Lucent Glass on true black."
-msgstr "ألوان زجاجية كحلية لـ Arctic Fuse 3: إيقاف، أو Lucent Glass، أو Lucent Glass على أسود تام."
+msgstr "ألوان زجاجية كحلية لـ Arctic Fuse 3: إيقاف، أو زجاج لوسنت، أو زجاج لوسنت على أسود تام."
 
 msgctxt "#32180"
 msgid "The Lucent player screen in Arctic Fuse 3: controls, seek bar, pause card and statistics."
-msgstr "شاشة مشغّل Lucent في Arctic Fuse 3: أزرار التحكم وشريط التقديم وبطاقة الإيقاف المؤقت والإحصاءات."
+msgstr "شاشة مشغّل لوسنت في Arctic Fuse 3: أزرار التحكم وشريط التقديم وبطاقة الإيقاف المؤقت والإحصاءات."
 
 msgctxt "#32181"
 msgid "Build the side menu and widgets of the Lucent skin from your Arctic Fuse 3 menu."
-msgstr "بناء القائمة الجانبية وودجات واجهة Lucent من قائمة Arctic Fuse 3 لديك."
+msgstr "بناء القائمة الجانبية وودجات واجهة لوسنت من قائمة Arctic Fuse 3 لديك."
 
 msgctxt "#32182"
 msgid "Show the plot complete in a glass box on the right side of the Arctic Fuse 3 Home page."
@@ -3243,4 +3243,44 @@ msgstr "قوائم مجلد القرص تعمل مع AllDebrid وTorBox وPremiu
 msgctxt "#32276"
 msgid "Premiumize: pick this release in Search All to open its disc menu"
 msgstr "Premiumize: اختر هذا الإصدار من «بحث الكل» لفتح قائمة قرصه"
+
+msgctxt "#32277"
+msgid "Tabs"
+msgstr "التبويبات"
+
+msgctxt "#32278"
+msgid "AF3 changes"
+msgstr "تغييرات AF3"
+
+msgctxt "#32279"
+msgid "Lucent"
+msgstr "لوسنت"
+
+msgctxt "#32280"
+msgid "Fonts and waves"
+msgstr "الخطوط والأمواج"
+
+msgctxt "#32281"
+msgid "Show or hide the DPlex and Korean content tabs on the AF3 home."
+msgstr "إظهار تبويبَي DPlex والمحتوى الكوري في الصفحة الرئيسية لـ AF3 أو إخفاؤهما."
+
+msgctxt "#32282"
+msgid "Arctic Fuse 3 changes: badge style, plot on the right, plot size, disc menu and trailers."
+msgstr "تغييرات Arctic Fuse 3: نمط الشارات، والقصة على اليمين، وحجم خط القصة، وقائمة القرص، والتريلرات."
+
+msgctxt "#32283"
+msgid "The Lucent look: AF3 Lucent Look, Lucent Player, widgets from AF3, glass source windows and the AB Tools glass look."
+msgstr "مظهر لوسنت: مظهر لوسنت لـ AF3، ومشغّل لوسنت، والودجات من AF3، ونوافذ المصادر الزجاجية، والمظهر الزجاجي لـ AB Tools."
+
+msgctxt "#32284"
+msgid "Font size, the AF3 waves and the section icons."
+msgstr "حجم الخط، وأمواج AF3، وأيقونات الأقسام."
+
+msgctxt "#32285"
+msgid "Back"
+msgstr "رجوع"
+
+msgctxt "#32286"
+msgid "Done"
+msgstr "تم"
 

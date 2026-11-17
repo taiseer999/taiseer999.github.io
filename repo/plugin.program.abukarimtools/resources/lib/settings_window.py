@@ -106,13 +106,27 @@ class ToolsModel(object):
                     'desc': T(S_CLASSIC_DESC), 'run': _classic})
         return out
 
+    back_label = property(lambda self: T(32285))
+
+    def group(self, key):
+        """Label of a group (4.9.3), '' if key is not one."""
+        g = menu_model.GROUPS.get(key)
+        return T(g[0]) if g else ''
+
     def entries(self, key):
-        for cat_key, _label, _icon, items in menu_model.CATEGORIES:
+        cats = list(menu_model.CATEGORIES) + [(k, g[0], k, g[2]) for k, g in menu_model.GROUPS.items()]
+        for cat_key, _label, _icon, items in cats:
             if cat_key != key:
                 continue
             out = []
             for mode, label_id in items:
                 if not menu_model.visible(mode):
+                    continue
+                if mode in menu_model.GROUPS:
+                    out.append({'id': mode, 'label': T(label_id), 'icon': self._icon(mode),
+                                'desc': T(menu_model.DESC[mode]) if mode in menu_model.DESC else '',
+                                'open': mode,
+                                'value': (lambda m=mode: menu_model.group_summary(m))})
                     continue
                 e = {'id': mode, 'label': T(label_id), 'icon': self._icon(mode),
                      'desc': T(menu_model.DESC[mode]) if mode in menu_model.DESC else '',

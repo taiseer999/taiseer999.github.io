@@ -50,7 +50,7 @@
          dark on the light Lucent focus tile, like the label does -->
     <expression name="ABK_Lucent_GlyphTile">[Skin.HasSetting(abk.lucent) + [String.StartsWith(ListItem.Icon,special://skin/extras/icons/) | String.Contains(ListItem.Icon,/icons_glass/) | [String.Contains(ListItem.Icon,plugin.video.abukarim.lastplayed/resources/media/) + !String.EndsWith(ListItem.Icon,/icon.png)] | [String.IsEmpty(ListItem.DBType) + String.Contains(ListItem.Icon,i.imgur.com) + [String.Contains(ListItem.FolderPath,plugin.video.fenlight) | String.Contains(ListItem.FolderPath,plugin.video.redlight)]]]]</expression>
     <variable name="ABK_Lucent_GlyphFocus">
-        <value condition="$EXP[ABK_Lucent_GlyphTile]">FF0B1119</value>
+        <value condition="$EXP[ABK_Lucent_GlyphTile]">$VAR[ColorSelected]</value>
         <value>FFFFFFFF</value>
     </variable>
 
@@ -61,9 +61,10 @@
         <value>dialog_overlay</value>
     </variable>
 
-    <!-- OSD buttons: glass circle, solid white when focused -->
+    <!-- OSD buttons: glass circle, filled with the focus colour (4.9.5: the
+         skin's own unless "Lucent white" is chosen - ColorHighlight) -->
     <include name="ABK_Lucent_OSD_Button_Textures">
-        <texturefocus colordiffuse="FFFFFFFF">common/circle.png</texturefocus>
+        <texturefocus colordiffuse="$VAR[ColorHighlight]">common/circle.png</texturefocus>
         <texturenofocus colordiffuse="26FFFFFF">common/circle.png</texturenofocus>
     </include>
 
@@ -71,7 +72,7 @@
          (placed before AF3's own texture tag of the focused icon) -->
     <include name="ABK_Lucent_IconFocus">
         <definition>
-            <texture colordiffuse="FF0B1119" flipx="$PARAM[flipx]">$PARAM[icon]</texture>
+            <texture colordiffuse="$VAR[ColorSelected]" flipx="$PARAM[flipx]">$PARAM[icon]</texture>
         </definition>
     </include>
 
@@ -136,10 +137,10 @@
         <aligny>center</aligny>
         <textoffsetx>30</textoffsetx>
         <textcolor>dialog_fg_70</textcolor>
-        <focusedcolor>FF0B1119</focusedcolor>
-        <texturefocus border="28" colordiffuse="FFFFFFFF">abk_lucent/pill60.png</texturefocus>
+        <focusedcolor>$VAR[ColorSelected]</focusedcolor>
+        <texturefocus border="28" colordiffuse="$VAR[ColorHighlight]">abk_lucent/pill60.png</texturefocus>
         <texturenofocus border="28" colordiffuse="1AFFFFFF">abk_lucent/pill60.png</texturenofocus>
-        <alttexturefocus border="28" colordiffuse="FFFFFFFF">abk_lucent/pill60.png</alttexturefocus>
+        <alttexturefocus border="28" colordiffuse="$VAR[ColorHighlight]">abk_lucent/pill60.png</alttexturefocus>
         <alttexturenofocus border="28" colordiffuse="3DFFFFFF">abk_lucent/pill60.png</alttexturenofocus>
     </include>
     <!-- pills sit closer than AF3's underlined labels -->

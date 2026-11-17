@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ABUKARIM TOOLS 4.9.3 - a list of on/off switches (toggle_ui.switch_list /
+     option_list) with "Done" as a button at the top instead of the first row.
+     Window.Property(dir) = rtl mirrors it. List 100: Label, Label2 (state or
+     value), Art(icon) = the switch picture. Button 200 = Done. -->
+<window>
+    <defaultcontrol always="true">100</defaultcontrol>
+    <animation type="WindowOpen" reversible="false"><effect type="fade" start="0" end="100" time="180"/><effect type="zoom" start="96" end="100" center="960,540" time="200" tween="cubic" easing="out"/></animation>
+    <animation type="WindowClose" reversible="false"><effect type="fade" start="100" end="0" time="140"/></animation>
+    <controls>
+        <control type="image">
+            <left>0</left><top>0</top><width>1920</width><height>1080</height>
+            <texture colordiffuse="B3000000">white.png</texture>
+        </control>
+        <control type="group">
+            <left>300</left><top>110</top>
+            <control type="image">
+                <left>0</left><top>0</top><width>1320</width><height>860</height>
+                <texture border="22" colordiffuse="F50C0E14">abk_sq_round.png</texture>
+            </control>
+            <control type="image">
+                <left>0</left><top>0</top><width>1320</width><height>860</height>
+                <texture border="22" colordiffuse="2EFFFFFF">abk_sq_outline.png</texture>
+            </control>
+            <!-- title (ltr: left, Done right / rtl: right, Done left) -->
+            <control type="label">
+                <left>48</left><top>34</top><width>960</width><height>70</height>
+                <font>abk_set_m</font><aligny>center</aligny><textcolor>FFFFFFFF</textcolor>
+                <label>$INFO[Window.Property(title)]</label>
+                <visible>!String.IsEqual(Window.Property(dir),rtl)</visible>
+            </control>
+            <control type="label">
+                <left>312</left><top>34</top><width>960</width><height>70</height>
+                <font>abk_set_m</font><align>right</align><aligny>center</aligny><textcolor>FFFFFFFF</textcolor>
+                <label>$INFO[Window.Property(title)]</label>
+                <visible>String.IsEqual(Window.Property(dir),rtl)</visible>
+            </control>
+            <control type="label">
+                <left>48</left><top>100</top><width>1224</width><height>36</height>
+                <font>abk_set_s</font><aligny>center</aligny><textcolor>80FFFFFF</textcolor>
+                <label>$INFO[Container(100).CurrentItem] / $INFO[Container(100).NumItems]</label>
+                <visible>!String.IsEqual(Window.Property(dir),rtl)</visible>
+            </control>
+            <control type="label">
+                <left>48</left><top>100</top><width>1224</width><height>36</height>
+                <font>abk_set_s</font><align>right</align><aligny>center</aligny><textcolor>80FFFFFF</textcolor>
+                <label>$INFO[Container(100).CurrentItem] / $INFO[Container(100).NumItems]</label>
+                <visible>String.IsEqual(Window.Property(dir),rtl)</visible>
+            </control>
+            <!-- Done: top right (ltr) / top left (rtl) -->
+            <control type="button" id="200">
+                <left>1052</left><top>36</top><width>220</width><height>66</height>
+                <font>abk_set_m</font><align>center</align><aligny>center</aligny>
+                <label>$INFO[Window.Property(done)]</label>
+                <textcolor>FFFFFFFF</textcolor><focusedcolor>FF0C0E14</focusedcolor>
+                <texturefocus border="22" colordiffuse="FF2FD07A">abk_sq_round.png</texturefocus>
+                <texturenofocus border="22" colordiffuse="402FD07A">abk_sq_round.png</texturenofocus>
+                <ondown>100</ondown><onup>100</onup>
+                <visible>!String.IsEqual(Window.Property(dir),rtl)</visible>
+            </control>
+            <control type="button" id="201">
+                <left>48</left><top>36</top><width>220</width><height>66</height>
+                <font>abk_set_m</font><align>center</align><aligny>center</aligny>
+                <label>$INFO[Window.Property(done)]</label>
+                <textcolor>FFFFFFFF</textcolor><focusedcolor>FF0C0E14</focusedcolor>
+                <texturefocus border="22" colordiffuse="FF2FD07A">abk_sq_round.png</texturefocus>
+                <texturenofocus border="22" colordiffuse="402FD07A">abk_sq_round.png</texturenofocus>
+                <ondown>100</ondown><onup>100</onup>
+                <visible>String.IsEqual(Window.Property(dir),rtl)</visible>
+            </control>
+            <control type="image">
+                <left>24</left><top>148</top><width>1272</width><height>1</height>
+                <texture colordiffuse="1AFFFFFF">white.png</texture>
+            </control>
+            <control type="list" id="100">
+                <left>24</left><top>164</top><width>1272</width><height>672</height>
+                <orientation>vertical</orientation>
+                <onup condition="!String.IsEqual(Window.Property(dir),rtl)">200</onup>
+                <onup condition="String.IsEqual(Window.Property(dir),rtl)">201</onup>
+                <scrolltime tween="cubic" easing="out">200</scrolltime>
+                <itemlayout height="112" width="1272">
+                    <control type="image">
+                        <left>24</left><top>24</top><width>128</width><height>64</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture>$INFO[ListItem.Art(icon)]</texture>
+                        <visible>!String.IsEqual(Window.Property(dir),rtl)</visible>
+                    </control>
+                    <control type="label">
+                        <left>180</left><top>14</top><width>1060</width><height>50</height>
+                        <font>abk_set_m</font><aligny>center</aligny><textcolor>D9FFFFFF</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>!String.IsEqual(Window.Property(dir),rtl)</visible>
+                    </control>
+                    <control type="label">
+                        <left>180</left><top>62</top><width>1060</width><height>36</height>
+                        <font>abk_set_s</font><aligny>center</aligny><textcolor>80FFFFFF</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                        <visible>!String.IsEqual(Window.Property(dir),rtl)</visible>
+                    </control>
+                    <control type="image">
+                        <left>1120</left><top>24</top><width>128</width><height>64</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture>$INFO[ListItem.Art(icon)]</texture>
+                        <visible>String.IsEqual(Window.Property(dir),rtl)</visible>
+                    </control>
+                    <control type="label">
+                        <left>32</left><top>14</top><width>1060</width><height>50</height>
+                        <font>abk_set_m</font><align>right</align><aligny>center</aligny><textcolor>D9FFFFFF</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>String.IsEqual(Window.Property(dir),rtl)</visible>
+                    </control>
+                    <control type="label">
+                        <left>32</left><top>62</top><width>1060</width><height>36</height>
+                        <font>abk_set_s</font><align>right</align><aligny>center</aligny><textcolor>80FFFFFF</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                        <visible>String.IsEqual(Window.Property(dir),rtl)</visible>
+                    </control>
+                </itemlayout>
+                <focusedlayout height="112" width="1272">
+                    <control type="image">
+                        <left>0</left><top>4</top><width>1272</width><height>104</height>
+                        <texture border="22" colordiffuse="2EFFFFFF">abk_sq_round.png</texture>
+                        <visible>Control.HasFocus(100)</visible>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>4</top><width>1272</width><height>104</height>
+                        <texture border="22" colordiffuse="B3FFFFFF">abk_sq_outline.png</texture>
+                        <visible>Control.HasFocus(100)</visible>
+                    </control>
+                    <control type="image">
+                        <left>24</left><top>24</top><width>128</width><height>64</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture>$INFO[ListItem.Art(icon)]</texture>
+                        <visible>!String.IsEqual(Window.Property(dir),rtl)</visible>
+                    </control>
+                    <control type="label">
+                        <left>180</left><top>14</top><width>1060</width><height>50</height>
+                        <font>abk_set_m</font><aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>!String.IsEqual(Window.Property(dir),rtl)</visible>
+                    </control>
+                    <control type="label">
+                        <left>180</left><top>62</top><width>1060</width><height>36</height>
+                        <font>abk_set_s</font><aligny>center</aligny>
+                        <textcolor>B3FFFFFF</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                        <visible>!String.IsEqual(Window.Property(dir),rtl)</visible>
+                    </control>
+                    <control type="image">
+                        <left>1120</left><top>24</top><width>128</width><height>64</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture>$INFO[ListItem.Art(icon)]</texture>
+                        <visible>String.IsEqual(Window.Property(dir),rtl)</visible>
+                    </control>
+                    <control type="label">
+                        <left>32</left><top>14</top><width>1060</width><height>50</height>
+                        <font>abk_set_m</font><align>right</align><aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>String.IsEqual(Window.Property(dir),rtl)</visible>
+                    </control>
+                    <control type="label">
+                        <left>32</left><top>62</top><width>1060</width><height>36</height>
+                        <font>abk_set_s</font><align>right</align><aligny>center</aligny>
+                        <textcolor>B3FFFFFF</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                        <visible>String.IsEqual(Window.Property(dir),rtl)</visible>
+                    </control>
+                </focusedlayout>
+            </control>
+        </control>
+    </controls>
+</window>

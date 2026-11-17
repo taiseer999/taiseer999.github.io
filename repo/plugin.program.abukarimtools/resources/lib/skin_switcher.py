@@ -193,6 +193,7 @@ def _run_impl():
     names     = []
     addon_ids = []
 
+    arts = []                       # 4.9.3: (fanart, icon) per skin for the cards
     for folder in sorted(skin_folders):
         foldername = os.path.basename(folder.rstrip(os.sep))
         xml_path   = os.path.join(folder, 'addon.xml')
@@ -206,6 +207,7 @@ def _run_impl():
             addon = xbmcaddon.Addon(id=addon_id)
             names.append(addon.getAddonInfo('name'))
             addon_ids.append(addon_id)
+            arts.append((addon.getAddonInfo('fanart') or '', addon.getAddonInfo('icon') or ''))
         except Exception:
             pass
 
@@ -225,7 +227,13 @@ def _run_impl():
             choices.append(name)
         selectable.append(aid)
 
-    idx = xbmcgui.Dialog().select(T(30151), choices)
+    from resources.lib import grid_ui
+    cards = []
+    for name, aid, (fan, ico) in zip(names, addon_ids, arts):
+        use_fan = bool(fan) and os.path.isfile(xbmcvfs.translatePath(fan)) if fan else False
+        cards.append({'label': name, 'desc': aid, 'art': fan if use_fan else ico,
+                      'fit': 'fill' if use_fan else 'keep', 'current': aid == current_id})
+    idx = grid_ui.pick(T(30151), cards, addon_ids.index(current_id) if current_id in addon_ids else 0)
     if idx < 0:
         _close_to_home(settle=False)
         return

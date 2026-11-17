@@ -180,11 +180,23 @@ def run():
     else:
         state_lbl = T(30344)   # Unknown
 
-    # 0 = Colored, 1 = Monochrome
-    choice = DIALOG.select(
+    # 0 = Colored, 1 = Monochrome - 4.9.3: as picture cards (one icon of each set)
+    def _sample(d):
+        for n in NAMES:
+            for ext in ('', '.png', '.jpg'):
+                f = os.path.join(d, n + ext)
+                if os.path.isfile(f):
+                    return f
+        try:
+            return next(os.path.join(d, f) for f in sorted(os.listdir(d)) if f.lower().endswith(('.png', '.jpg')))
+        except Exception:
+            return ''
+    from resources.lib import grid_ui
+    choice = grid_ui.pick(
         T(30341) % state_lbl,
-        [T(30342), T(30343)],
-        preselect=1 if state == 'mono' else 0)
+        [{'label': T(30342), 'art': _sample(color_dir), 'fit': 'keep', 'current': state == 'color'},
+         {'label': T(30343), 'art': _sample(bw_dir), 'fit': 'keep', 'current': state == 'mono'}],
+        1 if state == 'mono' else 0)
     if choice == -1:
         return
 

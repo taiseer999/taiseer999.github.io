@@ -46,7 +46,123 @@ def item(label, on, label2=None):
     return li
 
 
+# ---------------------------------------------------------------- 4.9.3
+# The switch lists in a window of their own (abk_switches.xml): "Done" is a
+# button at the top instead of the first row, and a pick flips the switch in
+# place (no reopening). The old Kodi list below stays as the fallback.
+XML = 'abk_switches.xml'
+
+
+def _rtl():
+    try:
+        return (xbmc.getLanguage(xbmc.ISO_639_1) or '').lower() in ('ar', 'he', 'fa', 'ur')
+    except Exception:
+        return False
+
+
+def _short_done(label):
+    import re
+    return re.sub(r'\[/?B\]', '', label or '').split(' - ')[0].strip() or T(32286)
+
+
+class _Switches(xbmcgui.WindowXMLDialog):
+    """rows: [[key, label, value, choices]] (choices None = on/off)."""
+    def __init__(self, *args, **kwargs):
+        self.rows = kwargs.pop('rows')
+        self.title = kwargs.pop('title', '')
+        self.done_text = kwargs.pop('done', '')
+        self.result = None              # 'done' or None (Back)
+        self.lis = []
+        super().__init__(*args, **kwargs)
+
+    def _li(self, row):
+        # not offscreen: the item is changed while the window shows it
+        li = xbmcgui.ListItem(row[1])
+        self._paint(li, row)
+        return li
+
+    def _paint(self, li, row):
+        _k, _l, v, c = row
+        if c is None:
+            on, text = bool(v), state_text(bool(v))
+        else:
+            on, text = v != c[0][0], dict(c).get(v, str(v))
+        ic = icon(on)
+        li.setArt({'icon': ic, 'thumb': ic})
+        li.setLabel2(text)
+
+    def onInit(self):
+        self.setProperty('dir', 'rtl' if _rtl() else 'ltr')
+        self.setProperty('title', self.title)
+        self.setProperty('done', self.done_text)
+        lst = self.getControl(100)
+        lst.reset()
+        self.lis = [self._li(r) for r in self.rows]
+        lst.addItems(self.lis)
+        self.setFocusId(100)
+
+    def onClick(self, control_id):
+        if control_id in (200, 201):
+            self.result = 'done'
+            self.close()
+            return
+        if control_id == 100:
+            pos = self.getControl(100).getSelectedPosition()
+            if not 0 <= pos < len(self.rows):
+                return
+            row = self.rows[pos]
+            if row[3] is None:
+                row[2] = not row[2]
+            else:
+                vals = [v for v, _l in row[3]]
+                i = vals.index(row[2]) if row[2] in vals else -1
+                row[2] = vals[(i + 1) % len(vals)]
+            self._paint(self.lis[pos], row)
+
+    def onAction(self, action):
+        if action.getId() in (xbmcgui.ACTION_PREVIOUS_MENU, xbmcgui.ACTION_NAV_BACK):
+            self.close()
+
+
+def _window(title, rows, done_label):
+    """('done' | None, rows) - None when the window could not be shown."""
+    try:
+        w = _Switches(XML, paths.ADDON_PATH, 'Default', '1080i',
+                      rows=rows, title=title, done=_short_done(done_label))
+        w.doModal()
+        res = w.result
+        del w
+        return res, rows
+    except Exception as e:
+        xbmc.log('[AbukarimTools Switches] window failed, using the list: %s' % e, xbmc.LOGWARNING)
+        return False, rows
+
+
 def switch_list(title, rows, done_label=None, confirm_back=None):
+    rs = [[k, l, bool(o), None] for k, l, o in rows]
+    initial = {k: bool(o) for k, _l, o in rows}
+    res, rs = _window(title, rs, done_label)
+    if res is not False:
+        current = {k: v for k, _l, v, _c in rs}
+        if res == 'done':
+            return current
+        if confirm_back and current != initial:
+            msg, yes, no = confirm_back
+            if xbmcgui.Dialog().yesno(title, msg, yeslabel=yes, nolabel=no):
+                return current
+        return None
+    return _switch_list_dialog(title, rows, done_label, confirm_back)
+
+
+def option_list(title, rows, done_label=None):
+    rs = [[k, l, v, c] for k, l, v, c in rows]
+    res, rs = _window(title, rs, done_label)
+    if res is not False:
+        return {k: v for k, _l, v, _c in rs}      # Back moves on too (see below)
+    return _option_list_dialog(title, rows, done_label)
+
+
+def _switch_list_dialog(title, rows, done_label=None, confirm_back=None):
     """rows: [(key, label, on), ...]. Returns {key: on} after "Done", or None
     on Back. Each pick flips that switch and reopens the list on the same row.
     A list that answers faster than a person can (Kodi swallowed it while
@@ -86,7 +202,7 @@ def switch_list(title, rows, done_label=None, confirm_back=None):
         pos = choice
 
 
-def option_list(title, rows, done_label=None):
+def _option_list_dialog(title, rows, done_label=None):
     """4.7.9 (setup wizard, all toggles on one page).
 
     rows: [(key, label, value, choices), ...]
