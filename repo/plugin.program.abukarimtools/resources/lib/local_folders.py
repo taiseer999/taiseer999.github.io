@@ -85,6 +85,7 @@ def folders():
 
 def _save(items):
     _write(CONFIG, [{'name': f['name'], 'path': f['path']} for f in items])
+    _log('saved: %s' % ', '.join('%s = %s' % (f['name'], f['path']) for f in items))
 
 
 def configured():
@@ -94,6 +95,13 @@ def configured():
 def _base(path):
     p = str(path or '').rstrip('/\\')
     return re.split(r'[/\\]', p)[-1] or p
+
+
+def display_name():
+    """The source's name in Search All: the folder's own name when there is
+    one folder, else 'My folders'."""
+    items = folders()
+    return items[0]['name'] if len(items) == 1 else T(32303)
 
 
 def summary():
@@ -335,7 +343,8 @@ def run():
         acts = [T(32299), T(32308), T(32300), T(32298)]
         act = xbmcgui.Dialog().select('%s  -  %s' % (f['name'], f['path']), acts)
         if act == 0:
-            name = xbmcgui.Dialog().input(T(32297), f['name']).strip()
+            name = (xbmcgui.Dialog().input(T(32297), f['name']) or '').strip()
+            _log('rename %s -> %s' % (f['name'], name or '(cancelled)'))
             if name and name != f['name']:
                 f['name'] = name
                 _save(items)

@@ -1,3 +1,9 @@
+v4.10.2  (2026-11-17)
+- Search All: my folders - with one folder, Search All lists the source
+  under that folder's own name (renaming it renames the source in the
+  add-on line and on the rows); with more than one it stays "My folders".
+  Renames and saves are written to kodi.log.
+
 v4.10.1  (2026-11-17)
 - Search All: my folders - picking a folder opens a dialog titled with its
   name and path: Rename, Change the path, Index again, Remove (it was a

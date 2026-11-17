@@ -183,7 +183,9 @@ def available_addons():
     for key, aid, name, tag in ADDONS:
         if key == 'loc':                    # 4.10.0: listed once folders are set
             if _supported(key, aid):
-                out.append((key, aid, T(32303), tag, True))
+                # 4.10.2: one folder shows under its own (renamable) name
+                from resources.lib import local_folders
+                out.append((key, aid, local_folders.display_name(), tag, True))
             continue
         if not xbmc.getCondVisibility('System.HasAddon(%s)' % aid):
             continue
