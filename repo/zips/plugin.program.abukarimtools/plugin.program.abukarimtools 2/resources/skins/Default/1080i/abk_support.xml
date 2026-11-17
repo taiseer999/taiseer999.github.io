@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- "Support ABUKARIM" dialog: Buy Me a Coffee QR. Python contract:
+     Window.Property(title|text|url|hint|qr|logo). Any key closes it. -->
+<window type="dialog">
+    <defaultcontrol always="true">9100</defaultcontrol>
+    <zorder>2</zorder>
+    <controls>
+        <control type="image">
+            <left>0</left><top>0</top><width>1920</width><height>1080</height>
+            <texture colordiffuse="F80D1116">white.png</texture>
+        </control>
+
+        <control type="label">
+            <left>0</left><top>80</top><width>1920</width><height>90</height>
+            <font>AbkTitle</font>
+            <align>center</align><aligny>center</aligny>
+            <textcolor>FFFFFFFF</textcolor>
+            <label>$INFO[Window.Property(title)]</label>
+        </control>
+        <control type="image">
+            <left>885</left><top>180</top><width>150</width><height>5</height>
+            <texture colordiffuse="FFFFDD00">white.png</texture>
+        </control>
+
+        <!-- QR on a white card -->
+        <control type="image">
+            <left>240</left><top>250</top><width>620</width><height>620</height>
+            <texture colordiffuse="FFFFFFFF">white.png</texture>
+        </control>
+        <control type="image">
+            <left>250</left><top>260</top><width>600</width><height>600</height>
+            <texture>$INFO[Window.Property(qr)]</texture>
+            <aspectratio>keep</aspectratio>
+        </control>
+
+        <!-- right panel -->
+        <control type="image">
+            <left>920</left><top>250</top><width>760</width><height>620</height>
+            <texture colordiffuse="FF161C24">white.png</texture>
+        </control>
+        <control type="image">
+            <left>1200</left><top>290</top><width>200</width><height>200</height>
+            <texture>$INFO[Window.Property(logo)]</texture>
+            <aspectratio>keep</aspectratio>
+        </control>
+        <control type="textbox">
+            <left>970</left><top>520</top><width>660</width><height>230</height>
+            <font>AbkRow</font>
+            <align>center</align>
+            <textcolor>FFE8EEF3</textcolor>
+            <label>$INFO[Window.Property(text)]</label>
+        </control>
+        <control type="label">
+            <left>920</left><top>770</top><width>760</width><height>60</height>
+            <font>AbkRowBold</font>
+            <align>center</align><aligny>center</aligny>
+            <textcolor>FFFFDD00</textcolor>
+            <label>$INFO[Window.Property(url)]</label>
+        </control>
+
+        <control type="label">
+            <left>0</left><top>930</top><width>1920</width><height>60</height>
+            <font>AbkHint</font>
+            <align>center</align><aligny>center</aligny>
+            <textcolor>FF9AA4B2</textcolor>
+            <label>$INFO[Window.Property(hint)]</label>
+        </control>
+
+        <control type="button" id="9100">
+            <left>-10</left><top>-10</top><width>1</width><height>1</height>
+            <texturefocus />
+            <texturenofocus />
+            <label></label>
+        </control>
+    </controls>
+</window>
