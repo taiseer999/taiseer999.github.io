@@ -748,7 +748,13 @@ def open_window():
     HOME.setProperty(P + "open", "1")
     try:
         import xbmcaddon
-        win = Info("ABK_LucentPlayerInfo.xml", xbmcaddon.Addon("skin.arctic.fuse.3").getAddonInfo("path"), "Default", "1080i")
+        # 4.10.3: the active skin (Arctic Fuse 3 or Arctic Zephyr Rounded - both ship the
+        # window); Kodi reads the XML from the active skin first, the path only has to be real
+        try:
+            skin_path = xbmcaddon.Addon(xbmc.getSkinDir()).getAddonInfo("path")
+        except Exception:
+            skin_path = xbmcaddon.Addon("skin.arctic.fuse.3").getAddonInfo("path")
+        win = Info("ABK_LucentPlayerInfo.xml", skin_path, "Default", "1080i")
         tick()
         win.doModal()
         del win

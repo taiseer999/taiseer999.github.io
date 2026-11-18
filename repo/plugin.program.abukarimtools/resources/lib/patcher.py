@@ -6533,6 +6533,17 @@ def reload_skin_if_pending():
                                   'Window.IsActive(busydialog) | '
                                   'Window.IsActive(busydialognocancel)'):
             return False
+        # 4.10.5: never under the open AB Tools page. A ReloadSkin() there
+        # rebuilds the window while its script keeps the old controls: the
+        # category list still moves (skin side) but the item list on the left
+        # never changes again (Arctic Zephyr Rounded, boot sweep 2026-11-18).
+        # The watchdog retries once the page is closed.
+        try:
+            from resources.lib import settings_engine
+            if settings_engine._page_open():
+                return False
+        except Exception:
+            pass
         # 3.2.47: never reload under a running script.skinvariables build -
         # its own ReloadSkin() comes at the end; ours would cut it short.
         from resources.lib import skin_rebuild

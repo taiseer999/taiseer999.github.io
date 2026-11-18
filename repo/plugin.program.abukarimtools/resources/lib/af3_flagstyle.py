@@ -60,6 +60,8 @@ import xbmcvfs
 from resources.lib.i18n import T
 
 SKIN_ID = 'skin.arctic.fuse.3'
+# 4.10.4: skins that ship the Lucent Player and read Skin.String(abk.flagstyle)
+LP_SKINS = (SKIN_ID, 'skin.arctic.zephyr.rounded')
 RES_ID = 'resource.images.af3.frbadges'
 TITLE = 'ABUKARIM TOOLS'
 DEFAULT = 'auto'
@@ -239,9 +241,10 @@ def _migrate():
 
 
 def sync_skin_string(style=None):
-    """Skin strings belong to the active skin: only while AF3 is active.
+    """Skin strings belong to the active skin: only while AF3 or Arctic Zephyr
+    Rounded (3.5.69+, its own Lucent Player copy) is active.
     Returns True when the value changed."""
-    if xbmc.getSkinDir() != SKIN_ID:
+    if xbmc.getSkinDir() not in LP_SKINS:
         return False
     want = lp_style(style)
     if xbmc.getInfoLabel('Skin.String(abk.flagstyle)') == want:
@@ -353,6 +356,10 @@ def run():
     set_style(style)
     before = xbmc.getInfoLabel('Skin.String(abk.flagstyle)')
     ok, msg, wrote = reconcile()
+    try:
+        sync_skin_string(style)          # 4.10.4: Arctic Zephyr Rounded too (live, no reload)
+    except Exception as e:
+        _log('skin string: %s' % e, xbmc.LOGWARNING)
     changed = wrote or (xbmc.getSkinDir() == SKIN_ID and before != lp_style(style))
     _log('%s -> %s' % (style, msg))
     if not ok or 'pre-50.11.68' in msg:

@@ -1,3 +1,23 @@
+v4.10.5  (2026-11-18)
+- AB Tools page: the item list stopped following the categories (the
+  category list still moved, the items stayed on Setup). A skin reload
+  queued by a patch (here: PPI Arabic fonts written into Arctic Zephyr
+  Rounded's Font.xml at the first start of a new skin version) fired from
+  the boot sweep while the page was open; the rebuilt window no longer
+  matched the page's script. The queued reload now waits until the page
+  is closed (the watchdog fires it then).
+
+v4.10.4  (2026-11-18)
+- AF3: OSD Flags Style also styles the Lucent Player badges in Arctic Zephyr
+  Rounded 3.5.70: the chosen style is written into the active skin's
+  Skin.String(abk.flagstyle) at start-up and when the style is picked,
+  for AF3 and AZR alike (skin strings belong to the skin that is running).
+
+v4.10.3  (2026-11-18)
+- Lucent Player Statistics: the window opens from the active skin, so it
+  works in Arctic Zephyr Rounded 3.5.69 (which ships its own copy of the
+  Lucent Player) and no longer needs Arctic Fuse 3 to be installed.
+
 v4.10.2  (2026-11-17)
 - Search All: my folders - with one folder, Search All lists the source
   under that folder's own name (renaming it renames the source in the

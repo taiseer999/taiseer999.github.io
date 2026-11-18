@@ -1547,6 +1547,16 @@ def main():
         _log('Lucent Player Back keymap sync failed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
+    # 4.10.4: the Lucent Player badge style (AF3: OSD Flags Style) also in
+    # Arctic Zephyr Rounded - skin strings belong to the active skin, so the
+    # chosen style is written into whichever Lucent Player skin is running.
+    try:
+        from resources.lib import af3_flagstyle
+        af3_flagstyle.sync_skin_string()
+    except Exception:
+        _log('Flag style skin string sync failed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
     # From here the service stays alive for the rest of the Kodi session and
     # watches the patch targets: a Kodi add-on update replaces the add-on
     # folder wholesale, which silently wipes every patch we applied to it.
