@@ -3927,6 +3927,20 @@ PATCHES = [
      'new': "\t\tif not cache_data: return None\n\t\ttry: int(cache_data[1])\n\t\texcept (TypeError, ValueError): return None  # ABK: function row in the wrong columns\n\t\treturn self.jsloads(cache_data[0])\n",
      'already_patched_check': '# ABK: function row in the wrong columns',
      'description': 'POV meta_cache.py - function cache row written in the wrong columns is a miss'},
+    # 4.10.8: POV rejects a whole debrid torrent as soon as one file ends in
+    # .m2ts (raise Exception('_m2ts_check failed') in resolve_external_sources),
+    # so full Blu-ray discs (BDMV/STREAM/*.m2ts) never play - Search All picks
+    # of UHD disc releases fall through every candidate and end "pick not
+    # played" (kodi.log 2026-11-18, The Odyssey 2026). For a movie, keep the
+    # .m2ts files: POV's own sort-by-size then plays the largest (the main
+    # feature), and the Disc Menu button can reopen it as a disc. Episodes keep
+    # the stock rejection (a TV disc's largest .m2ts is not the episode asked for).
+    {'addon_id': 'plugin.video.pov', 'not_found_ok': True,
+     'rel_path': os.path.join('resources', 'lib', 'modules', 'debrid.py'),
+     'old': "\t\t\t\tif filename.endswith('.m2ts'): raise Exception('_m2ts_check failed')\n",
+     'new': "\t\t\t\tif filename.endswith('.m2ts'):  # ABK: BDMV disc - play the largest .m2ts\n\t\t\t\t\tif season: raise Exception('_m2ts_check failed')\n\t\t\t\t\tselected_files_append(i); continue\n",
+     'already_patched_check': '# ABK: BDMV disc - play the largest .m2ts',
+     'description': 'POV debrid.py - full Blu-ray disc torrents play the main .m2ts instead of failing _m2ts_check'},
     # ── Search All (3.4.48): Toggles > Glass Theme > "Search All add-ons" ──
     # Red Light gets Fen Light's device-select modes back (Fen Light has them);
     # TMDbHelper gets the "AB Search All" player that opens resources/lib/ab_search.py.

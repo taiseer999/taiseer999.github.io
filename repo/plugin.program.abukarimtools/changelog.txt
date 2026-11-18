@@ -1,3 +1,12 @@
+v4.10.8  (2026-11-18)
+- POV: full Blu-ray disc releases (BDMV with .m2ts files) from a debrid
+  torrent now play. POV threw "_m2ts_check failed" for any torrent holding an
+  .m2ts file, so Search All picks of UHD disc releases ran through every
+  candidate and ended "pick not played". New patch on
+  resources/lib/modules/debrid.py: for movies the .m2ts files are kept and
+  POV plays the largest one (the main feature); the Disc Menu button can
+  reopen it as a disc. Episodes keep POV's stock behaviour.
+
 v4.10.7  (2026-11-18)
 - Lucent (Red Light, POV): the "Searching for streams" screen shows every
   provider while it searches, like Fen Light+: one chip per scraper (pulsing
