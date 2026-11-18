@@ -2,10 +2,12 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
-   "v": "4.10.5",
+   "v": "4.10.7",
    "from": "4.8.94",
    "en": [
     "Search All searches your own folders too: on this device or on the network (SMB, NFS). Add, rename, re-point or remove them in Mods > Search All: my folders.",
+    "Search All shows every source while it searches, like Fen Light+: a chip per add-on, then a chip per scraper or site (Torrentio, Comet, Easynews...) with the streams it found, and the running time beside them.",
+    "Red Light and POV in Lucent show every provider while they search, like Fen Light+: a chip per scraper with the streams it found, and the time left of the search timeout.",
     "Toggles is now Mods, with related mods grouped (AF3 changes, Lucent, Tabs, Fonts and waves); pickers with pictures are grids and Done sits at the top of switch lists.",
     "AF3 OSD Flags Style: new styles from FR-Badges, and the Lucent Player badge row adds bit depth, DTS core, container and MULTI AUDIO.",
     "The Lucent look follows the skin's focus colour by default, in menus and in the player.",
@@ -14,6 +16,8 @@
    ],
    "ar": [
     "أصبح البحث الشامل يبحث في مجلداتك أيضًا، على هذا الجهاز أو على الشبكة (SMB أو NFS). أضفها أو أعد تسميتها أو غيّر مسارها أو أزلها من «التخصيصات» ثم «البحث الشامل: مجلداتي».",
+    "يعرض البحث الشامل كل المصادر أثناء البحث كما في Fen Light+: شريحة لكل إضافة، ثم شريحة لكل مزوّد أو موقع (Torrentio وComet وEasynews...) مع عدد المصادر التي وجدها، والوقت المنقضي بجانبها.",
+    "تعرض Red Light وPOV بمظهر Lucent كل المزوّدين أثناء البحث كما في Fen Light+: شريحة لكل مزوّد مع عدد المصادر التي وجدها، والوقت المنقضي من مهلة البحث.",
     "أصبح قسم التبديلات باسم «التخصيصات»، وجُمعت التعديلات المتشابهة في مجموعات (تغييرات AF3، لوسنت، التبويبات، الخطوط والأمواج)، وصارت قوائم الصور شبكات، وزر «تم» في أعلى قوائم التبديل.",
     "نمط شارات AF3: أنماط جديدة من FR-Badges، وأضيف إلى صف شارات مشغّل لوسنت عمق الألوان ونواة DTS والحاوية وتعدد الصوت.",
     "أصبح مظهر لوسنت يتبع لون تركيز الواجهة افتراضيًا، في القوائم وفي المشغّل.",

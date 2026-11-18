@@ -105,6 +105,9 @@ _SUPPORT = {'fl': (os.path.join(_MODULES, 'router.py'), 'app_list_sources'),
 _BRIDGE = {'rl': 'redlight_search', 'umb': 'umbrella_search', 'pov': 'pov_search', 'dex': 'dexhub_search'}
 
 LIST, CHIPS = 2000, 2300
+# 4.10.6: source grid under the plot (Fen Light+ style), 3 x 7 chips - keep in
+# step with tools/gen_lucent.py AB_SRC_*
+SRC_GRID, _SRC_SLOTS = 2500, 21
 # 4.6.7: expanded view - the same streams over the whole page (two columns)
 LIST_X, CHIPS_X = 2002, 2310
 VIEW_BTN, VIEW_BTN_X = 2400, 2410
@@ -1157,6 +1160,52 @@ def _size(item):
         return 0.0
 
 
+# ───────────────────────── source grid (4.10.6) ─────────────────────────
+# Fen Light+ shows every scraper while it searches. Search All does the same
+# for everything it asks: one chip per add-on (pulses while it searches), and
+# as each add-on's results land, one chip per scraper / site behind them
+# (Torrentio, Comet, Easynews, RD Cloud, a Dex Hub add-on, an AIOStreams
+# add-on ...) with the streams it found - counted once, however many add-ons
+# found the same release.
+_SRC_PRETTY = {'rd_cloud': 'RD Cloud', 'pm_cloud': 'PM Cloud', 'ad_cloud': 'AD Cloud', 'oc_cloud': 'OC Cloud',
+               'tb_cloud': 'TB Cloud', 'easynews': 'Easynews', 'folders': 'Folders', 'torrent': 'Torrent'}
+
+
+def _source_name(item):
+    get = item.get
+    sp = str(get('scrape_provider') or '')
+    if get('abk_site'):
+        name = get('abk_site')
+    elif sp == 'external':
+        name = get('provider') or get('source')
+    elif sp == 'folders':
+        name = get('source') or sp
+    else:
+        name = sp or get('provider') or get('source')
+    name = _clean(name).strip()
+    if not name:
+        return ''
+    low = name.lower()
+    if low in _SRC_PRETTY:
+        return _SRC_PRETTY[low]
+    return name.title() if name == low else name
+
+
+def source_breakdown(session):
+    """{name: number of releases} over every add-on's playable results."""
+    found = {}
+    with session.lock:
+        snapshot = [list(session.state.get(key, {}).get('results') or []) for key, _a, _n, _t, _ok in session.addons]
+    for results in snapshot:
+        for item in results:
+            if not isinstance(item, dict) or 'Uncached' in str(item.get('cache_provider', '')):
+                continue
+            name = _source_name(item)
+            if name:
+                found.setdefault(name, set()).add(_row_key(item))
+    return {k: len(v) for k, v in found.items()}
+
+
 def _row_key(item):
     h = str(item.get('hash') or '').strip().lower()
     if h:
@@ -1233,6 +1282,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         self.played = False           # 4.8.6: a late start of the last pick closed the reopened window
         self._restore = kwargs.get('restore') or None   # 4.8.6: reopened after a pick that did not play
         self._meta_thread = None
+        self.src_names = None         # 4.10.6: names on the source grid, in order
 
     # ---- view (4.6.7) ----
     def _lid(self):
@@ -1301,6 +1351,10 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             self._meta_thread.start()
         self.ready = True
         self.session.listener = self.request_refresh
+        if not self.session.done():          # 4.10.6: running time beside the source grid
+            t = threading.Thread(target=self._ticker, name='abs_tick')
+            self.session.threads.append(t)
+            t.start()
         self.refresh()
         self._focus(self._lid() if r and self.shown else self._cid())
         if not self.session.started_threads:
@@ -1330,6 +1384,37 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 'params': {'sender': ADDON_ID, 'message': 'abs_refresh', 'data': {'rid': self.session.rid}}}))
         except Exception as e:
             _log('refresh notify failed: %s' % e, xbmc.LOGWARNING)
+
+    def _ticker(self):
+        """Ticker thread (4.10.6): once a second while the add-ons search, ask the
+        dialog thread to redraw the running time. No window call here."""
+        mon = xbmc.Monitor()
+        try:
+            while not self.session.closed and not self.session.done() and not mon.abortRequested():
+                if mon.waitForAbort(1.0) or self.session.closed:
+                    break
+                try:
+                    xbmc.executeJSONRPC(json.dumps({
+                        'jsonrpc': '2.0', 'id': 1, 'method': 'JSONRPC.NotifyAll',
+                        'params': {'sender': ADDON_ID, 'message': 'abs_tick', 'data': {'rid': self.session.rid}}}))
+                except Exception:
+                    pass
+        finally:
+            del mon
+
+    def tick(self):
+        """Dialog thread: running time of the search (stops when the last add-on ends)."""
+        if self.session.closed:
+            return
+        if self.session.done():
+            took = max([s.get('took') or 0 for s in self.session.state.values()] or [0])
+            secs = took or (time.time() - self.session.started)
+        else:
+            secs = time.time() - self.session.started
+        try:
+            self.setProperty('abs.elapsed', T(30878) % secs)
+        except Exception:
+            pass
 
     def pump(self):
         """Dialog thread only: Monitor.onNotification, onAction, after a nested dialog."""
@@ -1399,6 +1484,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         with self.ui_lock:
             self.rows = merge(self.session)
             self._status()
+            self._sources()
+            self.tick()
             self._chips()
             self._rows()
         if not self._finished and self.session.done():
@@ -1461,6 +1548,58 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             self.setProperty('abs.subhead', sub)
             self.setProperty('abs.waitmsg', T(30824))
             self.setProperty('abs.empty', 'true')
+
+    def _source_defs(self):
+        """(name, key, state, count) per chip: add-ons in their own order, then
+        scrapers / sites with the most streams first."""
+        st = self.session.state
+        defs = []
+        for key, _aid, name, _tag, ok in self.session.addons:
+            s = st[key]['state']
+            if s == 'searching':
+                defs.append((name, key, 'searching', ''))
+            elif s == 'done':
+                count = sum(1 for r in self.rows if any(k == key for k, _i in r['refs']))
+                defs.append((name, key, 'done', str(count)))
+            elif s == 'failed':
+                defs.append((name, key, 'failed', '×'))
+            else:
+                defs.append((name, key, 'off', '—'))
+        sites = [(n, '', 'done', str(c)) for n, c in
+                 sorted(source_breakdown(self.session).items(), key=lambda kv: (-kv[1], kv[0].lower()))]
+        room = max(_SRC_SLOTS - len(defs), 0)
+        if len(sites) > room > 0:          # the last chip sums up the rest
+            rest = sites[room - 1:]
+            sites = sites[:room - 1] + [(T(30879) % len(rest), '', 'done', str(sum(int(r[3]) for r in rest)))]
+        return defs + sites[:room]
+
+    def _sources(self):
+        """Dialog thread: fill / update the source grid (rebuilt only when the
+        names change, otherwise the chips are updated in place)."""
+        defs = self._source_defs()
+        try:
+            ctl = self.getControl(SRC_GRID)
+        except Exception:
+            return
+        names = [(d[0], d[1]) for d in defs]
+        if names != self.src_names:
+            ctl.reset()
+            items = []
+            for name, key, state, count in defs:
+                li = xbmcgui.ListItem(name)
+                li.setLabel2(count)
+                li.setProperty('abs.key', key)
+                li.setProperty('abs.state', state)
+                items.append(li)
+            ctl.addItems(items)
+            self.src_names = names
+            return
+        for n, (_name, _key, state, count) in enumerate(defs):
+            li = ctl.getListItem(n)
+            if li.getLabel2() != count:
+                li.setLabel2(count)
+            if li.getProperty('abs.state') != state:
+                li.setProperty('abs.state', state)
 
     def _chip_defs(self):
         st = self.session.state
@@ -1853,12 +1992,14 @@ class _Pump(xbmc.Monitor):
         self.win = None
 
     def onNotification(self, sender, method, data):
-        if not str(method).endswith('abs_refresh') or self.rid not in str(data or ''):
+        method = str(method)
+        tick = method.endswith('abs_tick')
+        if not (tick or method.endswith('abs_refresh')) or self.rid not in str(data or ''):
             return
         win = self.win
         if win is not None:
             try:
-                win.pump()
+                win.tick() if tick else win.pump()
             except Exception as e:
                 _log('refresh failed: %s' % e, xbmc.LOGWARNING)
 

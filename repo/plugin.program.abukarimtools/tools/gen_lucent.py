@@ -1210,6 +1210,130 @@ def status_textbox(cid, visible=None, top=96, color='FFDCE2E7'):
             </control>""" % (idattr, top, color, vis)
 
 
+# ───────── 4.10.6: source grid while searching (Fen Light+ style) ─────────
+# Fed by the add-on's scrape loop through lucent_theme (lucent_chip_feed /
+# lucent_chips_draw): panel 7700, 7 chips a row, up to 4 rows growing up from
+# the heading; the tiles and the running time move up with it. Without a
+# feed (lucent.chips empty) the screen is the 4.8.5 one, text line included.
+CHIPS_ON = 'String.IsEqual(Window.Property(lucent.chips),true)'
+CHIP_COLS, CHIP_ROWS, CHIP_PITCH, CHIP_H = 7, 4, 52, 44
+CHIP_CELL = 1740 // CHIP_COLS                  # 248
+CHIP_W = CHIP_CELL - 12                        # 236
+CHIP_TOP = 196 - CHIP_PITCH                    # one row: 144 .. 188 (heading at 200)
+CHIP_CNT = 56
+
+
+def _chip_rows_anim(shift):
+    """Slide up by shift(rows) for 2 .. 4 rows."""
+    return ''.join('''
+                <animation effect="slide" end="0,-%d" time="0" condition="String.IsEqual(Window.Property(lucent.chip_rows),%d)">Conditional</animation>''' % (shift(r), r)
+        for r in range(2, CHIP_ROWS + 1) if shift(r) > 0)
+
+
+def _tiles_lift(r):
+    return max(0, 84 + 12 - (CHIP_TOP - (r - 1) * CHIP_PITCH))
+
+
+def chip_lift(xml):
+    """Tiles row / time label: move up when the grid has more rows."""
+    return xml.replace('<control type="group">', '<control type="group">' + _chip_rows_anim(_tiles_lift), 1)
+
+
+def lucent_chip_item():
+    st = 'String.IsEqual(ListItem.Property(lucent.state),%s)'
+    dot = '''
+                        <control type="image">
+                            <left>16</left>
+                            <top>%(t)d</top>
+                            <width>12</width>
+                            <height>12</height>
+                            <texture>lucent/dot.png</texture>
+                            <colordiffuse>%(c)s</colordiffuse>%(anim)s
+                            <visible>%(v)s</visible>
+                        </control>'''
+    pulse = '''
+                            <animation effect="fade" start="100" end="20" time="500" pulse="true" condition="true">Conditional</animation>'''
+    dots = ''.join(dot % {'t': (CHIP_H - 12) // 2, 'c': c, 'anim': a, 'v': st % s_}
+                   for s_, c, a in (('done', 'FFFFFFFF', ''), ('scanning', '8CFFFFFF', pulse), ('failed', 'FFE5484D', '')))
+    count = '''
+                        <control type="label">
+                            <left>%(l)d</left>
+                            <width>%(w)d</width>
+                            <height>%(h)d</height>
+                            <font>font12</font>
+                            <align>right</align>
+                            <aligny>center</aligny>
+                            <textcolor>%(c)s</textcolor>
+                            <label>[B]$INFO[ListItem.Label2][/B]</label>
+                            <visible>%(v)s</visible>
+                        </control>'''
+    return '''
+                        <control type="image">
+                            <width>%(w)d</width>
+                            <height>%(h)d</height>
+                            <texture border="22">lucent/pill44.png</texture>
+                            <colordiffuse>1AFFFFFF</colordiffuse>
+                        </control>%(dots)s
+                        <control type="label">
+                            <left>36</left>
+                            <width>%(nw)d</width>
+                            <height>%(h)d</height>
+                            <font>font12</font>
+                            <aligny>center</aligny>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[ListItem.Label][/B]</label>
+                        </control>%(cnt)s%(bad)s''' % {
+        'w': CHIP_W, 'h': CHIP_H, 'dots': dots, 'nw': CHIP_W - 36 - CHIP_CNT - 14,
+        'cnt': count % {'l': CHIP_W - CHIP_CNT - 14, 'w': CHIP_CNT, 'h': CHIP_H, 'c': 'FFBDC8D1', 'v': '!' + st % 'failed'},
+        'bad': count % {'l': CHIP_W - CHIP_CNT - 14, 'w': CHIP_CNT, 'h': CHIP_H, 'c': 'FFE5484D', 'v': st % 'failed'}}
+
+
+def chip_grid(visible=None):
+    vis = CHIPS_ON + (' + ' + visible if visible else '')
+    item = lucent_chip_item()
+    return '''
+            <!-- 4.10.6: source grid (Fen Light+ style) -->
+            <control type="group">
+                <visible>%(vis)s</visible>
+                <control type="group">%(tlift)s
+                    <control type="label">
+                        <right>0</right>
+                        <top>6</top>
+                        <width>500</width>
+                        <height>44</height>
+                        <font>font27</font>
+                        <align>right</align>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[Window.Property(lucent.chip_time)][/B]</label>
+                    </control>
+                    <control type="label">
+                        <right>0</right>
+                        <top>50</top>
+                        <width>500</width>
+                        <height>30</height>
+                        <font>font12</font>
+                        <align>right</align>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>$INFO[Window.Property(lucent.chip_sub)]</label>
+                    </control>
+                </control>
+                <control type="panel" id="7700">
+                    <top>%(top)d</top>
+                    <width>1740</width>
+                    <height>%(gh)d</height>
+                    <orientation>vertical</orientation>
+                    <scrolltime>0</scrolltime>%(glift)s
+                    <itemlayout width="%(cw)d" height="%(ch)d">%(item)s
+                    </itemlayout>
+                    <focusedlayout width="%(cw)d" height="%(ch)d">%(item)s
+                    </focusedlayout>
+                </control>
+            </control>''' % {'vis': vis, 'top': CHIP_TOP, 'gh': CHIP_ROWS * CHIP_PITCH, 'cw': CHIP_CELL,
+                             'ch': CHIP_PITCH, 'item': item,
+                             'tlift': _chip_rows_anim(_tiles_lift).replace('\n                <', '\n                    <'),
+                             'glift': _chip_rows_anim(lambda r: (r - 1) * CHIP_PITCH).replace('\n                <', '\n                    <')}
+
+
 def _row_at_zero(row):
     return row.replace('<left>40</left>', '<left>0</left>', 1)
 
@@ -1223,8 +1347,9 @@ def redlight_playback(counts, percent_prop, resume_percent_prop):
     scraper, resolver, resume = mode % 'scraper', mode % 'resolver', mode % 'resume'
     busy = 'String.IsEqual(Window.Property(enable_busy_spinner),true)'
     inner = ''.join([
-        counts_row(counts, 0, scraper),
-        status_textbox('2001', scraper),
+        chip_lift(counts_row(counts, 0, scraper)),
+        status_textbox('2001', scraper + ' + !' + CHIPS_ON),
+        chip_grid(scraper),
         status_textbox('2002', resolver),
         _row_at_zero(resume_buttons_redlight()).replace('<top>160</top>', '<top>96</top>', 1),
         spinner(busy, -30, 214),
@@ -1252,8 +1377,9 @@ def pov_progress():
     buttons_on = 'String.IsEqual(%s,true)' % (p % 'buttons')
     has_heading = '!String.IsEmpty(%s)' % (LC % 'heading')
     inner = ''.join([
-        counts_row(PARSED_TILES + [('TOTAL', LC % 'c_total')], 0, COUNTS_ON),
-        status_textbox('2000'),
+        chip_lift(counts_row(PARSED_TILES + [('TOTAL', LC % 'c_total')], 0, COUNTS_ON)),
+        status_textbox('2000', '!' + CHIPS_ON),
+        chip_grid(),
         _row_at_zero(button_row([
             action_button('10', '$INFO[%s]' % (p % 'true_button'), nav='\n                    <onright>11</onright>\n                    <onleft>11</onleft>'),
             action_button('11', '$INFO[%s]' % (p % 'false_button'), nav='\n                    <onright>10</onright>\n                    <onleft>10</onleft>'),
@@ -1669,9 +1795,15 @@ AB_ADDONS = (('rl', 'FFE5484D'), ('fl', 'FF3E9BFF'), ('umb', 'FF9B6BFF'), ('pov'
              ('dex', 'FFEC4899'),      # 4.7.13 Dex Hub (pink)
              ('en', 'FF22D3EE'),       # 4.7.16 EasyNews (cyan)
              ('loc', 'FFA3E635'))      # 4.10.0 My folders (lime)
-AB_SLOTS = len(AB_ADDONS)             # one status line per add-on (abs.s1 .. abs.sN)
-AB_SLOT_PITCH = 54                    # 4.7.40: bigger lines (26 px), 7 fit under the plot (was 40)
-AB_DOT = 20
+# 4.10.6: the add-on lines became a source grid (Fen Light+ style): 3 x 7
+# chips under the plot - the add-ons first, then every scraper / site.
+# AB_SRC_* must match ab_search.SRC_GRID / _SRC_SLOTS.
+AB_SRC_ID = 2500
+AB_SRC_COLS, AB_SRC_ROWS = 3, 7
+AB_SRC_PITCH = 54                     # 7 rows end at 566 + 56 + 378 = 1000
+AB_SRC_W = 700 // AB_SRC_COLS - 12    # 221: chip, 12 px gap
+AB_SRC_H = 46
+AB_SRC_CNT = 44                       # count column
 # 4.7.40: left column all the way up (logo / title from y 48, was 96 + a
 # 220 px logo box), the plot right under the pills and the add-on list under
 # the plot (was y 736).
@@ -2048,45 +2180,95 @@ def ab_panel(expanded, visible, W):
     return xml
 
 
+def ab_source_chip():
+    """4.10.6: one chip of the source grid (Fen Light+ style): coloured dot for
+    an add-on (pulses while it searches), grey dot for a scraper / site, then
+    name and count. Properties: abs.key (add-on key or empty), abs.state
+    (searching / done / failed / off), Label = name, Label2 = count."""
+    dots = ''.join('''
+                    <control type="image">
+                        <left>14</left>
+                        <top>%(t)d</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>lucent/dot.png</texture>
+                        <colordiffuse>%(c)s</colordiffuse>
+                        <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(ListItem.Property(abs.state),searching)">Conditional</animation>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),%(k)s)</visible>
+                    </control>''' % {'t': (AB_SRC_H - 14) // 2, 'c': color, 'k': key} for key, color in AB_ADDONS)
+    return '''
+                <control type="group">
+                    <animation effect="fade" start="100" end="40" time="0" condition="String.IsEqual(ListItem.Property(abs.state),off)">Conditional</animation>
+                    <control type="image">
+                        <width>%(w)d</width>
+                        <height>%(h)d</height>
+                        <texture border="23">lucent/pill48.png</texture>
+                        <colordiffuse>1AFFFFFF</colordiffuse>
+                    </control>%(dots)s
+                    <control type="image">
+                        <left>14</left>
+                        <top>%(t)d</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>lucent/dot.png</texture>
+                        <colordiffuse>99FFFFFF</colordiffuse>
+                        <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(ListItem.Property(abs.state),searching)">Conditional</animation>
+                        <visible>String.IsEmpty(ListItem.Property(abs.key))</visible>
+                    </control>
+                    <!-- name and count in separate labels (Arabic UI re-orders one mixed label) -->
+                    <control type="label">
+                        <left>36</left>
+                        <width>%(nw)d</width>
+                        <height>%(h)d</height>
+                        <font>font12</font>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[ListItem.Label][/B]</label>
+                    </control>
+                    <control type="label">
+                        <left>%(cl)d</left>
+                        <width>%(cw)d</width>
+                        <height>%(h)d</height>
+                        <font>font12</font>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFBDC8D1</textcolor>
+                        <label>[B]$INFO[ListItem.Label2][/B]</label>
+                        <visible>!String.IsEqual(ListItem.Property(abs.state),failed)</visible>
+                    </control>
+                    <control type="label">
+                        <left>%(cl)d</left>
+                        <width>%(cw)d</width>
+                        <height>%(h)d</height>
+                        <font>font12</font>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFE5484D</textcolor>
+                        <label>[B]$INFO[ListItem.Label2][/B]</label>
+                        <visible>String.IsEqual(ListItem.Property(abs.state),failed)</visible>
+                    </control>
+                </control>''' % {'w': AB_SRC_W, 'h': AB_SRC_H, 'dots': dots, 't': (AB_SRC_H - 14) // 2,
+                               'nw': AB_SRC_W - 36 - AB_SRC_CNT - 12, 'cl': AB_SRC_W - AB_SRC_CNT - 14,
+                               'cw': AB_SRC_CNT}
+
+
 def ab_search_window():
     W = 'Window.Property(abs.%s)'
-    slots = []
-    for n in range(1, AB_SLOTS + 1):
-        top = (n - 1) * AB_SLOT_PITCH
-        dots = ''.join('''
-                <control type="image">
-                    <left>0</left>
-                    <top>%(t)d</top>
-                    <width>%(d)d</width>
-                    <height>%(d)d</height>
-                    <texture>lucent/dot.png</texture>
-                    <colordiffuse>%(c)s</colordiffuse>
-                    <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(Window.Property(abs.s%(n)d.state),searching)">Conditional</animation>
-                    <visible>String.IsEqual(Window.Property(abs.s%(n)d.key),%(k)s)</visible>
-                </control>''' % {'t': top + (AB_SLOT_PITCH - AB_DOT) // 2, 'd': AB_DOT, 'c': color, 'n': n, 'k': key}
-            for key, color in AB_ADDONS)
-        slots.append('''%(dots)s
-                <control type="label">
-                    <left>36</left>
-                    <top>%(t)d</top>
-                    <width>380</width>
-                    <height>%(h)d</height>
-                    <font>abk_srch_m</font>
-                    <aligny>center</aligny>
-                    <textcolor>FFFFFFFF</textcolor>
-                    <label>[B]$INFO[Window.Property(abs.s%(n)d.name)][/B]</label>
-                </control>
-                <control type="label">
-                    <left>420</left>
-                    <top>%(t)d</top>
-                    <width>280</width>
-                    <height>%(h)d</height>
-                    <font>abk_srch_m</font>
-                    <align>right</align>
-                    <aligny>center</aligny>
-                    <textcolor>FFBDC8D1</textcolor>
-                    <label>$INFO[Window.Property(abs.s%(n)d.status)]</label>
-                </control>''' % {'dots': dots, 't': top, 'n': n, 'h': AB_SLOT_PITCH})
+    chip = ab_source_chip()
+    slots = ['''
+                <!-- 4.10.6: source grid (Fen Light+ style) - one chip per add-on,
+                     then one per scraper / site with the streams it found -->
+                <control type="panel" id="%(id)d">
+                    <width>700</width>
+                    <height>%(gh)d</height>
+                    <orientation>vertical</orientation>
+                    <scrolltime>0</scrolltime>
+                    <itemlayout width="%(cw)d" height="%(ch)d">%(chip)s
+                    </itemlayout>
+                    <focusedlayout width="%(cw)d" height="%(ch)d">%(chip)s
+                    </focusedlayout>
+                </control>''' % {'id': AB_SRC_ID, 'gh': AB_SRC_ROWS * AB_SRC_PITCH, 'cw': 700 // AB_SRC_COLS,
+                                  'ch': AB_SRC_PITCH, 'chip': chip}]
     status = '''
         <!-- ============ Left: one line per add-on (searching / N streams) ============ -->
         <control type="group">
@@ -2102,6 +2284,15 @@ def ab_search_window():
                 <textcolor>FF8F9BA6</textcolor>
                 <label>[B][UPPERCASE]$INFO[%(heading)s][/UPPERCASE][/B]</label>
             </control>
+            <control type="label">
+                <left>300</left>
+                <width>400</width>
+                <height>40</height>
+                <font>font12</font>
+                <align>right</align>
+                <textcolor>FFBDC8D1</textcolor>
+                <label>[B]$INFO[%(timer)s][/B]</label>
+            </control>
             <control type="image">
                 <top>44</top>
                 <width>700</width>
@@ -2112,7 +2303,7 @@ def ab_search_window():
             <control type="group">
                 <top>56</top>%(slots)s
             </control>
-        </control>''' % {'heading': W % 'addons_heading', 'slots': ''.join(slots), 'top': AB_LIST_TOP}
+        </control>''' % {'heading': W % 'addons_heading', 'timer': W % 'elapsed', 'slots': ''.join(slots), 'top': AB_LIST_TOP}
     # 4.8.25: search done + results -> stream details instead of the add-on list
     done = ('String.IsEqual(Window.Property(abs.empty),true) + '
             'Integer.IsGreater(Container(2000).NumItems,0)')

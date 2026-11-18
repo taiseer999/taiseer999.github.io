@@ -1,3 +1,36 @@
+v4.10.7  (2026-11-18)
+- Lucent (Red Light, POV): the "Searching for streams" screen shows every
+  provider while it searches, like Fen Light+: one chip per scraper (pulsing
+  while it runs, then the streams it found, a red x when it failed), up to
+  4 rows of 7 growing up from the heading (the tiles move up with it; past
+  28 the last chip sums up the rest), and the running time "of Ns timeout"
+  right of the tiles. The debrid cache check shows its services the same way
+  ("of Ns cache check"). The provider line under the tiles gives way to the
+  grid; opening a stream takes the grid away.
+  Fed from the add-on's own scrape loop: new optional hooks next to the
+  progress line (Red Light: scrapers/external.py flat + wave scrapes and cache
+  check, modules/debrid.py, modules/sources.py internal scrape; POV:
+  modules/sources.py external monitor + internal scrape), drawn from the
+  window's update (Red Light update_scraper, POV / Umbrella lucent_progress).
+  A fork without one of these lines keeps the theme without that step.
+- Patcher: the feed hooks have their own fence (# >>> ABK CHIPS), so the
+  Search All bridge and the Lucent theme can share modules/sources.py -
+  applying or reverting one strips only its own hooks.
+- Lucent helper version 15.
+
+v4.10.6  (2026-11-18)
+- Search All: the add-on lines under the plot became a source grid, like
+  Fen Light+'s scraping window. One chip per add-on (its colour, pulsing
+  while it searches; then its stream count, a red x when it failed, dimmed
+  when it is not set up), then one chip per scraper / site behind the
+  results as each add-on finishes - Torrentio, Comet, Mediafusion,
+  Easynews, RD Cloud, a Dex Hub or AIOStreams add-on, a folder - with the
+  releases it found, counted once however many add-ons found them.
+  3 x 7 chips; past that the last chip sums up the rest ("+N more").
+  The running time of the search sits right of the heading (a ticker
+  thread asks the dialog thread to redraw it once a second; it stops when
+  the last add-on ends and is joined with the search threads).
+
 v4.10.5  (2026-11-18)
 - AB Tools page: the item list stopped following the categories (the
   category list still moved, the items stayed on Setup). A skin reload

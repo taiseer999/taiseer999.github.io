@@ -1884,6 +1884,14 @@ msgctxt "#30877"
 msgid "%d%% solid (default)"
 msgstr ""
 
+msgctxt "#30878"
+msgid "%.0fs"
+msgstr ""
+
+msgctxt "#30879"
+msgid "+%d more"
+msgstr ""
+
 msgctxt "#30880"
 msgid "Subtitles"
 msgstr ""

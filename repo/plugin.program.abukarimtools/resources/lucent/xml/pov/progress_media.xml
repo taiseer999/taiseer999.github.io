@@ -99,6 +99,9 @@
             <width>1740</width>
             <height>270</height>
                 <control type="group">
+                    <animation effect="slide" end="0,-4" time="0" condition="String.IsEqual(Window.Property(lucent.chip_rows),2)">Conditional</animation>
+                    <animation effect="slide" end="0,-56" time="0" condition="String.IsEqual(Window.Property(lucent.chip_rows),3)">Conditional</animation>
+                    <animation effect="slide" end="0,-108" time="0" condition="String.IsEqual(Window.Property(lucent.chip_rows),4)">Conditional</animation>
                     <left>40</left>
                     <top>0</top>
                     <visible>String.IsEqual(Window.Property(lucent.counts),true)</visible>
@@ -254,6 +257,180 @@
                     <height>96</height>
                     <font>font12</font>
                     <textcolor>FFDCE2E7</textcolor>
+                    <visible>!String.IsEqual(Window.Property(lucent.chips),true)</visible>
+                </control>
+                <!-- 4.10.6: source grid (Fen Light+ style) -->
+                <control type="group">
+                    <visible>String.IsEqual(Window.Property(lucent.chips),true)</visible>
+                    <control type="group">
+                        <animation effect="slide" end="0,-4" time="0" condition="String.IsEqual(Window.Property(lucent.chip_rows),2)">Conditional</animation>
+                        <animation effect="slide" end="0,-56" time="0" condition="String.IsEqual(Window.Property(lucent.chip_rows),3)">Conditional</animation>
+                        <animation effect="slide" end="0,-108" time="0" condition="String.IsEqual(Window.Property(lucent.chip_rows),4)">Conditional</animation>
+                        <control type="label">
+                            <right>0</right>
+                            <top>6</top>
+                            <width>500</width>
+                            <height>44</height>
+                            <font>font27</font>
+                            <align>right</align>
+                            <textcolor>FFFFFFFF</textcolor>
+                            <label>[B]$INFO[Window.Property(lucent.chip_time)][/B]</label>
+                        </control>
+                        <control type="label">
+                            <right>0</right>
+                            <top>50</top>
+                            <width>500</width>
+                            <height>30</height>
+                            <font>font12</font>
+                            <align>right</align>
+                            <textcolor>FFBDC8D1</textcolor>
+                            <label>$INFO[Window.Property(lucent.chip_sub)]</label>
+                        </control>
+                    </control>
+                    <control type="panel" id="7700">
+                        <top>144</top>
+                        <width>1740</width>
+                        <height>208</height>
+                        <orientation>vertical</orientation>
+                        <scrolltime>0</scrolltime>
+                        <animation effect="slide" end="0,-52" time="0" condition="String.IsEqual(Window.Property(lucent.chip_rows),2)">Conditional</animation>
+                        <animation effect="slide" end="0,-104" time="0" condition="String.IsEqual(Window.Property(lucent.chip_rows),3)">Conditional</animation>
+                        <animation effect="slide" end="0,-156" time="0" condition="String.IsEqual(Window.Property(lucent.chip_rows),4)">Conditional</animation>
+                        <itemlayout width="248" height="52">
+                            <control type="image">
+                                <width>236</width>
+                                <height>44</height>
+                                <texture border="22">lucent/pill44.png</texture>
+                                <colordiffuse>1AFFFFFF</colordiffuse>
+                            </control>
+                            <control type="image">
+                                <left>16</left>
+                                <top>16</top>
+                                <width>12</width>
+                                <height>12</height>
+                                <texture>lucent/dot.png</texture>
+                                <colordiffuse>FFFFFFFF</colordiffuse>
+                                <visible>String.IsEqual(ListItem.Property(lucent.state),done)</visible>
+                            </control>
+                            <control type="image">
+                                <left>16</left>
+                                <top>16</top>
+                                <width>12</width>
+                                <height>12</height>
+                                <texture>lucent/dot.png</texture>
+                                <colordiffuse>8CFFFFFF</colordiffuse>
+                                <animation effect="fade" start="100" end="20" time="500" pulse="true" condition="true">Conditional</animation>
+                                <visible>String.IsEqual(ListItem.Property(lucent.state),scanning)</visible>
+                            </control>
+                            <control type="image">
+                                <left>16</left>
+                                <top>16</top>
+                                <width>12</width>
+                                <height>12</height>
+                                <texture>lucent/dot.png</texture>
+                                <colordiffuse>FFE5484D</colordiffuse>
+                                <visible>String.IsEqual(ListItem.Property(lucent.state),failed)</visible>
+                            </control>
+                            <control type="label">
+                                <left>36</left>
+                                <width>130</width>
+                                <height>44</height>
+                                <font>font12</font>
+                                <aligny>center</aligny>
+                                <textcolor>FFFFFFFF</textcolor>
+                                <label>[B]$INFO[ListItem.Label][/B]</label>
+                            </control>
+                            <control type="label">
+                                <left>166</left>
+                                <width>56</width>
+                                <height>44</height>
+                                <font>font12</font>
+                                <align>right</align>
+                                <aligny>center</aligny>
+                                <textcolor>FFBDC8D1</textcolor>
+                                <label>[B]$INFO[ListItem.Label2][/B]</label>
+                                <visible>!String.IsEqual(ListItem.Property(lucent.state),failed)</visible>
+                            </control>
+                            <control type="label">
+                                <left>166</left>
+                                <width>56</width>
+                                <height>44</height>
+                                <font>font12</font>
+                                <align>right</align>
+                                <aligny>center</aligny>
+                                <textcolor>FFE5484D</textcolor>
+                                <label>[B]$INFO[ListItem.Label2][/B]</label>
+                                <visible>String.IsEqual(ListItem.Property(lucent.state),failed)</visible>
+                            </control>
+                        </itemlayout>
+                        <focusedlayout width="248" height="52">
+                            <control type="image">
+                                <width>236</width>
+                                <height>44</height>
+                                <texture border="22">lucent/pill44.png</texture>
+                                <colordiffuse>1AFFFFFF</colordiffuse>
+                            </control>
+                            <control type="image">
+                                <left>16</left>
+                                <top>16</top>
+                                <width>12</width>
+                                <height>12</height>
+                                <texture>lucent/dot.png</texture>
+                                <colordiffuse>FFFFFFFF</colordiffuse>
+                                <visible>String.IsEqual(ListItem.Property(lucent.state),done)</visible>
+                            </control>
+                            <control type="image">
+                                <left>16</left>
+                                <top>16</top>
+                                <width>12</width>
+                                <height>12</height>
+                                <texture>lucent/dot.png</texture>
+                                <colordiffuse>8CFFFFFF</colordiffuse>
+                                <animation effect="fade" start="100" end="20" time="500" pulse="true" condition="true">Conditional</animation>
+                                <visible>String.IsEqual(ListItem.Property(lucent.state),scanning)</visible>
+                            </control>
+                            <control type="image">
+                                <left>16</left>
+                                <top>16</top>
+                                <width>12</width>
+                                <height>12</height>
+                                <texture>lucent/dot.png</texture>
+                                <colordiffuse>FFE5484D</colordiffuse>
+                                <visible>String.IsEqual(ListItem.Property(lucent.state),failed)</visible>
+                            </control>
+                            <control type="label">
+                                <left>36</left>
+                                <width>130</width>
+                                <height>44</height>
+                                <font>font12</font>
+                                <aligny>center</aligny>
+                                <textcolor>FFFFFFFF</textcolor>
+                                <label>[B]$INFO[ListItem.Label][/B]</label>
+                            </control>
+                            <control type="label">
+                                <left>166</left>
+                                <width>56</width>
+                                <height>44</height>
+                                <font>font12</font>
+                                <align>right</align>
+                                <aligny>center</aligny>
+                                <textcolor>FFBDC8D1</textcolor>
+                                <label>[B]$INFO[ListItem.Label2][/B]</label>
+                                <visible>!String.IsEqual(ListItem.Property(lucent.state),failed)</visible>
+                            </control>
+                            <control type="label">
+                                <left>166</left>
+                                <width>56</width>
+                                <height>44</height>
+                                <font>font12</font>
+                                <align>right</align>
+                                <aligny>center</aligny>
+                                <textcolor>FFE5484D</textcolor>
+                                <label>[B]$INFO[ListItem.Label2][/B]</label>
+                                <visible>String.IsEqual(ListItem.Property(lucent.state),failed)</visible>
+                            </control>
+                        </focusedlayout>
+                    </control>
                 </control>
                 <control type="grouplist">
                     <left>0</left>

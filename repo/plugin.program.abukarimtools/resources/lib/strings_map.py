@@ -658,6 +658,9 @@ STRINGS = {
     30839: ('Bitrate: 10 - 20 Mbps (estimated)', 'معدل البت: من 10 إلى 20 ميغابت/ث (تقديري)'),
     30840: ('Bitrate: under 10 Mbps (estimated)', 'معدل البت: أقل من 10 ميغابت/ث (تقديري)'),
     30841: ('Expand', 'توسيع'),
+    # ---- 4.10.6: Search All source grid ----
+    30878: ('%.0fs', '%.0f ث'),
+    30879: ('+%d more', 'و%d غيرها'),
     30842: ('Collapse', 'تصغير'),
     30843: ('Not set up (no manifest URL)', 'غير مُعدّة (لا يوجد رابط manifest)'),
     30844: ('Not signed in (Account Manager)', 'لم يُسجَّل الدخول (مدير الحسابات)'),

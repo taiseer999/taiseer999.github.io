@@ -1884,6 +1884,14 @@ msgctxt "#30877"
 msgid "%d%% solid (default)"
 msgstr "معتم بنسبة %d%% (الافتراضي)"
 
+msgctxt "#30878"
+msgid "%.0fs"
+msgstr "%.0f ث"
+
+msgctxt "#30879"
+msgid "+%d more"
+msgstr "و%d غيرها"
+
 msgctxt "#30880"
 msgid "Subtitles"
 msgstr "الترجمة"

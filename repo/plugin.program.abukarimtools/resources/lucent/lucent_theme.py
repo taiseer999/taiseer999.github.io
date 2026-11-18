@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
 # Lucent theme helper - injected by AB Tools (plugin.program.abukarimtools).
-# LUCENT_HELPER_VERSION = 14
+# LUCENT_HELPER_VERSION = 15
 #
 # Normalises each add-on's own source-list and meta properties into one shared
 # 'lucent.*' property set, so a single Lucent window layout works for Fen Light,
@@ -515,6 +515,9 @@ def lucent_progress(window, content, percent=0):
 				window.setProperty('lucent.' + key, str(value))
 			window.setProperty('lucent.c_total', str(sum(totals)))
 		window.setProperty('lucent.heading', _t('Searching for streams') if found else _t('Opening stream'))
+		if not found: _CHIP['at'] = 0.0          # 4.10.6: opening a stream - the grid goes
+		try: lucent_chips_draw(window)
+		except NameError: pass
 		try: window.setProperty('lucent.percent', str(int(float(percent))))
 		except Exception: pass
 		if not found: return content
@@ -1026,3 +1029,151 @@ def lucent_layer1_back(window, action):
 		window.selected = (None, '')
 		window.close()
 	return True
+
+
+# ───────────── Source grid while searching (4.10.6, Fen Light+ style) ─────────────
+# The add-on's own scrape loop feeds its provider threads / futures here
+# (lucent_chip_feed, hooked by AB Tools next to the loop's progress line), the
+# progress window draws them (lucent_chips_draw, from lucent_progress or the
+# window's update_scraper): one chip per provider - pulsing while it runs, then
+# the streams it found (red x when it failed) - and the running time of the
+# search. Windows without the grid (control 7700) are left untouched.
+_CHIP_ID, _CHIP_COLS, _CHIP_MAX_ROWS = 7700, 7, 4
+_CHIP = {'key': None, 'phase': '', 'order': [], 'state': {}, 'count': {}, 'fut': set(), 'start': 0.0, 'timeout': 0.0, 'at': 0.0}
+_CHIP_NAMES = {'rd_cloud': 'RD Cloud', 'pm_cloud': 'PM Cloud', 'ad_cloud': 'AD Cloud', 'oc_cloud': 'OC Cloud',
+		'tb_cloud': 'TB Cloud', 'easynews': 'Easynews', 'realdebrid': 'Real-Debrid', 'alldebrid': 'AllDebrid',
+		'premiumize': 'Premiumize', 'torbox': 'TorBox', 'offcloud': 'Offcloud', 'easydebrid': 'EasyDebrid'}
+_AR.update({'of %ds timeout': 'من مهلة %d ث', 'of %ds cache check': 'من مهلة فحص التخزين %d ث',
+	'%.1fs': '%.1f ث', '+%d more': 'و%d غيرها'})
+
+
+def _chip_norm(name):
+	return re.sub(r'[^a-z0-9]', '', re.sub(r'\s*[(\[].*?[)\]]', '', str(name or '')).lower())
+
+
+def _chip_label(name):
+	name = re.sub(r'\s*\[.*?\]', '', _clean(name)).strip()     # Red Light: 'Btdig [Gears Scrapers]'
+	pretty = _CHIP_NAMES.get(name.lower())
+	if pretty: return pretty
+	return name.title() if name == name.lower() or name == name.upper() else name
+
+
+def lucent_chip_feed(workers=(), pending=(), results=None, timeout=0, phase='scrape', key=None):
+	"""Scrape thread: record the providers of one search step.
+	workers: threading.Thread or concurrent.futures.Future objects named after
+	their provider; pending: names still running that have no thread here (an
+	add-on's internal scrapers); results: the step's result list, counted per
+	provider (item 'provider' / 'scrape_provider'); a future's own result
+	length wins. A new key or phase starts a new grid."""
+	try:
+		import time
+		now, c = time.time(), _CHIP
+		k = (id(workers) if key is None else key, phase)
+		if c['key'] != k:
+			c.update(key=k, phase=phase, order=[], state={}, count={}, fut=set(), start=now)
+		c['timeout'], c['at'] = float(timeout or 0), now
+		state, count, order = c['state'], c['count'], c['order']
+		running = set()
+
+		def seen(name):
+			if name and name not in state:
+				order.append(name)
+				state[name] = 'scanning'
+		for w in list(workers or ()):
+			name = str(getattr(w, 'name', '') or (w.getName() if hasattr(w, 'getName') else ''))
+			if not name: continue
+			seen(name)
+			if hasattr(w, 'is_alive'):
+				if w.is_alive(): running.add(name)
+				continue
+			if not w.done():
+				running.add(name)
+				continue
+			try:
+				if w.exception() is not None:
+					state[name] = 'failed'
+					continue
+				res = w.result()
+				if isinstance(res, (list, tuple, set)):
+					count[name] = len(res)
+					c['fut'].add(name)
+			except Exception:
+				state[name] = 'failed'
+				continue
+		for name in pending or ():
+			name = str(name)
+			seen(name)
+			running.add(name)
+		for name in order:
+			if name in running: state[name] = 'scanning'
+			elif state[name] == 'scanning': state[name] = 'done'
+		if results is not None:
+			found = {}
+			for item in list(results):
+				if not isinstance(item, dict): continue
+				n = _chip_norm(item.get('provider') or item.get('scrape_provider') or item.get('source'))
+				if n: found[n] = found.get(n, 0) + 1
+			for name in order:
+				if name not in c['fut']:
+					count[name] = found.get(_chip_norm(name), 0)
+	except Exception:
+		pass
+
+
+def lucent_chips_draw(window):
+	"""Window update: draw the grid fed above (or take it away when the feed
+	stopped - another screen, the stream being opened)."""
+	try:
+		import time
+		ctl = window.getControl(_CHIP_ID)
+	except Exception:
+		return
+	try:
+		c = _CHIP
+		if not c['order'] or time.time() - c['at'] > 3.0:
+			if window.getProperty('lucent.chips'):
+				window.setProperty('lucent.chips', '')
+				window.setProperty('lucent.chip_rows', '')
+				ctl.reset()
+			window._lucent_chip_names = None
+			return
+		import xbmcgui
+		defs = []
+		for name in c['order']:
+			st = c['state'].get(name, 'scanning')
+			cnt = c['count'].get(name)
+			label = '×' if st == 'failed' else ('' if st == 'scanning' or cnt is None else str(cnt))
+			defs.append([_chip_label(name), st, label])
+		room = _CHIP_COLS * _CHIP_MAX_ROWS
+		if len(defs) > room:
+			rest = defs[room - 1:]
+			left = sum(1 for d in rest if d[1] == 'scanning')
+			total = sum(int(d[2]) for d in rest if d[2].isdigit())
+			defs = defs[:room - 1] + [[_t('+%d more') % len(rest), 'scanning' if left else 'done', str(total)]]
+		names = [d[0] for d in defs]
+		if getattr(window, '_lucent_chip_names', None) != names:
+			ctl.reset()
+			items = []
+			for name, st, label in defs:
+				li = xbmcgui.ListItem(name)
+				li.setLabel2(label)
+				li.setProperty('lucent.state', st)
+				items.append(li)
+			ctl.addItems(items)
+			window._lucent_chip_names = names
+		else:
+			for n, (_name, st, label) in enumerate(defs):
+				li = ctl.getListItem(n)
+				if li.getLabel2() != label: li.setLabel2(label)
+				if li.getProperty('lucent.state') != st: li.setProperty('lucent.state', st)
+		window.setProperty('lucent.chip_rows', str(min(_CHIP_MAX_ROWS, -(-len(defs) // _CHIP_COLS))))
+		window.setProperty('lucent.chips', 'true')
+		elapsed, timeout = max(0.0, time.time() - c['start']), c['timeout']
+		if timeout: elapsed = min(elapsed, timeout)
+		window.setProperty('lucent.chip_time', _t('%.1fs') % elapsed)
+		sub = ''
+		if timeout:
+			sub = _t('of %ds cache check' if c['phase'] == 'cache' else 'of %ds timeout') % int(round(timeout))
+		window.setProperty('lucent.chip_sub', sub)
+	except Exception:
+		pass

@@ -33,6 +33,15 @@ MARKER_XML = '<!-- LUCENT for '
 HOOK_OPEN = '# >>> ABK LUCENT'
 HOOK_CLOSE = '# <<< ABK LUCENT'
 _HOOK_RE = re.compile(r'[ \t]*# >>> ABK LUCENT\r?\n[\s\S]*?# <<< ABK LUCENT\r?\n')
+# 4.10.6: the source-grid feed hooks sit in files the Search All bridge also
+# hooks (Red Light / POV modules/sources.py). They carry their own fence, so
+# applying or reverting one feature never strips the other's hooks.
+_MARKS = {'LUCENT': _HOOK_RE,
+          'CHIPS': re.compile(r'[ \t]*# >>> ABK CHIPS\r?\n[\s\S]*?# <<< ABK CHIPS\r?\n')}
+
+
+def _mark(hook):
+    return 'CHIPS' if 'chips' in hook[4:] else 'LUCENT'
 
 _SELF = xbmcvfs.translatePath('special://home/addons/plugin.program.abukarimtools/')
 _SRC = os.path.join(_SELF, 'resources', 'lucent')
@@ -250,6 +259,48 @@ SPECS['dexhub_search'] = {
     ],
 }
 
+# 4.10.6: source grid while searching (Fen Light+ style). The scrape loops
+# feed their provider threads / futures to lucent_theme.lucent_chip_feed; the
+# progress window draws them (Red Light: update_scraper, POV / Umbrella:
+# lucent_progress). All optional - a fork without one of these lines keeps the
+# theme, only without that grid step. Feed hooks are fenced '# >>> ABK CHIPS'.
+_SCR = os.path.join('resources', 'lib', 'scrapers')
+
+
+def _feed(args):
+    return ('try:\n\tfrom modules.lucent_theme import lucent_chip_feed\n\tlucent_chip_feed(%s)\n'
+            'except Exception: pass\n' % args)
+
+
+SPECS['redlight']['hooks'] += [
+    (os.path.join(_WIN, 'sources.py'), '\t\tself.set_text(2001, content)\n',
+     'try:\n\tfrom modules.lucent_theme import lucent_chips_draw\n\tlucent_chips_draw(self)\nexcept Exception: pass\n',
+     'after', 'optional'),
+    (os.path.join(_SCR, 'external.py'),
+     '\t\t\t\t\tline1 = self._format_progress_line1(external_threads, internal_pending)\n',
+     _feed('self.threads, internal_pending, self.sources, self.timeout, key=id(self)'), 'after', 'optional', 'chips'),
+    (os.path.join(_SCR, 'external.py'),
+     '\t\t\t\t\tline1 = self._format_progress_line1(external_threads, internal_pending, wave_prefix=line1_prefix)\n',
+     _feed('self.threads, internal_pending, self.sources, self.timeout, key=id(self)'), 'after', 'optional', 'chips'),
+    (os.path.join(_SCR, 'external.py'), "\t\t\t\t\tline1 = ', '.join(remaining_debrids).upper()\n",
+     _feed("debrid_check_threads, (), None, debrid_timeout, 'cache', key=id(debrid_check_threads)"),
+     'after', 'optional', 'chips'),
+    (os.path.join(_MOD, 'debrid.py'),
+     "\t\t\t\tprogress_dialog.update_scraper(sd, p720, p1080, p4k, len(shown), ', '.join(remaining).upper(), percent)\n",
+     _feed("debrid_check_threads, (), None, debrid_timeout, 'cache', key=id(debrid_check_threads)"),
+     'before', 'optional', 'chips'),
+    (os.path.join(_MOD, 'sources.py'), "\t\t\t\t\tline1 = ', '.join(remaining_providers).upper()\n",
+     _feed('_threads, (), None, budget, key=id(_threads)'), 'after', 'optional', 'chips'),
+]
+SPECS['pov']['hooks'] += [
+    (os.path.join(_MOD, 'sources.py'),
+     '\t\t\tif not self.background: self.progress_update(alive_threads, len_threads, status_line)\n',
+     _feed("threads, () if debrid else [x.name for x in self.internal_scrapers if x.is_alive()], None, self.timeout, "
+           "'cache' if debrid else 'scrape', key=id(threads)"), 'before', 'optional', 'chips'),
+    (os.path.join(_MOD, 'sources.py'), "\t\t\t\tline3 = remaining_format % ', '.join(alive_threads).upper()\n",
+     _feed('threads_list, (), None, timeout, key=id(threads_list)'), 'after', 'optional', 'chips'),
+]
+
 # Glass theme profiles only (the search bridge is switched on its own)
 PROFILE_OF = {spec['addon_id']: key for key, spec in SPECS.items() if not spec.get('search')}
 
@@ -301,9 +352,9 @@ def _indent_of(line):
     return line[:len(line) - len(line.lstrip(' \t'))]
 
 
-def _fence(code, indent, nl='\n'):
+def _fence(code, indent, nl='\n', mark='LUCENT'):
     body = ''.join(indent + ln + nl for ln in code.rstrip('\n').split('\n'))
-    return '%s%s%s%s%s%s%s' % (indent, HOOK_OPEN, nl, body, indent, HOOK_CLOSE, nl)
+    return '%s# >>> ABK %s%s%s%s# <<< ABK %s%s' % (indent, mark, nl, body, indent, mark, nl)
 
 
 def _apply_hooks(text, hooks):
@@ -311,10 +362,11 @@ def _apply_hooks(text, hooks):
     files mix LF and CRLF, so each anchor is matched in either form and its
     fence uses the newline style found there (revert is then byte-exact)."""
     missing = []
-    text = _strip_hooks(text)
+    text = _strip_hooks(text, {_mark(h) for h in hooks})
     for hook in hooks:
         _rel, anchor, code, where = hook[:4]
-        optional = len(hook) > 4 and hook[4] == 'optional'   # 4.7.18: a missing anchor is not an error
+        optional = 'optional' in hook[4:]   # 4.7.18: a missing anchor is not an error
+        mark = _mark(hook)
         nl, idx = '\n', text.find(anchor)
         if idx < 0:
             crlf_anchor = anchor.replace('\n', '\r\n')
@@ -327,17 +379,19 @@ def _apply_hooks(text, hooks):
             continue
         if where == 'before':
             indent = _indent_of(anchor.split('\n')[0])
-            text = text[:idx] + _fence(code, indent, nl) + text[idx:]
+            text = text[:idx] + _fence(code, indent, nl, mark) + text[idx:]
         else:
             last = anchor.rstrip('\r\n').split('\n')[-1]
             indent = '' if last.startswith(('from ', 'import ')) else _indent_of(last)
             end = idx + len(anchor)
-            text = text[:end] + _fence(code, indent, nl) + text[end:]
+            text = text[:end] + _fence(code, indent, nl, mark) + text[end:]
     return text, missing
 
 
-def _strip_hooks(text):
-    return _HOOK_RE.sub('', text)
+def _strip_hooks(text, marks=('LUCENT',)):
+    for mark in marks:
+        text = _MARKS[mark].sub('', text)
+    return text
 
 
 def _load_py(path):
@@ -363,7 +417,7 @@ def apply(addon_path, profile):
         for rel, hooks in by_file.items():
             path = os.path.join(addon_path, rel)
             if not os.path.isfile(path):
-                if not all(len(h) > 4 and h[4] == 'optional' for h in hooks):
+                if not all('optional' in h[4:] for h in hooks):
                     missing.append(rel)
                 continue
             text, crlf = _load_py(path)
@@ -443,13 +497,19 @@ def revert(addon_path, profile):
             changed += 1
         else:
             problems.append(name)
-    for rel in sorted({h[0] for h in spec['hooks']} | set(spec.get('cleanup', ()))):
+    marks_of = {}
+    for h in spec['hooks']:
+        marks_of.setdefault(h[0], set()).add(_mark(h))
+    for rel in spec.get('cleanup', ()):
+        marks_of.setdefault(rel, set()).add('LUCENT')
+    for rel in sorted(marks_of):
         path = os.path.join(addon_path, rel)
         if not os.path.isfile(path):
             continue
         text, crlf = _load_py(path)
-        if HOOK_OPEN in text:
-            _save_py(path, _strip_hooks(text), crlf)
+        new = _strip_hooks(text, marks_of[rel])
+        if new != text:
+            _save_py(path, new, crlf)
             changed += 1
     if problems:
         return False, ('[%s] Glass theme: no stock copy of %s – reinstall %s to restore it'
