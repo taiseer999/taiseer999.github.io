@@ -1,3 +1,11 @@
+v4.11.2  (2026-11-19)
+- Search All: the service logos (Real-Debrid, AllDebrid, Premiumize, TorBox,
+  Offcloud, EasyNews, EasyDebrid) are in colour - on the stream cards and on
+  the service filter chips. They were the black & white providers_bw set
+  (4.8.58), tinted grey on the chips. Now the colour lucent/providers set,
+  untinted, in both list views (tools/gen_lucent.py regenerated
+  ab_search.xml). The add-ons' own Lucent source windows are unchanged
+  (their "Colored resolution & service icons" switch still decides there).
 v4.11.1  (2026-11-19)
 - Search All: Premiumize results were missing for anyone with two debrid
   services. Rows were merged by torrent hash alone, so a release cached on

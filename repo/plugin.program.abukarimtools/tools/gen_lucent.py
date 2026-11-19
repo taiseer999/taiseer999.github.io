@@ -1921,7 +1921,7 @@ def ab_card(state):
                             <label>[B]$INFO[ListItem.Property(abs.svc)][/B]</label>
                             <visible>!String.IsEmpty(ListItem.Property(abs.svc)) + String.IsEmpty(ListItem.Property(abs.svcicon))</visible>
                         </control>''' % ({'icon': 'FFFFFFFF', 'pill': '2EFFFFFF'} if state == 'active'
-                           else {'icon': 'E6FFFFFF', 'pill': '14FFFFFF'})
+                           else {'icon': 'FFFFFFFF', 'pill': '14FFFFFF'})    # 4.11.2: colour logos at full strength
     return xml.replace(marker, svc + _ab_tags(state == 'active') + marker, 1)
 
 
@@ -1982,7 +1982,7 @@ def ab_chip(focused):
                         <texture>$INFO[ListItem.Property(abs.chipicon)]</texture>
                         <colordiffuse>%s</colordiffuse>
                         <visible>!String.IsEmpty(ListItem.Property(abs.chipicon))</visible>
-                    </control>''' % cc   # 4.8.58: B&W logo, dark on the white chip
+                    </control>''' % 'FFFFFFFF'   # 4.11.2: colour logo, untinted (was B&W, 4.8.58)
     return '''%(bg)s%(dots)s
                     <control type="image">
                         <left>16</left>
