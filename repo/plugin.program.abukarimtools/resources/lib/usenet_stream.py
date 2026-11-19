@@ -49,12 +49,32 @@ import xml.etree.ElementTree as ET
 from collections import OrderedDict
 from urllib.parse import quote, unquote, urlencode, urlsplit, parse_qs
 
-import xbmc
-import xbmcgui
-import xbmcvfs
+try:
+    import xbmc
+    import xbmcgui
+    import xbmcvfs
+    _IN_KODI = True
+except ImportError:                       # 4.11.6: the NZB server as its own process (_serve_main)
+    import sys as _sys
+    import types as _types
+    _IN_KODI = False
+    xbmc = _types.SimpleNamespace(LOGDEBUG=0, LOGINFO=1, LOGWARNING=2, LOGERROR=3)
+
+    def _child_log(msg, level=1):
+        if level < 1:
+            return
+        try:
+            _sys.stdout.write('LOG %d %s\n' % (level, msg))
+            _sys.stdout.flush()
+        except Exception:
+            pass                          # Kodi gone - the parent check ends this process
+    xbmc.log = _child_log
+    xbmcgui = None
+    xbmcvfs = _types.SimpleNamespace(translatePath=lambda p: p)
 
 ADDON_ID = 'plugin.program.abukarimtools'
-_DIR = xbmcvfs.translatePath('special://profile/addon_data/%s/' % ADDON_ID)
+_DIR = (xbmcvfs.translatePath('special://profile/addon_data/%s/' % ADDON_ID) if _IN_KODI
+        else os.environ.get('ABK_DATA', '.'))
 CONFIG = os.path.join(_DIR, 'usenet.json')
 NZB_DIR = os.path.join(_DIR, 'nzb')
 HOST = '127.0.0.1'
@@ -1214,17 +1234,127 @@ class Server(object):
 _server = [None]
 
 
+# ── 4.11.6: the server runs as its OWN Python process when the box has a
+# python3 (CoreELEC / LibreELEC do; macOS with the Command Line Tools or
+# Homebrew). Inside Kodi every add-on shares one Python lock (GIL), and Kodi's
+# xbmcvfs Stat / File calls keep it while they wait on the network: an add-on
+# that Stats the playing 127.0.0.1 URL froze the in-process server for 30 s
+# and Kodi stopped the video (kodi.log 2026-11-19 22:28:42-22:29:12,
+# "CCurlFile::Stat ... Timeout was reached" x3 after "stream stalled"). Out of
+# process the server never waits for Kodi's Python. In-process stays as the
+# fallback when no python3 is found.
+
+def _python():
+    import shutil
+    import sys
+    cands = []
+    if sys.platform == 'darwin':
+        cands += ['/opt/homebrew/bin/python3', '/usr/local/bin/python3',
+                  '/Library/Developer/CommandLineTools/usr/bin/python3']   # not /usr/bin: its stub may ask to install Xcode
+    else:
+        cands += ['/usr/bin/python3', '/usr/local/bin/python3', shutil.which('python3') or '']
+    import subprocess
+    for c in cands:
+        if not c or not os.path.isfile(c) or not os.access(c, os.X_OK):
+            continue
+        try:
+            out = subprocess.run([c, '-I', '-c', 'import ssl, http.server, xml.etree.ElementTree; print(1)'],
+                                 capture_output=True, timeout=20)
+            if out.returncode == 0 and out.stdout.strip() == b'1':
+                return c
+        except Exception:
+            continue
+    return ''
+
+
+class _External(object):
+    """The NZB server process, seen from service.py."""
+
+    def __init__(self, proc):
+        self.proc = proc
+
+    def stop(self):
+        try:
+            self.proc.terminate()
+            self.proc.wait(5)
+        except Exception:
+            try:
+                self.proc.kill()
+            except Exception:
+                pass
+
+
+def _start_external():
+    import subprocess
+    py = _python()
+    if not py:
+        _log('no python3 on this system - NZB server inside Kodi', xbmc.LOGWARNING)
+        return None
+    env = dict(os.environ, ABK_DATA=_DIR, PYTHONUNBUFFERED='1')
+    proc = subprocess.Popen([py, '-I', os.path.abspath(__file__), '--serve'], stdin=subprocess.DEVNULL,
+                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=env, close_fds=True)
+    first = {}
+
+    def reader():
+        for raw in proc.stdout:
+            line = raw.decode('utf-8', 'replace').rstrip('\n')
+            if line.startswith('PORT '):
+                first['port'] = int(line[5:])
+            elif line.startswith('LOG '):
+                try:
+                    lvl, msg = line[4:].split(' ', 1)
+                    xbmc.log(msg, int(lvl))             # already '[AbukarimTools Usenet] ...'
+                except ValueError:
+                    xbmc.log('[AbukarimTools Usenet] %s' % line, xbmc.LOGINFO)
+            elif line.strip():
+                xbmc.log('[AbukarimTools Usenet] server: %s' % line, xbmc.LOGWARNING)
+        code = proc.wait()
+        if _server[0] is not None and getattr(_server[0], 'proc', None) is proc:
+            _log('NZB server process ended (%s) - restarting it inside Kodi' % code, xbmc.LOGWARNING)
+            _server[0] = None
+            _home().clearProperty(PORT_PROP)
+            _start_inside()
+
+    threading.Thread(target=reader, name='abk-nzb-proc', daemon=True).start()
+    for _ in range(100):
+        if 'port' in first or proc.poll() is not None:
+            break
+        time.sleep(0.1)
+    if 'port' not in first:
+        _log('NZB server process did not start (%s)' % py, xbmc.LOGWARNING)
+        try:
+            proc.kill()
+        except Exception:
+            pass
+        return None
+    _server[0] = _External(proc)
+    _log('NZB server on %s:%d (own process, %s, pid %d)' % (HOST, first['port'], py, proc.pid))
+    return first['port']
+
+
+def _start_inside():
+    s = Server()
+    number = s.start()
+    _server[0] = s
+    _home().setProperty(PORT_PROP, str(number))
+    _log('NZB server on %s:%d (inside Kodi)' % (HOST, number))
+    return number
+
+
 def start(monitor=None):
     """service.py: the NZB server for the rest of the session."""
     if _server[0] is not None:
         return True
+    _clean_nzbs()
     try:
-        s = Server()
-        number = s.start()
-        _server[0] = s
-        _home().setProperty(PORT_PROP, str(number))
-        _log('NZB server on %s:%d' % (HOST, number))
-        _clean_nzbs()
+        number = _start_external()
+        if number:
+            _home().setProperty(PORT_PROP, str(number))
+            return True
+    except Exception as e:
+        _log('NZB server process failed: %s' % e, xbmc.LOGWARNING)
+    try:
+        _start_inside()
         return True
     except Exception as e:
         _log('NZB server not started: %s' % e, xbmc.LOGERROR)
@@ -1708,3 +1838,30 @@ def run():
             elif act == 2:
                 idxs.remove(i)
                 save_config(cfg)
+
+
+# ───────────────────────── the server process (python3 usenet_stream.py --serve) ─────────────────────────
+
+def _serve_main():
+    """Runs outside Kodi: ABK_DATA = AB Tools' addon_data folder (usenet.json,
+    nzb/). Ends when Kodi (the parent) ends."""
+    import signal
+    parent = os.getppid()
+    s = Server()
+    number = s.start()
+    print('PORT %d' % number, flush=True)
+    stop = threading.Event()
+    signal.signal(signal.SIGTERM, lambda *a: stop.set())
+    while not stop.wait(3):
+        if os.getppid() != parent:
+            break
+    try:
+        s.stop()
+    except Exception:
+        pass
+
+
+if __name__ == '__main__' and not _IN_KODI:
+    import sys as _s
+    if '--serve' in _s.argv:
+        _serve_main()

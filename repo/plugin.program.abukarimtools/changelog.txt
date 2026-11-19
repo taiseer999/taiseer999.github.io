@@ -1,3 +1,17 @@
+v4.11.6  (2026-11-19)
+- Usenet: a stream stopped after a few seconds (kodi.log 2026-11-19 22:28,
+  The Odyssey 2160p remux, 82.92 GB / 115933 articles: playback started,
+  "stream stalled" 6 s later, then an add-on's CCurlFile::Stat of the
+  127.0.0.1 URL timed out 3 x 10 s and Kodi closed the player). Kodi's
+  xbmcvfs Stat / File calls keep the Python lock (GIL) that every add-on
+  shares while they wait on the network, and the NZB server ran on Python
+  threads inside Kodi - so it could not send a byte for 30 s. The NZB
+  server now runs as its own python3 process (usenet_stream.py --serve,
+  started by service.py; /usr/bin/python3 on CoreELEC, Homebrew or the
+  Command Line Tools python3 on macOS) with its own GIL: no add-on can
+  block it, and decoding gets a core of its own. It logs through Kodi's
+  log as before and ends with Kodi. If no python3 is found it runs inside
+  Kodi as before (logged: "NZB server ... (inside Kodi)").
 v4.11.5  (2026-11-19)
 - Usenet: Kodi could hang when a Usenet stream started (AM9 Pro, CoreELEC
   22 Piers canary 20261118: kodi.bin idle, the main thread and ~20 Python
