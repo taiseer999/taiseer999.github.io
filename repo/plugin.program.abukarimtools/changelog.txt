@@ -1,3 +1,17 @@
+v4.11.4  (2026-11-19)
+- Search All / Usenet: kodi.log (macOS, Kodi 22 RC2) had no Usenet line at
+  all and no "[AbukarimTools Service] started" - Kodi had not launched the
+  AB Tools service, so the local NZB server was not running either.
+  * Search All opened on its own (RunPlugin mode=ab_search from a context
+    menu or TMDbHelper) now starts the service when it is missing, like the
+    menu does (_ensure_service).
+  * Playing an NZB with no NZB server: asks the service to start, waits up
+    to 10 s, else runs the server inside the playing script and keeps it up
+    until playback stops.
+  * The log says why Usenet is not searched: "Usenet: not searched - needs a
+    news server AND a Newznab indexer ... N server(s), M indexer(s)". The
+    Usenet source is only listed once both are set in Mods > Search All:
+    Usenet.
 v4.11.3  (2026-11-19)
 - Search All: no more lag with thousands of streams. kodi.log 2026-11-19
   (The Odyssey / Spider-Man: Fen Light 1111 + Umbrella 1494 + Red Light 1369

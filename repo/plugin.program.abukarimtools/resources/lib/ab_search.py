@@ -170,7 +170,12 @@ def _supported(key, aid):
         return local_folders.configured()
     if key == 'nn':                         # 4.11.0: a news server and an indexer
         from resources.lib import usenet_stream
-        return usenet_stream.configured()
+        ok = usenet_stream.configured()
+        if not ok:                          # 4.11.4: say why it is not searched
+            _log('Usenet: not searched - needs a news server AND a Newznab indexer '
+                 '(Mods > Search All: Usenet): %d server(s), %d indexer(s)'
+                 % (len(usenet_stream.providers()), len(usenet_stream.indexers())))
+        return ok
     try:
         rel, mark = _SUPPORT[key]
         with open(os.path.join(_addon_dir(aid), rel), 'r', encoding='utf-8', errors='replace') as f:

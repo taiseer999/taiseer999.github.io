@@ -1435,14 +1435,55 @@ _ERRORS = {'compressed': 32330, 'encrypted': 32331, 'incomplete': 32332, 'no pro
            'no video found': 32334, 'no video in the RAR set': 32334, 'not a RAR volume': 32334}
 
 
+def _local_server():
+    """4.11.4: the service is not running (Kodi skipped it at boot - seen on
+    macOS): ask it to start, wait a little, else run a server in this script
+    and keep the script alive while the release plays (_hold)."""
+    number = _port()
+    if number:
+        return number, None
+    home = _home()
+    if not home.getProperty('abukarimtools.service.alive.kick'):
+        home.setProperty('abukarimtools.service.alive.kick', '1')
+        _log('service not running - starting it', xbmc.LOGWARNING)
+        xbmc.executebuiltin('RunPlugin(plugin://%s/?run=service)' % ADDON_ID)
+    mon = xbmc.Monitor()
+    for _ in range(40):                     # the service starts the server within seconds
+        if mon.waitForAbort(0.25):
+            break
+        number = _port()
+        if number:
+            return number, None
+    own = Server()
+    number = own.start()
+    _log('no service - NZB server in this script on port %d' % number, xbmc.LOGWARNING)
+    return number, own
+
+
+def _hold(own):
+    """Keep a script-owned server up while Kodi plays from it."""
+    mon = xbmc.Monitor()
+    player = xbmc.Player()
+    try:
+        for _ in range(240):                # up to 60 s for playback to start
+            if player.isPlaying() or mon.waitForAbort(0.25):
+                break
+        while player.isPlaying() and not mon.waitForAbort(1):
+            pass
+    finally:
+        own.stop()
+        _log('script NZB server stopped')
+
+
 def play_nzb(link, media, title='', servers=None, meta=None):
     """Open the NZB on the local server and play it. False = not played
     (Search All shows the results again)."""
     from resources.lib.i18n import T
-    number = _port()
-    if not number:
+    try:
+        number, own = _local_server()
+    except Exception as e:
+        _log('NZB server not available: %s' % e, xbmc.LOGWARNING)
         xbmcgui.Dialog().notification('AB Search All', T(32335), xbmcgui.NOTIFICATION_WARNING, 5000)
-        _log('the NZB server is not running', xbmc.LOGWARNING)
         return False
     if not servers and not can_play():
         xbmcgui.Dialog().ok('AB Search All', T(32333))
@@ -1488,9 +1529,13 @@ def play_nzb(link, media, title='', servers=None, meta=None):
     if result.get('cancel') and not result.get('ok'):
         home.clearProperty(BUSY_PROP)
         _log('cancelled while opening')
+        if own:
+            threading.Thread(target=own.stop, daemon=True).start()
         return False
     if not result.get('ok'):
         home.clearProperty(BUSY_PROP)
+        if own:
+            own.stop()
         err = result.get('error') or 'failed'
         _log('not playable: %s %s' % (err, result.get('detail') or ''), xbmc.LOGWARNING)
         msg = T(_ERRORS[err]) if err in _ERRORS else T(32338) % (result.get('detail') or err)
@@ -1501,9 +1546,15 @@ def play_nzb(link, media, title='', servers=None, meta=None):
     from resources.lib import local_folders
     item = {'abk_loc': {'path': url}, 'display_name': title or result.get('name'), 'name': result.get('name')}
     try:
-        return local_folders.play(item, media, meta)
+        ok = local_folders.play(item, media, meta)
     finally:
         home.clearProperty(BUSY_PROP)
+    if own:
+        if ok:
+            _hold(own)
+        else:
+            own.stop()
+    return ok
 
 
 def play(item, media, meta=None):

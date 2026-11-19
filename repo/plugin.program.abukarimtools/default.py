@@ -609,6 +609,7 @@ def router():
         from resources.lib import lucent_toggle
         lucent_toggle.run()
     elif mode == 'ab_search':
+        _ensure_service()       # 4.11.4: Search All alone (from a context menu) also starts the service
         from resources.lib import ab_search
         ab_search.run(params)
     elif mode == 'font_scale':
