@@ -1,3 +1,16 @@
+v4.11.3  (2026-11-19)
+- Search All: no more lag with thousands of streams. kodi.log 2026-11-19
+  (The Odyssey / Spider-Man: Fen Light 1111 + Umbrella 1494 + Red Light 1369
+  sources) showed "refresh ran 9.4s / 11.5s after the data arrived": every
+  time an add-on answered, every stream card was worked out again from
+  scratch. Now each card's properties are built once and reused by every
+  later refresh (measured: 2.9 s -> 0.02 s for 3974 rows after the first
+  build), and lucent_theme._fit measures a title in one pass instead of
+  once per cut character (the first build is twice as fast; same output -
+  checked against the old code on 30000 random titles). The add-ons' own
+  Lucent source windows get the faster _fit too.
+- Search All: the source grid under the plot lists the add-ons only. The
+  scraper / site chips (Torrentio, Comet, RD Cloud ...; 4.10.6) are left out.
 v4.11.2  (2026-11-19)
 - Search All: the service logos (Real-Debrid, AllDebrid, Premiumize, TorBox,
   Offcloud, EasyNews, EasyDebrid) are in colour - on the stream cards and on

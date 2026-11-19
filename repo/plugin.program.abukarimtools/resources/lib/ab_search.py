@@ -1336,6 +1336,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         self.runtime = 0              # minutes, from TMDb: bitrate = size / running time
         self.filters = []            # filter menu (RIGHT / "Filter" chip): [{'kind', 'value', 'label'}]
         self._badge_cache = {}
+        self._props_cache = {}         # 4.11.3: a row's card properties, built once
         self.expanded = _load_expanded()   # 4.6.7: last view is kept
         self._dirty = False           # 4.6.13: new data waiting for the dialog thread
         self._dirty_at = 0.0
@@ -1629,13 +1630,9 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 defs.append((name, key, 'failed', '×'))
             else:
                 defs.append((name, key, 'off', '—'))
-        sites = [(n, '', 'done', str(c)) for n, c in
-                 sorted(source_breakdown(self.session).items(), key=lambda kv: (-kv[1], kv[0].lower()))]
-        room = max(_SRC_SLOTS - len(defs), 0)
-        if len(sites) > room > 0:          # the last chip sums up the rest
-            rest = sites[room - 1:]
-            sites = sites[:room - 1] + [(T(30879) % len(rest), '', 'done', str(sum(int(r[3]) for r in rest)))]
-        return defs + sites[:room]
+        # 4.11.3: add-ons only - the scraper / site chips (Torrentio, Comet ...)
+        # crowded the grid with 1000s of streams and are left out
+        return defs[:_SRC_SLOTS]
 
     def _sources(self):
         """Dialog thread: fill / update the source grid (rebuilt only when the
@@ -1902,10 +1899,24 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             self.setFocusId(self._cid())
 
     def _listitem(self, row):
+        """4.11.3: a card's properties are worked out once per row (same release,
+        same add-ons, same running time) and reused by every later refresh -
+        with 4000 streams Search All rebuilt every card each time an add-on
+        answered (kodi.log 2026-11-19: "refresh ran 11.5s after the data arrived")."""
+        item = row['item']
+        ck = (id(item), tuple(k for k, _i in row['refs'][:4]), len(row['refs']), self.runtime)
+        props = self._props_cache.get(ck)
+        if props is None:
+            props = self._card_props(row)
+            self._props_cache[ck] = props
+        # offscreen: a new row, filled before addItems and never changed after
+        li = xbmcgui.ListItem(props.get('lucent.title_full') or '', offscreen=True)
+        li.setProperties(props)
+        return li
+
+    def _card_props(self, row):
         th = _theme()
         item, q = row['item'], row['q']
-        # offscreen: a new row, filled before addItems and never changed after
-        li = xbmcgui.ListItem(_clean(item.get('display_name') or item.get('name')), offscreen=True)
         provider = _provider(item)
         site = _site(item)
         size = _clean(item.get('size_label'))
@@ -1967,8 +1978,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             key = row['refs'][n][0] if n < len(row['refs']) else ''
             props['abs.tag_%d' % (n + 1)] = key
             props['abs.tagtxt_%d' % (n + 1)] = self.tags.get(key, ('', ''))[1] if key else ''
-        li.setProperties(props)
-        return li
+        return props
 
     # ---- input ----
     def onClick(self, cid):

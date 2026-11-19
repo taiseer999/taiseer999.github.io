@@ -2,19 +2,21 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
-   "v": "4.11.2",
+   "v": "4.11.3",
    "from": "4.11.0",
    "en": [
     "Search All: Usenet (Mods) streams releases straight from your own news server - no debrid and no download. Add a news server (or your EasyNews account) and a Newznab indexer, and a Usenet source joins Search All.",
     "AIOStreams Usenet results (NZB streams) now show in Search All and play through the same engine. Seeking works; season packs play the right episode; compressed or password-protected releases are refused with a message.",
     "Premiumize results show in Search All again when a release is also cached on another debrid service: one row per service, and the PM filter chip is back.",
-    "The debrid service logos in Search All (RD, AD, PM, TB, EN ...) are in colour."
+    "The debrid service logos in Search All (RD, AD, PM, TB, EN ...) are in colour.",
+    "Search All stays fast with thousands of streams, and the source grid shows the add-ons only (no scraper chips)."
    ],
    "ar": [
     "يبثّ خيار «البحث الشامل: يوزنت» (التخصيصات) الإصدارات مباشرةً من خادم الأخبار الخاص بك دون خدمة Debrid ودون تنزيل. أضف خادم أخبار (أو حسابك في EasyNews) ومفهرس Newznab، فينضمّ مصدر يوزنت إلى البحث الشامل.",
     "تظهر الآن نتائج يوزنت من AIOStreams (بثّ NZB) في البحث الشامل وتُشغَّل بالمحرّك نفسه. يعمل التقديم والترجيع، وتُشغَّل الحلقة الصحيحة من حزم المواسم، وتُرفض الإصدارات المضغوطة أو المحمية بكلمة مرور مع رسالة توضّح السبب.",
     "تظهر نتائج Premiumize في البحث الشامل مجددًا عندما يكون الإصدار مخزّنًا أيضًا في خدمة Debrid أخرى: صفّ لكل خدمة، وعاد زرّ التصفية PM.",
-    "صارت شعارات خدمات Debrid في البحث الشامل (RD وAD وPM وTB وEN وغيرها) ملوّنة."
+    "صارت شعارات خدمات Debrid في البحث الشامل (RD وAD وPM وTB وEN وغيرها) ملوّنة.",
+    "يبقى البحث الشامل سريعًا مع آلاف المصادر، وتعرض شبكة المصادر الإضافات فقط دون أزرار أدوات الكشط."
    ]
   },
   {

@@ -157,22 +157,52 @@ def lucent_sort(results, meta=None):
 _TITLE_PX, _META_PX = 690, 690
 
 
-def _px(text):
-	w = 0.0
-	for ch in text:
-		if ch in ' .,:;|\'!': w += 7
-		elif ch in '-_()[]/': w += 10
-		elif ch.isdigit(): w += 15.5
-		elif ch.isupper(): w += 17
-		elif ch == '·': w += 8
-		else: w += 13.5
+_CW = {}
+
+
+def _cw(ch):
+	w = _CW.get(ch)
+	if w is None:
+		if ch in ' .,:;|\'!': w = 7
+		elif ch in '-_()[]/': w = 10
+		elif ch.isdigit(): w = 15.5
+		elif ch.isupper(): w = 17
+		elif ch == '·': w = 8
+		else: w = 13.5
+		_CW[ch] = w
 	return w
 
 
+def _px(text):
+	w = 0.0
+	for ch in text:
+		w += _CW[ch] if ch in _CW else _cw(ch)
+	return w
+
+
+_FIT = {}
+
+
 def _fit(text, limit):
-	if _px(text) <= limit: return text
-	while text and _px(text + '…') > limit: text = text[:-1]
-	return text.rstrip(' .-_') + '…'
+	# 4.11.3: one pass over the text (was: measure the whole text again after
+	# each character cut - most of Search All's refresh time with 4000 rows).
+	# Same result: the longest start that still fits with the ellipsis.
+	key = (text, limit)
+	out = _FIT.get(key)
+	if out is not None: return out
+	if _px(text) <= limit:
+		out = text
+	else:
+		room = limit - _cw('…')
+		w, n = 0.0, 0
+		for ch in text:
+			w += _CW[ch] if ch in _CW else _cw(ch)
+			if w > room: break
+			n += 1
+		out = text[:n].rstrip(' .-_') + '…'
+	if len(_FIT) > 20000: _FIT.clear()
+	_FIT[key] = out
+	return out
 
 
 # Resolution flag (Arctic Fuse 3 media/flags/color/resolution) per quality.
