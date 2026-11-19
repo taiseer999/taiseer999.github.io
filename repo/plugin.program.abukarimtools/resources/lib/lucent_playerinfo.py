@@ -58,7 +58,7 @@ def info(name):
 DV2_NAME = re.compile(r"(?i)(?<![a-z0-9])(?:dv2|dovi[ ._-]?2|dolby[ ._-]?vision[ ._-]?2)(?![a-z0-9])")
 
 
-def bit_depth(hdr="", detail="", layer=""):
+def bit_depth(hdr="", detail="", layer="", name=""):
     """4.9.6: video bit depth, 0 when unknown. Same sources as the PPI and
     in this order: Kodi 22 video.bitdepth, the Amlogic pixel format, the
     generic pixel format (p010 / yuv420p10le / ...). HDR transfer (PQ, HLG,
@@ -80,6 +80,16 @@ def bit_depth(hdr="", detail="", layer=""):
             if re.search(r"\b(nv12|yuv420p|yuvj420p|rgb24|bgra|8bit)\b", f):
                 n = 8
                 break
+    if not n and name:
+        # 4.10.9: nothing measured (VideoToolbox, most non-Amlogic players) -
+        # the release name: "10bit", "12-bit", "Hi10P"; DV FEL is 12-bit
+        m = re.search(r"(?i)(?<![a-z0-9])(12|10|8)[ ._-]?bits?(?![a-z0-9])", name)
+        if m:
+            n = int(m.group(1))
+        elif re.search(r"(?i)(?<![a-z0-9])hi10p?(?![a-z0-9])", name):
+            n = 10
+        if re.search(r"(?i)(?<![a-z0-9])fel(?![a-z0-9])", name) and (hdr or "").lower() == "dolbyvision":
+            n = max(n, 12)
     h = (hdr or "").lower()
     if h in ("hdr10", "hdr10plus", "hlg", "dolbyvision") and n < 10:
         n = 10
@@ -337,7 +347,7 @@ def tick():
     prof = re.search(r"(\d+)", detail or "")
     layer = "FEL" if "FEL" in (detail or "").upper() else "MEL" if "MEL" in (detail or "").upper() else ""
     pix = info("Player.Process(pixformat)")
-    bits = bit_depth(hdr, detail, layer)
+    bits = bit_depth(hdr, detail, layer, info("Player.Filename") + " " + info("Player.FilenameAndPath"))
     ten = bits >= 10
     vcodec = info("VideoPlayer.VideoCodec").lower()
     vname = VCODEC.get(vcodec, vcodec.upper())
