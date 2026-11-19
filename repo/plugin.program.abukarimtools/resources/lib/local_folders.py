@@ -263,6 +263,19 @@ def play(item, media, meta=None):
     art = {k: meta[k] for k in ('fanart', 'clearlogo', 'poster', 'thumb') if meta.get(k)}
     if art:
         li.setArt(art)
+    if path.startswith('http://127.0.0.1:'):
+        # 4.11.5: AB Tools' own Usenet server (usenet_stream.py) runs on Python
+        # threads inside Kodi. Without these two calls Kodi's MAIN thread asks
+        # the URL for its type first (a blocking HTTP HEAD while it holds the
+        # GUI lock) - a Python thread that holds the shared GIL and waits for
+        # that GUI lock then blocks the server thread that has to answer:
+        # Kodi hangs (CoreELEC 2026-11-19: main thread + ~20 Python threads
+        # stuck in futex_lock_pi, CPU idle, right after a Usenet pick).
+        ext = os.path.splitext(path.split('?')[0].lower())[1]
+        li.setMimeType({'.mp4': 'video/mp4', '.m4v': 'video/mp4', '.avi': 'video/x-msvideo',
+                        '.ts': 'video/mp2t', '.m2ts': 'video/mp2t', '.webm': 'video/webm',
+                        '.mov': 'video/quicktime'}.get(ext, 'video/x-matroska'))
+        li.setContentLookup(False)
     _log('play: %s' % path)
     xbmc.Player().play(path, li)
     return True

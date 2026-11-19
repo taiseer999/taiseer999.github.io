@@ -1,3 +1,14 @@
+v4.11.5  (2026-11-19)
+- Usenet: Kodi could hang when a Usenet stream started (AM9 Pro, CoreELEC
+  22 Piers canary 20261118: kodi.bin idle, the main thread and ~20 Python
+  threads - AB Tools, TMDbHelper, TinyPPI - waiting in futex_lock_pi, i.e.
+  on Kodi's own locks, after a Usenet pick). Kodi's main thread asked the
+  127.0.0.1 stream URL for its type (blocking HTTP HEAD) before playing,
+  and the NZB server that has to answer runs on Python threads inside Kodi
+  - a lock-order deadlock with Python threads waiting for the GUI. The
+  play item now carries its MIME type and setContentLookup(False), so the
+  main thread never calls the in-process server; only the player thread
+  reads from it (local_folders.play, used by Usenet).
 v4.11.4  (2026-11-19)
 - Search All / Usenet: kodi.log (macOS, Kodi 22 RC2) had no Usenet line at
   all and no "[AbukarimTools Service] started" - Kodi had not launched the
