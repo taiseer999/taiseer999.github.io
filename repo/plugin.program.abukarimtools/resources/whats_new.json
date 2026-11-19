@@ -3,6 +3,18 @@
  "entries": [
   {
    "v": "4.10.9",
+   "from": "4.10.8",
+   "en": [
+    "AF3: Default OSD (Mods > AF3 changes) brings back upstream Arctic Fuse 3's info line: the item details as outlined tags and the star rating on a solid pill, with the Plain text / Pill choice in Skin settings > Information. Needs AF3 50.11.87 or newer.",
+    "POV plays full Blu-ray disc releases (BDMV with .m2ts files) from debrid: the movie's main feature plays, and the Disc Menu button can reopen it as a disc."
+   ],
+   "ar": [
+    "يعيد خيار «AF3: الواجهة الافتراضية للمشغّل» (التخصيصات > تغييرات AF3) سطر المعلومات كما في Arctic Fuse 3 الأصلي: تفاصيل العنصر وسومًا محدّدة الإطار، والتقييم بالنجوم على قرص مصمت، مع خيار «نص عادي / أقراص» في إعدادات الواجهة > المعلومات. يتطلّب AF3 بالإصدار 50.11.87 أو أحدث.",
+    "يشغّل POV إصدارات أقراص Blu-ray الكاملة (BDMV بملفات .m2ts) من خدمات الديبريد: يُشغَّل الفيلم الرئيسي، ويمكن إعادة فتحه كقرص من زر قائمة القرص."
+   ]
+  },
+  {
+   "v": "4.10.7",
    "from": "4.8.94",
    "en": [
     "Search All searches your own folders too: on this device or on the network (SMB, NFS). Add, rename, re-point or remove them in Mods > Search All: my folders.",

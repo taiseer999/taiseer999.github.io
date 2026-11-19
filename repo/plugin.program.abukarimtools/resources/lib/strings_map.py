@@ -968,6 +968,14 @@ STRINGS = {
     32306: ('Choose the folder', 'اختر المجلد'),
     32307: ('Browse sources (add a network location there)', 'تصفّح المصادر (ومنها إضافة موقع شبكة)'),
     32308: ('Change the path', 'تغيير المسار'),
+    # ---- 4.10.9: AF3 Default OSD (32309-32313) ----
+    32309: ('AF3: Default OSD', 'AF3: الواجهة الافتراضية للمشغّل'),
+    32310: ('Upstream Arctic Fuse 3 look for the info line: the item details as outlined tags and the star rating on a solid pill, with the Plain text / Pill choice in Skin settings > Information.',
+            'مظهر Arctic Fuse 3 الأصلي لسطر المعلومات: تفاصيل العنصر وسومًا محدّدة الإطار، والتقييم بالنجوم على قرص مصمت، مع خيار «نص عادي / أقراص» في إعدادات الواجهة > المعلومات.'),
+    32311: ('Default OSD on - the skin reloads', 'الواجهة الافتراضية مفعّلة، وستُعاد تحميل الواجهة'),
+    32312: ('Default OSD off - the skin reloads', 'الواجهة الافتراضية معطّلة، وستُعاد تحميل الواجهة'),
+    32313: ('This needs Arctic Fuse 3 50.11.87 or newer. Update the skin, then try again.',
+            'يتطلّب هذا الخيار Arctic Fuse 3 بالإصدار 50.11.87 أو أحدث. حدّث الواجهة ثم أعد المحاولة.'),
     # ---- 4.7.41: AF3 Plot Text Size (32113-32117) ----
     32113: ('AF3: Plot Text Size', 'AF3: حجم خط القصة'),
     32114: ('Large', 'كبير'),

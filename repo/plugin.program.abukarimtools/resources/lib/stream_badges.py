@@ -68,15 +68,12 @@ def _audio_languages():
     return langs if streams else None
 
 
-def _bits(path=''):
+def _bits():
     try:
         from resources.lib import lucent_playerinfo as lp
         hdr = (xbmc.getInfoLabel('VideoPlayer.HdrType') or '').lower()
-        name = ' '.join(x for x in (urllib.parse.unquote(str(path or '').split('|', 1)[0]),
-                                    xbmc.getInfoLabel('Player.Filename'),
-                                    xbmc.getInfoLabel('VideoPlayer.OriginalTitle')) if x)
         return lp.bit_depth(hdr, xbmc.getInfoLabel('Player.Process(video.source.hdr.type)'),
-                            xbmc.getInfoLabel('Player.Process(amlogic.dv.el)'), name)
+                            xbmc.getInfoLabel('Player.Process(amlogic.dv.el)'))
     except Exception as e:
         _log('bit depth: %s' % e, xbmc.LOGWARNING)
         return 0
@@ -103,7 +100,7 @@ def started(path):
                 langs = _audio_languages()
                 if langs is not None and len(langs) > 1:
                     h.setProperty('abk.lp.multi', '1')
-            b = _bits(path)
+            b = _bits()
             if b and b != bits:
                 bits = b
                 h.setProperty('abk.lp.bits', str(b))

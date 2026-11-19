@@ -3380,3 +3380,23 @@ msgctxt "#32308"
 msgid "Change the path"
 msgstr ""
 
+msgctxt "#32309"
+msgid "AF3: Default OSD"
+msgstr ""
+
+msgctxt "#32310"
+msgid "Upstream Arctic Fuse 3 look for the info line: the item details as outlined tags and the star rating on a solid pill, with the Plain text / Pill choice in Skin settings > Information."
+msgstr ""
+
+msgctxt "#32311"
+msgid "Default OSD on - the skin reloads"
+msgstr ""
+
+msgctxt "#32312"
+msgid "Default OSD off - the skin reloads"
+msgstr ""
+
+msgctxt "#32313"
+msgid "This needs Arctic Fuse 3 50.11.87 or newer. Update the skin, then try again."
+msgstr ""
+

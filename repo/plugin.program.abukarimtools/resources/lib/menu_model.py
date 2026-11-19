@@ -74,7 +74,7 @@ GROUPS = {
     'grp_tabs':   (32277, 32281, [('dplex_toggle', 30010), ('korean_toggle', 30011)]),
     'grp_af3':    (32278, 32282, [('af3_flagstyle', 32230), ('af3_plotright', 30890),
                                   ('af3_plotsize', 32113), ('af3_discmenu', 32102),
-                                  ('af3_trailers', 30430)]),
+                                  ('af3_defaultosd', 32309), ('af3_trailers', 30430)]),
     'grp_lucent': (32279, 32283, [('af3_lucent', 30850), ('af3_lucentplayer', 32080),
                                   ('lucent_from_af3', 32089), ('lucent_theme', 30800),
                                   ('ab_glass', 32216)]),
@@ -110,6 +110,7 @@ ICON_FILES = {
     'af3_plotright':  'resources/icons/af3_plotright.png',
     'af3_plotsize':   'resources/icons/af3_plotsize.png',
     'af3_discmenu':   'resources/icons/af3_discmenu.png',
+    'af3_defaultosd': 'resources/icons/af3_lucentplayer.png',
     'af3_flagstyle':  'resources/icons/af3_flagstyle.png',
     'seek_preview':   'resources/icons/seek_preview.png',
     'search_folders': 'resources/icons/sources.png',
@@ -169,7 +170,7 @@ DESC = {
     'af3_plotright': 32182, 'af3_plotsize': 32183, 'af3_discmenu': 32184,
     'seek_preview': 32186, 'font_scale': 32187, 'search_folders': 32294,
     'profile_export': 32188, 'profile_restore': 32189,
-    'ab_glass': 32217, 'af3_flagstyle': 32240,
+    'ab_glass': 32217, 'af3_flagstyle': 32240, 'af3_defaultosd': 32310,
     'grp_tabs': 32281, 'grp_af3': 32282, 'grp_lucent': 32283, 'grp_fonts': 32284,
 }
 
@@ -213,6 +214,9 @@ def switch_state(mode):
         if mode == 'af3_discmenu':
             from resources.lib import af3_discmenu_toggle
             return af3_discmenu_toggle.disc_menu_on()
+        if mode == 'af3_defaultosd':
+            from resources.lib import af3_defaultosd_toggle
+            return af3_defaultosd_toggle.default_osd_on()
         if mode == 'seek_preview':
             from resources.lib.seek_preview import engine as _sp
             return bool(_sp.load_config()['enabled'])

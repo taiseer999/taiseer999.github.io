@@ -46,6 +46,8 @@ ACTION_MODES = {'skin_switch', 'settings_view', 'first_run', 'abukarimwizard',
                 'af3_plotsize',
                 # 4.7.36: AF3 Disc Menu for ISO Streams (on/off switch)
                 'af3_discmenu',
+                # 4.10.9: AF3 Default OSD (on/off switch)
+                'af3_defaultosd',
                 # 4.8.17: AF3 Classic OSD Flags (on/off switch)
                 # 4.8.68: AF3 OSD Flags Style (picker)
                 'af3_flagstyle',
@@ -583,6 +585,9 @@ def router():
     elif mode == 'af3_discmenu':
         from resources.lib import af3_discmenu_toggle
         af3_discmenu_toggle.run()
+    elif mode == 'af3_defaultosd':
+        from resources.lib import af3_defaultosd_toggle
+        af3_defaultosd_toggle.run()
     elif mode == 'af3_classicflags':        # 4.8.77: retired - now "Off" in OSD Flags Style
         from resources.lib import af3_flagstyle
         af3_flagstyle.run()
