@@ -1,3 +1,12 @@
+v4.11.1  (2026-11-19)
+- Search All: Premiumize results were missing for anyone with two debrid
+  services. Rows were merged by torrent hash alone, so a release cached on
+  Real-Debrid / AllDebrid / TorBox AND Premiumize - two add-on entries with
+  the same hash - kept only the first entry (the add-ons list RD / AD first)
+  and the PM rows and PM chip never showed. The service is now part of the
+  merge key: one row per release per service; the same release on the same
+  service from several add-ons still merges into one row. The source grid
+  still counts a release once per site.
 v4.11.0  (2026-11-19)
 - Search All: Usenet (Mods > Search All: Usenet, new). NZBs stream straight
   from your own news server over NNTP - no debrid, no NzbDAV / AltMount, no

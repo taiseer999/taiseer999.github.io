@@ -1256,13 +1256,22 @@ def source_breakdown(session):
                 continue
             name = _source_name(item)
             if name:
-                found.setdefault(name, set()).add(_row_key(item))
+                found.setdefault(name, set()).add(_row_key(item, service=False))   # a release once per site
     return {k: len(v) for k, v in found.items()}
 
 
-def _row_key(item):
+def _row_key(item, service=True):
+    """4.11.1: the debrid service is part of a release's key. One torrent
+    cached on Real-Debrid AND Premiumize comes back from the add-ons as two
+    entries with the same hash; keyed by the hash alone the second (usually
+    Premiumize - the add-ons list RD / AD first) was merged away, so PM rows
+    and the PM chip never showed for anyone with two services."""
     h = str(item.get('hash') or '').strip().lower()
     if h:
+        if service:
+            code = _service_code(_provider(item))
+            if code:
+                return 'h:%s|%s' % (h, code)
         return 'h:' + h
     return 'n:%s|%s' % (_clean(item.get('name') or item.get('display_name')).lower(), _clean(item.get('size_label')))
 
