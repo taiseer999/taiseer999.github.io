@@ -57,6 +57,8 @@ ACTION_MODES = {'skin_switch', 'settings_view', 'first_run', 'abukarimwizard',
                 'seek_preview',
                 # 4.10.0: Search All - My folders (dialogs only)
                 'search_folders',
+                # 4.11.0: Search All - Usenet (dialogs only)
+                'search_usenet',
                 # 4.6.14: AF3 Streaming Services (dialogs only)
                 'streaming_rows',
                 # 4.6.8: AF3 Lucent Look (Off / Glass / AMOLED picker)
@@ -581,6 +583,9 @@ def router():
     elif mode == 'search_folders':
         from resources.lib import local_folders
         local_folders.run()
+    elif mode == 'search_usenet':           # 4.11.0
+        from resources.lib import usenet_stream
+        usenet_stream.run()
 
     elif mode == 'af3_discmenu':
         from resources.lib import af3_discmenu_toggle

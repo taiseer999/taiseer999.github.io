@@ -1538,6 +1538,16 @@ def main():
         _log('Disc streams failed to start (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
+    # 4.11.0: Usenet for Search All - the 127.0.0.1 NZB server that streams
+    # an NZB straight from the news server (usenet_stream.py). Idles until a
+    # pick asks it to open a release. Fenced.
+    try:
+        from resources.lib import usenet_stream
+        usenet_stream.start(monitor)
+    except Exception:
+        _log('NZB server failed to start (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
     # 4.7.32: AF3 Lucent Player Back keymap follows the toggle / active skin
     # (a skin switch or a skin-settings reset leaves no stale keymap behind).
     try:

@@ -65,6 +65,13 @@ link resolved, its "Searching for streams" / resume screen closed with Back
 or Cancel, nothing left on screen) opens the same results again - same
 search, tab, filters and the row that was picked. Only Back in Search All's
 own window ends the search.
+
+4.11.0 - Usenet (usenet_stream.py) joins the list once Mods > "Search All:
+Usenet" has a news server and a Newznab indexer: the indexers are searched by
+IMDb / TVDb id and a pick streams the NZB straight from the news server
+through AB Tools' local NZB server - no debrid, no download. AIOStreams
+"nzbUrl" streams (its Newznab / Prowlarr / NZBHydra built-ins with no
+streaming service) are kept too and played the same way.
 """
 import gc
 import json
@@ -93,6 +100,7 @@ ADDONS = (('rl', 'plugin.video.redlight', 'Red Light', 'RL'),
           ('aio', 'plugin.video.aiostreams', 'AIOStreams', 'AIO'),
           ('dex', 'plugin.video.dexhub', 'Dex Hub', 'DEX'),
           ('en', 'plugin.video.easynewsx', 'EasyNews', 'EN'),
+          ('nn', '', 'Usenet', 'NN'),            # 4.11.0: NZBs streamed over NNTP (usenet_stream.py)
           ('loc', '', 'My folders', 'MY'))   # 4.10.0: local / SMB / NFS folders (local_folders.py)
 _MODULES = os.path.join('resources', 'lib', 'modules')
 # file that carries the device-select modes (relative to the add-on), and the text that proves it
@@ -160,6 +168,9 @@ def _supported(key, aid):
     if key == 'loc':                        # 4.10.0: no add-on, only the folder list
         from resources.lib import local_folders
         return local_folders.configured()
+    if key == 'nn':                         # 4.11.0: a news server and an indexer
+        from resources.lib import usenet_stream
+        return usenet_stream.configured()
     try:
         rel, mark = _SUPPORT[key]
         with open(os.path.join(_addon_dir(aid), rel), 'r', encoding='utf-8', errors='replace') as f:
@@ -189,6 +200,10 @@ def available_addons():
                 # 4.10.2: one folder shows under its own (renamable) name
                 from resources.lib import local_folders
                 out.append((key, aid, local_folders.display_name(), tag, True))
+            continue
+        if key == 'nn':                     # 4.11.0: listed once a server + an indexer are set
+            if _supported(key, aid):
+                out.append((key, aid, name, tag, True))
             continue
         if not xbmc.getCondVisibility('System.HasAddon(%s)' % aid):
             continue
@@ -267,6 +282,8 @@ class Session(object):
             return self._run_en(name)
         if key == 'loc':
             return self._run_loc(name)
+        if key == 'nn':
+            return self._run_nn(name)
         rid = self.request_id(key)
         if key == 'umb':
             self.umb_media = _english_names(self.media)
@@ -372,6 +389,28 @@ class Session(object):
         with self.lock:
             self.state['loc'] = {'state': 'done' if found else 'failed', 'results': results,
                                  'took': time.time() - t0}
+        listener = self.listener
+        if listener and not self.closed:
+            try:
+                listener()
+            except Exception as e:
+                _log('update failed: %s' % e, xbmc.LOGWARNING)
+
+
+    def _run_nn(self, name):
+        """4.11.0: Usenet - the Newznab indexers, English title and the ids."""
+        t0 = time.time()
+        results, found = [], False
+        try:
+            from resources.lib import usenet_stream
+            results = usenet_stream.search(_english_names(self.media), _en_words, _en_match)
+            found = True
+            _log('%s: %d sources in %.1fs' % (name, len(results), time.time() - t0))
+        except Exception as e:
+            _log('%s: failed after %.1fs - %s' % (name, time.time() - t0, e), xbmc.LOGWARNING)
+        with self.lock:
+            self.state['nn'] = {'state': 'done' if found else 'failed', 'results': results,
+                                'took': time.time() - t0}
         listener = self.listener
         if listener and not self.closed:
             try:
@@ -690,6 +729,11 @@ def _aio_streams(media):
         data = json.loads(r.read().decode('utf-8'))
     streams = (data.get('streams') or []) if isinstance(data, dict) else []
     p2p = _aio_int(addon, 'p2p_handler', 0) > 0
+    try:                                    # 4.11.0: nzbUrl streams play through usenet_stream
+        from resources.lib import usenet_stream
+        nzb_ok = usenet_stream.can_play()
+    except Exception:
+        nzb_ok = False
     out = []
     for st in streams:
         if not isinstance(st, dict):
@@ -698,6 +742,8 @@ def _aio_streams(media):
         if sd.get('type') in ('error', 'statistic'):
             continue
         if st.get('url') or (p2p and st.get('infoHash')):
+            out.append(st)
+        elif st.get('nzbUrl') and (nzb_ok or st.get('servers')):
             out.append(st)
     return out, vid, type_
 
@@ -738,7 +784,8 @@ def _aio_item(st):
             info.append(str(part))
     item = {'name': name, 'display_name': name, 'quality': res, 'size': gb,
             'size_label': ('%.2f GB' % gb) if gb else '', 'scrape_provider': 'external',
-            'debrid': _AIO_SVC.get(sid, sid.title()) if sid else ('P2P' if st.get('infoHash') else ''),
+            'debrid': _AIO_SVC.get(sid, sid.title()) if sid else ('P2P' if st.get('infoHash') else
+                                                                  ('Usenet' if st.get('nzbUrl') else '')),
             'source': sd.get('addon') or 'AIOStreams', 'extraInfo': ' | '.join(info),
             'hash': st.get('infoHash') or (sd.get('torrent') or {}).get('infoHash') or ''}
     if sid and svc.get('cached') is False:
@@ -753,6 +800,13 @@ def _aio_play(session, index):
     data = getattr(session, 'aio_play', None)
     if not data:
         return
+    streams = data.get('streams') or []
+    st = streams[index] if 0 <= index < len(streams) else {}
+    if st.get('nzbUrl') and not st.get('url'):      # 4.11.0: an NZB - streamed here over NNTP
+        from resources.lib import usenet_stream
+        hints = st.get('behaviorHints') or {}
+        title = (st.get('streamData') or {}).get('filename') or hints.get('filename') or ''
+        return usenet_stream.play_nzb(st['nzbUrl'], session.media, title, st.get('servers'))
     path = os.path.join(_DATA, _AIO_ID, 'last_streams.json')
     try:
         os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -1517,7 +1571,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 count = sum(1 for r in self.rows if any(k == key for k, _i in r['refs']))
                 text = T(30820) % count
             elif s['state'] == 'unsupported':
-                text = T(30843) if key == 'aio' else (T(30844) if key == 'en' else T(30829))
+                text = T(30843) if key == 'aio' else (T(30844) if key == 'en' else
+                                                     (T(32317) if key == 'nn' else T(30829)))
             else:
                 text = T(30821)
             # 4.7.40: most streams first, then the add-ons still searching, then
@@ -2315,6 +2370,9 @@ def _after_pick(session, addons, media, picked):
     if key == 'loc':                                 # 4.10.0: play the file itself
         from resources.lib import local_folders
         return local_folders.play(item or {}, media)
+    if key == 'nn':                                  # 4.11.0: the NZB over NNTP
+        from resources.lib import usenet_stream
+        return usenet_stream.play(item or {}, media)
     aid = dict((k, a) for k, a, _n, _t, _ok in addons)[key]
     url = session.url(key, aid, 'play', index)
     _log('play: %s' % url)

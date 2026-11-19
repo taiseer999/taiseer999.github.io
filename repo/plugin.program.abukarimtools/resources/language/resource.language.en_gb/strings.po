@@ -3400,3 +3400,139 @@ msgctxt "#32313"
 msgid "This needs Arctic Fuse 3 50.11.87 or newer. Update the skin, then try again."
 msgstr ""
 
+msgctxt "#32314"
+msgid "Search All: Usenet"
+msgstr ""
+
+msgctxt "#32315"
+msgid "Stream NZBs straight from your own news server (Easynews, Newshosting, Eweka ...) with no debrid and no download: Search All searches your Newznab indexers, and AIOStreams Usenet results play here too. Stored RAR releases work; compressed or password-protected ones cannot be streamed."
+msgstr ""
+
+msgctxt "#32316"
+msgid "Usenet"
+msgstr ""
+
+msgctxt "#32317"
+msgid "No news server or indexer yet"
+msgstr ""
+
+msgctxt "#32318"
+msgid "%d servers, %d indexers"
+msgstr ""
+
+msgctxt "#32319"
+msgid "Add a news server"
+msgstr ""
+
+msgctxt "#32320"
+msgid "Type the server details"
+msgstr ""
+
+msgctxt "#32321"
+msgid "Use my EasyNews account (news.easynews.com)"
+msgstr ""
+
+msgctxt "#32322"
+msgid "Server address (e.g. news.eweka.nl)"
+msgstr ""
+
+msgctxt "#32323"
+msgid "Connect with SSL / TLS on port 563? (recommended)"
+msgstr ""
+
+msgctxt "#32324"
+msgid "Port"
+msgstr ""
+
+msgctxt "#32325"
+msgid "Username"
+msgstr ""
+
+msgctxt "#32326"
+msgid "Password"
+msgstr ""
+
+msgctxt "#32327"
+msgid "Connections"
+msgstr ""
+
+msgctxt "#32328"
+msgid "Newznab address (indexer, Prowlarr or NZBHydra)"
+msgstr ""
+
+msgctxt "#32329"
+msgid "API key"
+msgstr ""
+
+msgctxt "#32330"
+msgid "This release is compressed and cannot be streamed - pick another"
+msgstr ""
+
+msgctxt "#32331"
+msgid "This release is password-protected and cannot be streamed"
+msgstr ""
+
+msgctxt "#32332"
+msgid "This release is incomplete on your news server - pick another"
+msgstr ""
+
+msgctxt "#32333"
+msgid "Add a news server first: Mods > Search All: Usenet"
+msgstr ""
+
+msgctxt "#32334"
+msgid "No video was found in this release"
+msgstr ""
+
+msgctxt "#32335"
+msgid "The AB Tools Usenet server is not running - restart Kodi"
+msgstr ""
+
+msgctxt "#32336"
+msgid "Downloading the NZB..."
+msgstr ""
+
+msgctxt "#32337"
+msgid "Opening the release on the news server..."
+msgstr ""
+
+msgctxt "#32338"
+msgid "Usenet: not playable (%s)"
+msgstr ""
+
+msgctxt "#32339"
+msgid "Test the connection"
+msgstr ""
+
+msgctxt "#32340"
+msgid "%s: the test failed[CR][CR]%s"
+msgstr ""
+
+msgctxt "#32341"
+msgid "%s works"
+msgstr ""
+
+msgctxt "#32342"
+msgid "Add a Newznab indexer"
+msgstr ""
+
+msgctxt "#32343"
+msgid "News server"
+msgstr ""
+
+msgctxt "#32344"
+msgid "Memory cache: %d MB"
+msgstr ""
+
+msgctxt "#32345"
+msgid "The test failed. Keep it anyway?"
+msgstr ""
+
+msgctxt "#32346"
+msgid "Memory cache in MB (32 to 1024)"
+msgstr ""
+
+msgctxt "#32347"
+msgid "Plain (port 119)"
+msgstr ""
+

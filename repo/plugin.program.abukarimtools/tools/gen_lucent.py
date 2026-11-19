@@ -1794,6 +1794,7 @@ AB_ADDONS = (('rl', 'FFE5484D'), ('fl', 'FF3E9BFF'), ('umb', 'FF9B6BFF'), ('pov'
              ('aio', 'FFF5A524'),      # 4.6.32 AIOStreams (orange)
              ('dex', 'FFEC4899'),      # 4.7.13 Dex Hub (pink)
              ('en', 'FF22D3EE'),       # 4.7.16 EasyNews (cyan)
+             ('nn', 'FFFACC15'),       # 4.11.0 Usenet (yellow)
              ('loc', 'FFA3E635'))      # 4.10.0 My folders (lime)
 # 4.10.6: the add-on lines became a source grid (Fen Light+ style): 3 x 7
 # chips under the plot - the add-ons first, then every scraper / site.

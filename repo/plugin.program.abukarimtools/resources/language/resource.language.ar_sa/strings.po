@@ -3400,3 +3400,139 @@ msgctxt "#32313"
 msgid "This needs Arctic Fuse 3 50.11.87 or newer. Update the skin, then try again."
 msgstr "يتطلّب هذا الخيار Arctic Fuse 3 بالإصدار 50.11.87 أو أحدث. حدّث الواجهة ثم أعد المحاولة."
 
+msgctxt "#32314"
+msgid "Search All: Usenet"
+msgstr "البحث الشامل: يوزنت"
+
+msgctxt "#32315"
+msgid "Stream NZBs straight from your own news server (Easynews, Newshosting, Eweka ...) with no debrid and no download: Search All searches your Newznab indexers, and AIOStreams Usenet results play here too. Stored RAR releases work; compressed or password-protected ones cannot be streamed."
+msgstr "بثّ ملفات NZB مباشرةً من خادم الأخبار الخاص بك (Easynews أو Newshosting أو Eweka وغيرها) دون خدمة Debrid ودون تنزيل: يبحث البحث الشامل في مفهرسات Newznab لديك، وتُشغَّل هنا أيضًا نتائج يوزنت من AIOStreams. تعمل الإصدارات المخزّنة في ملفات RAR غير المضغوطة، أمّا المضغوطة أو المحمية بكلمة مرور فلا يمكن بثّها."
+
+msgctxt "#32316"
+msgid "Usenet"
+msgstr "يوزنت"
+
+msgctxt "#32317"
+msgid "No news server or indexer yet"
+msgstr "لا يوجد خادم أخبار أو مفهرس بعد"
+
+msgctxt "#32318"
+msgid "%d servers, %d indexers"
+msgstr "الخوادم: %d، المفهرسات: %d"
+
+msgctxt "#32319"
+msgid "Add a news server"
+msgstr "إضافة خادم أخبار"
+
+msgctxt "#32320"
+msgid "Type the server details"
+msgstr "إدخال بيانات الخادم يدويًا"
+
+msgctxt "#32321"
+msgid "Use my EasyNews account (news.easynews.com)"
+msgstr "استخدام حسابي في EasyNews (news.easynews.com)"
+
+msgctxt "#32322"
+msgid "Server address (e.g. news.eweka.nl)"
+msgstr "عنوان الخادم (مثل news.eweka.nl)"
+
+msgctxt "#32323"
+msgid "Connect with SSL / TLS on port 563? (recommended)"
+msgstr "هل يكون الاتصال عبر SSL / TLS على المنفذ 563؟ (مستحسن)"
+
+msgctxt "#32324"
+msgid "Port"
+msgstr "المنفذ"
+
+msgctxt "#32325"
+msgid "Username"
+msgstr "اسم المستخدم"
+
+msgctxt "#32326"
+msgid "Password"
+msgstr "كلمة المرور"
+
+msgctxt "#32327"
+msgid "Connections"
+msgstr "عدد الاتصالات"
+
+msgctxt "#32328"
+msgid "Newznab address (indexer, Prowlarr or NZBHydra)"
+msgstr "عنوان Newznab (مفهرس أو Prowlarr أو NZBHydra)"
+
+msgctxt "#32329"
+msgid "API key"
+msgstr "مفتاح API"
+
+msgctxt "#32330"
+msgid "This release is compressed and cannot be streamed - pick another"
+msgstr "هذا الإصدار مضغوط ولا يمكن بثّه، فاختر إصدارًا آخر"
+
+msgctxt "#32331"
+msgid "This release is password-protected and cannot be streamed"
+msgstr "هذا الإصدار محمي بكلمة مرور ولا يمكن بثّه"
+
+msgctxt "#32332"
+msgid "This release is incomplete on your news server - pick another"
+msgstr "هذا الإصدار غير مكتمل على خادم الأخبار لديك، فاختر إصدارًا آخر"
+
+msgctxt "#32333"
+msgid "Add a news server first: Mods > Search All: Usenet"
+msgstr "أضف خادم أخبار أولًا: التخصيصات > البحث الشامل: يوزنت"
+
+msgctxt "#32334"
+msgid "No video was found in this release"
+msgstr "لم يُعثر على فيديو في هذا الإصدار"
+
+msgctxt "#32335"
+msgid "The AB Tools Usenet server is not running - restart Kodi"
+msgstr "خادم يوزنت في AB Tools لا يعمل، فأعد تشغيل Kodi"
+
+msgctxt "#32336"
+msgid "Downloading the NZB..."
+msgstr "جارٍ تنزيل ملف NZB..."
+
+msgctxt "#32337"
+msgid "Opening the release on the news server..."
+msgstr "جارٍ فتح الإصدار على خادم الأخبار..."
+
+msgctxt "#32338"
+msgid "Usenet: not playable (%s)"
+msgstr "يوزنت: يتعذّر التشغيل (%s)"
+
+msgctxt "#32339"
+msgid "Test the connection"
+msgstr "اختبار الاتصال"
+
+msgctxt "#32340"
+msgid "%s: the test failed[CR][CR]%s"
+msgstr "%s: فشل الاختبار[CR][CR]%s"
+
+msgctxt "#32341"
+msgid "%s works"
+msgstr "%s يعمل"
+
+msgctxt "#32342"
+msgid "Add a Newznab indexer"
+msgstr "إضافة مفهرس Newznab"
+
+msgctxt "#32343"
+msgid "News server"
+msgstr "خادم أخبار"
+
+msgctxt "#32344"
+msgid "Memory cache: %d MB"
+msgstr "ذاكرة التخزين المؤقت: %d ميغابايت"
+
+msgctxt "#32345"
+msgid "The test failed. Keep it anyway?"
+msgstr "فشل الاختبار. هل تريد الإبقاء عليه رغم ذلك؟"
+
+msgctxt "#32346"
+msgid "Memory cache in MB (32 to 1024)"
+msgstr "ذاكرة التخزين المؤقت بالميغابايت (من 32 إلى 1024)"
+
+msgctxt "#32347"
+msgid "Plain (port 119)"
+msgstr "دون تشفير (المنفذ 119)"
+

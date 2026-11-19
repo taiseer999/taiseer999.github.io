@@ -371,6 +371,16 @@
                         <width>14</width>
                         <height>14</height>
                         <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FFFACC15</colordiffuse>
+                        <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(ListItem.Property(abs.state),searching)">Conditional</animation>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),nn)</visible>
+                    </control>
+                    <control type="image">
+                        <left>14</left>
+                        <top>16</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                         <colordiffuse>FFA3E635</colordiffuse>
                         <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(ListItem.Property(abs.state),searching)">Conditional</animation>
                         <visible>String.IsEqual(ListItem.Property(abs.key),loc)</visible>
@@ -497,6 +507,16 @@
                         <colordiffuse>FF22D3EE</colordiffuse>
                         <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(ListItem.Property(abs.state),searching)">Conditional</animation>
                         <visible>String.IsEqual(ListItem.Property(abs.key),en)</visible>
+                    </control>
+                    <control type="image">
+                        <left>14</left>
+                        <top>16</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FFFACC15</colordiffuse>
+                        <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(ListItem.Property(abs.state),searching)">Conditional</animation>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),nn)</visible>
                     </control>
                     <control type="image">
                         <left>14</left>
@@ -1326,6 +1346,15 @@
                         <width>14</width>
                         <height>14</height>
                         <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FFFACC15</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),nn) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                         <colordiffuse>FFA3E635</colordiffuse>
                         <visible>String.IsEqual(ListItem.Property(abs.key),loc) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
@@ -1465,6 +1494,15 @@
                         <width>14</width>
                         <height>14</height>
                         <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FFFACC15</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),nn) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                         <colordiffuse>FFA3E635</colordiffuse>
                         <visible>String.IsEqual(ListItem.Property(abs.key),loc) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
@@ -1580,6 +1618,15 @@
                         <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                         <colordiffuse>FF22D3EE</colordiffuse>
                         <visible>String.IsEqual(ListItem.Property(abs.key),en) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FFFACC15</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),nn) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
                     <control type="image">
                         <left>16</left>
@@ -1908,6 +1955,15 @@
                             <width>64</width>
                             <height>28</height>
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6FACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),nn)</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A6A3E635</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_1),loc)</visible>
                         </control>
@@ -1984,6 +2040,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A622D3EE</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_2),en)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6FACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),nn)</visible>
                         </control>
                         <control type="image">
                             <left>750</left>
@@ -2074,6 +2139,15 @@
                             <width>64</width>
                             <height>28</height>
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6FACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),nn)</visible>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A6A3E635</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_3),loc)</visible>
                         </control>
@@ -2150,6 +2224,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A622D3EE</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_4),en)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6FACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),nn)</visible>
                         </control>
                         <control type="image">
                             <left>610</left>
@@ -2432,6 +2515,15 @@
                             <width>64</width>
                             <height>28</height>
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6FACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),nn)</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A6A3E635</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_1),loc)</visible>
                         </control>
@@ -2508,6 +2600,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A622D3EE</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_2),en)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6FACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),nn)</visible>
                         </control>
                         <control type="image">
                             <left>750</left>
@@ -2598,6 +2699,15 @@
                             <width>64</width>
                             <height>28</height>
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6FACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),nn)</visible>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A6A3E635</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_3),loc)</visible>
                         </control>
@@ -2674,6 +2784,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A622D3EE</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_4),en)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6FACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),nn)</visible>
                         </control>
                         <control type="image">
                             <left>610</left>
@@ -2967,6 +3086,15 @@
                             <width>64</width>
                             <height>28</height>
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FFFACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),nn)</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>FFA3E635</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_1),loc)</visible>
                         </control>
@@ -3043,6 +3171,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>FF22D3EE</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_2),en)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FFFACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),nn)</visible>
                         </control>
                         <control type="image">
                             <left>750</left>
@@ -3133,6 +3270,15 @@
                             <width>64</width>
                             <height>28</height>
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FFFACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),nn)</visible>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>FFA3E635</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_3),loc)</visible>
                         </control>
@@ -3209,6 +3355,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>FF22D3EE</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_4),en)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FFFACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),nn)</visible>
                         </control>
                         <control type="image">
                             <left>610</left>
@@ -3451,6 +3606,15 @@
                         <width>14</width>
                         <height>14</height>
                         <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FFFACC15</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),nn) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                         <colordiffuse>FFA3E635</colordiffuse>
                         <visible>String.IsEqual(ListItem.Property(abs.key),loc) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
@@ -3590,6 +3754,15 @@
                         <width>14</width>
                         <height>14</height>
                         <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FFFACC15</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),nn) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                         <colordiffuse>FFA3E635</colordiffuse>
                         <visible>String.IsEqual(ListItem.Property(abs.key),loc) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
@@ -3705,6 +3878,15 @@
                         <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
                         <colordiffuse>FF22D3EE</colordiffuse>
                         <visible>String.IsEqual(ListItem.Property(abs.key),en) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left>
+                        <top>19</top>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/dot.png</texture>
+                        <colordiffuse>FFFACC15</colordiffuse>
+                        <visible>String.IsEqual(ListItem.Property(abs.key),nn) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>
                     <control type="image">
                         <left>16</left>
@@ -4031,6 +4213,15 @@
                             <width>64</width>
                             <height>28</height>
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6FACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),nn)</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A6A3E635</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_1),loc)</visible>
                         </control>
@@ -4107,6 +4298,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A622D3EE</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_2),en)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6FACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),nn)</visible>
                         </control>
                         <control type="image">
                             <left>750</left>
@@ -4197,6 +4397,15 @@
                             <width>64</width>
                             <height>28</height>
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6FACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),nn)</visible>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A6A3E635</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_3),loc)</visible>
                         </control>
@@ -4273,6 +4482,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A622D3EE</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_4),en)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6FACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),nn)</visible>
                         </control>
                         <control type="image">
                             <left>610</left>
@@ -4555,6 +4773,15 @@
                             <width>64</width>
                             <height>28</height>
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6FACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),nn)</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A6A3E635</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_1),loc)</visible>
                         </control>
@@ -4631,6 +4858,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A622D3EE</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_2),en)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6FACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),nn)</visible>
                         </control>
                         <control type="image">
                             <left>750</left>
@@ -4721,6 +4957,15 @@
                             <width>64</width>
                             <height>28</height>
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6FACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),nn)</visible>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A6A3E635</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_3),loc)</visible>
                         </control>
@@ -4797,6 +5042,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>A622D3EE</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_4),en)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>A6FACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),nn)</visible>
                         </control>
                         <control type="image">
                             <left>610</left>
@@ -5090,6 +5344,15 @@
                             <width>64</width>
                             <height>28</height>
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FFFACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_1),nn)</visible>
+                        </control>
+                        <control type="image">
+                            <left>820</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>FFA3E635</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_1),loc)</visible>
                         </control>
@@ -5166,6 +5429,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>FF22D3EE</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_2),en)</visible>
+                        </control>
+                        <control type="image">
+                            <left>750</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FFFACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_2),nn)</visible>
                         </control>
                         <control type="image">
                             <left>750</left>
@@ -5256,6 +5528,15 @@
                             <width>64</width>
                             <height>28</height>
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FFFACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_3),nn)</visible>
+                        </control>
+                        <control type="image">
+                            <left>680</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>FFA3E635</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_3),loc)</visible>
                         </control>
@@ -5332,6 +5613,15 @@
                             <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
                             <colordiffuse>FF22D3EE</colordiffuse>
                             <visible>String.IsEqual(ListItem.Property(abs.tag_4),en)</visible>
+                        </control>
+                        <control type="image">
+                            <left>610</left>
+                            <top>49</top>
+                            <width>64</width>
+                            <height>28</height>
+                            <texture border="14">special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/pill42.png</texture>
+                            <colordiffuse>FFFACC15</colordiffuse>
+                            <visible>String.IsEqual(ListItem.Property(abs.tag_4),nn)</visible>
                         </control>
                         <control type="image">
                             <left>610</left>

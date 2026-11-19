@@ -1,3 +1,27 @@
+v4.11.0  (2026-11-19)
+- Search All: Usenet (Mods > Search All: Usenet, new). NZBs stream straight
+  from your own news server over NNTP - no debrid, no NzbDAV / AltMount, no
+  download first. Add a news server (or "Use my EasyNews account" =
+  news.easynews.com:563 with the EasyNews Video login) and one or more
+  Newznab indexers (NZBGeek, NZBFinder, DrunkenSlug, or a Prowlarr / NZBHydra
+  Newznab endpoint). Search All then lists a "Usenet" source (yellow): the
+  indexers are searched by IMDb / TVDb id, title + SxxEyy as a fallback;
+  samples and passworded posts are left out.
+- AIOStreams "nzbUrl" streams (its Newznab / Prowlarr / NZBHydra built-ins
+  without a streaming service) are no longer dropped: they show as Usenet in
+  the AIOStreams rows and a pick plays them through the same engine, with
+  the stream's own "servers" when it carries them.
+- The engine (new usenet_stream.py, a 127.0.0.1 server started by
+  service.py): own NNTP client (Python 3.13+ has no nntplib) with a
+  connection pool per server and failover to the next server on a missing
+  article, fast yEnc decoding, read-ahead and a memory cache (128 MB,
+  settable), ranged reads so seeking works. Plays plain posts, split
+  .mkv.001 posts, STORED RAR4 / RAR5 sets (scene packing, the video read
+  inside the volumes without unpacking) and obfuscated posts (names read
+  from the articles), and the right episode of a season pack. Compressed,
+  7z, password-protected and incomplete releases are refused with a message
+  and the Search All results come back. Strings 32314-32347.
+
 v4.10.9  (2026-11-19)
 - AF3: Default OSD (Mods > AF3 changes, new switch). Taiseer's AF3 50.11.87
   keeps its own info line (plain labels, its own pillbox style) and leaves
