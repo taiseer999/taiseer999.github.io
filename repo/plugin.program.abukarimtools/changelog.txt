@@ -1,3 +1,28 @@
+v4.11.8  (2026-11-20)  [ported from 4.10.12]
+- TMDbHelper (6.22.x) on Kodi 22 RC2: backing out of the player list crashed
+  Kodi (SIGSEGV in CGUIListItem::FreeMemory on the LanguageInvoker thread,
+  from PyGC_Collect at script exit). TMDbHelper returned "lib.player -
+  Failure!" while DialogSelect's closing animation still drew the player
+  ListItems, and the script's exit freed them under the GUI thread. Patched
+  player/dialog/standard.py: after the select it waits until the select
+  dialog has finished closing (max 2 s) before going on.
+
+          [ported from 4.10.11]
+- script.skinvariables multisearch (AF3 search page): the context menu never
+  opened on a result - Python windows skip Kodi's media-window actions and
+  SkinVariables only handles Info there. Patched window.py: ContextMenu /
+  right click on a result opens Information, Play/Open and TMDbHelper's own
+  context actions (Play with, Browse lists, Sync options, Refresh details,
+  Add to library).
+
+          [ported from 4.10.10]
+- AF3: Default OSD now looks like upstream: the details sit on ONE row. With
+  AF3's "Two-line information bar" on (Plot on the Right turns it on) the
+  info line moved to its two-row layout, which keeps the plain labels, so
+  the tags never showed. Switching Default OSD on now also turns
+  InfoBar.TwoRow off, and switching it off restores TwoRow when this switch
+  was the one that cleared it (state in af3_defaultosd.json).
+
 v4.11.6  (2026-11-19)
 - Usenet: a stream stopped after a few seconds (kodi.log 2026-11-19 22:28,
   The Odyssey 2160p remux, 82.92 GB / 115933 articles: playback started,

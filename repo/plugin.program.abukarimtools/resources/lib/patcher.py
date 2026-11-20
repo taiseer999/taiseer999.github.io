@@ -4353,6 +4353,52 @@ def _skinvars_ar_entry(sid, ar):
 
 PATCHES += [_skinvars_ar_entry(_sid, _ar) for _sid, _ar in _SKINVARS_AR_FIX]
 
+# ── TMDbHelper: crash after backing out of the player list (4.10.12) ──
+# Kodi 22 RC2 crashed (SIGSEGV in CGUIListItem::FreeMemory on the
+# LanguageInvoker thread, from PyGC_Collect at script exit) when the player
+# list was cancelled: TMDbHelper returned "lib.player - Failure!" while the
+# DialogSelect closing animation was still drawing the player ListItems, and
+# the script's exit freed them under the GUI thread. The patch waits until
+# the select dialog has finished closing before TMDbHelper goes on.
+PATCHES += [
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'player', 'dialog', 'standard.py'),
+        'not_found_ok': True,
+        'old': '        x = Dialog().select(\n            header or get_localized(32042),\n            [i.listitem for i in players_list],\n            useDetails=detailed\n        )\n',
+        'new': "        x = Dialog().select(\n            header or get_localized(32042),\n            [i.listitem for i in players_list],\n            useDetails=detailed\n        )\n        try:  # ABUKARIM: let the select dialog finish closing before its listitems can be freed\n            import xbmc\n            _monitor = xbmc.Monitor()\n            for _ in range(40):\n                if not xbmc.getCondVisibility('Window.IsVisible(selectdialog)'):\n                    break\n                if _monitor.waitForAbort(0.05):\n                    break\n            xbmc.sleep(150)\n        except Exception:\n            pass\n",
+        'already_patched_check': '# ABUKARIM: let the select dialog finish closing',
+        'description': 'TMDbHelper - wait for the player list to close (Kodi 22 crash)',
+    },
+]
+
+
+# ── script.skinvariables multisearch: context menu on search results (4.10.11) ──
+# Python windows skip Kodi's media-window actions, so a long press / C on a
+# search result did nothing (SkinVariables only handles Info there). The
+# patch opens a menu: Information, Play/Open, and TMDbHelper's own context
+# actions (Play with, Browse lists, Sync options, Refresh details, Add to library).
+PATCHES += [
+    {
+        'addon_id': 'script.skinvariables',
+        'rel_path': os.path.join('resources', 'lib', 'multisearch', 'window.py'),
+        'not_found_ok': True,
+        'old': '        if action_id == xbmcgui.ACTION_SHOW_INFO:\n            window.show_info(self.control_id)\n',
+        'new': '        if action_id == xbmcgui.ACTION_SHOW_INFO:\n            window.show_info(self.control_id)\n        elif action_id in (xbmcgui.ACTION_CONTEXT_MENU, 101):  # ABUKARIM: context menu\n            window.show_context(self.control_id)\n',
+        'already_patched_check': '# ABUKARIM: context menu\n',
+        'description': 'SkinVariables multisearch - context menu key on results',
+    },
+    {
+        'addon_id': 'script.skinvariables',
+        'rel_path': os.path.join('resources', 'lib', 'multisearch', 'window.py'),
+        'not_found_ok': True,
+        'old': '    def stop(self):\n        """Store the search text for the session, drop the queued searches and wait for the running searches."""',
+        'new': '    def show_context(self, control_id):  # ABUKARIM: context menu for search results\n        try:\n            result = self.get_selected_result(control_id)\n        except (IndexError, KeyError):\n            return\n        try:\n            import xbmcaddon\n            item = result.item\n            info = item.infolabels or {}\n            ids = item.uniqueids or {}\n            mediatype = info.get(\'mediatype\') or \'\'\n            tmdb_id = ids.get(\'tmdb\') or \'\'\n            tmdb_type = {\'movie\': \'movie\', \'tvshow\': \'tv\', \'season\': \'tv\', \'episode\': \'tv\', \'set\': \'collection\',\n                         \'actor\': \'person\', \'person\': \'person\'}.get(mediatype, \'\')\n            season, episode = info.get(\'season\'), info.get(\'episode\')\n            ext = []\n            if tmdb_id and tmdb_type:\n                th = xbmcaddon.Addon(\'plugin.video.themoviedb.helper\').getLocalizedString\n                base = \'tmdb_type=%s,tmdb_id=%s\' % (tmdb_type, tmdb_id)\n                if mediatype == \'episode\' and season not in (None, \'\', -1) and episode not in (None, \'\', -1):\n                    base += \',season=%s,episode=%s\' % (season, episode)\n                elif mediatype == \'season\' and season not in (None, \'\', -1):\n                    base += \',season=%s\' % season\n                run = \'RunScript(plugin.video.themoviedb.helper,%s,%s)\'\n                if mediatype in (\'movie\', \'episode\'):\n                    ext.append((th(32061),\n                                run % (\'play=%s\' % tmdb_type, \'tmdb_id=%s\' % tmdb_id + (\',season=%s,episode=%s\' % (season, episode) if mediatype == \'episode\' else \'\') + \',ignore_default=true\')))\n                ext.append((th(32235), run % (\'related_lists\', base)))\n                ext.append((th(32549), run % (\'sync_options\', base)))\n                ext.append((th(32233), run % (\'refresh_details\', base)))\n                if mediatype in (\'movie\', \'tvshow\', \'season\', \'episode\'):\n                    ext.append((xbmc.getLocalizedString(20444), run % (\'add_to_library\', \'tmdb_type=%s,tmdb_id=%s\' % (tmdb_type, tmdb_id))))\n            items = [(xbmc.getLocalizedString(19033), None), (xbmc.getLocalizedString(208) if not item.is_folder else xbmc.getLocalizedString(1024), result.builtin)] + ext\n            choice = xbmcgui.Dialog().contextmenu([label for label, _ in items])\n            if choice < 0:\n                return\n            if choice == 0:\n                xbmcgui.Dialog().info(result.listitem)\n            elif choice == 1:\n                self.open_result(control_id)\n            else:\n                xbmc.executebuiltin(items[choice][1])\n        except Exception as error:\n            xbmc.log(\'[AbukarimTools] multisearch context menu: %s\' % error, xbmc.LOGWARNING)\n\n    def stop(self):\n        """Store the search text for the session, drop the queued searches and wait for the running searches."""',
+        'already_patched_check': '# ABUKARIM: context menu for search results',
+        'description': 'SkinVariables multisearch - context menu for results',
+    },
+]
+
 
 
 # ── AB Scrapers support for Fenlight & Umbrella (3.4.16) ──

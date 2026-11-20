@@ -2,6 +2,19 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
+   "v": "4.11.8",
+   "en": [
+    "Search (AF3 search page): a long press or the context-menu key on a result opens a menu again: Information, Play/Open, and TMDbHelper's Play with, Browse lists, Sync options, Refresh details and Add to library.",
+    "Kodi 22 no longer crashes when you back out of TMDbHelper's player list (for example after choosing a movie on the search page).",
+    "AF3: Default OSD also turns the two-line information bar off while it is on, so the upstream one-row info line shows."
+   ],
+   "ar": [
+    "البحث (صفحة البحث في AF3): الضغط المطوّل أو زر القائمة السياقية على أي نتيجة يفتح قائمة من جديد: المعلومات، والتشغيل أو الفتح، وخيارات TMDbHelper: التشغيل باستخدام، وتصفّح القوائم، وخيارات المزامنة، وتحديث التفاصيل، والإضافة إلى المكتبة.",
+    "لم يعد Kodi 22 ينهار عند الرجوع من قائمة مشغّلات TMDbHelper (مثلًا بعد اختيار فيلم من صفحة البحث).",
+    "AF3: يعطّل خيار «الواجهة الافتراضية للمشغّل» أيضًا شريط المعلومات ذا السطرين ما دام مفعّلًا، ليظهر سطر المعلومات الأصلي في صف واحد."
+   ]
+  },
+  {
    "v": "4.11.6",
    "from": "4.11.0",
    "en": [
