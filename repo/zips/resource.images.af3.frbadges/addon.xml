@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="resource.images.af3.frbadges" name="AF3 OSD Flags Styles (FR-Badges)" version="1.0.14" provider-name="ABUKARIM">
+<addon id="resource.images.af3.frbadges" name="AF3 OSD Flags Styles (FR-Badges)" version="1.0.15" provider-name="ABUKARIM">
     <requires>
         <import addon="kodi.resource" version="1.0.0" />
     </requires>
     <extension point="kodi.resource.images" compile="false" type="flags" />
     <extension point="xbmc.addon.metadata">
+        <news>1.0.15: Rebuilt all FR-Badges styles from the latest FR-Badges set (larger text, Lucent-matched 0.22h side padding); updated every language flag; lucent_player pills now fill the Lucent 176x68 box in every style; added Lucent and text-style Hebrew/Filipino and 4.0/4.1 badges.</news>
         <summary lang="en_GB">Lucent plus 13 FR-Badges styles of media-flag badges for Arctic Fuse 3 (Piers)</summary>
         <summary lang="ar_SA">شارات الوسائط بنمط لوسنت و13 نمطاً من FR-Badges لواجهة Arctic Fuse 3 (Piers)</summary>
         <description lang="en_GB">Fourteen looks for the codec, HDR, audio, channel, source, aspect-ratio and language badges in the Arctic Fuse 3 Piers player OSD and footer, laid out like resource.images.af3.classicflags/colorful. Chosen in AB Tools (Toggles &gt; AF3: OSD Flags Style). Badge artwork: FR-Badges by farizmohd70 (MIT licence, github.com/farizmohd70/FR-Badges); aspect-ratio badges drawn to match. Each style also carries a lucent_player/ copy named like the AF3 Lucent Player pills; lucent/lucent_player holds the Lucent pills themselves (from the Lucent skin by djdirty60, GPL-2.0-or-later).</description>
