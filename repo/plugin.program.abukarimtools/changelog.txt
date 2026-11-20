@@ -1,3 +1,11 @@
+v4.11.9  (2026-11-20)
+- addon.xml: the xbmc.service extension was commented out again (same
+  regression as v1.9.1 / v2.3 / 3.1.0.27 / 3.1.7 / 3.3.3 / 4.8.67) -
+  re-enabled. kodi.log 2026-11-20 (AM9): no "[AbukarimTools Service]" line
+  at boot in two sessions; the service only started when Search All was
+  opened ("[AbukarimTools Menu] service not running - starting it"), so the
+  boot sweep wrote 259 patches mid-use and reloaded the skin at 11:58:40.
+
 v4.11.8  (2026-11-20)  [ported from 4.10.12]
 - TMDbHelper (6.22.x) on Kodi 22 RC2: backing out of the player list crashed
   Kodi (SIGSEGV in CGUIListItem::FreeMemory on the LanguageInvoker thread,

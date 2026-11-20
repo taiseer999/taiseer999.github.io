@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="AB Tools"
-       version="4.11.8"
+       version="4.11.9"
        provider-name="Abukarim">
 
   <requires>
@@ -34,7 +34,7 @@
     <provides>executable</provides>
   </extension>
 
-  <!--<extension point="xbmc.service" library="service.py"/>-->
+  <extension point="xbmc.service" library="service.py"/>
 
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">AB Tools - all-in-one Kodi maintenance and skin toolkit</summary>
@@ -42,7 +42,7 @@
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، ووصولاً سريعاً إلى معالج أبوكريم وأدوات الصيانة فيه (التنظيف الشامل وحذف الصور المصغّرة القديمة). كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة واختبار أداء المعالج وإعادة بناء قاعدة بيانات الإضافات.</description>
     <license>GPL-3.0-or-later</license>
-    <news>v4.11.8: Context menu on search results; no more Kodi 22 crash when backing out of the TMDbHelper player list. v4.11.6: Usenet streams no longer stop after a few seconds - the NZB server runs as its own process. v4.11.5: Fixes a Kodi hang when starting a Usenet stream. v4.11.4: Usenet in Search All works even when Kodi skips the AB Tools service at boot, and the log says when Usenet is not set up. v4.11.3: Search All stays responsive with thousands of streams; the scraper chips are gone from the source grid. v4.11.1: Premiumize results show in Search All again when the same release is also on another debrid service. v4.11.0: Search All streams Usenet directly from your own news server (Mods > Search All: Usenet) - Newznab indexers and AIOStreams NZB results, no debrid. v4.8.90: Even spacing between badges. IMAX and Dolby Vision 2 badges in every badge style. ISO badge for disc images in Search All and the add-ons' Lucent source windows. Disc menus for whole Blu-ray discs in a debrid torrent (AllDebrid, TorBox, Premiumize) - Disc Menu button in the AF3 player. AB Tools is now free software under GPL-3.0-or-later (LICENSE.txt, THIRD-PARTY-NOTICES.txt). Blu-ray disc images from a stream (Debrid, TorBox, Usenet) play as discs with menus, chapters and languages, without downloading first; disc links that would not play reopen as discs (AF3: Disc Menu for ISO Streams); NewPipe installs from repository.twilight0. Full history: changelog.txt</news>
+    <news>v4.11.9: The AB Tools service starts with Kodi again (boot sweep, watchdog, Guardian). v4.11.8: Context menu on search results; no more Kodi 22 crash when backing out of the TMDbHelper player list. v4.11.6: Usenet streams no longer stop after a few seconds - the NZB server runs as its own process. v4.11.5: Fixes a Kodi hang when starting a Usenet stream. Full history: changelog.txt</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>
