@@ -548,23 +548,42 @@ class KeepAliveReader(object):
             try:
                 self.conn.request('GET', self.target, headers=h)
                 r = self.conn.getresponse()
-                data = r.read()
+                status = r.status
+                if status in (301, 302, 303, 307, 308):
+                    r.read(65536)
+                    data = b''
+                elif status == 200:
+                    # the server ignored Range: never pull the whole film — take what we
+                    # asked for (only useful at the very start) and drop the connection
+                    data = r.read(n) if pos == 0 else b''
+                    self.close()
+                elif status == 206:
+                    try:
+                        cl = int(r.getheader('Content-Length') or 0)
+                    except ValueError:
+                        cl = 0
+                    if cl > n + 65536:
+                        data = r.read(n)
+                        self.close()
+                    else:
+                        data = r.read()
+                else:
+                    data = b''
+                    self.close()
             except Exception:
                 self.close()
                 raise
-            if r.status in (301, 302, 303, 307, 308):
+            if status in (301, 302, 303, 307, 308):
                 loc = r.getheader('Location')
                 if not loc:
                     raise MkvError('redirect_without_location')
                 self._set(urllib.parse.urljoin('%s://%s%s' % (self.scheme, self.host, self.target), loc))
                 continue
-            if r.status == 200 and pos > 0:
-                self.close()
+            if status == 200 and pos > 0:
                 raise MkvError('no_range')
-            if r.status not in (200, 206):
-                self.close()
-                raise MkvError('http_%d' % r.status)
-            if (r.getheader('Connection') or '').lower() == 'close':
+            if status not in (200, 206):
+                raise MkvError('http_%d' % status)
+            if self.conn is not None and (r.getheader('Connection') or '').lower() == 'close':
                 self.close()
             return data[:n]
         raise MkvError('too_many_redirects')
@@ -835,7 +854,10 @@ def _remote_lines(path, entries, seg, decode, one, reader, readers, progress, ab
                             if a <= at < a + len(data):
                                 buf = data[at - a:]
                                 break
-                        r = decode(e, buf) if buf else None
+                        try:
+                            r = decode(e, buf) if buf else None
+                        except Exception:
+                            r = None          # one odd block: read it on its own below
                         if r is None or r[0] == 'more':
                             pending.append(e)
                         else:

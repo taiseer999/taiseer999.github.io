@@ -30,8 +30,8 @@ class Player(xbmc.Player):
             lang = pipeline.embedded_text_info(video)
             if not lang or not self.isPlayingVideo() or self.getPlayingFile() != path:
                 return False
-            msg = ('لم يتم العثور على ترجمة عربية لهذا العمل.[CR]'
-                   'لكن الفيديو يحتوي على ترجمة %s مدمجة، هل تريد ترجمتها إلى العربية بالذكاء الاصطناعي؟' % lang)
+            msg = ('ما لقيت ترجمة عربية لهذا العمل.[CR]'
+                   'بس الفيديو فيه ترجمة %s مدمجة — تبي أترجمها للعربي بالذكاء الاصطناعي؟' % lang)
             try:
                 yes = xbmcgui.Dialog().yesno(ADDON_NAME, msg, nolabel='لا', yeslabel='نعم، ترجم',
                                              autoclose=20000, defaultbutton=xbmcgui.DLG_YESNO_YES_BTN)
@@ -42,7 +42,7 @@ class Player(xbmc.Player):
                 set_status('')
                 return True
             bar = xbmcgui.DialogProgressBG()
-            bar.create(ADDON_NAME, 'جارٍ استخراج الترجمة المدمجة وترجمتها...')
+            bar.create(ADDON_NAME, 'جاري سحب الترجمة المدمجة وترجمتها...')
 
             def pos():
                 try:
@@ -58,12 +58,12 @@ class Player(xbmc.Player):
             if self.isPlayingVideo() and self.getPlayingFile() == path:
                 self.setSubtitles(sub_path)
                 self.showSubtitles(True)
-                set_status(summary[0] if summary else 'الترجمة تعمل ✓', 'busy' if os.listdir(JOBS_DIR) else 'ok')
+                set_status(summary[0] if summary else 'الترجمة شغالة ✓', 'busy' if os.listdir(JOBS_DIR) else 'ok')
                 notify(' | '.join(summary), seconds=6)
             return True
         except Exception as e:
             log('embedded offer failed: %s' % e, xbmc.LOGERROR)
-            set_status('فشل استخراج الترجمة المدمجة', 'err')
+            set_status('فشل سحب الترجمة المدمجة', 'err')
             notify(str(e).split('\n')[-1][:80], seconds=6)
             return True
 
@@ -81,12 +81,64 @@ class Player(xbmc.Player):
         set_status('')
         if getattr(self, 'live', None):
             self.live.stop = True
+        self._after(False)
 
     def onPlayBackEnded(self):
         set_status('')
+        self._after(True)
+
+    def _watch(self, token):
+        """Remember how far the viewer got (for the timing question at the end)."""
+        while getattr(self, 'fb', None) and self.fb.get('token') == token:
+            try:
+                if self.isPlayingVideo():
+                    self.fb['pos'] = self.getTime()
+                    self.fb['total'] = self.getTotalTime() or self.fb.get('total', 0)
+            except Exception:
+                pass
+            if MONITOR[0].waitForAbort(5):
+                return
+
+    def _after(self, ended):
+        fb, self.fb = getattr(self, 'fb', None), None
+        if not fb or not setting_bool('ask_timing', True):
+            return
+        if not ended and (not fb.get('total') or fb.get('pos', 0) < 0.6 * fb['total']):
+            return
+        threading.Thread(target=self._ask_timing, args=(fb['video'],), daemon=True).start()
+
+    def _ask_timing(self, video):
+        try:
+            from resources.lib import trace
+            if not trace.has_sync(video):
+                return
+            if MONITOR[0].waitForAbort(3) or self.isPlayingVideo():
+                return          # next episode already started: don't interrupt
+            opts = ['مضبوط', 'تطلع قبل الكلام (متقدمة)', 'تطلع بعد الكلام (متأخرة)',
+                    'جزء منها بس خربان', 'ما انتبهت']
+            codes = ['ok', 'early', 'late', 'part', 'skip']
+            k = xbmcgui.Dialog().select('ترجمة نجد — كيف كان توقيت الترجمة؟', opts, autoclose=25000)
+            if k < 0:
+                return
+            ans = codes[k]
+            if ans == 'part':
+                w = xbmcgui.Dialog().select('وين تقريباً؟', ['البداية', 'النص', 'الآخر', 'ما أدري'],
+                                            autoclose=20000)
+                ans += ':' + ['start', 'middle', 'end', '?'][w] if w >= 0 else ''
+            trace.feedback(video, ans)
+            if ans != 'skip':
+                notify('شكراً، انحفظ في التقرير ✓', seconds=3)
+        except Exception as e:
+            log('timing question failed: %s' % e)
 
     def onAVStarted(self):
         set_status('')
+        try:
+            token = time.time()
+            self.fb = {'token': token, 'video': media.current(), 'pos': 0, 'total': 0}
+            threading.Thread(target=self._watch, args=(token,), daemon=True).start()
+        except Exception as e:
+            log('watch not started: %s' % e)
         try:
             if getattr(self, 'live', None):
                 self.live.stop = True
@@ -128,17 +180,16 @@ class Player(xbmc.Player):
                 self.setSubtitles(sub_path)
                 self.showSubtitles(True)
                 if pct < 100:
-                    set_status('الترجمة جاهزة بنسبة %d٪، ويكتمل الباقي في الخلفية...' % pct, 'busy')
-                    notify('عدت إلى الفيلم: الترجمة جاهزة بنسبة %d٪ ويكتمل الباقي تلقائياً' % pct, seconds=5)
+                    set_status('الترجمة جاهزة %d٪ — يكمل الباقي بالخلفية...' % pct, 'busy')
+                    notify('رجعت للفيلم: الترجمة جاهزة %d٪ ويكمل الباقي لحاله' % pct, seconds=5)
                 else:
-                    set_status('الترجمة تعمل ✓', 'ok')
+                    set_status('الترجمة شغالة ✓', 'ok')
                 return
             if not setting_bool('auto_download', True):
                 return
             if media.is_dexhub_item(self) and not media.subtitle_streams_have_arabic():
-                # Piers edition: Dex Hub loads its own subtitle (DexSubtitles +
-                # AutoSync) after the start; give it the first go so the
-                # subtitle on screen is not swapped twice.
+                # Piers edition: Dex Hub loads its own subtitle after the start;
+                # give it the first go so the subtitle is not swapped twice.
                 set_status('بانتظار ترجمة Dex Hub...')
                 for _ in range(30):
                     xbmc.sleep(1000)
@@ -151,41 +202,34 @@ class Player(xbmc.Player):
             if media.subtitle_streams_have_arabic():
                 # Piers edition: turn the video's own Arabic subtitle on
                 # instead of only reporting that it is there
-                picked = media.enable_arabic_stream()
-                if picked == 'switched':
+                if media.enable_arabic_stream() == 'switched':
                     set_status('تم تفعيل الترجمة العربية المدمجة ✓', 'ok')
                     notify('تم تفعيل الترجمة العربية الموجودة في الفيديو', seconds=4)
                 else:
-                    set_status('الفيديو يحتوي على ترجمة عربية ✓', 'ok')
+                    set_status('الفيديو فيه ترجمة عربية ✓', 'ok')
                 return
-            if not any(m.available() for m in providers.PROVIDERS.values()):
-                self._offer_embedded(media.current(), path)
+            # the same list the search below really uses: only sites with a key (the subtitle
+            # add-ons installed in Kodi are never called in the background)
+            enabled = tuple(n for n in ('subdl', 'subsource', 'opensubtitles') if providers.PROVIDERS[n].available())
+            if not enabled:
+                if not self._offer_embedded(media.current(), path):
+                    msg = 'التنزيل التلقائي يحتاج مفتاح موقع ترجمة — افتح قائمة الترجمة واختر بنفسك'
+                    set_status(msg, 'err')
+                    notify(msg, seconds=7)
                 return
-            if not any(providers.PROVIDERS[p].available() for p in ('subdl', 'subsource', 'opensubtitles')):
-                # Piers edition: no subtitle-site key yet - say so (once per
-                # session) instead of a silent "nothing found"
-                log('auto: no SubDL / SubSource / OpenSubtitles key - nothing to search')
-                set_status('أضف مفتاح موقع ترجمة من معالج نجد', 'err')
-                if not NO_KEY_TOLD[0]:
-                    NO_KEY_TOLD[0] = True
-                    notify('للبحث التلقائي عن الترجمة العربية أضف مفتاح SubDL أو SubSource أو OpenSubtitles '
-                           'من معالج الإعداد في نجد', seconds=8)
-                self._offer_embedded(media.current(), path)
-                return
-            set_status('جارٍ البحث عن ترجمة عربية...')
+            set_status('تدور على ترجمة عربية...')
             video = media.current()
-            results = [r for r in providers.search_all(video, ['ar'],
-                                                       enabled=('subdl', 'subsource', 'opensubtitles'))
+            results = [r for r in providers.search_all(video, ['ar'], enabled=enabled)
                        if r['lang'] == 'ar']
             if not results:
-                msg = 'تعذر الاتصال بمواقع الترجمة' if providers.all_failed() \
-                    else 'لم يتم العثور على ترجمة عربية لهذا العمل'
+                msg = 'ما قدرت أتصل بمواقع الترجمة' if providers.all_failed() \
+                    else 'ما لقيت ترجمة عربية لهذا العمل'
                 set_status(msg, 'err')
                 if not self._offer_embedded(video, path):
                     notify(msg)
                 return
-            set_status('تم العثور على ترجمة، جارٍ تجهيزها...')
-            notify('تم العثور على ترجمة، جارٍ التجهيز...', seconds=3)
+            set_status('لقيت ترجمة، جاري تجهيزها...')
+            notify('لقيت ترجمة، جاري التجهيز...', seconds=3)
             for item in results[:3]:
                 try:
                     sub_path, summary = pipeline.process(item, video)
@@ -197,8 +241,8 @@ class Player(xbmc.Player):
                         return          # user (or Kodi) already loaded an Arabic subtitle meanwhile
                     self.setSubtitles(sub_path)
                     self.showSubtitles(True)
-                    set_status('الترجمة تعمل، وجارٍ ضبطها مع الصوت...' if os.listdir(JOBS_DIR)
-                               else 'الترجمة تعمل ✓', 'busy' if os.listdir(JOBS_DIR) else 'ok')
+                    set_status('الترجمة شغالة — جاري ضبطها مع الصوت...' if os.listdir(JOBS_DIR)
+                               else 'الترجمة شغالة ✓', 'busy' if os.listdir(JOBS_DIR) else 'ok')
                     notify('تمت إضافة الترجمة%s' % (' | ' + ' | '.join(summary) if summary else ''),
                            seconds=7)
                 return
@@ -210,6 +254,8 @@ class Player(xbmc.Player):
 
 def process_jobs(player, monitor):
     for name in sorted(os.listdir(JOBS_DIR)):
+        if not name.endswith('.json'):
+            continue             # still being written
         full = os.path.join(JOBS_DIR, name)
         try:
             with open(full, encoding='utf-8') as f:
@@ -231,19 +277,36 @@ def process_jobs(player, monitor):
         if vpath and not still_playing():
             continue
         bar = xbmcgui.DialogProgressBG()
-        bar.create(ADDON_NAME, 'جارٍ الاستماع إلى الفيلم...' if 'audio' in job['steps']
-                   else 'جارٍ استخراج باقي الترجمة وترجمته...' if 'embedded_more' in job['steps']
-                   else 'جارٍ التصحيح بالذكاء الاصطناعي...')
+        bar.create(ADDON_NAME, 'جاري سماع الفيلم...' if 'audio' in job['steps']
+                   else 'جاري سحب وترجمة باقي الترجمة...' if 'embedded_more' in job['steps']
+                   else 'جاري التصحيح بالذكاء الاصطناعي...')
         current = [job['path']]
+
+        def replaced():
+            """The viewer picked another subtitle meanwhile (a new job is waiting, or the
+            subtitle on screen is not one of this job's versions): stop, free the queue."""
+            if 'embedded_more' not in job['steps']:
+                return False
+            try:
+                if any(n.endswith('.json') for n in os.listdir(JOBS_DIR)):
+                    return True
+                last = pipeline.last_for(job.get('video') or {})
+                return bool(last) and last.get('path') != current[0] and \
+                    (last.get('lineage') or last.get('path')) not in (job['path'], current[0]) and \
+                    (last.get('item') or {}).get('provider') != 'embedded'
+            except Exception:
+                return False
 
         def swap(path, msg_lines):
             last = pipeline.last_for(job.get('video') or {})
-            if last and last.get('path') != current[0]:
+            if last and last.get('path') != current[0] and \
+                    (last.get('lineage') or last.get('path')) not in (job['path'], current[0]):
                 return False          # user picked another subtitle meanwhile
             if still_playing():
                 player.setSubtitles(path)
                 player.showSubtitles(True)
-                pipeline.remember_last(path, job.get('video') or {}, job.get('item') or {})
+                pipeline.remember_last(path, job.get('video') or {}, job.get('item') or {},
+                                       lineage=job['path'])
                 current[0] = path
                 return True
             return False
@@ -255,11 +318,11 @@ def process_jobs(player, monitor):
                 log('early swap failed: %s' % e, xbmc.LOGERROR)
                 ok = False
             if ok and any('جاهز' in l for l in msg_lines):
-                set_status(msg_lines[0] + ' — ويكتمل الباقي...', 'busy')
+                set_status(msg_lines[0] + ' — الباقي يكمل...', 'busy')
             elif ok:
-                partial = 'التالية' in ' '.join(msg_lines)
-                set_status('تم تصحيح الأسطر التالية ✓ ويكتمل الباقي...' if partial
-                           else 'تم تصحيح النص ✓، وجارٍ ضبط التوقيت...')
+                partial = 'الجاية' in ' '.join(msg_lines)
+                set_status('صُححت الأسطر الجاية ✓ — الباقي يكمل...' if partial
+                           else 'النص اتصحح ✓ — جاري ضبط التوقيت...')
                 notify(' | '.join(msg_lines), seconds=5)
 
         try:
@@ -273,7 +336,7 @@ def process_jobs(player, monitor):
                 progress=lambda p, m: (bar.update(p, ADDON_NAME, m),
                                        set_status('%s %d%%' % (m.rstrip('.').rstrip(), p)))
                 if still_playing() else None,
-                abort=lambda: monitor.abortRequested() or not still_playing())
+                abort=lambda: monitor.abortRequested() or not still_playing() or replaced())
         except Exception as e:
             import traceback
             log('job failed: %s\n%s' % (e, traceback.format_exc()), xbmc.LOGERROR)
@@ -284,16 +347,16 @@ def process_jobs(player, monitor):
             set_status('')            # playback ended: nothing to report on screen
             continue
         if not new_path:
-            bad = [l for l in lines if any(x in l for x in ('تعذر', 'لم ', 'لا يطابق', 'غير'))]
+            bad = [l for l in lines if any(x in l for x in ('تعذر', 'ما قدر', 'ما يطابق', 'غير'))]
             if bad:
                 set_status(bad[0].split(':')[0][:45], 'err')
             else:
-                set_status('الترجمة تعمل ✓', 'ok')
+                set_status('الترجمة شغالة ✓', 'ok')
         if new_path:
             if swap(new_path, lines):
                 set_status('الترجمة مضبوطة ✓' if 'audio' in job['steps'] or 'understand' in job['steps']
                            else 'الترجمة كاملة ✓' if 'embedded_more' in job['steps']
-                           else 'تم تصحيح النص ✓', 'ok')
+                           else 'النص اتصحح ✓', 'ok')
             else:
                 log('a newer subtitle was chosen meanwhile (or playback ended); not swapping')
                 continue
@@ -312,7 +375,54 @@ if __name__ == '__main__':
         Badge(monitor).start()
     except Exception as e:
         log('badge disabled: %s' % e)
-    if not setting_bool('wizard_done', False):
+    try:
+        pipeline.forget_old_offsets()
+    except Exception as e:
+        log('offset cleanup: %s' % e)
+    first_run = not setting_bool('wizard_done', False)
+    try:
+        from resources.lib import whatsnew
+        threading.Thread(target=whatsnew.maybe_show, args=(monitor, first_run), daemon=True).start()
+    except Exception as e:
+        log('what\'s new failed: %s' % e)
+    def ask_dexhub_key():
+        """Piers edition (advice of Dex Hub's author): Dex Hub's AI key is
+        used only after the user says yes - it spends that account's tokens.
+        Asked once, on the home screen, when Najd has no AI key of its own."""
+        from resources.lib import llm
+        from resources.lib.common import ADDON, PROFILE, abtools_setup_busy
+        flag = os.path.join(PROFILE, 'dexhub_key_asked')
+        try:
+            if os.path.exists(flag) or setting_bool('use_dexhub_key', False) or llm.configured() \
+                    or not llm.dexhub_has_key():
+                return
+        except Exception as e:
+            log('dexhub key check: %s' % e)
+            return
+        for _ in range(600):
+            if monitor.waitForAbort(5):
+                return
+            if xbmc.getCondVisibility('Window.IsActive(home)') and \
+                    not xbmc.getCondVisibility('Player.HasMedia') and \
+                    not xbmc.getCondVisibility('System.HasActiveModalDialog') and not abtools_setup_busy():
+                break
+        else:
+            return
+        yes = xbmcgui.Dialog().yesno(
+            ADDON_NAME, 'يوجد مفتاح ذكاء اصطناعي محفوظ في Dex Hub.[CR]'
+            'هل تسمح لنجد باستعماله لتصحيح الترجمات وترجمتها؟[CR]'
+            '[COLOR gold]سيُستهلك من رصيد ذلك المفتاح.[/COLOR] يمكنك تغيير ذلك لاحقاً من إعدادات نجد.',
+            nolabel='لا', yeslabel='نعم، اسمح')
+        try:
+            open(flag, 'w').close()
+        except OSError:
+            pass
+        ADDON.setSetting('use_dexhub_key', 'true' if yes else 'false')
+        log('Dex Hub AI key: %s by the user' % ('allowed' if yes else 'declined'))
+
+    if not first_run:
+        threading.Thread(target=ask_dexhub_key, daemon=True).start()
+    if first_run:
         # first run: open the setup wizard once Kodi's home screen is up.
         # Piers edition: in its own thread (the job loop below starts at once)
         # and never over AB Tools' first-run setup or a playing video.
@@ -339,7 +449,7 @@ if __name__ == '__main__':
     from resources.lib.common import ensure_dirs
     while not monitor.abortRequested():
         ensure_dirs()
-        if os.listdir(JOBS_DIR) and not busy.locked():
+        if any(n.endswith('.json') for n in os.listdir(JOBS_DIR)) and not busy.locked():
             threading.Thread(target=worker, daemon=True).start()
         if monitor.waitForAbort(2):
             break

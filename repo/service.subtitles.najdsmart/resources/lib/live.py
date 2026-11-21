@@ -78,7 +78,7 @@ class LiveChecker(object):
         inside = [(c.start, c.end) for c in cues if a0 + 1500 <= c.start <= a1 - 1500]
         if len(inside) < 6:
             return                               # quiet scene: nothing to measure
-        set_status('فحص التوقيت للجزء القادم...')
+        set_status('فحص التوقيت للجزء الجاي...')
         pcm = audiosync._run_ffmpeg(eng, src, args, start=start, dur=win,
                                     abort=self._abort, timeout=90)
         speech = sorted((c.start, c.end) for c in audiosync.detect_speech(pcm, offset_ms=a0))
@@ -87,7 +87,8 @@ class LiveChecker(object):
             return
         base = sync._overlap(inside, speech)
         d, score = sync._refine(inside, speech, 1.0, 0, 2500, 20)
-        confident = score > base * 1.10 and score > 0.35 * sum(e - s for s, e in inside)
+        confident = score > base * 1.10 and score > 0.35 * sum(e - s for s, e in inside) and \
+            pipeline.chance_lift([(inside, speech)], d) >= pipeline.MIN_LIFT
         self.history.append((int(pos * 1000), d if confident else 0))
         log('live check @%ds: shift %d ms (overlap %d → %d, confident=%s)' % (pos, d, base, score, confident))
         recent = [h[1] for h in self.history[-2:]]
@@ -110,9 +111,10 @@ class LiveChecker(object):
         if self.playing():
             self.player.setSubtitles(new_path)
             self.player.showSubtitles(True)
-            pipeline.remember_last(new_path, video, last.get('item') or {})
+            pipeline.remember_last(new_path, video, last.get('item') or {},
+                                   lineage=last.get('lineage') or last['path'])
             self.history = []
-            set_status('تم تصحيح التوقيت بدءاً من الدقيقة %d: %+.2f ث ✓' % (pos // 60, d / 1000.0), 'ok')
+            set_status('صُحح التوقيت من الدقيقة %d: %+.2f ث ✓' % (pos // 60, d / 1000.0), 'ok')
             log('live check: shifted %d ms from %ds' % (d, pos))
 
 

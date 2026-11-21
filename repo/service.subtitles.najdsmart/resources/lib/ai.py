@@ -90,8 +90,11 @@ def proofread(cues, title='', progress=None, batch=150, workers=2, abort=None,
     digest = hashlib.sha1(('\n'.join(texts) + model).encode('utf-8')).hexdigest()
     cached = cache_get('ai_%s.json' % digest, 60 * 86400)
     if cached:
-        results = {int(k): v for k, v in json.loads(cached.decode('utf-8')).items()}
-        return _apply(cues, texts, results)
+        try:
+            results = {int(k): v for k, v in json.loads(cached.decode('utf-8')).items()}
+            return _apply(cues, texts, results)
+        except ValueError:
+            pass
 
     now = 0
     try:
@@ -195,7 +198,10 @@ def translate(cues, title='', progress=None, batch=100, workers=3, abort=None):
     cached = cache_get('tr_%s.json' % digest, 120 * 86400)
     results = {}
     if cached:
-        results = {int(k): v for k, v in json.loads(cached.decode('utf-8')).items()}
+        try:
+            results = {int(k): v for k, v in json.loads(cached.decode('utf-8')).items()}
+        except ValueError:
+            results = {}
     todo = [k for k in range(len(texts)) if k not in results and texts[k].strip()]
     chunks = [[{'i': k, 't': texts[k]} for k in todo[a:a + batch]] for a in range(0, len(todo), batch)]
     errors = []

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """OpenSubtitles.com REST API (needs a free consumer API key; login raises the daily quota)."""
 import json
-import time
 
 from ..common import http, setting, cache_get, cache_put, HttpError, log
 

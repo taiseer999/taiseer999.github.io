@@ -11,7 +11,7 @@ import re
 import threading
 import time
 
-from .common import http, HttpError, log, setting, cache_get, cache_put
+from .common import setting_bool, http, HttpError, log, setting, cache_get, cache_put
 
 PROVIDERS = {
     # id: (display name, kind, base url, default models — first that works is kept)
@@ -47,7 +47,10 @@ def _day():
 
 def _quota_dead():
     c = cache_get('ai_quota_%s.json' % _day(), 86400)
-    return set(json.loads(c.decode('utf-8'))) if c else set()
+    try:
+        return set(json.loads(c.decode('utf-8'))) if c else set()
+    except ValueError:
+        return set()
 
 
 def _mark_quota(pid):
@@ -61,8 +64,18 @@ def key_for(pid):
     own = (setting('%s_key' % pid) or '').strip()
     if own:
         return own
+    # Piers edition: Dex Hub's key only with the user's consent (setting
+    # use_dexhub_key, asked once) - it spends that account's tokens
+    if not setting_bool('use_dexhub_key', False):
+        return ''
     from .common import shared_key
     return shared_key(pid)
+
+
+def dexhub_has_key():
+    """Dex Hub holds a key for a provider this add-on can use."""
+    from .common import shared_key
+    return any(shared_key(p) for p in PROVIDERS)
 
 
 def configured():
@@ -257,6 +270,18 @@ def _gemini_call(system, user, timeout):
 
 # ------------------------------------------------------------------ public
 def ask_json(system, user, timeout=120):
+    """Ask the first AI that answers; a per-minute limit is waited out once."""
+    from . import gemini
+    try:
+        return _ask_json(system, user, timeout)
+    except gemini.RateLimited as e:
+        wait = min(max(e.delay, 5), 90)
+        log('AI: per-minute limit, waiting %ds and trying again' % wait)
+        time.sleep(wait)
+        return _ask_json(system, user, timeout)
+
+
+def _ask_json(system, user, timeout=120):
     """Returns (list, provider_id). Tries every available provider in order."""
     from . import gemini
     errors = []
@@ -272,7 +297,7 @@ def ask_json(system, user, timeout=120):
             log('AI: answered by %s%s in %.1fs' % (name(pid), (' (%s)' % _model_ok[pid]) if pid in _model_ok
                                                    else '', time.time() - t0))
             return res, pid
-        except gemini.QuotaExhausted as e:
+        except (gemini.QuotaExhausted, gemini.RateLimited) as e:
             errors.append((pid, e))
             continue
         except HttpError as e:
@@ -304,6 +329,9 @@ def ask_json(system, user, timeout=120):
             errors.append((pid, e))
     if not errors:
         raise NoProvider('no AI key')
+    limited = [e for _p, e in errors if isinstance(e, gemini.RateLimited)]
+    if limited:
+        raise limited[0]          # a per-minute limit: the caller waits and tries again
     if all(isinstance(e, (gemini.QuotaExhausted,)) or
            (isinstance(e, HttpError) and e.code in (402, 429)) for _p, e in errors):
         raise gemini.QuotaExhausted('all AI providers are out of quota today')
@@ -319,12 +347,12 @@ def check(pid):
         kind = PROVIDERS[pid][1]
         call = _anthropic_call if kind == 'anthropic' else _openai_call
         res = call(pid, '', 'Return the list [1, 2, 3].', 60)
-        return (bool(res), 'يعمل ✓ (%s)' % _model_ok.get(pid, ''))
+        return (bool(res), 'يشتغل ✓ (%s)' % _model_ok.get(pid, ''))
     except HttpError as e:
         if e.code in (401, 403):
             return False, 'المفتاح غير صحيح'
         if e.code in (402, 429):
-            return False, 'المفتاح صحيح لكن لا يوجد رصيد أو انتهى الحد'
+            return False, 'المفتاح صحيح بس ما فيه رصيد/خلص الحد'
         return False, 'خطأ %s' % e.code
     except Exception as e:
-        return False, 'لم يعمل: %s' % str(e)[:60]
+        return False, 'ما اشتغل: %s' % str(e)[:60]

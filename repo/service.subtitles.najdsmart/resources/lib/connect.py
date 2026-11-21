@@ -69,9 +69,9 @@ def openrouter_login():
             q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
             if 'code' in q:
                 box['code'] = q['code'][0]
-                msg = 'تم ✓ عد إلى كودي — Done, return to Kodi'
+                msg = 'تم ✓ ارجع لكودي — Done, return to Kodi'
             else:
-                msg = 'لم يصل أي رمز — No code received'
+                msg = 'ما وصل رمز — No code received'
             body = ('<html dir="rtl"><meta charset="utf-8"><body style="font-family:sans-serif;'
                     'background:#101826;color:#fff;text-align:center;padding-top:15vh">'
                     '<h1>%s</h1></body></html>' % msg).encode('utf-8')
@@ -83,7 +83,7 @@ def openrouter_login():
     try:
         srv, port = _free_server(H, '127.0.0.1', [3000] + list(range(51400, 51440)))
     except OSError:
-        DLG.ok(ADDON_NAME, 'تعذر تشغيل خادم الاستقبال على هذا الجهاز.')
+        DLG.ok(ADDON_NAME, 'ما قدرت أشغل خادم الاستقبال على هذا الجهاز.')
         return None
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     cb = 'http://localhost:%d/callback' % port
@@ -91,10 +91,10 @@ def openrouter_login():
         {'callback_url': cb, 'code_challenge': challenge, 'code_challenge_method': 'S256'})
     if not _open_browser(url):
         srv.shutdown()
-        DLG.ok(ADDON_NAME, 'تعذر فتح المتصفح على هذا الجهاز.\nاستخدم «إدخال المفاتيح من الهاتف» بدلاً من ذلك.')
+        DLG.ok(ADDON_NAME, 'ما قدرت أفتح المتصفح على هذا الجهاز.\nاستخدم «إدخال المفاتيح من الجوال» بدلها.')
         return None
     prog = xbmcgui.DialogProgress()
-    prog.create(ADDON_NAME, 'تم فتح OpenRouter في المتصفح:\nسجّل الدخول (أو أنشئ حساباً) واضغط Authorize، ثم عد إلى هنا.')
+    prog.create(ADDON_NAME, 'فتحت لك OpenRouter في المتصفح:\nسجّل دخول (أو أنشئ حساب) واضغط Authorize، وارجع هنا.')
     key = None
     try:
         t0 = time.time()
@@ -102,13 +102,13 @@ def openrouter_login():
             if prog.iscanceled():
                 break
             if 'code' in box:
-                prog.update(90, 'جارٍ استلام المفتاح...')
+                prog.update(90, 'جاري استلام المفتاح...')
                 r = http('https://openrouter.ai/api/v1/auth/keys',
                          json_body={'code': box['code'], 'code_verifier': verifier,
                                     'code_challenge_method': 'S256'}, timeout=30)
                 key = r.get('key')
                 break
-            prog.update(int((time.time() - t0) * 100 / 600), 'في انتظار تسجيل الدخول في المتصفح...')
+            prog.update(int((time.time() - t0) * 100 / 600), 'بانتظار تسجيل الدخول في المتصفح...')
             xbmc.sleep(500)
     except Exception as e:
         log('openrouter login failed: %s' % e)
@@ -119,7 +119,7 @@ def openrouter_login():
         except Exception:
             pass
     if not key:
-        DLG.ok(ADDON_NAME, 'لم يكتمل تسجيل الدخول. حاول مرة أخرى.')
+        DLG.ok(ADDON_NAME, 'ما اكتمل تسجيل الدخول. جرّب مرة ثانية.')
         return None
     a = xbmcaddon.Addon(ADDON_ID)
     a.setSetting('openrouter_key', key)
@@ -127,7 +127,7 @@ def openrouter_login():
     pos = 1 if order and order[0] == 'gemini' else 0
     order.insert(pos, 'openrouter')
     a.setSetting('ai_order', ','.join(order))
-    DLG.ok(ADDON_NAME, 'تم ربط OpenRouter ✓\nوأصبح احتياطياً تلقائياً عند انتهاء حد Gemini.')
+    DLG.ok(ADDON_NAME, 'تم ربط OpenRouter ✓\nصار احتياط تلقائي إذا خلص Gemini.')
     return key
 
 
@@ -163,8 +163,8 @@ def _page(token, saved=None):
     rows = []
     for sid, title, link in FIELDS:
         cur = a.getSetting(sid)
-        hint = ('موجود (••••%s) — اتركه فارغاً للإبقاء عليه' % html.escape(cur[-4:])) if cur else 'الصق المفتاح هنا'
-        rows.append('<label><b>%s</b> <a href="%s" target="_blank">احصل على مفتاح ↗</a>'
+        hint = ('موجود (••••%s) — اتركه فاضي للإبقاء' % html.escape(cur[-4:])) if cur else 'الصق المفتاح هنا'
+        rows.append('<label><b>%s</b> <a href="%s" target="_blank">طلّع مفتاح ↗</a>'
                     '<input name="%s" placeholder="%s" autocomplete="off"></label>'
                     % (html.escape(title), link, sid, hint))
     note = '<p class="ok">✓ تم الحفظ: %s</p>' % html.escape('، '.join(saved)) if saved else ''
@@ -180,7 +180,7 @@ def _page(token, saved=None):
             '.ok{background:#173d27;padding:10px;border-radius:10px}</style>'
             '<h1>ترجمة نجد الذكية — المفاتيح</h1>%s'
             '<form method="post" action="/%s">%s<button>حفظ</button></form>'
-            '<p style="opacity:.6;font-size:12px">تعمل هذه الصفحة فقط ما دام كودي مفتوحاً على نافذة الاستقبال.</p>'
+            '<p style="opacity:.6;font-size:12px">الصفحة تشتغل بس وكودي مفتوح على نافذة الاستقبال.</p>'
             '</html>' % (note, token, ''.join(rows)))
 
 
@@ -225,15 +225,158 @@ def key_form():
     try:
         srv, port = _free_server(H, '0.0.0.0', range(8765, 8790))
     except OSError:
-        DLG.ok(ADDON_NAME, 'تعذر تشغيل صفحة المفاتيح على هذا الجهاز.')
+        DLG.ok(ADDON_NAME, 'ما قدرت أشغل صفحة المفاتيح على هذا الجهاز.')
         return
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     url = 'http://%s:%d/%s' % (_lan_ip(), port, token)
     if sys.platform.startswith('win') or sys.platform == 'darwin':
         _open_browser('http://localhost:%d/%s' % (port, token))   # also open it right here
-    DLG.ok(ADDON_NAME, 'افتح هذا الرابط من هاتفك أو أي جهاز متصل بالشبكة نفسها:\n'
-                       '[B]%s[/B]\nالصق المفاتيح واضغط حفظ، ثم عد واضغط موافق.\n'
-                       '(إذا سألك ويندوز عن جدار الحماية، فاختر «السماح»)' % url)
+    DLG.ok(ADDON_NAME, 'افتح هذا الرابط من جوالك أو أي جهاز على نفس الواي فاي:\n'
+                       '[B]%s[/B]\nالصق المفاتيح واضغط حفظ، بعدين ارجع واضغط موافق.\n'
+                       '(لو ويندوز سأل عن جدار الحماية، اختر «السماح»)' % url)
     srv.shutdown()
+    srv.server_close()
     if saved_all:
-        DLG.notification(ADDON_NAME, 'تم الحفظ: %s ✓' % '، '.join(sorted(set(saved_all))), time=5000)
+        DLG.notification(ADDON_NAME, 'انحفظت: %s ✓' % '، '.join(sorted(set(saved_all))), time=5000)
+
+
+# ------------------------------------------------------------------ Groq (Whisper) by QR code
+GROQ_PAGE = '''<!doctype html><html dir="rtl" lang="ar"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>ترجمة نجد - Whisper</title>
+<style>body{font-family:system-ui,sans-serif;background:#0f1724;color:#eef;margin:0;padding:18px;line-height:1.6}
+h1{color:#ecbe5c;font-size:21px;margin:0 0 6px}.st{background:#16233a;border-radius:14px;padding:12px 14px;margin:12px 0}
+.n{display:inline-block;width:26px;height:26px;border-radius:13px;background:#ecbe5c;color:#111;text-align:center;font-weight:bold;margin-left:6px}
+a.b,button{display:block;width:100%%;box-sizing:border-box;text-align:center;padding:14px;border:0;border-radius:12px;font-size:17px;font-weight:bold;text-decoration:none;margin-top:8px}
+a.b{background:#2b6cdf;color:#fff}button{background:#ecbe5c;color:#111}button.g{background:#2a3a55;color:#dde}
+input{width:100%%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid #345;background:#0f1a2c;color:#fff;font-size:16px;direction:ltr;margin-top:8px}
+.msg{padding:12px;border-radius:10px;margin-top:10px;display:none}.ok{background:#173d27;display:block}.bad{background:#4a1c1c;display:block}
+small{opacity:.65}</style>
+<h1>ربط Whisper (مجاني)</h1><small>يخلي الإضافة تسمع كلام الفيلم وتضبط الترجمة عليه. %(cur)s</small>
+<div class="st"><span class="n">١</span>سجّل دخول في Groq (يقبل حساب قوقل، بدون بطاقة)
+<a class="b" href="https://console.groq.com/keys" target="_blank">افتح Groq ↗</a></div>
+<div class="st"><span class="n">٢</span>اضغط <b>Create API Key</b>، اكتب أي اسم، بعدين <b>Copy</b></div>
+<div class="st"><span class="n">٣</span>ارجع هنا والصقه
+<button class="g" type="button" onclick="pasteKey()">📋 لصق</button>
+<input id="k" placeholder="gsk_..." autocomplete="off" autocapitalize="off" spellcheck="false">
+<button type="button" onclick="save()">حفظ وتجربة</button><div id="m" class="msg"></div></div>
+<script>
+function say(t,ok){var m=document.getElementById('m');m.textContent=t;m.className='msg '+(ok?'ok':'bad');}
+function pasteKey(){if(navigator.clipboard&&navigator.clipboard.readText){navigator.clipboard.readText().then(function(t){document.getElementById('k').value=t.trim();save();},function(){say('اضغط مطوّل على الخانة واختر لصق',false);});}else{say('اضغط مطوّل على الخانة واختر لصق',false);}}
+function save(){var k=document.getElementById('k').value.replace(/\\s+/g,'');
+ if(!/^gsk_[A-Za-z0-9]{20,}$/.test(k)){say('المفتاح يبدأ بـ gsk_ — تأكد إنك نسخته كامل',false);return;}
+ say('جاري التجربة...',true);
+ fetch(location.pathname,{method:'POST',body:k}).then(function(r){return r.json();}).then(function(j){say(j.msg,j.ok);})
+ .catch(function(){say('انقطع الاتصال بكودي — تأكد إنك على نفس الواي فاي',false);});}
+</script></html>'''
+
+
+def check_groq(key):
+    """'ok' | 'bad' | 'net' - a tiny call that costs nothing."""
+    try:
+        http('https://api.groq.com/openai/v1/models', headers={'Authorization': 'Bearer ' + key}, timeout=15)
+        return 'ok'
+    except Exception as e:
+        t = str(e)
+        return 'bad' if ('401' in t or '403' in t) else 'net'
+
+
+class _KeyQR(xbmcgui.WindowDialog):
+    def __init__(self, link, title, lines):
+        super().__init__()
+        from .sharereport import qr_png, MEDIA
+        white = os.path.join(MEDIA, 'white.png')
+        self.addControl(xbmcgui.ControlImage(0, 0, 1280, 720, white, colorDiffuse='E60B111B'))
+        self.addControl(xbmcgui.ControlImage(370, 40, 540, 640, white, colorDiffuse='FF141C2A'))
+        self.addControl(xbmcgui.ControlLabel(370, 60, 540, 40, '[B]%s[/B]' % title,
+                                             textColor='FFECBE5C', alignment=0x00000002))
+        self.addControl(xbmcgui.ControlImage(490, 110, 300, 300, qr_png(link)))
+        y = 425
+        for ln, col in lines:
+            self.addControl(xbmcgui.ControlLabel(380, y, 520, 30, ln, textColor=col, alignment=0x00000002))
+            y += 34
+        self.status = xbmcgui.ControlLabel(380, y + 4, 520, 30, '', textColor='FF7BE495', alignment=0x00000002)
+        self.addControl(self.status)
+        self.addControl(xbmcgui.ControlLabel(370, 640, 540, 30, 'رجوع للإغلاق', textColor='FF98A2B3',
+                                             alignment=0x00000002))
+
+    def onAction(self, action):
+        if action.getId() in (9, 10, 13, 92, 110, 7, 100, 101):
+            self.close()
+
+
+def groq_qr():
+    """Show a QR code; the phone opens a small page that walks through getting a free Groq
+    key and sends it back here. The window closes by itself once a working key arrives."""
+    token = secrets.token_urlsafe(8)
+    cur = xbmcaddon.Addon(ADDON_ID).getSetting('groq_key')
+    state = {'ok': False}
+    holder = {}
+
+    class H(BaseHTTPRequestHandler):
+        def log_message(self, *a):
+            pass
+
+        def _send(self, body, ctype='text/html; charset=utf-8', code=200):
+            b = body.encode('utf-8')
+            self.send_response(code)
+            self.send_header('Content-Type', ctype)
+            self.send_header('Content-Length', str(len(b)))
+            self.send_header('Cache-Control', 'no-store')
+            self.end_headers()
+            self.wfile.write(b)
+
+        def _json(self, ok, msg):
+            self._send(json.dumps({'ok': ok, 'msg': msg}, ensure_ascii=False), 'application/json; charset=utf-8')
+
+        def do_GET(self):
+            if self.path.strip('/') != token:
+                return self._send('404', 'text/plain', 404)
+            note = ('عندك مفتاح محفوظ (••••%s)، تقدر تبدّله.' % html.escape(cur[-4:])) if cur else ''
+            self._send(GROQ_PAGE % {'cur': note})
+
+        def do_POST(self):
+            if self.path.strip('/') != token:
+                return self._send('404', 'text/plain', 404)
+            n = int(self.headers.get('Content-Length') or 0)
+            key = self.rfile.read(n).decode('utf-8', 'replace').strip() if 0 < n < 400 else ''
+            if not key.startswith('gsk_'):
+                return self._json(False, 'هذا مو مفتاح Groq')
+            res = check_groq(key)
+            if res == 'bad':
+                return self._json(False, 'Groq رفض المفتاح — انسخه مرة ثانية')
+            a = xbmcaddon.Addon(ADDON_ID)
+            a.setSetting('groq_key', key)
+            a.setSetting('whisper_sync', 'true')
+            state['ok'] = True
+            self._json(True, '✓ تم! المفتاح شغّال وانحفظ في كودي. تقدر تسكّر الصفحة.' if res == 'ok' else
+                       '✓ انحفظ في كودي (ما قدرت أجرّبه الحين، بيتجرّب أول ما يشتغل فيلم).')
+            w = holder.get('w')
+            if w:
+                try:
+                    w.status.setLabel('✓ وصل المفتاح وانحفظ')
+                except Exception:
+                    pass
+                threading.Timer(2.0, w.close).start()
+
+    try:
+        srv, port = _free_server(H, '0.0.0.0', range(8765, 8790))
+    except OSError:
+        DLG.ok(ADDON_NAME, 'ما قدرت أشغل صفحة الربط على هذا الجهاز.')
+        return False
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    link = 'http://%s:%d/%s' % (_lan_ip(), port, token)
+    try:
+        w = _KeyQR(link, 'ربط Whisper — مجاني', [
+            ('صوّر الرمز بكاميرا الجوال', 'FFF4F1EA'),
+            ('سجّل في Groq ← انسخ المفتاح ← الصق ← حفظ', 'FFB8C2D6'),
+            (link, 'FFECBE5C'),
+            ('الجوال لازم يكون على نفس الواي فاي', 'FF98A2B3')])
+        holder['w'] = w
+        w.doModal()
+        del w
+    finally:
+        srv.shutdown()
+        srv.server_close()
+    if state['ok']:
+        DLG.notification(ADDON_NAME, 'Whisper جاهز ✓ — بيضبط الترجمة على كلام الفيلم', time=5000)
+    return state['ok']

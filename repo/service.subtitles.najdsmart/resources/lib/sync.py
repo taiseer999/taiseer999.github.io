@@ -191,5 +191,5 @@ def describe(info):
     if abs(off) >= 0.05:
         parts.append('إزاحة %+.2f ث' % off)
     if info.get('local_fixes'):
-        parts.append('تصحيح %d سطراً موضعياً' % info['local_fixes'])
+        parts.append('تصحيح %d سطر موضعياً' % info['local_fixes'])
     return '، '.join(parts) if parts else 'التوقيت مضبوط أصلاً'

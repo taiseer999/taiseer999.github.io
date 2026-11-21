@@ -21,7 +21,10 @@ AD_PATTERNS = [
     r'تابعونا|تابعوني|للاعلان|للإعلان|اشترك في القناة',
 ]
 CREDIT_PATTERNS = [
-    r'^\s*(?:ترجمة|ترجمه|تعريب|تدقيق|مراجعة|تعديل(?: ال)?توقيت|ضبط(?: ال)?توقيت|تزامن|سينك|مزامنة)\s*[:：\-]?',
+    # «ترجمة: فلان» / «ترجمة - فلان», or a short credit line «ترجمة أحمد محمد»; not dialogue
+    # that just starts with the word («ترجمة هذا الكتاب صعبة جداً؟»)
+    r'^\s*(?:ترجمة|ترجمه|تعريب|تدقيق|مراجعة|تعديل(?: ال)?توقيت|ضبط(?: ال)?توقيت|تزامن|سينك|مزامنة)\s*[:：\-|]',
+    r'^\s*(?:ترجمة|ترجمه|تعريب|تدقيق|مراجعة)\s+[^\s.,،؟?!]+(?:\s+[^\s.,،؟?!]+){0,2}\s*$',
     r'(?:ترجمة|ترجمه)\s*(?:و|\+)\s*(?:تعديل|ضبط)',
     r'^\s*(?:subtitles?|subbed|translated|synced|sync|resync|corrected|ripped)\s+(?:by|:)',
     r'(?:نتمنى لكم|أتمنى لكم|اتمنى لكم)\s+(?:مشاهدة|مشاهده)\s+(?:ممتعة|ممتعه)',
@@ -52,6 +55,11 @@ def decode(data, letters=True):
         text = data[3:].decode('utf-8', 'replace')
     elif data.startswith((b'\xff\xfe', b'\xfe\xff')):
         text = data.decode('utf-16', 'replace')
+    elif len(data) > 64 and data[:4000].count(b'\x00') > len(data[:4000]) // 4:
+        # UTF-16 without its BOM: every other byte of the ASCII parts is zero
+        head = data[:4000]
+        le = head[1::2].count(b'\x00') >= head[0::2].count(b'\x00')
+        text = data.decode('utf-16-le' if le else 'utf-16-be', 'replace')
     else:
         try:
             text = data.decode('utf-8')

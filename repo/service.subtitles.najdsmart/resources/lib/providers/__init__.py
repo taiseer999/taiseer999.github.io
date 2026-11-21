@@ -2,7 +2,7 @@
 import concurrent.futures
 import re
 
-from ..common import log
+from ..common import log, cache_get, cache_put
 from ..media import release_tokens
 from . import subdl, opensubtitles, subsource, kodiaddons
 
@@ -22,7 +22,7 @@ def all_failed():
 
 
 _EP_RE = re.compile(r'(?<![a-z0-9])s(\d{1,2})[ ._-]?e(\d{1,3})(?:[ ._-]?(?:-|e)[ ._-]?e?(\d{1,3}))?'
-                    r'|(?<![a-z0-9.])(\d{1,2})x(?!26[45])(\d{2,3})(?![0-9])', re.I)
+                    r'|(?<![a-z0-9])(?<!\d\.)(\d{1,2})x(?!26[45])(\d{2,3})(?![0-9])', re.I)
 _SEASON_RE = re.compile(r'(?<![a-z0-9])(?:s(\d{1,2})(?![0-9]|[ ._-]?e\d)|season[ ._-]?(\d{1,2}))(?![0-9])', re.I)
 
 
@@ -98,22 +98,26 @@ def search_all(video, langs, enabled=None):
             if (enabled is None or n in enabled) and m.available()]
     results = []
     LAST['failed'], LAST['total'] = 0, len(mods)
-    with concurrent.futures.ThreadPoolExecutor(max_workers=len(mods) or 1) as ex:
-        futs = {ex.submit(m.search, video, langs): n for n, m in mods}
+    ex = concurrent.futures.ThreadPoolExecutor(max_workers=len(mods) or 1)
+    futs = {ex.submit(m.search, video, langs): n for n, m in mods}
+    try:
+        done_iter = list(concurrent.futures.as_completed(futs, timeout=60))
+    except concurrent.futures.TimeoutError:
+        done_iter = [f for f in futs if f.done()]
+        slow = [futs[f] for f in futs if not f.done()]
+        LAST['failed'] += len(slow)
+        log('too slow, skipped: %s' % ', '.join(slow))
+    finally:
+        ex.shutdown(wait=False)      # never wait for a source that hangs
+    for f in done_iter:
+        name = futs[f]
         try:
-            done_iter = list(concurrent.futures.as_completed(futs, timeout=60))
-        except concurrent.futures.TimeoutError:
-            done_iter = [f for f in futs if f.done()]
-            log('some sources were too slow and were skipped')
-        for f in done_iter:
-            name = futs[f]
-            try:
-                items = f.result() or []
-                log('%s: %d results' % (name, len(items)))
-                results.extend(items)
-            except Exception as e:
-                LAST['failed'] += 1
-                log('%s search failed: %s' % (name, e))
+            items = f.result() or []
+            log('%s: %d results' % (name, len(items)))
+            results.extend(items)
+        except Exception as e:
+            LAST['failed'] += 1
+            log('%s search failed: %s' % (name, e))
     kept, dropped = [], 0
     for it in results:
         it['fit'] = episode_fit(it, video)
@@ -121,6 +125,8 @@ def search_all(video, langs, enabled=None):
             dropped += 1
             continue
         it['score'] = score(it, video)
+        if limited(it.get('provider', '')):
+            it['score'] -= 1000          # its downloads are used up today: others first
         kept.append(it)
     if dropped:
         log('dropped %d results for other episodes/seasons' % dropped)
@@ -129,6 +135,41 @@ def search_all(video, langs, enabled=None):
     return results
 
 
+NAMES = {'subdl': 'SubDL', 'subsource': 'SubSource', 'opensubtitles': 'OpenSubtitles'}
+
+
+class DailyLimit(Exception):
+    pass
+
+
+def limited(provider):
+    """True while a site has said its free daily downloads are used up."""
+    import time
+    c = cache_get('limit_%s.json' % provider, 86400)
+    try:
+        return bool(c) and float(c.decode('utf-8')) > time.time()
+    except ValueError:
+        return False
+
+
+def _note_limit(provider, err):
+    import time
+    m = re.search(r'retryAfterSeconds"?\s*:\s*(\d+)', err)
+    wait = int(m.group(1)) if m else 6 * 3600
+    cache_put('limit_%s.json' % provider, str(time.time() + min(wait, 86400)))
+    log('%s: daily download limit reached — not used for %d min' % (provider, wait // 60))
+
+
 def download(item):
     """Returns raw bytes (zip or subtitle file)."""
-    return PROVIDERS[item['provider']].download(item)
+    prov = item['provider']
+    if limited(prov):
+        raise DailyLimit('%s: خلص حد التنزيل المجاني اليوم' % NAMES.get(prov, prov))
+    try:
+        return PROVIDERS[prov].download(item)
+    except Exception as e:
+        t = str(e)
+        if '429' in t and ('limit' in t.lower() or 'quota' in t.lower()):
+            _note_limit(prov, t)
+            raise DailyLimit('%s: خلص حد التنزيل المجاني اليوم' % NAMES.get(prov, prov))
+        raise

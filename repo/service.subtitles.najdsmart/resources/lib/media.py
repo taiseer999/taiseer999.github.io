@@ -231,10 +231,16 @@ def current():
     return v
 
 
+def is_arabic_code(code):
+    """'ar', 'ara', 'arabic', 'ar-SA', 'عربي' — but not 'arm'/'armenian'."""
+    c = (code or '').strip().lower()
+    return c in ('ar', 'ara', 'arabic') or c.startswith(('ar-', 'ar_', 'arabic', 'عرب'))
+
+
 def subtitle_streams_have_arabic():
     try:
         langs = xbmc.Player().getAvailableSubtitleStreams() or []
-        return any((l or '').lower().startswith(('ar', 'عرب')) for l in langs)
+        return any(is_arabic_code(l) for l in langs)
     except Exception:
         return False
 

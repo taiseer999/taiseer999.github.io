@@ -160,7 +160,7 @@ def collect_anchors(cues, ffmpeg, path, duration_s, api_key, model,
     futs = [ex.submit(work, c) for c in clips]
     try:
         while True:
-            done, pending = concurrent.futures.wait(futs, timeout=0.5)
+            _fin, pending = concurrent.futures.wait(futs, timeout=0.5)
             if not pending:
                 break
             if abort and abort():
@@ -265,7 +265,7 @@ def apply_anchors(cues, anchors, speech=None, max_jump=8000, snap=500):
 
 
 def describe(info):
-    msg = 'تم فهم %d من %d سطراً' % (info.get('kept', 0), info.get('lines', 0))
+    msg = 'فهم %d من %d سطر' % (info.get('kept', 0), info.get('lines', 0))
     if info.get('fixed_lines'):
-        msg += '، وتصحيح %d سطراً كان في غير موضعه' % info['fixed_lines']
+        msg += '، وصحح %d سطر كان في غير مكانه' % info['fixed_lines']
     return msg

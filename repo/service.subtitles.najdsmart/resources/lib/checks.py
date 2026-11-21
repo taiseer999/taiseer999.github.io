@@ -11,9 +11,9 @@ def _err(e):
         if e.code in (401, 403):
             return 'المفتاح غير صحيح'
         if e.code == 429:
-            return 'المفتاح صحيح لكن تم بلوغ الحد، حاول لاحقاً'
+            return 'المفتاح صحيح بس وصل الحد، جرّب بعدين'
         return 'خطأ %s' % e.code
-    return 'تعذر الاتصال بالإنترنت'
+    return 'ما قدر يتصل بالإنترنت'
 
 
 def check_subdl(key):
@@ -23,7 +23,7 @@ def check_subdl(key):
                          'languages': 'AR', 'subs_per_page': 1}, timeout=20)
         if d.get('status') is False and 'key' in str(d.get('error', '')).lower():
             return False, 'المفتاح غير صحيح'
-        return True, 'يعمل ✓'
+        return True, 'يشتغل ✓'
     except Exception as e:
         return False, _err(e)
 
@@ -33,7 +33,7 @@ def check_subsource(key):
         http('https://api.subsource.net/api/v1/movies/search',
              params={'searchType': 'text', 'q': 'inception'},
              headers={'X-API-Key': key, 'Accept': 'application/json'}, timeout=20)
-        return True, 'يعمل ✓'
+        return True, 'يشتغل ✓'
     except Exception as e:
         return False, _err(e)
 
@@ -51,20 +51,20 @@ def check_opensubtitles(key, user='', pwd=''):
                  json_body={'username': user, 'password': pwd},
                  headers={'Api-Key': key, 'Accept': 'application/json'}, timeout=20)
         except Exception as e:
-            return False, 'المفتاح صحيح لكن اسم المستخدم أو كلمة المرور غير صحيحة' \
+            return False, 'المفتاح صحيح بس اسم المستخدم أو كلمة المرور غلط' \
                 if isinstance(e, HttpError) and e.code in (400, 401) else _err(e)
-    return True, 'يعمل ✓'
+    return True, 'يشتغل ✓'
 
 
 def check_gemini(key, model):
     from . import gemini
     try:
         if gemini.all_used_up():
-            return False, 'المفتاح يعمل لكن انتهى الحد المجاني اليوم، ويتجدد غداً'
+            return False, 'المفتاح شغال بس خلص الحد المجاني اليوم، يرجع بكرة'
         gemini.generate({'contents': [{'role': 'user', 'parts': [{'text': 'قل: تم'}]}]}, timeout=40)
-        return True, 'يعمل ✓ (%s)' % gemini.models()[0]
+        return True, 'يشتغل ✓ (%s)' % gemini.models()[0]
     except gemini.QuotaExhausted:
-        return False, 'المفتاح يعمل لكن انتهى الحد المجاني اليوم، ويتجدد غداً'
+        return False, 'المفتاح شغال بس خلص الحد المجاني اليوم، يرجع بكرة'
     except HttpError as e:
         return False, _err(e)
     except Exception as e:
@@ -78,9 +78,9 @@ def check_ffmpeg(path):
         kw = {'creationflags': 0x08000000} if sys.platform.startswith('win') else {}
         p = subprocess.run([path, '-hide_banner', '-version'], stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE, timeout=20, **kw)
-        return (p.returncode == 0), ('جاهزة ✓' if p.returncode == 0 else 'لم تعمل')
+        return (p.returncode == 0), ('جاهزة ✓' if p.returncode == 0 else 'ما اشتغلت')
     except Exception as e:
-        return False, 'لم تعمل: %s' % str(e)[:60]
+        return False, 'ما اشتغلت: %s' % str(e)[:60]
 
 
 def check_audio(configured=''):
@@ -92,9 +92,9 @@ def check_audio(configured=''):
     if eng == audiosync.MF:
         try:
             if winaudio.self_test(TEMP_DIR):
-                return True, 'جاهزة ✓ (محرك الصوت الخاص بويندوز)'
-            return False, 'عمل محرك ويندوز لكن النتيجة غير صحيحة'
+                return True, 'جاهزة ✓ (محرك الصوت حق ويندوز)'
+            return False, 'محرك ويندوز اشتغل بس النتيجة غلط'
         except Exception as e:
-            return False, 'لم يعمل محرك ويندوز: %s' % str(e)[:80]
+            return False, 'محرك ويندوز ما اشتغل: %s' % str(e)[:80]
     err = audiosync._engine_cache.get('last_error', '')
     return False, 'غير متوفرة على هذا الجهاز' + (' (%s)' % err[:60] if err else '')

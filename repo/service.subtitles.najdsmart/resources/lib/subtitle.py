@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Parse SRT / VTT / ASS / MicroDVD into cues and write SRT. Pure Python."""
+import html
 import re
 
 _TIME = r'(\d{1,2}):(\d{1,2}):(\d{1,2})(?:[,.:](\d{1,3}))?'
@@ -101,6 +102,7 @@ def parse_vtt(text):
                 end = _ms(g[4] or 0, g[5], g[6], g[7])
                 body = '\n'.join(lines[k + 1:]).strip()
                 body = re.sub(r'</?c[^>]*>|</?v[^>]*>', '', body)
+                body = html.unescape(body)          # &amp; &lt; &nbsp; ...
                 if body:
                     cues.append(Cue(start, end, body))
                 break

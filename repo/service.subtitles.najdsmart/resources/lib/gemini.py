@@ -20,6 +20,13 @@ class QuotaExhausted(Exception):
     pass
 
 
+class RateLimited(Exception):
+    """The per-MINUTE limit was hit (not the daily one): wait `delay` seconds and retry."""
+    def __init__(self, delay):
+        Exception.__init__(self, 'rate limited, retry in %ds' % delay)
+        self.delay = delay
+
+
 _lock = threading.Lock()
 _no_think = {}          # model -> False when it refuses thinkingConfig
 
@@ -30,7 +37,10 @@ def _day():
 
 def _exhausted():
     c = cache_get('gemini_quota_%s.json' % _day(), 86400)
-    return set(json.loads(c.decode('utf-8'))) if c else set()
+    try:
+        return set(json.loads(c.decode('utf-8'))) if c else set()
+    except ValueError:
+        return set()
 
 
 def _mark_exhausted(model):
@@ -100,6 +110,7 @@ def generate(body, timeout=90):
         raise Exception('no_key')
     tried = []
     last_err = None
+    minute_wait = 0
     for model in models():
         start = _LADDER.index(_shape.get(model, 'full'))
         level_i = start
@@ -133,12 +144,14 @@ def generate(body, timeout=90):
                 if e.code == 429:
                     per_minute = 'perminute' in b.replace('_', '').replace(' ', '') or 'per minute' in b
                     delay = _retry_delay(e.body)
-                    if per_minute and not waited and (delay is None or delay <= 40):
+                    if per_minute and not waited and (delay is None or delay <= 70):
                         waited = True
                         time.sleep(delay or 20)
                         continue
                     log('Gemini %s: quota used up (%s)' % (model, 'minute' if per_minute else 'day'))
-                    if not per_minute:
+                    if per_minute:
+                        minute_wait = max(minute_wait, delay or 60)
+                    else:
                         _mark_exhausted(model)
                     tried.append(model)
                     break
@@ -158,4 +171,6 @@ def generate(body, timeout=90):
             tried.append(model)            # every shape rejected → try the next model
     if last_err is not None and getattr(last_err, 'code', 0) in (400, 500, 503, 504):
         raise last_err
+    if minute_wait:
+        raise RateLimited(int(minute_wait))      # only the per-minute limit: not used up today
     raise QuotaExhausted('all models used up: %s' % ', '.join(tried))

@@ -100,8 +100,10 @@ def search(video, langs):
         t = threading.Thread(target=one, args=(aid, name), daemon=True)
         t.start()
         threads.append(t)
-    for t in threads:
-        t.join(20)        # a slow/hung add-on must never block us
+    import time
+    deadline = time.time() + 20
+    for t in threads:     # one 20 s limit for all of them: a hung add-on never blocks us
+        t.join(max(0.0, deadline - time.time()))
     with lock:
         return list(results)
 
@@ -121,4 +123,4 @@ def download(item):
                 return data
         except Exception as e:
             log('read %s failed: %s' % (path, e))
-    raise Exception('لم تُرجع الإضافة %s ملف ترجمة' % item.get('source', ''))
+    raise Exception('الإضافة %s ما رجعت ملف ترجمة' % item.get('source', ''))

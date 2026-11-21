@@ -1,3 +1,23 @@
+v4.12.9  (2026-11-21)
+- Najd rebased on the author's 2.9.7 (bundled 2.9.7.1). Upstream 2.8.4 ->
+  2.9.7 brings: Whisper sync on the film's own speech (Groq key, daily
+  limit), a stricter audio sync that leaves the timing alone unless the
+  sound clearly beats chance, per-section offsets for cut versions,
+  embedded subtitles read from TorBox-style links with no extension (and
+  then no English reference downloaded), fixes from a full review (right
+  season in season packs, no double offset, no full-film download for the
+  embedded track), a timing question after an episode and a What's New
+  window. All Piers changes carried over: Dex Hub / Trakt ids, Dex Hub's
+  subtitle first, the embedded Arabic track switched on, outside subtitles
+  timed (extwatch), cache folders remade, ffmpeg-tools path, sumprod, filled
+  settings labels + ar_sa, first-run wizard and What's New never over AB
+  Tools' setup. The Piers string ids moved to 30200-30203 (upstream now
+  uses 30150+).
+- Dex Hub's AI key, on the advice of Dex Hub's author: Najd no longer uses
+  it silently. New setting "Use the AI key saved in Dex Hub" (off); when
+  Najd has no key of its own and Dex Hub has one, Najd asks once on the
+  home screen, saying it spends that account's tokens.
+
 v4.12.8  (2026-11-21)
 - Search All: Usenet rows now carry the stream badges (BLU-RAY, REMUX, DV,
   HDR, HEVC, ATMOS, TRUEHD, DTS-HD MA, DD+, 7.1 ...) like the debrid rows.

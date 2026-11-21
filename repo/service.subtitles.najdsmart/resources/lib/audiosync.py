@@ -142,7 +142,109 @@ def media_source(path):
     return path, [], False
 
 
+STATS = {'layout': '', 'short': 0, 'refused': 0}
+_CENTER = {}     # source → False once its center channel proved unusable (stereo, silent...)
+CENTER_FILTER = 'pan=mono|c0=FC,'
+PLAIN_FILTER = ''
+
+
+def _quiet(pcm):
+    """True when the clip is (nearly) silent — e.g. an empty center channel."""
+    if not pcm:
+        return True
+    try:
+        if audioop:
+            return audioop.rms(pcm[:len(pcm) - len(pcm) % 2], 2) < 40
+        a = array.array('h')
+        a.frombytes(pcm[:len(pcm) - len(pcm) % 2][:400000])
+        return (sum(x * x for x in a[::7]) / float(max(1, len(a[::7])))) ** 0.5 < 40
+    except Exception:
+        return False
+
+
+_LAYOUT_RE = re.compile(r'Stream #\d+:\d+(?:\[[^\]]*\])?(?:\([^)]*\))?: Audio: [^\n]*?, \d+ Hz, ([^,\n]+)')
+_WITH_CENTER = ('3.0', '4.0', '5.0', '5.1', '6.0', '6.1', '7.0', '7.1', 'hexagonal', 'octagonal')
+
+
+def _has_center(ffmpeg, src, args, track):
+    """Does the audio track have a front-center channel? Asked once per source."""
+    if src in _CENTER:
+        return _CENTER[src]
+    ok = False
+    try:
+        kw = {}
+        if sys.platform.startswith('win'):
+            kw['creationflags'] = 0x08000000
+        proc = subprocess.Popen([ffmpeg, '-nostdin', '-hide_banner'] + args + ['-i', src],
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, **kw)
+        timer = threading.Timer(40, proc.kill)
+        timer.start()
+        try:
+            err = proc.communicate()[1].decode('utf-8', 'replace')
+        finally:
+            timer.cancel()
+        layouts = _LAYOUT_RE.findall(err)
+        if layouts:
+            lay = layouts[min(track or 0, len(layouts) - 1)].strip().lower()
+            ok = lay.startswith(_WITH_CENTER) or lay in ('6 channels', '8 channels')
+            STATS['layout'] = lay + (' (center)' if ok else '')
+            from .common import log
+            log('audio: layout %s → %s' % (lay, 'center channel' if ok else 'full mix'))
+    except Exception:
+        ok = False
+    _CENTER[src] = ok
+    return ok
+
+
 def _run_ffmpeg(ffmpeg, src, args, start=None, dur=None, track=None, timeout=900, abort=None):
+    """Like _run_mono, but a clip that came back short (the connection dropped half way —
+    ffmpeg then often resumes at the wrong spot) is read again once, then refused:
+    a cut-off clip would measure a wrong shift."""
+    pcm = _run_mono(ffmpeg, src, args, start, dur, track, timeout, abort)
+    if not dur or ffmpeg == MF:
+        return pcm
+    want = int(dur * RATE) * 2
+    if len(pcm) >= want * 0.92:
+        return pcm
+    from .common import log
+    STATS['short'] += 1
+    log('audio: clip @%ss came back short (%d%%), reading it again' % (int(start or 0), 100 * len(pcm) // want))
+    pcm = _run_mono(ffmpeg, src, args, start, dur, track, timeout, abort)
+    if len(pcm) >= want * 0.92:
+        return pcm
+    STATS['refused'] += 1
+    raise AudioSyncError('short read (%d%%)' % (100 * len(pcm) // want))
+
+
+def _run_mono(ffmpeg, src, args, start=None, dur=None, track=None, timeout=900, abort=None):
+    """Mono 8 kHz speech-band PCM. Surround sound: listen to the center channel only (the
+    dialogue lives there, the music and effects mostly don't); falls back to the full mix
+    when there is no center channel or it is silent."""
+    try:
+        from .common import setting_bool
+        use_center = setting_bool('center_channel', True)
+    except Exception:
+        use_center = True
+    if not use_center:
+        STATS['layout'] = 'center off (setting)'
+    if use_center and ffmpeg != MF and _has_center(ffmpeg, src, args, track):
+        try:
+            pcm = _run_ffmpeg_once(ffmpeg, src, args, start, dur, track, timeout, abort, CENTER_FILTER)
+            if not _quiet(pcm):
+                return pcm
+            from .common import log
+            log('audio: center channel is silent here, using the full mix')
+            return _run_ffmpeg_once(ffmpeg, src, args, start, dur, track, timeout, abort, PLAIN_FILTER)
+        except AudioSyncError as e:
+            if 'aborted' in str(e):
+                raise
+            from .common import log
+            log('audio: no center channel (%s), using the full mix' % str(e)[-80:])
+        _CENTER[src] = False
+    return _run_ffmpeg_once(ffmpeg, src, args, start, dur, track, timeout, abort, PLAIN_FILTER)
+
+
+def _run_ffmpeg_once(ffmpeg, src, args, start, dur, track, timeout, abort, pre):
     if ffmpeg == MF:
         from . import winaudio
         try:
@@ -156,14 +258,17 @@ def _run_ffmpeg(ffmpeg, src, args, start=None, dur=None, track=None, timeout=900
     if dur:
         cmd += ['-t', '%.3f' % dur]
     cmd += ['-map', '0:a:%d?' % track if track is not None else '0:a:0?',
-            '-vn', '-sn', '-dn', '-ac', '1', '-ar', str(RATE),
-            '-af', 'highpass=f=250,lowpass=f=3400',
+            '-vn', '-sn', '-dn', '-ar', str(RATE),
+            '-af', pre + 'highpass=f=250,lowpass=f=3400,aformat=channel_layouts=mono',
             '-f', 's16le', '-']
     kw = {}
     if sys.platform.startswith('win'):
         kw['creationflags'] = 0x08000000  # CREATE_NO_WINDOW
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, **kw)
-    timer = threading.Timer(timeout, proc.kill)
+    import tempfile
+    errf = tempfile.TemporaryFile()        # a file, not a pipe: lots of warnings can't block ffmpeg
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=errf, **kw)
+    killed = []
+    timer = threading.Timer(timeout, lambda: (killed.append(1), proc.kill()))
     timer.start()
     chunks = []
     try:
@@ -175,10 +280,14 @@ def _run_ffmpeg(ffmpeg, src, args, start=None, dur=None, track=None, timeout=900
             if abort and abort():
                 proc.kill()
                 raise AudioSyncError('aborted')
-        err = proc.stderr.read().decode('utf-8', 'replace')
         proc.wait()
+        errf.seek(0)
+        err = errf.read()[-4000:].decode('utf-8', 'replace')
     finally:
         timer.cancel()
+        errf.close()
+    if killed:
+        raise AudioSyncError('ffmpeg timed out')     # a cut-off read must not count as audio
     data = b''.join(chunks)
     if not data:
         raise AudioSyncError('ffmpeg: %s' % (err.strip()[-300:] or 'no audio'))
@@ -334,7 +443,7 @@ def speech_reference(ffmpeg, path, duration_s, mode='auto', track=None,
         with lock:
             done[0] += 1
             if progress:
-                progress(5 + done[0] * 65 // n, 'الاستماع إلى الصوت (%d/%d)...' % (done[0], n))
+                progress(5 + done[0] * 65 // n, 'الاستماع للصوت (%d/%d)...' % (done[0], n))
     threads = []
     for k in range(n):
         t = threading.Thread(target=work, args=(k,))
@@ -355,9 +464,9 @@ def describe_error(e):
     if 'no_ffmpeg' in m:
         return 'أداة قراءة الصوت غير متوفرة على هذا الجهاز'
     if 'windows audio' in m:
-        return 'تعذر على ويندوز قراءة صوت هذا الملف (صيغة صوت غير مدعومة مثل DTS)'
+        return 'ويندوز ما قدر يقرأ صوت هذا الملف (صيغة صوت غير مدعومة مثل DTS)'
     if 'unsupported_path' in m:
-        return 'مصدر الفيديو لا يدعم الاستماع إلى الصوت (رابط إضافة أو شبكة غير مدعومة)'
+        return 'مصدر الفيديو ما يدعم الاستماع للصوت (رابط إضافة أو شبكة غير مدعومة)'
     if 'aborted' in m:
         return 'توقفت المزامنة الصوتية'
     return 'تعذر تحليل الصوت: %s' % m[:120]

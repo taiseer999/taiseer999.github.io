@@ -13,9 +13,9 @@ import zipfile
 import xbmcvfs
 
 from .common import (TEMP_DIR, JOBS_DIR, CACHE_DIR, ensure_dirs, log, setting, setting_bool,
-                     cache_get, cache_put)
-from . import arabic, subtitle, sync, providers
-from .media import release_tokens, release_family
+                     cache_get, cache_put, cache_del, cache_json, write_atomic)
+from . import arabic, subtitle, sync, providers, trace
+from .media import release_tokens, release_family, is_arabic_code
 
 def llm_key(pid):
     """The add-on's own key, else the one shared from Dex Hub (Piers edition)."""
@@ -32,9 +32,19 @@ def _pick(names, video):
         return None
     if video.get('is_episode') and video.get('episode'):
         s, e = int(video['season'] or 0), int(video['episode'])
-        strict = re.compile(r'(?:s0*%d[ ._-]?e0*%d(?!\d)|(?<!\d)0*%dx0*%d(?!\d)|(?<![a-z])ep?\s*0*%d(?!\d)'
+        strict = re.compile(r'(?:s0*%d[ ._-]?e0*%d(?!\d)|(?<!\d)0*%dx0*%d(?!\d)|(?<![a-z0-9])ep?\s*0*%d(?!\d)'
                             r'|[ ._-]e0*\d+-e?0*%d(?!\d)|episode[ ._-]*0*%d(?!\d))' % (s, e, s, e, e, e, e), re.I)
         bare = re.compile(r'(?<![\dxXeEsS])0*%d(?![\dpPkK])' % e)
+        def other_season(n):
+            b = os.path.basename(n)
+            for m in re.finditer(r'(?<![a-z0-9])s0*(\d{1,2})[ ._-]?e\d|(?<![a-z0-9.])0*(\d{1,2})x\d{2,3}(?!\d)', b, re.I):
+                if int(m.group(1) or m.group(2)) != s:
+                    return True
+            return False
+        if s:
+            subs = [n for n in subs if not other_season(n)] or subs
+            if all(other_season(n) for n in subs):
+                return None      # only other seasons in this archive
         eps = [n for n in subs if strict.search(os.path.basename(n))]
         if not eps:
             # names like "Anime - 02 [1080p]" or "02.srt": number on its own
@@ -79,7 +89,8 @@ def extract(data, video):
             return z.read(best), best
     if data[:4] == b'Rar!' or data[:2] == b'7z':
         ext = '.rar' if data[:4] == b'Rar!' else '.7z'
-        tmp = os.path.join(TEMP_DIR, 'archive' + ext)
+        tmp = os.path.join(TEMP_DIR, 'archive_%s%s' % (hashlib.sha1(data[:65536]).hexdigest()[:10] +
+                                                    '_%d' % os.getpid(), ext))
         with open(tmp, 'wb') as f:
             f.write(data)
         root = 'archive://%s/' % urllib.parse.quote_plus(tmp)
@@ -101,13 +112,43 @@ def extract(data, video):
                 return content, best
         except Exception as e:
             log('archive read failed (install "Archive support" vfs.libarchive): %s' % e)
+        finally:
+            try:
+                os.remove(tmp)
+            except OSError:
+                pass
         return None, None
     return data, 'subtitle.srt'
 
 
+GENERIC_NAMES = ('index', 'video', 'download', 'playlist', 'master', 'stream', 'file', 'media',
+                 'play', 'watch', 'movie', 'get', 'manifest')
+
+
+def is_generic_name(filename):
+    """'index.m3u8', '/download', a random id... — names that do not tell films apart."""
+    b = os.path.splitext(os.path.basename(filename or ''))[0].lower()
+    return len(b) < 4 or b in GENERIC_NAMES or is_random_name(filename)
+
+
+_RANDOM_RE = re.compile(r'^(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|[0-9a-f]{16,})$', re.I)
+
+
+def is_random_name(filename):
+    """A link id that changes on every play (e.g. '211fd81f-af5b-46b9-9eb0-ce92ea50c3c1')."""
+    b = os.path.splitext(os.path.basename(filename or ''))[0]
+    return bool(_RANDOM_RE.match(b))
+
+
 def _video_key(video):
-    k = video.get('hash') or (video.get('filename', '') + video.get('imdb', '') +
+    name = video.get('filename', '')
+    rnd = is_random_name(name)
+    k = video.get('hash') or (('' if rnd else name) + video.get('imdb', '') +
                               str(video.get('season')) + str(video.get('episode')))
+    if not video.get('hash') and (rnd or not video.get('imdb')) and is_generic_name(name):
+        # a generic or random stream name: tell films apart by what Kodi knows about them
+        k += '|%s|%s|%s|%d' % (video.get('tvshow') or '', video.get('title') or '', video.get('year') or '',
+                               int(float(video.get('duration') or 0)) // 10)
     return hashlib.sha1(k.encode('utf-8')).hexdigest()[:16]
 
 
@@ -187,9 +228,17 @@ def get_reference(video, chosen, ar_cues=None):
     tiers.sort(key=lambda t: (t[0], t[1]))
     tried = 0
     bad = set(_bad_refs(video))
+    none_key = 'refnone_%s_%s' % (_video_key(video), hashlib.sha1(
+        (chosen.get('release') or str(chosen.get('id') or '')).encode('utf-8')).hexdigest()[:8])
+    if cache_get(none_key, 3 * 86400):
+        log('reference: none fitted this video last time; not downloading again')
+        return None, None
+    net_trouble = False
     for tier, _score, cand, how in tiers:
-        if tried >= 5:
+        if tried >= 3:                      # each try is a download from the site's daily allowance
             break
+        if providers.limited(cand.get('provider', '')):
+            continue
         if (cand.get('release') or '') in bad:
             log('reference skipped (audio showed it is another cut): %s' % cand.get('release'))
             continue
@@ -229,9 +278,17 @@ def get_reference(video, chosen, ar_cues=None):
                 {'how': how, 'family': release_family(max(rels, key=lambda r: _sim(r, video.get('filename'))))
                  if rels else '', 'release': cand.get('release') or ''}))
             log('reference chosen (%s): %s' % (how, cand.get('release')))
+            trace.event(video, 'english reference found (%s): %s' % (how, cand.get('release')))
             return cues, how
+        except providers.DailyLimit as e:
+            log('reference: %s — stopped trying' % e)
+            net_trouble = True
+            break
         except Exception as e:
             log('reference download failed: %s' % e)
+            net_trouble = True
+    if tried and not net_trouble:
+        cache_put(none_key, '1')     # do not spend downloads on it again (for this subtitle)
     return None, None
 
 
@@ -244,9 +301,10 @@ def process(item, video, progress=None):
     summary = []
     step(10, 'تنزيل الترجمة...')
     raw = providers.download(item)
+    trace.start(video, item, 'manual' if progress else 'auto')
     content, name = extract(raw, video)
     if not content:
-        raise Exception('لا يحتوي الأرشيف على ترجمة لهذه الحلقة أو هذا الفيلم')
+        raise Exception('الأرشيف ما فيه ترجمة لهذي الحلقة أو الفلم')
 
     step(25, 'إصلاح الترميز والنص...')
     text = arabic.decode(content)
@@ -260,20 +318,24 @@ def process(item, video, progress=None):
                                    remove_ads=setting_bool('remove_ads', True),
                                    remove_hi=setting_bool('remove_hi', False))
         if st['changed'] or st['ads']:
-            summary.append('تم إصلاح %d سطراً وحذف %d إعلاناً' % (st['changed'], st['ads']))
+            summary.append('إصلاح %d سطر وحذف %d إعلان' % (st['changed'], st['ads']))
 
     steps = []
     verify_orig = None
     method = setting('sync_method', 'smart')
     if method == 'auto':                       # older setting value
         method = 'smart'
+    whisper_only = setting_bool('whisper_only', False)     # testing: nothing but Whisper
+    if whisper_only:
+        method = 'audio'
     from . import llm as _llm
     gemini = is_ar and setting_bool('ai_fix', True) and _llm.any_available()
     emb_ok = False
+    ref_used = False
     if setting_bool('auto_sync', True):
         if item.get('hash_match'):
-            summary.append('مطابقة لملف الفيديو نفسه ✓')
-        if method in ('smart', 'subtitle', 'audio') and setting_bool('embedded_ref', True):
+            summary.append('مطابقة لنفس ملف الفيديو ✓')
+        if method in ('smart', 'subtitle', 'audio') and setting_bool('embedded_ref', True) and not whisper_only:
             step(35, 'قراءة توقيت الترجمة المدمجة في الفيديو...')
             emb = embedded_reference(video)
             if emb:
@@ -281,8 +343,12 @@ def process(item, video, progress=None):
                 log('embedded sync: %s' % einfo)
                 if new is not None:
                     cues, emb_ok = new, True
-                    summary.append('تم ضبط التوقيت على الترجمة المدمجة في الفيديو ✓ (%s)' % sync.describe(einfo))
-        if method in ('smart', 'subtitle') and not item.get('hash_match'):
+                    summary.append('ضُبط التوقيت على الترجمة المدمجة في الفيديو ✓ (%s)' % sync.describe(einfo))
+        if emb_ok:
+            # the film's own subtitle already gave the timing: nothing is downloaded from the
+            # subtitle sites for a comparison (their daily downloads are kept for real subtitles)
+            log('timing taken from the subtitle inside the video; no English download needed')
+        elif method in ('smart', 'subtitle') and not item.get('hash_match'):
             step(45, 'البحث عن ترجمة إنجليزية مرجعية...')
             ref, how = get_reference(video, item, ar_cues=cues)
             if ref and emb_ok:
@@ -297,11 +363,12 @@ def process(item, video, progress=None):
                     cache_put('refmeta_%s.json' % _video_key(video), json.dumps(meta))
                     if method == 'smart' and gemini:
                         steps.append('semantic')
-                        summary.append('جارٍ مطابقة كل سطر مع الترجمة الإنجليزية حسب المعنى...')
+                        summary.append('جاري مطابقة كل سطر مع الإنجليزي بالمعنى...')
                 else:
                     log('English reference does not fit this video; not used')
                 ref = None
             if ref:
+                ref_used = True
                 before = [subtitle.Cue(c.start, c.end, c.text) for c in cues]
                 cues, line = reference_sync_msg(cues, video, item, ref=ref, how=how)
                 info = _LAST_REF_INFO.get('info') or {}
@@ -317,17 +384,34 @@ def process(item, video, progress=None):
                     summary.append(line)
                 if method == 'smart' and gemini:
                     steps.append('semantic')
-                    summary.append('جارٍ مطابقة كل سطر مع الترجمة الإنجليزية حسب المعنى...')
+                    summary.append('جاري مطابقة كل سطر مع الإنجليزي بالمعنى...')
             elif how != 'hash':
                 log('no English reference; keeping the subtitle timing as is')
-        listen = not emb_ok and (method == 'audio' or (setting_bool('listen_extra', False) and not steps))
+                trace.event(video, 'no english reference with the same timing')
+        # nothing that follows this video (no embedded subtitle, no English file of the same
+        # release): let Whisper hear the film's own speech and build the timing from that
+        if method in ('smart', 'audio') and not emb_ok and not ref_used and 'semantic' not in steps \
+                and (setting_bool('whisper_sync', True) or whisper_only):
+            from . import whisper as _wsp
+            if _wsp.available() and (finetune_possible(video) if is_stream(video) else audio_possible(video)):
+                steps.append('whisper')
+                summary.append('Whisper يسمع كلام الفيلم لضبط التوقيت بالخلفية...')
+            elif whisper_only:
+                summary.append('وضع تجربة Whisper: ' + ('اربط Groq أول (قائمة الإضافة ← ربط Whisper بالباركود)'
+                                                        if not _wsp.available() else 'السماع غير متاح لهذا المصدر'))
+            elif not _wsp.available() and setting('whisper_hint') != 'shown':
+                from .common import ADDON
+                ADDON.setSetting('whisper_hint', 'shown')
+                summary.append('لضبط أدق على كلام الفيلم: قائمة الإضافة ← ربط Whisper بالباركود (مجاني)')
+        listen = not emb_ok and 'whisper' not in steps and not whisper_only and \
+            (method == 'audio' or (setting_bool('listen_extra', False) and not steps))
         if listen and audio_possible(video):
             steps.append('audio')
             if llm_key('gemini') and not is_stream(video) and setting_bool('understand_extra', False):
                 steps.append('understand')
-            summary.append('جارٍ الاستماع إلى الصوت لمزامنة الترجمة...')
+            summary.append('جاري الاستماع للصوت لمزامنة الترجمة...')
         elif method == 'audio':
-            summary.append('الاستماع غير متاح لهذا المصدر')
+            summary.append('السماع غير متاح لهذا المصدر')
 
     apply_offset(cues, user_offset(video))
     cues = subtitle.fix_timing(cues)
@@ -340,13 +424,16 @@ def process(item, video, progress=None):
 
     if gemini and 'semantic' not in steps:
         steps.append('ai')
-    if setting_bool('auto_sync', True) and setting_bool('auto_finetune', True) and 'audio' not in steps \
+    if setting_bool('auto_sync', True) and setting_bool('auto_finetune', True) and not whisper_only and 'audio' not in steps \
             and not emb_ok:
         if not is_stream(video) and audio_possible(video):
             steps.append('finetune')
         elif is_stream(video) and setting_bool('stream_finetune', True) and finetune_possible(video):
             steps.append('finetune')
-        summary.append('جارٍ التصحيح بالذكاء الاصطناعي في الخلفية...')
+    if 'finetune' in steps:
+        summary.append('ضبط دقيق على الصوت بالخلفية...')
+    elif 'ai' in steps:
+        summary.append('التصحيح بالذكاء الاصطناعي بالخلفية...')
     if verify_orig and (finetune_possible(video) if is_stream(video) else audio_possible(video)):
         steps.insert(0, 'verify')
     remember_last(path, video, item)
@@ -371,9 +458,10 @@ def embedded_reference(video):
         except (ValueError, KeyError):
             pass
     path = video.get('path') or ''
-    if not path or not re.search(r'\.(mkv|webm|mk3d)($|[?|])', path.split('|')[0], re.I) and \
-            not (video.get('filename') or '').lower().endswith(('.mkv', '.webm')):
+    if not path or _other_container(video):
         return None
+    # links with a random name ('211fd81f-...') are tried too: the file's own first bytes
+    # tell whether it is an MKV (one small read; the answer is kept)
     from . import mkvcues, audiosync
     try:
         src, _args, remote = audiosync.media_source(path)
@@ -398,6 +486,13 @@ def _is_mkv(video):
         (video.get('filename') or '').lower().endswith(('.mkv', '.webm', '.mk3d'))
 
 
+def _other_container(video):
+    path = (video.get('path') or '').split('|')[0].lower()
+    name = (video.get('filename') or '').lower()
+    return not _is_mkv(video) and bool(
+        re.search(r'\.(mp4|m4v|avi|ts|m3u8|mpd|mov|wmv|flv|mpg|mpeg)($|[?])', path + ' ' + name))
+
+
 def embedded_text_possible(video):
     """Worth offering «translate the built-in subtitle»? (cheap: no network)"""
     path = (video.get('path') or '').split('|')[0].lower()
@@ -419,11 +514,11 @@ def _net_msg(e, what):
     log('embedded text failed: %r' % (e,))
     t = str(e).lower()
     if 'timed out' in t or 'timeout' in t or 'handshake' in t or 'reset' in t or 'urlopen' in t:
-        return what + ':\nخادم الفيلم بطيء أو انقطع الاتصال. حاول مرة أخرى بعد قليل.'
+        return what + ':\nسيرفر الفيلم بطيء أو قطع الاتصال. جرّب مرة ثانية بعد شوي.'
     if 'no_range' in t:
-        return what + ':\nخادم الفيلم لا يسمح بالقراءة الجزئية.'
+        return what + ':\nسيرفر الفيلم ما يسمح بالقراءة الجزئية.'
     if 'no_relative_positions' in t or 'block_not_found' in t:
-        return what + ':\nبنية ملف الفيديو لا تسمح باستخراج الترجمة منه.'
+        return what + ':\nملف الفيديو مبني بطريقة ما تسمح بسحب الترجمة منه.'
     return '%s (%s)' % (what, e)
 
 
@@ -431,7 +526,7 @@ def _read_text(mkvcues, where, track, idx, remote, abort, step):
     return mkvcues.read_text(where, track, idx, workers=4 if remote else 2,
                              timeout=240.0 if remote else 60.0, abort=abort,
                              progress=lambda d, n: step(10 + int(20 * d / max(1, n)),
-                                                        'استخراج الترجمة من داخل الفيديو (%d/%d)...' % (d, n)))
+                                                        'سحب الترجمة من داخل الفيديو (%d/%d)...' % (d, n)))
 
 
 LANG_AR = {'en': 'الإنجليزية', 'eng': 'الإنجليزية', 'fr': 'الفرنسية', 'fre': 'الفرنسية', 'fra': 'الفرنسية',
@@ -460,7 +555,7 @@ def embedded_text_info(video):
     best = max(tracks, key=lambda t: (1 if (t.get('lang') or '').lower().startswith('en') else 0,
                                       len(idx['cues'].get(t['num']) or [])))
     lang = (best.get('lang') or '').lower()
-    if lang.startswith('ar'):
+    if is_arabic_code(lang):
         return None
     return LANG_AR.get(lang.split('-')[0], lang or 'أجنبية')
 
@@ -473,12 +568,12 @@ def embedded_translate(video, progress=None, abort=None, position=None):
         if progress:
             progress(pct, msg)
     if not embedded_text_possible(video):
-        raise Exception('هذه الميزة لملفات MKV فقط')
+        raise Exception('هذي الميزة لملفات MKV فقط')
     step(5, 'قراءة قائمة الترجمات داخل الفيديو...')
     try:
         src, _a, remote = audiosync.media_source(video.get('path'))
     except audiosync.AudioSyncError as e:
-        raise Exception('تعذر فتح الفيديو (%s)' % e)
+        raise Exception('ما قدرت أفتح الفيديو (%s)' % e)
     where = video.get('path') if remote else src
     idx = None
     for attempt in range(3):
@@ -493,8 +588,8 @@ def embedded_translate(video, progress=None, abort=None, position=None):
     if idx is None:
         e = err
         if 'not_mkv' in str(e):
-            raise Exception('هذا الفيديو ليس بصيغة MKV، فلا توجد فيه ترجمة مدمجة يمكن استخراجها')
-        raise Exception(_net_msg(e, 'تعذرت قراءة فهرس الفيديو'))
+            raise Exception('هذا الفيديو مو MKV، فما فيه ترجمة مدمجة تنسحب')
+        raise Exception(_net_msg(e, 'ما قدرت أقرأ فهرس الفيديو'))
     tracks = mkvcues.text_tracks(idx)
     if not tracks:
         imgs = [t for t in idx.get('tracks', []) if t['type'] == mkvcues.SUBTITLE]
@@ -505,21 +600,21 @@ def embedded_translate(video, progress=None, abort=None, position=None):
             d = {}
         d['text'] = False
         cache_put(key, json.dumps(d))
-        raise Exception('الترجمة المدمجة في هذا الفيديو صور (PGS) وليست نصاً، لذا لا يمكن قراءتها'
-                        if imgs else 'لا توجد ترجمة مدمجة داخل هذا الفيديو')
+        raise Exception('الترجمة المدمجة في هذا الفيديو صور (PGS) وليست نص — ما تنقرأ'
+                        if imgs else 'ما فيه ترجمة مدمجة داخل هذا الفيديو')
 
     def rank(t):
         lang = (t.get('lang') or '').lower()
         name = (t.get('name') or '').lower()
-        return (2 if lang.startswith('ar') else 1 if lang.startswith('en') else 0,
+        return (2 if is_arabic_code(lang) else 1 if lang.startswith('en') else 0,
                 0 if ('sdh' in name or 'cc' in name.split()) else 1,
                 len(idx['cues'].get(t['num']) or []))
     track = max(tracks, key=rank)
-    is_ar = (track.get('lang') or '').lower().startswith('ar')
+    is_ar = is_arabic_code(track.get('lang'))
     log('embedded text: track %s %s %s (%d lines)' % (track['num'], track['codec'], track['lang'],
                                                        len(idx['cues'].get(track['num']) or [])))
     if not is_ar and not llm.any_available():
-        raise Exception('يلزم مفتاح ذكاء اصطناعي (Gemini أو غيره) في الإعدادات للترجمة')
+        raise Exception('لازم مفتاح ذكاء اصطناعي (Gemini أو غيره) في الإعدادات عشان الترجمة')
     item = {'provider': 'embedded', 'id': 'track%s' % track['num'], 'lang': 'ar',
             'release': 'embedded', 'hash_match': True}
     state = _emb_state(video, track)
@@ -535,19 +630,19 @@ def embedded_translate(video, progress=None, abort=None, position=None):
         todo = _emb_next(state, dur, now, first=True)
     summary = []
     if todo:
-        step(10, 'استخراج الترجمة من داخل الفيديو...')
+        step(10, 'سحب الترجمة من داخل الفيديو...')
         _emb_run_slices(state, todo, video, where, track, idx, remote, dur, is_ar, abort,
                         lambda pct, msg: step(10 + int(pct * 0.85), msg))
     if not state['lines']:
-        raise Exception('الترجمة المدمجة فارغة')
+        raise Exception('الترجمة المدمجة فاضية')
     path = _emb_write(video, state)
     remember_last(path, video, item)
     left = [k for k in range(EMB_SLICES) if k not in state['done']]
     if left:
-        summary.append('جاهز %d٪ من الترجمة، ويكتمل الباقي في الخلفية أثناء المشاهدة' % (len(state['done']) * 100 // EMB_SLICES))
+        summary.append('جاهز %d٪ من الترجمة — الباقي يكمل بالخلفية وانت تتفرج' % (len(state['done']) * 100 // EMB_SLICES))
         queue_job(path, video, item, ['embedded_more'])
     else:
-        summary.append('الترجمة المدمجة جاهزة بالكامل ✓ (%d سطراً)' % len(state['lines']))
+        summary.append('الترجمة المدمجة جاهزة كاملة ✓ (%d سطر)' % len(state['lines']))
     step(100, 'تم')
     return path, summary
 
@@ -609,25 +704,46 @@ def _emb_run_slices(state, ks, video, where, track, idx, remote, dur, is_ar, abo
         a, b = _emb_slice(k, dur)
         base = 100.0 * j / len(ks)
         span = 100.0 / len(ks)
-        step(base, 'استخراج الجزء %d من 10...' % (k + 1))
+        step(base, 'سحب الجزء %d من 10...' % (k + 1))
         try:
             lines = mkvcues.read_text(where, track, idx, workers=4 if remote else 2,
                                       timeout=240.0 if remote else 60.0, abort=abort, t_range=(a, b),
                                       progress=lambda d, n: step(base + span * 0.4 * d / max(1, n),
-                                                                 'استخراج الجزء %d من 10 (%d/%d)...' % (k + 1, d, n)))
+                                                                 'سحب الجزء %d من 10 (%d/%d)...' % (k + 1, d, n)))
         except mkvcues.MkvError as e:
             if 'aborted' in str(e):
                 raise
-            raise Exception(_net_msg(e, 'تعذر استخراج الترجمة من الفيديو'))
+            raise Exception(_net_msg(e, 'ما قدرت أسحب الترجمة من الفيديو'))
         cues = [subtitle.Cue(s, e, t) for s, e, t in lines]
         if cues and not is_ar:
             step(base + span * 0.4, 'ترجمة الجزء %d من 10 بالذكاء الاصطناعي...' % (k + 1))
-            n = ai.translate(cues, title=title, abort=abort,
-                             progress=lambda d, t: step(base + span * (0.4 + 0.6 * d / max(1, t)),
-                                                        'ترجمة الجزء %d من 10 (%d/%d)...' % (k + 1, d, t)))
-            if n < len(cues) * 0.6:
-                raise Exception('لم تكتمل ترجمة الجزء %d (%d من %d سطراً)، حاول مرة أخرى' % (k + 1, n, len(cues)))
+            originals = [c.text for c in cues]
+            n = 0
+            for attempt in range(2):          # the 2nd pass only asks for the missing lines (cached)
+                for c, t in zip(cues, originals):
+                    c.text = t
+                n = ai.translate(cues, title=title, abort=abort,
+                                 progress=lambda d, t: step(base + span * (0.4 + 0.6 * d / max(1, t)),
+                                                            'ترجمة الجزء %d من 10 (%d/%d)...' % (k + 1, d, t)))
+                if n >= len(cues) * 0.95:
+                    break
+            complete = n >= len(cues) * 0.95
             cues = [c for c in cues if arabic.ARABIC_RE.search(c.text)]
+            if not complete:
+                if n < len(originals) * 0.6:
+                    raise Exception('ترجمة الجزء %d ما اكتملت (%d من %d سطر) — جرّب مرة ثانية'
+                                    % (k + 1, n, len(originals)))
+                tries = state.setdefault('_tries', {})
+                tries[k] = tries.get(k, 0) + 1
+            if not complete and tries[k] < 3:
+                # keep what is translated (shown now), but leave the part open: the
+                # background job comes back to it and only the missing lines are asked again
+                state['lines'] = [l for l in state['lines'] if not (a <= l[0] < b)] + \
+                    [[c.start, c.end, c.text] for c in cues]
+                state['lines'].sort()
+                _emb_save(state)
+                log('embedded: part %d/10 only %d of %d lines — will finish it later' % (k + 1, n, len(originals)))
+                continue
         state['lines'] = [l for l in state['lines'] if not (a <= l[0] < b)] + \
             [[c.start, c.end, c.text] for c in cues]
         state['lines'].sort()
@@ -682,6 +798,18 @@ def embedded_resume(video):
             if best is None or len(d['done']) > len(best['done']):
                 best = d
     if not best:
+        # the cached state may be gone: a finished translation kept in translated/ still counts
+        try:
+            from .common import PROFILE
+            base = re.sub(r'[\\/:*?"<>|]+', '_', os.path.splitext(video.get('filename') or 'subtitle')[0])[:80]
+            kept = os.path.join(PROFILE, 'translated', '%s.ar.srt' % (base or 'subtitle'))
+            if video.get('filename') and not is_generic_name(video.get('filename')) and os.path.exists(kept):
+                remember_last(kept, video, {'provider': 'embedded', 'id': 'kept', 'lang': 'ar',
+                                            'release': 'embedded', 'hash_match': True})
+                log('embedded: using the finished translation kept in translated/')
+                return kept, 100
+        except OSError:
+            pass
         return None
     item = {'provider': 'embedded', 'id': 'track%s' % best['num'], 'lang': 'ar',
             'release': 'embedded', 'hash_match': True}
@@ -710,12 +838,12 @@ def embedded_more(job, progress=None, abort=None, on_update=None, position=None)
                 return None, []
             time.sleep(3)
     if idx is None:
-        return None, ['تعذر إكمال استخراج الترجمة المدمجة (مشكلة في الاتصال)']
+        return None, ['تعذر إكمال سحب الترجمة المدمجة (الاتصال)']
     num = int(str(job['item'].get('id', 'track0'))[5:] or 0)
     track = next((t for t in idx['tracks'] if t['num'] == num), None)
     if not track:
         return None, []
-    is_ar = (track.get('lang') or '').lower().startswith('ar')
+    is_ar = is_arabic_code(track.get('lang'))
     state = _emb_state(video, track)
     dur = _emb_duration(idx, track)
     path = None
@@ -755,10 +883,10 @@ def embedded_more(job, progress=None, abort=None, on_update=None, position=None)
             rounds = job.setdefault('_rounds', 0) + 1
             job['_rounds'] = rounds
             if rounds >= 8:
-                return None, ['توقف استخراج الترجمة المدمجة عند %d٪، وسيكتمل تلقائياً عند تشغيل الفيلم في المرة القادمة' %
+                return None, ['توقف سحب الترجمة المدمجة عند %d٪ — بيكمل لحاله المرة الجاية اللي تشغل فيها الفيلم' %
                               (len(state['done']) * 100 // EMB_SLICES)]
             if progress:
-                progress(len(state['done']) * 100 // EMB_SLICES, 'الاتصال متعثر، ستتم المحاولة مرة أخرى بعد دقائق...')
+                progress(len(state['done']) * 100 // EMB_SLICES, 'الاتصال متعثر — بيحاول مرة ثانية بعد دقايق...')
             for _ in range(180):                 # rest 3 minutes, then carry on by itself
                 if abort and abort():
                     return None, []
@@ -768,7 +896,7 @@ def embedded_more(job, progress=None, abort=None, on_update=None, position=None)
         left = len(state['done']) < EMB_SLICES
         if on_update and left:
             on_update(path, ['جاهز %d٪ من الترجمة' % (len(state['done']) * 100 // EMB_SLICES)])
-    return path, ['الترجمة المدمجة جاهزة بالكامل ✓ (%d سطراً)' % len(state['lines'])]
+    return path, ['الترجمة المدمجة جاهزة كاملة ✓ (%d سطر)' % len(state['lines'])]
 
 
 def _ref_meta(video):
@@ -831,6 +959,7 @@ def audio_compare(a_cues, b_cues, video, abort=None, progress=None):
         src, args, remote = audiosync.media_source(video.get('path'))
     except audiosync.AudioSyncError:
         return None
+    audiosync.STATS.update(short=0, refused=0)
     dur = video.get('duration') or (max(c.end for c in a_cues) / 1000.0 if a_cues else 0)
     if dur < 600 or not a_cues or not b_cues:
         return None
@@ -884,13 +1013,13 @@ def reference_sync_msg(cues, video, item, ref=None, how=None):
     if ref is None:
         ref, how = get_reference(video, item)
     if not ref:
-        return cues, ('لم يتم العثور على مرجع للمزامنة' if how is None else '')
+        return cues, ('ما لقيت مرجع للمزامنة' if how is None else '')
     t0 = time.time()
     new, info = sync.align(cues, ref, local=setting_bool('local_sync', True), min_lift=1.45)
     log('ref sync (%s) %.1fs: %s' % (how, time.time() - t0, info))
     _LAST_REF_INFO['info'] = info if new is not None else {}
     if new is None:
-        return cues, 'المزامنة: المرجع غير مطابق، فتُركت الترجمة كما هي'
+        return cues, 'المزامنة: المرجع ما يطابق، تُركت كما هي'
     return new, 'مزامنة: ' + sync.describe(info)
 
 
@@ -926,15 +1055,15 @@ def audio_sync(cues, video, progress=None, abort=None):
     if not ff:
         raise audiosync.AudioSyncError('no_ffmpeg')
     key = 'speech_%s.json' % _video_key(video)
-    cached = cache_get(key, 30 * 86400)
+    cached = cache_json(key, 30 * 86400)
     if cached:
-        speech = [subtitle.Cue(s, e, '') for s, e in json.loads(cached.decode('utf-8'))]
+        speech = [subtitle.Cue(s, e, '') for s, e in cached]
     else:
         speech = audiosync.speech_reference(ff, video['path'], video.get('duration') or 0,
                                             mode=setting('audio_mode', 'auto'),
                                             progress=progress, abort=abort)
         if len(speech) < 20:
-            raise audiosync.AudioSyncError('لم يُرصد كلام كافٍ في الصوت')
+            raise audiosync.AudioSyncError('ما انسمع كلام كافي في الصوت')
         cache_put(key, json.dumps([[c.start, c.end] for c in speech]))
     if progress:
         progress(80, 'مطابقة الترجمة مع الكلام...')
@@ -957,9 +1086,9 @@ def understand_sync(cues, video, progress=None, abort=None):
     anchors = understand.collect_anchors(cues, ff, video['path'], video.get('duration') or 0,
                                          key, model, progress=progress, abort=abort)
     speech = None
-    c = cache_get('speech_%s.json' % _video_key(video), 30 * 86400)
+    c = cache_json('speech_%s.json' % _video_key(video), 30 * 86400)
     if c:
-        speech = [subtitle.Cue(s, e, '') for s, e in json.loads(c.decode('utf-8'))]
+        speech = [subtitle.Cue(s, e, '') for s, e in c]
     if progress:
         progress(90, 'ضبط كل سطر على بداية الكلام...')
     new, info = understand.apply_anchors(cues, anchors, speech)
@@ -974,10 +1103,9 @@ def understand_describe(info):
 
 def _pair(video):
     """'web>bluray' style key: which kind of reference timed this video's subtitle."""
-    c = cache_get('refmeta_%s.json' % _video_key(video), 365 * 86400)
-    if not c:
+    meta = cache_json('refmeta_%s.json' % _video_key(video), 365 * 86400)
+    if not meta:
         return None
-    meta = json.loads(c.decode('utf-8'))
     if meta.get('how') == 'hash':
         return None
     return '%s>%s' % (meta.get('family') or meta.get('how') or '?', release_family(video.get('filename')) or '?')
@@ -1017,19 +1145,28 @@ def _video_offset(video):
 
 
 def user_offset(video):
-    """Automatic + your own correction: global setting + (this video's own value, or
-    what was learned for this kind of reference when the video has none yet)."""
+    """Your own fixed correction from the settings (التوقيت → تقديم/تأخير ثابت).
+    The per-episode / per-season / learned offsets of the old ¼-second buttons are gone
+    (the buttons were removed in 2.8.2 and nothing could reset them any more)."""
     try:
-        g = int(float(setting('global_offset_ms', '0') or 0))
+        return int(float(setting('global_offset_ms', '0') or 0))
     except ValueError:
-        g = 0
-    own = _video_offset(video)
-    if _has_embedded(video):                 # timed on the film's own subtitles: nothing to learn
-        return g + (own or 0)
-    if own is None:
-        own = _season_offset(video)          # series: what you set on another episode
-    return g + (own if own is not None else learned_offset(video))
+        return 0
 
+
+def forget_old_offsets():
+    """One-time cleanup of the hidden offsets left by the removed ¼-second buttons."""
+    n = 0
+    try:
+        for name in os.listdir(CACHE_DIR):
+            if name == 'learned_offsets.json' or (name.endswith('.json') and
+                                                  name.startswith(('offset_', 'season_'))):
+                os.remove(os.path.join(CACHE_DIR, name))
+                n += 1
+    except OSError:
+        pass
+    if n:
+        log('removed %d old hidden offsets' % n)
 
 def _has_embedded(video):
     c = cache_get('emb_%s.json' % _video_key(video), 60 * 86400)
@@ -1115,6 +1252,7 @@ def finetune_offset(cues, video, abort=None, progress=None):
         src, args, remote = audiosync.media_source(video.get('path'))
     except audiosync.AudioSyncError:
         return None
+    audiosync.STATS.update(short=0, refused=0)
     dur = video.get('duration') or (max(c.end for c in cues) / 1000.0 if cues else 0)
     if dur < 600 or not cues:
         return None
@@ -1126,7 +1264,7 @@ def finetune_offset(cues, video, abort=None, progress=None):
         wins_ms = [int(dur * f * 1000) for f in (0.15, 0.38, 0.62, 0.85)]
     if not wins_ms:
         return None
-    per = []
+    per, wl, tw = [], [], []
     for k, w0 in enumerate(wins_ms):
         if progress:
             progress(85 + k * 3, 'ضبط دقيق على الصوت (%d/%d)...' % (k + 1, len(wins_ms)))
@@ -1146,12 +1284,29 @@ def finetune_offset(cues, video, abort=None, progress=None):
         d, score = sync._refine(inside, sp, 1.0, 0, 1500, 20)
         dur_in = sum(e - s for s, e in inside) or 1
         per.append((d, score, base, score / float(dur_in)))
+        wl.append((inside, sp))
+        tw.append((w0, inside, sp))
         log('finetune window @%ds: shift %d ms (overlap %d → %d)' % (w0 // 1000, d, base, score))
+    try:
+        trace.windows(video, 'finetune', tw, dict(audiosync.STATS, asked=len(wins_ms), heard=len(tw),
+                                                  each=[p[0] for p in per]))
+    except Exception:
+        pass
     if not per:
         return None
     if len(per) >= 2:
         ds = sorted(p[0] for p in per)
-        if ds[-1] - ds[0] > 300:                 # windows disagree: don't guess
+        if ds[-1] - ds[0] > 300:
+            # same direction and close (e.g. -1500 / -1110): the gap is real, take the
+            # middle if that helps every window; opposite directions: don't guess
+            if ds[-1] - ds[0] <= 600 and (ds[0] >= 0 or ds[-1] <= 0):
+                dj = int(round(sum(ds) / float(len(ds)) / 10.0)) * 10
+                sc = [sync._overlap(_shifted(ins, dj), sp) for ins, sp in wl]
+                bases = [p[2] for p in per]
+                if all(x >= b * 1.03 for x, b in zip(sc, bases)) and abs(dj) >= 80 and \
+                        chance_lift(wl, dj) >= MIN_LIFT:
+                    log('finetune: windows %s agree on the direction → %+d ms' % (ds, dj))
+                    return dj
             log('finetune: windows disagree %s' % ds)
             return None
         d = ds[len(ds) // 2]
@@ -1163,6 +1318,10 @@ def finetune_offset(cues, video, abort=None, progress=None):
         gain_ok = score >= base * 1.12 and cov > 0.4      # one window: be stricter
     if abs(d) < 80 or not gain_ok:
         return 0
+    lift = chance_lift(wl, d)
+    if lift < MIN_LIFT:
+        log('finetune: %+d ms is no better than chance (lift %.2f) — leaving the timing alone' % (d, lift))
+        return None
     return d
 
 
@@ -1185,6 +1344,246 @@ def _window_shift(inside, sp, span=6000):
     return fine, cov
 
 
+def _shifted(iv, d):
+    return [(a + d, b + d) for a, b in iv]
+
+
+def _curve(windows, span=6000, step=100):
+    """Overlap score of every shift, summed over all windows (one joint measurement)."""
+    out = []
+    d = -span
+    while d <= span:
+        out.append((d, sum(sync._overlap(_shifted(ins, d), sp) for ins, sp in windows)))
+        d += step
+    return out
+
+
+def _peaks(scores, sep=700):
+    """Best shift and the best *separate* peak: [(shift, score), ...] high→low.
+    A second peak counts only if the curve dips between them (not the main peak's shoulder)."""
+    best_i = max(range(len(scores)), key=lambda i: scores[i][1])
+    best = scores[best_i]
+    out = [best]
+    cand = []
+    for i in range(1, len(scores) - 1):
+        d, sc = scores[i]
+        if abs(d - best[0]) <= sep or sc <= 0 or sc < scores[i - 1][1] or sc < scores[i + 1][1]:
+            continue
+        lo, hi = sorted((i, best_i))
+        dip = min(x[1] for x in scores[lo:hi + 1])
+        if dip < sc * 0.85:
+            cand.append((d, sc))
+    if cand:
+        out.append(max(cand, key=lambda x: x[1]))
+    return out
+
+
+def _fine(windows, d0, span=120, step=10):
+    best = (d0, sum(sync._overlap(_shifted(ins, d0), sp) for ins, sp in windows))
+    d = d0 - span
+    while d <= d0 + span:
+        sc = sum(sync._overlap(_shifted(ins, d), sp) for ins, sp in windows)
+        if sc > best[1]:
+            best = (d, sc)
+        d += step
+    return best
+
+
+def chance_lift(windows, d):
+    # d: one shift for all windows, or a list with each window's own shift
+    """How much better than pure chance the shift d fits. With speech everywhere (music,
+    a narrator, noise) ANY shift overlaps a lot; what counts is the overlap above what the
+    same amount of subtitle and speech would give at random."""
+    got = exp = 0.0
+    ds = d if isinstance(d, (list, tuple)) else [d] * len(windows)
+    for (ins, sp), dw in zip(windows, ds):
+        if not ins or not sp:
+            continue
+        lo = min(ins[0][0], sp[0][0])
+        hi = max(max(b for _a, b in ins), max(b for _a, b in sp))
+        span = float(max(1, hi - lo))
+        dens = min(1.0, sum(b - a for a, b in sp) / span)
+        exp += sum(b - a for a, b in ins) * dens
+        got += sync._overlap(_shifted(ins, dw), sp)
+    return got / exp if exp > 0 else 0.0
+
+
+MIN_LIFT = 1.12
+LAST_LIFT = [0.0]
+
+
+def joint_shift(windows, span=6000):
+    """Like ffsubsync's multi-segment sync: the windows are scored together, so the right
+    shift adds up across all of them while each window's chance matches cancel out.
+    Returns (shift_ms, coverage) or None when the evidence is not clear."""
+    if not windows:
+        return None
+    pk = _peaks(_curve(windows, span))
+    if pk[0][1] <= 0:
+        return None
+    fine, fs = _fine(windows, pk[0][0])
+    dur_in = sum(b - a for ins, _sp in windows for a, b in ins) or 1
+    cov = fs / float(dur_in)
+    second = pk[1][1] if len(pk) > 1 else 0
+    need = 1.08 if len(windows) == 1 else 1.04
+    if cov < 0.25 or fs < second * need:
+        return None
+    if chance_lift(windows, fine) < MIN_LIFT:
+        return None          # no better than chance: the sound doesn't follow this subtitle
+    return fine, cov
+
+
+def _which_shift(inside, sp, d_a, d_b, margin=1.12):
+    """Which of two shifts fits this window clearly better? (None = can't tell)"""
+    sa = sync._overlap(_shifted(inside, d_a), sp)
+    sb = sync._overlap(_shifted(inside, d_b), sp)
+    if max(sa, sb) <= 0:
+        return None
+    if sa >= sb * margin:
+        return d_a
+    if sb >= sa * margin:
+        return d_b
+    return None
+
+
+def sections_from_windows(data, min_run=2):
+    """data: [(time_ms, subtitle_lines, speech)] in film order.
+    1. score all windows together: one clear shift for the film, or two (a cut part);
+    2. each window says which of those shifts fits it; a window may only bring a shift of
+       its own when its evidence is clear and clearly better;
+    3. a section needs at least `min_run` neighbouring windows agreeing — a lone window
+       (at the edges too) never moves a whole part of the film.
+    Returns (main_shift, [(time_ms, shift_ms)]) or None."""
+    if len(data) < 3:
+        return None
+    wl = [(ins, sp) for _t, ins, sp in data]
+    pk = _peaks(_curve(wl))
+    if pk[0][1] <= 0:
+        return None
+    c0, s0 = _fine(wl, pk[0][0])
+    cands = [c0]
+    dur_in = sum(b - a for ins, _sp in wl for a, b in ins) or 1
+    two = False
+    if len(pk) > 1 and pk[1][1] >= pk[0][1] * 0.45:
+        # maybe two parts with different shifts (a cut scene): keep the second shift only
+        # if it explains the sound much better and whole neighbouring windows ask for it
+        c1 = _fine(wl, pk[1][0])[0]
+        prefs = [_which_shift(ins, sp, c0, c1, 1.2) for ins, sp in wl]
+        s2 = sum(max(sync._overlap(_shifted(ins, c0), sp), sync._overlap(_shifted(ins, c1), sp))
+                 for ins, sp in wl)
+        pair = any(prefs[k] == c1 and prefs[k + 1] == c1 for k in range(len(prefs) - 1))
+        if s2 >= s0 * 1.06 and pair:
+            cands.append(c1)
+            two = True
+    if s0 / float(dur_in) < 0.25 or (not two and len(pk) > 1 and s0 < pk[1][1] * 1.04):
+        log('sections: windows together give no clear answer')
+        return None
+    if two:
+        best_each = [max(cands, key=lambda c: sync._overlap(_shifted(ins, c), sp)) for ins, sp in wl]
+        lift = chance_lift(wl, best_each)
+    else:
+        lift = chance_lift(wl, c0)
+    LAST_LIFT[0] = lift
+    if lift < MIN_LIFT:
+        log('sections: best shift is no better than chance (lift %.2f): the sound does not follow '
+            'this subtitle (other cut, music or narration)' % lift)
+        return None
+    log('sections: joint shift %s from %d windows' % (' / '.join('%+d ms' % c for c in cands), len(data)))
+    # the main shift must be confirmed by at least two windows that are clear ON THEIR OWN —
+    # a joint answer carried by a single window (the others just 'unclear') moves nothing
+    own_r = [_window_shift(ins, sp) for ins, sp in wl]
+    support = sum(1 for r in own_r if r and abs(r[0] - c0) <= 350)
+    if support < 2:
+        log('sections: only %d window(s) clearly agree with %+d ms — leaving the timing alone' % (support, c0))
+        return None
+
+    lab = []
+    for t, ins, sp in data:
+        got = None
+        if len(cands) == 2:
+            got = _which_shift(ins, sp, cands[0], cands[1])
+        r = _window_shift(ins, sp)
+        if got is None and r:
+            near = [c for c in cands if abs(r[0] - c) <= 350]
+            if near:
+                got = near[0]
+        if r and all(abs(r[0] - c) > 350 for c in cands):
+            s_own = sync._overlap(_shifted(ins, r[0]), sp)
+            if all(s_own >= sync._overlap(_shifted(ins, c), sp) * 1.25 for c in cands):
+                got = r[0]
+        log('sections: window @%ds → %s' % (t // 1000, 'unclear' if got is None else '%+d ms' % got))
+        lab.append(got)
+    own = list(lab)
+    # windows without a clear answer of their own, next to a window that differs: ask
+    # them which of the two shifts fits better
+    for _ in range(3):
+        for k in range(len(lab)):
+            if own[k] is not None:
+                continue
+            near = set(lab[x] for x in (k - 1, k + 1) if 0 <= x < len(lab) and lab[x] is not None)
+            base = lab[k] if lab[k] is not None else cands[0]
+            for other in near - {base}:
+                pick = _which_shift(data[k][1], data[k][2], base, other)
+                if pick is not None:
+                    lab[k] = pick
+                    break
+    if len(cands) == 1:
+        lab = [cands[0] if v is None else v for v in lab]     # still unclear: follow the film
+
+    def runs(values):
+        out, k = [], 0
+        while k < len(values):
+            m = k
+            while m + 1 < len(values) and values[m + 1] is not None and values[k] is not None and \
+                    abs(values[m + 1] - values[k]) <= 400:
+                m += 1
+            out.append((k, m))
+            k = m + 1
+        return out
+
+    # unclear windows take the side their neighbours agree on (or the nearer clear one)
+    for k in range(len(lab)):
+        if lab[k] is None:
+            left = next((lab[x] for x in range(k - 1, -1, -1) if lab[x] is not None), None)
+            right = next((lab[x] for x in range(k + 1, len(lab)) if lab[x] is not None), None)
+            lab[k] = left if left is not None else right
+    if any(v is None for v in lab):
+        return None
+    # lone windows never make a section: they follow the longer neighbouring section
+    for _ in range(3):
+        rs = runs(lab)
+        new = list(lab)
+        for n, (a, b) in enumerate(rs):
+            if b - a + 1 >= min_run:
+                continue
+            nbs = [rs[x] for x in (n - 1, n + 1) if 0 <= x < len(rs)]
+            if not nbs:
+                continue
+            nbs.sort(key=lambda r: -(r[1] - r[0]))
+            long_ = [r for r in nbs if r[1] - r[0] == nbs[0][1] - nbs[0][0]]
+            log('sections: lone window @%ds ignored' % (data[a][0] // 1000))
+            for x in range(a, b + 1):
+                if len(long_) == 2 and lab[long_[0][0]] != lab[long_[1][0]]:
+                    new[x] = _which_shift(data[x][1], data[x][2], lab[long_[0][0]], lab[long_[1][0]], 1.0) \
+                        or lab[long_[0][0]]
+                else:
+                    new[x] = lab[long_[0][0]]
+        if new == lab:
+            break
+        lab = new
+    # each run takes its median shift
+    out = list(lab)
+    for a, b in runs(lab):
+        ds = sorted(lab[a:b + 1])
+        for x in range(a, b + 1):
+            out[x] = ds[len(ds) // 2]
+    counts = {}
+    for v in out:
+        counts[v] = counts.get(v, 0) + 1
+    main = max(counts, key=counts.get)
+    return main, [(data[k][0], out[k]) for k in range(len(out))]
+
+
 def section_offsets(cues, video, abort=None, progress=None):
     """Listen at many points across the whole film and measure the gap in each part.
     Returns [(from_ms, to_ms, shift_ms)] covering the film, or None if it could not tell.
@@ -1197,6 +1596,7 @@ def section_offsets(cues, video, abort=None, progress=None):
         src, args, remote = audiosync.media_source(video.get('path'))
     except audiosync.AudioSyncError:
         return None
+    audiosync.STATS.update(short=0, refused=0)
     dur = video.get('duration') or (max(c.end for c in cues) / 1000.0)
     if dur < 600:
         return None
@@ -1223,7 +1623,8 @@ def section_offsets(cues, video, abort=None, progress=None):
             wins.append(best[1])
     if len(wins) < 3:
         return None
-    def measure(w0, ln):
+    def listen(w0, ln):
+        """(subtitle lines, detected speech) inside one window, or None."""
         inside = [(c.start, c.end) for c in cues if w0 + 1500 <= c.start and c.end <= w0 + ln - 1500]
         if len(inside) < 4:
             return None
@@ -1238,67 +1639,57 @@ def section_offsets(cues, video, abort=None, progress=None):
         sp = sorted((c.start, c.end) for c in audiosync.detect_speech(pcm, offset_ms=w0))
         if len(sp) < 4:
             return None
-        r = _window_shift(inside, sp)
-        log('sections: window @%ds → %s' % (w0 // 1000, r and ('%+d ms (%.2f)' % r)))
-        return r[0] if r else None
+        return inside, sp
 
-    meas = []
+    data = []
     for k, w0 in enumerate(wins):
         if progress:
             progress(84 + int(12 * k / len(wins)), 'ضبط كل قسم على الصوت (%d/%d)...' % (k + 1, len(wins)))
-        d = measure(w0, length)
-        if d is not None:
-            meas.append((w0 + length // 2, d))
-    if len(meas) < 3:
+        r = listen(w0, length)
+        if r:
+            data.append((w0 + length // 2, r[0], r[1]))
+    LAST_LIFT[0] = 0.0
+    plan = sections_from_windows(data)
+    trace.windows(video, 'sections', data, dict(audiosync.STATS, asked=len(wins), heard=len(data),
+                                                 lift=round(LAST_LIFT[0], 3),
+                                                 answer=plan and sorted(set(d for _t, d in plan[1]))))
+    if not plan:
+        trace.event(video, 'sections: no clear answer (%d of %d windows heard)' % (len(data), len(wins)))
         return None
-    # drop a lone measurement that disagrees with both neighbours that agree with each other
-    clean = []
-    for i, (t, d) in enumerate(meas):
-        if 0 < i < len(meas) - 1:
-            p, n = meas[i - 1][1], meas[i + 1][1]
-            if (abs(p - n) <= 400 and abs(d - p) > 700 and abs(d - n) > 700) or \
-                    not (min(p, n) - 400 <= d <= max(p, n) + 400):
-                log('sections: ignoring outlier %+d ms @%ds' % (d, t // 1000))
-                continue
-        clean.append((t, d))
-    if len(clean) < 2:
-        return None
-    # group neighbouring windows that agree into sections
-    groups = [[clean[0]]]
-    for t, d in clean[1:]:
-        g = groups[-1]
-        med = sorted(x[1] for x in g)[len(g) // 2]
-        if abs(d - med) <= 350:
-            g.append((t, d))
+    d0, labels = plan
+
+    # group neighbouring windows with the same shift into sections
+    groups = []
+    for t, d in labels:
+        if groups and groups[-1][1] == d:
+            groups[-1][0].append(t)
         else:
-            groups.append([(t, d)])
+            groups.append([[t], d])
     secs = []
-    for i, g in enumerate(groups):
-        shift = sorted(x[1] for x in g)[len(g) // 2]
+    for i, (ts, shift) in enumerate(groups):
         if i == 0:
             start = 0
         else:
             # find where the change happens: listen in between (halving the gap) ...
-            a, b = groups[i - 1][-1][0], g[0][0]
-            prev_shift = sorted(x[1] for x in groups[i - 1])[len(groups[i - 1]) // 2]
+            a, b = groups[i - 1][0][-1], ts[0]
+            prev_shift = groups[i - 1][1]
             probe = 15000 if remote else 20000
             for _ in range(4):
                 if b - a < 90000:
                     break
                 mid = (a + b) // 2
-                found = None
+                side = None
                 for w0 in (mid - probe // 2, mid - probe * 2, mid + probe):   # a spot with dialogue
-                    found = measure(w0, probe)
-                    if found is not None:
+                    r = listen(w0, probe)
+                    side = r and _which_shift(r[0], r[1], prev_shift, shift)
+                    if side is not None:
                         break
-                if found is None:
+                if side is None:
                     break
-                if abs(found - prev_shift) <= 350:
+                if side == prev_shift:
                     a = w0 + probe
-                elif abs(found - shift) <= 350:
-                    b = w0
                 else:
-                    break
+                    b = w0
             # ... then cut at the longest silence left in that range
             best_gap, cut = -1, (a + b) // 2
             for k in range(1, len(cues)):
@@ -1312,270 +1703,8 @@ def section_offsets(cues, video, abort=None, progress=None):
         secs[i][1] = secs[i + 1][0]
     secs[-1][1] = dur_ms + 3600000
     log('sections: %s' % [(a // 1000, d) for a, _b, d in secs])
+    trace.event(video, 'sections: %s' % [(a // 1000, d) for a, _b, d in secs])
     return [tuple(x) for x in secs]
-
-
-def apply_sections(cues, secs):
-    for c in cues:
-        for a, b, d in secs:
-            if a <= c.start < b:
-                if d:
-                    c.start = max(0, c.start + d)
-                    c.end = max(c.start + 200, c.end + d)
-                break
-    cues.sort(key=lambda c: c.start)
-    return cues
-
-
-def describe_sections(secs):
-    def mmss(ms):
-        return '%d:%02d' % (ms // 60000, (ms // 1000) % 60)
-    parts = []
-    for a, b, d in secs:
-        parts.append('%s %+.1fث' % (mmss(a), d / 1000.0))
-    return '، '.join(parts)
-
-
-def finetune_possible(video):
-    from . import audiosync
-    if not ffmpeg_path():
-        return False
-    try:
-        audiosync.media_source(video.get('path'))
-        return True
-    except audiosync.AudioSyncError:
-        return False
-
-
-def has_reference(video):
-    return bool(cache_get('ref_%s.srt' % _video_key(video), 30 * 86400))
-
-
-def remember_last(path, video, item):
-    try:
-        cache_put('last.json', json.dumps({'path': path, 'video': video.get('path', ''),
-                                           'item': item}, ensure_ascii=False))
-    except Exception:
-        pass
-
-
-def last_for(video):
-    c = cache_get('last.json', 12 * 3600)
-    if not c:
-        return None
-    d = json.loads(c.decode('utf-8'))
-    if d.get('video') == video.get('path') and os.path.exists(d.get('path', '')):
-        return d
-    return None
-
-
-def queue_job(path, video, item, steps, resync=False, orig=None):
-    job = {'path': path, 'video': video, 'item': item, 'steps': steps, 'resync': resync, 'orig': orig,
-           'title': video.get('tvshow') or video.get('title') or '', 'time': time.time()}
-    name = os.path.join(JOBS_DIR, 'job_%d.json' % int(time.time() * 1000))
-    with open(name, 'w', encoding='utf-8') as f:
-        json.dump(job, f, ensure_ascii=False)
-
-
-def _write_version(job, cues, item, suffix, retimed=False):
-    cues = [subtitle.Cue(c.start, c.end, c.text) for c in cues]
-    if retimed:            # timing was rebuilt from a reference: re-apply your own offset
-        apply_offset(cues, user_offset(job.get('video') or {}))
-    cues = subtitle.fix_timing(cues)
-    if item.get('lang', 'ar') == 'ar':
-        cues, _st = arabic.fix_cues(cues, rtl_mode=setting('rtl_mode', 'rle'), remove_ads=False)
-    base = job['path'][:-4]
-    for suf in ('.synced', '.ai', '.v2'):
-        if base.endswith(suf):
-            base = base[:-len(suf)]
-    new_path = base + suffix + '.srt'
-    if new_path == job['path']:
-        new_path = base + suffix + '.v2.srt'
-    with open(new_path, 'w', encoding='utf-8-sig') as f:
-        f.write(subtitle.to_srt(cues))
-    return new_path
-
-
-def run_job(job, progress=None, abort=None, on_update=None, position=None):
-    """Background steps on an already processed SRT.
-    Text correction runs FIRST (small, quick) and is swapped in right away through
-    on_update(path, lines); listening to the audio comes after.
-    Returns (new_path or None, list of summary lines)."""
-    if 'embedded_more' in job['steps']:
-        return embedded_more(job, progress=progress, abort=abort, on_update=on_update, position=position)
-    from . import audiosync
-    with open(job['path'], 'rb') as f:
-        cues = subtitle.parse(arabic.decode(f.read()))
-    video, item = job['video'], job.get('item') or {}
-    out = []
-    changed = False
-    audio_truth = False
-    if 'verify' in job['steps'] and job.get('orig') and os.path.exists(job['orig']):
-        try:
-            with open(job['orig'], 'rb') as f:
-                orig = subtitle.parse(arabic.decode(f.read()))
-            apply_offset(orig, user_offset(video))
-            verdict = audio_compare(orig, cues, video, abort=abort, progress=progress)
-            log('verify: big reference jump — sound says %s' % {
-                'a': 'the ORIGINAL timing is right', 'b': 'the reference is right'}.get(verdict, 'not sure'))
-            if verdict == 'a':
-                cues, changed, audio_truth = orig, True, True
-                _mark_ref_bad(video)
-                job = dict(job, steps=[st if st != 'semantic' else 'ai' for st in job['steps']])
-                out.append('أثبت الصوت أن التوقيت الأصلي للترجمة هو الصحيح، فتمت إعادته')
-                if on_update:
-                    on_update(_write_version(job, cues, item, '.synced'), list(out))
-            elif verdict == 'b':
-                _mark_ref_good(video)
-        except Exception as e:
-            if 'aborted' in str(e):
-                return None, []
-            log('verify failed: %s' % e)
-    if 'semantic' in job['steps']:
-        from . import semsync
-        c = cache_get('ref_%s.srt' % _video_key(video), 30 * 86400)
-        en = subtitle.parse(c.decode('utf-8', 'replace')) if c else []
-        if en:
-            def sem_progress(pct, k, total):
-                if progress:
-                    progress(pct, 'مطابقة الترجمة مع الإنجليزية (%d/%d)' % (k, total))
-
-            def sem_partial(part, info):
-                if on_update:
-                    on_update(_write_version(job, part, item, '.ai-part', retimed=True),
-                              ['تم ضبط الأسطر التالية ✓ ويكتمل الباقي...'])
-            try:
-                new, info = semsync.semantic_sync(cues, en, title=job.get('title', ''),
-                                                  position=position, progress=sem_progress,
-                                                  abort=abort, on_partial=sem_partial)
-                log('semantic: %s' % info)
-                if new is not None:
-                    cues, changed = new, True
-                    out.append(semsync.describe(info))
-            except Exception as e:
-                if 'aborted' in str(e):
-                    return None, []
-                log('semantic failed: %s' % e)
-                from . import gemini
-                if isinstance(e, gemini.QuotaExhausted):
-                    out.append('انتهى الحد اليومي للذكاء الاصطناعي، والترجمة تعمل بتوقيت الترجمة الإنجليزية')
-                    job = dict(job, steps=[st for st in job['steps'] if st not in ('semantic', 'ai')])
-                else:
-                    job = dict(job, steps=[st for st in job['steps'] if st != 'semantic'] + ['ai'])
-        else:
-            job = dict(job, steps=[st for st in job['steps'] if st != 'semantic'] + ['ai'])
-        if changed and on_update and 'audio' in job['steps']:
-            on_update(_write_version(job, cues, item, '.ai', retimed=True), list(out))
-    if 'ai' in job['steps']:
-        from . import ai
-        if progress:
-            progress(5, 'تصحيح النص بالذكاء الاصطناعي...')
-        try:
-            def ai_progress(pct, k, total):
-                if progress:
-                    progress(5 + pct * 40 // 100 if any(st in job['steps'] for st in ('audio', 'understand'))
-                             else pct, 'تصحيح النص بالذكاء الاصطناعي (%d/%d)' % (k, total))
-
-            def ai_partial(tmp_cues, n):
-                if on_update:
-                    on_update(_write_version(job, tmp_cues, item, '.ai-part'),
-                              ['تم تصحيح الأسطر التالية (%d سطراً) ويكتمل الباقي...' % n])
-
-            n = ai.proofread(cues, title=job.get('title', ''), abort=abort, position=position,
-                             progress=ai_progress, on_partial=ai_partial)
-            if n:
-                changed = True
-                out.append('تم تصحيح %d سطراً بالذكاء الاصطناعي' % n)
-                if on_update and any(st in job['steps'] for st in ('audio', 'understand')):
-                    on_update(_write_version(job, cues, item, '.ai'), list(out))
-        except Exception as e:
-            if 'aborted' in str(e):
-                return None, []
-            log('AI failed: %s' % e)
-            from . import gemini
-            if isinstance(e, gemini.QuotaExhausted):
-                out.append('انتهى الحد اليومي للذكاء الاصطناعي، والترجمة تعمل دون تصحيح')
-            else:
-                out.append('مفتاح Gemini غير صحيح' if any(x in str(e) for x in ('no_key', '400', '403'))
-                           else 'تعذر التصحيح بالذكاء الاصطناعي')
-        if abort and abort():
-            return None, []
-    if 'audio' in job['steps']:
-        try:
-            new, info = audio_sync(cues, video, progress=progress, abort=abort)
-            if new is not None:
-                cues, changed = new, True
-                out.append('تمت المزامنة مع الصوت: ' + sync.describe(info))
-            else:
-                out.append('الصوت لا يطابق الترجمة (ربما تكون الترجمة لنسخة أخرى)')
-        except audiosync.AudioSyncError as e:
-            if 'aborted' in str(e):
-                return None, []
-            log('audio sync failed: %s' % e)
-            out.append(audiosync.describe_error(e))
-            if any(x in str(e) for x in ('no_ffmpeg', 'unsupported_path', 'no_path')):
-                job = dict(job, steps=[st for st in job['steps'] if st != 'understand'])
-            if setting('sync_method', 'smart') in ('auto', 'smart') and not job.get('resync'):
-                cues2, line = reference_sync_msg(cues, video, item)
-                if cues2 is not cues:
-                    cues, changed = cues2, True
-                if line:
-                    out.append(line)
-    if 'understand' in job['steps']:
-        try:
-            new, info = understand_sync(cues, video, progress=progress, abort=abort)
-            if new is not None:
-                cues, changed = new, True
-                out = [l for l in out if not l.startswith('تمت المزامنة مع الصوت')]
-                out.append('فهم الكلام: ' + understand_describe(info))
-            else:
-                out.append('تعذرت مطابقة الكلام مع الترجمة (ربما تكون الترجمة لنسخة أخرى)')
-        except audiosync.AudioSyncError as e:
-            if 'aborted' in str(e):
-                return None, []
-            log('understand failed: %s' % e)
-            out.append('تعذر فهم الكلام: ' + (
-                'مفتاح Gemini غير صحيح' if any(x in str(e) for x in ('400', '403')) else
-                'انتهى الحد المجاني لـ Gemini، حاول لاحقاً' if '429' in str(e) else str(e)[:80]))
-    if 'finetune' in job['steps']:
-        try:
-            if changed and any(st in job['steps'] for st in ('semantic',)):
-                # measure on what will actually be shown (reference timing + your offset)
-                apply_offset(cues, user_offset(video))
-                pre_offset = True
-            else:
-                pre_offset = False
-            secs = section_offsets(cues, video, abort=abort, progress=progress) \
-                if setting_bool('section_sync', True) else None
-            if secs and len(set(x[2] for x in secs)) > 1:
-                apply_sections(cues, secs)
-                audio_truth = True
-                changed = True
-                out.append('ضبط كل قسم على الصوت: ' + describe_sections(secs))
-                d = 'sections'
-            elif secs:
-                d = secs[0][2]
-            else:
-                d = finetune_offset(cues, video, abort=abort, progress=progress)
-            if d == 'sections':
-                pass
-            elif d is None and pre_offset:
-                apply_offset(cues, -user_offset(video))
-            elif d is not None:
-                apply_offset(cues, d)
-                audio_truth = True
-                changed = True
-                if d:
-                    out.append('ضبط دقيق على الصوت: %+.2f ث' % (d / 1000.0))
-        except Exception as e:
-            if 'aborted' in str(e):
-                return None, []
-            log('finetune failed: %s' % e)
-    if not changed:
-        return None, out
-    synced = any(st in job['steps'] for st in ('audio', 'understand', 'semantic', 'finetune'))
-    return _write_version(job, cues, item, '.synced' if synced else '.ai',
-                          retimed=synced and not audio_truth), out
 
 
 # ---------------------------------------------------------------- Piers edition
@@ -1640,3 +1769,346 @@ def sync_external(src, video, progress=None):
     if same and not is_ar:
         return path, 'same', ['الترجمة مضبوطة أصلاً ✓']
     return path, 'now', summary
+
+
+def apply_sections(cues, secs):
+    for c in cues:
+        for a, b, d in secs:
+            if a <= c.start < b:
+                if d:
+                    c.start = max(0, c.start + d)
+                    c.end = max(c.start + 200, c.end + d)
+                break
+    cues.sort(key=lambda c: c.start)
+    return cues
+
+
+def describe_sections(secs):
+    def mmss(ms):
+        return '%d:%02d' % (ms // 60000, (ms // 1000) % 60)
+    parts = []
+    for a, b, d in secs:
+        parts.append('%s %+.1fث' % (mmss(a), d / 1000.0))
+    return '، '.join(parts)
+
+
+def finetune_possible(video):
+    from . import audiosync
+    if not ffmpeg_path():
+        return False
+    try:
+        audiosync.media_source(video.get('path'))
+        return True
+    except audiosync.AudioSyncError:
+        return False
+
+
+def has_reference(video):
+    return bool(cache_get('ref_%s.srt' % _video_key(video), 30 * 86400))
+
+
+def remember_last(path, video, item, lineage=None):
+    """The subtitle now on screen. `lineage` = the file it was made from by the add-on
+    itself (a background step or the live check), so a later step can tell its own newer
+    versions apart from a subtitle the viewer picked."""
+    try:
+        cache_put('last.json', json.dumps({'path': path, 'video': video.get('path', ''),
+                                           'item': item, 'lineage': lineage or path}, ensure_ascii=False))
+    except Exception:
+        pass
+
+
+def last_for(video):
+    c = cache_get('last.json', 12 * 3600)
+    if not c:
+        return None
+    try:
+        d = json.loads(c.decode('utf-8'))
+    except ValueError:
+        cache_del('last.json')
+        return None
+    if d.get('video') == video.get('path') and os.path.exists(d.get('path', '')):
+        return d
+    return None
+
+
+def queue_job(path, video, item, steps, resync=False, orig=None):
+    job = {'path': path, 'video': video, 'item': item, 'steps': steps, 'resync': resync, 'orig': orig,
+           'title': video.get('tvshow') or video.get('title') or '', 'time': time.time()}
+    name = os.path.join(JOBS_DIR, 'job_%d.json' % int(time.time() * 1000))
+    write_atomic(name, json.dumps(job, ensure_ascii=False))
+
+
+def _write_version(job, cues, item, suffix, retimed=False):
+    cues = [subtitle.Cue(c.start, c.end, c.text) for c in cues]
+    if retimed:            # timing was rebuilt from a reference: re-apply your own offset
+        apply_offset(cues, user_offset(job.get('video') or {}))
+    cues = subtitle.fix_timing(cues)
+    if item.get('lang', 'ar') == 'ar':
+        cues, _st = arabic.fix_cues(cues, rtl_mode=setting('rtl_mode', 'rle'), remove_ads=False)
+    base = job['path'][:-4]
+    for suf in ('.synced', '.ai', '.v2'):
+        if base.endswith(suf):
+            base = base[:-len(suf)]
+    new_path = base + suffix + '.srt'
+    if new_path == job['path']:
+        new_path = base + suffix + '.v2.srt'
+    with open(new_path, 'w', encoding='utf-8-sig') as f:
+        f.write(subtitle.to_srt(cues))
+    return new_path
+
+
+def _pack(iv):
+    """[(a_ms, b_ms)...] → small ints (tenths of a second, each start from the last end)."""
+    out, last = [], 0
+    for a, b in iv:
+        a, b = int(a) // 100, int(b) // 100
+        out += [a - last, max(0, b - a)]
+        last = b
+    return out
+
+
+def _trace_whisper(video, cues, ref, covered):
+    """What Whisper heard and the subtitle's timing, kept small, for replaying the match."""
+    try:
+        trace.put(video, 'whisper_data', {'sub': _pack([(c.start, c.end) for c in cues]),
+                                          'heard': _pack([(c.start, c.end) for c in ref]),
+                                          'covered': _pack(covered)})
+    except Exception:
+        pass
+
+
+def run_job(job, progress=None, abort=None, on_update=None, position=None):
+    """Background steps on an already processed SRT.
+    Text correction runs FIRST (small, quick) and is swapped in right away through
+    on_update(path, lines); listening to the audio comes after.
+    Returns (new_path or None, list of summary lines)."""
+    if 'embedded_more' in job['steps']:
+        return embedded_more(job, progress=progress, abort=abort, on_update=on_update, position=position)
+    from . import audiosync
+    with open(job['path'], 'rb') as f:
+        cues = subtitle.parse(arabic.decode(f.read()))
+    video, item = job['video'], job.get('item') or {}
+    out = []
+    changed = False
+    audio_truth = False
+    rebuilt = False          # timing rebuilt from a reference: your offset goes back on
+    if 'verify' in job['steps'] and job.get('orig') and os.path.exists(job['orig']):
+        try:
+            with open(job['orig'], 'rb') as f:
+                orig = subtitle.parse(arabic.decode(f.read()))
+            apply_offset(orig, user_offset(video))
+            verdict = audio_compare(orig, cues, video, abort=abort, progress=progress)
+            log('verify: big reference jump — sound says %s' % {
+                'a': 'the ORIGINAL timing is right', 'b': 'the reference is right'}.get(verdict, 'not sure'))
+            if verdict == 'a':
+                cues, changed, audio_truth = orig, True, True
+                _mark_ref_bad(video)
+                job = dict(job, steps=[st if st != 'semantic' else 'ai' for st in job['steps']])
+                out.append('الصوت أثبت إن توقيت الترجمة الأصلي هو الصح — رجعته')
+                if on_update:
+                    on_update(_write_version(job, cues, item, '.synced'), list(out))
+            elif verdict == 'b':
+                _mark_ref_good(video)
+        except Exception as e:
+            if 'aborted' in str(e):
+                return None, []
+            log('verify failed: %s' % e)
+    if 'semantic' in job['steps']:
+        from . import semsync
+        c = cache_get('ref_%s.srt' % _video_key(video), 30 * 86400)
+        en = subtitle.parse(c.decode('utf-8', 'replace')) if c else []
+        if en:
+            def sem_progress(pct, k, total):
+                if progress:
+                    progress(pct, 'مطابقة الترجمة مع الإنجليزي (%d/%d)' % (k, total))
+
+            def sem_partial(part, info):
+                if on_update:
+                    on_update(_write_version(job, part, item, '.ai-part', retimed=True),
+                              ['ضُبطت الأسطر الجاية ✓ والباقي يكمل...'])
+            try:
+                new, info = semsync.semantic_sync(cues, en, title=job.get('title', ''),
+                                                  position=position, progress=sem_progress,
+                                                  abort=abort, on_partial=sem_partial)
+                log('semantic: %s' % info)
+                if new is not None:
+                    cues, changed, rebuilt = new, True, True
+                    out.append(semsync.describe(info))
+            except Exception as e:
+                if 'aborted' in str(e):
+                    return None, []
+                log('semantic failed: %s' % e)
+                from . import gemini
+                if isinstance(e, gemini.QuotaExhausted):
+                    out.append('خلص حد الذكاء الاصطناعي اليوم — الترجمة شغالة بتوقيت الإنجليزي')
+                    job = dict(job, steps=[st for st in job['steps'] if st not in ('semantic', 'ai')])
+                else:
+                    job = dict(job, steps=[st for st in job['steps'] if st != 'semantic'] + ['ai'])
+        else:
+            job = dict(job, steps=[st for st in job['steps'] if st != 'semantic'] + ['ai'])
+        if changed and on_update and 'audio' in job['steps']:
+            on_update(_write_version(job, cues, item, '.ai', retimed=True), list(out))
+    if 'ai' in job['steps']:
+        from . import ai
+        if progress:
+            progress(5, 'تصحيح النص بالذكاء الاصطناعي...')
+        try:
+            def ai_progress(pct, k, total):
+                if progress:
+                    progress(5 + pct * 40 // 100 if any(st in job['steps'] for st in ('audio', 'understand'))
+                             else pct, 'تصحيح النص بالذكاء الاصطناعي (%d/%d)' % (k, total))
+
+            def ai_partial(tmp_cues, n):
+                if on_update:
+                    on_update(_write_version(job, tmp_cues, item, '.ai-part'),
+                              ['صُححت الأسطر الجاية (%d سطر) والباقي يكمل...' % n])
+
+            n = ai.proofread(cues, title=job.get('title', ''), abort=abort, position=position,
+                             progress=ai_progress, on_partial=ai_partial)
+            if n:
+                changed = True
+                out.append('تم تصحيح %d سطر بالذكاء الاصطناعي' % n)
+                if on_update and any(st in job['steps'] for st in ('audio', 'understand')):
+                    on_update(_write_version(job, cues, item, '.ai'), list(out))
+        except Exception as e:
+            if 'aborted' in str(e):
+                return None, []
+            log('AI failed: %s' % e)
+            from . import gemini
+            if isinstance(e, gemini.QuotaExhausted):
+                out.append('خلص حد الذكاء الاصطناعي اليوم — الترجمة شغالة بدون تصحيح')
+            else:
+                out.append('مفتاح Gemini غير صحيح' if any(x in str(e) for x in ('no_key', '400', '403'))
+                           else 'تعذر التصحيح بالذكاء الاصطناعي')
+        if abort and abort():
+            return None, []
+    if 'audio' in job['steps']:
+        try:
+            new, info = audio_sync(cues, video, progress=progress, abort=abort)
+            if new is not None:
+                cues, changed, rebuilt = new, True, True
+                out.append('تمت المزامنة مع الصوت: ' + sync.describe(info))
+            else:
+                out.append('الصوت ما يطابق الترجمة (يمكن ترجمة لنسخة ثانية)')
+        except audiosync.AudioSyncError as e:
+            if 'aborted' in str(e):
+                return None, []
+            log('audio sync failed: %s' % e)
+            out.append(audiosync.describe_error(e))
+            if any(x in str(e) for x in ('no_ffmpeg', 'unsupported_path', 'no_path')):
+                job = dict(job, steps=[st for st in job['steps'] if st != 'understand'])
+            if setting('sync_method', 'smart') in ('auto', 'smart') and not job.get('resync'):
+                cues2, line = reference_sync_msg(cues, video, item)
+                if cues2 is not cues:
+                    cues, changed, rebuilt = cues2, True, True
+                if line:
+                    out.append(line)
+    if 'understand' in job['steps']:
+        try:
+            new, info = understand_sync(cues, video, progress=progress, abort=abort)
+            if new is not None:
+                cues, changed, rebuilt = new, True, True
+                out = [l for l in out if not l.startswith('تمت المزامنة مع الصوت')]
+                out.append('فهم الكلام: ' + understand_describe(info))
+            else:
+                out.append('ما قدر يطابق الكلام مع الترجمة (يمكن ترجمة لنسخة ثانية)')
+        except audiosync.AudioSyncError as e:
+            if 'aborted' in str(e):
+                return None, []
+            log('understand failed: %s' % e)
+            out.append('تعذر فهم الكلام: ' + (
+                'مفتاح Gemini غير صحيح' if any(x in str(e) for x in ('400', '403')) else
+                'خلص حد Gemini المجاني، جرّب بعدين' if '429' in str(e) else str(e)[:80]))
+    if 'finetune' in job['steps']:
+        try:
+            if changed and any(st in job['steps'] for st in ('semantic',)):
+                # measure on what will actually be shown (reference timing + your offset)
+                apply_offset(cues, user_offset(video))
+                pre_offset = True
+            else:
+                pre_offset = False
+            secs = section_offsets(cues, video, abort=abort, progress=progress) \
+                if setting_bool('section_sync', True) else None
+            if secs and len(set(x[2] for x in secs)) > 1:
+                apply_sections(cues, secs)
+                audio_truth = True
+                changed = True
+                out.append('ضبط كل قسم على الصوت: ' + describe_sections(secs))
+                d = 'sections'
+            elif secs:
+                d = secs[0][2]
+            else:
+                d = finetune_offset(cues, video, abort=abort, progress=progress)
+            if d == 'sections':
+                pass
+            elif d is None and pre_offset:
+                apply_offset(cues, -user_offset(video))
+            elif d is not None:
+                apply_offset(cues, d)
+                audio_truth = True
+                changed = True
+                if d:
+                    out.append('ضبط دقيق على الصوت: %+.2f ث' % (d / 1000.0))
+        except Exception as e:
+            if 'aborted' in str(e):
+                return None, []
+            log('finetune failed: %s' % e)
+    # Whisper only when the free listening above was not sure — it costs from the daily allowance
+    if 'whisper' in job['steps'] and not audio_truth:
+        from . import whisper as wsp, refalign
+        try:
+            pos = 0
+            try:
+                pos = int((position() if position else 0) or 0)
+            except Exception:
+                pos = 0
+            base = [subtitle.Cue(c.start, c.end, c.text) for c in cues]
+            new, info, stage = None, 'no_match', ''
+            # a little first; more only while the answer is "same film, not sure yet"
+            for stage in ('probe', 'probe2', 'more'):
+                if stage == 'probe2' and info not in ('no_match', 'weak'):
+                    break
+                if stage == 'more' and info != 'weak':
+                    break
+                ref, covered = wsp.reference(video, _video_key(video), ffmpeg_path(),
+                                             progress=progress, abort=abort, position_s=pos, stage=stage)
+                new, info = refalign.align(base, ref, covered)
+                trace.event(video, 'whisper %s: %d sentences, %s' % (stage, len(ref), info))
+                _trace_whisper(video, base, ref, covered)
+                if new is not None or info == 'in_sync':
+                    break
+            if new is not None:
+                apply_offset(new, user_offset(video))      # your own fixed correction stays
+                cues, changed, audio_truth = new, True, True
+                out = [l for l in out if not l.startswith('ضبط دقيق على الصوت')]
+                shifts = info.get('shifts')
+                if shifts:
+                    out.append('ضُبطت على كلام الفيلم (Whisper): الفيلم نسخة مقصوصة غير، كل جزء بإزاحته: %s'
+                               % ' / '.join('%+.1f ث' % (d / 1000.0) for d in shifts))
+                else:
+                    out.append('ضُبطت على كلام الفيلم (Whisper): إزاحة %+.1f ث' % (info['shift'] / 1000.0))
+                if on_update:      # show it now — do not wait for anything else
+                    on_update(_write_version(job, cues, item, '.synced'), list(out))
+            elif info == 'in_sync':
+                out.append('Whisper: التوقيت مضبوط أصلاً ✓')
+            elif info == 'weak':
+                out.append('Whisper: نفس الفيلم بس ما تأكد من التوقيت — تركها مثل ما هي')
+            else:
+                out.append('Whisper سمع الفيلم بس الترجمة ما تطابق كلامه (يمكن لفيلم أو نسخة ثانية)')
+        except wsp.WhisperError as e:
+            if 'aborted' in str(e):
+                return None, []
+            log('whisper failed: %s' % e)
+            if str(e) == 'key':
+                out.append('مفتاح Groq غير صحيح')
+    try:
+        trace.put(video, 'result', out or ['no change'])
+        trace.put(video, 'took', int(time.time() - job.get('time', time.time())))
+    except Exception:
+        pass
+    if not changed:
+        return None, out
+    synced = rebuilt or audio_truth
+    return _write_version(job, cues, item, '.synced' if synced else '.ai',
+                          retimed=rebuilt and not audio_truth), out

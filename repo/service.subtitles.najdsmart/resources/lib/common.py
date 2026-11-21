@@ -181,12 +181,37 @@ def cache_get(name, max_age):
     return None
 
 
-def cache_put(name, content):
+def write_atomic(path, content):
+    """Write to a temporary file, then swap it in: a reader never sees a half-written file."""
     ensure_dirs()
-    path = os.path.join(CACHE_DIR, name)
-    with open(path, 'wb') as f:
+    tmp = '%s.%d.tmp' % (path, os.getpid())
+    with open(tmp, 'wb') as f:
         f.write(content if isinstance(content, bytes) else content.encode('utf-8'))
+    os.replace(tmp, path)
     return path
+
+
+def cache_put(name, content):
+    return write_atomic(os.path.join(CACHE_DIR, name), content)
+
+
+def cache_del(name):
+    try:
+        os.remove(os.path.join(CACHE_DIR, name))
+    except OSError:
+        pass
+
+
+def cache_json(name, max_age):
+    """Cached JSON, or None; a damaged file is deleted instead of breaking the caller."""
+    c = cache_get(name, max_age)
+    if not c:
+        return None
+    try:
+        return json.loads(c.decode('utf-8'))
+    except (ValueError, UnicodeDecodeError):
+        cache_del(name)
+        return None
 
 
 def clean_temp(keep_hours=12):
@@ -203,12 +228,20 @@ def clean_temp(keep_hours=12):
             pass
 
 
+# long-lived cache files: AI translations and reference info are kept far longer
+LONG_LIVED = {'whisper_': 365 * 86400, 'embtr_': 365 * 86400, 'tr_': 365 * 86400, 'refmeta_': 120 * 86400, 'ref_': 30 * 86400,
+              'emb_': 60 * 86400}
+
+
 def prune_cache(max_age=14 * 86400):
     now = time.time()
     for name in os.listdir(CACHE_DIR):
         p = os.path.join(CACHE_DIR, name)
+        age = next((a for pre, a in LONG_LIVED.items() if name.startswith(pre)), max_age)
         try:
-            if now - os.path.getmtime(p) > max_age:
+            if name.endswith('.tmp') and now - os.path.getmtime(p) > 3600:
+                os.remove(p)
+            elif now - os.path.getmtime(p) > age:
                 os.remove(p)
         except OSError:
             pass
