@@ -1,3 +1,21 @@
+v4.12.7  (2026-11-21)
+- Najd 2.8.4.0 (bundled): it now times ANY outside subtitle that plays in
+  Kodi - the subtitle window with any service, Dex Hub / DexSubtitles,
+  another add-on, a file beside the video - as it times its own: on the
+  video's embedded subtitle timeline (MKV index) at once, else on the sound
+  in the background (audio for local files, fine-tune for streams). Kodi
+  gives only the stream's name and language, so extwatch.py finds the file
+  by Kodi's naming rule in special://temp, the add-ons' subtitle folders,
+  the custom subtitle folder and the video's folder (a fresh file wins;
+  two different candidates and no fresh one -> no guess). Each subtitle is
+  timed once; Najd's own files are skipped. Setting: Sync > Time subtitles
+  from other sources (on). Before this only Najd's downloads were timed.
+- najd_subs.sync_owner(): while Najd is the default service with that
+  setting on, the AutoSync of DexSubtitles / Dex Hub is switched off (its
+  value kept in najd_state.json) so a subtitle is not timed and swapped
+  twice; it goes back when Najd stops being the default. Their subtitle
+  downloads are not touched.
+
 v4.12.6  (2026-11-21)
 - 12-BIT badge for Dolby Vision FEL / MEL now works on CoreELEC. The AM9's
   Kodi 22 exposes no infolabel for the enhancement layer (4.12.5 still read

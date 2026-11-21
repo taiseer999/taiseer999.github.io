@@ -2,6 +2,17 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
+   "v": "4.12.7",
+   "en": [
+    "Najd now times any subtitle that plays in Kodi, whatever add-on or file it comes from: on the subtitle inside the video, or on the sound when there is none. Najd > Settings > Time subtitles from other sources.",
+    "While Najd does this, the AutoSync of DexSubtitles and Dex Hub rests, so a subtitle is not timed twice."
+   ],
+   "ar": [
+    "أصبحت نجد تضبط توقيت أي ترجمة تعمل في كودي، أيًّا كانت الإضافة أو الملف الذي جاءت منه: على الترجمة المدمجة في الفيديو، أو على الصوت إن لم توجد. نجد > الإعدادات > اضبط الترجمات من المصادر الأخرى.",
+    "وما دامت نجد تقوم بذلك يتوقف الضبط التلقائي في DexSubtitles وDex Hub، حتى لا تُضبط الترجمة مرتين."
+   ]
+  },
+  {
    "v": "4.12.6",
    "en": [
     "Najd Smart Subtitles is now your Arabic subtitle service: Arabic subtitles from three sites, fixed, timed to the audio and proofread by AI, or the video's own subtitle translated when none exists. Mods > Najd Smart Subtitles.",

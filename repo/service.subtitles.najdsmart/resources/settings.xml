@@ -59,6 +59,7 @@
         <setting id="auto_sync" type="boolean" label="30069" help="30070"><level>0</level><default>true</default><control type="toggle"/></setting>
         <setting id="section_sync" type="boolean" label="30071" help="30072"><level>0</level><default>true</default><control type="toggle"/></setting>
         <setting id="embedded_ref" type="boolean" label="30073" help="30074"><level>0</level><default>true</default><control type="toggle"/></setting>
+        <setting id="ext_sync" type="boolean" label="30150" help="30151"><level>0</level><default>true</default><dependencies><dependency type="enable" setting="auto_sync">true</dependency></dependencies><control type="toggle"/></setting>
         <setting id="auto_finetune" type="boolean" label="30075" help="30076"><level>0</level><default>true</default><control type="toggle"/></setting>
         <setting id="stream_finetune" type="boolean" label="30077" help="30078"><level>0</level><default>true</default><control type="toggle"/></setting>
         <setting id="live_check" type="boolean" label="30079" help="30080"><level>0</level><default>true</default><control type="toggle"/></setting>

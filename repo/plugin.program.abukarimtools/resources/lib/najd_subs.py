@@ -145,6 +145,50 @@ def is_default():
     return all(_get(s) == NAJD_ID for s in SERVICES)
 
 
+DEX_SYNCERS = ('service.subtitles.dexworld', 'plugin.video.dexhub')
+
+
+def _najd_ext_sync():
+    try:
+        import xbmcaddon
+        return (xbmcaddon.Addon(NAJD_ID).getSetting('ext_sync') or 'true').lower() != 'false'
+    except Exception:
+        return False
+
+
+def sync_owner():
+    """4.12.7: one add-on times outside subtitles. While Najd is the default
+    service with its 'time subtitles from other sources' on, the AutoSync of
+    DexSubtitles / Dex Hub is switched off (its value kept); otherwise the
+    kept value goes back. Their subtitle downloads are not touched."""
+    import xbmcaddon
+    st = _load()
+    kept = st.get('dex_autosync') or {}
+    najd = enabled() and is_default() and _najd_ext_sync()
+    changed = False
+    for aid in DEX_SYNCERS:
+        try:
+            addon = xbmcaddon.Addon(aid)
+            cur = addon.getSetting('autosync_enabled')
+        except Exception:
+            continue
+        if cur == '':
+            continue
+        if najd and cur.lower() != 'false':
+            kept[aid] = cur
+            addon.setSetting('autosync_enabled', 'false')
+            changed = True
+            _log('%s AutoSync off - Najd times outside subtitles' % aid)
+        elif not najd and aid in kept:
+            addon.setSetting('autosync_enabled', kept.pop(aid) or 'true')
+            changed = True
+            _log('%s AutoSync back on' % aid)
+    if changed:
+        st['dex_autosync'] = kept
+        _save(st)
+    return changed
+
+
 def set_default(on=True):
     """on: Najd for movies and episodes (the current services kept), Arabic
     added to the subtitle languages. off: the kept services back (none kept
@@ -169,6 +213,10 @@ def set_default(on=True):
     st['default_on'] = bool(on)
     _save(st)
     _log('default subtitle service -> %s (ok=%s)' % ('Najd' if on else 'previous', ok))
+    try:
+        sync_owner()
+    except Exception as e:
+        _log('sync owner: %s' % e, xbmc.LOGWARNING)
     return ok
 
 
@@ -281,6 +329,10 @@ def ensure():
         st['ffmpeg_tried'] = True
         _save(st)
         install_ffmpeg()
+    try:
+        sync_owner()
+    except Exception as e:
+        _log('sync owner: %s' % e, xbmc.LOGWARNING)
     return ok
 
 
@@ -289,6 +341,10 @@ def start_boot_ensure(monitor, delay=45):
     zpath, zver = bundle()
     if not zpath:
         return
+    try:
+        sync_owner()
+    except Exception as e:
+        _log('sync owner: %s' % e, xbmc.LOGWARNING)
     if _load().get('default_set') and _vtuple(installed_version()) >= _vtuple(zver) \
             and enabled() and (not _is_coreelec() or _ffmpeg_present() or _load().get('ffmpeg_tried')):
         return

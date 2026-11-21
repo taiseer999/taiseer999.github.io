@@ -71,6 +71,12 @@ class Player(xbmc.Player):
         xbmc.Player.__init__(self)
         self.last_path = None
 
+    def setSubtitles(self, path):
+        # Piers edition: a subtitle Najd sets is not an outside one to time
+        from resources.lib import extwatch
+        extwatch.najd_set()
+        xbmc.Player.setSubtitles(self, path)
+
     def onPlayBackStopped(self):
         set_status('')
         if getattr(self, 'live', None):
@@ -89,6 +95,12 @@ class Player(xbmc.Player):
         except Exception as e:
             log('live check not started: %s' % e)
         threading.Thread(target=self._auto, daemon=True).start()
+        try:
+            # Piers edition: time any subtitle another add-on or file puts on
+            from resources.lib import extwatch
+            extwatch.start(self, self.getPlayingFile())
+        except Exception as e:
+            log('external sync watch not started: %s' % e)
 
     def _auto(self):
         try:

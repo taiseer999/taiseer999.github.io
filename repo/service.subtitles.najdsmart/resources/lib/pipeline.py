@@ -1576,3 +1576,67 @@ def run_job(job, progress=None, abort=None, on_update=None, position=None):
     synced = any(st in job['steps'] for st in ('audio', 'understand', 'semantic', 'finetune'))
     return _write_version(job, cues, item, '.synced' if synced else '.ai',
                           retimed=synced and not audio_truth), out
+
+
+# ---------------------------------------------------------------- Piers edition
+def sync_external(src, video, progress=None):
+    """Time a subtitle that another add-on (or a file beside the video) put on
+    the player, the same way Najd times its own: on the video's own subtitle
+    timeline (MKV index) at once, else on the sound in the background.
+    Returns (path, mode, summary_lines) - mode 'now' (path is ready, show it),
+    'job' (queued; process_jobs swaps it in when done), 'same' (already in
+    time, nothing to change) - or None when it cannot be timed here."""
+    def step(pct, msg):
+        if progress:
+            progress(pct, msg)
+
+    with open(src, 'rb') as f:
+        raw = f.read()
+    text = arabic.decode(raw)
+    cues = subtitle.parse(text, video.get('fps') or 23.976)
+    if len(cues) < 20:
+        log('external sync: %s has %d lines - skipped' % (os.path.basename(src), len(cues)))
+        return None
+    is_ar = arabic._arabic_ratio(' '.join(c.text for c in cues[:200])) > 0.3
+    item = {'lang': 'ar' if is_ar else 'xx', 'external': src}
+    summary = []
+    if is_ar and setting_bool('fix_arabic', True):
+        cues, _st = arabic.fix_cues(cues, rtl_mode=setting('rtl_mode', 'rle'),
+                                    remove_ads=setting_bool('remove_ads', True), remove_hi=False)
+    method = setting('sync_method', 'smart')
+    emb_ok = same = False
+    if method in ('smart', 'auto', 'subtitle', 'audio') and setting_bool('embedded_ref', True):
+        step(30, 'قراءة توقيت الترجمة المدمجة في الفيديو...')
+        emb = embedded_reference(video)
+        if emb:
+            new, einfo = sync.align(cues, emb, local=setting_bool('local_sync', True), min_lift=1.4)
+            log('external sync on embedded: %s' % einfo)
+            if new is not None:
+                cues, emb_ok = new, True
+                same = abs(einfo.get('offset', 0)) < 80 and abs(einfo.get('ratio', 1) - 1) < 1e-4 \
+                    and not einfo.get('local_fixes')
+                summary.append('تم ضبط الترجمة على الترجمة المدمجة في الفيديو ✓ (%s)' % sync.describe(einfo))
+    steps = []
+    if not emb_ok:
+        if not is_stream(video) and audio_possible(video):
+            steps.append('audio')
+        elif is_stream(video) and setting_bool('stream_finetune', True) and finetune_possible(video):
+            steps.append('finetune')
+        elif is_stream(video) and audio_possible(video):
+            steps.append('audio')
+        if not steps:
+            log('external sync: no embedded timeline and no audio for %s' % (video.get('filename') or ''))
+            return None
+    apply_offset(cues, user_offset(video))
+    cues = subtitle.fix_timing(cues)
+    base = re.sub(r'[\\/:*?"<>|]+', '_', os.path.splitext(os.path.basename(src))[0])[:80]
+    path = os.path.join(TEMP_DIR, '%s.ext.srt' % (base or 'subtitle'))
+    with open(path, 'w', encoding='utf-8-sig') as f:
+        f.write(subtitle.to_srt(cues))
+    remember_last(path, video, item)
+    if steps:
+        queue_job(path, video, item, steps)
+        return path, 'job', ['جارٍ ضبط الترجمة على صوت الفيلم في الخلفية...']
+    if same and not is_ar:
+        return path, 'same', ['الترجمة مضبوطة أصلاً ✓']
+    return path, 'now', summary
