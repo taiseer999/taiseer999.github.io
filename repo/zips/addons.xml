@@ -621,7 +621,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.12.10" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.12.11" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -658,7 +658,7 @@ updated YouTube addon URL
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، ووصولاً سريعاً إلى معالج أبوكريم وأدوات الصيانة فيه (التنظيف الشامل وحذف الصور المصغّرة القديمة). كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة واختبار أداء المعالج وإعادة بناء قاعدة بيانات الإضافات.</description>
     <license>LicenseRef-ABTools (personal use only, no redistribution - see LICENSE.txt)</license>
-    <news>v4.12.10: Najd's text and guide in Modern Standard Arabic. v4.12.9: Najd updated to 2.9.7 (Whisper sync); it uses Dex Hub's AI key only with your permission. v4.12.8: Usenet results in Search All show the stream badges. v4.12.7: Najd times any subtitle playing in Kodi, from any add-on or file. v4.12.6: The 12-BIT badge for Dolby Vision FEL / MEL now works on CoreELEC. v4.12.5: The bit-depth badge shows 12-BIT for Dolby Vision FEL / MEL, as Player Process Info does. v4.12.4: Najd settings window shows its options again. v4.12.3: An updated Najd starts at once; Najd tells you when it needs a subtitle-site key. v4.12.2: Najd turns on the Arabic subtitle already inside the video. v4.12.1: Najd Smart Subtitles (by Ali) is the Arabic subtitle service - AB Tools installs, updates and sets it (Mods &gt; Najd Smart Subtitles). v4.12.0: New licence - AB Tools is free for personal use; redistributing it, in whole or in part, needs written permission (LICENSE.txt). Seek Preview, the CPU Benchmark and the Lucent Player Statistics window and Back key are rewritten. v4.11.9: The AB Tools service starts with Kodi again (boot sweep, watchdog, Guardian). v4.11.8: Context menu on search results; no more Kodi 22 crash when backing out of the TMDbHelper player list. v4.11.6: Usenet streams no longer stop after a few seconds - the NZB server runs as its own process. v4.11.5: Fixes a Kodi hang when starting a Usenet stream. Full history: changelog.txt</news>
+    <news>v4.12.11: The player's sync button uses Najd while Najd is the subtitle service. v4.12.10: Najd's text and guide in Modern Standard Arabic. v4.12.9: Najd updated to 2.9.7 (Whisper sync); it uses Dex Hub's AI key only with your permission. v4.12.8: Usenet results in Search All show the stream badges. v4.12.7: Najd times any subtitle playing in Kodi, from any add-on or file. v4.12.6: The 12-BIT badge for Dolby Vision FEL / MEL now works on CoreELEC. v4.12.5: The bit-depth badge shows 12-BIT for Dolby Vision FEL / MEL, as Player Process Info does. v4.12.4: Najd settings window shows its options again. v4.12.3: An updated Najd starts at once; Najd tells you when it needs a subtitle-site key. v4.12.2: Najd turns on the Arabic subtitle already inside the video. v4.12.1: Najd Smart Subtitles (by Ali) is the Arabic subtitle service - AB Tools installs, updates and sets it (Mods &gt; Najd Smart Subtitles). v4.12.0: New licence - AB Tools is free for personal use; redistributing it, in whole or in part, needs written permission (LICENSE.txt). Seek Preview, the CPU Benchmark and the Lucent Player Statistics window and Back key are rewritten. v4.11.9: The AB Tools service starts with Kodi again (boot sweep, watchdog, Guardian). v4.11.8: Context menu on search results; no more Kodi 22 crash when backing out of the TMDbHelper player list. Full history: changelog.txt</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>
@@ -6494,7 +6494,7 @@ v1.12.1 (2021-12-15)
         <icon>icon.png</icon>
     </assets>
   </extension>
-</addon><addon id="service.subtitles.najdsmart" name="ترجمة نجد الذكية" version="2.9.7.2" provider-name="علي">
+</addon><addon id="service.subtitles.najdsmart" name="ترجمة نجد الذكية" version="2.9.7.3" provider-name="علي">
   <requires>
     <import addon="xbmc.python" version="3.0.1" />
   </requires>
@@ -6509,7 +6509,7 @@ v1.12.1 (2021-12-15)
     <description lang="ar_SA">يبحث عن الترجمة العربية في SubDL و OpenSubtitles و SubSource، يصلح الترميز والحروف المقلوبة وعلامات الترقيم، يسمع صوت الفيلم ويفهم الكلام بـ Gemini ليضبط توقيت كل سطر، ويصحح النص بالذكاء الاصطناعي.</description>
     <description lang="en_GB">Searches SubDL, OpenSubtitles and SubSource. Fixes Arabic encoding/RTL punctuation, auto-syncs timing against a reference subtitle, and polishes text with Gemini.</description>
     <platform>all</platform>
-    <news>2.9.7.2 (Piers، عبر AB Tools): كل نصوص الإضافة بالعربية الفصحى؛ ضبط توقيت أي ترجمة خارجية تعمل في كودي؛ تفعيل الترجمة العربية المدمجة تلقائياً؛ لا يُستعمل مفتاح Dex Hub إلا بإذنك.
+    <news>2.9.7.3 (Piers، عبر AB Tools): زر المزامنة في المشغّل يضبط أي ترجمة معروضة؛ كل نصوص الإضافة بالعربية الفصحى؛ ضبط توقيت أي ترجمة خارجية تعمل في كودي؛ تفعيل الترجمة العربية المدمجة تلقائياً؛ لا يُستعمل مفتاح Dex Hub إلا بإذنك.
 2.9.7: الترجمة المدمجة أولاً، حتى في الروابط التي بلا امتداد.
 2.9.4 - 2.9.6: مزامنة على كلام الفيلم بـ Whisper، وضبط النسخ المقصوصة جزءاً جزءاً.
 2.9.3: مزامنة أحذر: لا يتغير التوقيت إلا إذا تفوّق الصوت على الصدفة بوضوح.
