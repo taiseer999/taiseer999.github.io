@@ -243,6 +243,36 @@ def file_size(path):
     return '%d MB' % round(size / float(1 << 20))
 
 
+def dv_layer_from_log():
+    """4.12.6: CoreELEC's Kodi 22 gives no infolabel for the Dolby Vision
+    enhancement layer, but its decoder logs it ('CAMLCodec::OpenDecoder DOVI:
+    ... full enhancement layer'). Read the log tail; only a line after the
+    current playback's 'Creating InputStream' counts. Returns 'FEL'/'MEL'/''."""
+    try:
+        import os
+        import xbmcvfs
+        path = xbmcvfs.translatePath('special://logpath/kodi.log')
+        size = os.path.getsize(path)
+        with open(path, 'rb') as f:
+            f.seek(max(0, size - 400000))
+            tail = f.read().decode('utf-8', 'ignore')
+        start = tail.rfind('Creating InputStream')
+        if start < 0:
+            start = tail.rfind('Opening stream')
+        seg = tail[start:] if start >= 0 else tail
+        i = seg.rfind('OpenDecoder DOVI:')
+        if i < 0:
+            return ''
+        line = seg[i:seg.find('\n', i) if seg.find('\n', i) > 0 else None].lower()
+        if 'full enhancement' in line or ' fel' in line:
+            return 'FEL'
+        if 'minimal enhancement' in line or ' mel' in line:
+            return 'MEL'
+    except Exception:
+        pass
+    return ''
+
+
 def bit_depth(hdr='', detail='', layer=''):
     """Video bit depth (0 when unknown): Kodi 22's video.bitdepth, else the (Amlogic) pixel format.
     PQ / HLG / Dolby Vision pictures are 10-bit at least, and a Dolby Vision FEL stream is 12-bit."""
@@ -273,6 +303,8 @@ def bit_depth(hdr='', detail='', layer=''):
                             label('Player.Process(video.dovi.el.type)'))).upper()
         present = label('Player.Process(video.dovi.el.present)').lower() in ('true', 'yes', '1')
         profile = label('Player.Process(video.dovi.profile)').strip()
+        if not re.search(r'(?<![A-Z])(FEL|MEL)(?![A-Z])', el) and not (present and profile.startswith('7')):
+            el = dv_layer_from_log()
         if re.search(r'(?<![A-Z])(FEL|MEL)(?![A-Z])', el) or (present and profile.startswith('7')):
             depth = max(depth, 12)
     return depth
@@ -422,6 +454,8 @@ class Reading(object):
         self.dv_profile = m.group(1) if (m and self.hdr == 'dolbyvision') else ''
         up = self.hdr_detail.upper()
         self.dv_layer = 'FEL' if 'FEL' in up else ('MEL' if 'MEL' in up else '')
+        if self.hdr == 'dolbyvision' and not self.dv_layer:
+            self.dv_layer = dv_layer_from_log()
         self.pixfmt = label('Player.Process(pixformat)')
         self.bits = bit_depth(self.hdr, self.hdr_detail, self.dv_layer)
         codec = label('VideoPlayer.VideoCodec').lower()

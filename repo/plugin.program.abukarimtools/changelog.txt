@@ -1,3 +1,12 @@
+v4.12.6  (2026-11-21)
+- 12-BIT badge for Dolby Vision FEL / MEL now works on CoreELEC. The AM9's
+  Kodi 22 exposes no infolabel for the enhancement layer (4.12.5 still read
+  10-BIT on Count of Monte Cristo 00000.m2ts, DV P7 FEL), but its decoder
+  logs "CAMLCodec::OpenDecoder DOVI: ... full enhancement layer".
+  lucent_playerinfo.dv_layer_from_log() reads the kodi.log tail and takes
+  that line only if it follows the current playback's "Creating
+  InputStream"; bit_depth() and the Statistics window fall back to it.
+
 v4.12.5  (2026-11-21)
 - OSD bit-depth badge: a Dolby Vision profile 7 file with an enhancement
   layer (FEL / MEL) now shows 12-BIT, the depth the layers rebuild and the
