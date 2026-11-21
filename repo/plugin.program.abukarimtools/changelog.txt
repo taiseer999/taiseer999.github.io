@@ -1,3 +1,14 @@
+v4.12.2  (2026-11-21)
+- Najd 2.8.3.2 (bundled; AB Tools updates the installed 2.8.3.1 at boot):
+  when the video carries an Arabic subtitle track, Najd now switches to it
+  and turns subtitles on, instead of only showing "the video has an Arabic
+  subtitle" while Kodi kept the English track (kodi.log 2026-11-21, Mac:
+  "Verity 2026 ... WEBRip ... CSP.mkv" and "Power.Book.II.Ghost.S01E01 ...
+  NF.WEB-DL", both with Arabic inside, both stayed on another track). It
+  picks a full track before a forced one and a plain one before SDH, over
+  JSON-RPC Player.SetSubtitle, once, 10 s after the video starts; a track
+  the user picks afterwards is left alone.
+
 v4.12.1  (2026-11-21)
 - Najd Smart Subtitles (service.subtitles.najdsmart by Ali, MIT, used with
   his permission) is now AB Tools' Arabic subtitle service. AB Tools carries

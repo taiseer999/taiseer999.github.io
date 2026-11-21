@@ -136,7 +136,14 @@ class Player(xbmc.Player):
                         break
                 set_status('')
             if media.subtitle_streams_have_arabic():
-                set_status('الفيديو يحتوي على ترجمة عربية ✓', 'ok')
+                # Piers edition: turn the video's own Arabic subtitle on
+                # instead of only reporting that it is there
+                picked = media.enable_arabic_stream()
+                if picked == 'switched':
+                    set_status('تم تفعيل الترجمة العربية المدمجة ✓', 'ok')
+                    notify('تم تفعيل الترجمة العربية الموجودة في الفيديو', seconds=4)
+                else:
+                    set_status('الفيديو يحتوي على ترجمة عربية ✓', 'ok')
                 return
             if not any(m.available() for m in providers.PROVIDERS.values()):
                 self._offer_embedded(media.current(), path)

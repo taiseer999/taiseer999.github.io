@@ -237,3 +237,45 @@ def subtitle_streams_have_arabic():
         return any((l or '').lower().startswith(('ar', 'عرب')) for l in langs)
     except Exception:
         return False
+
+
+def _is_ar(lang, name=''):
+    lang = (lang or '').lower()
+    name = (name or '').lower()
+    return lang in ('ar', 'ara', 'arabic') or lang.startswith('ar-') or \
+        'arabic' in name or 'عرب' in name
+
+
+def enable_arabic_stream():
+    """Piers edition: the video carries an Arabic subtitle but Kodi showed
+    another one (or none) - switch to the Arabic one and turn subtitles on.
+    Prefers a full (not forced) and not hearing-impaired track. Returns
+    'already' when Arabic is on screen, 'switched' after switching, '' when
+    there is no Arabic track or the switch failed."""
+    def rpc(method, params):
+        try:
+            return json.loads(xbmc.executeJSONRPC(json.dumps(
+                {'jsonrpc': '2.0', 'id': 1, 'method': method, 'params': params}))).get('result')
+        except Exception:
+            return None
+    pid = None
+    for p in rpc('Player.GetActivePlayers', {}) or []:
+        if p.get('type') == 'video':
+            pid = p.get('playerid')
+    if pid is None:
+        return ''
+    props = rpc('Player.GetProperties', {'playerid': pid, 'properties':
+                                         ['subtitles', 'currentsubtitle', 'subtitleenabled']}) or {}
+    subs = [s for s in props.get('subtitles') or [] if _is_ar(s.get('language'), s.get('name'))]
+    if not subs:
+        return ''
+    cur = props.get('currentsubtitle') or {}
+    if props.get('subtitleenabled') and _is_ar(cur.get('language'), cur.get('name')) \
+            and not cur.get('isforced'):
+        return 'already'
+    subs.sort(key=lambda s: (bool(s.get('isforced')), bool(s.get('isimpaired')), s.get('index', 0)))
+    best = subs[0]
+    ok = rpc('Player.SetSubtitle', {'playerid': pid, 'subtitle': best.get('index', 0), 'enable': True})
+    log('arabic stream: switched to #%s (%s, forced=%s) -> %s'
+        % (best.get('index'), best.get('name') or best.get('language'), best.get('isforced'), ok))
+    return 'switched' if ok == 'OK' else ''
