@@ -1,3 +1,18 @@
+v4.12.3  (2026-11-21)
+- Najd update starts at once: AB Tools unpacked Najd 2.8.3.2 over the
+  running 2.8.3.1 and Kodi kept running the old service until the next
+  start (kodi.log 2026-11-21 06:05:10, Mac). After an update AB Tools now
+  turns Najd off and on, so Kodi starts the new service; Najd stays the
+  default subtitle service across it.
+- Najd 2.8.3.3 (bundled):
+  * its addon_data folders (cache, temp, jobs) are made again whenever they
+    are missing - AB Wizard's Auto Clean deleted cache/ after Najd started
+    ("embedded resume failed: [Errno 2] No such file or directory: .../
+    service.subtitles.najdsmart/cache"), so the resume / job steps failed.
+  * with no SubDL / SubSource / OpenSubtitles key Najd said nothing and
+    searched nothing; now it shows "add a subtitle-site key in Najd's
+    setup wizard" once per session and logs it.
+
 v4.12.2  (2026-11-21)
 - Najd 2.8.3.2 (bundled; AB Tools updates the installed 2.8.3.1 at boot):
   when the video carries an Arabic subtitle track, Najd now switches to it

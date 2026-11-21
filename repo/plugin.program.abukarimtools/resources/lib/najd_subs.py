@@ -221,7 +221,19 @@ def install_bundled(force=False):
         except Exception:
             xbmc.executebuiltin('UpdateLocalAddons')
             xbmc.sleep(3000)
+        was_default = bool(have) and is_default()
+        if have and enabled():
+            # 4.12.3: an update unpacked over a running add-on leaves Kodi
+            # running the OLD service code until the next start (kodi.log
+            # 2026-11-21 06:05: 2.8.3.2 unpacked, 2.8.3.1's service kept
+            # running). Off + on makes Kodi start the new service now.
+            _rpc('Addons.SetAddonEnabled', {'addonid': NAJD_ID, 'enabled': False})
+            xbmc.sleep(1500)
+            _log('restarting %s so the new service runs' % NAJD_ID)
         _enable()
+        if was_default and not is_default():
+            for sid in SERVICES:
+                _set(sid, NAJD_ID)
         ok = installed_version() == zver and enabled()
         _log('%s %s ready=%s' % (NAJD_ID, zver, ok))
         return ok

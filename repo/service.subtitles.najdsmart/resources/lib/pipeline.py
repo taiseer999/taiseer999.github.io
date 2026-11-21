@@ -12,7 +12,7 @@ import zipfile
 
 import xbmcvfs
 
-from .common import (TEMP_DIR, JOBS_DIR, CACHE_DIR, log, setting, setting_bool,
+from .common import (TEMP_DIR, JOBS_DIR, CACHE_DIR, ensure_dirs, log, setting, setting_bool,
                      cache_get, cache_put)
 from . import arabic, subtitle, sync, providers
 from .media import release_tokens, release_family
@@ -667,6 +667,7 @@ def embedded_resume(video):
     load what is ready and carry on in the background. → path or None"""
     key = _video_key(video)
     best = None
+    ensure_dirs()
     for name in os.listdir(CACHE_DIR):
         if not (name.startswith('embtr_%s_' % key) and name.endswith('.json')):
             continue

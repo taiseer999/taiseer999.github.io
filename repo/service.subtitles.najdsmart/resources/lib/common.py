@@ -23,9 +23,20 @@ PROFILE = xbmcvfs.translatePath(ADDON.getAddonInfo('profile'))
 TEMP_DIR = os.path.join(PROFILE, 'temp')
 CACHE_DIR = os.path.join(PROFILE, 'cache')
 JOBS_DIR = os.path.join(PROFILE, 'jobs')
-for _d in (PROFILE, TEMP_DIR, CACHE_DIR, JOBS_DIR):
-    if not os.path.isdir(_d):
-        os.makedirs(_d, exist_ok=True)
+
+
+def ensure_dirs():
+    """Piers edition: a cache cleaner (AB Wizard Auto Clean) can delete these
+    folders while the service runs - make them again before they are used."""
+    for _d in (PROFILE, TEMP_DIR, CACHE_DIR, JOBS_DIR):
+        if not os.path.isdir(_d):
+            try:
+                os.makedirs(_d, exist_ok=True)
+            except OSError:
+                pass
+
+
+ensure_dirs()
 
 
 def setting(key, default=''):
@@ -171,6 +182,7 @@ def cache_get(name, max_age):
 
 
 def cache_put(name, content):
+    ensure_dirs()
     path = os.path.join(CACHE_DIR, name)
     with open(path, 'wb') as f:
         f.write(content if isinstance(content, bytes) else content.encode('utf-8'))
@@ -181,6 +193,7 @@ def clean_temp(keep_hours=12):
     """Remove old working files. Recent ones stay, so the subtitle that is playing (and the
     versions made for it) are never pulled away and can be checked in a problem report."""
     now = time.time()
+    ensure_dirs()
     for name in os.listdir(TEMP_DIR):
         try:
             p = os.path.join(TEMP_DIR, name)

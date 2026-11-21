@@ -16,6 +16,7 @@ from resources.lib import media, providers, pipeline
 
 
 MONITOR = [None]
+NO_KEY_TOLD = [False]
 
 
 class Player(xbmc.Player):
@@ -146,6 +147,17 @@ class Player(xbmc.Player):
                     set_status('الفيديو يحتوي على ترجمة عربية ✓', 'ok')
                 return
             if not any(m.available() for m in providers.PROVIDERS.values()):
+                self._offer_embedded(media.current(), path)
+                return
+            if not any(providers.PROVIDERS[p].available() for p in ('subdl', 'subsource', 'opensubtitles')):
+                # Piers edition: no subtitle-site key yet - say so (once per
+                # session) instead of a silent "nothing found"
+                log('auto: no SubDL / SubSource / OpenSubtitles key - nothing to search')
+                set_status('أضف مفتاح موقع ترجمة من معالج نجد', 'err')
+                if not NO_KEY_TOLD[0]:
+                    NO_KEY_TOLD[0] = True
+                    notify('للبحث التلقائي عن الترجمة العربية أضف مفتاح SubDL أو SubSource أو OpenSubtitles '
+                           'من معالج الإعداد في نجد', seconds=8)
                 self._offer_embedded(media.current(), path)
                 return
             set_status('جارٍ البحث عن ترجمة عربية...')
@@ -312,7 +324,9 @@ if __name__ == '__main__':
         with busy:
             process_jobs(player, monitor)
 
+    from resources.lib.common import ensure_dirs
     while not monitor.abortRequested():
+        ensure_dirs()
         if os.listdir(JOBS_DIR) and not busy.locked():
             threading.Thread(target=worker, daemon=True).start()
         if monitor.waitForAbort(2):
