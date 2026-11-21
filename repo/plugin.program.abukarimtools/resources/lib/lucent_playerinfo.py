@@ -264,8 +264,17 @@ def bit_depth(hdr='', detail='', layer=''):
     kind = (hdr or '').lower()
     if kind in ('hdr10', 'hdr10plus', 'hlg', 'dolbyvision'):
         depth = max(depth, 10)
-    if kind == 'dolbyvision' and 'FEL' in ('%s%s' % (layer or '', detail or '')).upper():
-        depth = max(depth, 12)
+    if kind == 'dolbyvision':
+        # 4.12.5: a Dolby Vision enhancement layer (FEL / MEL, profile 7)
+        # rebuilds a 12-bit picture over the 10-bit base layer - same as the
+        # TinyPPI / Player Process Info "12-bit". Kodi 22 reports the layer as
+        # video.dovi.el.type; the Amlogic label and the file name are fallbacks.
+        el = ('%s %s %s' % (layer or '', detail or '',
+                            label('Player.Process(video.dovi.el.type)'))).upper()
+        present = label('Player.Process(video.dovi.el.present)').lower() in ('true', 'yes', '1')
+        profile = label('Player.Process(video.dovi.profile)').strip()
+        if re.search(r'(?<![A-Z])(FEL|MEL)(?![A-Z])', el) or (present and profile.startswith('7')):
+            depth = max(depth, 12)
     return depth
 
 

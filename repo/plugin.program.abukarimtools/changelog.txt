@@ -1,3 +1,14 @@
+v4.12.5  (2026-11-21)
+- OSD bit-depth badge: a Dolby Vision profile 7 file with an enhancement
+  layer (FEL / MEL) now shows 12-BIT, the depth the layers rebuild and the
+  one Player Process Info shows (AM9 screenshot, Disclosure Day REMUX DV
+  P7.6 FEL: badge 10-BIT, PPI 12-bit). lucent_playerinfo.bit_depth() reads
+  Kodi 22's video.dovi.el.type (FEL / MEL), else video.dovi.el.present on
+  profile 7, else amlogic.dv.el, else FEL / MEL in the file name; the
+  Statistics window uses the same reading. stream_badges keeps reading for
+  up to 8 s on a Dolby Vision video until the layer facts arrive. HDR10,
+  profile 8 and SDR badges are unchanged (10-BIT / 8-BIT).
+
 v4.12.4  (2026-11-21)
 - Najd 2.8.3.4 (bundled): its settings window opened empty on the AM9
   (CoreELEC, Arabic GUI) - 7 categories and 12 entries counted, no labels.

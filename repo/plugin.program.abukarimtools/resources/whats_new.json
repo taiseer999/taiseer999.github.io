@@ -2,18 +2,20 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
-   "v": "4.12.4",
+   "v": "4.12.5",
    "en": [
     "Najd Smart Subtitles is now your Arabic subtitle service: Arabic subtitles from three sites, fixed, timed to the audio and proofread by AI, or the video's own subtitle translated when none exists. Mods > Najd Smart Subtitles.",
     "On Dex Hub videos Najd lets Dex Hub's own subtitle go first, and it uses the AI key you already gave Dex Hub.",
     "When the video already carries an Arabic subtitle, Najd turns it on for you.",
-    "Najd tells you when it needs a subtitle-site key (SubDL, SubSource or OpenSubtitles) to search by itself."
+    "Najd tells you when it needs a subtitle-site key (SubDL, SubSource or OpenSubtitles) to search by itself.",
+    "Dolby Vision FEL / MEL films show a 12-BIT badge, matching the playback info."
    ],
    "ar": [
     "أصبحت ترجمة نجد الذكية خدمة الترجمة العربية لديك: ترجمات عربية من ثلاثة مواقع، مصحّحة ومضبوطة على الصوت ومدقّقة بالذكاء الاصطناعي، أو تُترجَم الترجمة المدمجة في الفيديو إن لم توجد ترجمة. التخصيصات > ترجمة نجد الذكية.",
     "في فيديوهات Dex Hub تترك نجد الأولوية لترجمة Dex Hub نفسها، وتستخدم مفتاح الذكاء الاصطناعي الذي أدخلته في Dex Hub.",
     "إذا كان الفيديو يحتوي على ترجمة عربية، تفعّلها نجد تلقائيًّا.",
-    "تنبّهك نجد إذا احتاجت مفتاح موقع ترجمة (SubDL أو SubSource أو OpenSubtitles) لتبحث وحدها."
+    "تنبّهك نجد إذا احتاجت مفتاح موقع ترجمة (SubDL أو SubSource أو OpenSubtitles) لتبحث وحدها.",
+    "تظهر شارة 12-BIT لأفلام Dolby Vision من نوع FEL أو MEL، مطابقةً لمعلومات التشغيل."
    ],
    "from": "4.12.1"
   },

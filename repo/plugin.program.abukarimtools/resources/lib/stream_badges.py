@@ -68,12 +68,15 @@ def _audio_languages():
     return langs if streams else None
 
 
-def _bits():
+def _bits(path=''):
     try:
         from resources.lib import lucent_playerinfo as lp
         hdr = (xbmc.getInfoLabel('VideoPlayer.HdrType') or '').lower()
-        return lp.bit_depth(hdr, xbmc.getInfoLabel('Player.Process(video.source.hdr.type)'),
-                            xbmc.getInfoLabel('Player.Process(amlogic.dv.el)'))
+        # 4.12.5: the file name's FEL / MEL as a last fallback for the layer
+        name = urllib.parse.unquote(str(path or '').split('|', 1)[0].rsplit('/', 1)[-1])
+        layer = '%s %s' % (xbmc.getInfoLabel('Player.Process(amlogic.dv.el)'),
+                           lp.dolby_vision_from_name(name).get('layer') or '')
+        return lp.bit_depth(hdr, xbmc.getInfoLabel('Player.Process(video.source.hdr.type)'), layer)
     except Exception as e:
         _log('bit depth: %s' % e, xbmc.LOGWARNING)
         return 0
@@ -100,11 +103,16 @@ def started(path):
                 langs = _audio_languages()
                 if langs is not None and len(langs) > 1:
                     h.setProperty('abk.lp.multi', '1')
-            b = _bits()
-            if b and b != bits:
+            b = _bits(path)
+            if b and b > bits:
                 bits = b
                 h.setProperty('abk.lp.bits', str(b))
-            if langs is not None and bits and xbmc.getInfoLabel('Player.Process(video.bitdepth)'):
+            # 4.12.5: Dolby Vision's layer facts arrive after the first frame -
+            # keep reading (8 s) until the 12-bit of an FEL / MEL shows
+            dv_wait = (xbmc.getInfoLabel('VideoPlayer.HdrType') or '').lower() == 'dolbyvision' \
+                and bits < 12
+            if langs is not None and bits and not dv_wait \
+                    and xbmc.getInfoLabel('Player.Process(video.bitdepth)'):
                 break
             if mon.waitForAbort(1.0):
                 return
