@@ -262,7 +262,7 @@ def reference(video, key_name, ffmpeg, progress=None, abort=None, position_s=0, 
             complete = False
             break
         if progress:
-            progress(int(100 * k / len(pieces)), 'Whisper يسمع كلام الفيلم (%d/%d)...' % (k + 1, len(pieces)))
+            progress(int(100 * k / len(pieces)), 'Whisper يستمع إلى كلام الفيلم (%d/%d)...' % (k + 1, len(pieces)))
         try:
             got, heard = listen(ffmpeg, src, args, s, ln, key, abort)
         except WhisperError as e:

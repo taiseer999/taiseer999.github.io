@@ -18,7 +18,7 @@ DLG = xbmcgui.Dialog()
 KEYS = [
     # id, title, where to get it, url
     ('subdl_key', 'SubDL', 'سجّل في subdl.com ثم افتح صفحة API وانسخ المفتاح', 'https://subdl.com/panel/api'),
-    ('subsource_key', 'SubSource', 'سجّل في subsource.net ثم افتح تبويب API وأنشئ مفتاح', 'https://subsource.net/api-docs'),
+    ('subsource_key', 'SubSource', 'سجّل في subsource.net ثم افتح تبويب API وأنشئ مفتاحاً', 'https://subsource.net/api-docs'),
     ('os_key', 'OpenSubtitles', 'سجّل في opensubtitles.com ثم Consumers ← New consumer وانسخ API key', 'https://www.opensubtitles.com/consumers'),
     ('gemini_key', 'Gemini (الذكاء الاصطناعي)', 'سجّل بحساب Google في aistudio.google.com ثم Create API key', 'https://aistudio.google.com/apikey'),
 ]
@@ -28,9 +28,9 @@ AI_EXTRA = [
     ('openai_key', 'ChatGPT', 'platform.openai.com ثم API keys (مدفوع)', 'https://platform.openai.com/api-keys'),
     ('claude_key', 'Claude', 'console.anthropic.com ثم API keys (مدفوع)', 'https://console.anthropic.com/settings/keys'),
     ('grok_key', 'Grok', 'console.x.ai ثم API keys', 'https://console.x.ai'),
-    ('openrouter_key', 'OpenRouter', 'مفتاح واحد لعشرات النماذج وفيه مجانية', 'https://openrouter.ai/keys'),
-    ('groq_key', 'Groq', 'سريع جداً وفيه مجاني', 'https://console.groq.com/keys'),
-    ('mistral_key', 'Mistral', 'فيه مجاني', 'https://console.mistral.ai/api-keys'),
+    ('openrouter_key', 'OpenRouter', 'مفتاح واحد لعشرات النماذج، وبعضها مجاني', 'https://openrouter.ai/keys'),
+    ('groq_key', 'Groq', 'سريع جداً، وتتوفر خطة مجانية', 'https://console.groq.com/keys'),
+    ('mistral_key', 'Mistral', 'تتوفر خطة مجانية', 'https://console.mistral.ai/api-keys'),
 ]
 
 
@@ -72,20 +72,20 @@ def open_url(url):
 def ask_key(kid, title, how, url):
     cur = ADDON.getSetting(kid)
     while True:
-        opts = ['أكتب / ألصق المفتاح', 'افتح موقع المفتاح في المتصفح', 'تخطي']
+        opts = ['اكتب المفتاح أو الصقه', 'افتح موقع المفتاح في المتصفح', 'تخطَّ']
         if cur:
             opts = ['أبقِ المفتاح الحالي (••••%s)' % cur[-4:]] + opts
         head = '%s — %s' % (title, how)
         sel = DLG.select(head, opts)
-        if sel < 0 or opts[sel] == 'تخطي':
+        if sel < 0 or opts[sel] == 'تخطَّ':
             return cur
         if opts[sel].startswith('أبقِ'):
             return cur
         if opts[sel].startswith('افتح'):
             if open_url(url):
-                DLG.ok(ADDON_NAME, 'فتحت الموقع في المتصفح.\nانسخ المفتاح وارجع لكودي وألصقه (Ctrl+V).')
+                DLG.ok(ADDON_NAME, 'فُتح الموقع في المتصفح.\nانسخ المفتاح ثم ارجع إلى كودي والصقه (Ctrl+V).')
             else:
-                DLG.ok(ADDON_NAME, 'افتح هذا الرابط من جوالك أو الكمبيوتر:\n[B]%s[/B]' % url)
+                DLG.ok(ADDON_NAME, 'افتح هذا الرابط من جوالك أو حاسوبك:\n[B]%s[/B]' % url)
             continue
         val = DLG.input('الصق مفتاح %s' % title, cur).strip()
         if val:
@@ -97,7 +97,7 @@ def test_all(show=True):
     a = xbmcaddon.Addon(ADDON_ID)
     rows = []
     prog = xbmcgui.DialogProgress()
-    prog.create(ADDON_NAME, 'جاري الفحص...')
+    prog.create(ADDON_NAME, 'جارٍ الفحص...')
     tests = []
     if a.getSetting('subdl_key'):
         tests.append(('SubDL', lambda: checks.check_subdl(a.getSetting('subdl_key'))))
@@ -115,7 +115,7 @@ def test_all(show=True):
     except Exception:
         names = []
     if names and a.getSetting('use_kodi_addons') != 'false':
-        rows.append('[COLOR lime]●[/COLOR]  إضافات ترجمة مثبتة يستخدمها بدون مفاتيح: %s' % '، '.join(names))
+        rows.append('[COLOR lime]●[/COLOR]  إضافات ترجمة مثبتة تُستخدم بلا مفاتيح: %s' % '، '.join(names))
     tests.append(('قراءة الصوت', lambda: checks.check_audio(a.getSetting('ffmpeg_path'))))
     for n, (name, fn) in enumerate(tests):
         prog.update(int(n * 100 / len(tests)), 'فحص %s...' % name)
@@ -123,21 +123,21 @@ def test_all(show=True):
         rows.append('[COLOR %s]%s[/COLOR]  %s: %s' % ('lime' if ok else 'red', '●', name, msg))
     prog.close()
     if not names and not any(a.getSetting(k) for k in ('subdl_key', 'subsource_key', 'os_key')):
-        rows.insert(0, '[COLOR red]●[/COLOR]  ما فيه ولا مصدر ترجمة — لازم مفتاح واحد على الأقل')
+        rows.insert(0, '[COLOR red]●[/COLOR]  لا يوجد أي مصدر للترجمة؛ يلزم مفتاح واحد على الأقل')
     if show:
         DLG.textviewer(ADDON_NAME + ' — نتيجة الفحص', '\n'.join(rows))
     return rows
 
 
 def wizard():
-    DLG.ok(ADDON_NAME, 'هلا! هذا معالج الإعداد، بيجهز لك كل شي من داخل كودي:\n'
-                       '١) يخلي الإضافة خدمة الترجمة الأساسية\n٢) تحط مفاتيح المواقع (اختياري — إذا عندك إضافات ترجمة ثانية بيستخدمها)\n٣) يفحص إن كل شي شغال')
+    DLG.ok(ADDON_NAME, 'مرحباً! هذا معالج الإعداد، وسيجهّز لك كل شيء من داخل كودي:\n'
+                       '١) يجعل الإضافة خدمة الترجمة الأساسية\n٢) تضع مفاتيح المواقع (اختياري — إن كانت لديك إضافات ترجمة أخرى فسيستخدمها)\n٣) يتحقق من أن كل شيء يعمل')
     if set_defaults():
-        xbmcgui.Dialog().notification(ADDON_NAME, 'صارت خدمة الترجمة الأساسية ✓', time=3000)
+        xbmcgui.Dialog().notification(ADDON_NAME, 'أصبحت خدمة الترجمة الأساسية ✓', time=3000)
     for kid, title, how, url in KEYS:
         ask_key(kid, title, how, url)
         if kid == 'os_key' and ADDON.getSetting('os_key'):
-            if DLG.yesno(ADDON_NAME, 'عندك حساب OpenSubtitles وتبي تدخله؟ (يزيد عدد التنزيلات اليومية)'):
+            if DLG.yesno(ADDON_NAME, 'هل لديك حساب في OpenSubtitles وتريد إدخاله؟ (يزيد عدد التنزيلات اليومية)'):
                 u = DLG.input('اسم المستخدم', ADDON.getSetting('os_user')).strip()
                 p = DLG.input('كلمة المرور', option=xbmcgui.ALPHANUM_HIDE_INPUT).strip()
                 if u and p:
@@ -145,26 +145,26 @@ def wizard():
                     ADDON.setSetting('os_pass', p)
     from resources.lib import connect
     if not ADDON.getSetting('groq_key') and DLG.yesno(
-            ADDON_NAME, 'تبي الإضافة تضبط الترجمة على كلام الفيلم نفسه (Whisper)؟\n'
-                        'مجاني — تصوّر باركود بجوالك وتلصق مفتاح Groq، دقيقة وحدة.'):
+            ADDON_NAME, 'هل تريد أن تضبط الإضافة الترجمة على كلام الفيلم نفسه (Whisper)؟\n'
+                        'مجاني: تصوّر رمزاً بجوالك وتلصق مفتاح Groq، في دقيقة واحدة.'):
         connect.groq_qr()
-    choice = DLG.select('ذكاء اصطناعي احتياطي (يشتغل لو خلص Gemini)', [
-        'سجّل دخول OpenRouter بضغطة (مجاني — بدون نسخ مفاتيح)',
-        'ألصق مفاتيح من الجوال أو المتصفح (ChatGPT، Claude، DeepSeek، Grok...)',
-        'أكتب المفاتيح هنا بالريموت',
-        'تخطي'])
+    choice = DLG.select('ذكاء اصطناعي احتياطي (يعمل إذا نفد حد Gemini)', [
+        'سجّل الدخول إلى OpenRouter بضغطة (مجاني، بلا نسخ مفاتيح)',
+        'الصق المفاتيح من الجوال أو المتصفح (ChatGPT، Claude، DeepSeek، Grok...)',
+        'اكتب المفاتيح هنا بجهاز التحكم',
+        'تخطَّ'])
     if choice == 0:
         connect.openrouter_login()
     elif choice == 1:
         connect.key_form()
     elif choice == 2:
-        sel = DLG.multiselect('اختر اللي عندك مفاتيحها', ['%s — %s' % (t, h) for _k, t, h, _u in AI_EXTRA])
+        sel = DLG.multiselect('اختر ما لديك مفاتيحه', ['%s — %s' % (t, h) for _k, t, h, _u in AI_EXTRA])
         for i in (sel or []):
             ask_key(*AI_EXTRA[i])
     ADDON.setSetting('wizard_done', 'true')
     test_all()
-    DLG.ok(ADDON_NAME, 'خلصنا ✓\nشغّل أي فلم أو حلقة والترجمة بتجيك لحالها.\n'
-                       'تقدر ترجع لهذا المعالج من: الإضافات ← إضافات البرامج ← %s' % ADDON_NAME)
+    DLG.ok(ADDON_NAME, 'انتهى الإعداد ✓\nشغّل أي فيلم أو حلقة وستصلك الترجمة تلقائياً.\n'
+                       'يمكنك العودة إلى هذا المعالج من: الإضافات ← إضافات البرامج ← %s' % ADDON_NAME)
 
 
 def _subtitle_files_summary():
@@ -250,14 +250,14 @@ def report():
             return
     except Exception as e:
         log('report QR failed: %s' % e)
-    DLG.ok(ADDON_NAME, 'سويت التقرير ✓ (بدون مفاتيح أو روابط)\n[B]%s[/B]\n'
+    DLG.ok(ADDON_NAME, 'أُنشئ التقرير ✓ (بلا مفاتيح أو روابط)\n[B]%s[/B]\n'
                        'أرسل هذا الملف في المحادثة.' % out)
 
 
 def menu():
     opts = ['معالج الإعداد (المفاتيح والخدمة الأساسية)',
-            'ربط Whisper بالباركود (مزامنة على كلام الفيلم — مجاني)',
-            'تسجيل دخول OpenRouter بضغطة (ذكاء اصطناعي مجاني)',
+            'ربط Whisper برمز QR (مزامنة على كلام الفيلم — مجاني)',
+            'تسجيل الدخول إلى OpenRouter بضغطة (ذكاء اصطناعي مجاني)',
             'إدخال المفاتيح من الجوال أو المتصفح', 'فحص المفاتيح والاتصال',
             'فتح الإعدادات', 'مسح الذاكرة المؤقتة (ترجمات وأصوات محفوظة)',
             'إنشاء تقرير مشكلة (ملف على سطح المكتب)']
@@ -326,6 +326,6 @@ if __name__ == '__main__':
         connect.key_form()
     elif arg == 'defaults':
         if set_defaults():
-            DLG.notification(ADDON_NAME, 'صارت خدمة الترجمة الأساسية ✓', time=3000)
+            DLG.notification(ADDON_NAME, 'أصبحت خدمة الترجمة الأساسية ✓', time=3000)
     else:
         menu()

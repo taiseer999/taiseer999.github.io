@@ -347,12 +347,12 @@ def check(pid):
         kind = PROVIDERS[pid][1]
         call = _anthropic_call if kind == 'anthropic' else _openai_call
         res = call(pid, '', 'Return the list [1, 2, 3].', 60)
-        return (bool(res), 'يشتغل ✓ (%s)' % _model_ok.get(pid, ''))
+        return (bool(res), 'يعمل ✓ (%s)' % _model_ok.get(pid, ''))
     except HttpError as e:
         if e.code in (401, 403):
             return False, 'المفتاح غير صحيح'
         if e.code in (402, 429):
-            return False, 'المفتاح صحيح بس ما فيه رصيد/خلص الحد'
+            return False, 'المفتاح صحيح لكن لا يوجد رصيد أو نفد الحد'
         return False, 'خطأ %s' % e.code
     except Exception as e:
-        return False, 'ما اشتغل: %s' % str(e)[:60]
+        return False, 'لم يعمل: %s' % str(e)[:60]

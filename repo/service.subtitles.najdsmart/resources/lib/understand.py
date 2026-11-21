@@ -265,7 +265,7 @@ def apply_anchors(cues, anchors, speech=None, max_jump=8000, snap=500):
 
 
 def describe(info):
-    msg = 'فهم %d من %d سطر' % (info.get('kept', 0), info.get('lines', 0))
+    msg = 'فهم %d من %d سطراً' % (info.get('kept', 0), info.get('lines', 0))
     if info.get('fixed_lines'):
-        msg += '، وصحح %d سطر كان في غير مكانه' % info['fixed_lines']
+        msg += '، وصحّح %d سطراً كان في غير موضعه' % info['fixed_lines']
     return msg

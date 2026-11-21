@@ -443,7 +443,7 @@ def speech_reference(ffmpeg, path, duration_s, mode='auto', track=None,
         with lock:
             done[0] += 1
             if progress:
-                progress(5 + done[0] * 65 // n, 'الاستماع للصوت (%d/%d)...' % (done[0], n))
+                progress(5 + done[0] * 65 // n, 'الاستماع إلى الصوت (%d/%d)...' % (done[0], n))
     threads = []
     for k in range(n):
         t = threading.Thread(target=work, args=(k,))
@@ -464,9 +464,9 @@ def describe_error(e):
     if 'no_ffmpeg' in m:
         return 'أداة قراءة الصوت غير متوفرة على هذا الجهاز'
     if 'windows audio' in m:
-        return 'ويندوز ما قدر يقرأ صوت هذا الملف (صيغة صوت غير مدعومة مثل DTS)'
+        return 'تعذر على ويندوز قراءة صوت هذا الملف (صيغة صوت غير مدعومة مثل DTS)'
     if 'unsupported_path' in m:
-        return 'مصدر الفيديو ما يدعم الاستماع للصوت (رابط إضافة أو شبكة غير مدعومة)'
+        return 'مصدر الفيديو لا يدعم الاستماع إلى الصوت (رابط إضافة أو شبكة غير مدعومة)'
     if 'aborted' in m:
         return 'توقفت المزامنة الصوتية'
     return 'تعذر تحليل الصوت: %s' % m[:120]

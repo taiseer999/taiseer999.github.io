@@ -78,7 +78,7 @@ class LiveChecker(object):
         inside = [(c.start, c.end) for c in cues if a0 + 1500 <= c.start <= a1 - 1500]
         if len(inside) < 6:
             return                               # quiet scene: nothing to measure
-        set_status('فحص التوقيت للجزء الجاي...')
+        set_status('فحص توقيت الجزء التالي...')
         pcm = audiosync._run_ffmpeg(eng, src, args, start=start, dur=win,
                                     abort=self._abort, timeout=90)
         speech = sorted((c.start, c.end) for c in audiosync.detect_speech(pcm, offset_ms=a0))

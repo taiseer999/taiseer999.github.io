@@ -30,8 +30,8 @@ class Player(xbmc.Player):
             lang = pipeline.embedded_text_info(video)
             if not lang or not self.isPlayingVideo() or self.getPlayingFile() != path:
                 return False
-            msg = ('ما لقيت ترجمة عربية لهذا العمل.[CR]'
-                   'بس الفيديو فيه ترجمة %s مدمجة — تبي أترجمها للعربي بالذكاء الاصطناعي؟' % lang)
+            msg = ('لم يُعثر على ترجمة عربية لهذا العمل.[CR]'
+                   'لكن الفيديو يحتوي على ترجمة %s مدمجة، فهل تريد ترجمتها إلى العربية بالذكاء الاصطناعي؟' % lang)
             try:
                 yes = xbmcgui.Dialog().yesno(ADDON_NAME, msg, nolabel='لا', yeslabel='نعم، ترجم',
                                              autoclose=20000, defaultbutton=xbmcgui.DLG_YESNO_YES_BTN)
@@ -42,7 +42,7 @@ class Player(xbmc.Player):
                 set_status('')
                 return True
             bar = xbmcgui.DialogProgressBG()
-            bar.create(ADDON_NAME, 'جاري سحب الترجمة المدمجة وترجمتها...')
+            bar.create(ADDON_NAME, 'جارٍ استخراج الترجمة المدمجة وترجمتها...')
 
             def pos():
                 try:
@@ -58,12 +58,12 @@ class Player(xbmc.Player):
             if self.isPlayingVideo() and self.getPlayingFile() == path:
                 self.setSubtitles(sub_path)
                 self.showSubtitles(True)
-                set_status(summary[0] if summary else 'الترجمة شغالة ✓', 'busy' if os.listdir(JOBS_DIR) else 'ok')
+                set_status(summary[0] if summary else 'الترجمة تعمل ✓', 'busy' if os.listdir(JOBS_DIR) else 'ok')
                 notify(' | '.join(summary), seconds=6)
             return True
         except Exception as e:
             log('embedded offer failed: %s' % e, xbmc.LOGERROR)
-            set_status('فشل سحب الترجمة المدمجة', 'err')
+            set_status('فشل استخراج الترجمة المدمجة', 'err')
             notify(str(e).split('\n')[-1][:80], seconds=6)
             return True
 
@@ -114,20 +114,20 @@ class Player(xbmc.Player):
                 return
             if MONITOR[0].waitForAbort(3) or self.isPlayingVideo():
                 return          # next episode already started: don't interrupt
-            opts = ['مضبوط', 'تطلع قبل الكلام (متقدمة)', 'تطلع بعد الكلام (متأخرة)',
-                    'جزء منها بس خربان', 'ما انتبهت']
+            opts = ['مضبوط', 'تظهر قبل الكلام (متقدمة)', 'تظهر بعد الكلام (متأخرة)',
+                    'جزء منها فقط غير مضبوط', 'لم أنتبه']
             codes = ['ok', 'early', 'late', 'part', 'skip']
             k = xbmcgui.Dialog().select('ترجمة نجد — كيف كان توقيت الترجمة؟', opts, autoclose=25000)
             if k < 0:
                 return
             ans = codes[k]
             if ans == 'part':
-                w = xbmcgui.Dialog().select('وين تقريباً؟', ['البداية', 'النص', 'الآخر', 'ما أدري'],
+                w = xbmcgui.Dialog().select('أين تقريباً؟', ['البداية', 'المنتصف', 'النهاية', 'لا أدري'],
                                             autoclose=20000)
                 ans += ':' + ['start', 'middle', 'end', '?'][w] if w >= 0 else ''
             trace.feedback(video, ans)
             if ans != 'skip':
-                notify('شكراً، انحفظ في التقرير ✓', seconds=3)
+                notify('شكراً، حُفظ في التقرير ✓', seconds=3)
         except Exception as e:
             log('timing question failed: %s' % e)
 
@@ -180,10 +180,10 @@ class Player(xbmc.Player):
                 self.setSubtitles(sub_path)
                 self.showSubtitles(True)
                 if pct < 100:
-                    set_status('الترجمة جاهزة %d٪ — يكمل الباقي بالخلفية...' % pct, 'busy')
-                    notify('رجعت للفيلم: الترجمة جاهزة %d٪ ويكمل الباقي لحاله' % pct, seconds=5)
+                    set_status('الترجمة جاهزة بنسبة %d٪، ويكتمل الباقي في الخلفية...' % pct, 'busy')
+                    notify('عدت إلى الفيلم: الترجمة جاهزة بنسبة %d٪ ويكتمل الباقي تلقائياً' % pct, seconds=5)
                 else:
-                    set_status('الترجمة شغالة ✓', 'ok')
+                    set_status('الترجمة تعمل ✓', 'ok')
                 return
             if not setting_bool('auto_download', True):
                 return
@@ -206,30 +206,30 @@ class Player(xbmc.Player):
                     set_status('تم تفعيل الترجمة العربية المدمجة ✓', 'ok')
                     notify('تم تفعيل الترجمة العربية الموجودة في الفيديو', seconds=4)
                 else:
-                    set_status('الفيديو فيه ترجمة عربية ✓', 'ok')
+                    set_status('الفيديو يحتوي على ترجمة عربية ✓', 'ok')
                 return
             # the same list the search below really uses: only sites with a key (the subtitle
             # add-ons installed in Kodi are never called in the background)
             enabled = tuple(n for n in ('subdl', 'subsource', 'opensubtitles') if providers.PROVIDERS[n].available())
             if not enabled:
                 if not self._offer_embedded(media.current(), path):
-                    msg = 'التنزيل التلقائي يحتاج مفتاح موقع ترجمة — افتح قائمة الترجمة واختر بنفسك'
+                    msg = 'التنزيل التلقائي يحتاج إلى مفتاح موقع ترجمة؛ افتح قائمة الترجمة واختر بنفسك'
                     set_status(msg, 'err')
                     notify(msg, seconds=7)
                 return
-            set_status('تدور على ترجمة عربية...')
+            set_status('جارٍ البحث عن ترجمة عربية...')
             video = media.current()
             results = [r for r in providers.search_all(video, ['ar'], enabled=enabled)
                        if r['lang'] == 'ar']
             if not results:
-                msg = 'ما قدرت أتصل بمواقع الترجمة' if providers.all_failed() \
-                    else 'ما لقيت ترجمة عربية لهذا العمل'
+                msg = 'تعذر الاتصال بمواقع الترجمة' if providers.all_failed() \
+                    else 'لم يُعثر على ترجمة عربية لهذا العمل'
                 set_status(msg, 'err')
                 if not self._offer_embedded(video, path):
                     notify(msg)
                 return
-            set_status('لقيت ترجمة، جاري تجهيزها...')
-            notify('لقيت ترجمة، جاري التجهيز...', seconds=3)
+            set_status('عُثر على ترجمة، جارٍ تجهيزها...')
+            notify('عُثر على ترجمة، جارٍ التجهيز...', seconds=3)
             for item in results[:3]:
                 try:
                     sub_path, summary = pipeline.process(item, video)
@@ -241,8 +241,8 @@ class Player(xbmc.Player):
                         return          # user (or Kodi) already loaded an Arabic subtitle meanwhile
                     self.setSubtitles(sub_path)
                     self.showSubtitles(True)
-                    set_status('الترجمة شغالة — جاري ضبطها مع الصوت...' if os.listdir(JOBS_DIR)
-                               else 'الترجمة شغالة ✓', 'busy' if os.listdir(JOBS_DIR) else 'ok')
+                    set_status('الترجمة تعمل، وجارٍ ضبطها مع الصوت...' if os.listdir(JOBS_DIR)
+                               else 'الترجمة تعمل ✓', 'busy' if os.listdir(JOBS_DIR) else 'ok')
                     notify('تمت إضافة الترجمة%s' % (' | ' + ' | '.join(summary) if summary else ''),
                            seconds=7)
                 return
@@ -277,9 +277,9 @@ def process_jobs(player, monitor):
         if vpath and not still_playing():
             continue
         bar = xbmcgui.DialogProgressBG()
-        bar.create(ADDON_NAME, 'جاري سماع الفيلم...' if 'audio' in job['steps']
-                   else 'جاري سحب وترجمة باقي الترجمة...' if 'embedded_more' in job['steps']
-                   else 'جاري التصحيح بالذكاء الاصطناعي...')
+        bar.create(ADDON_NAME, 'جارٍ الاستماع إلى الفيلم...' if 'audio' in job['steps']
+                   else 'جارٍ استخراج باقي الترجمة وترجمته...' if 'embedded_more' in job['steps']
+                   else 'جارٍ التصحيح بالذكاء الاصطناعي...')
         current = [job['path']]
 
         def replaced():
@@ -318,11 +318,11 @@ def process_jobs(player, monitor):
                 log('early swap failed: %s' % e, xbmc.LOGERROR)
                 ok = False
             if ok and any('جاهز' in l for l in msg_lines):
-                set_status(msg_lines[0] + ' — الباقي يكمل...', 'busy')
+                set_status(msg_lines[0] + '، ويكتمل الباقي...', 'busy')
             elif ok:
-                partial = 'الجاية' in ' '.join(msg_lines)
-                set_status('صُححت الأسطر الجاية ✓ — الباقي يكمل...' if partial
-                           else 'النص اتصحح ✓ — جاري ضبط التوقيت...')
+                partial = 'التالية' in ' '.join(msg_lines)
+                set_status('صُحّحت الأسطر التالية ✓، ويكتمل الباقي...' if partial
+                           else 'صُحّح النص ✓، وجارٍ ضبط التوقيت...')
                 notify(' | '.join(msg_lines), seconds=5)
 
         try:
@@ -347,16 +347,16 @@ def process_jobs(player, monitor):
             set_status('')            # playback ended: nothing to report on screen
             continue
         if not new_path:
-            bad = [l for l in lines if any(x in l for x in ('تعذر', 'ما قدر', 'ما يطابق', 'غير'))]
+            bad = [l for l in lines if any(x in l for x in ('تعذر', 'لم ', 'لا يطابق', 'غير'))]
             if bad:
                 set_status(bad[0].split(':')[0][:45], 'err')
             else:
-                set_status('الترجمة شغالة ✓', 'ok')
+                set_status('الترجمة تعمل ✓', 'ok')
         if new_path:
             if swap(new_path, lines):
                 set_status('الترجمة مضبوطة ✓' if 'audio' in job['steps'] or 'understand' in job['steps']
                            else 'الترجمة كاملة ✓' if 'embedded_more' in job['steps']
-                           else 'النص اتصحح ✓', 'ok')
+                           else 'صُحّح النص ✓', 'ok')
             else:
                 log('a newer subtitle was chosen meanwhile (or playback ended); not swapping')
                 continue

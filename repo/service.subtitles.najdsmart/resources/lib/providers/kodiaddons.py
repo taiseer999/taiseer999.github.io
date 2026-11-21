@@ -123,4 +123,4 @@ def download(item):
                 return data
         except Exception as e:
             log('read %s failed: %s' % (path, e))
-    raise Exception('الإضافة %s ما رجعت ملف ترجمة' % item.get('source', ''))
+    raise Exception('لم تُرجع الإضافة %s ملف ترجمة' % item.get('source', ''))

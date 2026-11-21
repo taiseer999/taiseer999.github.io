@@ -323,14 +323,14 @@ def _diff_summary(deltas):
     med, p10, p90 = d[len(d) // 2], d[len(d) // 10], d[len(d) * 9 // 10]
     if p90 - p10 <= 700:
         return 'الفرق بين الترجمتين ثابت: %+.1f ث' % (med / 1000.0)
-    return 'الفرق بين الترجمتين متغير (من %+.1f إلى %+.1f ث) — فيه قص أو اختلاف نسخة' % (
+    return 'الفرق بين الترجمتين متغير (من %+.1f إلى %+.1f ث) — يوجد قص أو اختلاف في النسخة' % (
         p10 / 1000.0, p90 / 1000.0)
 
 
 def describe(info):
-    msg = 'طابق %d من %d سطر مع الإنجليزي' % (info.get('kept', 0), info.get('lines', 0))
+    msg = 'طابق %d من %d سطراً مع الإنجليزية' % (info.get('kept', 0), info.get('lines', 0))
     if info.get('diff'):
         msg = info['diff'] + ' | ' + msg
     if info.get('corrected'):
-        msg += '، وصحح %d سطر' % info['corrected']
+        msg += '، وصحّح %d سطراً' % info['corrected']
     return msg

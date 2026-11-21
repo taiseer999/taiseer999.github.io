@@ -34,7 +34,7 @@ def no_keys():
 
 def search(manual=None):
     if no_keys():
-        if xbmcgui.Dialog().yesno(ADDON_NAME, 'ما فيه أي مصدر ترجمة: لا مفاتيح ولا إضافات ترجمة ثانية مثبتة في كودي.\nتبي أشغل معالج الإعداد الحين؟'):
+        if xbmcgui.Dialog().yesno(ADDON_NAME, 'لا يوجد أي مصدر للترجمة: لا مفاتيح ولا إضافات ترجمة أخرى مثبتة في كودي.\nهل تريد تشغيل معالج الإعداد الآن؟'):
             xbmc.executebuiltin('RunScript(%s,wizard)' % ADDON.getAddonInfo('id'))
         return
     video = media.current()
@@ -65,8 +65,8 @@ def search(manual=None):
     video['interactive'] = True
     results = providers.search_all(video, wanted_langs())
     if not results:
-        notify('ما قدرت أتصل بمواقع الترجمة — تأكد من الإنترنت' if providers.all_failed()
-               else 'ما لقيت ترجمة عربية لهذا العمل')
+        notify('تعذر الاتصال بمواقع الترجمة — تأكد من اتصال الإنترنت' if providers.all_failed()
+               else 'لم يُعثر على ترجمة عربية لهذا العمل')
     for it in results[:80]:
         tag = it.get('source') or PROVIDER_LABEL.get(it['provider'], it['provider'])
         label2 = '[%s] %s' % (tag, it['release'] or '—')
@@ -95,9 +95,9 @@ def download():
     prune_cache()
     item = json.loads(urllib.parse.unquote(PARAMS['item']))
     video = media.current()
-    set_status('جاري تجهيز الترجمة...')
+    set_status('جارٍ تجهيز الترجمة...')
     dlg = xbmcgui.DialogProgress()
-    dlg.create(ADDON_NAME, 'جاري التحضير...')
+    dlg.create(ADDON_NAME, 'جارٍ التحضير...')
     try:
         path, summary = pipeline.process(item, video,
                                          progress=lambda p, m: dlg.update(p, m))
@@ -106,13 +106,13 @@ def download():
         log('download failed: %s' % e, xbmc.LOGERROR)
         msg = str(e)
         if msg == 'quota':
-            msg = 'خلص حد التنزيل اليومي في OpenSubtitles، جرّب مصدر ثاني'
+            msg = 'نفد حد التنزيل اليومي في OpenSubtitles، جرّب مصدراً آخر'
         set_status('فشل تنزيل الترجمة', 'err')
         xbmcgui.Dialog().ok(ADDON_NAME, 'فشل تنزيل الترجمة:\n%s' % msg)
         return
     dlg.close()
     busy = bool(os.listdir(JOBS_DIR))
-    set_status('الترجمة شغالة — جاري ضبطها مع الصوت...' if busy else 'الترجمة شغالة ✓',
+    set_status('الترجمة تعمل، وجارٍ ضبطها مع الصوت...' if busy else 'الترجمة تعمل ✓',
                'busy' if busy else 'ok')
     if summary:
         notify(' | '.join(summary), seconds=7)
@@ -123,9 +123,9 @@ def download():
 def embedded_ai():
     clean_temp()
     video = media.current()
-    set_status('جاري سحب الترجمة المدمجة وترجمتها...')
+    set_status('جارٍ استخراج الترجمة المدمجة وترجمتها...')
     dlg = xbmcgui.DialogProgress()
-    dlg.create(ADDON_NAME, 'جاري التحضير...')
+    dlg.create(ADDON_NAME, 'جارٍ التحضير...')
     try:
         def pos():
             try:
@@ -137,12 +137,12 @@ def embedded_ai():
     except Exception as e:
         dlg.close()
         log('embedded_ai failed: %s' % e, xbmc.LOGERROR)
-        set_status('فشل سحب الترجمة المدمجة', 'err')
+        set_status('فشل استخراج الترجمة المدمجة', 'err')
         if 'aborted' not in str(e):
             xbmcgui.Dialog().ok(ADDON_NAME, str(e))
         return
     dlg.close()
-    set_status('الترجمة شغالة ✓', 'ok')
+    set_status('الترجمة تعمل ✓', 'ok')
     notify(' | '.join(summary), seconds=7)
     li = xbmcgui.ListItem(label=path)
     xbmcplugin.addDirectoryItem(HANDLE, path, li, isFolder=False)
@@ -161,12 +161,12 @@ def resync():
     elif pipeline.audio_possible(video):
         steps = ['audio']
     else:
-        xbmcgui.Dialog().ok(ADDON_NAME, 'ما لقيت ترجمة إنجليزية مرجعية لهذا الفيديو، والسماع غير متاح له.\n'
-                            'جرّب ترجمة ثانية من القائمة، أو اضبط التوقيت يدوي من «تأخير الترجمة».')
+        xbmcgui.Dialog().ok(ADDON_NAME, 'لم يُعثر على ترجمة إنجليزية مرجعية لهذا الفيديو، والاستماع غير متاح له.\n'
+                            'جرّب ترجمة أخرى من القائمة، أو اضبط التوقيت يدوياً من «تأخير الترجمة».')
         return
     pipeline.queue_job(last['path'], video, last.get('item') or {}, steps, resync=True)
-    set_status('جاري ضبط الترجمة...')
-    notify('جاري ضبط التوقيت... الترجمة بتتبدل لحالها لما تخلص')
+    set_status('جارٍ ضبط الترجمة...')
+    notify('جارٍ ضبط التوقيت... وستُستبدل الترجمة تلقائياً عند الانتهاء')
     li = xbmcgui.ListItem(label=last['path'])
     xbmcplugin.addDirectoryItem(HANDLE, last['path'], li, isFolder=False)
 
@@ -181,7 +181,7 @@ def do_nudge():
     if not r:
         return
     path, total = r
-    set_status('التوقيت %+.2f ث — محفوظ لهذا الفيديو ✓' % (total / 1000.0), 'ok')
+    set_status('التوقيت %+.2f ث — حُفظ لهذا الفيديو ✓' % (total / 1000.0), 'ok')
     li = xbmcgui.ListItem(label=path)
     xbmcplugin.addDirectoryItem(HANDLE, path, li, isFolder=False)
 

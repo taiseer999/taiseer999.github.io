@@ -69,9 +69,9 @@ def openrouter_login():
             q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
             if 'code' in q:
                 box['code'] = q['code'][0]
-                msg = 'تم ✓ ارجع لكودي — Done, return to Kodi'
+                msg = 'تم ✓ ارجع إلى كودي — Done, return to Kodi'
             else:
-                msg = 'ما وصل رمز — No code received'
+                msg = 'لم يصل أي رمز — No code received'
             body = ('<html dir="rtl"><meta charset="utf-8"><body style="font-family:sans-serif;'
                     'background:#101826;color:#fff;text-align:center;padding-top:15vh">'
                     '<h1>%s</h1></body></html>' % msg).encode('utf-8')
@@ -83,7 +83,7 @@ def openrouter_login():
     try:
         srv, port = _free_server(H, '127.0.0.1', [3000] + list(range(51400, 51440)))
     except OSError:
-        DLG.ok(ADDON_NAME, 'ما قدرت أشغل خادم الاستقبال على هذا الجهاز.')
+        DLG.ok(ADDON_NAME, 'تعذر تشغيل خادم الاستقبال على هذا الجهاز.')
         return None
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     cb = 'http://localhost:%d/callback' % port
@@ -91,10 +91,10 @@ def openrouter_login():
         {'callback_url': cb, 'code_challenge': challenge, 'code_challenge_method': 'S256'})
     if not _open_browser(url):
         srv.shutdown()
-        DLG.ok(ADDON_NAME, 'ما قدرت أفتح المتصفح على هذا الجهاز.\nاستخدم «إدخال المفاتيح من الجوال» بدلها.')
+        DLG.ok(ADDON_NAME, 'تعذر فتح المتصفح على هذا الجهاز.\nاستخدم «إدخال المفاتيح من الجوال» بدلاً من ذلك.')
         return None
     prog = xbmcgui.DialogProgress()
-    prog.create(ADDON_NAME, 'فتحت لك OpenRouter في المتصفح:\nسجّل دخول (أو أنشئ حساب) واضغط Authorize، وارجع هنا.')
+    prog.create(ADDON_NAME, 'فُتح OpenRouter في المتصفح:\nسجّل الدخول (أو أنشئ حساباً) واضغط Authorize، ثم ارجع إلى هنا.')
     key = None
     try:
         t0 = time.time()
@@ -102,7 +102,7 @@ def openrouter_login():
             if prog.iscanceled():
                 break
             if 'code' in box:
-                prog.update(90, 'جاري استلام المفتاح...')
+                prog.update(90, 'جارٍ استلام المفتاح...')
                 r = http('https://openrouter.ai/api/v1/auth/keys',
                          json_body={'code': box['code'], 'code_verifier': verifier,
                                     'code_challenge_method': 'S256'}, timeout=30)
@@ -119,7 +119,7 @@ def openrouter_login():
         except Exception:
             pass
     if not key:
-        DLG.ok(ADDON_NAME, 'ما اكتمل تسجيل الدخول. جرّب مرة ثانية.')
+        DLG.ok(ADDON_NAME, 'لم يكتمل تسجيل الدخول. حاول مرة أخرى.')
         return None
     a = xbmcaddon.Addon(ADDON_ID)
     a.setSetting('openrouter_key', key)
@@ -127,7 +127,7 @@ def openrouter_login():
     pos = 1 if order and order[0] == 'gemini' else 0
     order.insert(pos, 'openrouter')
     a.setSetting('ai_order', ','.join(order))
-    DLG.ok(ADDON_NAME, 'تم ربط OpenRouter ✓\nصار احتياط تلقائي إذا خلص Gemini.')
+    DLG.ok(ADDON_NAME, 'تم ربط OpenRouter ✓\nأصبح احتياطاً تلقائياً إذا نفد حد Gemini.')
     return key
 
 
@@ -163,8 +163,8 @@ def _page(token, saved=None):
     rows = []
     for sid, title, link in FIELDS:
         cur = a.getSetting(sid)
-        hint = ('موجود (••••%s) — اتركه فاضي للإبقاء' % html.escape(cur[-4:])) if cur else 'الصق المفتاح هنا'
-        rows.append('<label><b>%s</b> <a href="%s" target="_blank">طلّع مفتاح ↗</a>'
+        hint = ('موجود (••••%s) — اتركه فارغاً للإبقاء عليه' % html.escape(cur[-4:])) if cur else 'الصق المفتاح هنا'
+        rows.append('<label><b>%s</b> <a href="%s" target="_blank">احصل على مفتاح ↗</a>'
                     '<input name="%s" placeholder="%s" autocomplete="off"></label>'
                     % (html.escape(title), link, sid, hint))
     note = '<p class="ok">✓ تم الحفظ: %s</p>' % html.escape('، '.join(saved)) if saved else ''
@@ -180,7 +180,7 @@ def _page(token, saved=None):
             '.ok{background:#173d27;padding:10px;border-radius:10px}</style>'
             '<h1>ترجمة نجد الذكية — المفاتيح</h1>%s'
             '<form method="post" action="/%s">%s<button>حفظ</button></form>'
-            '<p style="opacity:.6;font-size:12px">الصفحة تشتغل بس وكودي مفتوح على نافذة الاستقبال.</p>'
+            '<p style="opacity:.6;font-size:12px">تعمل الصفحة فقط ما دام كودي مفتوحاً على نافذة الاستقبال.</p>'
             '</html>' % (note, token, ''.join(rows)))
 
 
@@ -225,19 +225,19 @@ def key_form():
     try:
         srv, port = _free_server(H, '0.0.0.0', range(8765, 8790))
     except OSError:
-        DLG.ok(ADDON_NAME, 'ما قدرت أشغل صفحة المفاتيح على هذا الجهاز.')
+        DLG.ok(ADDON_NAME, 'تعذر تشغيل صفحة المفاتيح على هذا الجهاز.')
         return
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     url = 'http://%s:%d/%s' % (_lan_ip(), port, token)
     if sys.platform.startswith('win') or sys.platform == 'darwin':
         _open_browser('http://localhost:%d/%s' % (port, token))   # also open it right here
-    DLG.ok(ADDON_NAME, 'افتح هذا الرابط من جوالك أو أي جهاز على نفس الواي فاي:\n'
-                       '[B]%s[/B]\nالصق المفاتيح واضغط حفظ، بعدين ارجع واضغط موافق.\n'
-                       '(لو ويندوز سأل عن جدار الحماية، اختر «السماح»)' % url)
+    DLG.ok(ADDON_NAME, 'افتح هذا الرابط من جوالك أو من أي جهاز على شبكة الواي فاي نفسها:\n'
+                       '[B]%s[/B]\nالصق المفاتيح واضغط حفظ، ثم ارجع واضغط موافق.\n'
+                       '(إذا سأل ويندوز عن جدار الحماية، فاختر «السماح»)' % url)
     srv.shutdown()
     srv.server_close()
     if saved_all:
-        DLG.notification(ADDON_NAME, 'انحفظت: %s ✓' % '، '.join(sorted(set(saved_all))), time=5000)
+        DLG.notification(ADDON_NAME, 'حُفظت: %s ✓' % '، '.join(sorted(set(saved_all))), time=5000)
 
 
 # ------------------------------------------------------------------ Groq (Whisper) by QR code
@@ -251,22 +251,22 @@ a.b{background:#2b6cdf;color:#fff}button{background:#ecbe5c;color:#111}button.g{
 input{width:100%%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid #345;background:#0f1a2c;color:#fff;font-size:16px;direction:ltr;margin-top:8px}
 .msg{padding:12px;border-radius:10px;margin-top:10px;display:none}.ok{background:#173d27;display:block}.bad{background:#4a1c1c;display:block}
 small{opacity:.65}</style>
-<h1>ربط Whisper (مجاني)</h1><small>يخلي الإضافة تسمع كلام الفيلم وتضبط الترجمة عليه. %(cur)s</small>
-<div class="st"><span class="n">١</span>سجّل دخول في Groq (يقبل حساب قوقل، بدون بطاقة)
+<h1>ربط Whisper (مجاني)</h1><small>يجعل الإضافة تستمع إلى كلام الفيلم وتضبط الترجمة عليه. %(cur)s</small>
+<div class="st"><span class="n">١</span>سجّل الدخول في Groq (يقبل حساب Google، بلا بطاقة)
 <a class="b" href="https://console.groq.com/keys" target="_blank">افتح Groq ↗</a></div>
-<div class="st"><span class="n">٢</span>اضغط <b>Create API Key</b>، اكتب أي اسم، بعدين <b>Copy</b></div>
-<div class="st"><span class="n">٣</span>ارجع هنا والصقه
+<div class="st"><span class="n">٢</span>اضغط <b>Create API Key</b>، اكتب أي اسم، ثم <b>Copy</b></div>
+<div class="st"><span class="n">٣</span>ارجع إلى هنا والصقه
 <button class="g" type="button" onclick="pasteKey()">📋 لصق</button>
 <input id="k" placeholder="gsk_..." autocomplete="off" autocapitalize="off" spellcheck="false">
 <button type="button" onclick="save()">حفظ وتجربة</button><div id="m" class="msg"></div></div>
 <script>
 function say(t,ok){var m=document.getElementById('m');m.textContent=t;m.className='msg '+(ok?'ok':'bad');}
-function pasteKey(){if(navigator.clipboard&&navigator.clipboard.readText){navigator.clipboard.readText().then(function(t){document.getElementById('k').value=t.trim();save();},function(){say('اضغط مطوّل على الخانة واختر لصق',false);});}else{say('اضغط مطوّل على الخانة واختر لصق',false);}}
+function pasteKey(){if(navigator.clipboard&&navigator.clipboard.readText){navigator.clipboard.readText().then(function(t){document.getElementById('k').value=t.trim();save();},function(){say('اضغط مطولاً على الخانة واختر لصق',false);});}else{say('اضغط مطولاً على الخانة واختر لصق',false);}}
 function save(){var k=document.getElementById('k').value.replace(/\\s+/g,'');
- if(!/^gsk_[A-Za-z0-9]{20,}$/.test(k)){say('المفتاح يبدأ بـ gsk_ — تأكد إنك نسخته كامل',false);return;}
- say('جاري التجربة...',true);
+ if(!/^gsk_[A-Za-z0-9]{20,}$/.test(k)){say('المفتاح يبدأ بـ gsk_ — تأكد من أنك نسخته كاملاً',false);return;}
+ say('جارٍ التجربة...',true);
  fetch(location.pathname,{method:'POST',body:k}).then(function(r){return r.json();}).then(function(j){say(j.msg,j.ok);})
- .catch(function(){say('انقطع الاتصال بكودي — تأكد إنك على نفس الواي فاي',false);});}
+ .catch(function(){say('انقطع الاتصال بكودي — تأكد من أنك على شبكة الواي فاي نفسها',false);});}
 </script></html>'''
 
 
@@ -296,7 +296,7 @@ class _KeyQR(xbmcgui.WindowDialog):
             y += 34
         self.status = xbmcgui.ControlLabel(380, y + 4, 520, 30, '', textColor='FF7BE495', alignment=0x00000002)
         self.addControl(self.status)
-        self.addControl(xbmcgui.ControlLabel(370, 640, 540, 30, 'رجوع للإغلاق', textColor='FF98A2B3',
+        self.addControl(xbmcgui.ControlLabel(370, 640, 540, 30, 'زر الرجوع للإغلاق', textColor='FF98A2B3',
                                              alignment=0x00000002))
 
     def onAction(self, action):
@@ -331,7 +331,7 @@ def groq_qr():
         def do_GET(self):
             if self.path.strip('/') != token:
                 return self._send('404', 'text/plain', 404)
-            note = ('عندك مفتاح محفوظ (••••%s)، تقدر تبدّله.' % html.escape(cur[-4:])) if cur else ''
+            note = ('لديك مفتاح محفوظ (••••%s)، ويمكنك تبديله.' % html.escape(cur[-4:])) if cur else ''
             self._send(GROQ_PAGE % {'cur': note})
 
         def do_POST(self):
@@ -340,20 +340,20 @@ def groq_qr():
             n = int(self.headers.get('Content-Length') or 0)
             key = self.rfile.read(n).decode('utf-8', 'replace').strip() if 0 < n < 400 else ''
             if not key.startswith('gsk_'):
-                return self._json(False, 'هذا مو مفتاح Groq')
+                return self._json(False, 'هذا ليس مفتاح Groq')
             res = check_groq(key)
             if res == 'bad':
-                return self._json(False, 'Groq رفض المفتاح — انسخه مرة ثانية')
+                return self._json(False, 'رفض Groq المفتاح — انسخه مرة أخرى')
             a = xbmcaddon.Addon(ADDON_ID)
             a.setSetting('groq_key', key)
             a.setSetting('whisper_sync', 'true')
             state['ok'] = True
-            self._json(True, '✓ تم! المفتاح شغّال وانحفظ في كودي. تقدر تسكّر الصفحة.' if res == 'ok' else
-                       '✓ انحفظ في كودي (ما قدرت أجرّبه الحين، بيتجرّب أول ما يشتغل فيلم).')
+            self._json(True, '✓ تم! المفتاح يعمل وحُفظ في كودي. يمكنك إغلاق الصفحة.' if res == 'ok' else
+                       '✓ حُفظ في كودي (تعذرت تجربته الآن، وسيُجرَّب عند تشغيل أول فيلم).')
             w = holder.get('w')
             if w:
                 try:
-                    w.status.setLabel('✓ وصل المفتاح وانحفظ')
+                    w.status.setLabel('✓ وصل المفتاح وحُفظ')
                 except Exception:
                     pass
                 threading.Timer(2.0, w.close).start()
@@ -361,7 +361,7 @@ def groq_qr():
     try:
         srv, port = _free_server(H, '0.0.0.0', range(8765, 8790))
     except OSError:
-        DLG.ok(ADDON_NAME, 'ما قدرت أشغل صفحة الربط على هذا الجهاز.')
+        DLG.ok(ADDON_NAME, 'تعذر تشغيل صفحة الربط على هذا الجهاز.')
         return False
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     link = 'http://%s:%d/%s' % (_lan_ip(), port, token)
@@ -370,7 +370,7 @@ def groq_qr():
             ('صوّر الرمز بكاميرا الجوال', 'FFF4F1EA'),
             ('سجّل في Groq ← انسخ المفتاح ← الصق ← حفظ', 'FFB8C2D6'),
             (link, 'FFECBE5C'),
-            ('الجوال لازم يكون على نفس الواي فاي', 'FF98A2B3')])
+            ('يجب أن يكون الجوال على شبكة الواي فاي نفسها', 'FF98A2B3')])
         holder['w'] = w
         w.doModal()
         del w
@@ -378,5 +378,5 @@ def groq_qr():
         srv.shutdown()
         srv.server_close()
     if state['ok']:
-        DLG.notification(ADDON_NAME, 'Whisper جاهز ✓ — بيضبط الترجمة على كلام الفيلم', time=5000)
+        DLG.notification(ADDON_NAME, 'Whisper جاهز ✓ — سيضبط الترجمة على كلام الفيلم', time=5000)
     return state['ok']

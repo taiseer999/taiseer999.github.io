@@ -1,3 +1,15 @@
+v4.12.10  (2026-11-21)
+- Najd 2.9.7.2 (bundled): all its Arabic is Modern Standard Arabic. Upstream
+  2.9.x moved to Gulf dialect; tools/najd/fusha_najd.py converts every UI
+  string (Python literals in 18 modules, the settings .po, the What's New
+  window, the Groq / keys / report web pages) in one idempotent pass - AI
+  prompts and the Arabic data patterns in arabic.py are left alone - and
+  the code that matched on message text now matches the new words
+  (التالية, لم , لا يطابق). tools/najd/najd_guide_fusha.py redraws the 8
+  guide slides (IBM Plex Sans Arabic) in Fusha and drops the removed
+  quarter-second buttons from slides 3 and 5. Re-run both after each
+  upstream rebase.
+
 v4.12.9  (2026-11-21)
 - Najd rebased on the author's 2.9.7 (bundled 2.9.7.1). Upstream 2.8.4 ->
   2.9.7 brings: Whisper sync on the film's own speech (Groq key, daily

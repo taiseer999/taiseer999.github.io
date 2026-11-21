@@ -2,15 +2,18 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
-   "v": "4.12.9",
+   "v": "4.12.10",
    "en": [
     "Najd is updated to its author's latest release: it can time a subtitle on the film's own speech (Whisper), syncs more carefully, and reads the subtitle inside more links.",
-    "Najd uses the AI key saved in Dex Hub only if you allow it: it asks you once, since it spends that key's tokens."
+    "Najd uses the AI key saved in Dex Hub only if you allow it: it asks you once, since it spends that key's tokens.",
+    "All of Najd's text and its picture guide are now in Modern Standard Arabic."
    ],
    "ar": [
     "حُدِّثت نجد إلى أحدث إصدار من صاحبها: تستطيع ضبط الترجمة على كلام الفيلم نفسه (Whisper)، وتزامن بحذر أكبر، وتقرأ الترجمة المدمجة في روابط أكثر.",
-    "لا تستعمل نجد مفتاح الذكاء الاصطناعي المحفوظ في Dex Hub إلا بإذنك: تسألك مرة واحدة، لأنه يُستهلك من رصيد ذلك المفتاح."
-   ]
+    "لا تستعمل نجد مفتاح الذكاء الاصطناعي المحفوظ في Dex Hub إلا بإذنك: تسألك مرة واحدة، لأنه يُستهلك من رصيد ذلك المفتاح.",
+    "أصبحت كل نصوص نجد وصور الشرح فيها بالعربية الفصحى."
+   ],
+   "from": "4.12.9"
   },
   {
    "v": "4.12.8",

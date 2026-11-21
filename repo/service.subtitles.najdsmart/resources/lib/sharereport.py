@@ -67,30 +67,30 @@ details{margin-top:14px;color:#9aa6bd}pre{white-space:pre-wrap;font-size:11px;di
 background:#0a111c;padding:10px;border-radius:10px;max-height:300px;overflow:auto}
 </style>
 <h1>تقرير مشكلة — ترجمة نجد</h1>
-<p>اكتب وش صار بكلامك (وش الفيلم، وش ضغطت، وش ظهر لك). التقرير ما فيه مفاتيح ولا روابط.</p>
-<textarea id="note" placeholder="مثال: ضغطت ترجم الترجمة المدمجة، وقف عند ٥٠٪ وطلع خطأ..."></textarea>
+<p>اكتب ما حدث بأسلوبك (ما الفيلم، وما الذي ضغطته، وما الذي ظهر لك). لا يحتوي التقرير على مفاتيح ولا روابط.</p>
+<textarea id="note" placeholder="مثال: ضغطت «ترجم الترجمة المدمجة» فتوقف عند ٥٠٪ وظهر خطأ..."></textarea>
 <button class="g" onclick="copyAll()">نسخ التقرير كامل</button>
 <a class="b w" id="wa" href="#" onclick="return wa()">إرسال بالواتساب</a>
 <button class="s" onclick="dl()">تنزيل ملف التقرير</button>
 <div class="ok" id="ok"></div>
-<details><summary>شوف التقرير (%(n)d سطر)</summary><pre id="rep"></pre></details>
+<details><summary>اعرض التقرير (%(n)d سطر)</summary><pre id="rep"></pre></details>
 <textarea id="tmp" style="position:fixed;top:-1000px;height:10px"></textarea>
 <script>
 var REP=%(rep)s, TOKEN=%(tok)s;
 document.getElementById('rep').textContent=REP;
 function full(){var n=document.getElementById('note').value.trim();
- return 'وصف المشكلة:\\n'+(n||'(ما كتب وصف)')+'\\n\\n==== التقرير ====\\n'+REP;}
+ return 'وصف المشكلة:\\n'+(n||'(لم يُكتب وصف)')+'\\n\\n==== التقرير ====\\n'+REP;}
 function sendNote(){var n=document.getElementById('note').value.trim(); if(!n)return;
  var x=new XMLHttpRequest();x.open('POST','/'+TOKEN+'/note');x.send(n);}
 function ok(t){var o=document.getElementById('ok');o.textContent=t;o.style.display='block';}
 function copyAll(){sendNote();var t=document.getElementById('tmp');t.value=full();t.select();
  t.setSelectionRange(0,t.value.length);var done=false;try{done=document.execCommand('copy');}catch(e){}
- ok(done?'✓ انتسخ — الصقه في المحادثة':'ما قدر ينسخ تلقائي: افتح «شوف التقرير» وانسخه يدوي');}
+ ok(done?'✓ نُسخ — الصقه في المحادثة':'تعذر النسخ تلقائياً: افتح «اعرض التقرير» وانسخه يدوياً');}
 function wa(){sendNote();var t=full();if(t.length>6000)t=t.slice(0,1200)+'\\n...\\n'+t.slice(-4600);
  location.href='https://wa.me/?text='+encodeURIComponent(t);return false;}
 function dl(){sendNote();var b=new Blob([full()],{type:'text/plain;charset=utf-8'});
  var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='najd-report.txt';
- document.body.appendChild(a);a.click();ok('✓ نزل الملف — تلقاه في التنزيلات، أرسله في المحادثة');}
+ document.body.appendChild(a);a.click();ok('✓ نُزّل الملف — ستجده في التنزيلات، فأرسله في المحادثة');}
 </script></html>'''
 
 
@@ -105,13 +105,13 @@ class QRCard(xbmcgui.WindowDialog):
         self.addControl(xbmcgui.ControlImage(490, 120, 300, 300, qr_png(link)))
         self.addControl(xbmcgui.ControlLabel(370, 435, 540, 30, 'صوّر الرمز بكاميرا الجوال',
                                              textColor='FFF4F1EA', alignment=0x00000002))
-        self.addControl(xbmcgui.ControlLabel(370, 470, 540, 30, 'اكتب المشكلة بكلامك واضغط نسخ أو واتساب',
+        self.addControl(xbmcgui.ControlLabel(370, 470, 540, 30, 'اكتب المشكلة بأسلوبك واضغط نسخ أو واتساب',
                                              textColor='FFB8C2D6', alignment=0x00000002))
         self.addControl(xbmcgui.ControlLabel(370, 510, 540, 30, link,
                                              textColor='FFECBE5C', alignment=0x00000002))
         self.addControl(xbmcgui.ControlLabel(380, 550, 520, 60, extra, textColor='FF98A2B3',
                                              alignment=0x00000002))
-        self.addControl(xbmcgui.ControlLabel(370, 625, 540, 30, 'الجوال لازم يكون على نفس الواي فاي — رجوع للإغلاق',
+        self.addControl(xbmcgui.ControlLabel(370, 625, 540, 30, 'يجب أن يكون الجوال على شبكة الواي فاي نفسها — زر الرجوع للإغلاق',
                                              textColor='FF98A2B3', alignment=0x00000002))
 
     def onAction(self, action):
@@ -165,7 +165,7 @@ def share(text, saved_path):
     link = 'http://%s:%d/%s' % (_lan_ip(), port, token)
     log('report page ready on port %d' % port)
     try:
-        w = QRCard(link, 'وفيه نسخة محفوظة على الجهاز: ' + os.path.basename(saved_path))
+        w = QRCard(link, 'وتوجد نسخة محفوظة على الجهاز: ' + os.path.basename(saved_path))
         w.doModal()
         del w
     finally:

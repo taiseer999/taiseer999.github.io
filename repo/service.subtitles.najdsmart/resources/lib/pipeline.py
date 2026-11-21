@@ -304,7 +304,7 @@ def process(item, video, progress=None):
     trace.start(video, item, 'manual' if progress else 'auto')
     content, name = extract(raw, video)
     if not content:
-        raise Exception('الأرشيف ما فيه ترجمة لهذي الحلقة أو الفلم')
+        raise Exception('لا يحتوي الأرشيف على ترجمة لهذه الحلقة أو هذا الفيلم')
 
     step(25, 'إصلاح الترميز والنص...')
     text = arabic.decode(content)
@@ -318,7 +318,7 @@ def process(item, video, progress=None):
                                    remove_ads=setting_bool('remove_ads', True),
                                    remove_hi=setting_bool('remove_hi', False))
         if st['changed'] or st['ads']:
-            summary.append('إصلاح %d سطر وحذف %d إعلان' % (st['changed'], st['ads']))
+            summary.append('أُصلح %d سطراً وحُذف %d إعلاناً' % (st['changed'], st['ads']))
 
     steps = []
     verify_orig = None
@@ -334,7 +334,7 @@ def process(item, video, progress=None):
     ref_used = False
     if setting_bool('auto_sync', True):
         if item.get('hash_match'):
-            summary.append('مطابقة لنفس ملف الفيديو ✓')
+            summary.append('مطابقة لملف الفيديو نفسه ✓')
         if method in ('smart', 'subtitle', 'audio') and setting_bool('embedded_ref', True) and not whisper_only:
             step(35, 'قراءة توقيت الترجمة المدمجة في الفيديو...')
             emb = embedded_reference(video)
@@ -363,7 +363,7 @@ def process(item, video, progress=None):
                     cache_put('refmeta_%s.json' % _video_key(video), json.dumps(meta))
                     if method == 'smart' and gemini:
                         steps.append('semantic')
-                        summary.append('جاري مطابقة كل سطر مع الإنجليزي بالمعنى...')
+                        summary.append('جارٍ مطابقة كل سطر مع الترجمة الإنجليزية حسب المعنى...')
                 else:
                     log('English reference does not fit this video; not used')
                 ref = None
@@ -384,7 +384,7 @@ def process(item, video, progress=None):
                     summary.append(line)
                 if method == 'smart' and gemini:
                     steps.append('semantic')
-                    summary.append('جاري مطابقة كل سطر مع الإنجليزي بالمعنى...')
+                    summary.append('جارٍ مطابقة كل سطر مع الترجمة الإنجليزية حسب المعنى...')
             elif how != 'hash':
                 log('no English reference; keeping the subtitle timing as is')
                 trace.event(video, 'no english reference with the same timing')
@@ -395,23 +395,23 @@ def process(item, video, progress=None):
             from . import whisper as _wsp
             if _wsp.available() and (finetune_possible(video) if is_stream(video) else audio_possible(video)):
                 steps.append('whisper')
-                summary.append('Whisper يسمع كلام الفيلم لضبط التوقيت بالخلفية...')
+                summary.append('Whisper يستمع إلى كلام الفيلم لضبط التوقيت في الخلفية...')
             elif whisper_only:
-                summary.append('وضع تجربة Whisper: ' + ('اربط Groq أول (قائمة الإضافة ← ربط Whisper بالباركود)'
-                                                        if not _wsp.available() else 'السماع غير متاح لهذا المصدر'))
+                summary.append('وضع تجربة Whisper: ' + ('اربط Groq أولاً (قائمة الإضافة ← ربط Whisper برمز QR)'
+                                                        if not _wsp.available() else 'الاستماع غير متاح لهذا المصدر'))
             elif not _wsp.available() and setting('whisper_hint') != 'shown':
                 from .common import ADDON
                 ADDON.setSetting('whisper_hint', 'shown')
-                summary.append('لضبط أدق على كلام الفيلم: قائمة الإضافة ← ربط Whisper بالباركود (مجاني)')
+                summary.append('لضبط أدق على كلام الفيلم: قائمة الإضافة ← ربط Whisper برمز QR (مجاني)')
         listen = not emb_ok and 'whisper' not in steps and not whisper_only and \
             (method == 'audio' or (setting_bool('listen_extra', False) and not steps))
         if listen and audio_possible(video):
             steps.append('audio')
             if llm_key('gemini') and not is_stream(video) and setting_bool('understand_extra', False):
                 steps.append('understand')
-            summary.append('جاري الاستماع للصوت لمزامنة الترجمة...')
+            summary.append('جارٍ الاستماع إلى الصوت لمزامنة الترجمة...')
         elif method == 'audio':
-            summary.append('السماع غير متاح لهذا المصدر')
+            summary.append('الاستماع غير متاح لهذا المصدر')
 
     apply_offset(cues, user_offset(video))
     cues = subtitle.fix_timing(cues)
@@ -431,9 +431,9 @@ def process(item, video, progress=None):
         elif is_stream(video) and setting_bool('stream_finetune', True) and finetune_possible(video):
             steps.append('finetune')
     if 'finetune' in steps:
-        summary.append('ضبط دقيق على الصوت بالخلفية...')
+        summary.append('ضبط دقيق على الصوت في الخلفية...')
     elif 'ai' in steps:
-        summary.append('التصحيح بالذكاء الاصطناعي بالخلفية...')
+        summary.append('التصحيح بالذكاء الاصطناعي في الخلفية...')
     if verify_orig and (finetune_possible(video) if is_stream(video) else audio_possible(video)):
         steps.insert(0, 'verify')
     remember_last(path, video, item)
@@ -514,11 +514,11 @@ def _net_msg(e, what):
     log('embedded text failed: %r' % (e,))
     t = str(e).lower()
     if 'timed out' in t or 'timeout' in t or 'handshake' in t or 'reset' in t or 'urlopen' in t:
-        return what + ':\nسيرفر الفيلم بطيء أو قطع الاتصال. جرّب مرة ثانية بعد شوي.'
+        return what + ':\nخادم الفيلم بطيء أو قطع الاتصال. حاول مرة أخرى بعد قليل.'
     if 'no_range' in t:
-        return what + ':\nسيرفر الفيلم ما يسمح بالقراءة الجزئية.'
+        return what + ':\nخادم الفيلم لا يسمح بالقراءة الجزئية.'
     if 'no_relative_positions' in t or 'block_not_found' in t:
-        return what + ':\nملف الفيديو مبني بطريقة ما تسمح بسحب الترجمة منه.'
+        return what + ':\nبنية ملف الفيديو لا تسمح باستخراج الترجمة منه.'
     return '%s (%s)' % (what, e)
 
 
@@ -526,7 +526,7 @@ def _read_text(mkvcues, where, track, idx, remote, abort, step):
     return mkvcues.read_text(where, track, idx, workers=4 if remote else 2,
                              timeout=240.0 if remote else 60.0, abort=abort,
                              progress=lambda d, n: step(10 + int(20 * d / max(1, n)),
-                                                        'سحب الترجمة من داخل الفيديو (%d/%d)...' % (d, n)))
+                                                        'استخراج الترجمة من داخل الفيديو (%d/%d)...' % (d, n)))
 
 
 LANG_AR = {'en': 'الإنجليزية', 'eng': 'الإنجليزية', 'fr': 'الفرنسية', 'fre': 'الفرنسية', 'fra': 'الفرنسية',
@@ -568,12 +568,12 @@ def embedded_translate(video, progress=None, abort=None, position=None):
         if progress:
             progress(pct, msg)
     if not embedded_text_possible(video):
-        raise Exception('هذي الميزة لملفات MKV فقط')
+        raise Exception('هذه الميزة لملفات MKV فقط')
     step(5, 'قراءة قائمة الترجمات داخل الفيديو...')
     try:
         src, _a, remote = audiosync.media_source(video.get('path'))
     except audiosync.AudioSyncError as e:
-        raise Exception('ما قدرت أفتح الفيديو (%s)' % e)
+        raise Exception('تعذر فتح الفيديو (%s)' % e)
     where = video.get('path') if remote else src
     idx = None
     for attempt in range(3):
@@ -588,8 +588,8 @@ def embedded_translate(video, progress=None, abort=None, position=None):
     if idx is None:
         e = err
         if 'not_mkv' in str(e):
-            raise Exception('هذا الفيديو مو MKV، فما فيه ترجمة مدمجة تنسحب')
-        raise Exception(_net_msg(e, 'ما قدرت أقرأ فهرس الفيديو'))
+            raise Exception('هذا الفيديو ليس MKV، فلا توجد فيه ترجمة مدمجة يمكن استخراجها')
+        raise Exception(_net_msg(e, 'تعذرت قراءة فهرس الفيديو'))
     tracks = mkvcues.text_tracks(idx)
     if not tracks:
         imgs = [t for t in idx.get('tracks', []) if t['type'] == mkvcues.SUBTITLE]
@@ -600,8 +600,8 @@ def embedded_translate(video, progress=None, abort=None, position=None):
             d = {}
         d['text'] = False
         cache_put(key, json.dumps(d))
-        raise Exception('الترجمة المدمجة في هذا الفيديو صور (PGS) وليست نص — ما تنقرأ'
-                        if imgs else 'ما فيه ترجمة مدمجة داخل هذا الفيديو')
+        raise Exception('الترجمة المدمجة في هذا الفيديو صور (PGS) وليست نصاً، فلا يمكن قراءتها'
+                        if imgs else 'لا توجد ترجمة مدمجة داخل هذا الفيديو')
 
     def rank(t):
         lang = (t.get('lang') or '').lower()
@@ -614,7 +614,7 @@ def embedded_translate(video, progress=None, abort=None, position=None):
     log('embedded text: track %s %s %s (%d lines)' % (track['num'], track['codec'], track['lang'],
                                                        len(idx['cues'].get(track['num']) or [])))
     if not is_ar and not llm.any_available():
-        raise Exception('لازم مفتاح ذكاء اصطناعي (Gemini أو غيره) في الإعدادات عشان الترجمة')
+        raise Exception('يلزم مفتاح ذكاء اصطناعي (Gemini أو غيره) في الإعدادات للترجمة')
     item = {'provider': 'embedded', 'id': 'track%s' % track['num'], 'lang': 'ar',
             'release': 'embedded', 'hash_match': True}
     state = _emb_state(video, track)
@@ -630,19 +630,19 @@ def embedded_translate(video, progress=None, abort=None, position=None):
         todo = _emb_next(state, dur, now, first=True)
     summary = []
     if todo:
-        step(10, 'سحب الترجمة من داخل الفيديو...')
+        step(10, 'استخراج الترجمة من داخل الفيديو...')
         _emb_run_slices(state, todo, video, where, track, idx, remote, dur, is_ar, abort,
                         lambda pct, msg: step(10 + int(pct * 0.85), msg))
     if not state['lines']:
-        raise Exception('الترجمة المدمجة فاضية')
+        raise Exception('الترجمة المدمجة فارغة')
     path = _emb_write(video, state)
     remember_last(path, video, item)
     left = [k for k in range(EMB_SLICES) if k not in state['done']]
     if left:
-        summary.append('جاهز %d٪ من الترجمة — الباقي يكمل بالخلفية وانت تتفرج' % (len(state['done']) * 100 // EMB_SLICES))
+        summary.append('جاهز %d٪ من الترجمة، ويكتمل الباقي في الخلفية أثناء المشاهدة' % (len(state['done']) * 100 // EMB_SLICES))
         queue_job(path, video, item, ['embedded_more'])
     else:
-        summary.append('الترجمة المدمجة جاهزة كاملة ✓ (%d سطر)' % len(state['lines']))
+        summary.append('الترجمة المدمجة جاهزة كاملة ✓ (%d سطراً)' % len(state['lines']))
     step(100, 'تم')
     return path, summary
 
@@ -704,16 +704,16 @@ def _emb_run_slices(state, ks, video, where, track, idx, remote, dur, is_ar, abo
         a, b = _emb_slice(k, dur)
         base = 100.0 * j / len(ks)
         span = 100.0 / len(ks)
-        step(base, 'سحب الجزء %d من 10...' % (k + 1))
+        step(base, 'استخراج الجزء %d من 10...' % (k + 1))
         try:
             lines = mkvcues.read_text(where, track, idx, workers=4 if remote else 2,
                                       timeout=240.0 if remote else 60.0, abort=abort, t_range=(a, b),
                                       progress=lambda d, n: step(base + span * 0.4 * d / max(1, n),
-                                                                 'سحب الجزء %d من 10 (%d/%d)...' % (k + 1, d, n)))
+                                                                 'استخراج الجزء %d من 10 (%d/%d)...' % (k + 1, d, n)))
         except mkvcues.MkvError as e:
             if 'aborted' in str(e):
                 raise
-            raise Exception(_net_msg(e, 'ما قدرت أسحب الترجمة من الفيديو'))
+            raise Exception(_net_msg(e, 'تعذر استخراج الترجمة من الفيديو'))
         cues = [subtitle.Cue(s, e, t) for s, e, t in lines]
         if cues and not is_ar:
             step(base + span * 0.4, 'ترجمة الجزء %d من 10 بالذكاء الاصطناعي...' % (k + 1))
@@ -731,7 +731,7 @@ def _emb_run_slices(state, ks, video, where, track, idx, remote, dur, is_ar, abo
             cues = [c for c in cues if arabic.ARABIC_RE.search(c.text)]
             if not complete:
                 if n < len(originals) * 0.6:
-                    raise Exception('ترجمة الجزء %d ما اكتملت (%d من %d سطر) — جرّب مرة ثانية'
+                    raise Exception('لم تكتمل ترجمة الجزء %d (%d من %d سطراً) — حاول مرة أخرى'
                                     % (k + 1, n, len(originals)))
                 tries = state.setdefault('_tries', {})
                 tries[k] = tries.get(k, 0) + 1
@@ -838,7 +838,7 @@ def embedded_more(job, progress=None, abort=None, on_update=None, position=None)
                 return None, []
             time.sleep(3)
     if idx is None:
-        return None, ['تعذر إكمال سحب الترجمة المدمجة (الاتصال)']
+        return None, ['تعذر إكمال استخراج الترجمة المدمجة (الاتصال)']
     num = int(str(job['item'].get('id', 'track0'))[5:] or 0)
     track = next((t for t in idx['tracks'] if t['num'] == num), None)
     if not track:
@@ -883,10 +883,10 @@ def embedded_more(job, progress=None, abort=None, on_update=None, position=None)
             rounds = job.setdefault('_rounds', 0) + 1
             job['_rounds'] = rounds
             if rounds >= 8:
-                return None, ['توقف سحب الترجمة المدمجة عند %d٪ — بيكمل لحاله المرة الجاية اللي تشغل فيها الفيلم' %
+                return None, ['توقف استخراج الترجمة المدمجة عند %d٪ — وسيكتمل تلقائياً في المرة القادمة التي تشغّل فيها الفيلم' %
                               (len(state['done']) * 100 // EMB_SLICES)]
             if progress:
-                progress(len(state['done']) * 100 // EMB_SLICES, 'الاتصال متعثر — بيحاول مرة ثانية بعد دقايق...')
+                progress(len(state['done']) * 100 // EMB_SLICES, 'الاتصال متعثر — ستُعاد المحاولة بعد دقائق...')
             for _ in range(180):                 # rest 3 minutes, then carry on by itself
                 if abort and abort():
                     return None, []
@@ -896,7 +896,7 @@ def embedded_more(job, progress=None, abort=None, on_update=None, position=None)
         left = len(state['done']) < EMB_SLICES
         if on_update and left:
             on_update(path, ['جاهز %d٪ من الترجمة' % (len(state['done']) * 100 // EMB_SLICES)])
-    return path, ['الترجمة المدمجة جاهزة كاملة ✓ (%d سطر)' % len(state['lines'])]
+    return path, ['الترجمة المدمجة جاهزة كاملة ✓ (%d سطراً)' % len(state['lines'])]
 
 
 def _ref_meta(video):
@@ -1013,13 +1013,13 @@ def reference_sync_msg(cues, video, item, ref=None, how=None):
     if ref is None:
         ref, how = get_reference(video, item)
     if not ref:
-        return cues, ('ما لقيت مرجع للمزامنة' if how is None else '')
+        return cues, ('لم يُعثر على مرجع للمزامنة' if how is None else '')
     t0 = time.time()
     new, info = sync.align(cues, ref, local=setting_bool('local_sync', True), min_lift=1.45)
     log('ref sync (%s) %.1fs: %s' % (how, time.time() - t0, info))
     _LAST_REF_INFO['info'] = info if new is not None else {}
     if new is None:
-        return cues, 'المزامنة: المرجع ما يطابق، تُركت كما هي'
+        return cues, 'المزامنة: المرجع لا يطابق، فتُركت كما هي'
     return new, 'مزامنة: ' + sync.describe(info)
 
 
@@ -1063,7 +1063,7 @@ def audio_sync(cues, video, progress=None, abort=None):
                                             mode=setting('audio_mode', 'auto'),
                                             progress=progress, abort=abort)
         if len(speech) < 20:
-            raise audiosync.AudioSyncError('ما انسمع كلام كافي في الصوت')
+            raise audiosync.AudioSyncError('لم يُسمع كلام كافٍ في الصوت')
         cache_put(key, json.dumps([[c.start, c.end] for c in speech]))
     if progress:
         progress(80, 'مطابقة الترجمة مع الكلام...')
@@ -1905,7 +1905,7 @@ def run_job(job, progress=None, abort=None, on_update=None, position=None):
                 cues, changed, audio_truth = orig, True, True
                 _mark_ref_bad(video)
                 job = dict(job, steps=[st if st != 'semantic' else 'ai' for st in job['steps']])
-                out.append('الصوت أثبت إن توقيت الترجمة الأصلي هو الصح — رجعته')
+                out.append('أثبت الصوت أن توقيت الترجمة الأصلي هو الصحيح — فأُعيد')
                 if on_update:
                     on_update(_write_version(job, cues, item, '.synced'), list(out))
             elif verdict == 'b':
@@ -1921,12 +1921,12 @@ def run_job(job, progress=None, abort=None, on_update=None, position=None):
         if en:
             def sem_progress(pct, k, total):
                 if progress:
-                    progress(pct, 'مطابقة الترجمة مع الإنجليزي (%d/%d)' % (k, total))
+                    progress(pct, 'مطابقة الترجمة مع الإنجليزية (%d/%d)' % (k, total))
 
             def sem_partial(part, info):
                 if on_update:
                     on_update(_write_version(job, part, item, '.ai-part', retimed=True),
-                              ['ضُبطت الأسطر الجاية ✓ والباقي يكمل...'])
+                              ['ضُبطت الأسطر التالية ✓ ويكتمل الباقي...'])
             try:
                 new, info = semsync.semantic_sync(cues, en, title=job.get('title', ''),
                                                   position=position, progress=sem_progress,
@@ -1941,7 +1941,7 @@ def run_job(job, progress=None, abort=None, on_update=None, position=None):
                 log('semantic failed: %s' % e)
                 from . import gemini
                 if isinstance(e, gemini.QuotaExhausted):
-                    out.append('خلص حد الذكاء الاصطناعي اليوم — الترجمة شغالة بتوقيت الإنجليزي')
+                    out.append('نفد حد الذكاء الاصطناعي اليوم — الترجمة تعمل بتوقيت الإنجليزية')
                     job = dict(job, steps=[st for st in job['steps'] if st not in ('semantic', 'ai')])
                 else:
                     job = dict(job, steps=[st for st in job['steps'] if st != 'semantic'] + ['ai'])
@@ -1962,13 +1962,13 @@ def run_job(job, progress=None, abort=None, on_update=None, position=None):
             def ai_partial(tmp_cues, n):
                 if on_update:
                     on_update(_write_version(job, tmp_cues, item, '.ai-part'),
-                              ['صُححت الأسطر الجاية (%d سطر) والباقي يكمل...' % n])
+                              ['صُحّحت الأسطر التالية (%d سطراً) ويكتمل الباقي...' % n])
 
             n = ai.proofread(cues, title=job.get('title', ''), abort=abort, position=position,
                              progress=ai_progress, on_partial=ai_partial)
             if n:
                 changed = True
-                out.append('تم تصحيح %d سطر بالذكاء الاصطناعي' % n)
+                out.append('تم تصحيح %d سطراً بالذكاء الاصطناعي' % n)
                 if on_update and any(st in job['steps'] for st in ('audio', 'understand')):
                     on_update(_write_version(job, cues, item, '.ai'), list(out))
         except Exception as e:
@@ -1977,7 +1977,7 @@ def run_job(job, progress=None, abort=None, on_update=None, position=None):
             log('AI failed: %s' % e)
             from . import gemini
             if isinstance(e, gemini.QuotaExhausted):
-                out.append('خلص حد الذكاء الاصطناعي اليوم — الترجمة شغالة بدون تصحيح')
+                out.append('نفد حد الذكاء الاصطناعي اليوم — الترجمة تعمل دون تصحيح')
             else:
                 out.append('مفتاح Gemini غير صحيح' if any(x in str(e) for x in ('no_key', '400', '403'))
                            else 'تعذر التصحيح بالذكاء الاصطناعي')
@@ -1990,7 +1990,7 @@ def run_job(job, progress=None, abort=None, on_update=None, position=None):
                 cues, changed, rebuilt = new, True, True
                 out.append('تمت المزامنة مع الصوت: ' + sync.describe(info))
             else:
-                out.append('الصوت ما يطابق الترجمة (يمكن ترجمة لنسخة ثانية)')
+                out.append('الصوت لا يطابق الترجمة (ربما تكون الترجمة لنسخة أخرى)')
         except audiosync.AudioSyncError as e:
             if 'aborted' in str(e):
                 return None, []
@@ -2012,14 +2012,14 @@ def run_job(job, progress=None, abort=None, on_update=None, position=None):
                 out = [l for l in out if not l.startswith('تمت المزامنة مع الصوت')]
                 out.append('فهم الكلام: ' + understand_describe(info))
             else:
-                out.append('ما قدر يطابق الكلام مع الترجمة (يمكن ترجمة لنسخة ثانية)')
+                out.append('تعذرت مطابقة الكلام مع الترجمة (ربما تكون الترجمة لنسخة أخرى)')
         except audiosync.AudioSyncError as e:
             if 'aborted' in str(e):
                 return None, []
             log('understand failed: %s' % e)
             out.append('تعذر فهم الكلام: ' + (
                 'مفتاح Gemini غير صحيح' if any(x in str(e) for x in ('400', '403')) else
-                'خلص حد Gemini المجاني، جرّب بعدين' if '429' in str(e) else str(e)[:80]))
+                'نفد حد Gemini المجاني، حاول لاحقاً' if '429' in str(e) else str(e)[:80]))
     if 'finetune' in job['steps']:
         try:
             if changed and any(st in job['steps'] for st in ('semantic',)):
@@ -2084,7 +2084,7 @@ def run_job(job, progress=None, abort=None, on_update=None, position=None):
                 out = [l for l in out if not l.startswith('ضبط دقيق على الصوت')]
                 shifts = info.get('shifts')
                 if shifts:
-                    out.append('ضُبطت على كلام الفيلم (Whisper): الفيلم نسخة مقصوصة غير، كل جزء بإزاحته: %s'
+                    out.append('ضُبطت على كلام الفيلم (Whisper): الفيلم نسخة مقصوصة مختلفة، وضُبط كل جزء بإزاحته: %s'
                                % ' / '.join('%+.1f ث' % (d / 1000.0) for d in shifts))
                 else:
                     out.append('ضُبطت على كلام الفيلم (Whisper): إزاحة %+.1f ث' % (info['shift'] / 1000.0))
@@ -2093,9 +2093,9 @@ def run_job(job, progress=None, abort=None, on_update=None, position=None):
             elif info == 'in_sync':
                 out.append('Whisper: التوقيت مضبوط أصلاً ✓')
             elif info == 'weak':
-                out.append('Whisper: نفس الفيلم بس ما تأكد من التوقيت — تركها مثل ما هي')
+                out.append('Whisper: الفيلم نفسه لكن التوقيت لم يتأكد — تُركت كما هي')
             else:
-                out.append('Whisper سمع الفيلم بس الترجمة ما تطابق كلامه (يمكن لفيلم أو نسخة ثانية)')
+                out.append('استمع Whisper إلى الفيلم لكن الترجمة لا تطابق كلامه (ربما لفيلم أو نسخة أخرى)')
         except wsp.WhisperError as e:
             if 'aborted' in str(e):
                 return None, []

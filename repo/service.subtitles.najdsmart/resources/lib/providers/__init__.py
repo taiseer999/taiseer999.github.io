@@ -164,12 +164,12 @@ def download(item):
     """Returns raw bytes (zip or subtitle file)."""
     prov = item['provider']
     if limited(prov):
-        raise DailyLimit('%s: خلص حد التنزيل المجاني اليوم' % NAMES.get(prov, prov))
+        raise DailyLimit('%s: نفد حد التنزيل المجاني اليوم' % NAMES.get(prov, prov))
     try:
         return PROVIDERS[prov].download(item)
     except Exception as e:
         t = str(e)
         if '429' in t and ('limit' in t.lower() or 'quota' in t.lower()):
             _note_limit(prov, t)
-            raise DailyLimit('%s: خلص حد التنزيل المجاني اليوم' % NAMES.get(prov, prov))
+            raise DailyLimit('%s: نفد حد التنزيل المجاني اليوم' % NAMES.get(prov, prov))
         raise
