@@ -2,6 +2,26 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
+   "v": "4.12.13",
+   "en": [
+    "Boxes without a clock battery (such as the AM9 Pro) now have the right time from the first seconds after a boot, so add-ons connect at once instead of failing for a minute or two."
+   ],
+   "ar": [
+    "أصبحت الأجهزة التي لا تحوي بطارية ساعة (مثل AM9 Pro) تعرف الوقت الصحيح منذ الثواني الأولى بعد التشغيل، فتتصل الإضافات فورًا بدل أن تتعثر دقيقة أو دقيقتين."
+   ]
+  },
+  {
+   "v": "4.12.12",
+   "en": [
+    "The \"AF3: OSD Flags Style\" picker is redesigned: larger previews, each style's description on its own card, and a check mark on the style in use.",
+    "All FR-Badges styles are rebuilt from the latest set, with new language flags and Lucent-size player pills."
+   ],
+   "ar": [
+    "أُعيد تصميم نافذة اختيار \"AF3: نمط شارات OSD\": معاينات أكبر، ووصف كل نمط على بطاقته، وعلامة على النمط المستخدم.",
+    "أُعيد بناء كل أنماط شارات FR-Badges من أحدث مجموعة، مع أعلام لغات جديدة وشارات مشغّل بحجم Lucent."
+   ]
+  },
+  {
    "v": "4.12.11",
    "en": [
     "Najd is updated to its author's latest release: it can time a subtitle on the film's own speech (Whisper), syncs more carefully, and reads the subtitle inside more links.",

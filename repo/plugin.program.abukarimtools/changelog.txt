@@ -1,3 +1,17 @@
+v4.12.13  (2026-11-21)
+- Clock fix for CoreELEC / LibreELEC boxes with no RTC (resources/lib/
+  clock_fix.py). A user's AM9 Pro booted on 2026-11-05 while the date was
+  2026-11-21 (no /dev/rtc*, connman Timeservers empty, slow router DNS), so
+  HTTPS failed and add-ons looked offline for a minute or two after boot.
+  - From Kodi: SNTP to NTP servers by IP (Cloudflare, Google - no DNS),
+    retried for 3 min; the clock is stepped when off by more than 2 s, then
+    saved to /storage/.cache/abk_clock every 10 min.
+  - Boot unit /storage/.config/system.d/abk-clock.service (+ helper
+    /storage/.config/abk_clock.py), before connman and Kodi: moves the clock
+    forward to the saved time (never back); saves it again at shutdown.
+  - Boxes with an RTC and other systems: nothing. Off switch:
+    /storage/.config/abk_clock.off.
+
 v4.12.12  (2026-11-21)
 - "AF3: OSD Flags Style" picker redesigned: an opaque backdrop (the menu no
   longer shows through), taller 16:9 previews, each style's description on

@@ -1238,6 +1238,16 @@ def main():
         _log('Window rescue failed to start (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
+    # 4.12.13: boxes with no RTC (AM9 Pro) boot weeks in the past until
+    # connman syncs; HTTPS fails meanwhile. NTP by IP + saved-time boot unit.
+    # Own thread, early, no-op elsewhere. Fenced.
+    try:
+        from resources.lib import clock_fix
+        clock_fix.start(monitor)
+    except Exception:
+        _log('Clock fix failed to start (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
     # Finish an in-progress Addons33 rebuild first (phase 2): if the add-on
     # DB was just deleted and Kodi has rebuilt a clean one, re-enable every
     # add-on and restart. This reboots when it fires, so it runs before the
