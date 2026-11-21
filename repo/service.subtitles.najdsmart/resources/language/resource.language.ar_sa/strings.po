@@ -1,0 +1,605 @@
+# Najd Smart Subs
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ar_SA\n"
+
+msgctxt "#30000"
+msgid "البداية"
+msgstr "البداية"
+
+msgctxt "#30001"
+msgid "ابدأ من هنا"
+msgstr "ابدأ من هنا"
+
+msgctxt "#30002"
+msgid "شرح سريع بالصور"
+msgstr "شرح سريع بالصور"
+
+msgctxt "#30003"
+msgid "صور بسيطة تشرح طريقة استخدام الإضافة خطوة بخطوة."
+msgstr "صور بسيطة تشرح طريقة استخدام الإضافة خطوة بخطوة."
+
+msgctxt "#30004"
+msgid "معالج الإعداد"
+msgstr "معالج الإعداد"
+
+msgctxt "#30005"
+msgid "يجهّز المفاتيح ويجعل الإضافة الخدمة الأساسية في كودي.[CR]شغّله مرة واحدة فقط في البداية."
+msgstr "يجهّز المفاتيح ويجعل الإضافة الخدمة الأساسية في كودي.[CR]شغّله مرة واحدة فقط في البداية."
+
+msgctxt "#30006"
+msgid "اجعلها خدمة الترجمة الأساسية"
+msgstr "اجعلها خدمة الترجمة الأساسية"
+
+msgctxt "#30007"
+msgid "عند الضغط على «تنزيل» في قائمة الترجمة، تظهر ترجمة نجد أولاً."
+msgstr "عند الضغط على «تنزيل» في قائمة الترجمة، تظهر ترجمة نجد أولاً."
+
+msgctxt "#30008"
+msgid "تلقائي"
+msgstr "تلقائي"
+
+msgctxt "#30009"
+msgid "اجلب الترجمة العربية تلقائياً"
+msgstr "اجلب الترجمة العربية تلقائياً"
+
+msgctxt "#30010"
+msgid "عند بدء تشغيل الفيلم دون ترجمة عربية، تبحث الإضافة عن أفضل ترجمة وتعرضها."
+msgstr "عند بدء تشغيل الفيلم دون ترجمة عربية، تبحث الإضافة عن أفضل ترجمة وتعرضها."
+
+msgctxt "#30011"
+msgid "اسألني قبل ترجمة الترجمة المدمجة"
+msgstr "اسألني قبل ترجمة الترجمة المدمجة"
+
+msgctxt "#30012"
+msgid "إذا لم تُعثر على ترجمة عربية وكان الفيلم يحتوي على ترجمة مدمجة (إنجليزية مثلاً)،[CR]يظهر سؤال: هل تريد ترجمتها بالذكاء الاصطناعي؟"
+msgstr "إذا لم تُعثر على ترجمة عربية وكان الفيلم يحتوي على ترجمة مدمجة (إنجليزية مثلاً)،[CR]يظهر سؤال: هل تريد ترجمتها بالذكاء الاصطناعي؟"
+
+msgctxt "#30013"
+msgid "مواقع الترجمة"
+msgstr "مواقع الترجمة"
+
+msgctxt "#30014"
+msgid "إضافات الترجمة المثبتة لديك"
+msgstr "إضافات الترجمة المثبتة لديك"
+
+msgctxt "#30015"
+msgid "ابحث في إضافات الترجمة الأخرى"
+msgstr "ابحث في إضافات الترجمة الأخرى"
+
+msgctxt "#30016"
+msgid "يبحث أيضاً في a4kSubtitles وOpenSubtitles وغيرها من الإضافات المثبتة لديك.[CR]لا يحتاج إلى مفاتيح."
+msgstr "يبحث أيضاً في a4kSubtitles وOpenSubtitles وغيرها من الإضافات المثبتة لديك.[CR]لا يحتاج إلى مفاتيح."
+
+msgctxt "#30017"
+msgid "SubDL"
+msgstr "SubDL"
+
+msgctxt "#30018"
+msgid "تفعيل SubDL"
+msgstr "تفعيل SubDL"
+
+msgctxt "#30019"
+msgid "موقع ترجمات عربية كبير ومجاني."
+msgstr "موقع ترجمات عربية كبير ومجاني."
+
+msgctxt "#30020"
+msgid "مفتاح SubDL"
+msgstr "مفتاح SubDL"
+
+msgctxt "#30021"
+msgid "مجاني: سجّل في subdl.com وخذ المفتاح من صفحة API."
+msgstr "مجاني: سجّل في subdl.com وخذ المفتاح من صفحة API."
+
+msgctxt "#30022"
+msgid "SubSource"
+msgstr "SubSource"
+
+msgctxt "#30023"
+msgid "تفعيل SubSource"
+msgstr "تفعيل SubSource"
+
+msgctxt "#30024"
+msgid "موقع ترجمات يضم الكثير من الترجمات العربية."
+msgstr "موقع ترجمات يضم الكثير من الترجمات العربية."
+
+msgctxt "#30025"
+msgid "مفتاح SubSource"
+msgstr "مفتاح SubSource"
+
+msgctxt "#30026"
+msgid "مجاني: من حسابك في subsource.net ← تبويب API."
+msgstr "مجاني: من حسابك في subsource.net ← تبويب API."
+
+msgctxt "#30027"
+msgid "OpenSubtitles"
+msgstr "OpenSubtitles"
+
+msgctxt "#30028"
+msgid "تفعيل OpenSubtitles"
+msgstr "تفعيل OpenSubtitles"
+
+msgctxt "#30029"
+msgid "أكبر موقع للترجمات، لكن التنزيل اليومي محدود."
+msgstr "أكبر موقع للترجمات، لكن التنزيل اليومي محدود."
+
+msgctxt "#30030"
+msgid "مفتاح OpenSubtitles"
+msgstr "مفتاح OpenSubtitles"
+
+msgctxt "#30031"
+msgid "من opensubtitles.com/consumers."
+msgstr "من opensubtitles.com/consumers."
+
+msgctxt "#30032"
+msgid "اسم المستخدم (اختياري)"
+msgstr "اسم المستخدم (اختياري)"
+
+msgctxt "#30033"
+msgid "تسجيل الدخول يزيد عدد التنزيلات المسموحة يومياً."
+msgstr "تسجيل الدخول يزيد عدد التنزيلات المسموحة يومياً."
+
+msgctxt "#30034"
+msgid "كلمة المرور"
+msgstr "كلمة المرور"
+
+msgctxt "#30035"
+msgid "كلمة مرور حسابك في OpenSubtitles."
+msgstr "كلمة مرور حسابك في OpenSubtitles."
+
+msgctxt "#30036"
+msgid "غير"
+msgstr "غير"
+
+msgctxt "#30037"
+msgid "اعرض الترجمات الإنجليزية بعد العربية"
+msgstr "اعرض الترجمات الإنجليزية بعد العربية"
+
+msgctxt "#30038"
+msgid "يضيف الترجمات الإنجليزية في آخر القائمة."
+msgstr "يضيف الترجمات الإنجليزية في آخر القائمة."
+
+msgctxt "#30039"
+msgid "الذكاء الاصطناعي"
+msgstr "الذكاء الاصطناعي"
+
+msgctxt "#30040"
+msgid "ربط سريع"
+msgstr "ربط سريع"
+
+msgctxt "#30041"
+msgid "دخول OpenRouter بضغطة (مجاني)"
+msgstr "دخول OpenRouter بضغطة (مجاني)"
+
+msgctxt "#30042"
+msgid "يربط ذكاءً اصطناعياً مجانياً دون نسخ مفاتيح.[CR]مفيد كاحتياط عند تعطل Gemini."
+msgstr "يربط ذكاءً اصطناعياً مجانياً دون نسخ مفاتيح.[CR]مفيد كاحتياط عند تعطل Gemini."
+
+msgctxt "#30043"
+msgid "أدخل المفاتيح من الهاتف"
+msgstr "أدخل المفاتيح من الهاتف"
+
+msgctxt "#30044"
+msgid "يظهر رابط تفتحه من الهاتف وتلصق فيه المفاتيح بسهولة."
+msgstr "يظهر رابط تفتحه من الهاتف وتلصق فيه المفاتيح بسهولة."
+
+msgctxt "#30045"
+msgid "وظائف الذكاء الاصطناعي"
+msgstr "وظائف الذكاء الاصطناعي"
+
+msgctxt "#30046"
+msgid "صحّح الترجمة العربية"
+msgstr "صحّح الترجمة العربية"
+
+msgctxt "#30047"
+msgid "يصحح الأخطاء الإملائية والصياغة الركيكة ويطابق الأسطر مع الترجمة الإنجليزية."
+msgstr "يصحح الأخطاء الإملائية والصياغة الركيكة ويطابق الأسطر مع الترجمة الإنجليزية."
+
+msgctxt "#30048"
+msgid "خيار «ترجم الترجمة المدمجة»"
+msgstr "خيار «ترجم الترجمة المدمجة»"
+
+msgctxt "#30049"
+msgid "يظهر في قائمة الترجمات: يستخرج الترجمة من داخل الفيلم[CR]ويترجمها إلى العربية جزءاً بعد جزء أثناء المشاهدة."
+msgstr "يظهر في قائمة الترجمات: يستخرج الترجمة من داخل الفيلم[CR]ويترجمها إلى العربية جزءاً بعد جزء أثناء المشاهدة."
+
+msgctxt "#30050"
+msgid "المفاتيح"
+msgstr "المفاتيح"
+
+msgctxt "#30051"
+msgid "مفتاح Gemini (مجاني)"
+msgstr "مفتاح Gemini (مجاني)"
+
+msgctxt "#30052"
+msgid "من aistudio.google.com/apikey — وهو المفتاح الأساسي."
+msgstr "من aistudio.google.com/apikey — وهو المفتاح الأساسي."
+
+msgctxt "#30053"
+msgid "مفتاح OpenRouter"
+msgstr "مفتاح OpenRouter"
+
+msgctxt "#30054"
+msgid "يوفر نماذج مجانية: openrouter.ai/keys"
+msgstr "يوفر نماذج مجانية: openrouter.ai/keys"
+
+msgctxt "#30055"
+msgid "مفتاح Groq"
+msgstr "مفتاح Groq"
+
+msgctxt "#30056"
+msgid "سريع ويوفر خطة مجانية: console.groq.com/keys"
+msgstr "سريع ويوفر خطة مجانية: console.groq.com/keys"
+
+msgctxt "#30057"
+msgid "مفتاح DeepSeek"
+msgstr "مفتاح DeepSeek"
+
+msgctxt "#30058"
+msgid "رخيص جداً: platform.deepseek.com"
+msgstr "رخيص جداً: platform.deepseek.com"
+
+msgctxt "#30059"
+msgid "مفتاح ChatGPT"
+msgstr "مفتاح ChatGPT"
+
+msgctxt "#30060"
+msgid "platform.openai.com/api-keys"
+msgstr "platform.openai.com/api-keys"
+
+msgctxt "#30061"
+msgid "مفتاح Claude"
+msgstr "مفتاح Claude"
+
+msgctxt "#30062"
+msgid "console.anthropic.com"
+msgstr "console.anthropic.com"
+
+msgctxt "#30063"
+msgid "مفتاح Grok"
+msgstr "مفتاح Grok"
+
+msgctxt "#30064"
+msgid "console.x.ai"
+msgstr "console.x.ai"
+
+msgctxt "#30065"
+msgid "مفتاح Mistral"
+msgstr "مفتاح Mistral"
+
+msgctxt "#30066"
+msgid "يوفر خطة مجانية: console.mistral.ai"
+msgstr "يوفر خطة مجانية: console.mistral.ai"
+
+msgctxt "#30067"
+msgid "التوقيت"
+msgstr "التوقيت"
+
+msgctxt "#30068"
+msgid "ضبط التوقيت"
+msgstr "ضبط التوقيت"
+
+msgctxt "#30069"
+msgid "اضبط التوقيت تلقائياً"
+msgstr "اضبط التوقيت تلقائياً"
+
+msgctxt "#30070"
+msgid "يضبط الترجمة على الفيلم تلقائياً. يُنصح بإبقائه مفعلاً."
+msgstr "يضبط الترجمة على الفيلم تلقائياً. يُنصح بإبقائه مفعلاً."
+
+msgctxt "#30071"
+msgid "اضبط كل قسم على حدة"
+msgstr "اضبط كل قسم على حدة"
+
+msgctxt "#30072"
+msgid "إذا كانت الترجمة مضبوطة في البداية ثم اختلّت لاحقاً،[CR]يستمع إلى مواضع كثيرة من الفيلم ويضبط كل قسم."
+msgstr "إذا كانت الترجمة مضبوطة في البداية ثم اختلّت لاحقاً،[CR]يستمع إلى مواضع كثيرة من الفيلم ويضبط كل قسم."
+
+msgctxt "#30073"
+msgid "استعمل توقيت الترجمة المدمجة"
+msgstr "استعمل توقيت الترجمة المدمجة"
+
+msgctxt "#30074"
+msgid "إذا كان الفيلم يحتوي على ترجمة مدمجة، يُستخدم توقيتها مرجعاً (الأدق)."
+msgstr "إذا كان الفيلم يحتوي على ترجمة مدمجة، يُستخدم توقيتها مرجعاً (الأدق)."
+
+msgctxt "#30075"
+msgid "ضبط دقيق للملفات المحلية"
+msgstr "ضبط دقيق للملفات المحلية"
+
+msgctxt "#30076"
+msgid "يستمع إلى الصوت ويصحح الفرق البسيط. لا يستهلك الإنترنت."
+msgstr "يستمع إلى الصوت ويصحح الفرق البسيط. لا يستهلك الإنترنت."
+
+msgctxt "#30077"
+msgid "ضبط دقيق لأفلام الإنترنت"
+msgstr "ضبط دقيق لأفلام الإنترنت"
+
+msgctxt "#30078"
+msgid "يستمع إلى مقاطع قصيرة من الفيلم مرة واحدة ويصحح الفرق."
+msgstr "يستمع إلى مقاطع قصيرة من الفيلم مرة واحدة ويصحح الفرق."
+
+msgctxt "#30079"
+msgid "راقب التوقيت أثناء المشاهدة"
+msgstr "راقب التوقيت أثناء المشاهدة"
+
+msgctxt "#30080"
+msgid "يتحقق دورياً من أن الترجمة لم تختل، ويصححها من موضع المشاهدة."
+msgstr "يتحقق دورياً من أن الترجمة لم تختل، ويصححها من موضع المشاهدة."
+
+msgctxt "#30081"
+msgid "تقديم/تأخير ثابت (ملي ثانية)"
+msgstr "تقديم/تأخير ثابت (ملي ثانية)"
+
+msgctxt "#30082"
+msgid "إذا كانت جميع الترجمات لديك متأخرة بالمقدار نفسه.[CR]سالب = تقديم، موجب = تأخير."
+msgstr "إذا كانت جميع الترجمات لديك متأخرة بالمقدار نفسه.[CR]سالب = تقديم، موجب = تأخير."
+
+msgctxt "#30083"
+msgid "النص العربي"
+msgstr "النص العربي"
+
+msgctxt "#30084"
+msgid "تنظيف النص"
+msgstr "تنظيف النص"
+
+msgctxt "#30085"
+msgid "أصلح النص العربي"
+msgstr "أصلح النص العربي"
+
+msgctxt "#30086"
+msgid "يصحح الحروف المتقطعة والترميز الخاطئ وعلامات الترقيم."
+msgstr "يصحح الحروف المتقطعة والترميز الخاطئ وعلامات الترقيم."
+
+msgctxt "#30087"
+msgid "اتجاه السطر"
+msgstr "اتجاه السطر"
+
+msgctxt "#30088"
+msgid "طريقة ضبط اتجاه الكتابة من اليمين.[CR]إذا ظهرت علامات الترقيم في غير موضعها فجرّب طريقة أخرى."
+msgstr "طريقة ضبط اتجاه الكتابة من اليمين.[CR]إذا ظهرت علامات الترقيم في غير موضعها فجرّب طريقة أخرى."
+
+msgctxt "#30089"
+msgid "rle"
+msgstr "rle"
+
+msgctxt "#30090"
+msgid "rlm"
+msgstr "rlm"
+
+msgctxt "#30091"
+msgid "none"
+msgstr "none"
+
+msgctxt "#30092"
+msgid "احذف الإعلانات والروابط"
+msgstr "احذف الإعلانات والروابط"
+
+msgctxt "#30093"
+msgid "يحذف أسطر المواقع وحقوق المترجم."
+msgstr "يحذف أسطر المواقع وحقوق المترجم."
+
+msgctxt "#30094"
+msgid "احذف وصف الأصوات [موسيقى]"
+msgstr "احذف وصف الأصوات [موسيقى]"
+
+msgctxt "#30095"
+msgid "لمن لا يرغب في أسطر وصف الأصوات المخصصة للصم."
+msgstr "لمن لا يرغب في أسطر وصف الأصوات المخصصة للصم."
+
+msgctxt "#30096"
+msgid "الدعم"
+msgstr "الدعم"
+
+msgctxt "#30097"
+msgid "هل لديك مشكلة؟"
+msgstr "هل لديك مشكلة؟"
+
+msgctxt "#30098"
+msgid "إرسال تقرير مشكلة (QR)"
+msgstr "إرسال تقرير مشكلة (QR)"
+
+msgctxt "#30099"
+msgid "يظهر رمز QR تمسحه بهاتفك، وترسل التقرير عبر واتساب أو كملف.[CR]لا يحتوي على مفاتيح أو روابط."
+msgstr "يظهر رمز QR تمسحه بهاتفك، وترسل التقرير عبر واتساب أو كملف.[CR]لا يحتوي على مفاتيح أو روابط."
+
+msgctxt "#30100"
+msgid "فحص المفاتيح والاتصال"
+msgstr "فحص المفاتيح والاتصال"
+
+msgctxt "#30101"
+msgid "يتحقق من عمل مواقع الترجمة والذكاء الاصطناعي."
+msgstr "يتحقق من عمل مواقع الترجمة والذكاء الاصطناعي."
+
+msgctxt "#30102"
+msgid "مسح الذاكرة المؤقتة"
+msgstr "مسح الذاكرة المؤقتة"
+
+msgctxt "#30103"
+msgid "يمسح الترجمات والأصوات المحفوظة مؤقتاً.[CR]لا تُمسح الترجمات الجاهزة في مجلد translated."
+msgstr "يمسح الترجمات والأصوات المحفوظة مؤقتاً.[CR]لا تُمسح الترجمات الجاهزة في مجلد translated."
+
+msgctxt "#30104"
+msgid "صور بسيطة تشرح طريقة استخدام الإضافة."
+msgstr "صور بسيطة تشرح طريقة استخدام الإضافة."
+
+msgctxt "#30105"
+msgid "متقدم"
+msgstr "متقدم"
+
+msgctxt "#30106"
+msgid "طريقة المزامنة"
+msgstr "طريقة المزامنة"
+
+msgctxt "#30107"
+msgid "smart: يطابق حسب المعنى مع الإنجليزية (الأفضل)[CR]subtitle: التوقيت فقط — audio: يستمع إلى الصوت (أبطأ)"
+msgstr "smart: يطابق حسب المعنى مع الإنجليزية (الأفضل)[CR]subtitle: التوقيت فقط — audio: يستمع إلى الصوت (أبطأ)"
+
+msgctxt "#30108"
+msgid "smart"
+msgstr "smart"
+
+msgctxt "#30109"
+msgid "subtitle"
+msgstr "subtitle"
+
+msgctxt "#30110"
+msgid "audio"
+msgstr "audio"
+
+msgctxt "#30111"
+msgid "المرجع الإنجليزي من الإضافات"
+msgstr "المرجع الإنجليزي من الإضافات"
+
+msgctxt "#30112"
+msgid "يبحث عن ترجمة إنجليزية مرجعية في إضافات الترجمة الأخرى."
+msgstr "يبحث عن ترجمة إنجليزية مرجعية في إضافات الترجمة الأخرى."
+
+msgctxt "#30113"
+msgid "مزامنة لكل مقطع"
+msgstr "مزامنة لكل مقطع"
+
+msgctxt "#30114"
+msgid "للنسخ المقصوصة أو التي تتضمن إعلانات."
+msgstr "للنسخ المقصوصة أو التي تتضمن إعلانات."
+
+msgctxt "#30115"
+msgid "استمع إلى الصوت عند عدم وجود مرجع"
+msgstr "استمع إلى الصوت عند عدم وجود مرجع"
+
+msgctxt "#30116"
+msgid "للملفات المحلية: أبطأ، لكنه يضبط التوقيت دون ترجمة إنجليزية."
+msgstr "للملفات المحلية: أبطأ، لكنه يضبط التوقيت دون ترجمة إنجليزية."
+
+msgctxt "#30117"
+msgid "افهم الكلام بـ Gemini"
+msgstr "افهم الكلام بـ Gemini"
+
+msgctxt "#30118"
+msgid "أدق بكثير لكن أبطأ بكثير."
+msgstr "أدق بكثير لكن أبطأ بكثير."
+
+msgctxt "#30119"
+msgid "المراقبة لأفلام الإنترنت"
+msgstr "المراقبة لأفلام الإنترنت"
+
+msgctxt "#30120"
+msgid "ينزّل نحو 30 ثانية من الصوت كل 8 دقائق."
+msgstr "ينزّل نحو 30 ثانية من الصوت كل 8 دقائق."
+
+msgctxt "#30121"
+msgid "الصوت"
+msgstr "الصوت"
+
+msgctxt "#30122"
+msgid "طريقة الاستماع"
+msgstr "طريقة الاستماع"
+
+msgctxt "#30123"
+msgid "auto: كامل للملفات وعينات للروابط[CR]full: الفيلم كاملاً — sample: عشرة مقاطع"
+msgstr "auto: كامل للملفات وعينات للروابط[CR]full: الفيلم كاملاً — sample: عشرة مقاطع"
+
+msgctxt "#30124"
+msgid "auto"
+msgstr "auto"
+
+msgctxt "#30125"
+msgid "full"
+msgstr "full"
+
+msgctxt "#30126"
+msgid "sample"
+msgstr "sample"
+
+msgctxt "#30127"
+msgid "الاستماع لأفلام البث"
+msgstr "الاستماع لأفلام البث"
+
+msgctxt "#30128"
+msgid "off: لا يستمع إلى البث — light: يستمع إلى أربعة مقاطع قصيرة."
+msgstr "off: لا يستمع إلى البث — light: يستمع إلى أربعة مقاطع قصيرة."
+
+msgctxt "#30129"
+msgid "off"
+msgstr "off"
+
+msgctxt "#30130"
+msgid "light"
+msgstr "light"
+
+msgctxt "#30131"
+msgid "مسار ffmpeg (اختياري)"
+msgstr "مسار ffmpeg (اختياري)"
+
+msgctxt "#30132"
+msgid "اتركه فارغاً، فالإضافة تتضمن أداة الصوت."
+msgstr "اتركه فارغاً، فالإضافة تتضمن أداة الصوت."
+
+msgctxt "#30133"
+msgid "ترتيب الاستخدام"
+msgstr "ترتيب الاستخدام"
+
+msgctxt "#30134"
+msgid "إذا تعطل أحدها ينتقل إلى التالي."
+msgstr "إذا تعطل أحدها ينتقل إلى التالي."
+
+msgctxt "#30135"
+msgid "نموذج Gemini"
+msgstr "نموذج Gemini"
+
+msgctxt "#30136"
+msgid "فارغ = تلقائي (يُنصح به)."
+msgstr "فارغ = تلقائي (يُنصح به)."
+
+msgctxt "#30137"
+msgid "نموذج OpenRouter"
+msgstr "نموذج OpenRouter"
+
+msgctxt "#30138"
+msgid "نموذج Groq"
+msgstr "نموذج Groq"
+
+msgctxt "#30139"
+msgid "نموذج DeepSeek"
+msgstr "نموذج DeepSeek"
+
+msgctxt "#30140"
+msgid "نموذج ChatGPT"
+msgstr "نموذج ChatGPT"
+
+msgctxt "#30141"
+msgid "نموذج Claude"
+msgstr "نموذج Claude"
+
+msgctxt "#30142"
+msgid "نموذج Grok"
+msgstr "نموذج Grok"
+
+msgctxt "#30143"
+msgid "نموذج Mistral"
+msgstr "نموذج Mistral"
+
+msgctxt "#30144"
+msgid "الشاشة"
+msgstr "الشاشة"
+
+msgctxt "#30145"
+msgid "الإشعارات"
+msgstr "الإشعارات"
+
+msgctxt "#30146"
+msgid "تنبيهات صغيرة توضح ما قامت به الإضافة."
+msgstr "تنبيهات صغيرة توضح ما قامت به الإضافة."
+
+msgctxt "#30147"
+msgid "شريط الحالة على الفيديو"
+msgstr "شريط الحالة على الفيديو"
+
+msgctxt "#30148"
+msgid "المربع الصغير في الأعلى الذي يوضح حالة الترجمة."
+msgstr "المربع الصغير في الأعلى الذي يوضح حالة الترجمة."
+
+msgctxt "#30149"
+msgid "internal"
+msgstr "internal"

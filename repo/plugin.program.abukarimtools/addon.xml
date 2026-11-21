@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="AB Tools"
-       version="4.12.3"
+       version="4.12.4"
        provider-name="Abukarim">
 
   <requires>
@@ -42,7 +42,7 @@
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، ووصولاً سريعاً إلى معالج أبوكريم وأدوات الصيانة فيه (التنظيف الشامل وحذف الصور المصغّرة القديمة). كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة واختبار أداء المعالج وإعادة بناء قاعدة بيانات الإضافات.</description>
     <license>LicenseRef-ABTools (personal use only, no redistribution - see LICENSE.txt)</license>
-    <news>v4.12.3: An updated Najd starts at once; Najd tells you when it needs a subtitle-site key. v4.12.2: Najd turns on the Arabic subtitle already inside the video. v4.12.1: Najd Smart Subtitles (by Ali) is the Arabic subtitle service - AB Tools installs, updates and sets it (Mods > Najd Smart Subtitles). v4.12.0: New licence - AB Tools is free for personal use; redistributing it, in whole or in part, needs written permission (LICENSE.txt). Seek Preview, the CPU Benchmark and the Lucent Player Statistics window and Back key are rewritten. v4.11.9: The AB Tools service starts with Kodi again (boot sweep, watchdog, Guardian). v4.11.8: Context menu on search results; no more Kodi 22 crash when backing out of the TMDbHelper player list. v4.11.6: Usenet streams no longer stop after a few seconds - the NZB server runs as its own process. v4.11.5: Fixes a Kodi hang when starting a Usenet stream. Full history: changelog.txt</news>
+    <news>v4.12.4: Najd settings window shows its options again. v4.12.3: An updated Najd starts at once; Najd tells you when it needs a subtitle-site key. v4.12.2: Najd turns on the Arabic subtitle already inside the video. v4.12.1: Najd Smart Subtitles (by Ali) is the Arabic subtitle service - AB Tools installs, updates and sets it (Mods > Najd Smart Subtitles). v4.12.0: New licence - AB Tools is free for personal use; redistributing it, in whole or in part, needs written permission (LICENSE.txt). Seek Preview, the CPU Benchmark and the Lucent Player Statistics window and Back key are rewritten. v4.11.9: The AB Tools service starts with Kodi again (boot sweep, watchdog, Guardian). v4.11.8: Context menu on search results; no more Kodi 22 crash when backing out of the TMDbHelper player list. v4.11.6: Usenet streams no longer stop after a few seconds - the NZB server runs as its own process. v4.11.5: Fixes a Kodi hang when starting a Usenet stream. Full history: changelog.txt</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>

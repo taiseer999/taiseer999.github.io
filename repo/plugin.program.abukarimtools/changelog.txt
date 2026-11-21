@@ -1,3 +1,11 @@
+v4.12.4  (2026-11-21)
+- Najd 2.8.3.4 (bundled): its settings window opened empty on the AM9
+  (CoreELEC, Arabic GUI) - 7 categories and 12 entries counted, no labels.
+  Najd shipped only resource.language.en_gb with the Arabic text in msgid
+  and every msgstr empty; it now ships resource.language.ar_sa too, and both
+  catalogues carry the text in msgstr as well, so the labels resolve however
+  Kodi reads them.
+
 v4.12.3  (2026-11-21)
 - Najd update starts at once: AB Tools unpacked Najd 2.8.3.2 over the
   running 2.8.3.1 and Kodi kept running the old service until the next
