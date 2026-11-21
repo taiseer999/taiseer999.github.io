@@ -1490,6 +1490,80 @@ def _quality(name, size):
     return '4K' if gb >= 30 else ('1080P' if gb >= 4 else ('720P' if gb >= 1.2 else 'SD'))
 
 
+# 4.12.8: the release tags of a Newznab title, spelled as the add-ons' info
+# strings spell them (lucent_theme._BADGES keys), so Search All draws the same
+# badges on a Usenet row as on a debrid one. Before this the row's extraInfo
+# held only "indexer | N grabs" and the badge row stayed empty. Order follows
+# the badge order (release type, picture, codec, audio, channels); one tag
+# per family where the theme keeps one anyway.
+_NT_SEP = re.compile(r'[\s._\[\]()|,]+')
+_NT_RULES = (
+    ('REMUX', r'\bREMUX\b'),
+    ('BLU-RAY', r'\bBLU-?RAY\b|\bBD-?RIP\b|\bBR-?RIP\b|\bBDREMUX\b|\bBD25\b|\bBD50\b|\bBD66\b|\bBD100\b'),
+    ('WEB-DL', r'\bWEB-?DL\b|\bWEB\b'),
+    ('WEBRIP', r'\bWEB-?RIP\b'),
+    ('HDTV', r'\bHDTV\b'),
+    ('DVDRIP', r'\bDVD-?RIP\b|\bDVD(?:5|9|R)?\b'),
+    ('HDRIP', r'\bHD-?RIP\b'),
+    ('DV2', r'\bDV2\b|\bDOVI2\b|\bDOLBY-?VISION-?2\b'),
+    ('DV', r'\bDV\b|\bDOVI\b|\bDOLBY-?VISION\b|\bDOLBYVISION\b'),
+    ('HDR10+', r'\bHDR10(?:\+|PLUS|P)'),
+    ('HDR10', r'\bHDR10\b'),
+    ('HDR', r'\bHDR\b'),
+    ('HLG', r'\bHLG\b'),
+    ('HEVC', r'\bHEVC\b|\b[HX][- ]?265\b'),
+    ('AVC', r'\bAVC\b|\b[HX][- ]?264\b'),
+    ('AV1', r'\bAV1\b'),
+    ('VP9', r'\bVP9\b'),
+    ('XVID', r'\bXVID\b'),
+    ('ATMOS', r'\bATMOS\b'),
+    ('TRUEHD', r'\bTRUE[- ]?HD'),
+    ('DTS-X', r'\bDTS[- ]?X\b|\bDTS:X\b'),
+    ('DTS-HD MA', r'\bDTS[- ]?HD[- ]?MA\b|\bDTS[- ]?MA\b'),
+    ('DTS-HD', r'\bDTS[- ]?HD\b'),
+    ('DTS', r'\bDTS'),
+    ('DD+', r'\bDDP|\bDD\+|\bE-?AC-?3\b|\bDOLBY-?DIGITAL-?PLUS\b'),
+    ('DD', r'\bDD(?:5|2|EX|\b)|\bAC-?3\b'),
+    ('FLAC', r'\bFLAC'),
+    ('PCM', r'\bL?PCM'),
+    ('AAC', r'\bAAC'),
+    ('OPUS', r'\bOPUS'),
+    ('MP3', r'\bMP3\b'),
+)
+_NT_RULES = tuple((tag, re.compile(rx)) for tag, rx in _NT_RULES)
+# channels: "7.1", "DDP5.1", "TrueHD.7.1", "AAC2.0" - the dots are separators
+# by the time this runs, so "7 1" / "DDP5 1" / "AAC2 0"
+_NT_CH = re.compile(r'(?<![0-9])([75621])\s+([01])(?![0-9])')
+_NT_CH_TAG = {('7', '1'): '7.1', ('6', '1'): '6.1', ('5', '1'): '5.1', ('2', '0'): '2.0', ('1', '0'): '1.0'}
+
+
+def release_tags(name):
+    """'Top.Gun.Maverick.2022.2160p.UHD.BluRay.REMUX.DV.HDR.HEVC.TrueHD.7.1.Atmos-X'
+    -> 'REMUX | BLU-RAY | DV | HDR | HEVC | ATMOS | TRUEHD | 7.1' (info-string form)."""
+    try:
+        up = str(name or '').upper()
+        up = re.sub(r'\.(?:MKV|MP4|AVI|TS|M2TS|ISO|NZB)\s*$', '', up)
+        text = ' %s ' % _NT_SEP.sub(' ', up)
+        tags = []
+        for tag, rx in _NT_RULES:
+            if rx.search(text) and tag not in tags:
+                tags.append(tag)
+        # "WEB-DL" already covers a bare "WEB"; DTS-X/HD win over plain DTS etc. -
+        # the theme keeps one per family, so only the obvious duplicates go here
+        if 'WEBRIP' in tags and 'WEB-DL' in tags and not re.search(r'\bWEB-?DL\b', text):
+            tags.remove('WEB-DL')
+        if 'DV2' in tags and 'DV' in tags:
+            tags.remove('DV')
+        m = _NT_CH.search(re.sub(r'(?<=[A-Z+])(?=[0-9])', ' ', text))
+        if m:
+            ch = _NT_CH_TAG.get((m.group(1), m.group(2)))
+            if ch:
+                tags.append(ch)
+        return ' | '.join(tags)
+    except Exception:
+        return ''
+
+
 def search(media, words_fn, match_fn):
     """Rows for Search All from every indexer (one thread each)."""
     idxs = indexers()
@@ -1527,7 +1601,9 @@ def search(media, words_fn, match_fn):
                    'quality': _quality(it['title'], it['size']), 'size': gb,
                    'size_label': ('%.2f GB' % gb) if gb else '', 'scrape_provider': 'external',
                    'source': idx['name'], 'debrid': 'Usenet',
-                   'extraInfo': ' | '.join(x for x in (idx['name'], ('%s grabs' % it['grabs']) if it['grabs'] else '')
+                   # 4.12.8: release tags first (badges), indexer + grabs after
+                   'extraInfo': ' | '.join(x for x in (release_tags(it['title']), idx['name'],
+                                                       ('%s grabs' % it['grabs']) if it['grabs'] else '')
                                            if x),
                    'abk_nn': {'nzb': it['link']}}
             if pack:

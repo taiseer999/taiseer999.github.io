@@ -1,3 +1,10 @@
+v4.12.8  (2026-11-21)
+- Search All: Usenet rows now carry the stream badges (BLU-RAY, REMUX, DV,
+  HDR, HEVC, ATMOS, TRUEHD, DTS-HD MA, DD+, 7.1 ...) like the debrid rows.
+  The Newznab rows' info string held only "indexer | N grabs", so the badge
+  row was empty; usenet_stream.release_tags() now reads the tags from the
+  release name and puts them first in the info string.
+
 v4.12.7  (2026-11-21)
 - Najd 2.8.4.0 (bundled): it now times ANY outside subtitle that plays in
   Kodi - the subtitle window with any service, Dex Hub / DexSubtitles,

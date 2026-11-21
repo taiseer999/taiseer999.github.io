@@ -2,6 +2,15 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
+   "v": "4.12.8",
+   "en": [
+    "Usenet results in Search All now show the same stream badges as the other results (Blu-ray, Dolby Vision, HDR, HEVC, Atmos, TrueHD, 7.1 ...)."
+   ],
+   "ar": [
+    "أصبحت نتائج Usenet في «كل المصادر» تعرض شارات البث نفسها التي تعرضها النتائج الأخرى (Blu-ray وDolby Vision وHDR وHEVC وAtmos وTrueHD و7.1 وغيرها)."
+   ]
+  },
+  {
    "v": "4.12.7",
    "en": [
     "Najd now times any subtitle that plays in Kodi, whatever add-on or file it comes from: on the subtitle inside the video, or on the sound when there is none. Najd > Settings > Time subtitles from other sources.",
