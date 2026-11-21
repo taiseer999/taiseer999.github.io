@@ -1,5 +1,5 @@
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """lucent_player/ copies sized for the AF3 Lucent Player boxes (132x51 / 176x68,
 ratio 2.59): every badge on a 176x68 canvas, same pill height; badges too wide
 for the box are redrawn as a compact single-label pill in the same colours."""

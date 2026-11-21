@@ -1,5 +1,5 @@
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """B&W glass debrid service icons for Search All (4.8.58).
 
 resources/lucent/media/lucent/providers/*.png  ->  .../providers_bw/*.png

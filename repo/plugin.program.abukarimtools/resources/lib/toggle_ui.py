@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """On/off switch art used everywhere ABUKARIM TOOLS shows a state (3.2.23).
 
     icon(on)                 -> path of toggle_on.png / toggle_off.png

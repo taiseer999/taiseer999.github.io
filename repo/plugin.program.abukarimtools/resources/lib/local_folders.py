@@ -1,5 +1,5 @@
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """local_folders.py - ABUKARIM TOOLS (4.10.0)
 
 "My folders" for AB Search All: folders on this device or on the network

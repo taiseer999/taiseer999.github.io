@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """grid_ui.py - ABUKARIM TOOLS (4.9.3)
 
 A choice with pictures as a grid of cards (abk_grid.xml), instead of a

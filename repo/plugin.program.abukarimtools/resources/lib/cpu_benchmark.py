@@ -1,244 +1,213 @@
 # -*- coding: utf-8 -*-
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """
-cpu_benchmark.py - CPU Benchmark (pystone) inside ABUKARIM TOOLS.
+cpu_benchmark.py - AB Tools CPU Benchmark (rewritten for AB Tools in 4.12.0).
 
-Port of script.pystone.benchmark 1.1.8 by Lunatixz (GPLv3,
-https://github.com/Lunatixz/Kodi_Addons/tree/master/script.pystone.benchmark).
-The pystone benchmark itself is vendored unchanged at
-resources/lib/modules/pystone.py.
+Runs the classic Pystone benchmark (resources/lib/modules/pystone.py, the
+CPython version, PSF License) once per logical CPU core and shows the result
+in the active skin's text viewer (control 1 = heading, 5 = text):
 
-Changes from the original:
-  * no kodi_six / requests - plain xbmc* and the paste.kodi.tv uploader
-    from log_share;
-  * the passes run on a worker thread, so Back closes the window (and stops
-    after the current pass) instead of being ignored until the end;
-  * Kodi's debug overlay (CPU/RAM, debug.showloginfo) is switched on during
-    the run and always restored afterwards;
-  * texts go through i18n (English / Arabic).
+  * the device: Kodi build, system, processor, architecture, cores, Python;
+  * one row per pass with a coloured meter, then the average;
+  * the report is uploaded to paste.kodi.tv (log_share) and its link shown.
+
+The passes run on their own thread, so Back closes the window at once (the
+pass in progress finishes on its own). Kodi's CPU/RAM overlay
+(debug.showloginfo) is on during the run and set back afterwards.
 """
-import os
-import re
 import json
+import os
 import platform
-import textwrap
+import re
+import subprocess
 import threading
 
 import xbmc
 import xbmcgui
-import xbmcaddon
+import xbmcvfs
 
+from resources.lib import paths
 from resources.lib.i18n import T
 from resources.lib.modules import pystone
 
 TITLE = 'ABUKARIM TOOLS'
-LIMIT = 45
-LINE  = 64
-LOOP  = 50000
-MAXSEED = 200000
-TAG   = '[AbukarimTools CPUBench]'
-
-try:
-    CPU_COUNT = os.cpu_count() or 1
-except Exception:
-    CPU_COUNT = 1
+TAG = '[AbukarimTools CPUBench]'
+PASS_LOOPS = 50000
+METER = 40                      # meter width in characters
+TOP_SCORE = 200000              # pystones/s that fill the meter
+RULE = '[COLOR=dimgrey]%s[/COLOR]' % ('-' * 60)
+# meter colour by how full it is: weak .. strong
+SHADES = ((0.25, 'red'), (0.5, 'orange'), (0.75, 'yellow'), (1.01, 'limegreen'))
 
 
 def _log(msg, level=xbmc.LOGINFO):
     xbmc.log('%s %s' % (TAG, msg), level)
 
 
-def _repeat(length=LIMIT, fill=u'█'):
-    length = int(round(length))
-    return (fill * (int(length / len(fill)) + 1))[:length]
-
-
-def _k(n):
-    n = int(n)
-    return '%dk' % (n // 1000) if n >= 1000 else str(n)
-
-
-def _color(col, txt):
-    return '[COLOR=%s]%s[/COLOR]' % (col, txt)
-
-
-def progress_bar(iteration, total, length=LIMIT, fill=u'█'):
-    percent = '%.1f' % (100 * (iteration / float(total)))
-    filled = int(length * iteration // total)
-    bar = fill * filled + '-' * (length - filled)
-    if filled > 10:
-        mid = length // 2 - len(percent) // 2
-        bar = bar[:mid] + percent + '%' + bar[mid + len(percent):]
-    return '|%s|' % bar
-
-
-def score_bar(stones, seed, dur, length=LIMIT):
-    value = (stones * 100) // MAXSEED
-    if value >= 100:
-        value = 90
-    value = 100 - value
-    score = '| %s |' % stones
-    fill = _repeat(length - 4)
-    sindex = int(length * ((length / 100.0) * value / length))
-    colors = ['green', 'yellow', 'orange', 'red', 'dimgrey', 'dimgrey']
-    chunks = textwrap.wrap(fill[:sindex - len(score) // 2] + score
-                           + fill[sindex + len(score) // 2:], length // 4)
-    bars = ''.join(_color(colors.pop(0), c) for c in chunks if colors)
-    return '| %s | %s in %.2fs' % (bars, _k(seed), dur)
-
-
-def _cpu_name():
+def _cores():
     try:
-        with open('/proc/cpuinfo', 'r') as f:
-            info = f.read()
-        m = (re.search(r'model name\s*:\s*(.+)', info)
-             or re.search(r'Hardware\s*:\s*(.+)', info))
-        name = m.group(1).strip() if m else ''
+        return max(1, os.cpu_count() or 1)
     except Exception:
-        name = ''
+        return 1
+
+
+# ---------------------------------------------------------------------- the device
+def _read(path):
     try:
-        with open('/proc/device-tree/model', 'r') as f:
-            model = f.read().strip().strip('\x00')
-        if model:
-            name = ('%s %s' % (name, model)).strip()
+        with open(path, 'r', errors='replace') as fh:
+            return fh.read()
     except Exception:
-        pass
-    if not name and platform.system() == 'Darwin':
+        return ''
+
+
+def processor_name():
+    parts = []
+    info = _read('/proc/cpuinfo')
+    for key in ('model name', 'Hardware'):
+        m = re.search(r'^%s\s*:\s*(.+)$' % key, info, re.M)
+        if m:
+            parts.append(m.group(1).strip())
+            break
+    board = _read('/proc/device-tree/model').replace('\x00', '').strip()
+    if board:
+        parts.append(board)
+    if not parts and platform.system() == 'Darwin':
         try:
-            import subprocess
-            name = subprocess.check_output(
-                ['sysctl', '-n', 'machdep.cpu.brand_string']).decode().strip()
+            parts.append(subprocess.check_output(['sysctl', '-n', 'machdep.cpu.brand_string'],
+                                                 timeout=5).decode().strip())
         except Exception:
             pass
-    return name or platform.processor() or platform.machine()
+    return ' '.join(parts) or platform.processor() or platform.machine() or '?'
 
 
-def system_info():
-    sep = _repeat(LINE, '_')
-    return '[CR]'.join([
-        'Kodi Build: [B]%s[/B]' % xbmc.getInfoLabel('System.BuildVersion'),
-        'Operating System: [B]%s v.%s (%s)[/B]' % (platform.system(), platform.release(),
-                                                  platform.platform()),
-        sep,
-        'Processor: [B]%s[/B]' % _cpu_name(),
-        'Machine Architecture: [B]%s %s[/B]' % (platform.machine(),
-                                               ' '.join(platform.architecture())),
-        'Logical CPU Cores: [B]%d[/B]' % CPU_COUNT,
-        sep,
-        'Python: [B]%s v.%s[/B][CR]Benchmark: [B]pystone v.%s[/B] n=%d' % (
+def device_lines():
+    return [
+        'Kodi: [B]%s[/B]' % xbmc.getInfoLabel('System.BuildVersion'),
+        'System: [B]%s %s[/B]' % (platform.system(), platform.release()),
+        'Processor: [B]%s[/B]' % processor_name(),
+        'Architecture: [B]%s (%s)[/B]' % (platform.machine(), platform.architecture()[0]),
+        'Cores: [B]%d[/B]' % _cores(),
+        'Python: [B]%s %s[/B]   Pystone [B]%s[/B], %d loops a pass' % (
             platform.python_implementation(), platform.python_version(),
-            pystone.__version__, LOOP),
-        sep,
-    ])
+            getattr(pystone, '__version__', '?'), PASS_LOOPS),
+    ]
 
 
-def _plain(text):
+# ---------------------------------------------------------------------- the meter
+def meter(score):
+    """A coloured bar for a pystones/s score."""
+    share = max(0.0, min(1.0, float(score) / TOP_SCORE))
+    filled = int(round(share * METER))
+    colour = next(c for limit, c in SHADES if share < limit)
+    return '[COLOR=%s]%s[/COLOR][COLOR=dimgrey]%s[/COLOR]' % (colour, '#' * filled, '.' * (METER - filled))
+
+
+def result_row(label, score, seconds):
+    return '%s  %s  [B]%s[/B] pystones/s  (%.2f s)' % (label, meter(score), '{:,}'.format(int(score)), seconds)
+
+
+def waiting_row(done, total):
+    return '[COLOR=dimgrey]%s %d / %d ...[/COLOR]' % (T(30624), done + 1, total)
+
+
+def plain(text):
     text = text.replace('[CR]', '\n')
-    text = re.sub(r'\[/?COLOR[^\]]*\]', '', text)
-    return re.sub(r'\[/?[BI]\]', '', text)
+    return re.sub(r'\[/?(?:COLOR[^\]]*|B|I)\]', '', text)
 
 
+# ---------------------------------------------------------------------- the window
 class BenchWindow(xbmcgui.WindowXMLDialog):
-    """Runs inside the active skin's DialogTextViewer (1 = heading, 5 = text)."""
 
     def __init__(self, *args, **kwargs):
-        self.head = kwargs.pop('head', TITLE)
-        self.text = system_info()
-        self.textbox = None
-        self.stop = threading.Event()
-        self.worker = None
+        self.heading = kwargs.pop('heading', TITLE)
+        self.lines = device_lines() + [RULE]
+        self.box = None
+        self.cancel = threading.Event()
+        self.thread = None
 
     def onInit(self):
         try:
-            self.getControl(1).setLabel(self.head)
+            self.getControl(1).setLabel(self.heading)
         except Exception:
             pass
-        self.textbox = self.getControl(5)
-        self._show(self.text)
-        if self.worker is None:      # onInit can fire again after a re-init
-            self.worker = threading.Thread(target=self._run, name='abk_cpubench')
-            self.worker.daemon = True
-            self.worker.start()
+        self.box = self.getControl(5)
+        self.refresh()
+        if self.thread is None:
+            self.thread = threading.Thread(target=self.bench, name='abk_cpubench')
+            self.thread.daemon = True
+            self.thread.start()
 
     def onAction(self, action):
         if action.getId() in (xbmcgui.ACTION_PREVIOUS_MENU, xbmcgui.ACTION_NAV_BACK,
                               xbmcgui.ACTION_SELECT_ITEM):
-            self.stop.set()
+            self.cancel.set()
             self.close()
 
-    def _show(self, txt):
+    def refresh(self, extra=None):
+        if self.box is None:
+            return
+        rows = self.lines + ([extra] if extra else [])
         try:
-            self.textbox.setText(txt)
-            # keep the newest lines in view (any skin: Kodi clamps the offset
-            # to the last page once the new text is laid out)
+            self.box.setText('[CR]'.join(rows))
             xbmc.sleep(150)
-            self.textbox.scroll(10000)
+            self.box.scroll(10000)          # newest rows in view
         except Exception:
             pass
 
-    def _run(self):
-        ranks = []
-        seeds = [LOOP] * CPU_COUNT
-        for i, seed in enumerate(seeds):
-            if self.stop.is_set():
+    def bench(self):
+        total = _cores()
+        results = []
+        for n in range(total):
+            if self.cancel.is_set():
                 return
-            self._show('%s[CR]%s' % (self.text, progress_bar(i, len(seeds))))
-            dur, stones = pystone.pystones(seed)
-            ranks.append((seed, dur, stones))
-            if len(seeds) > 1:
-                self.text = '%s[CR]%s %d%s' % (self.text, T(30624), i + 1,
-                                              score_bar(int(stones), seed, dur))
-                self._show(self.text)
-        if self.stop.is_set() or not ranks:
+            self.refresh(waiting_row(n, total))
+            seconds, score = pystone.pystones(PASS_LOOPS)
+            results.append((seconds, score))
+            if total > 1:
+                self.lines.append(result_row('%s %d' % (T(30624), n + 1), score, seconds))
+                self.refresh()
+        if self.cancel.is_set() or not results:
             return
-        n = float(len(ranks))
-        avg_seed = int(sum(r[0] for r in ranks) / n)
-        avg_dur = sum(r[1] for r in ranks) / n
-        avg_stones = int(sum(r[2] for r in ranks) / n)
-        _log('score %d pystones/s (%d passes, %.2fs avg)' % (avg_stones, len(ranks), avg_dur))
-        self.text = '%s[CR]%s %s[CR]%s' % (self.text, T(30621),
-                                           score_bar(avg_stones, avg_seed, avg_dur),
-                                           _repeat(LINE, '_'))
-        self._show('%s[CR]%s' % (self.text, _color('dimgrey', T(30623))))
+        avg_seconds = sum(r[0] for r in results) / len(results)
+        avg_score = sum(r[1] for r in results) / len(results)
+        _log('score %d pystones/s (%d passes, %.2f s each)' % (avg_score, len(results), avg_seconds))
+        self.lines += [RULE, result_row('[B]%s[/B]' % T(30621), avg_score, avg_seconds), RULE]
+        self.refresh('[COLOR=dimgrey]%s[/COLOR]' % T(30623))
         try:
             from resources.lib import log_share
-            build = 'ABUKARIM TOOLS %s | CPU Benchmark\n\n' % (
-                xbmcaddon.Addon('plugin.program.abukarimtools').getAddonInfo('version'))
-            url = log_share.upload(build + _plain(self.text))
-            _log('uploaded: %s' % url)
-            self.text = '%s[CR]%s: [B]%s[/B]' % (self.text, T(30622), url)
+            head = 'AB Tools %s - CPU Benchmark\n\n' % paths.version()
+            link = log_share.upload(head + plain('[CR]'.join(self.lines)))
+            _log('uploaded: %s' % link)
+            self.lines.append('%s: [B]%s[/B]' % (T(30622), link))
         except Exception as e:
             _log('upload failed: %s' % e, xbmc.LOGWARNING)
-        if not self.stop.is_set():
-            self._show('%s[CR]%s' % (self.text, _color('dimgrey', T(30625))))
+        if not self.cancel.is_set():
+            self.refresh('[COLOR=dimgrey]%s[/COLOR]' % T(30625))
 
 
-def _rpc(method, params):
-    req = {'jsonrpc': '2.0', 'id': 1, 'method': method, 'params': params}
+# ---------------------------------------------------------------------- entry
+def _setting(method, **params):
+    call = {'jsonrpc': '2.0', 'id': 1, 'method': method, 'params': params}
     try:
-        return json.loads(xbmc.executeJSONRPC(json.dumps(req))).get('result')
+        return json.loads(xbmc.executeJSONRPC(json.dumps(call))).get('result')
     except Exception:
         return None
 
 
 def run():
-    import xbmcvfs
-    path = xbmcvfs.translatePath(
-        xbmcaddon.Addon('plugin.program.abukarimtools').getAddonInfo('path'))
-    res = _rpc('Settings.GetSettingValue', {'setting': 'debug.showloginfo'}) or {}
-    overlay_was_on = bool(res.get('value', False))
-    if not overlay_was_on:
-        _rpc('Settings.SetSettingValue', {'setting': 'debug.showloginfo', 'value': True})
+    shown = bool((_setting('Settings.GetSettingValue', setting='debug.showloginfo') or {}).get('value'))
+    if not shown:
+        _setting('Settings.SetSettingValue', setting='debug.showloginfo', value=True)
     try:
-        win = BenchWindow('DialogTextViewer.xml', path, 'Default', '1080i',
-                          head='%s - %s' % (TITLE, T(30620)))
+        win = BenchWindow('DialogTextViewer.xml', xbmcvfs.translatePath(paths.ADDON_PATH), 'Default', '1080i',
+                          heading='%s - %s' % (TITLE, T(30620)))
         win.doModal()
-        win.stop.set()
+        win.cancel.set()
         del win
     except Exception as e:
         _log('failed: %s' % e, xbmc.LOGERROR)
         xbmcgui.Dialog().ok(TITLE, T(30626) % e)
     finally:
-        if not overlay_was_on:
-            _rpc('Settings.SetSettingValue', {'setting': 'debug.showloginfo', 'value': False})
+        if not shown:
+            _setting('Settings.SetSettingValue', setting='debug.showloginfo', value=False)

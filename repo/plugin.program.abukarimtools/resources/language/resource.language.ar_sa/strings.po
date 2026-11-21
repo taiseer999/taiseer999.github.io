@@ -3536,3 +3536,83 @@ msgctxt "#32347"
 msgid "Plain (port 119)"
 msgstr "دون تشفير (المنفذ 119)"
 
+msgctxt "#32348"
+msgid "Najd Smart Subtitles"
+msgstr "ترجمة نجد الذكية"
+
+msgctxt "#32349"
+msgid "Arabic subtitles from SubDL, OpenSubtitles and SubSource, with the encoding and right-to-left punctuation fixed, the timing matched to the audio and the text proofread by AI; when no Arabic subtitle exists it translates the one inside the video. AB Tools installs it, keeps it up to date and makes it Kodi's subtitle service. By Ali, MIT licence."
+msgstr "ترجمات عربية من SubDL وOpenSubtitles وSubSource، مع تصحيح الترميز وعلامات الترقيم من اليمين إلى اليسار، وضبط التوقيت على الصوت، وتدقيق النص بالذكاء الاصطناعي؛ وإن لم توجد ترجمة عربية ترجمت الترجمة المدمجة في الفيديو. يثبّتها AB Tools ويحدّثها ويجعلها خدمة الترجمة في Kodi. من تطوير علي، برخصة MIT."
+
+msgctxt "#32350"
+msgid "Default service"
+msgstr "الخدمة الافتراضية"
+
+msgctxt "#32351"
+msgid "Installed"
+msgstr "مثبّتة"
+
+msgctxt "#32352"
+msgid "Not installed"
+msgstr "غير مثبّتة"
+
+msgctxt "#32353"
+msgid "Kodi subtitle service: %s"
+msgstr "خدمة الترجمة في Kodi: %s"
+
+msgctxt "#32354"
+msgid "Make Najd the default subtitle service"
+msgstr "جعل نجد خدمة الترجمة الافتراضية"
+
+msgctxt "#32355"
+msgid "Go back to the previous subtitle service"
+msgstr "العودة إلى خدمة الترجمة السابقة"
+
+msgctxt "#32356"
+msgid "Setup wizard (subtitle sites and AI keys)"
+msgstr "معالج الإعداد (مواقع الترجمة ومفاتيح الذكاء الاصطناعي)"
+
+msgctxt "#32357"
+msgid "Najd settings"
+msgstr "إعدادات نجد"
+
+msgctxt "#32358"
+msgid "Test the connections"
+msgstr "اختبار الاتصالات"
+
+msgctxt "#32359"
+msgid "Install / update Najd from AB Tools"
+msgstr "تثبيت نجد أو تحديثها من AB Tools"
+
+msgctxt "#32360"
+msgid "Najd %s is installed"
+msgstr "ثُبّتت نجد %s"
+
+msgctxt "#32361"
+msgid "Najd could not be installed"
+msgstr "تعذّر تثبيت نجد"
+
+msgctxt "#32362"
+msgid "Najd is now the default subtitle service"
+msgstr "أصبحت نجد خدمة الترجمة الافتراضية"
+
+msgctxt "#32363"
+msgid "The previous subtitle service is back"
+msgstr "عادت خدمة الترجمة السابقة"
+
+msgctxt "#32364"
+msgid "None"
+msgstr "لا شيء"
+
+msgctxt "#32365"
+msgid "Install FFmpeg tools (to time subtitles to the audio)"
+msgstr "تثبيت أدوات FFmpeg (لضبط توقيت الترجمة على الصوت)"
+
+msgctxt "#32366"
+msgid "FFmpeg tools are installed"
+msgstr "ثُبّتت أدوات FFmpeg"
+
+msgctxt "#32367"
+msgid "FFmpeg tools could not be installed"
+msgstr "تعذّر تثبيت أدوات FFmpeg"
+

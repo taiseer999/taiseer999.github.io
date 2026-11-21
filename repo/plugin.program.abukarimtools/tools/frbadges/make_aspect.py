@@ -1,5 +1,5 @@
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """The aspect-ratio badges Kodi 22 can name that the styles lack (1.00, 1.19,
 1.43, 1.50, 1.90 - Kodi's built-in vocabulary, utils/AspectRatioVocabulary.cpp),
 drawn from each style's own aspectratio/1.78.png with the number replaced

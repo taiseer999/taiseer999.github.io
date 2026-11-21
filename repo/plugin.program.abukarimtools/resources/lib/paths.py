@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """Add-on paths without asking Kodi's add-on manager (3.2.15).
 
 xbmcaddon.Addon() goes through Kodi's add-on manager. On Kodi 22 / Py3.14

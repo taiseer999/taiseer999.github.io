@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. GPL-3.0-or-later (port of Lucent by djdirty60), see resources/licenses/GPL-3.0.txt
 import re,sys,os,glob
 root=sys.argv[1]; files=sys.argv[2:]
 allxml={os.path.basename(f):open(f,encoding='utf-8').read() for f in glob.glob(root+'/xml/*.xml')}

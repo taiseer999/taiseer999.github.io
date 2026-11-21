@@ -1,5 +1,5 @@
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """DV2.png and IMAX.png for every style's lucent_player/ set (176x68 canvas).
 DV2  = the style's DV badge with a "2" after its big label line (VISION / DV),
        the pill widened by a band blended from the background next to the text.

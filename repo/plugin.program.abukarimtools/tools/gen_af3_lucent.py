@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """Generate the Arctic Fuse 3 "Lucent Glass" colour themes (AB Tools 4.6.8).
 
 Dev tool (not used at runtime). Output: resources/af3_lucent/colors/*.xml,

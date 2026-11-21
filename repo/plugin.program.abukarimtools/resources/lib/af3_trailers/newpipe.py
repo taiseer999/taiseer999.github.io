@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """YouTube trailers through NewPipe for the AF3 auto-trailers (ABUKARIM TOOLS).
 
 TEST source (3.2.43~beta1). Instead of IMDb's own MP4s, the title's YouTube

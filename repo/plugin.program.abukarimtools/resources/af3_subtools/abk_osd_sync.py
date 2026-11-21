@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 # -- DexSubtitles OSD AutoSync launcher (by ABUKARIM TOOLS) --
 # Shipped by plugin.program.abukarimtools (toggle "AF3: Subtitle Buttons") and
 # run from the Arctic Fuse 3 player OSD:

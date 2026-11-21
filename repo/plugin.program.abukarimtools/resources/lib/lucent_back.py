@@ -1,132 +1,125 @@
 # -*- coding: utf-8 -*-
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """
-lucent_back.py - ABUKARIM TOOLS (4.7.32)
+lucent_back.py - AB Tools (rewritten for AB Tools in 4.12.0)
 
-Back in the fullscreen player while "AF3: Lucent Player" is on. Idea from
-Lucent 1.34.3 (scripts/fsback.py by djdirty60, github.com/djdirty60/Lucent,
-GPL-2.0-or-later), changed for Piers: Lucent maps Back to Stop, AF3 / Kodi
-leave fullscreen with the video playing on. Only the skipping part is taken:
+The Back key in the fullscreen player while "AF3: Lucent Player" is on:
 
-  fast forward / rewind          -> back to normal speed, stay in the video
-  seek bar up / a seek just done -> close the seek bar, stay in the video
-  anything else                  -> Kodi's own Back (unchanged)
+  while fast-forwarding or rewinding    -> normal speed again, video stays
+  while the seek bar is up / just after
+  a skip                                -> the seek bar closes, video stays
+  any other time                        -> Kodi's own Back
 
-Called from the keymap special://profile/keymaps/abk-lucentplayer-back.xml
-(FullscreenVideo only; the OSD, pause card dialogs and menus are untouched).
-sync_keymap() writes or removes that file and is called by the toggle and at
-service start.
+A keymap in the profile (FullscreenVideo only) sends Back here; the OSD, the
+pause card and every menu keep Kodi's Back. sync_keymap() writes the keymap
+while Lucent Player is on and removes it otherwise; the toggle, the skin
+switcher and the service call it.
 
     RunScript(special://home/addons/plugin.program.abukarimtools/resources/lib/lucent_back.py)
 """
 import xbmc
 import xbmcvfs
 
-SKIN_ID = 'skin.arctic.fuse.3'
-SETTING = 'abk.lucentplayer'
+AF3 = 'skin.arctic.fuse.3'
+SKIN_BOOL = 'abk.lucentplayer'
 KEYMAP_DIR = 'special://profile/keymaps/'
 KEYMAP_PATH = KEYMAP_DIR + 'abk-lucentplayer-back.xml'
-_RUN = ('RunScript(special://home/addons/plugin.program.abukarimtools/'
-        'resources/lib/lucent_back.py)')
-KEYMAP = """<keymap>
-    <!-- ABUKARIM TOOLS - AF3: Lucent Player. Back while skipping ends the skipping;
-         otherwise Kodi's normal Back. Removed when Lucent Player is turned off. -->
-    <FullscreenVideo>
-        <keyboard>
-            <backspace>%(r)s</backspace>
-            <browser_back>%(r)s</browser_back>
-        </keyboard>
-        <remote>
-            <back>%(r)s</back>
-        </remote>
-    </FullscreenVideo>
-</keymap>
-""" % {'r': _RUN}
+_SCRIPT = 'RunScript(special://home/addons/plugin.program.abukarimtools/resources/lib/lucent_back.py)'
+
+
+def _keymap():
+    keys = ''.join('            <%s>%s</%s>\n' % (k, _SCRIPT, k) for k in ('backspace', 'browser_back'))
+    return ('<keymap>\n'
+            '    <!-- AB Tools - AF3: Lucent Player. Back ends fast-forward, rewind and the\n'
+            '         seek bar; any other time it is Kodi\'s Back. Removed with Lucent Player. -->\n'
+            '    <FullscreenVideo>\n'
+            '        <keyboard>\n%s'
+            '        </keyboard>\n'
+            '        <remote>\n'
+            '            <back>%s</back>\n'
+            '        </remote>\n'
+            '    </FullscreenVideo>\n'
+            '</keymap>\n') % (keys, _SCRIPT)
+
+
+KEYMAP = _keymap()
 
 
 def _log(msg):
     xbmc.log('[AbukarimTools LucentBack] %s' % msg, xbmc.LOGINFO)
 
 
-def _cond(c):
-    return bool(xbmc.getCondVisibility(c))
+def _is(condition):
+    return bool(xbmc.getCondVisibility(condition))
 
 
-def _active():
-    return xbmc.getSkinDir() == SKIN_ID and _cond('Skin.HasSetting(%s)' % SETTING)
+def lucent_player_on():
+    return xbmc.getSkinDir() == AF3 and _is('Skin.HasSetting(%s)' % SKIN_BOOL)
 
 
 def handle():
-    if _active():
-        if _cond('Player.Forwarding | Player.Rewinding'):
-            xbmc.executebuiltin('PlayerControl(Play)')       # back to normal speed
+    """What Back does now (called by the keymap)."""
+    if lucent_player_on():
+        if _is('Player.Forwarding') or _is('Player.Rewinding'):
+            xbmc.executebuiltin('PlayerControl(Play)')
             return
-        if _cond('Player.Seeking | Player.HasPerformedSeek(3)'):
+        if _is('Player.Seeking') or _is('Player.HasPerformedSeek(3)'):
             xbmc.executebuiltin('Dialog.Close(seekbar)')
             return
-    xbmc.executebuiltin('Action(Back)')                     # Kodi's own Back
+    xbmc.executebuiltin('Action(Back)')
 
 
-def _read():
-    if not xbmcvfs.exists(KEYMAP_PATH):
-        return None
-    f = xbmcvfs.File(KEYMAP_PATH)
+def _text(path):
     try:
-        return f.read()
+        fh = xbmcvfs.File(path)
+    except Exception:
+        return None
+    try:
+        return fh.read()
     finally:
-        f.close()
+        fh.close()
 
 
 def clear_lucent_keymaps():
-    """4.7.33: the Lucent skin writes keymaps into the profile (lucent-back-stop.xml:
-    Back in fullscreen video, lucent-ok-page.xml: OK in the video lists) that run
-    special://skin/scripts/... - with another skin active those scripts do not
-    exist, so Back / OK did nothing (they also load after ours and override it).
-    Remove them while Lucent is not the skin; Lucent writes them again itself
-    (scripts/keymap.py) when its Home opens. Returns True when a file went."""
+    """The Lucent skin leaves keymaps in the profile (lucent-*.xml) that run
+    special://skin/scripts/...; under any other skin those scripts are missing,
+    so the keys they take (Back, OK) do nothing. Delete them while Lucent is not
+    the skin (Lucent writes them again when it runs). True when one went."""
     if xbmc.getSkinDir() == 'skin.lucent':
         return False
-    gone = []
     try:
-        _dirs, files = xbmcvfs.listdir(KEYMAP_DIR)
+        names = xbmcvfs.listdir(KEYMAP_DIR)[1]
     except Exception:
         return False
-    for name in files:
+    removed = []
+    for name in names:
         if not (name.startswith('lucent-') and name.endswith('.xml')):
             continue
-        path = KEYMAP_DIR + name
-        try:
-            f = xbmcvfs.File(path)
-            try:
-                body = f.read()
-            finally:
-                f.close()
-        except Exception:
-            continue
-        if 'special://skin/scripts/' in body and xbmcvfs.delete(path):
-            gone.append(name)
-    if gone:
-        _log('removed Lucent skin keymaps (not the active skin): %s' % ', '.join(gone))
-    return bool(gone)
+        body = _text(KEYMAP_DIR + name)
+        if body and 'special://skin/scripts/' in body and xbmcvfs.delete(KEYMAP_DIR + name):
+            removed.append(name)
+    if removed:
+        _log('removed Lucent skin keymaps (Lucent is not the skin): %s' % ', '.join(removed))
+    return bool(removed)
 
 
 def sync_keymap(wanted=None):
-    """Keymap present while Lucent Player is on (AF3 active), gone otherwise.
-    Returns True when the file changed (keymaps are then reloaded)."""
+    """Write the keymap while Lucent Player is on, remove it otherwise.
+    True when a keymap file changed (Kodi then reloads its keymaps)."""
     if wanted is None:
-        wanted = _active()
-    have = _read()
+        wanted = lucent_player_on()
+    current = _text(KEYMAP_PATH) if xbmcvfs.exists(KEYMAP_PATH) else None
     changed = clear_lucent_keymaps()
-    if wanted and have != KEYMAP:
+    if wanted and current != KEYMAP:
         xbmcvfs.mkdirs(KEYMAP_DIR)
-        f = xbmcvfs.File(KEYMAP_PATH, 'w')
+        fh = xbmcvfs.File(KEYMAP_PATH, 'w')
         try:
-            f.write(KEYMAP)
+            fh.write(KEYMAP)
         finally:
-            f.close()
+            fh.close()
         changed = True
-    elif not wanted and have is not None:
+    elif not wanted and current is not None:
         xbmcvfs.delete(KEYMAP_PATH)
         changed = True
     if changed:

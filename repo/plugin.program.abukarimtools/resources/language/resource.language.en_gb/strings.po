@@ -3536,3 +3536,83 @@ msgctxt "#32347"
 msgid "Plain (port 119)"
 msgstr ""
 
+msgctxt "#32348"
+msgid "Najd Smart Subtitles"
+msgstr ""
+
+msgctxt "#32349"
+msgid "Arabic subtitles from SubDL, OpenSubtitles and SubSource, with the encoding and right-to-left punctuation fixed, the timing matched to the audio and the text proofread by AI; when no Arabic subtitle exists it translates the one inside the video. AB Tools installs it, keeps it up to date and makes it Kodi's subtitle service. By Ali, MIT licence."
+msgstr ""
+
+msgctxt "#32350"
+msgid "Default service"
+msgstr ""
+
+msgctxt "#32351"
+msgid "Installed"
+msgstr ""
+
+msgctxt "#32352"
+msgid "Not installed"
+msgstr ""
+
+msgctxt "#32353"
+msgid "Kodi subtitle service: %s"
+msgstr ""
+
+msgctxt "#32354"
+msgid "Make Najd the default subtitle service"
+msgstr ""
+
+msgctxt "#32355"
+msgid "Go back to the previous subtitle service"
+msgstr ""
+
+msgctxt "#32356"
+msgid "Setup wizard (subtitle sites and AI keys)"
+msgstr ""
+
+msgctxt "#32357"
+msgid "Najd settings"
+msgstr ""
+
+msgctxt "#32358"
+msgid "Test the connections"
+msgstr ""
+
+msgctxt "#32359"
+msgid "Install / update Najd from AB Tools"
+msgstr ""
+
+msgctxt "#32360"
+msgid "Najd %s is installed"
+msgstr ""
+
+msgctxt "#32361"
+msgid "Najd could not be installed"
+msgstr ""
+
+msgctxt "#32362"
+msgid "Najd is now the default subtitle service"
+msgstr ""
+
+msgctxt "#32363"
+msgid "The previous subtitle service is back"
+msgstr ""
+
+msgctxt "#32364"
+msgid "None"
+msgstr ""
+
+msgctxt "#32365"
+msgid "Install FFmpeg tools (to time subtitles to the audio)"
+msgstr ""
+
+msgctxt "#32366"
+msgid "FFmpeg tools are installed"
+msgstr ""
+
+msgctxt "#32367"
+msgid "FFmpeg tools could not be installed"
+msgstr ""
+

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. GPL-3.0-or-later (port of Lucent by djdirty60), see resources/licenses/GPL-3.0.txt
 """4.7.32: Lucent's passthrough note on AF3's volume dialog.
 
 Run after port.py / af3_layout.py / af3_furniture.py:

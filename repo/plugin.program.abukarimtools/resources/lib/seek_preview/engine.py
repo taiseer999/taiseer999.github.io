@@ -1,423 +1,535 @@
 # -*- coding: utf-8 -*-
-"""
-AB Tools "Seek Preview" (4.8.12) - while you skip forward or back, a small
-picture of the spot you are jumping to shows above the seek bar.
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
+"""AB Tools "Seek Preview" (rewritten for AB Tools in 4.12.0).
 
-Based on service.seekpreview 1.2.0 by easter478
-(https://github.com/easter478/kodi-seek-preview), GPL-3.0-or-later - see
-LICENSE.txt in this folder. frames.py is the original frame maker, unchanged.
-What AB Tools changed:
-  - runs as a thread of the AB Tools service (started at boot, idles while
-    the toggle is off) instead of its own add-on;
-  - settings live in addon_data/plugin.program.abukarimtools/seek_preview.json
-    and are set from Toggles > Seek Preview;
-  - Kodi's own skip settings are never touched;
-  - frames made ahead of time: the whole file for local files; on a stream
-    only 3 minutes each way by default (4.8.13; every frame is one more HTTP
-    request on the file being played), 10 minutes with "Always";
-  - 4.8.14: only the picture of the spot you skip to (or one step next to
-    it) is shown; until it is made the card shows a waiting picture instead
-    of a picture from minutes away; frames are made around the spot you
-    skip to, not around where the film is playing;
-  - 4.8.13: diagnostics in kodi.log (first frame and its time, failures with
-    ffmpeg's error text, low memory) with every URL replaced by <url>;
-  - the box is a Lucent-style glass card, fitted to the Lucent Player seek
-    bar on Arctic Fuse 3 (skin bool abk.lucentplayer);
-  - the playing URL (it can carry a debrid / Silo token) is never logged.
+While the viewer skips forward or back, a glass card above the seek bar shows
+a picture of the spot being skipped to, with its time. Pictures come from
+grabber.py (ffmpeg); this module watches the player, chooses what to make and
+draws the card.
 
-ffmpeg comes from the CoreELEC "FFmpeg Tools" add-on (tools.ffmpeg-tools) or
-from the system PATH; without one there is no preview.
+  - one thread of the AB Tools service, started at boot, idle while off;
+  - settings: addon_data/plugin.program.abukarimtools/seek_preview.json,
+    set from Toggles > Seek Preview, read again whenever the file changes;
+  - "frames ahead": off / local files whole, streams 3 min each way /
+    always, streams 10 min each way;
+  - only the picture of the skip target (or one step beside it) is shown,
+    else a waiting picture;
+  - Kodi's own skip settings are never changed, and no address of the
+    playing video is written to kodi.log.
+
+ffmpeg comes from CoreELEC's "FFmpeg Tools" add-on (tools.ffmpeg-tools), a
+Homebrew / MacPorts install, or the PATH.
 """
 import hashlib
 import json
 import os
 import re
 import shutil
+import socket
 import threading
 import time
+from urllib.parse import unquote_plus
 
 import xbmc
 import xbmcgui
 import xbmcvfs
 
 from resources.lib import paths
-from resources.lib.seek_preview import frames
+from resources.lib.seek_preview import grabber
 
 PROFILE = xbmcvfs.translatePath('special://profile/addon_data/plugin.program.abukarimtools/')
 CONFIG = os.path.join(PROFILE, 'seek_preview.json')
 DISK = xbmcvfs.translatePath('special://temp/abk_seekpreview')
-RAM = '/tmp/abk_seekpreview' if os.path.isdir('/tmp') and not frames.WIN else DISK
+RAM = '/tmp/abk_seekpreview' if (os.path.isdir('/tmp') and not grabber.IS_WINDOWS) else DISK
 MEDIA = os.path.join(paths.ADDON_PATH, 'resources', 'seek_preview', 'media')
-FFMPEG_TOOLS = [
-    xbmcvfs.translatePath('special://home/addons/tools.ffmpeg-tools/bin/ffmpeg'),
+WAIT_IMG = os.path.join(MEDIA, 'wait.png')
+
+CANDIDATES = (
+    'special://home/addons/tools.ffmpeg-tools/bin/ffmpeg',
     '/usr/lib/kodi/addons/tools.ffmpeg-tools/bin/ffmpeg',
-    # macOS: Kodi.app does not get the shell PATH, so Homebrew / MacPorts
-    # installs are not found by shutil.which.
-    '/opt/homebrew/bin/ffmpeg', '/usr/local/bin/ffmpeg', '/opt/local/bin/ffmpeg',
-]
+    '/opt/homebrew/bin/ffmpeg',          # Kodi.app on macOS has no shell PATH
+    '/usr/local/bin/ffmpeg',
+    '/opt/local/bin/ffmpeg',
+)
 
 DEFAULTS = {'enabled': False, 'size': 1, 'ahead': 1, 'hidesubs': True, 'step': 10}
-# 1280x720 units. Frame size, the card's padding and the time row under the frame.
-SIZES = [(240, 135), (320, 180), (426, 240)]
-NAMES = ['s', 'm', 'l']
-PAD, TIME_H = 8, 30
-FRAME_W = 426                   # frames are made once at the largest size
-# Lucent Player on AF3 (Includes_ABK_LucentPlayer.xml, 1080p units): the bar runs
-# 96..1824; the time labels above it start at 880 (seek bar) / 836 (OSD open).
-LUCENT = {'x0': 64, 'x1': 1216, 'bottom': 878 * 2 // 3, 'bottom_osd': 834 * 2 // 3}
-GENERIC = {'x0': 64, 'x1': 1216, 'bottom': 720 - 150, 'bottom_osd': 720 - 210}
-GAP = 10
-WAIT_IMG = os.path.join(MEDIA, 'wait.png')
-SEEK_FOCUS = 30                # s: prefetch stays around the last skip target this long
-LOW_MEM = 250 << 20            # 4.8.13: was 450 MB (the original's default)
-SPAN_NEARBY, SPAN_FULL = 180, 600
+STEPS = (5, 10, 15, 30)
+
+# The card, in 1280x720 skin units: picture sizes (small / medium / large),
+# the padding around the picture and the time row under it.
+CARD_SIZES = ((240, 135), (320, 180), (426, 240))
+CARD_NAMES = ('s', 'm', 'l')
+CARD_PAD = 8
+CARD_TIME_H = 30
+CARD_GAP = 10
+GRAB_WIDTH = 426                        # pictures are made once, at the largest size
+# where the seek bar is: x range and the line the card sits above (OSD closed / open)
+BAR_LUCENT = (64, 1216, 585, 556)       # AF3 with Lucent Player (bar 96..1824 at 1080p)
+BAR_OTHER = (64, 1216, 570, 510)
+
+FOCUS_HOLD = 30                         # s: prefetch stays around the last skip target
+MIN_FREE = 250 << 20
+SPAN_NEAR, SPAN_FAR = 180, 600
 
 STOP = threading.Event()
-_THREAD = [None]
+_WORKER = {'thread': None}
 
 
 def _log(msg, level=xbmc.LOGINFO):
     xbmc.log('[AbukarimTools SeekPreview] %s' % msg, level)
 
 
+# ---------------------------------------------------------------------- settings
 def load_config():
     cfg = dict(DEFAULTS)
     try:
-        with open(CONFIG, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-        if isinstance(data, dict):
-            cfg.update({k: data[k] for k in DEFAULTS if k in data})
+        with open(CONFIG, 'r', encoding='utf-8') as fh:
+            saved = json.load(fh)
+        for k in DEFAULTS:
+            if isinstance(saved, dict) and k in saved:
+                cfg[k] = saved[k]
     except Exception:
         pass
-    cfg['size'] = max(0, min(2, int(cfg['size'])))
-    cfg['ahead'] = max(0, min(2, int(cfg['ahead'])))
-    cfg['step'] = int(cfg['step']) if int(cfg['step']) in (5, 10, 15, 30) else 10
+
+    def clamp(v, lo, hi, fallback):
+        try:
+            return max(lo, min(hi, int(v)))
+        except Exception:
+            return fallback
+    cfg['enabled'] = bool(cfg['enabled'])
+    cfg['hidesubs'] = bool(cfg['hidesubs'])
+    cfg['size'] = clamp(cfg['size'], 0, 2, DEFAULTS['size'])
+    cfg['ahead'] = clamp(cfg['ahead'], 0, 2, DEFAULTS['ahead'])
+    step = clamp(cfg['step'], 0, 999, DEFAULTS['step'])
+    cfg['step'] = step if step in STEPS else DEFAULTS['step']
     return cfg
 
 
 def save_config(cfg):
     os.makedirs(PROFILE, exist_ok=True)
-    tmp = CONFIG + '.part'
-    with open(tmp, 'w', encoding='utf-8') as f:
-        json.dump({k: cfg.get(k, DEFAULTS[k]) for k in DEFAULTS}, f, indent=1)
-    os.replace(tmp, CONFIG)
+    data = dict((k, cfg.get(k, DEFAULTS[k])) for k in DEFAULTS)
+    part = CONFIG + '.part'
+    with open(part, 'w', encoding='utf-8') as fh:
+        json.dump(data, fh, indent=1)
+    os.replace(part, CONFIG)
 
 
 def find_ffmpeg():
-    """(path, where) or ('', '')."""
-    for p in FFMPEG_TOOLS + [shutil.which('ffmpeg') or '']:
-        if p and os.path.isfile(p) and frames.runs(p):
-            return p, 'tools.ffmpeg-tools' if 'ffmpeg-tools' in p else 'system'
+    """(path, 'tools.ffmpeg-tools' | 'system') of a working ffmpeg, or ('', '')."""
+    seen = []
+    for c in CANDIDATES + (shutil.which('ffmpeg') or '',):
+        p = xbmcvfs.translatePath(c) if c.startswith('special://') else c
+        if not p or p in seen:
+            continue
+        seen.append(p)
+        if os.path.isfile(p) and grabber.ffmpeg_ok(p):
+            return p, ('tools.ffmpeg-tools' if 'ffmpeg-tools' in p else 'system')
     return '', ''
 
 
-def _secs(s):
+# ---------------------------------------------------------------------- reading the video
+class _LocalServer(object):
+    """Serves Kodi-only paths (smb://, nfs://, ...) to ffmpeg over http://127.0.0.1,
+    reading them through xbmcvfs, with byte ranges so ffmpeg can seek."""
+
+    def __init__(self):
+        self.port = 0
+        self.paths = {}
+        self._sock = None
+
+    def address(self, kodi_path):
+        if not self.port:
+            self._open()
+        key = hashlib.sha1(kodi_path.encode('utf-8', 'replace')).hexdigest()[:24]
+        self.paths[key] = kodi_path
+        return 'http://127.0.0.1:%d/%s' % (self.port, key)
+
+    def _open(self):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        s.bind(('127.0.0.1', 0))
+        s.listen(8)
+        s.settimeout(0.5)
+        self._sock, self.port = s, s.getsockname()[1]
+        th = threading.Thread(target=self._accept, name='abk-seekpreview-files')
+        th.daemon = True
+        th.start()
+
+    def _accept(self):
+        while not STOP.is_set():
+            try:
+                conn, _addr = self._sock.accept()
+            except socket.timeout:
+                continue
+            except OSError:
+                return
+            th = threading.Thread(target=self._answer, args=(conn,), name='abk-seekpreview-file')
+            th.daemon = True
+            th.start()
+
+    def _answer(self, conn):
+        try:
+            conn.settimeout(30)
+            head = b''
+            while b'\r\n\r\n' not in head and len(head) < 16384:
+                got = conn.recv(4096)
+                if not got:
+                    return
+                head += got
+            lines = head.split(b'\r\n')
+            parts = lines[0].decode('latin-1').split(' ')
+            key = parts[1].strip('/') if len(parts) > 1 else ''
+            rng = ''
+            for ln in lines[1:]:
+                name, _, val = ln.decode('latin-1').partition(':')
+                if name.strip().lower() == 'range':
+                    rng = val.strip()
+            path = self.paths.get(key)
+            if not path:
+                conn.sendall(b'HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\nConnection: close\r\n\r\n')
+                return
+            self._send(conn, path, rng)
+        except Exception:
+            pass
+        finally:
+            try:
+                conn.close()
+            except Exception:
+                pass
+
+    @staticmethod
+    def _send(conn, path, rng):
+        fh = xbmcvfs.File(path)
+        try:
+            total = fh.size()
+            m = re.match(r'bytes=(\d*)-(\d*)$', rng)
+            if m and (m.group(1) or m.group(2)):
+                if m.group(1):
+                    first = int(m.group(1))
+                    last = int(m.group(2)) if m.group(2) else total - 1
+                else:                               # "bytes=-N": the last N bytes
+                    first, last = max(0, total - int(m.group(2))), total - 1
+                last = min(last, total - 1)
+                status = '206 Partial Content'
+                extra = 'Content-Range: bytes %d-%d/%d\r\n' % (first, last, total)
+            else:
+                first, last, status, extra = 0, total - 1, '200 OK', ''
+            length = max(0, last - first + 1)
+            conn.sendall(('HTTP/1.1 %s\r\nAccept-Ranges: bytes\r\nContent-Length: %d\r\n%s'
+                          'Connection: close\r\n\r\n' % (status, length, extra)).encode('latin-1'))
+            fh.seek(first, 0)
+            while length > 0 and not STOP.is_set():
+                chunk = fh.readBytes(min(1 << 18, length))
+                if not chunk:
+                    break
+                conn.sendall(bytes(chunk))
+                length -= len(chunk)
+        finally:
+            fh.close()
+
+    def close(self):
+        if self._sock:
+            try:
+                self._sock.close()
+            except Exception:
+                pass
+            self._sock = None
+
+
+FILES = _LocalServer()
+
+
+def video_input(playing):
+    """Kodi's playing path -> (ffmpeg input, ffmpeg -headers text, streamed?).
+    The input is None when ffmpeg cannot read it (discs, live TV, DRM)."""
+    url, _, options = playing.partition('|')
+    if url.startswith(('http://', 'https://')):
+        headers = []
+        for pair in options.split('&'):
+            if '=' in pair:
+                name, value = pair.split('=', 1)
+                headers.append('%s: %s\r\n' % (unquote_plus(name), unquote_plus(value)))
+        return url, ''.join(headers), True
+    if os.path.isfile(url):
+        return url, '', False
+    if re.match(r'(smb|nfs|ftp|sftp|dav|davs|upnp|special|zip|rar)://', url) and xbmcvfs.exists(url):
+        return FILES.address(url), '', False
+    return None, '', False
+
+
+# ---------------------------------------------------------------------- the card
+def _bar():
+    if (xbmc.getSkinDir() == 'skin.arctic.fuse.3'
+            and xbmc.getCondVisibility('Skin.HasSetting(abk.lucentplayer)')):
+        return BAR_LUCENT
+    return BAR_OTHER
+
+
+def card_position(fraction, size, osd_open):
+    """Top-left corner of the card, centred over ``fraction`` of the seek bar."""
+    w, h = CARD_SIZES[size]
+    card_w, card_h = w + 2 * CARD_PAD, h + 2 * CARD_PAD + CARD_TIME_H
+    left, right, base_closed, base_open = _bar()
+    fraction = min(1.0, max(0.0, fraction))
+    x = int(left + fraction * (right - left) - card_w / 2.0)
+    x = min(max(x, left), right - card_w)
+    y = (base_open if osd_open else base_closed) - CARD_GAP - card_h
+    return x, max(4, y)
+
+
+class Card(object):
+    """The glass card: background, picture, rounded-corner mask, time label."""
+
+    def __init__(self):
+        self.window = None
+        self.size = None
+        self.image = ''
+
+    def show(self, image, label, fraction, size, osd_open):
+        if self.window is not None and size != self.size:
+            self.hide()
+        w, h = CARD_SIZES[size]
+        x, y = card_position(fraction, size, osd_open)
+        if self.window is None:
+            name = CARD_NAMES[size]
+            win = xbmcgui.WindowDialog()
+            self.back = xbmcgui.ControlImage(x, y, w + 2 * CARD_PAD, h + 2 * CARD_PAD + CARD_TIME_H,
+                                             os.path.join(MEDIA, 'card_%s.png' % name))
+            self.pic = xbmcgui.ControlImage(x + CARD_PAD, y + CARD_PAD, w, h, image, aspectRatio=0)
+            self.mask = xbmcgui.ControlImage(x + CARD_PAD, y + CARD_PAD, w, h,
+                                             os.path.join(MEDIA, 'corners_%s.png' % name))
+            self.time = xbmcgui.ControlLabel(x + CARD_PAD, y + CARD_PAD + h + 2, w, CARD_TIME_H - 4,
+                                             label, font='font13', textColor='FFFFFFFF',
+                                             alignment=0x00000002 | 0x00000004)
+            win.addControls([self.back, self.pic, self.mask, self.time])
+            win.show()
+            self.window, self.size, self.image = win, size, image
+            return
+        self.back.setPosition(x, y)
+        self.pic.setPosition(x + CARD_PAD, y + CARD_PAD)
+        self.mask.setPosition(x + CARD_PAD, y + CARD_PAD)
+        self.time.setPosition(x + CARD_PAD, y + CARD_PAD + h + 2)
+        if image != self.image:
+            self.pic.setImage(image, False)
+            self.image = image
+        self.time.setLabel(label)
+
+    def hide(self):
+        if self.window is not None:
+            try:
+                self.window.close()
+            except Exception:
+                pass
+        self.window, self.image = None, ''
+
+
+# ---------------------------------------------------------------------- diagnostics
+def _scrub(text):
+    text = re.sub(r'(?:https?|smb|nfs)://\S+', '<url>', text)
+    return re.sub(r'(bearer|token|apikey|api_key)([=: +]+)\S+', r'\1 ***', text, flags=re.I)
+
+
+def _make_reporter():
+    state = {'lowmem': False, 'fails': 0}
+
+    def report(kind, text):
+        if kind == 'lowmem':
+            if state['lowmem']:
+                return
+            state['lowmem'] = True
+        elif kind == 'fail':
+            state['fails'] += 1
+            if state['fails'] > 3:
+                return                      # the total is in "video done"
+        flat = ' | '.join(r.strip() for r in _scrub(text).splitlines() if r.strip())
+        _log('%s: %s' % (kind, flat), xbmc.LOGWARNING if kind in ('fail', 'lowmem') else xbmc.LOGINFO)
+    return report
+
+
+def _seconds(label):
     try:
-        n = 0
-        for part in s.strip().split(':'):
-            n = n * 60 + int(part)
-        return n
+        total = 0
+        for piece in label.strip().split(':'):
+            total = total * 60 + int(piece)
+        return total
     except Exception:
         return -1
 
 
-# ffmpeg can't open smb:// or nfs://, Kodi can: a tiny HTTP server on 127.0.0.1
-# serves the file through xbmcvfs with Range support (from the original add-on).
-PROXY = {'port': 0, 'files': {}, 'srv': None}
+# ---------------------------------------------------------------------- the watcher
+class _Watcher(object):
+    def __init__(self, monitor):
+        self.monitor = monitor
+        self.player = xbmc.Player()
+        self.card = Card()
+        self.cfg = load_config()
+        self.cfg_stamp = self._stamp()
+        self.ffmpeg = ''
+        self.looked_for_ffmpeg = False
+        self.grab = None
+        self.playing = None
+        self.last_shown = 0.0
+        self.subs_hidden = False
+        self.target, self.target_at = 0, 0.0
+        self._check_ffmpeg()
 
-
-def _proxy():
-    if PROXY['port']:
-        return PROXY['port']
-    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-
-    class H(BaseHTTPRequestHandler):
-        def log_message(self, *a):
-            pass
-
-        def do_GET(self):
-            path = PROXY['files'].get(self.path.strip('/'))
-            if not path:
-                self.send_error(404)
-                return
-            f = xbmcvfs.File(path)
-            try:
-                size = f.size()
-                m = re.match(r'bytes=(\d+)-(\d*)', self.headers.get('Range', ''))
-                a = int(m.group(1)) if m else 0
-                b = int(m.group(2)) if m and m.group(2) else size - 1
-                self.send_response(206 if m else 200)
-                self.send_header('Accept-Ranges', 'bytes')
-                self.send_header('Content-Length', str(b - a + 1))
-                if m:
-                    self.send_header('Content-Range', 'bytes %d-%d/%d' % (a, b, size))
-                self.end_headers()
-                f.seek(a, 0)
-                left = b - a + 1
-                while left > 0 and not STOP.is_set():
-                    d = f.readBytes(min(262144, left))
-                    if not d:
-                        break
-                    self.wfile.write(d)
-                    left -= len(d)
-            except Exception:
-                pass
-            finally:
-                f.close()
-
-    srv = ThreadingHTTPServer(('127.0.0.1', 0), H)
-    srv.daemon_threads = True
-    threading.Thread(target=srv.serve_forever, kwargs={'poll_interval': 0.2},
-                     name='abk-seekpreview-proxy', daemon=True).start()
-    PROXY['port'], PROXY['srv'] = srv.server_address[1], srv
-    return PROXY['port']
-
-
-def source(f):
-    """Playing file -> (ffmpeg input, http headers, streamed?). (None, ..) when
-    ffmpeg can't read it (discs, PVR, DRM add-ons)."""
-    url, _, hdr = f.partition('|')
-    if re.match(r'https?://', url):
-        # Kodi's "|Name=Value&..." headers are URL-encoded (Authorization=Bearer+eyJ...).
-        from urllib.parse import unquote_plus
-        h = ''.join('%s: %s\r\n' % tuple(unquote_plus(p) for p in x.split('=', 1))
-                    for x in hdr.split('&') if '=' in x)
-        return url, h, True
-    if os.path.isfile(url):
-        return url, '', False
-    if re.match(r'(smb|nfs|ftp|sftp|dav|davs|upnp|special|zip|rar)://', url) and xbmcvfs.exists(url):
-        tok = hashlib.md5(url.encode('utf8', 'replace')).hexdigest()
-        PROXY['files'][tok] = url
-        return 'http://127.0.0.1:%d/%s' % (_proxy(), tok), '', False
-    return None, '', False
-
-
-def _fit():
-    if xbmc.getSkinDir() == 'skin.arctic.fuse.3' and xbmc.getCondVisibility('Skin.HasSetting(abk.lucentplayer)'):
-        return LUCENT
-    return GENERIC
-
-
-def spot(frac, size, osd):
-    """Top-left corner of the card, centred over the seek position."""
-    w, h = SIZES[size]
-    cw, ch = w + 2 * PAD, h + 2 * PAD + TIME_H
-    fit = _fit()
-    bottom = fit['bottom_osd'] if osd else fit['bottom']
-    x = int(fit['x0'] + max(0.0, min(1.0, frac)) * (fit['x1'] - fit['x0']) - cw / 2.0)
-    x = max(fit['x0'], min(fit['x1'] - cw, x))
-    y = bottom - GAP - ch
-    return x, max(4, y)
-
-
-class Overlay(object):
-    """Glass card: background, frame, rounded corners over the frame, time."""
-
-    def __init__(self):
-        self.win = None
-        self.shown = ''
-        self.size = None
-
-    def show(self, img, text, frac, size, osd):
-        w, h = SIZES[size]
-        x, y = spot(frac, size, osd)
-        if self.win and self.size != size:
-            self.hide()
-        if not self.win:
-            n = NAMES[size]
-            self.win = xbmcgui.WindowDialog()
-            self.bg = xbmcgui.ControlImage(x, y, w + 2 * PAD, h + 2 * PAD + TIME_H,
-                                           os.path.join(MEDIA, 'card_%s.png' % n))
-            self.img = xbmcgui.ControlImage(x + PAD, y + PAD, w, h, img, aspectRatio=0)
-            self.corners = xbmcgui.ControlImage(x + PAD, y + PAD, w, h,
-                                                os.path.join(MEDIA, 'corners_%s.png' % n))
-            self.lab = xbmcgui.ControlLabel(x + PAD, y + PAD + h + 2, w, TIME_H - 4, text,
-                                            font='font13', textColor='FFFFFFFF',
-                                            alignment=0x2 | 0x4)
-            self.win.addControls([self.bg, self.img, self.corners, self.lab])
-            self.win.show()
-            self.shown, self.size = img, size
-            return
-        self.bg.setPosition(x, y)
-        self.img.setPosition(x + PAD, y + PAD)
-        self.corners.setPosition(x + PAD, y + PAD)
-        self.lab.setPosition(x + PAD, y + PAD + h + 2)
-        if img != self.shown:
-            self.img.setImage(img, False)
-            self.shown = img
-        self.lab.setLabel(text)
-
-    def hide(self):
-        if self.win:
-            try:
-                self.win.close()
-            except Exception:
-                pass
-            self.win = None
-            self.shown = ''
-
-
-def _clean(text):
-    text = re.sub(r'(https?|smb|nfs)://\S+', '<url>', text)
-    return re.sub(r'(Bearer|token|apikey|api_key)[=: +]+\S+', r'\1 ***', text, flags=re.I)
-
-
-def _reporter():
-    seen = set()
-
-    def report(kind, text):
-        if kind == 'lowmem':
-            if 'lowmem' in seen:
-                return
-            seen.add('lowmem')
-        if kind == 'fail':
-            n = sum(1 for x in seen if x.startswith('fail')) + 1
-            seen.add('fail%d' % n)
-            if n > 3:
-                return              # the count is in "video done"
-        _log('%s: %s' % (kind, ' | '.join(l.strip() for l in _clean(text).splitlines() if l.strip())),
-             xbmc.LOGWARNING if kind in ('fail', 'lowmem') else xbmc.LOGINFO)
-    return report
-
-
-def _loop(monitor):
-    player, box = xbmc.Player(), Overlay()
-    ff, where = '', ''
-    ff_checked = False
-    cfg, cfg_mtime = load_config(), None
-    gen, cur, last, root, subs = None, None, 0, None, False
-    seek_t, seek_at = 0, 0
-
-    def drop():
-        nonlocal gen, cur
-        if gen:
-            gen.halt()
-        gen, cur = None, None
-
-    def clear():
-        nonlocal subs, last
-        box.hide()
-        last = 0
-        if subs:
-            subs = False
-            try:
-                player.showSubtitles(True)
-            except Exception:
-                pass
-
-    while not monitor.abortRequested():
-        now = time.time()
+    @staticmethod
+    def _stamp():
         try:
-            m = os.path.getmtime(CONFIG)
+            return os.path.getmtime(CONFIG)
         except OSError:
-            m = None
-        if m != cfg_mtime:
-            cfg_mtime, cfg = m, load_config()
-            if cfg['enabled'] and not ff_checked:
-                ff, where = find_ffmpeg()
-                ff_checked = True
-                _log('ffmpeg: %s' % ('%s (%s)' % (ff, where) if ff else
-                                      'none found (install FFmpeg Tools) - no previews'),
-                     xbmc.LOGINFO if ff else xbmc.LOGWARNING)
-            if not cfg['enabled']:
-                drop()
-                clear()
-        if not (cfg['enabled'] and ff and player.isPlayingVideo()
-                and not xbmc.getCondVisibility('Pvr.IsPlayingTV')):
-            if gen:
-                drop()
-                clear()
-                if root == RAM and RAM != DISK:
-                    shutil.rmtree(RAM, True)
-            monitor.waitForAbort(2 if not cfg['enabled'] else 1)
-            continue
-        root = RAM
+            return None
+
+    def _check_ffmpeg(self):
+        if self.cfg['enabled'] and not self.looked_for_ffmpeg:
+            self.looked_for_ffmpeg = True
+            self.ffmpeg, where = find_ffmpeg()
+            if self.ffmpeg:
+                _log('ffmpeg: %s (%s)' % (self.ffmpeg, where))
+            else:
+                _log('ffmpeg: none found (install FFmpeg Tools) - no previews', xbmc.LOGWARNING)
+
+    def _end_video(self):
+        if self.grab:
+            self.grab.stop()
+            _log('video done: %d pictures made, %d failed' % (self.grab.made, self.grab.failed))
+        self.grab = None
+
+    def _hide(self):
+        self.card.hide()
+        self.last_shown = 0.0
+        if self.subs_hidden:
+            self.subs_hidden = False
+            try:
+                self.player.showSubtitles(True)
+            except Exception:
+                pass
+
+    def _new_video(self, playing):
+        self._end_video()
+        self._hide()
+        self.playing = playing
+        if not playing or playing.endswith('dummy.mp4'):
+            return
+        src, headers, streamed = video_input(playing)
+        if not src:
+            _log('no preview for this video (disc, live TV, DRM or unknown source)')
+            return
+        cfg = self.cfg
+        key = hashlib.sha1(('%d|%d|%s' % (GRAB_WIDTH, cfg['step'], playing.partition('|')[0]))
+                           .encode('utf-8', 'replace')).hexdigest()[:16]
+        ahead = cfg['ahead'] > 0
+        span = SPAN_FAR if cfg['ahead'] == 2 else SPAN_NEAR
+        slots = ((3 if cfg['ahead'] == 2 else 2) if streamed else 1) if ahead else 0
+        grabber.keep_recent(RAM, key)
+        self.grab = grabber.Grabber(self.ffmpeg, src, headers, os.path.join(RAM, key), step=cfg['step'],
+                                    width=GRAB_WIDTH, streamed=streamed, stop_event=STOP,
+                                    min_free=MIN_FREE, settle=20.0, span=span, slots=slots,
+                                    report=_make_reporter())
+        self.grab.start()
+        if not ahead:
+            how = 'off'
+        elif not streamed:
+            how = 'whole file'
+        else:
+            how = '%d min each way' % (span // 60)
+        _log('new video: %s, pictures ahead %s' % ('stream' if streamed else 'file', how))
+
+    def _active(self):
+        return (self.cfg['enabled'] and self.ffmpeg and self.player.isPlayingVideo()
+                and not xbmc.getCondVisibility('Pvr.IsPlayingTV'))
+
+    def tick(self):
+        """One pass; returns how long to wait before the next."""
+        now = time.time()
+        stamp = self._stamp()
+        if stamp != self.cfg_stamp:
+            self.cfg_stamp, self.cfg = stamp, load_config()
+            self._check_ffmpeg()
+            if not self.cfg['enabled']:
+                self._end_video()
+                self._hide()
+                self.playing = None
+        if not self._active():
+            if self.grab:
+                self._end_video()
+                self._hide()
+                if RAM != DISK:
+                    shutil.rmtree(RAM, ignore_errors=True)
+            self.playing = None
+            return 1.0 if self.cfg['enabled'] else 2.0
         try:
-            f = player.getPlayingFile()
+            playing = self.player.getPlayingFile()
         except Exception:
-            f = ''
-        if f != cur:
-            if gen:
-                gen.halt()
-                _log('video done: %d frames made, %d failed' % (gen.made, gen.failed))
-            gen, cur = None, f
-            clear()
-            url, hdr, remote = source(f) if f and not f.endswith('dummy.mp4') else (None, '', False)
-            if url:
-                key = hashlib.md5(('%d:%d:%s' % (FRAME_W, cfg['step'], f.partition('|')[0]))
-                                  .encode('utf8', 'replace')).hexdigest()[:16]
-                ahead = cfg['ahead'] > 0
-                gen = frames.Frames(ff, url, hdr, os.path.join(root, key), cfg['step'], FRAME_W,
-                                    remote, STOP, low_mem=LOW_MEM, wait=20 if ahead else 1e12)
-                gen.span_remote = SPAN_FULL if cfg['ahead'] == 2 else SPAN_NEARBY
-                gen.workers = (3 if cfg['ahead'] == 2 else 2) if remote else 1   # 4.8.15
-                gen.report = _reporter()
-                frames.tidy(root, key)
-                gen.start()
-                _log('new video: %s, frames ahead %s' % (
-                    'stream' if remote else 'file',
-                    'off' if not ahead else ('whole file' if not remote else
-                                             '%d min each way' % (gen.span_remote // 60))))
-            elif f and not f.endswith('dummy.mp4'):
-                _log('no preview for this video (disc, live TV, DRM or unknown source)')
-        if not gen:
-            monitor.waitForAbort(0.5)
-            continue
+            playing = ''
+        if playing != self.playing:
+            self._new_video(playing)
+        g = self.grab
+        if not g:
+            return 0.5
         try:
-            gen.dur = int(player.getTotalTime())
-            # frames are made outward from the spot being skipped to while the
-            # person is skipping, else from where the film is playing
-            gen.around = seek_t if now - seek_at < SEEK_FOCUS else int(player.getTime())
+            g.duration = int(self.player.getTotalTime())
+            g.centre = self.target if now - self.target_at < FOCUS_HOLD else int(self.player.getTime())
         except Exception:
             pass
         if xbmc.getCondVisibility('Player.Seeking'):
             label = xbmc.getInfoLabel('Player.SeekTime')
-            t = _secs(label)
+            t = _seconds(label)
             if t >= 0:
-                seek_t, seek_at = t, now
-                gen.ask(t)
-                img = gen.nearest(t, reach=gen.step * 2) or WAIT_IMG   # exact spot or one step off
-                if img:
-                    if (cfg['hidesubs'] and not subs
-                            and xbmc.getCondVisibility('VideoPlayer.SubtitlesEnabled')):
-                        try:
-                            player.showSubtitles(False)
-                            subs = True
-                        except Exception:
-                            pass
-                    box.show(img, label, t / float(gen.dur) if gen.dur else 0.5, cfg['size'],
-                             bool(xbmc.getCondVisibility('Window.IsActive(videoosd)')))
-                last = now
-        elif last and now - last > 0.4:
-            clear()
-        monitor.waitForAbort(0.1)
+                self.target, self.target_at = t, now
+                g.want(t)
+                image = g.picture(t, reach=g.step * 2) or WAIT_IMG
+                if (self.cfg['hidesubs'] and not self.subs_hidden
+                        and xbmc.getCondVisibility('VideoPlayer.SubtitlesEnabled')):
+                    try:
+                        self.player.showSubtitles(False)
+                        self.subs_hidden = True
+                    except Exception:
+                        pass
+                fraction = (t / float(g.duration)) if g.duration else 0.5
+                self.card.show(image, label, fraction, self.cfg['size'],
+                               bool(xbmc.getCondVisibility('Window.IsActive(videoosd)')))
+                self.last_shown = now
+        elif self.last_shown and now - self.last_shown > 0.4:
+            self._hide()
+        return 0.1
 
-    STOP.set()
-    if gen:
-        gen.halt()
-        gen.join(2)
-    clear()
-    if PROXY['srv']:
-        try:
-            PROXY['srv'].shutdown()
-            PROXY['srv'].server_close()
-        except Exception:
-            pass
+    def close(self):
+        STOP.set()
+        g = self.grab
+        self._end_video()
+        if g:
+            g.join(2)
+        self._hide()
+        FILES.close()
 
 
 def _run(monitor):
+    watcher = None
     try:
-        _loop(monitor)
+        watcher = _Watcher(monitor)
+        while not monitor.abortRequested():
+            if monitor.waitForAbort(watcher.tick()):
+                break
     except Exception:
         import traceback
         _log('stopped after an error:\n%s' % traceback.format_exc(), xbmc.LOGERROR)
+    finally:
+        if watcher:
+            try:
+                watcher.close()
+            except Exception:
+                pass
 
 
 def start(monitor):
     """Called once by the AB Tools service. Idles while Seek Preview is off."""
-    if _THREAD[0] and _THREAD[0].is_alive():
+    th = _WORKER['thread']
+    if th is not None and th.is_alive():
         return
-    t = threading.Thread(target=_run, args=(monitor,), name='abk-seekpreview', daemon=True)
-    _THREAD[0] = t
-    t.start()
+    th = threading.Thread(target=_run, args=(monitor,), name='abk-seekpreview')
+    th.daemon = True
+    _WORKER['thread'] = th
+    th.start()
     _log('engine started (%s)' % ('on' if load_config()['enabled'] else 'off'))

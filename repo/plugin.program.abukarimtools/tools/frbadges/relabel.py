@@ -1,5 +1,5 @@
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """Redraw an FR badge with another label, keeping its icon, pill and colours
 (used for the aspect-ratio badges and the compact Lucent Player badges of the
 styles added in 4.8.75). Geometry measured on each style's SDR badge."""

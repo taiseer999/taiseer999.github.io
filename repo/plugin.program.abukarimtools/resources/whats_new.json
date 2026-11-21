@@ -2,6 +2,28 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
+   "v": "4.12.1",
+   "en": [
+    "Najd Smart Subtitles is now your Arabic subtitle service: Arabic subtitles from three sites, fixed, timed to the audio and proofread by AI, or the video's own subtitle translated when none exists. Mods > Najd Smart Subtitles.",
+    "On Dex Hub videos Najd lets Dex Hub's own subtitle go first, and it uses the AI key you already gave Dex Hub."
+   ],
+   "ar": [
+    "أصبحت ترجمة نجد الذكية خدمة الترجمة العربية لديك: ترجمات عربية من ثلاثة مواقع، مصحّحة ومضبوطة على الصوت ومدقّقة بالذكاء الاصطناعي، أو تُترجَم الترجمة المدمجة في الفيديو إن لم توجد ترجمة. التخصيصات > ترجمة نجد الذكية.",
+    "في فيديوهات Dex Hub تترك نجد الأولوية لترجمة Dex Hub نفسها، وتستخدم مفتاح الذكاء الاصطناعي الذي أدخلته في Dex Hub."
+   ]
+  },
+  {
+   "v": "4.12.0",
+   "en": [
+    "New licence: AB Tools stays free for your own use; sharing it elsewhere, in whole or in part, now needs permission (LICENSE.txt).",
+    "Seek Preview, the CPU Benchmark and the Lucent Player Statistics window were rewritten; they work as before."
+   ],
+   "ar": [
+    "ترخيص جديد: يبقى AB Tools مجانيًّا لاستخدامك الشخصي، أما نشره في مكان آخر كليًّا أو جزئيًّا فيحتاج الآن إلى إذن (LICENSE.txt).",
+    "أُعيدت كتابة معاينة التقديم واختبار أداء المعالج ونافذة الإحصاءات في Lucent Player، وهي تعمل كما كانت."
+   ]
+  },
+  {
    "v": "4.11.9",
    "en": [
     "The AB Tools service starts with Kodi again, so patches are checked at boot instead of the first time you open Search All or the menu."

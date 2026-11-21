@@ -1,3 +1,59 @@
+v4.12.1  (2026-11-21)
+- Najd Smart Subtitles (service.subtitles.najdsmart by Ali, MIT, used with
+  his permission) is now AB Tools' Arabic subtitle service. AB Tools carries
+  its Piers edition (resources/najdsmart/service.subtitles.najdsmart-
+  2.8.3.1.zip) and resources/lib/najd_subs.py:
+  * boot (background, after first-run setup, never during playback):
+    installs / updates the bundled zip when Najd is missing or older,
+    enables it, and the first time only makes it Kodi's subtitle service for
+    movies and episodes (subtitles.movie / subtitles.tv) with Arabic in the
+    subtitle languages; the services it replaced are kept. A later change in
+    Kodi's own settings is never overridden. On CoreELEC it also installs
+    tools.ffmpeg-tools once (Najd's audio timing needs ffmpeg).
+  * Mods > Najd Smart Subtitles: default on / back to the previous
+    service, setup wizard, Najd settings, connection test, reinstall from
+    AB Tools, FFmpeg tools.
+- Najd 2.8.3.1 (Piers edition) against 2.8.3:
+  * Dex Hub videos (dexhub_item): waits up to 30 s for Dex Hub's own
+    subtitle (DexSubtitles / AutoSync) before searching, so the subtitle on
+    screen is not swapped twice.
+  * ids for add-on streams: Dex Hub's dexhub.sub.* Home properties (series
+    ids, season / episode) and script.trakt.ids (Fen Light, Umbrella, POV,
+    Seren) fill what the info tag lacks, so SubDL / OpenSubtitles /
+    SubSource search by IMDb id instead of by title.
+  * AI keys: without its own key Najd uses the one already set in Dex Hub
+    (addon_data/plugin.video.dexhub/ai.json); its own key always wins.
+  * ffmpeg: also looks in special://home/addons/tools.ffmpeg-tools.
+  * audio timing on Python 3.12+ (no audioop): sum of squares through
+    math.sumprod.
+  * its first-run setup wizard opens in its own thread and never over AB
+    Tools' first-run setup or a playing video.
+  * the Windows ffmpeg.exe (3.4 MB) is left out; LICENSE.txt added.
+
+v4.12.0  (2026-11-21)
+- Licence: from this version AB Tools is under its own licence
+  (LICENSE.txt): free to download, install and use for personal,
+  non-commercial use; redistributing it in whole or in part, copying its
+  code or artwork into another project, publishing a modified version or
+  selling it needs written permission. Versions before 4.12.0 stay under the
+  GPL-3.0 they were published with. Parts written by others keep their own
+  licences (THIRD-PARTY-NOTICES.txt); the GPL text moved to
+  resources/licenses/GPL-3.0.txt. Every AB Tools source file now carries
+  "SPDX-License-Identifier: LicenseRef-ABTools".
+- Code that came from GPL add-ons is rewritten from scratch, so none of
+  AB Tools' own modules is built from it:
+  * Seek Preview (was based on service.seekpreview by easter478): new
+    picture maker resources/lib/seek_preview/grabber.py (one priority list,
+    one thread kept for the spot being skipped to) and new engine.py (own
+    local file server for smb:// / nfs://, same card, same settings file).
+  * CPU Benchmark (was a port of script.pystone.benchmark by Lunatixz): new
+    window and meters; Pystone itself is CPython's own (PSF License).
+  * AF3: Lucent Player - the Statistics window script (lucent_playerinfo.py)
+    and the Back key (lucent_back.py) are new code filling the same
+    properties; the unused sleep timer script lucent_sleep.py is removed.
+- The Lucent Player skin files (resources/lucent_player/) and the tools that
+  make them stay GPL as before, as separate files.
+
 v4.11.9  (2026-11-20)
 - addon.xml: the xbmc.service extension was commented out again (same
   regression as v1.9.1 / v2.3 / 3.1.0.27 / 3.1.7 / 3.3.3 / 4.8.67) -

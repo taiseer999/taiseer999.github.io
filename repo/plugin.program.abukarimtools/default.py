@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 import sys
 import os
 from urllib.parse import parse_qsl
@@ -59,6 +59,8 @@ ACTION_MODES = {'skin_switch', 'settings_view', 'first_run', 'abukarimwizard',
                 'search_folders',
                 # 4.11.0: Search All - Usenet (dialogs only)
                 'search_usenet',
+                # 4.12.1: Najd Smart Subtitles (dialogs only)
+                'najd_subs',
                 # 4.6.14: AF3 Streaming Services (dialogs only)
                 'streaming_rows',
                 # 4.6.8: AF3 Lucent Look (Off / Glass / AMOLED picker)
@@ -586,6 +588,9 @@ def router():
     elif mode == 'search_usenet':           # 4.11.0
         from resources.lib import usenet_stream
         usenet_stream.run()
+    elif mode == 'najd_subs':               # 4.12.1
+        from resources.lib import najd_subs
+        najd_subs.run()
 
     elif mode == 'af3_discmenu':
         from resources.lib import af3_discmenu_toggle

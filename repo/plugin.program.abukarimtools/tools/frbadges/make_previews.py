@@ -1,4 +1,5 @@
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """Cards for the "AF3: OSD Flags Style" picker (4.9.1): 560x270, rounded top
 corners, a small player mock-up (title + plot lines) with a row of that
 style's Lucent Player badges. Usage: make_previews.py FRBADGES_RESOURCES OUT"""

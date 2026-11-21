@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """
 Single source of truth for all user-facing strings in ABUKARIM TOOLS.
 
@@ -1160,5 +1160,26 @@ STRINGS = {
     32345: ('The test failed. Keep it anyway?', 'فشل الاختبار. هل تريد الإبقاء عليه رغم ذلك؟'),
     32346: ('Memory cache in MB (32 to 1024)', 'ذاكرة التخزين المؤقت بالميغابايت (من 32 إلى 1024)'),
     32347: ('Plain (port 119)', 'دون تشفير (المنفذ 119)'),
+    # ---- 4.12.1: Najd Smart Subtitles (najd_subs.py, 32348-32367) ----
+    32348: ('Najd Smart Subtitles', 'ترجمة نجد الذكية'),
+    32349: ('Arabic subtitles from SubDL, OpenSubtitles and SubSource, with the encoding and right-to-left punctuation fixed, the timing matched to the audio and the text proofread by AI; when no Arabic subtitle exists it translates the one inside the video. AB Tools installs it, keeps it up to date and makes it Kodi\'s subtitle service. By Ali, MIT licence.', 'ترجمات عربية من SubDL وOpenSubtitles وSubSource، مع تصحيح الترميز وعلامات الترقيم من اليمين إلى اليسار، وضبط التوقيت على الصوت، وتدقيق النص بالذكاء الاصطناعي؛ وإن لم توجد ترجمة عربية ترجمت الترجمة المدمجة في الفيديو. يثبّتها AB Tools ويحدّثها ويجعلها خدمة الترجمة في Kodi. من تطوير علي، برخصة MIT.'),
+    32350: ('Default service', 'الخدمة الافتراضية'),
+    32351: ('Installed', 'مثبّتة'),
+    32352: ('Not installed', 'غير مثبّتة'),
+    32353: ('Kodi subtitle service: %s', 'خدمة الترجمة في Kodi: %s'),
+    32354: ('Make Najd the default subtitle service', 'جعل نجد خدمة الترجمة الافتراضية'),
+    32355: ('Go back to the previous subtitle service', 'العودة إلى خدمة الترجمة السابقة'),
+    32356: ('Setup wizard (subtitle sites and AI keys)', 'معالج الإعداد (مواقع الترجمة ومفاتيح الذكاء الاصطناعي)'),
+    32357: ('Najd settings', 'إعدادات نجد'),
+    32358: ('Test the connections', 'اختبار الاتصالات'),
+    32359: ('Install / update Najd from AB Tools', 'تثبيت نجد أو تحديثها من AB Tools'),
+    32360: ('Najd %s is installed', 'ثُبّتت نجد %s'),
+    32361: ('Najd could not be installed', 'تعذّر تثبيت نجد'),
+    32362: ('Najd is now the default subtitle service', 'أصبحت نجد خدمة الترجمة الافتراضية'),
+    32363: ('The previous subtitle service is back', 'عادت خدمة الترجمة السابقة'),
+    32364: ('None', 'لا شيء'),
+    32365: ('Install FFmpeg tools (to time subtitles to the audio)', 'تثبيت أدوات FFmpeg (لضبط توقيت الترجمة على الصوت)'),
+    32366: ('FFmpeg tools are installed', 'ثُبّتت أدوات FFmpeg'),
+    32367: ('FFmpeg tools could not be installed', 'تعذّر تثبيت أدوات FFmpeg'),
     32217: ('AB Tools in glass: white icons with no background and a see-through window.', 'أدوات AB بمظهر زجاجي: أيقونات بيضاء بلا خلفية ونافذة شفافة.'),
 }

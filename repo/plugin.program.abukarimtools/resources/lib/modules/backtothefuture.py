@@ -1,4 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+# Kodi helper module, kept only for resources/lib/modules/speedtest.py (a separate script run with RunScript).
+# GPL-3.0-or-later, see resources/licenses/GPL-3.0.txt. Not covered by the AB Tools licence.
 
 import sys
 

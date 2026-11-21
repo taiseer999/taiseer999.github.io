@@ -1,4 +1,7 @@
 #! /usr/bin/env python3
+# SPDX-License-Identifier: PSF-2.0
+# The Pystone benchmark as shipped with CPython (Lib/test/pystone.py), unchanged.
+# Python Software Foundation License 2 - see THIRD-PARTY-NOTICES.txt. Not covered by the AB Tools licence.
 
 """
 "PYSTONE" Benchmark Program

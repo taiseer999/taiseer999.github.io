@@ -1,14 +1,16 @@
-AB Tools (plugin.program.abukarimtools) - third-party parts
-===========================================================
+AB Tools (plugin.program.abukarimtools) - parts written by others
+=================================================================
 
-AB Tools is free software under the GNU General Public License, version 3
-or (at your option) any later version - see LICENSE.txt. That licence covers
-the code and files written for AB Tools.
+AB Tools' own code, artwork and texts are under the AB Tools licence
+(LICENSE.txt; all rights reserved, personal use only) from version 4.12.0.
 
 The parts below were written by others. Each keeps its own licence and
-copyright notice; they are listed here as the licences ask. Where a part is
-under a licence that is not the GPL, AB Tools ships it beside its own code
-(as a separate work) and its terms still apply to it.
+copyright notice, listed here as the licences ask; the AB Tools licence does
+not cover them and does not limit what their licences allow. They sit beside
+AB Tools' own code as separate works: none of AB Tools' own modules is built
+from them.
+
+The GNU GPL v3 text for the GPL parts: resources/licenses/GPL-3.0.txt
 
 
 1. Code bundled in AB Tools
@@ -19,21 +21,21 @@ resources/lib/vendor/segno/
     Copyright (c) 2016 - 2019 Lars Heuer - Semagia
     BSD 3-Clause licence - see resources/lib/vendor/segno/LICENSE
 
-resources/lib/seek_preview/frames.py, engine.py (based on)
-    service.seekpreview 1.2.0 by easter478
-    https://github.com/easter478/kodi-seek-preview
-    GPL-3.0-or-later - see resources/lib/seek_preview/LICENSE.txt
+resources/lib/modules/pystone.py
+    The Pystone benchmark (Reinhold P. Weicker; Python version by Guido van
+    Rossum) as shipped with CPython, unchanged.
+    Copyright (c) 2001-2026 Python Software Foundation; All Rights Reserved.
+    Python Software Foundation License Version 2:
+    https://docs.python.org/3/license.html
+    (AB Tools' CPU Benchmark, resources/lib/cpu_benchmark.py, is AB Tools'
+    own code and only calls it.)
 
-resources/lib/modules/speedtest.py
-    speedtest-cli, Copyright 2012-2018 Matt Martz
-    Apache License 2.0 (header in the file)
-
-resources/lib/modules/pystone.py, resources/lib/cpu_benchmark.py (port)
-    PYSTONE benchmark (Reinhold P. Weicker, Python version by the Python
-    developers), via script.pystone.benchmark 1.1.8 by Lunatixz, GPLv3
-
-resources/lib/modules/backtothefuture.py
-    GPL-3.0-or-later (header in the file)
+resources/lib/modules/speedtest.py, resources/lib/modules/backtothefuture.py
+    speedtest-cli, Copyright 2012-2018 Matt Martz, Apache License 2.0
+    (header in the file; https://www.apache.org/licenses/LICENSE-2.0), with
+    Kodi changes (progress dialog, result picture) from Kodi wizard add-ons,
+    and its helper backtothefuture.py, GPL-3.0-or-later. Both run as a
+    separate script (RunScript) and are not imported by AB Tools' own code.
 
 resources/lib/af3_trailers/imdb.py (port)
     From Dex Hub homeui/trailers.py 5.10.104 (a version released under the
@@ -50,17 +52,31 @@ resources/lib/af3_trailers/imdb.py (port)
       portions of the Software.
       THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 
+resources/najdsmart/service.subtitles.najdsmart-2.8.3.1.zip
+    Najd Smart Subtitles / ترجمة نجد الذكية 2.8.3 by علي (Ali), with the
+    Piers edition changes (2.8.3.1) made with the author's permission.
+    A separate add-on that AB Tools installs as it is (resources/lib/
+    najd_subs.py only installs it and changes Kodi settings; it imports none
+    of its code). MIT License - the full text is LICENSE.txt inside the zip;
+    the permission and warranty notice above (Dex Hub) is the same MIT text.
+    The AB Tools licence does not cover it.
+
 
 2. Ports from Lucent by djdirty60 (GPL-2.0-or-later)
 ----------------------------------------------------
 https://github.com/djdirty60/Lucent - distributed here under GPL-3.0-or-later,
-as GPL-2.0-or-later allows.
+as GPL-2.0-or-later allows (resources/licenses/GPL-3.0.txt):
 
     resources/lucent_player/ (Includes_ABK_LucentPlayer.xml,
         ABK_LucentPlayerInfo.xml, media/) - see its README.txt
-    resources/lib/lucent_playerinfo.py, lucent_sleep.py, lucent_back.py
-    Designs after Lucent: resources/af3_lucent/, the settings window
-        (abk_settings.xml), sub_list.py, streaming_rows.py
+    tools/lucent_player/ (the scripts that make those files from Lucent)
+
+These are skin files that the patcher installs into Arctic Fuse 3. The
+Python that runs the Lucent Player features (resources/lib/lucent_playerinfo.py,
+lucent_back.py) was written for AB Tools from scratch in 4.12.0 and is
+AB Tools' own code; it only fills the window's properties. The AB Tools
+designs that follow Lucent's look (resources/af3_lucent/, the settings window,
+sub_list.py, streaming_rows.py) are AB Tools' own code and artwork.
 
 
 3. Lucent theme for Seren by djdirty60
@@ -69,8 +85,9 @@ https://github.com/djdirty60/Seren-Thema
 The look and textures of resources/lucent/ (source windows for Fen Light,
 Red Light, POV and Umbrella, generated by tools/gen_lucent.py),
 resources/skins/Default/1080i/ab_search.xml and lucent_select.xml follow
-this theme. Its repository states no licence: credit to djdirty60; ask him
-before reusing these files outside AB Tools.
+this theme. Its repository states no licence: credit to djdirty60; these
+files are not covered by the AB Tools licence, and reusing them outside
+AB Tools needs his permission.
 
 
 4. Arctic Fuse 3 by jurialmunkey (not GPL)
@@ -79,7 +96,7 @@ https://github.com/jurialmunkey - jurialmunkey's Arctic skins are published
 under Creative Commons Attribution-NonCommercial-ShareAlike (see the licence
 in Arctic Fuse 3's own addon.xml). These files are copies / changed copies of
 Arctic Fuse 3 skin files and stay under that licence (free, non-commercial,
-same licence for changes), not the GPL:
+same licence for changes), not the AB Tools licence:
 
     1080i/DialogPlayerProcessInfo.xml, Includes_PPI_Classic.xml,
     Includes_PPI_Modern.xml, Includes_PPI_Legacy_Support.xml, Includes_p3i.xml
@@ -88,7 +105,7 @@ same licence for changes), not the GPL:
     Arctic Fuse 3's own markup
 
 The XML AB Tools adds to Arctic Fuse 3 (its own buttons, includes and
-variables) is AB Tools' work under the GPL.
+variables) is AB Tools' own work.
 
 
 5. Patches for other add-ons (resources/lib/patcher.py, resources/*/)
@@ -115,9 +132,10 @@ resources/skins/Default/fonts/NotoSans-Regular.ttf, NotoSans-Bold.ttf
 
 resources/fonts/Noto-Regular.ttf, Noto-Bold.ttf
     These files are Amazon Ember V2, Copyright 2014-2019 Amazon.com, Inc. or
-    its affiliates. They are NOT under the GPL or any free licence: the font
-    itself says that changing or redistributing it needs Amazon's written
-    permission. To be replaced by a font under the SIL Open Font License.
+    its affiliates. They are NOT under the AB Tools licence or any free
+    licence: the font itself says that changing or redistributing it needs
+    Amazon's written permission. To be replaced by a font under the SIL Open
+    Font License.
 
 
 7. Names and logos
@@ -125,5 +143,4 @@ resources/fonts/Noto-Regular.ttf, Noto-Bold.ttf
 Kodi, CoreELEC, LibreELEC, Arctic Fuse, TMDb, Trakt, Real-Debrid, TorBox and
 the other service and add-on names are used only to say what AB Tools works
 with; they belong to their owners. The names "AB Tools", "ABUKARIM" and the
-AB Tools artwork belong to Taiseer (Abukarim); the GPL covers the code, not
-the right to present a changed copy as the original.
+AB Tools artwork belong to Taiseer (Abukarim).

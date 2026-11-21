@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. GPL-3.0-or-later (port of Lucent by djdirty60), see resources/licenses/GPL-3.0.txt
 """Last step after port.py / af3_layout.py / af3_furniture.py (4.8.69):
 route every Lucent pill texture (abk_lp/flags/X.png) through ABK_LP_FlagDir so
 "AF3: OSD Flags Style" can swap the Lucent Player's pills for another badge set

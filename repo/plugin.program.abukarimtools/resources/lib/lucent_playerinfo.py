@@ -1,769 +1,940 @@
 # -*- coding: utf-8 -*-
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
-"""AB Tools "AF3: Lucent Player" - the Statistics window of the player (OSD > Statistics, and Kodi's player
-process info while Lucent Player is on). Port of scripts/playerinfo.py from the Lucent skin by djdirty60
-(github.com/djdirty60/Lucent, GPL-2.0-or-later): English / Arabic (Fusha) instead of English / Dutch, the window is
-ABK_LucentPlayerInfo.xml inside Arctic Fuse 3 (installed by the patcher).
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
+"""AB Tools "AF3: Lucent Player" - the player's Statistics window (rewritten for AB Tools in 4.12.0).
 
-Lucent: the player info screen.
+Opened from OSD > Statistics, and in place of Kodi's player process info while Lucent Player is on:
 
-The helper calls tick() every second while the screen is open. It fills Window(Home).Property(lucent.pi.*):
-title, time, the badges (b.*), the six tiles on the left (t1..t6), the rows (r.*), the CPU cores and the meters.
-Bars are given as a step 0..40 (cores 0..27): Kodi cannot size a picture from a property.
-Only the name of the server is shown as location, never the whole address (it can hold a login or a key).
+    RunScript(special://home/addons/plugin.program.abukarimtools/resources/lib/lucent_playerinfo.py,open)
+
+The window (ABK_LucentPlayerInfo.xml, in the active skin) only draws; this script reads Kodi once a second
+and writes what it shows into Window(Home) properties named lucent.pi.<key>:
+
+  overview  title, time, badges (b.*), six tiles (t1..t6), the per-core CPU meter, system meters (m.*),
+            the detail rows (r.*) and a bitrate graph (spark)
+  video     resolution, frame, HDR / Dolby Vision, colour, decoder, screen, video bitrate graph (v.*)
+  audio     the signal path (a.c1..c5), what is heard, output, speakers (sp.*) and the audio tracks (a.t1..t4)
+
+Meters are steps (0..40, cores 1..27): a skin cannot size a picture from a number. For the location only a
+server or add-on name is shown, never the address, which can carry a login or a key.
 """
 import json
 import os
 import re
+import struct
+import threading
 import time
 import urllib.parse
 import zlib
-import struct
 
 import xbmc
 import xbmcgui
 import xbmcvfs
 
 HOME = xbmcgui.Window(10000)
-AR = xbmc.getLanguage(xbmc.ISO_639_1) == "ar"
-P = "lucent.pi."
-_STATE = {"hist": [], "vhist": [], "peak": 0.0, "set": {}, "sett": 0.0, "path": None, "size": "", "rpc": 0.0, "tracks": {}, "maxclk": 0.0, "spark": 0, "open": False}
-SPARK_DIR = "special://temp/lucent_pi/"
+PREFIX = 'lucent.pi.'
+ARABIC = xbmc.getLanguage(xbmc.ISO_639_1) == 'ar'
+GRAPH_DIR = 'special://temp/lucent_pi/'
+GRAPH_RGB = (0x7C, 0xC4, 0xFF)
+METER_STEPS = 40
+CORE_STEPS = 27
+MAX_CORES = 8
+HISTORY = 40
+_LOG = '[AbukarimTools LucentPlayer] playerinfo'
 
 
-def t(en, ar):
-    return ar if AR else en
-
-def chan_word(n):
-    return t(f"{n} channel", f"{n} قناة") if str(n) == "1" else t(f"{n} channels", f"{n} قنوات")
+def say(en, ar):
+    return ar if ARABIC else en
 
 
-def app_volume():
-    """Kodi's own volume in percent (Player.Volume only gives dB)."""
-    try:
-        req = {"jsonrpc": "2.0", "id": 1, "method": "Application.GetProperties", "params": {"properties": ["volume", "muted"]}}
-        res = json.loads(xbmc.executeJSONRPC(json.dumps(req))).get("result") or {}
-        return res.get("volume"), bool(res.get("muted"))
-    except Exception:
-        return None, xbmc.getCondVisibility("Player.Muted")
+def _log(msg):
+    xbmc.log('%s: %s' % (_LOG, msg), xbmc.LOGINFO)
 
 
-
-def info(name):
+# ============================================================================ reading Kodi
+def label(name):
+    """An info label; '' where Kodi answers with the label's own name (a label it does not know)."""
     value = xbmc.getInfoLabel(name)
-    return "" if value == name else value              # Kodi gives the name back for a label it does not know
+    return '' if value == name else (value or '')
 
 
-DV2_NAME = re.compile(r"(?i)(?<![a-z0-9])(?:dv2|dovi[ ._-]?2|dolby[ ._-]?vision[ ._-]?2)(?![a-z0-9])")
+def flag(name):
+    return bool(xbmc.getCondVisibility(name))
 
 
-def bit_depth(hdr="", detail="", layer=""):
-    """4.9.6: video bit depth, 0 when unknown. Same sources as the PPI and
-    in this order: Kodi 22 video.bitdepth, the Amlogic pixel format, the
-    generic pixel format (p010 / yuv420p10le / ...). HDR transfer (PQ, HLG,
-    Dolby Vision) is never under 10 bits, so it raises a missing or 8-bit
-    reading (VideoToolbox reports no depth); a Dolby Vision FEL stream is 12."""
-    n = 0
-    v = xbmc.getInfoLabel("Player.Process(video.bitdepth)")
-    m = re.search(r"\d+", v or "")
-    if m:
-        n = int(m.group())
-    if not n:
-        for lab in ("Player.Process(amlogic.pixformat)", "Player.Process(pixformat)"):
-            f = (xbmc.getInfoLabel(lab) or "").lower()
-            m = re.search(r"(12|10|8)\s*-?\s*bit", f) or re.search(r"(?:p0|p)(12|10|16)(?:le|be)?\b", f) \
-                or re.search(r"yuv\w*?(12|10)(?:le|be)?\b", f)
-            if m:
-                n = int(m.group(1)); n = 10 if n == 16 else n
-                break
-            if re.search(r"\b(nv12|yuv420p|yuvj420p|rgb24|bgra|8bit)\b", f):
-                n = 8
-                break
-    h = (hdr or "").lower()
-    if h in ("hdr10", "hdr10plus", "hlg", "dolbyvision") and n < 10:
-        n = 10
-    if h == "dolbyvision" and "FEL" in ((layer or "") + (detail or "")).upper():
-        n = max(n, 12)
-    return n
+def number(text, fallback=0.0):
+    m = re.search(r'-?\d+(?:[.,]\d+)?', text or '')
+    return float(m.group(0).replace(',', '.')) if m else fallback
 
 
-def dv_from_name(name):
-    """What the release name says about Dolby Vision: Dolby Vision 2, the profile (P5 / P7 / P8) and the layer (FEL / MEL)."""
-    name = name or ""
-    prof = re.search(r"(?i)(?<![a-z0-9])(?:dv|dovi)?[ ._-]?p([578])(?:[ ._]\d)?(?![0-9a-z])", name)
-    layer = re.search(r"(?i)(?<![a-z0-9])(fel|mel)(?![a-z0-9])", name)
-    return {"dv2": bool(DV2_NAME.search(name)), "prof": prof.group(1) if prof else "", "layer": layer.group(1).upper() if layer else ""}
+def digits(text):
+    """'48,000' / '48.000' -> 48000.0 (thousands marks dropped)."""
+    only = re.sub(r'\D', '', text or '')
+    return float(only) if only else 0.0
 
 
-def dv_line(hdr, prof, layer, dvn):
-    """Video tab: what Kodi, the file name and the box + screen say about Dolby Vision, and what a Dolby Vision 2 TV does with it."""
-    if hdr != "dolbyvision":
-        put("v.dv.on", "")
-        return
-    put("v.dv.on", "1")
-    kodi = "Dolby Vision" + ((t(" · profile ", " · الملف ") + prof.group(1) + (f" {layer}" if layer else "")) if prof else "")
-    named = " · ".join(x for x in ((f"P{dvn['prof']}" + (f" {dvn['layer']}" if dvn["layer"] else "")) if dvn.get("prof") else dvn.get("layer", ""),
-                                    "DV2" if dvn.get("dv2") else "") if x) or t("nothing extra", "لا شيء إضافي")
-    hdr_types = info("System.SupportedHDRTypes").lower()
-    screen = t("Dolby Vision ✓", "Dolby Vision ✓") if "dolby" in hdr_types else (t("no Dolby Vision reported", "لم يُبلَّغ عن Dolby Vision") if hdr_types
-                                                                                    else t("not reported", "لم يُبلَّغ عنه"))
-    v = "[COLOR FFFFFFFF][B]{}[/B][/COLOR]"
-    put("v.dv.line", "   ·   ".join((t("Kodi: ", "Kodi: ") + v.format(kodi), t("File name: ", "اسم الملف: ") + v.format(named),
-                                     t("Box + screen: ", "الجهاز + الشاشة: ") + v.format(screen))))
-    put("v.dv.note", t("The release says Dolby Vision 2: a TV with Dolby Vision 2 uses its extra information.",
-                       "يذكر الإصدار Dolby Vision 2: يستخدم التلفاز الداعم لـ Dolby Vision 2 هذه المعلومات الإضافية.") if dvn.get("dv2") else
-        t("A TV with Dolby Vision 2 applies its new picture processing to this Dolby Vision picture by itself.",
-          "يطبّق التلفاز الداعم لـ Dolby Vision 2 معالجته الجديدة للصورة على صورة Dolby Vision هذه تلقائيًّا."))
-
-
-def put(key, value):
-    value = "" if value is None else str(value)
-    if HOME.getProperty(P + key) != value:
-        HOME.setProperty(P + key, value)
-
-
-def num(text, default=0.0):
-    m = re.search(r"-?\d+(?:[.,]\d+)?", text or "")
-    return float(m.group(0).replace(",", ".")) if m else default
-
-
-def step(percent, steps=40):
+def meter(percent, steps=METER_STEPS):
     try:
-        return max(0, min(steps, round(float(percent) * steps / 100.0)))
+        return int(max(0, min(steps, round(float(percent) / 100.0 * steps))))
     except (TypeError, ValueError):
         return 0
 
 
-# ----------------------------------------------------------------------------- names
-ACODEC = {"truehd_atmos": "TrueHD Atmos", "eac3_ddp_atmos": "Dolby Digital+ Atmos", "dtshd_ma_x_imax": "DTS:X IMAX",
-          "dtshd_ma_x": "DTS:X", "truehd": "TrueHD", "dtshd_ma": "DTS-HD MA", "dtshd_hra": "DTS-HD HRA", "dts": "DTS",
-          "eac3": "Dolby Digital+", "ac3": "Dolby Digital", "aac": "AAC", "flac": "FLAC", "opus": "Opus", "mp3": "MP3",
-          "vorbis": "Vorbis", "mp2": "MP2"}
-ABADGE = {"truehd_atmos": "TrueHD", "truehd": "TrueHD", "eac3_ddp_atmos": "DD+", "eac3": "DD+", "ac3": "DD",
-          "dtshd_ma_x_imax": "DTS-HD MA", "dtshd_ma_x": "DTS-HD MA", "dtshd_ma": "DTS-HD MA", "dtshd_hra": "DTS-HD HRA",
-          "dts": "DTS", "aac": "AAC", "flac": "FLAC", "opus": "OPUS", "mp3": "MP3"}
-VCODEC = {"hevc": "HEVC", "h264": "H.264", "av1": "AV1", "vp9": "VP9", "mpeg2video": "MPEG-2", "vc1": "VC-1"}
-CONTAINER = {"mkv": "Matroska (MKV)", "mp4": "MPEG-4 (MP4)", "m4v": "MPEG-4 (M4V)", "ts": "MPEG-TS", "m2ts": "Blu-ray (M2TS)",
-             "avi": "AVI", "webm": "WebM", "mov": "QuickTime (MOV)", "iso": "ISO", "m3u8": "HLS (M3U8)", "mpd": "DASH (MPD)",
-             "wmv": "WMV", "flv": "FLV"}
-CHANNELS = {1: "1.0", 2: "2.0", 3: "2.1", 6: "5.1", 7: "6.1", 8: "7.1"}
-LANG_AR = {"eng": "الإنجليزية", "ara": "العربية", "dut": "الهولندية", "nld": "الهولندية", "ger": "الألمانية",
-           "deu": "الألمانية", "fre": "الفرنسية", "fra": "الفرنسية", "spa": "الإسبانية", "ita": "الإيطالية",
-           "por": "البرتغالية", "jpn": "اليابانية", "kor": "الكورية", "chi": "الصينية", "zho": "الصينية",
-           "rus": "الروسية", "tur": "التركية", "pol": "البولندية", "swe": "السويدية", "nor": "النرويجية",
-           "dan": "الدنماركية", "fin": "الفنلندية", "ukr": "الأوكرانية", "cze": "التشيكية", "ces": "التشيكية",
-           "hin": "الهندية", "gre": "اليونانية", "ell": "اليونانية", "hun": "المجرية", "heb": "العبرية",
-           "per": "الفارسية", "fas": "الفارسية", "urd": "الأردية", "tha": "التايلاندية", "vie": "الفيتنامية",
-           "ind": "الإندونيسية", "may": "الملايوية", "msa": "الملايوية"}
+def joined(*parts, sep=' · '):
+    return sep.join(p for p in parts if p)
 
 
-def lang_name(code):
-    code = (code or "").lower()
-    if not code or code in ("und", "unk"):
-        return ""
-    if AR and code in LANG_AR:
-        return LANG_AR[code]
+def rpc(method, **params):
+    try:
+        out = json.loads(xbmc.executeJSONRPC(json.dumps({'jsonrpc': '2.0', 'id': 1, 'method': method,
+                                                           'params': params})))
+        return out.get('result') or {}
+    except Exception:
+        return {}
+
+
+class Every(object):
+    """A value fetched again only after ``seconds``."""
+
+    def __init__(self, seconds, fetch):
+        self.seconds, self.fetch = seconds, fetch
+        self.at, self.value = 0.0, None
+
+    def get(self, now, fresh=False):
+        if fresh or self.value is None or now - self.at >= self.seconds:
+            self.at = now
+            try:
+                self.value = self.fetch()
+            except Exception:
+                self.value = {}
+        return self.value
+
+
+TRACKS = Every(5, lambda: rpc('Player.GetProperties', playerid=1,
+                              properties=['currentaudiostream', 'audiostreams', 'currentsubtitle',
+                                          'subtitles', 'subtitleenabled']))
+
+
+def _audio_settings():
+    keys = ('audiooutput.audiodevice', 'audiooutput.passthroughdevice', 'audiooutput.config',
+            'audiooutput.channels')
+    return dict((k, rpc('Settings.GetSettingValue', setting=k).get('value')) for k in keys)
+
+
+AUDIO_SETTINGS = Every(10, _audio_settings)
+
+
+# ============================================================================ names
+AUDIO_LONG = {
+    'truehd_atmos': 'TrueHD Atmos', 'truehd': 'TrueHD', 'eac3_ddp_atmos': 'Dolby Digital+ Atmos',
+    'eac3': 'Dolby Digital+', 'ac3': 'Dolby Digital', 'dtshd_ma_x_imax': 'DTS:X IMAX', 'dtshd_ma_x': 'DTS:X',
+    'dtshd_ma': 'DTS-HD MA', 'dtshd_hra': 'DTS-HD HRA', 'dts': 'DTS', 'aac': 'AAC', 'flac': 'FLAC',
+    'opus': 'Opus', 'mp3': 'MP3', 'mp2': 'MP2', 'vorbis': 'Vorbis', 'pcm': 'PCM',
+}
+AUDIO_SHORT = {
+    'truehd_atmos': 'TrueHD', 'truehd': 'TrueHD', 'eac3_ddp_atmos': 'DD+', 'eac3': 'DD+', 'ac3': 'DD',
+    'dtshd_ma_x_imax': 'DTS-HD MA', 'dtshd_ma_x': 'DTS-HD MA', 'dtshd_ma': 'DTS-HD MA',
+    'dtshd_hra': 'DTS-HD HRA', 'dts': 'DTS', 'aac': 'AAC', 'flac': 'FLAC', 'opus': 'OPUS', 'mp3': 'MP3',
+}
+AUDIO_FAMILY = {
+    'truehd_atmos': 'Dolby TrueHD', 'truehd': 'Dolby TrueHD', 'eac3_ddp_atmos': 'Dolby Digital+',
+    'eac3': 'Dolby Digital+', 'ac3': 'Dolby Digital', 'dtshd_ma_x_imax': 'DTS:X', 'dtshd_ma_x': 'DTS:X',
+    'dtshd_ma': 'DTS-HD MA', 'dtshd_hra': 'DTS-HD HRA', 'dts': 'DTS',
+}
+VIDEO_CODECS = {'hevc': 'HEVC', 'h264': 'H.264', 'av1': 'AV1', 'vp9': 'VP9', 'mpeg2video': 'MPEG-2', 'vc1': 'VC-1'}
+CONTAINERS = {
+    'mkv': 'Matroska (MKV)', 'mp4': 'MPEG-4 (MP4)', 'm4v': 'MPEG-4 (M4V)', 'ts': 'MPEG-TS',
+    'm2ts': 'Blu-ray (M2TS)', 'avi': 'AVI', 'webm': 'WebM', 'mov': 'QuickTime (MOV)', 'iso': 'ISO',
+    'm3u8': 'HLS (M3U8)', 'mpd': 'DASH (MPD)', 'wmv': 'WMV', 'flv': 'FLV',
+}
+LAYOUTS = {1: '1.0', 2: '2.0', 3: '2.1', 6: '5.1', 7: '6.1', 8: '7.1'}
+SPEAKERS = {
+    1: ('c',), 2: ('l', 'r'), 3: ('l', 'r', 'lfe'), 4: ('l', 'r', 'sl', 'sr'), 5: ('l', 'r', 'c', 'sl', 'sr'),
+    6: ('l', 'r', 'c', 'lfe', 'sl', 'sr'), 7: ('l', 'r', 'c', 'lfe', 'sl', 'sr', 'sbl'),
+    8: ('l', 'r', 'c', 'lfe', 'sl', 'sr', 'sbl', 'sbr'),
+}
+SPEAKER_NAMES = ('l', 'c', 'r', 'sl', 'sr', 'sbl', 'sbr', 'lfe', 'tfl', 'tfr', 'trl', 'trr')
+HEIGHT_SPEAKERS = ('tfl', 'tfr', 'trl', 'trr')
+OUTPUT_LAYOUTS = {0: '2.0', 1: '2.1', 2: '3.0', 3: '3.1', 4: '4.0', 5: '4.1', 6: '5.0', 7: '5.1', 8: '7.0',
+                  9: '7.1', 10: '7.1'}
+HDR_NAMES = {'dolbyvision': 'Dolby Vision', 'hdr10': 'HDR10', 'hdr10plus': 'HDR10+', 'hlg': 'HLG'}
+HDR_BADGES = {'hdr10': 'HDR10', 'hdr10plus': 'HDR10+', 'hlg': 'HLG'}
+ARABIC_LANGUAGES = {
+    'ara': 'العربية', 'eng': 'الإنجليزية', 'fre': 'الفرنسية', 'fra': 'الفرنسية', 'ger': 'الألمانية',
+    'deu': 'الألمانية', 'spa': 'الإسبانية', 'ita': 'الإيطالية', 'por': 'البرتغالية', 'rus': 'الروسية',
+    'tur': 'التركية', 'per': 'الفارسية', 'fas': 'الفارسية', 'urd': 'الأردية', 'hin': 'الهندية',
+    'jpn': 'اليابانية', 'kor': 'الكورية', 'chi': 'الصينية', 'zho': 'الصينية', 'dut': 'الهولندية',
+    'nld': 'الهولندية', 'swe': 'السويدية', 'nor': 'النرويجية', 'dan': 'الدنماركية', 'fin': 'الفنلندية',
+    'pol': 'البولندية', 'ukr': 'الأوكرانية', 'cze': 'التشيكية', 'ces': 'التشيكية', 'gre': 'اليونانية',
+    'ell': 'اليونانية', 'hun': 'المجرية', 'heb': 'العبرية', 'tha': 'التايلاندية', 'vie': 'الفيتنامية',
+    'ind': 'الإندونيسية', 'may': 'الملايوية', 'msa': 'الملايوية',
+}
+_DV2 = re.compile(r'(?i)(?<![a-z0-9])(?:dv2|dovi[ ._-]?2|dolby[ ._-]?vision[ ._-]?2)(?![a-z0-9])')
+_DV_PROFILE = re.compile(r'(?i)(?<![a-z0-9])(?:dv|dovi)?[ ._-]?p([578])(?:[ ._]\d)?(?![0-9a-z])')
+_DV_LAYER = re.compile(r'(?i)(?<![a-z0-9])(fel|mel)(?![a-z0-9])')
+
+
+def language(code):
+    code = (code or '').strip().lower()
+    if not code or code in ('und', 'unk', 'unknown'):
+        return ''
+    if ARABIC and code in ARABIC_LANGUAGES:
+        return ARABIC_LANGUAGES[code]
     try:
         return xbmc.convertLanguage(code, xbmc.ENGLISH_NAME) or code.upper()
-    except Exception:  # noqa: BLE001
+    except Exception:
         return code.upper()
 
 
-def lang_short(code):
+def language_tag(code):
     try:
-        two = xbmc.convertLanguage(code or "", xbmc.ISO_639_1)
-    except Exception:  # noqa: BLE001
-        two = ""
-    return (two or code or "").upper()[:3]
+        short = xbmc.convertLanguage(code or '', xbmc.ISO_639_1)
+    except Exception:
+        short = ''
+    return (short or code or '').upper()[:3]
 
 
-def middle(text, keep=64):
-    """A long file name with the middle left out: 'The.Expanse.S03E07.2160p … TrueHD.Atmos.7.1-FGT.mkv'."""
-    if len(text) <= keep:
-        return text
-    head = keep * 55 // 100
-    return f"{text[:head].rstrip('.')} … {text[-(keep - head - 3):].lstrip('.')}"
+def channel_count(n):
+    if n == 1:
+        return say('1 channel', 'قناة واحدة')
+    return say('%d channels' % n, '%d قنوات' % n)
 
 
-def location(path):
-    """Only the server name (or the add-on, or 'local'), never the whole address."""
+def shorten(name, room=64):
+    """A long file name with its middle taken out."""
+    if len(name) <= room:
+        return name
+    front = int(room * 0.55)
+    back = room - front - 3
+    return '%s … %s' % (name[:front].rstrip('.'), name[-back:].lstrip('.'))
+
+
+def where_from(path):
+    """The server, add-on or 'this device' a video comes from - never the address itself."""
     if not path:
-        return ""
-    if path.startswith("plugin://"):
-        addon = urllib.parse.urlparse(path).netloc
+        return ''
+    if path.startswith('plugin://'):
+        addon_id = urllib.parse.urlparse(path).netloc
         try:
             import xbmcaddon
-            return xbmcaddon.Addon(addon).getAddonInfo("name")
-        except Exception:  # noqa: BLE001
-            return addon
+            return xbmcaddon.Addon(addon_id).getAddonInfo('name')
+        except Exception:
+            return addon_id
     parts = urllib.parse.urlparse(path)
-    if parts.scheme in ("http", "https", "rtmp", "rtsp", "udp", "rtp", "mms"):
-        host = (parts.hostname or "").lower()
-        return host[4:] if host.startswith("www.") else host
-    if parts.scheme in ("smb", "nfs", "ftp", "sftp", "dav", "davs"):
-        return f"{parts.hostname or ''} · {parts.scheme.upper()}"
-    return t("this device", "هذا الجهاز")
+    if parts.scheme in ('http', 'https', 'rtmp', 'rtsp', 'udp', 'rtp', 'mms'):
+        host = (parts.hostname or '').lower()
+        return host[4:] if host.startswith('www.') else host
+    if parts.scheme in ('smb', 'nfs', 'ftp', 'sftp', 'dav', 'davs'):
+        return joined(parts.hostname or '', parts.scheme.upper())
+    return say('this device', 'هذا الجهاز')
 
 
-def local_size(path):
-    if not path or "://" in path and not path.startswith(("smb://", "nfs://", "special://")):
-        return ""
+def file_size(path):
+    if not path or ('://' in path and not path.startswith(('smb://', 'nfs://', 'special://'))):
+        return ''
     try:
         size = xbmcvfs.Stat(path).st_size()
-    except Exception:  # noqa: BLE001
-        return ""
+    except Exception:
+        return ''
     if not size:
-        return ""
-    return f"{size / 1073741824:.1f} GB" if size >= 1073741824 else f"{size / 1048576:.0f} MB"
+        return ''
+    if size >= 1 << 30:
+        return '%.1f GB' % (size / float(1 << 30))
+    return '%d MB' % round(size / float(1 << 20))
 
 
-# ----------------------------------------------------------------------------- tracks (JSON-RPC, every 5 s)
-def tracks(now):
-    if now - _STATE["rpc"] < 5 and _STATE["tracks"]:
-        return _STATE["tracks"]
-    _STATE["rpc"] = now
-    out = {}
-    try:
-        req = {"jsonrpc": "2.0", "id": 1, "method": "Player.GetProperties",
-               "params": {"playerid": 1, "properties": ["currentaudiostream", "audiostreams", "currentsubtitle", "subtitles",
-                                                        "subtitleenabled", "currentvideostream"]}}
-        res = json.loads(xbmc.executeJSONRPC(json.dumps(req))).get("result") or {}
-        out = res
-    except Exception:  # noqa: BLE001
-        pass
-    _STATE["tracks"] = out
-    return out
+def bit_depth(hdr='', detail='', layer=''):
+    """Video bit depth (0 when unknown): Kodi 22's video.bitdepth, else the (Amlogic) pixel format.
+    PQ / HLG / Dolby Vision pictures are 10-bit at least, and a Dolby Vision FEL stream is 12-bit."""
+    depth = 0
+    m = re.search(r'\d+', label('Player.Process(video.bitdepth)'))
+    if m:
+        depth = int(m.group(0))
+    if not depth:
+        for name in ('Player.Process(amlogic.pixformat)', 'Player.Process(pixformat)'):
+            fmt = label(name).lower()
+            m = (re.search(r'\b(8|10|12)\s*-?\s*bit', fmt) or re.search(r'p0?(10|12|16)(?:le|be)?\b', fmt)
+                 or re.search(r'yuv\w*?(10|12)(?:le|be)?\b', fmt))
+            if m:
+                depth = min(int(m.group(1)), 12) if m.group(1) != '16' else 10
+                break
+            if re.search(r'\b(?:nv12|yuv420p|yuvj420p|rgb24|bgra|8bit)\b', fmt):
+                depth = 8
+                break
+    kind = (hdr or '').lower()
+    if kind in ('hdr10', 'hdr10plus', 'hlg', 'dolbyvision'):
+        depth = max(depth, 10)
+    if kind == 'dolbyvision' and 'FEL' in ('%s%s' % (layer or '', detail or '')).upper():
+        depth = max(depth, 12)
+    return depth
 
 
-# ----------------------------------------------------------------------------- the bitrate graph (a small PNG)
-def _png(width, height, rows):
-    raw = b"".join(b"\x00" + bytes(r) for r in rows)
-
-    def chunk(kind, data):
-        c = struct.pack(">I", len(data)) + kind + data
-        return c + struct.pack(">I", zlib.crc32(kind + data) & 0xFFFFFFFF)
-    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 6, 0, 0, 0))
-            + chunk(b"IDAT", zlib.compress(raw, 6)) + chunk(b"IEND", b""))
+def dolby_vision_from_name(name):
+    name = name or ''
+    profile = _DV_PROFILE.search(name)
+    layer = _DV_LAYER.search(name)
+    return {'dv2': bool(_DV2.search(name)), 'profile': profile.group(1) if profile else '',
+            'layer': layer.group(1).upper() if layer else ''}
 
 
-def spark(values, W=760, H=60, tag="spark"):
-    """Area and line of the last values (shown at half size), colour #7CC4FF."""
-    vals = values[-40:]
-    if len(vals) < 2:
-        return ""
-    lo, hi = min(vals), max(vals)
-    span = (hi - lo) or max(hi, 1.0)
-    ys = []
-    for x in range(W):
-        pos = x / (W - 1) * (len(vals) - 1)
-        i = int(pos)
-        f = pos - i
-        v = vals[i] if i + 1 >= len(vals) else vals[i] * (1 - f) + vals[i + 1] * f
-        ys.append(H - 4 - (v - lo) / span * (H - 12) - (H * 0.1 if hi == lo else 0))
-    rows = []
-    for y in range(H):
-        row = bytearray(W * 4)
-        for x in range(W):
-            ly = ys[x]
-            prev = ys[x - 1] if x else ly
-            top, bot = min(ly, prev) - 2.5, max(ly, prev) + 2.5
-            if top <= y <= bot:
-                a = 255
-            elif y > ly:
-                a = 46
-            else:
-                continue
-            row[x * 4:x * 4 + 4] = bytes((0x7C, 0xC4, 0xFF, a))
-        rows.append(row)
-    folder = xbmcvfs.translatePath(SPARK_DIR)
-    os.makedirs(folder, exist_ok=True)
-    _STATE["spark"] += 1
-    name = f"{tag}_{int(time.time())}_{_STATE['spark']}.png"
-    with open(os.path.join(folder, name), "wb") as handle:
-        handle.write(_png(W, H, rows))
-    for old in os.listdir(folder):
-        if old != name and old.startswith(tag + "_"):
-            try:
-                if time.time() - os.path.getmtime(os.path.join(folder, old)) > 4:
-                    os.remove(os.path.join(folder, old))
-            except OSError:
-                pass
-    return SPARK_DIR + name
-
-
-# ----------------------------------------------------------------------------- one update
-def visible():
-    return bool(HOME.getProperty(P + "open")) and xbmc.getCondVisibility("Player.HasVideo")
-
-
-def tick():
-    if not visible():
-        if _STATE["open"]:
-            _STATE.update(open=False, hist=[], vhist=[], peak=0.0)
-        return
-    _STATE["open"] = True
-    now = time.time()
-    path = info("Player.Filenameandpath")
-    if path != _STATE["path"]:
-        _STATE.update(path=path, hist=[], vhist=[], peak=0.0, size=local_size(path), rpc=0.0)
-
-    # header
-    show = info("VideoPlayer.TVShowTitle")
-    title = info("VideoPlayer.Title")
-    if show:
-        s, e = info("VideoPlayer.Season"), info("VideoPlayer.Episode")
-        se = f"S{s} E{e}" if s and e else ""
-        put("title", " · ".join(x for x in (show, se, title) if x))
-    else:
-        year = info("VideoPlayer.Year")
-        put("title", f"{title} ({year})" if title and year else title or info("Player.Filename"))
-    tm = f"{info('Player.Time')} / {info('Player.Duration')}" if info("Player.Duration") else info("Player.Time")
-    try:
-        chap, chaps = int(info("Player.Chapter") or 0), int(info("Player.ChapterCount") or 0)
-    except ValueError:
-        chap = chaps = 0
-    if chaps > 1 and chap:
-        tm += t(f" · chapter {chap} of {chaps}", f" · الفصل {chap} من {chaps}")
-    put("time", tm)
-
-    # video facts
-    w, h = info("Player.Process(videowidth)").replace(",", "").replace(".", ""), info("Player.Process(videoheight)").replace(",", "").replace(".", "")
-    fps = info("Player.Process(videofps)")
-    res = info("VideoPlayer.VideoResolution")
-    res_badge = {"8K": "8K", "4K": "4K", "1080": "1080p", "720": "720p", "576": "576p", "540": "540p", "480": "480p"}.get(res, res.upper())
-    hdr = info("VideoPlayer.HdrType").lower()
-    detail = info("VideoPlayer.HdrDetail")
-    prof = re.search(r"(\d+)", detail or "")
-    layer = "FEL" if "FEL" in (detail or "").upper() else "MEL" if "MEL" in (detail or "").upper() else ""
-    pix = info("Player.Process(pixformat)")
-    bits = bit_depth(hdr, detail, layer)
-    ten = bits >= 10
-    vcodec = info("VideoPlayer.VideoCodec").lower()
-    vname = VCODEC.get(vcodec, vcodec.upper())
-    fname = info("Player.Filename")
-    dvn = dv_from_name(fname + " " + info("Player.FilenameAndPath")) if hdr == "dolbyvision" else {}
-
-    # audio facts
-    acodec = info("VideoPlayer.AudioCodec").lower()
-    try:
-        chn = int(info("VideoPlayer.AudioChannels") or 0)
-    except ValueError:
-        chn = 0
-    chs = CHANNELS.get(chn, f"{chn}.0" if chn else "")
-    aname_stream = info("VideoPlayer.AudioName") or ""
-    atmos = "atmos" in acodec or "atmos" in aname_stream.lower()
-    dtsx = acodec.startswith("dtshd_ma_x") or "dts:x" in aname_stream.lower() or "dts-x" in aname_stream.lower()
-    along = ACODEC.get(acodec, acodec.upper())
-    if atmos and "Atmos" not in along:
-        along += " Atmos"
-    rate = float(re.sub(r"\D", "", info("Player.Process(audiosamplerate)") or "") or 0)   # '44,100' / '48.000': thousands marks
-    bits = info("Player.Process(audiobitspersample)")
-
-    # badges
-    put("b.res", res_badge)
-    if hdr == "dolbyvision":
-        put("b.dv", ("DOLBY VISION 2" if dvn.get("dv2") else "DOLBY VISION") + (f" P{prof.group(1)}" if prof else "") + (f" {layer}" if layer else ""))
-        put("b.hdr", "")
-    else:
-        put("b.dv", "")
-        put("b.hdr", {"hdr10": "HDR10", "hdr10plus": "HDR10+", "hlg": "HLG"}.get(hdr, ""))
-    put("b.vc", f"{vname} {bits}-bit" if vname and ten else vname)
-    put("b.remux", "REMUX" if re.search(r"remux", fname or "", re.I) else "")
-    put("b.ac", ABADGE.get(acodec, acodec.upper()))
-    put("b.imm", f"ATMOS {chs}".strip() if atmos else f"DTS:X {chs}".strip() if dtsx else "")
-    put("b.ch", "" if (atmos or dtsx) else chs)
-    subs_on = xbmc.getCondVisibility("VideoPlayer.SubtitlesEnabled")
-    sl = info("VideoPlayer.SubtitlesLanguage")
-    put("b.sub", t(f"{lang_short(sl)} subtitles", f"ترجمة {lang_short(sl)}") if subs_on and sl else "")
-
-    # tiles
-    hdr_word = {"dolbyvision": "Dolby Vision", "hdr10": "HDR10", "hdr10plus": "HDR10+", "hlg": "HLG"}.get(hdr, "")
-    put("t1.big", f"{res_badge} HDR" if hdr_word else res_badge)
-    put("t1.sub", " · ".join(x for x in (f"{w}×{h}" if w and h else "", fps) if x))
-    put("t2.big", hdr_word or "SDR")
-    put("t2.sub", t(f"profile {prof.group(1)}", f"الملف {prof.group(1)}") + (f" {layer}" if layer else "") if hdr == "dolbyvision" and prof else "")
-    put("t3.big", (f"Atmos {chs}" if atmos else f"DTS:X {chs}" if dtsx else chs or along).strip())
-    khz = (f"{rate / 1000:g} kHz" if rate else "")
-    put("t3.sub", " · ".join(x for x in (ABADGE.get(acodec, along) if (atmos or dtsx or chs) else "", khz) if x))
-    vbr = num(info("Player.Process(videolivebitrate)"))
-    abr_k = float(re.sub(r"\D", "", info("Player.Process(audiolivebitrate)") or "") or 0)
-    abr = abr_k / 1024.0
-    total = vbr + abr
-    if total:
-        _STATE["hist"] = (_STATE["hist"] + [total])[-40:]
-    put("t4.big", f"{total:.1f} Mb/s" if total else "–")
-    put("t4.sub", t(f"picture {vbr:.1f} · audio {abr:.1f}", f"الصورة {vbr:.1f} · الصوت {abr:.1f}") if total else "")
-    if len(_STATE["hist"]) >= 2:
-        try:
-            put("spark", spark(_STATE["hist"]))
-        except Exception as error:  # noqa: BLE001
-            xbmc.log(f"[AbukarimTools LucentPlayer] playerinfo spark: {error}", xbmc.LOGINFO)
-    cache = num(info("Player.CacheLevel"))
-    ahead = ""
-    try:
-        total_s = xbmc.Player().getTotalTime()
-        pc, pp = num(info("Player.ProgressCache")), num(info("Player.Progress"))
-        if total_s and pc > pp:
-            ahead_s = int((pc - pp) / 100.0 * total_s)
-            ahead = t(f"{ahead_s} s ahead", f"{ahead_s} ثانية مُخزَّنة مسبقًا") if ahead_s < 600 else t(f"{ahead_s // 60} min ahead", f"{ahead_s // 60} دقيقة مُخزَّنة مسبقًا")
-    except Exception:  # noqa: BLE001
-        pass
-    put("t5.big", f"{cache:.0f}%")
-    put("t5.sub", ahead)
-    put("t5.bar", step(cache))
-
-    # system
-    cpu_text = info("System.CpuUsage")
-    cores = [float(x) for x in re.findall(r"#\d+:\s*([\d.,]+)%", cpu_text.replace(",", "."))]
-    avg = sum(cores) / len(cores) if cores else num(cpu_text)
-    put("cores", min(len(cores), 8))
-    for i in range(8):
-        put(f"core{i}", max(1, min(27, round(cores[i] * 27 / 100))) if i < len(cores) else "")
-    put("cores.label", t(f"CPU per core · avg. {avg:.0f}%", f"المعالج لكل نواة · المتوسط {avg:.0f}%") if cores else t(f"CPU · {avg:.0f}%", f"CPU · {avg:.0f}%"))
-    ct, gt = num(info("System.CPUTemperature"), -1), num(info("System.GPUTemperature"), -1)
-    mem_p = num(info("System.Memory(used.percent)"))
-    mem_u = info("System.Memory(used)").replace("MB", " MB").replace("GB", " GB").replace("  ", " ")
-    put("t6.big", f"CPU {avg:.0f}%")
-    put("t6.sub", " · ".join(x for x in (f"{ct:.0f} °C" if ct >= 0 else "", t(f"{mem_p:.0f}% memory", f"{mem_p:.0f}% من الذاكرة")) if x))
-    put("t6.bar", step(mem_p))
-    put("m.ct", f"{ct:.0f} °C" if ct >= 0 else "–")
-    put("m.ct.bar", step(ct) if ct >= 0 else 0)
-    put("m.gt", f"{gt:.0f} °C" if gt >= 0 else "–")
-    put("m.gt.bar", step(gt) if gt >= 0 else 0)
-    put("m.mem", f"{mem_p:.0f}% · {mem_u}".strip(" ·"))
-    put("m.mem.bar", step(mem_p))
-    clk = num(info("System.CpuFrequency"))
-    if not _STATE["maxclk"]:
-        try:
-            with open("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq") as handle:
-                _STATE["maxclk"] = int(handle.read().strip()) / 1000.0
-        except (OSError, ValueError):
-            _STATE["maxclk"] = 0.0
-    _STATE["maxclk"] = max(_STATE["maxclk"], clk)
-    put("m.clk", f"{clk:.0f} MHz" if clk else "–")
-    put("m.clk.bar", step(clk / _STATE["maxclk"] * 100) if clk and _STATE["maxclk"] else 0)
-    rfps = num(info("System.FPS"))
-    vfps = num(fps)
-    put("m.fps", f"{rfps:.2f} fps" if rfps else "–")
-    put("m.fps.bar", step(min(100.0, rfps / vfps * 100)) if rfps and vfps else 0)
-    vq = num(info("Player.Process(videoqueuelevel)"))
-    aq = num(info("Player.Process(audioqueuelevel)"))
-    put("m.vq", f"{vq:.0f}%")
-    put("m.vq.bar", step(vq))
-
-    # rows: source
-    put("r.file", middle(fname or ""))
-    stream = xbmc.getCondVisibility("Player.IsInternetStream")
-    loc = location(path)
-    put("r.loc", f"{loc} · " + t("stream", "بث") if stream and loc else loc)
-    ext = os.path.splitext(urllib.parse.urlparse(fname or "").path)[1].lower().lstrip(".")
-    put("r.cont", " · ".join(x for x in (CONTAINER.get(ext, ext.upper()), _STATE["size"]) if x))
-    put("r.rate", t(f"{total:.1f} Mb/s · picture {vbr:.1f} · audio {abr:.1f}", f"{total:.1f} Mb/s · الصورة {vbr:.1f} · الصوت {abr:.1f}") if total else "–")
-    # video
-    scan = info("Player.Process(videoscantype)").lower()
-    scan_word = t("progressive", "تدريجي") if scan.startswith("p") else t("interlaced", "متشابك") if scan.startswith("i") else ""
-    put("r.res", " · ".join(x for x in (f"{w}×{h}" if w and h else "", f"{fps} fps" if fps else "", scan_word) if x))
-    if hdr == "dolbyvision":
-        put("r.hdr", " · ".join(x for x in ("Dolby Vision", (t("profile ", "الملف ") + prof.group(1) + (f" {layer}" if layer else "")) if prof else "", "BT.2020") if x))
-    elif hdr_word:
-        put("r.hdr", f"{hdr_word} · BT.2020")
-    else:
-        put("r.hdr", "SDR")
-    dar = info("Player.Process(videodar)")
-    put("r.fmt", " · ".join(x for x in (pix, f"{dar}:1" if dar else "") if x))
-    hw = xbmc.getCondVisibility("Player.Process(videohwdecoder)")
-    put("r.vdec", " · ".join(x for x in (info("Player.Process(videodecoder)"), "hardware" if hw else "software") if x))
-    disp = info("System.ScreenResolution")
-    disp = re.sub(r"(\d)\s*x\s*(\d)", r"\1×\2", disp).replace(" - ", " · ")
-    disp = re.sub(r"(\d)Hz", r"\1 Hz", disp)
-    put("r.disp", disp)
-    put("r.vq", f"{vq:.0f}%")
-    put("r.vq.dot", "low" if vq <= 20 else "ok")
-    # audio
-    tr = tracks(now)
-    streams = tr.get("audiostreams") or []
-    cur = tr.get("currentaudiostream") or {}
-    idx = next((n for n, s in enumerate(streams, 1) if s.get("index") == cur.get("index")), 0)
-    bits_track = [t(f"{idx} of {len(streams)}", f"{idx} من {len(streams)}") if idx and len(streams) > 1 else "",
-                  lang_name(cur.get("language") or info("VideoPlayer.AudioLanguage")), cur.get("name") or aname_stream]
-    put("r.atrack", " · ".join(x for x in bits_track if x))
-    ch_word = (t(f"{chn} channel ({chs})", f"{chn} قناة ({chs})") if chn == 1 else
-               t(f"{chn} channels ({chs})", f"{chn} قنوات ({chs})")) if chn else ""
-    put("r.afmt", " · ".join(x for x in (along, ch_word) if x))
-    put("r.aq", " · ".join(x for x in (khz, f"{bits} bit" if bits and bits != "0" else "") if x))
-    adec = info("Player.Process(audiodecoder)")
-    adec = "" if adec.lower() in ("unknown", "none") else adec
-    if adec.lower().startswith("pt-"):
-        adec += t(" · passthrough to receiver", " · تمرير مباشر إلى جهاز الاستقبال")
-    put("r.adec", adec)
-    put("r.aqueue", f"{aq:.0f}%")
-    put("r.aqueue.dot", "low" if aq <= 20 else "ok")
-    # subtitles
-    subs = tr.get("subtitles") or []
-    cs = tr.get("currentsubtitle") or {}
-    if tr.get("subtitleenabled") and cs:
-        sidx = next((n for n, s in enumerate(subs, 1) if s.get("index") == cs.get("index")), 0)
-        codec = (cs.get("codec") or "").upper().replace("SUBRIP", "SRT")
-        put("r.sub", " · ".join(x for x in (lang_name(cs.get("language")) or cs.get("name"), codec,
-                                             t(f"{sidx} of {len(subs)}", f"{sidx} من {len(subs)}") if sidx else "") if x))
-    else:
-        put("r.sub", t("Off", "متوقفة") + (t(f" · {len(subs)} available", f" · {len(subs)} متاحة") if subs else ""))
-    # network
-    put("r.buf", " · ".join(x for x in (f"{cache:.0f}%", ahead) if x))
-    put("r.buf.dot", "low" if cache <= 20 else "ok")
-    put("r.type", t("Stream · internet", "بث · عبر الإنترنت") if stream else t("Local file", "ملف محلي"))
-
-    # ======================================================================== tab 2: video
-    try:
-        video_tab(locals())
-    except Exception as error:  # noqa: BLE001
-        xbmc.log(f"[AbukarimTools LucentPlayer] playerinfo video: {error}", xbmc.LOGINFO)
-    try:
-        audio_tab(locals())
-    except Exception as error:  # noqa: BLE001
-        xbmc.log(f"[AbukarimTools LucentPlayer] playerinfo audio: {error}", xbmc.LOGINFO)
-
-
-def kodi_settings(now):
-    """Kodi's audio output settings (every 10 s)."""
-    if now - _STATE["sett"] < 10 and _STATE["set"]:
-        return _STATE["set"]
-    _STATE["sett"] = now
-    out = {}
-    for key in ("audiooutput.audiodevice", "audiooutput.passthroughdevice", "audiooutput.config", "audiooutput.channels", "audiooutput.passthrough"):
-        try:
-            req = {"jsonrpc": "2.0", "id": 1, "method": "Settings.GetSettingValue", "params": {"setting": key}}
-            out[key] = (json.loads(xbmc.executeJSONRPC(json.dumps(req))).get("result") or {}).get("value")
-        except Exception:  # noqa: BLE001
-            out[key] = None
-    _STATE["set"] = out
-    return out
+def kodi_volume():
+    got = rpc('Application.GetProperties', properties=['volume', 'muted'])
+    if 'volume' in got:
+        return got.get('volume'), bool(got.get('muted'))
+    return None, flag('Player.Muted')
 
 
 def device_name(raw):
-    """'ALSA:hdmi:CARD=PCH,DEV=0|HDA Intel PCH, HDMI 0' -> 'HDA Intel PCH, HDMI 0'; 'AudioTrack (RAW)' stays."""
-    raw = str(raw or "")
-    if "|" in raw:
-        raw = raw.split("|", 1)[1]
-    elif ":" in raw:
-        raw = raw.split(":", 1)[1]
-    return raw.strip() or ""
+    """'ALSA:hdmi:CARD=PCH,DEV=0|HDA Intel PCH, HDMI 0' -> 'HDA Intel PCH, HDMI 0'."""
+    raw = str(raw or '')
+    if '|' in raw:
+        raw = raw.split('|', 1)[1]
+    elif ':' in raw:
+        raw = raw.split(':', 1)[1]
+    return raw.strip()
 
 
-SPEAKER_CONFIG = {0: "2.0", 1: "2.1", 2: "3.0", 3: "3.1", 4: "4.0", 5: "4.1", 6: "5.0", 7: "5.1", 8: "7.0", 9: "7.1", 10: "7.1"}
+# ============================================================================ the bitrate graphs
+def _png(width, height, pixels):
+    """RGBA rows -> PNG bytes."""
+    data = b''.join(b'\x00' + bytes(row) for row in pixels)
+
+    def block(kind, body):
+        return (struct.pack('>I', len(body)) + kind + body
+                + struct.pack('>I', zlib.crc32(kind + body) & 0xFFFFFFFF))
+    return (b'\x89PNG\r\n\x1a\n'
+            + block(b'IHDR', struct.pack('>IIBBBBB', width, height, 8, 6, 0, 0, 0))
+            + block(b'IDAT', zlib.compress(data, 6)) + block(b'IEND', b''))
 
 
-def video_tab(v):
-    w, h, fps, hdr = v["w"], v["h"], v["fps"], v["hdr"]
-    res_badge, prof, layer, pix, ten, vname = v["res_badge"], v["prof"], v["layer"], v["pix"], v["ten"], v["vname"]
-    dvn = v.get("dvn") or {}                       # what the release name says about Dolby Vision (profile, FEL, DV2)
+class Graph(object):
+    """A line with a soft fill under it, of the last HISTORY values, saved as a fresh PNG each time
+    (Kodi caches a picture by its name)."""
+    _serial = [0]
+
+    def __init__(self, tag, width, height):
+        self.tag, self.width, self.height = tag, width, height
+
+    def draw(self, values):
+        values = list(values)[-HISTORY:]
+        if len(values) < 2:
+            return ''
+        w, h = self.width, self.height
+        low, high = min(values), max(values)
+        spread = (high - low) or max(high, 1.0)
+        flat = high == low
+        line = []
+        last = len(values) - 1
+        for x in range(w):
+            at = x * last / float(w - 1)
+            i = min(int(at), last - 1)
+            v = values[i] + (values[i + 1] - values[i]) * (at - i)
+            y = (h - 4) - (v - low) / spread * (h - 12)
+            line.append(y - (h * 0.1 if flat else 0))
+        r, g, b = GRAPH_RGB
+        solid, soft = bytes((r, g, b, 255)), bytes((r, g, b, 46))
+        rows = [bytearray(w * 4) for _ in range(h)]
+        for x in range(w):
+            y_here = line[x]
+            y_prev = line[x - 1] if x else y_here
+            top = min(y_here, y_prev) - 2.5
+            bottom = max(y_here, y_prev) + 2.5
+            for y in range(max(0, int(top)), h):
+                if y < top:
+                    continue
+                rows[y][x * 4:x * 4 + 4] = solid if y <= bottom else soft
+        return self._save(_png(w, h, rows))
+
+    def _save(self, data):
+        folder = xbmcvfs.translatePath(GRAPH_DIR)
+        os.makedirs(folder, exist_ok=True)
+        Graph._serial[0] += 1
+        name = '%s_%d_%d.png' % (self.tag, int(time.time()), Graph._serial[0])
+        with open(os.path.join(folder, name), 'wb') as fh:
+            fh.write(data)
+        for old in os.listdir(folder):
+            if old != name and old.startswith(self.tag + '_'):
+                try:
+                    if time.time() - os.path.getmtime(os.path.join(folder, old)) > 4:
+                        os.remove(os.path.join(folder, old))
+                except OSError:
+                    pass
+        return GRAPH_DIR + name
+
+
+TOTAL_GRAPH = Graph('spark', 760, 60)
+VIDEO_GRAPH = Graph('vspark', 940, 120)
+
+
+# ============================================================================ state between ticks
+class State(object):
+    def __init__(self):
+        self.reset(None)
+        self.max_clock = 0.0
+        self.shown = False
+
+    def reset(self, path):
+        self.path = path
+        self.total_rates = []
+        self.video_rates = []
+        self.video_peak = 0.0
+        self.size = file_size(path) if path else ''
+        TRACKS.at = 0.0
+
+
+STATE = State()
+
+
+def write(values):
+    for key, value in values.items():
+        value = '' if value is None else str(value)
+        if HOME.getProperty(PREFIX + key) != value:
+            HOME.setProperty(PREFIX + key, value)
+
+
+# ============================================================================ one reading
+class Reading(object):
+    """Everything the three pages need, read from Kodi once."""
+
+    def __init__(self, now):
+        self.now = now
+        self.path = label('Player.Filenameandpath')
+        self.filename = label('Player.Filename')
+        # video
+        self.width = re.sub(r'[,.]', '', label('Player.Process(videowidth)'))
+        self.height = re.sub(r'[,.]', '', label('Player.Process(videoheight)'))
+        self.fps = label('Player.Process(videofps)')
+        res = label('VideoPlayer.VideoResolution')
+        self.res = {'8K': '8K', '4K': '4K', '1080': '1080p', '720': '720p', '576': '576p', '540': '540p',
+                    '480': '480p'}.get(res, res.upper())
+        self.hdr = label('VideoPlayer.HdrType').lower()
+        self.hdr_detail = label('VideoPlayer.HdrDetail')
+        m = re.search(r'(\d+)', self.hdr_detail)
+        self.dv_profile = m.group(1) if (m and self.hdr == 'dolbyvision') else ''
+        up = self.hdr_detail.upper()
+        self.dv_layer = 'FEL' if 'FEL' in up else ('MEL' if 'MEL' in up else '')
+        self.pixfmt = label('Player.Process(pixformat)')
+        self.bits = bit_depth(self.hdr, self.hdr_detail, self.dv_layer)
+        codec = label('VideoPlayer.VideoCodec').lower()
+        self.vcodec = VIDEO_CODECS.get(codec, codec.upper())
+        self.dv_name = (dolby_vision_from_name('%s %s' % (self.filename, self.path))
+                        if self.hdr == 'dolbyvision' else {})
+        self.hdr_name = HDR_NAMES.get(self.hdr, '')
+        scan = label('Player.Process(videoscantype)').lower()
+        self.scan = (say('progressive', 'تدريجي') if scan.startswith('p')
+                     else say('interlaced', 'متشابك') if scan.startswith('i') else '')
+        self.dar = label('Player.Process(videodar)')
+        self.vdecoder = label('Player.Process(videodecoder)')
+        self.hw = flag('Player.Process(videohwdecoder)')
+        self.screen = label('System.ScreenResolution')
+        self.render_fps = number(label('System.FPS'))
+        # audio
+        self.acodec = label('VideoPlayer.AudioCodec').lower()
+        try:
+            self.channels = int(label('VideoPlayer.AudioChannels') or 0)
+        except ValueError:
+            self.channels = 0
+        self.layout = LAYOUTS.get(self.channels, ('%d.0' % self.channels) if self.channels else '')
+        self.aname = label('VideoPlayer.AudioName')
+        low = self.aname.lower()
+        self.atmos = 'atmos' in self.acodec or 'atmos' in low
+        self.dtsx = self.acodec.startswith('dtshd_ma_x') or 'dts:x' in low or 'dts-x' in low
+        self.immersive = self.atmos or self.dtsx
+        self.alabel = AUDIO_LONG.get(self.acodec, self.acodec.upper())
+        if self.atmos and 'Atmos' not in self.alabel:
+            self.alabel += ' Atmos'
+        self.ashort = AUDIO_SHORT.get(self.acodec, self.acodec.upper())
+        self.rate = digits(label('Player.Process(audiosamplerate)'))
+        self.khz = ('%g kHz' % (self.rate / 1000.0)) if self.rate else ''
+        abits = label('Player.Process(audiobitspersample)')
+        self.abits = abits if abits and abits != '0' else ''
+        adec = label('Player.Process(audiodecoder)')
+        self.adecoder = '' if adec.lower() in ('unknown', 'none') else adec
+        self.passthrough = self.adecoder.lower().startswith('pt-')
+        self.aqueue = number(label('Player.Process(audioqueuelevel)'))
+        self.vqueue = number(label('Player.Process(videoqueuelevel)'))
+        # rates and buffer
+        self.vrate = number(label('Player.Process(videolivebitrate)'))
+        self.arate = digits(label('Player.Process(audiolivebitrate)')) / 1024.0
+        self.total_rate = self.vrate + self.arate
+        self.cache = number(label('Player.CacheLevel'))
+        self.ahead = self._ahead()
+        self.stream = flag('Player.IsInternetStream')
+        self.tracks = TRACKS.get(now) or {}
+
+    @staticmethod
+    def _ahead():
+        try:
+            total = xbmc.Player().getTotalTime()
+        except Exception:
+            return ''
+        done, cached = number(label('Player.Progress')), number(label('Player.ProgressCache'))
+        if not total or cached <= done:
+            return ''
+        secs = int((cached - done) / 100.0 * total)
+        if secs < 600:
+            return say('%d s buffered' % secs, '%d ثانية في المخزن المؤقت' % secs)
+        return say('%d min buffered' % (secs // 60), '%d دقيقة في المخزن المؤقت' % (secs // 60))
+
+
+def _rates_text(r):
+    return say('%.1f Mb/s · video %.1f · audio %.1f' % (r.total_rate, r.vrate, r.arate),
+               '%.1f Mb/s · الفيديو %.1f · الصوت %.1f' % (r.total_rate, r.vrate, r.arate))
+
+
+def _dv_badge(r, upper=True):
+    name = 'DOLBY VISION 2' if r.dv_name.get('dv2') else 'DOLBY VISION'
+    return name if upper else name.title()
+
+
+def _profile_text(r, key='profile'):
+    if not r.dv_profile:
+        return ''
+    word = say('profile ', 'الملف ') if key == 'profile' else say('PROFILE ', 'الملف ')
+    return word + r.dv_profile + ((' ' + r.dv_layer) if r.dv_layer else '')
+
+
+# ---------------------------------------------------------------------------- page 1: overview
+def overview(r):
+    out = {}
+    show = label('VideoPlayer.TVShowTitle')
+    title = label('VideoPlayer.Title')
+    if show:
+        season, episode = label('VideoPlayer.Season'), label('VideoPlayer.Episode')
+        out['title'] = joined(show, ('S%s E%s' % (season, episode)) if season and episode else '', title)
+    else:
+        year = label('VideoPlayer.Year')
+        out['title'] = ('%s (%s)' % (title, year)) if (title and year) else (title or r.filename)
+    clock = label('Player.Time')
+    duration = label('Player.Duration')
+    text = ('%s / %s' % (clock, duration)) if duration else clock
     try:
-        width = int(w or 0)
+        chapter, chapters = int(label('Player.Chapter') or 0), int(label('Player.ChapterCount') or 0)
+    except ValueError:
+        chapter = chapters = 0
+    if chapter and chapters > 1:
+        text += say(' · chapter %d of %d' % (chapter, chapters), ' · الفصل %d من %d' % (chapter, chapters))
+    out['time'] = text
+
+    # badges
+    out['b.res'] = r.res
+    if r.hdr == 'dolbyvision':
+        out['b.dv'] = joined(_dv_badge(r), ('P' + r.dv_profile) if r.dv_profile else '', r.dv_layer, sep=' ')
+        out['b.hdr'] = ''
+    else:
+        out['b.dv'] = ''
+        out['b.hdr'] = HDR_BADGES.get(r.hdr, '')
+    out['b.vc'] = ('%s %d-bit' % (r.vcodec, r.bits)) if (r.vcodec and r.bits >= 10) else r.vcodec
+    out['b.remux'] = 'REMUX' if re.search(r'remux', r.filename, re.I) else ''
+    out['b.ac'] = r.ashort
+    out['b.imm'] = (('ATMOS %s' % r.layout) if r.atmos else ('DTS:X %s' % r.layout) if r.dtsx else '').strip()
+    out['b.ch'] = '' if r.immersive else r.layout
+    sub_lang = label('VideoPlayer.SubtitlesLanguage')
+    out['b.sub'] = (say('%s subtitles' % language_tag(sub_lang), 'ترجمة %s' % language_tag(sub_lang))
+                    if (flag('VideoPlayer.SubtitlesEnabled') and sub_lang) else '')
+
+    # tiles
+    out['t1.big'] = ('%s HDR' % r.res) if r.hdr_name else r.res
+    out['t1.sub'] = joined(('%s×%s' % (r.width, r.height)) if (r.width and r.height) else '', r.fps)
+    out['t2.big'] = r.hdr_name or 'SDR'
+    out['t2.sub'] = _profile_text(r)
+    if r.atmos:
+        big = 'Atmos %s' % r.layout
+    elif r.dtsx:
+        big = 'DTS:X %s' % r.layout
+    else:
+        big = r.layout or r.alabel
+    out['t3.big'] = big.strip()
+    out['t3.sub'] = joined(AUDIO_SHORT.get(r.acodec, r.alabel) if (r.immersive or r.layout) else '', r.khz)
+    if r.total_rate:
+        STATE.total_rates = (STATE.total_rates + [r.total_rate])[-HISTORY:]
+    out['t4.big'] = ('%.1f Mb/s' % r.total_rate) if r.total_rate else '–'
+    out['t4.sub'] = (say('video %.1f · audio %.1f' % (r.vrate, r.arate), 'الفيديو %.1f · الصوت %.1f' % (r.vrate, r.arate))
+                     if r.total_rate else '')
+    if len(STATE.total_rates) >= 2:
+        try:
+            out['spark'] = TOTAL_GRAPH.draw(STATE.total_rates)
+        except Exception as e:
+            _log('graph: %s' % e)
+    out['t5.big'] = '%d%%' % round(r.cache)
+    out['t5.sub'] = r.ahead
+    out['t5.bar'] = meter(r.cache)
+
+    # system
+    cpu = label('System.CpuUsage').replace(',', '.')
+    per_core = [float(v) for v in re.findall(r'#\d+:\s*([\d.]+)%', cpu)]
+    average = (sum(per_core) / len(per_core)) if per_core else number(cpu)
+    out['cores'] = min(len(per_core), MAX_CORES)
+    for n in range(MAX_CORES):
+        out['core%d' % n] = max(1, meter(per_core[n], CORE_STEPS)) if n < len(per_core) else ''
+    out['cores.label'] = (say('CPU per core · average %d%%' % round(average), 'المعالج لكل نواة · المتوسط %d%%' % round(average))
+                          if per_core else 'CPU · %d%%' % round(average))
+    cpu_temp, gpu_temp = number(label('System.CPUTemperature'), -1), number(label('System.GPUTemperature'), -1)
+    mem = number(label('System.Memory(used.percent)'))
+    mem_used = re.sub(r'\s+', ' ', label('System.Memory(used)').replace('MB', ' MB').replace('GB', ' GB')).strip()
+    out['t6.big'] = 'CPU %d%%' % round(average)
+    out['t6.sub'] = joined(('%d °C' % round(cpu_temp)) if cpu_temp >= 0 else '',
+                           say('%d%% memory' % round(mem), '%d%% من الذاكرة' % round(mem)))
+    out['t6.bar'] = meter(mem)
+    out['m.ct'] = ('%d °C' % round(cpu_temp)) if cpu_temp >= 0 else '–'
+    out['m.ct.bar'] = meter(cpu_temp) if cpu_temp >= 0 else 0
+    out['m.gt'] = ('%d °C' % round(gpu_temp)) if gpu_temp >= 0 else '–'
+    out['m.gt.bar'] = meter(gpu_temp) if gpu_temp >= 0 else 0
+    out['m.mem'] = joined('%d%%' % round(mem), mem_used)
+    out['m.mem.bar'] = meter(mem)
+    clock_mhz = number(label('System.CpuFrequency'))
+    if not STATE.max_clock:
+        try:
+            with open('/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq') as fh:
+                STATE.max_clock = int(fh.read().strip()) / 1000.0
+        except (OSError, ValueError):
+            STATE.max_clock = 0.0
+    STATE.max_clock = max(STATE.max_clock, clock_mhz)
+    out['m.clk'] = ('%d MHz' % round(clock_mhz)) if clock_mhz else '–'
+    out['m.clk.bar'] = meter(clock_mhz / STATE.max_clock * 100) if (clock_mhz and STATE.max_clock) else 0
+    video_fps = number(r.fps)
+    out['m.fps'] = ('%.2f fps' % r.render_fps) if r.render_fps else '–'
+    out['m.fps.bar'] = meter(min(100.0, r.render_fps / video_fps * 100)) if (r.render_fps and video_fps) else 0
+    out['m.vq'] = '%d%%' % round(r.vqueue)
+    out['m.vq.bar'] = meter(r.vqueue)
+
+    # rows: source
+    out['r.file'] = shorten(r.filename)
+    origin = where_from(r.path)
+    out['r.loc'] = joined(origin, say('stream', 'بث')) if (r.stream and origin) else origin
+    ext = os.path.splitext(urllib.parse.urlparse(r.filename).path)[1].lower().lstrip('.')
+    out['r.cont'] = joined(CONTAINERS.get(ext, ext.upper()), STATE.size)
+    out['r.rate'] = _rates_text(r) if r.total_rate else '–'
+    # rows: video
+    out['r.res'] = joined(('%s×%s' % (r.width, r.height)) if (r.width and r.height) else '',
+                          ('%s fps' % r.fps) if r.fps else '', r.scan)
+    if r.hdr == 'dolbyvision':
+        out['r.hdr'] = joined('Dolby Vision', _profile_text(r), 'BT.2020')
+    elif r.hdr_name:
+        out['r.hdr'] = joined(r.hdr_name, 'BT.2020')
+    else:
+        out['r.hdr'] = 'SDR'
+    out['r.fmt'] = joined(r.pixfmt, ('%s:1' % r.dar) if r.dar else '')
+    out['r.vdec'] = joined(r.vdecoder, 'hardware' if r.hw else 'software')
+    screen = re.sub(r'(\d)\s*x\s*(\d)', r'\1×\2', r.screen).replace(' - ', ' · ')
+    out['r.disp'] = re.sub(r'(\d)Hz', r'\1 Hz', screen)
+    out['r.vq'] = '%d%%' % round(r.vqueue)
+    out['r.vq.dot'] = 'low' if r.vqueue <= 20 else 'ok'
+    # rows: audio
+    streams = r.tracks.get('audiostreams') or []
+    current = r.tracks.get('currentaudiostream') or {}
+    pos = next((n for n, s in enumerate(streams, 1) if s.get('index') == current.get('index')), 0)
+    out['r.atrack'] = joined(say('%d of %d' % (pos, len(streams)), '%d من %d' % (pos, len(streams)))
+                             if (pos and len(streams) > 1) else '',
+                             language(current.get('language') or label('VideoPlayer.AudioLanguage')),
+                             current.get('name') or r.aname)
+    out['r.afmt'] = joined(r.alabel, ('%s (%s)' % (channel_count(r.channels), r.layout)) if r.channels else '')
+    out['r.aq'] = joined(r.khz, ('%s bit' % r.abits) if r.abits else '')
+    out['r.adec'] = (r.adecoder + say(' · passed through to the receiver', ' · يُمرَّر كما هو إلى جهاز الاستقبال')
+                     if r.passthrough else r.adecoder)
+    out['r.aqueue'] = '%d%%' % round(r.aqueue)
+    out['r.aqueue.dot'] = 'low' if r.aqueue <= 20 else 'ok'
+    # rows: subtitles
+    subs = r.tracks.get('subtitles') or []
+    sub = r.tracks.get('currentsubtitle') or {}
+    if r.tracks.get('subtitleenabled') and sub:
+        spos = next((n for n, s in enumerate(subs, 1) if s.get('index') == sub.get('index')), 0)
+        out['r.sub'] = joined(language(sub.get('language')) or sub.get('name'),
+                              (sub.get('codec') or '').upper().replace('SUBRIP', 'SRT'),
+                              say('%d of %d' % (spos, len(subs)), '%d من %d' % (spos, len(subs))) if spos else '')
+    else:
+        out['r.sub'] = say('Off', 'متوقفة') + (say(' · %d available' % len(subs), ' · %d متاحة' % len(subs))
+                                               if subs else '')
+    # rows: network
+    out['r.buf'] = joined('%d%%' % round(r.cache), r.ahead)
+    out['r.buf.dot'] = 'low' if r.cache <= 20 else 'ok'
+    out['r.type'] = say('Stream · internet', 'بث · عبر الإنترنت') if r.stream else say('Local file', 'ملف محلي')
+    return out
+
+
+# ---------------------------------------------------------------------------- page 2: video
+def _white(text):
+    return '[COLOR FFFFFFFF][B]%s[/B][/COLOR]' % text
+
+
+def video_page(r):
+    out = {}
+    try:
+        width = int(r.width or 0)
     except ValueError:
         width = 0
-    box = "4k" if width >= 3000 else "1080" if width >= 1200 else "sd"
-    put("v.resbox", box)
-    put("v.reslabel", f"{res_badge} · {w}×{h}" if w and h else res_badge)
-    put("v.resshort", res_badge)
-    put("v.resnote", {"4k": t("4× the pixels of Full HD", "أربعة أضعاف بكسلات Full HD"),
-                      "1080": t("Full HD" if width >= 1900 else "HD", "Full HD" if width >= 1900 else "HD"),
-                      "sd": t("standard definition", "دقة قياسية")}[box])
-    dar = info("Player.Process(videodar)")
+    box = '4k' if width >= 3000 else ('1080' if width >= 1200 else 'sd')
+    out['v.resbox'] = box
+    out['v.reslabel'] = joined(r.res, ('%s×%s' % (r.width, r.height)) if (r.width and r.height) else '')
+    out['v.resshort'] = r.res
+    out['v.resnote'] = {'4k': say('four times the pixels of Full HD', 'أربعة أضعاف بكسلات Full HD'),
+                        '1080': 'Full HD' if width >= 1900 else 'HD',
+                        'sd': say('standard definition', 'دقة قياسية')}[box]
+    ratio_name = ''
     try:
-        ratio = float(dar.replace(",", "."))
-        named = "16:9" if abs(ratio - 1.78) < 0.02 else "4:3" if abs(ratio - 1.33) < 0.02 else "21:9" if 2.3 < ratio < 2.45 else ""
+        ratio = float(r.dar.replace(',', '.'))
+        if abs(ratio - 1.78) < 0.02:
+            ratio_name = '16:9'
+        elif abs(ratio - 1.33) < 0.02:
+            ratio_name = '4:3'
+        elif 2.3 < ratio < 2.45:
+            ratio_name = '21:9'
     except ValueError:
-        named = ""
-    put("v.dar", f"{dar}:1" + (f" ({named})" if named else "") if dar else "–")
-    put("v.fps", f"{fps} fps" if fps else "–")
-    put("v.scan", v["scan_word"] or "–")
-    deint = info("Player.Process(deintmethod)")
-    put("v.deint", deint if deint and deint.lower() not in ("none", "unknown", "") else t("not needed", "غير مطلوب"))
-    bar = {"dolbyvision": "dv", "hdr10": "hdr10", "hdr10plus": "hdr10", "hlg": "hdr10"}.get(hdr, "sdr")
-    put("v.hdrbar", bar)
-    put("v.hb.dv", ("DOLBY VISION 2" if dvn.get("dv2") else "DOLBY VISION") if hdr == "dolbyvision" else "")
-    dv_line(hdr, prof, layer, dvn)
-    put("v.hb.hdr", {"hdr10": "HDR10", "hdr10plus": "HDR10+", "hlg": "HLG"}.get(hdr, ""))
-    put("v.hb.sdr", "SDR" if bar == "sdr" else "")
-    put("v.hb2", (t("PROFILE ", "الملف ") + prof.group(1) + (f" {layer}" if layer else "")) if hdr == "dolbyvision" and prof else "")
-    wide = bar != "sdr"
-    put("v.gamut", "2020" if wide else "709")
-    put("v.c1", t("Colours: ", "الألوان: ") + ("[COLOR FFFFFFFF][B]BT.2020[/B][/COLOR]" if wide else "[COLOR FFFFFFFF][B]BT.709[/B][/COLOR]"))
-    transfer = {"dolbyvision": "PQ", "hdr10": "PQ", "hdr10plus": "PQ", "hlg": "HLG"}.get(hdr, "SDR (gamma)")
-    put("v.c2", t("Transfer: ", "النقل: ") + f"[COLOR FFFFFFFF][B]{transfer}[/B][/COLOR]")
-    bits = v.get("bits", 10 if ten else 8) or (10 if wide else 8)
-    put("v.c3", "[COLOR FFFFFFFF][B]%d-bit[/B][/COLOR] · " % bits + (
-        t("68.7 billion colours", "68.7 مليار لون") if bits >= 12 else
-        t("1 billion colours", "مليار لون") if bits == 10 else
-        t("16.7 million colours", "16.7 مليون لون")))
-    put("v.p1k", t("File", "الملف"))
-    put("v.p1", f"{vname} {bits}-bit" if vname and ten else vname or "–")
-    put("v.p1s", pix)
-    put("v.p2k", "Decoder")
-    put("v.p2", info("Player.Process(videodecoder)") or "–")
-    hw = xbmc.getCondVisibility("Player.Process(videohwdecoder)")
-    put("v.p2s", t("hardware ✓", "hardware ✓") if hw else "software")
-    rfps = num(info("System.FPS"))
-    put("v.p3k", t("Picture", "الصورة"))
-    put("v.p3", f"{rfps:.2f} fps" if rfps else "–")
-    put("v.p3s", t("drawn per second", "إطارًا في الثانية"))
-    disp = info("System.ScreenResolution")
-    m = re.search(r"(\d+)\s*x\s*(\d+)", disp)
-    hz = num(re.search(r"@\s*([\d.,]+)", disp).group(1)) if re.search(r"@\s*([\d.,]+)", disp) else 0.0
-    put("v.p4k", "Tv")
-    put("v.p4", f"{m.group(1)}×{m.group(2)}" if m else disp)
-    vfps = num(fps)
-    match = hz and vfps and any(abs(hz - vfps * k) < 0.05 for k in (1, 2))
-    put("v.p4s", f"@ {hz:.2f} Hz" + (" ✓" if match else "") if hz else "")
-    vbr = v["vbr"]
-    if vbr:
-        _STATE["vhist"] = (_STATE["vhist"] + [vbr])[-40:]
-        _STATE["peak"] = max(_STATE["peak"], vbr)
-    put("v.br", f"{vbr:.1f} Mb/s" if vbr else "–")
-    put("v.peak", t(f"peak {_STATE['peak']:.1f}", f"الذروة {_STATE['peak']:.1f}") if _STATE["peak"] else "")
-    if len(_STATE["vhist"]) >= 2:
-        put("v.spark", spark(_STATE["vhist"], 940, 120, "vspark"))
+        pass
+    out['v.dar'] = (('%s:1' % r.dar) + ((' (%s)' % ratio_name) if ratio_name else '')) if r.dar else '–'
+    out['v.fps'] = ('%s fps' % r.fps) if r.fps else '–'
+    out['v.scan'] = r.scan or '–'
+    deint = label('Player.Process(deintmethod)')
+    out['v.deint'] = deint if (deint and deint.lower() not in ('none', 'unknown')) else say('not needed', 'غير مطلوب')
+    kind = 'dv' if r.hdr == 'dolbyvision' else ('hdr10' if r.hdr in ('hdr10', 'hdr10plus', 'hlg') else 'sdr')
+    out['v.hdrbar'] = kind
+    out['v.hb.dv'] = _dv_badge(r) if r.hdr == 'dolbyvision' else ''
+    out['v.hb.hdr'] = HDR_BADGES.get(r.hdr, '')
+    out['v.hb.sdr'] = 'SDR' if kind == 'sdr' else ''
+    out['v.hb2'] = _profile_text(r, 'PROFILE')
+    out.update(_dolby_vision_row(r))
+    wide = kind != 'sdr'
+    out['v.gamut'] = '2020' if wide else '709'
+    out['v.c1'] = say('Colours: ', 'الألوان: ') + _white('BT.2020' if wide else 'BT.709')
+    transfer = {'dolbyvision': 'PQ', 'hdr10': 'PQ', 'hdr10plus': 'PQ', 'hlg': 'HLG'}.get(r.hdr, 'SDR (gamma)')
+    out['v.c2'] = say('Transfer: ', 'منحنى النقل: ') + _white(transfer)
+    bits = r.bits or (10 if wide else 8)
+    if bits >= 12:
+        colours = say('68.7 billion colours', '68.7 مليار لون')
+    elif bits == 10:
+        colours = say('1.07 billion colours', '1.07 مليار لون')
+    else:
+        colours = say('16.7 million colours', '16.7 مليون لون')
+    out['v.c3'] = '%s · %s' % (_white('%d-bit' % bits), colours)
+    out['v.p1k'] = say('File', 'الملف')
+    out['v.p1'] = ('%s %d-bit' % (r.vcodec, bits)) if (r.vcodec and r.bits >= 10) else (r.vcodec or '–')
+    out['v.p1s'] = r.pixfmt
+    out['v.p2k'] = say('Decoder', 'فك الترميز')
+    out['v.p2'] = r.vdecoder or '–'
+    out['v.p2s'] = 'hardware ✓' if r.hw else 'software'
+    out['v.p3k'] = say('Picture', 'الصورة')
+    out['v.p3'] = ('%.2f fps' % r.render_fps) if r.render_fps else '–'
+    out['v.p3s'] = say('drawn each second', 'إطارًا يُرسم كل ثانية')
+    size = re.search(r'(\d+)\s*x\s*(\d+)', r.screen)
+    hz_m = re.search(r'@\s*([\d.,]+)', r.screen)
+    hz = number(hz_m.group(1)) if hz_m else 0.0
+    video_fps = number(r.fps)
+    out['v.p4k'] = say('TV', 'الشاشة')
+    out['v.p4'] = ('%s×%s' % size.groups()) if size else r.screen
+    matched = bool(hz and video_fps and any(abs(hz - video_fps * k) < 0.05 for k in (1, 2)))
+    out['v.p4s'] = (('@ %.2f Hz' % hz) + (' ✓' if matched else '')) if hz else ''
+    if r.vrate:
+        STATE.video_rates = (STATE.video_rates + [r.vrate])[-HISTORY:]
+        STATE.video_peak = max(STATE.video_peak, r.vrate)
+    out['v.br'] = ('%.1f Mb/s' % r.vrate) if r.vrate else '–'
+    out['v.peak'] = (say('peak %.1f' % STATE.video_peak, 'الذروة %.1f' % STATE.video_peak)
+                     if STATE.video_peak else '')
+    if len(STATE.video_rates) >= 2:
+        out['v.spark'] = VIDEO_GRAPH.draw(STATE.video_rates)
+    return out
 
 
-LAYOUT = {1: ["c"], 2: ["l", "r"], 3: ["l", "r", "lfe"], 4: ["l", "r", "sl", "sr"], 5: ["l", "r", "c", "sl", "sr"],
-          6: ["l", "r", "c", "lfe", "sl", "sr"], 7: ["l", "r", "c", "lfe", "sl", "sr", "sbl"], 8: ["l", "r", "c", "lfe", "sl", "sr", "sbl", "sbr"]}
+def _dolby_vision_row(r):
+    if r.hdr != 'dolbyvision':
+        return {'v.dv.on': ''}
+    dvn = r.dv_name
+    from_kodi = 'Dolby Vision' + ((' · ' + _profile_text(r)) if r.dv_profile else '')
+    named = joined(('P%s' % dvn['profile'] + ((' ' + dvn['layer']) if dvn.get('layer') else '')) if dvn.get('profile')
+                   else dvn.get('layer', ''), 'DV2' if dvn.get('dv2') else '') or say('nothing more', 'لا شيء إضافي')
+    supported = label('System.SupportedHDRTypes').lower()
+    if 'dolby' in supported:
+        screen = 'Dolby Vision ✓'
+    elif supported:
+        screen = say('no Dolby Vision reported', 'لم يُبلَّغ عن Dolby Vision')
+    else:
+        screen = say('not reported', 'لم يُبلَّغ عنه')
+    line = '   ·   '.join(('Kodi: ' + _white(from_kodi),
+                           say('File name: ', 'اسم الملف: ') + _white(named),
+                           say('Box + TV: ', 'الجهاز + الشاشة: ') + _white(screen)))
+    if dvn.get('dv2'):
+        note = say('The release is marked Dolby Vision 2: a Dolby Vision 2 TV uses the extra data it carries.',
+                   'الإصدار موسوم بـ Dolby Vision 2: يستعمل التلفاز الداعم لـ Dolby Vision 2 البيانات الإضافية التي يحملها.')
+    else:
+        note = say('A Dolby Vision 2 TV applies its own newer picture processing to this Dolby Vision picture.',
+                   'يطبّق التلفاز الداعم لـ Dolby Vision 2 معالجته الأحدث للصورة على صورة Dolby Vision هذه.')
+    return {'v.dv.on': '1', 'v.dv.line': line, 'v.dv.note': note}
 
 
-def audio_tab(v):
-    acodec, chn, chs, atmos, dtsx, along = v["acodec"], v["chn"], v["chs"], v["atmos"], v["dtsx"], v["along"]
-    rate, bits, khz, adec, aq = v["rate"], v["bits"], v["khz"], v["adec"], v["aq"]
-    sett = kodi_settings(v["now"])
-    passthrough = adec.lower().startswith("pt-") if adec else False
-    long_name = {"truehd_atmos": "Dolby TrueHD", "truehd": "Dolby TrueHD", "eac3_ddp_atmos": "Dolby Digital+", "eac3": "Dolby Digital+",
-                 "ac3": "Dolby Digital", "dtshd_ma_x_imax": "DTS:X", "dtshd_ma_x": "DTS:X", "dtshd_ma": "DTS-HD MA", "dtshd_hra": "DTS-HD HRA",
-                 "dts": "DTS"}.get(acodec, v["along"].replace(" Atmos", ""))
-    lossless = acodec.startswith(("truehd", "dtshd_ma", "flac", "pcm"))
-    # the way of the sound
-    put("a.c1k", t("File", "الملف"))
-    put("a.c1", f"{ABADGE.get(acodec, acodec.upper())}" + (" Atmos" if atmos else ""))
-    put("a.c1s", (f"{chs} + " + t("objects", "كائنات صوتية")) if (atmos or dtsx) and chs else (chan_word(chn) if chn else ""))
-    put("a.c2k", "Kodi")
-    put("a.c2", "passthrough" if passthrough else t("decodes itself", "يفك الترميز بنفسه"))
-    put("a.c2s", t("untouched ✓", "دون تعديل ✓") if passthrough else (adec or ""))
-    put("a.c3k", "HDMI" if passthrough else t("Out", "متوقفة"))
-    put("a.c3", t("bitstream", "تمرير مباشر") if passthrough else "PCM")
-    put("a.c3s", " · ".join(x for x in (khz, f"{bits} bit" if bits and bits != "0" else "") if x))
-    dev = device_name(sett.get("audiooutput.passthroughdevice") if passthrough else sett.get("audiooutput.audiodevice"))
-    put("a.c4k", t("Receiver", "Receiver") if passthrough else t("Device", "الجهاز"))
-    put("a.c4", dev or "–")
-    put("a.c4s", (t("decodes Atmos", "يفك ترميز Atmos") if atmos else t("decodes DTS:X", "يفك ترميز DTS:X") if dtsx else t("decodes", "يفك الترميز"))
-        if passthrough else t("plays", "يُشغِّل"))
-    cfg_ch = SPEAKER_CONFIG.get(sett.get("audiooutput.channels") if isinstance(sett.get("audiooutput.channels"), int) else -1, "")
-    put("a.c5k", t("Speakers", "مكبرات الصوت"))
-    put("a.c5", (chs or cfg_ch) + (" + Atmos" if atmos else " + DTS:X" if dtsx else ""))
-    put("a.c5s", chan_word(chn) + (t(" + height", " + الارتفاع") if (atmos or dtsx) else "") if chn else "")
-    # what you hear
-    put("a.h1", long_name)
-    put("a.h2", "Atmos" if atmos else "")
-    put("a.hs", " · ".join(x for x in ((chs + t(" + height", " + الارتفاع")) if (atmos or dtsx) and chs else chs, khz,
-                                       t(f"{bits} bit", f"{bits} بت") if bits and bits != "0" else "", t("lossless", "بلا فقد") if lossless else "") if x))
+# ---------------------------------------------------------------------------- page 3: audio
+def audio_page(r):
+    out = {}
+    cfg = AUDIO_SETTINGS.get(r.now) or {}
+    family = AUDIO_FAMILY.get(r.acodec, r.alabel.replace(' Atmos', ''))
+    lossless = r.acodec.startswith(('truehd', 'dtshd_ma', 'flac', 'pcm'))
+    plus_height = say(' + height', ' + الارتفاع')
+    # the path of the sound
+    out['a.c1k'] = say('File', 'الملف')
+    out['a.c1'] = r.ashort + (' Atmos' if r.atmos else '')
+    if r.immersive and r.layout:
+        out['a.c1s'] = '%s + %s' % (r.layout, say('objects', 'كائنات صوتية'))
+    else:
+        out['a.c1s'] = channel_count(r.channels) if r.channels else ''
+    out['a.c2k'] = 'Kodi'
+    out['a.c2'] = 'passthrough' if r.passthrough else say('decodes it', 'يفك ترميزه بنفسه')
+    out['a.c2s'] = say('untouched ✓', 'دون تعديل ✓') if r.passthrough else r.adecoder
+    out['a.c3k'] = 'HDMI' if r.passthrough else say('Out', 'الخرج')
+    out['a.c3'] = say('bitstream', 'تمرير مباشر') if r.passthrough else 'PCM'
+    out['a.c3s'] = joined(r.khz, ('%s bit' % r.abits) if r.abits else '')
+    device = device_name(cfg.get('audiooutput.passthroughdevice') if r.passthrough else cfg.get('audiooutput.audiodevice'))
+    out['a.c4k'] = say('Receiver', 'جهاز الاستقبال') if r.passthrough else say('Device', 'الجهاز')
+    out['a.c4'] = device or '–'
+    if r.passthrough:
+        out['a.c4s'] = (say('decodes Atmos', 'يفك ترميز Atmos') if r.atmos
+                        else say('decodes DTS:X', 'يفك ترميز DTS:X') if r.dtsx else say('decodes', 'يفك الترميز'))
+    else:
+        out['a.c4s'] = say('plays', 'يُشغِّل')
+    chosen = cfg.get('audiooutput.channels')
+    out_layout = OUTPUT_LAYOUTS.get(chosen if isinstance(chosen, int) else -1, '')
+    extra = ' + Atmos' if r.atmos else (' + DTS:X' if r.dtsx else '')
+    out['a.c5k'] = say('Speakers', 'مكبرات الصوت')
+    out['a.c5'] = (r.layout or out_layout) + extra
+    out['a.c5s'] = (channel_count(r.channels) + (plus_height if r.immersive else '')) if r.channels else ''
+    # what is heard
+    out['a.h1'] = family
+    out['a.h2'] = 'Atmos' if r.atmos else ''
+    out['a.hs'] = joined((r.layout + plus_height) if (r.immersive and r.layout) else r.layout, r.khz,
+                         say('%s bit' % r.abits, '%s بت' % r.abits) if r.abits else '',
+                         say('lossless', 'بلا فقد') if lossless else '')
     # output
-    cfg = {1: t("Fixed", "ثابت"), 2: t("Best match", "أفضل تطابق"), 3: t("Optimized", "مُحسَّن")}.get(sett.get("audiooutput.config"), "")
-    put("a.dev", ("HDMI · " if passthrough and dev and "hdmi" not in dev.lower() else "") + (dev or "–"))
-    put("a.cfg", " · ".join(x for x in (cfg, cfg_ch) if x) or "–")
-    vol, muted = app_volume()
-    vol = f"{vol}%" if vol is not None else info("Player.Volume")
-    delay = info("Player.AudioDelay")
+    mode = {1: say('Fixed', 'ثابت'), 2: say('Best match', 'أفضل تطابق'),
+            3: say('Optimised', 'مُحسَّن')}.get(cfg.get('audiooutput.config'), '')
+    out['a.dev'] = (('HDMI · ' if (r.passthrough and device and 'hdmi' not in device.lower()) else '')
+                    + (device or '–'))
+    out['a.cfg'] = joined(mode, out_layout) or '–'
+    volume, muted = kodi_volume()
+    volume_text = ('%s%%' % volume) if volume is not None else label('Player.Volume')
+    delay = ''
     try:
-        ms = round(float(delay.split()[0].replace(",", ".")) * 1000)
-        delay = t(f"delay {ms} ms", f"تأخير {ms} ms") if ms else t("no delay", "دون تأخير")
-    except (ValueError, IndexError, AttributeError):
-        delay = ""
-    put("a.vol", " · ".join(x for x in ((t("muted", "مكتوم") if muted else vol), delay) if x) or "–")
-    put("r.aqueue2", f"{aq:.0f}%")
-    put("r.aqueue2.bar", step(aq))
-    # speakers and bars: the channels this track has
-    have = set(LAYOUT.get(chn, LAYOUT[8] if chn > 8 else []))
-    if atmos or dtsx:
-        have |= {"tfl", "tfr", "trl", "trr"}
-    for nm in ("l", "c", "r", "sl", "sr", "sbl", "sbr", "lfe", "tfl", "tfr", "trl", "trr"):
-        put(f"sp.{nm}", "1" if nm in have else "")
-    room = chs + (" + Atmos" if atmos else " + DTS:X" if dtsx else "")
-    put("a.roomlabel", t("Your room", "غرفتك") + (f" · {room}" if room else ""))
-    put("a.chlabel", t("Channels", "القنوات") + (f" · {chs}" if chs else "") + (t(" + 4 height", " + 4 للارتفاع") if (atmos or dtsx) else ""))
-    # tracks
-    tr = v["tr"]
-    streams = tr.get("audiostreams") or []
-    cur = (tr.get("currentaudiostream") or {}).get("index")
-    put("a.tlabel", t("Audio tracks", "المسارات الصوتية") + f" · {len(streams)}")
+        ms = int(round(float(label('Player.AudioDelay').split()[0].replace(',', '.')) * 1000))
+        delay = say('delay %d ms' % ms, 'تأخير %d ms' % ms) if ms else say('no delay', 'دون تأخير')
+    except (ValueError, IndexError):
+        pass
+    out['a.vol'] = joined(say('muted', 'مكتوم') if muted else volume_text, delay) or '–'
+    out['r.aqueue2'] = '%d%%' % round(r.aqueue)
+    out['r.aqueue2.bar'] = meter(r.aqueue)
+    # the speakers this track uses
+    active = set(SPEAKERS.get(r.channels, SPEAKERS[8] if r.channels > 8 else ()))
+    if r.immersive:
+        active.update(HEIGHT_SPEAKERS)
+    for name in SPEAKER_NAMES:
+        out['sp.' + name] = '1' if name in active else ''
+    out['a.roomlabel'] = say('Your room', 'غرفتك') + ((' · ' + r.layout + extra) if r.layout else '')
+    out['a.chlabel'] = (say('Channels', 'القنوات') + ((' · ' + r.layout) if r.layout else '')
+                        + (say(' + 4 height', ' + 4 للارتفاع') if r.immersive else ''))
+    # the audio tracks (four shown)
+    streams = r.tracks.get('audiostreams') or []
+    current = (r.tracks.get('currentaudiostream') or {}).get('index')
+    out['a.tlabel'] = '%s · %d' % (say('Audio tracks', 'المسارات الصوتية'), len(streams))
     for n in range(1, 5):
         s = streams[n - 1] if n <= len(streams) else None
+        key = 'a.t%d.' % n
         if not s:
-            for k in ("lang", "codec", "sub", "on"):
-                put(f"a.t{n}.{k}", "")
+            for part in ('lang', 'codec', 'sub', 'on'):
+                out[key + part] = ''
             continue
-        codec = (s.get("codec") or "").lower()
-        ch = CHANNELS.get(s.get("channels") or 0, "")
-        put(f"a.t{n}.lang", lang_name(s.get("language")) or t("Unknown", "غير معروف"))
-        put(f"a.t{n}.codec", ACODEC.get(codec, codec.upper()) or "–")
-        put(f"a.t{n}.sub", " · ".join(x for x in (ch, s.get("name") or "") if x))
-        put(f"a.t{n}.on", "1" if s.get("index") == cur else "")
+        codec = (s.get('codec') or '').lower()
+        out[key + 'lang'] = language(s.get('language')) or say('Unknown', 'غير معروفة')
+        out[key + 'codec'] = AUDIO_LONG.get(codec, codec.upper()) or '–'
+        out[key + 'sub'] = joined(LAYOUTS.get(s.get('channels') or 0, ''), s.get('name') or '')
+        out[key + 'on'] = '1' if s.get('index') == current else ''
+    return out
 
 
-class Info(xbmcgui.WindowXMLDialog):
+# ============================================================================ the update
+def is_open():
+    return bool(HOME.getProperty(PREFIX + 'open')) and flag('Player.HasVideo')
+
+
+def tick():
+    if not is_open():
+        if STATE.shown:
+            STATE.shown = False
+            STATE.reset(STATE.path)
+        return
+    STATE.shown = True
+    now = time.time()
+    path = label('Player.Filenameandpath')
+    if path != STATE.path:
+        STATE.reset(path)
+    r = Reading(now)
+    for page in (overview, video_page, audio_page):
+        try:
+            write(page(r))
+        except Exception as e:
+            _log('%s: %s' % (page.__name__, e))
+
+
+# Back, close, Info, context and the remote's stop/menu keys close the window
+CLOSE_ACTIONS = (9, 10, 11, 92, 216, 247, 257, 275, 61448, 61467)
+
+
+class StatsWindow(xbmcgui.WindowXMLDialog):
+
     def onInit(self):
-        self.closing = False
-        HOME.setProperty(P + "tab", "1")
+        self.done = False
+        HOME.setProperty(PREFIX + 'tab', '1')
         try:
             self.setFocusId(101)
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
-        import threading
-        threading.Thread(target=self.loop, daemon=True).start()
+        th = threading.Thread(target=self._update, name='abk-lucent-stats')
+        th.daemon = True
+        th.start()
 
-    def loop(self):
-        mon = xbmc.Monitor()
-        while not self.closing and not mon.abortRequested():
+    def _update(self):
+        monitor = xbmc.Monitor()
+        while not self.done and not monitor.abortRequested():
             try:
                 tick()
-            except Exception as error:  # noqa: BLE001
-                xbmc.log(f"[AbukarimTools LucentPlayer] playerinfo: {error}", xbmc.LOGINFO)
-            if not xbmc.getCondVisibility("Player.HasVideo"):
+            except Exception as e:
+                _log(str(e))
+            if not flag('Player.HasVideo'):
                 self.close()
-                break
-            if mon.waitForAbort(1):
-                break
+                return
+            if monitor.waitForAbort(1):
+                return
 
     def onAction(self, action):
-        if action.getId() in (9, 10, 92, 216, 247, 257, 275, 61467, 61448, 11):     # back, close, info
+        if action.getId() in CLOSE_ACTIONS:
             self.close()
 
     def close(self):
-        self.closing = True
-        HOME.clearProperty(P + "open")
-        super().close()
+        self.done = True
+        HOME.clearProperty(PREFIX + 'open')
+        xbmcgui.WindowXMLDialog.close(self)
+
+
+def _skin_path():
+    import xbmcaddon
+    for skin in (xbmc.getSkinDir(), 'skin.arctic.fuse.3'):
+        try:
+            return xbmcaddon.Addon(skin).getAddonInfo('path')
+        except Exception:
+            continue
+    return ''
 
 
 def open_window():
-    # 'open' stays behind when Kodi stopped the script while the screen was open (a skin update, a crash): only trust it
-    # when the screen is really on
-    if HOME.getProperty(P + "open") and xbmc.getCondVisibility("Window.IsVisible(ABK_LucentPlayerInfo.xml)"):
+    # an 'open' mark left by a script Kodi stopped (skin reload, crash) only counts while the window shows
+    if HOME.getProperty(PREFIX + 'open') and flag('Window.IsVisible(ABK_LucentPlayerInfo.xml)'):
         return
-    HOME.setProperty(P + "open", "1")
+    HOME.setProperty(PREFIX + 'open', '1')
     try:
-        import xbmcaddon
-        # 4.10.3: the active skin (Arctic Fuse 3 or Arctic Zephyr Rounded - both ship the
-        # window); Kodi reads the XML from the active skin first, the path only has to be real
-        try:
-            skin_path = xbmcaddon.Addon(xbmc.getSkinDir()).getAddonInfo("path")
-        except Exception:
-            skin_path = xbmcaddon.Addon("skin.arctic.fuse.3").getAddonInfo("path")
-        win = Info("ABK_LucentPlayerInfo.xml", skin_path, "Default", "1080i")
+        win = StatsWindow('ABK_LucentPlayerInfo.xml', _skin_path(), 'Default', '1080i')
         tick()
         win.doModal()
         del win
     finally:
-        HOME.clearProperty(P + "open")
+        HOME.clearProperty(PREFIX + 'open')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import sys
-    if sys.argv[1:2] == ["open"]:
-        xbmc.executebuiltin("Dialog.Close(videoosd,true)")
+    if sys.argv[1:2] == ['open']:
+        xbmc.executebuiltin('Dialog.Close(videoosd,true)')
         open_window()

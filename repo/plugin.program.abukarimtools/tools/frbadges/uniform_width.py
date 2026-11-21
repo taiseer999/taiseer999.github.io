@@ -1,5 +1,5 @@
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """Uniform chips: in the pill styles every lucent_player/ badge is widened to
 the full 176 px canvas, so the Lucent Player rows have even gaps (a Kodi
 image slot is fixed-width; a narrow badge such as 7.1 or 3D left wide empty

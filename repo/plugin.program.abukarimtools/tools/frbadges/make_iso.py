@@ -1,5 +1,5 @@
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """ISO.png for every FR style's lucent_player/ set, redrawn from that style's
 BLURAY.png: the label is wiped (columns blended from both sides of it, so the
 pill, its gradient and its edges stay), then "ISO" is written at the same cap

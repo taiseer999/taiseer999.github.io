@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools, see LICENSE.txt
+# SPDX-License-Identifier: LicenseRef-ABTools
+# Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """
 service.py – ABUKARIM TOOLS first-run automation.
 
@@ -1517,6 +1517,17 @@ def main():
             subtitle_tools.start_boot_ensure(monitor)
     except Exception:
         _log('Subtitle Cycler check failed to start (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
+    # 4.12.1: Najd Smart Subtitles - install / update the bundled Piers
+    # edition, make it Kodi's subtitle service the first time, FFmpeg tools
+    # on CoreELEC once. Background thread, delayed, waits out first-run and
+    # playback. Fenced.
+    try:
+        from resources.lib import najd_subs
+        najd_subs.start_boot_ensure(monitor)
+    except Exception:
+        _log('Najd check failed to start (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
     # 4.7.22: Search All - when the episode it played ends by itself, Kodi's
