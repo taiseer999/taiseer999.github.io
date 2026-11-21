@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="service.subtitles.najdsmart"
        name="ترجمة نجد الذكية"
-       version="2.9.7.3"
+       version="2.9.7.5"
        provider-name="علي">
   <requires>
     <import addon="xbmc.python" version="3.0.1"/>
@@ -17,7 +17,9 @@
     <description lang="ar_SA">يبحث عن الترجمة العربية في SubDL و OpenSubtitles و SubSource، يصلح الترميز والحروف المقلوبة وعلامات الترقيم، يسمع صوت الفيلم ويفهم الكلام بـ Gemini ليضبط توقيت كل سطر، ويصحح النص بالذكاء الاصطناعي.</description>
     <description lang="en_GB">Searches SubDL, OpenSubtitles and SubSource. Fixes Arabic encoding/RTL punctuation, auto-syncs timing against a reference subtitle, and polishes text with Gemini.</description>
     <platform>all</platform>
-    <news>2.9.7.3 (Piers، عبر AB Tools): زر المزامنة في المشغّل يضبط أي ترجمة معروضة؛ كل نصوص الإضافة بالعربية الفصحى؛ ضبط توقيت أي ترجمة خارجية تعمل في كودي؛ تفعيل الترجمة العربية المدمجة تلقائياً؛ لا يُستعمل مفتاح Dex Hub إلا بإذنك.
+    <news>2.9.7.5 (Piers، عبر AB Tools): زر المزامنة في المشغّل يضبط أي ترجمة معروضة؛ Whisper في ضبط الترجمات الخارجية.
+2.9.7.4: لا ترجمة لمسلسل آخر، تنظيف أسماء الملفات، الترجمة المدمجة من روابط TorBox، الانتقال إلى SubSource عند نفاد حد SubDL، نماذج ذكاء اصطناعي جديدة، ترجمة بالفصحى دائماً.
+2.9.7.2 (Piers، عبر AB Tools): كل نصوص الإضافة بالعربية الفصحى؛ ضبط توقيت أي ترجمة خارجية تعمل في كودي؛ تفعيل الترجمة العربية المدمجة تلقائياً؛ لا يُستعمل مفتاح Dex Hub إلا بإذنك.
 2.9.7: الترجمة المدمجة أولاً، حتى في الروابط التي بلا امتداد.
 2.9.4 - 2.9.6: مزامنة على كلام الفيلم بـ Whisper، وضبط النسخ المقصوصة جزءاً جزءاً.
 2.9.3: مزامنة أحذر: لا يتغير التوقيت إلا إذا تفوّق الصوت على الصدفة بوضوح.

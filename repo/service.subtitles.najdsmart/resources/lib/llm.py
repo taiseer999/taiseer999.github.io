@@ -19,11 +19,11 @@ PROVIDERS = {
     'deepseek': ('DeepSeek', 'openai', 'https://api.deepseek.com', ['deepseek-flash', 'deepseek-v4-flash']),
     'openai': ('ChatGPT', 'openai', 'https://api.openai.com/v1', ['gpt-5-mini', 'gpt-4.1-mini', 'gpt-4o-mini']),
     'claude': ('Claude', 'anthropic', 'https://api.anthropic.com/v1', ['claude-haiku-5-5', 'claude-sonnet-5-5']),
-    'grok': ('Grok', 'openai', 'https://api.x.ai/v1', ['grok-4.3', 'grok-latest']),
+    'grok': ('Grok', 'openai', 'https://api.x.ai/v1', ['grok-4.7', 'grok-latest', 'grok-4.3']),
     'openrouter': ('OpenRouter', 'openai', 'https://openrouter.ai/api/v1',
                    ['google/gemini-2.5-flash-lite', 'deepseek/deepseek-chat', 'openai/gpt-4.1-mini',
                     'openrouter/auto']),
-    'groq': ('Groq', 'openai', 'https://api.groq.com/openai/v1', ['llama-3.3-70b-versatile']),
+    'groq': ('Groq', 'openai', 'https://api.groq.com/openai/v1', ['openai/gpt-oss-120b', 'qwen/qwen3.6-27b', 'openai/gpt-oss-20b']),
     'mistral': ('Mistral', 'openai', 'https://api.mistral.ai/v1', ['mistral-small-latest']),
 }
 DEFAULT_ORDER = 'gemini,deepseek,openai,claude,grok,openrouter,groq,mistral'

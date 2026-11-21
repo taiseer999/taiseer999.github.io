@@ -1,3 +1,24 @@
+v4.12.15  (2026-11-21)
+- Najd 2.9.7.5 (bundled) = the author's 2.9.7.4 + the Piers parts it did not
+  have (it was built on 2.9.7.2): osdsync.py and the "osdsync" script entry
+  for the player's sync button, Whisper in background timing of outside
+  subtitles, no stacked ".ext" names. The author's 2.9.7.4: no subtitle of
+  a look-alike series when searching by name, release names cleaned from
+  player titles, «re-time» re-aligns on the embedded subtitle piece by
+  piece (emb_alt), SubSource when SubDL's daily limit runs out, new Groq /
+  Grok models, a refused stream link stops at once, AI translation always
+  in Fusha. The sync button now makes the same choice as «re-time»
+  (English by meaning, the embedded subtitle piece by piece, the sound,
+  fine-tune + Whisper for streams).
+
+v4.12.14  (2026-11-21)
+- AF3 3.5.7 ("Cleanup unnecessary colour defs") changed the OSD time and
+  duration labels from panel_fg_100 to main_fg_100, so the Lucent Look
+  "bold play time" / "dimmed duration" anchors no longer matched. Added
+  3.5.7 twins of both patches (same already-patched marker, so only one
+  applies). Skin 50.11.98 keeps the removed panel_* / dialog_nib colours,
+  which Plot on the Right and the PPI windows still use.
+
 v4.12.13  (2026-11-21)
 - Clock fix for CoreELEC / LibreELEC boxes with no RTC (resources/lib/
   clock_fix.py). A user's AM9 Pro booted on 2026-11-05 while the date was

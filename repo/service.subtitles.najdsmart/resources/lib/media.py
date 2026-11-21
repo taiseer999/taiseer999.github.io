@@ -46,6 +46,10 @@ _SE_RE = re.compile(r'[Ss](\d{1,2})[ ._-]?[Ee](\d{1,3})|(\d{1,2})x(\d{2,3})')
 _YEAR_RE = re.compile(r'[\.\s\(\[_-]((?:19|20)\d{2})[\.\s\)\]_-]')
 
 
+_RELEASE_RE = re.compile(r'(?i)\bS\d{1,2}\s*E\d{1,3}\b|\b(480|576|720|1080|2160)p\b|\bx26[45]\b|\bh\.?26[45]\b'
+                         r'|\bblu-?ray\b|\bweb-?(dl|rip)\b|\bhdtv\b')
+
+
 def guess_from_name(name):
     base = os.path.splitext(os.path.basename(urllib.parse.unquote(name)))[0]
     info = {'season': '', 'episode': '', 'year': '', 'title': ''}
@@ -207,6 +211,13 @@ def current():
         fname = urllib.parse.urlparse(path).path
     v['filename'] = os.path.basename(urllib.parse.unquote(fname.split('|')[0]))
 
+    # a player that knows nothing about the video shows its release name as the title
+    # ('Prisoner 951 S01E02 1080p BluRay x264-PRiSONER'): keep only the name
+    for k in ('title', 'tvshow'):
+        if v[k] and _RELEASE_RE.search(v[k]):
+            clean = guess_from_name(v[k] + '.mkv')['title']
+            if clean:
+                v[k] = clean
     # fill gaps from the file name
     g = guess_from_name(v['filename'])
     if not v['title'] and not v['tvshow']:

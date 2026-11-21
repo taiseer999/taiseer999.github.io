@@ -19,22 +19,24 @@ from . import extwatch, media, pipeline
 
 
 def _job_steps(video):
+    """The same choice as the menu's «re-time» (service.resync), with Whisper
+    after the free listening when Groq is linked."""
     from . import llm
     if setting('sync_method', 'smart') in ('smart', 'auto') and llm.any_available() and \
             pipeline.has_reference(video):
         return ['semantic']
+    if pipeline.embedded_reference(video):
+        return ['emb_alt']             # the video's own subtitle: look again, part by part
+    whisper_ok = False
     try:
         from . import whisper
-        stream = pipeline.is_stream(video)
-        if setting_bool('whisper_sync', True) and whisper.available() and \
-                (pipeline.finetune_possible(video) if stream else pipeline.audio_possible(video)):
-            return ['finetune', 'whisper'] if setting_bool('auto_finetune', True) else ['whisper']
+        whisper_ok = setting_bool('whisper_sync', True) and whisper.available()
     except Exception as e:
         log('osd sync: whisper check: %s' % e)
     if not pipeline.is_stream(video) and pipeline.audio_possible(video):
         return ['audio']
     if pipeline.is_stream(video) and pipeline.finetune_possible(video):
-        return ['finetune']
+        return ['finetune', 'whisper'] if whisper_ok else ['finetune']
     if pipeline.audio_possible(video):
         return ['audio']
     return []
@@ -83,12 +85,6 @@ def run():
                 _apply(player, vpath, r)
                 return
         elif last:                                 # Najd's own subtitle
-            if pipeline.embedded_reference(video):
-                r = pipeline.sync_external(last['path'], video)
-                log('osd sync: own subtitle on the embedded timeline -> %s' % (r and r[1]))
-                if r:
-                    _apply(player, vpath, r)
-                    return
             steps = _job_steps(video)
             if steps:
                 pipeline.queue_job(last['path'], video, last.get('item') or {}, steps, resync=True)

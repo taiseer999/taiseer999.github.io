@@ -131,8 +131,40 @@ def search_all(video, langs, enabled=None):
     if dropped:
         log('dropped %d results for other episodes/seasons' % dropped)
     results = kept
+    if not (video.get('imdb') or video.get('show_imdb')):
+        # searched by name only: 'Prisoner 951' must not take 'Prison Break', nor
+        # 'Ripper Street S05' take 'Stargate SG-1 S05'
+        words = title_words(video.get('tvshow') or video.get('title') or '')
+        # only Latin titles: an Arabic title would never appear in the release names
+        if words and all(re.match(r'^[a-z0-9]+$', w) for w in words):
+            fit = [it for it in results if names_have(it, words)]
+            if len(fit) < len(results):
+                log('dropped %d results for another title (wanted: %s)'
+                    % (len(results) - len(fit), ' '.join(words)))
+            results = fit
     results.sort(key=lambda x: -x['score'])
     return results
+
+
+_STOP = set('the a an of and in on at to'.split())
+
+
+def _norm(t):
+    return re.sub(r'[^a-z0-9\u0600-\u06ff]+', ' ', (t or '').lower()).split()
+
+
+def title_words(title):
+    return [w for w in _norm(title) if w not in _STOP]
+
+
+def names_have(it, words):
+    names = list(it.get('releases') or []) + [it.get('release') or '', it.get('name') or '',
+                                                it.get('title') or '']
+    for n in names:
+        toks = set(_norm(n))
+        if toks and all(w in toks for w in words):
+            return True
+    return False
 
 
 NAMES = {'subdl': 'SubDL', 'subsource': 'SubSource', 'opensubtitles': 'OpenSubtitles'}

@@ -9,7 +9,7 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 
-from resources.lib.common import (ADDON, ADDON_NAME, JOBS_DIR, log, notify, setting, clean_temp,
+from resources.lib.common import (ADDON, ADDON_NAME, JOBS_DIR, log, notify, setting, setting_bool, clean_temp,
                                   prune_cache, set_status)
 from resources.lib import media, providers, pipeline
 
@@ -158,8 +158,15 @@ def resync():
     if setting('sync_method', 'smart') in ('smart', 'auto') and llm.any_available() and \
             pipeline.has_reference(video):
         steps = ['semantic']
+    elif pipeline.embedded_reference(video):
+        steps = ['emb_alt']             # the video's own subtitle: look again, part by part
     elif pipeline.audio_possible(video):
         steps = ['audio']
+    elif pipeline.is_stream(video) and pipeline.finetune_possible(video):
+        steps = ['finetune']
+        from resources.lib import whisper
+        if whisper.available() and setting_bool('whisper_sync', True):
+            steps.append('whisper')
     else:
         xbmcgui.Dialog().ok(ADDON_NAME, 'لم يُعثر على ترجمة إنجليزية مرجعية لهذا الفيديو، والاستماع غير متاح له.\n'
                             'جرّب ترجمة أخرى من القائمة، أو اضبط التوقيت يدوياً من «تأخير الترجمة».')

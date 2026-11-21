@@ -52,9 +52,9 @@ resources/lib/af3_trailers/imdb.py (port)
       portions of the Software.
       THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 
-resources/najdsmart/service.subtitles.najdsmart-2.9.7.3.zip
+resources/najdsmart/service.subtitles.najdsmart-2.9.7.5.zip
     Najd Smart Subtitles / ترجمة نجد الذكية 2.8.3 by علي (Ali), with the
-    Piers edition changes (2.8.3.1 - 2.9.7.3, rebased on upstream 2.9.7) made with the author's permission.
+    Piers edition changes (2.8.3.1 - 2.9.7.5, rebased on upstream 2.9.7.4) made with the author's permission.
     A separate add-on that AB Tools installs as it is (resources/lib/
     najd_subs.py only installs it and changes Kodi settings; it imports none
     of its code). MIT License - the full text is LICENSE.txt inside the zip;

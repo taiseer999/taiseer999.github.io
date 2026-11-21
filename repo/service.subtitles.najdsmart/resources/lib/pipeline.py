@@ -341,6 +341,13 @@ def process(item, video, progress=None):
             if emb:
                 new, einfo = sync.align(cues, emb, local=setting_bool('local_sync', True), min_lift=1.4)
                 log('embedded sync: %s' % einfo)
+                trace.event(video, 'embedded: %s' % {k: einfo.get(k) for k in
+                                                     ('ratio', 'offset', 'quality', 'lift', 'local_fixes', 'reason')})
+                try:      # both timelines, small, so a bad match can be replayed
+                    trace.put(video, 'emb_data', {'sub': _pack([(c.start, c.end) for c in cues]),
+                                                  'emb': _pack([(c.start, c.end) for c in emb])})
+                except Exception:
+                    pass
                 if new is not None:
                     cues, emb_ok = new, True
                     summary.append('ضُبط التوقيت على الترجمة المدمجة في الفيديو ✓ (%s)' % sync.describe(einfo))
@@ -2031,6 +2038,25 @@ def run_job(job, progress=None, abort=None, on_update=None, position=None):
             out.append('تعذر فهم الكلام: ' + (
                 'مفتاح Gemini غير صحيح' if any(x in str(e) for x in ('400', '403')) else
                 'نفد حد Gemini المجاني، حاول لاحقاً' if '429' in str(e) else str(e)[:80]))
+    if 'emb_alt' in job['steps']:
+        # «re-time» on a video whose own subtitle gave the timing: look again piece by piece
+        # (2-minute pieces over the whole video), so a part that went wrong gets its own shift
+        from . import refalign
+        emb = embedded_reference(video)
+        if emb:
+            dur = int(float(video.get('duration') or 0) * 1000) or (emb[-1].end + 60000)
+            cov = [(t, t + 120000) for t in range(0, dur, 120000)]
+            new, info = refalign.align([subtitle.Cue(c.start, c.end, c.text) for c in cues], emb, cov)
+            trace.event(video, 'resync on embedded: %s' % (info,))
+            if new is not None:
+                cues, changed, audio_truth = new, True, True
+                sh = info.get('shifts')
+                out.append('أُعيد الضبط على الترجمة المدمجة: ' + (' / '.join('%+.1f ث' % (d / 1000.0) for d in sh)
+                                                               if sh else '%+.1f ث' % (info['shift'] / 1000.0)))
+            elif info == 'in_sync':
+                out.append('التوقيت مطابق للترجمة المدمجة ✓')
+            else:
+                out.append('تعذّر تحسين التوقيت على الترجمة المدمجة')
     if 'finetune' in job['steps']:
         try:
             if changed and any(st in job['steps'] for st in ('semantic',)):

@@ -196,11 +196,28 @@ def _has_center(ffmpeg, src, args, track):
     return ok
 
 
+_REFUSED = {}          # link -> (times the server said 4xx, last time)
+
+
 def _run_ffmpeg(ffmpeg, src, args, start=None, dur=None, track=None, timeout=900, abort=None):
     """Like _run_mono, but a clip that came back short (the connection dropped half way —
     ffmpeg then often resumes at the wrong spot) is read again once, then refused:
-    a cut-off clip would measure a wrong shift."""
-    pcm = _run_mono(ffmpeg, src, args, start, dur, track, timeout, abort)
+    a cut-off clip would measure a wrong shift.
+    A link the server refuses twice (400/403/404/410: expired or one-player-only) is not
+    asked again for a few minutes — every other try would fail the same way."""
+    import time as _t
+    n, when = _REFUSED.get(src, (0, 0))
+    if n >= 2 and _t.time() - when < 600:
+        raise AudioSyncError('the video server refuses this link (expired?)')
+    try:
+        pcm = _run_mono(ffmpeg, src, args, start, dur, track, timeout, abort)
+    except AudioSyncError as e:
+        if re.search(r'Server returned 4\d\d|HTTP error 4\d\d', str(e)):
+            _REFUSED[src] = (n + 1, _t.time())
+            m = re.search(r'(?:Server returned|HTTP error) (4\d\d[^\n.]*)', str(e))
+            raise AudioSyncError('the video server refused the link (%s)' % (m.group(1)[:40] if m else '4xx'))
+        raise
+    _REFUSED.pop(src, None)
     if not dur or ffmpeg == MF:
         return pcm
     want = int(dur * RATE) * 2

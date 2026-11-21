@@ -2,6 +2,27 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
+   "v": "4.12.15",
+   "from": "4.12.14",
+   "en": [
+    "Najd updated with its author's latest fixes: no subtitle of a look-alike series, cleaner names before searching, SubSource when SubDL's daily limit runs out, and «re-time» on the subtitle inside the video part by part.",
+    "The player's sync button makes the same choice as Najd's «re-time»."
+   ],
+   "ar": [
+    "حُدّثت نجد بآخر إصلاحات صاحبها: لا ترجمة لمسلسل يشبه اسمه، وتنظيف الأسماء قبل البحث، والانتقال إلى SubSource عند نفاد حد SubDL، و«أعد الضبط» على الترجمة المدمجة جزءاً جزءاً.",
+    "زر المزامنة في المشغّل يختار الطريقة نفسها التي يختارها «أعد الضبط» في نجد."
+   ]
+  },
+  {
+   "v": "4.12.14",
+   "en": [
+    "AF3 3.5.7 (skin 50.11.98): the Lucent Look bold play time and dimmed duration in the player apply again after the skin's colour clean-up."
+   ],
+   "ar": [
+    "AF3 3.5.7 (الواجهة 50.11.98): يعود في مظهر Lucent خط وقت التشغيل العريض وتعتيم المدة في المشغّل بعد تنظيف ألوان الواجهة."
+   ]
+  },
+  {
    "v": "4.12.13",
    "en": [
     "Boxes without a clock battery (such as the AM9 Pro) now have the right time from the first seconds after a boot, so add-ons connect at once instead of failing for a minute or two."
