@@ -1747,7 +1747,17 @@ def sync_external(src, video, progress=None):
                 summary.append('تم ضبط الترجمة على الترجمة المدمجة في الفيديو ✓ (%s)' % sync.describe(einfo))
     steps = []
     if not emb_ok:
-        if not is_stream(video) and audio_possible(video):
+        try:
+            from . import whisper as _wsp
+            if setting_bool('whisper_sync', True) and _wsp.available() and \
+                    (finetune_possible(video) if is_stream(video) else audio_possible(video)):
+                # the free listening first; Whisper only when that is not sure (as process())
+                steps = ['finetune', 'whisper'] if setting_bool('auto_finetune', True) else ['whisper']
+        except Exception as e:
+            log('external sync: whisper check: %s' % e)
+        if steps:
+            pass
+        elif not is_stream(video) and audio_possible(video):
             steps.append('audio')
         elif is_stream(video) and setting_bool('stream_finetune', True) and finetune_possible(video):
             steps.append('finetune')
@@ -1759,6 +1769,7 @@ def sync_external(src, video, progress=None):
     apply_offset(cues, user_offset(video))
     cues = subtitle.fix_timing(cues)
     base = re.sub(r'[\\/:*?"<>|]+', '_', os.path.splitext(os.path.basename(src))[0])[:80]
+    base = re.sub(r'(\.(ext|synced|ai|v2))+$', '', base)
     path = os.path.join(TEMP_DIR, '%s.ext.srt' % (base or 'subtitle'))
     with open(path, 'w', encoding='utf-8-sig') as f:
         f.write(subtitle.to_srt(cues))

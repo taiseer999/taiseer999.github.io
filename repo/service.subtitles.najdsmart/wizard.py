@@ -294,7 +294,11 @@ def menu():
 
 if __name__ == '__main__':
     arg = sys.argv[1] if len(sys.argv) > 1 else ''
-    if arg == 'guide':
+    if arg == 'osdsync':
+        # Piers edition: the player's sync button (AB Tools / AF3 OSD)
+        from resources.lib import osdsync
+        osdsync.run()
+    elif arg == 'guide':
         from resources.lib import guide
         guide.show()
     elif arg == 'wizard':

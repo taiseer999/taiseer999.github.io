@@ -1,3 +1,20 @@
+v4.12.11  (2026-11-21)
+- The player's sync button (AF3 OSD button 6010 and the "Auto sync" row of
+  the subtitle window) now runs Najd's sync while Najd is the subtitle
+  service. It used to run DexSubtitles' manual sync only; that cannot find
+  the file of a subtitle Najd put on ("ما لقيت ملف الترجمة الشغالة" in the
+  AM9 logs), and AB Tools turns DexSubtitles' AutoSync off while Najd owns
+  the timing. abk_osd_sync.py (inside DexSubtitles' folder, re-injected)
+  hands over to RunScript(service.subtitles.najdsmart,osdsync); with Najd
+  not the default it runs DexSubtitles as before.
+- Najd 2.9.7.3 (bundled): new osdsync.py - times what is on screen: Najd's
+  own subtitle (embedded timeline at once, else English-by-meaning,
+  Whisper after the free listening, or the sound), an outside file (found
+  by Kodi's naming rule, then sync_external), or says an embedded track is
+  already the film's timing. Outside subtitles timed in the background now
+  use Whisper too when Groq is linked. A re-timed file no longer stacks
+  ".ext" in its name.
+
 v4.12.10  (2026-11-21)
 - Najd 2.9.7.2 (bundled): all its Arabic is Modern Standard Arabic. Upstream
   2.9.x moved to Gulf dialect; tools/najd/fusha_najd.py converts every UI

@@ -40,7 +40,28 @@ def _log(msg, level=xbmc.LOGINFO):
     xbmc.log('[DexSubtitles.abk_osd_sync] %s' % msg, level)
 
 
+def _najd_owns_sync():
+    """AB Tools 4.12.11: while Najd Smart Subtitles is Kodi's subtitle service
+    it owns the timing (AB Tools turns DexSubtitles' AutoSync off then), and
+    DexSubtitles cannot find the file of a subtitle Najd put on - so the
+    button runs Najd's own sync of whatever subtitle is on screen."""
+    try:
+        import json
+        if not xbmc.getCondVisibility('System.AddonIsEnabled(service.subtitles.najdsmart)'):
+            return False
+        r = json.loads(xbmc.executeJSONRPC(json.dumps({
+            'jsonrpc': '2.0', 'id': 1, 'method': 'Settings.GetSettingValue',
+            'params': {'setting': 'subtitles.movie'}})))
+        return (r.get('result') or {}).get('value') == 'service.subtitles.najdsmart'
+    except Exception:
+        return False
+
+
 def main():
+    if _najd_owns_sync():
+        _log('Najd is the subtitle service - its sync runs')
+        xbmc.executebuiltin('RunScript(service.subtitles.najdsmart,osdsync)')
+        return
     # service.py reads sys.argv[1] as a plugin handle; give it none (-1).
     sys.argv = [sys.argv[0] if sys.argv else __file__]
     import autosync

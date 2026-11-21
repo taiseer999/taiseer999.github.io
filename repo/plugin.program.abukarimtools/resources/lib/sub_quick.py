@@ -293,7 +293,14 @@ def _value_text(row, setting, value):
 
 
 def _sync_target():
-    """What Auto sync runs: Dex Hub's flow, else DexSubtitles' own, else nothing."""
+    """What Auto sync runs: Najd's sync while it is the subtitle service
+    (4.12.11), else Dex Hub's flow, else DexSubtitles' own, else nothing."""
+    try:
+        from resources.lib import najd_subs
+        if najd_subs.enabled() and najd_subs.is_default():
+            return 'RunScript(service.subtitles.najdsmart,osdsync)'
+    except Exception:
+        pass
     if xbmc.getCondVisibility('System.AddonIsEnabled(plugin.video.dexhub)'):
         return 'RunPlugin(plugin://plugin.video.dexhub/?action=subtitle_sync)'
     if xbmc.getCondVisibility('System.AddonIsEnabled(service.subtitles.dexworld)'):
