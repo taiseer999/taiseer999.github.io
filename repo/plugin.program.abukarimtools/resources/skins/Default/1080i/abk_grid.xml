@@ -1,103 +1,172 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- ABUKARIM TOOLS 4.9.3 - picture picker as a grid of cards (grid_ui.py;
+<!-- ABUKARIM TOOLS 4.12.12 - picture picker as a grid of cards (grid_ui.py;
      first the "AF3: OSD Flags Style" picker of 4.9.1). ListItem: Label = name,
-     Label2 = description (shown under the title), Art(thumb) = picture,
-     Property(current) = true on the choice in use, Property(fit) = keep for a
-     picture shown whole on a dark tile (icons, skin art) instead of filling. -->
+     Label2 = description (under the name on the card), Art(thumb) = picture
+     (16:9, 536x302 on the card), Property(current) = true on the choice in use
+     (green check on the picture), Property(fit) = keep for a picture shown
+     whole on the dark card (icons, skin art) instead of filling.
+     4.12.12: opaque cinematic backdrop, taller 16:9 art, the description on
+     every card, a soft glow under the focused card. -->
 <window>
     <defaultcontrol always="true">100</defaultcontrol>
-    <animation type="WindowOpen" reversible="false"><effect type="fade" start="0" end="100" time="200"/></animation>
+    <animation type="WindowOpen" reversible="false">
+        <effect type="fade" start="0" end="100" time="220"/>
+        <effect type="zoom" start="97" end="100" center="960,540" time="260" tween="cubic" easing="out"/>
+    </animation>
     <animation type="WindowClose" reversible="false"><effect type="fade" start="100" end="0" time="160"/></animation>
     <controls>
         <control type="image">
             <left>0</left><top>0</top><width>1920</width><height>1080</height>
-            <texture colordiffuse="F205060A">white.png</texture>
+            <texture>abk_grid_bg.jpg</texture>
         </control>
         <control type="label">
-            <left>120</left><top>44</top><width>1680</width><height>64</height>
+            <left>360</left><top>34</top><width>1200</width><height>64</height>
             <font>abk_set_xl</font><align>center</align><aligny>center</aligny>
             <textcolor>FFFFFFFF</textcolor>
-            <label>$INFO[Window.Property(title)]</label>
+            <label>[B]$INFO[Window.Property(title)][/B]</label>
+        </control>
+        <control type="image">
+            <left>928</left><top>104</top><width>64</width><height>5</height>
+            <texture colordiffuse="FF2FD07A">abk_sq_bar.png</texture>
         </control>
         <control type="label">
-            <left>120</left><top>110</top><width>1680</width><height>44</height>
-            <font>abk_set_s</font><align>center</align><aligny>center</aligny>
-            <textcolor>B3FFFFFF</textcolor>
-            <label>$INFO[Container(100).ListItem.Label2]</label>
-        </control>
-        <control type="label">
-            <left>1520</left><top>44</top><width>280</width><height>64</height>
+            <left>1560</left><top>34</top><width>240</width><height>64</height>
             <font>abk_set_s</font><align>right</align><aligny>center</aligny>
-            <textcolor>66FFFFFF</textcolor>
+            <textcolor>80FFFFFF</textcolor>
             <label>$INFO[Container(100).CurrentItem] / $INFO[Container(100).NumItems]</label>
         </control>
         <control type="panel" id="100">
-            <left>120</left><top>176</top><width>1680</width><height>880</height>
+            <left>96</left><top>130</top><width>1728</width><height>940</height>
             <orientation>vertical</orientation>
-            <scrolltime tween="cubic" easing="out">220</scrolltime>
-            <itemlayout width="560" height="430">
+            <scrolltime tween="cubic" easing="out">240</scrolltime>
+            <itemlayout width="576" height="470">
                 <control type="image">
-                    <left>12</left><top>12</top><width>536</width><height>396</height>
-                    <texture border="22" colordiffuse="FF14151C">abk_sq_round.png</texture>
+                    <left>20</left><top>22</top><width>536</width><height>436</height>
+                    <texture border="22" colordiffuse="FF15161D">abk_sq_round.png</texture>
                 </control>
                 <control type="image">
-                    <left>12</left><top>12</top><width>536</width><height>258</height>
+                    <left>20</left><top>22</top><width>536</width><height>302</height>
                     <aspectratio>scale</aspectratio>
-                    <texture colordiffuse="CCFFFFFF">$INFO[ListItem.Art(thumb)]</texture>
+                    <texture colordiffuse="A6FFFFFF">$INFO[ListItem.Art(thumb)]</texture>
                     <visible>!String.IsEqual(ListItem.Property(fit),keep)</visible>
                 </control>
                 <control type="image">
-                    <left>40</left><top>30</top><width>480</width><height>222</height>
+                    <left>56</left><top>46</top><width>464</width><height>254</height>
                     <aspectratio>keep</aspectratio>
-                    <texture colordiffuse="CCFFFFFF">$INFO[ListItem.Art(thumb)]</texture>
+                    <texture colordiffuse="A6FFFFFF">$INFO[ListItem.Art(thumb)]</texture>
                     <visible>String.IsEqual(ListItem.Property(fit),keep)</visible>
                 </control>
-                <control type="label">
-                    <left>24</left><top>276</top><width>512</width><height>124</height>
-                    <font>abk_set_m</font><align>center</align><aligny>center</aligny>
-                    <textcolor>B3FFFFFF</textcolor>
-                    <label>$INFO[ListItem.Label]</label>
-                </control>
                 <control type="image">
-                    <left>484</left><top>318</top><width>40</width><height>40</height>
-                    <texture colordiffuse="FF2FD07A">abk_fs_check.png</texture>
-                    <visible>String.IsEqual(ListItem.Property(current),true)</visible>
+                    <left>20</left><top>323</top><width>536</width><height>1</height>
+                    <texture colordiffuse="14FFFFFF">white.png</texture>
                 </control>
-            </itemlayout>
-            <focusedlayout width="560" height="430">
+                <control type="label">
+                    <left>44</left><top>338</top><width>488</width><height>44</height>
+                    <font>abk_set_m</font><align>center</align><aligny>center</aligny>
+                    <textcolor>CCFFFFFF</textcolor>
+                    <label>[B]$INFO[ListItem.Label][/B]</label>
+                    <visible>!String.IsEmpty(ListItem.Label2)</visible>
+                </control>
+                <control type="textbox">
+                    <left>44</left><top>384</top><width>488</width><height>62</height>
+                    <font>abk_set_s</font><align>center</align>
+                    <textcolor>80FFFFFF</textcolor>
+                    <label>$INFO[ListItem.Label2]</label>
+                    <visible>!String.IsEmpty(ListItem.Label2)</visible>
+                </control>
+                <control type="label">
+                    <left>44</left><top>336</top><width>488</width><height>110</height>
+                    <font>abk_set_m</font><align>center</align><aligny>center</aligny>
+                    <textcolor>CCFFFFFF</textcolor>
+                    <label>[B]$INFO[ListItem.Label][/B]</label>
+                    <visible>String.IsEmpty(ListItem.Label2)</visible>
+                </control>
                 <control type="group">
-                    <animation effect="zoom" start="100" end="104" center="280,210" time="160" tween="cubic" easing="out" reversible="false">Focus</animation>
+                    <left>486</left><top>38</top>
+                    <visible>String.IsEqual(ListItem.Property(current),true)</visible>
                     <control type="image">
-                        <left>12</left><top>12</top><width>536</width><height>396</height>
-                        <texture border="22" colordiffuse="FF20222C">abk_sq_round.png</texture>
+                        <left>-4</left><top>-4</top><width>60</width><height>60</height>
+                        <texture colordiffuse="66000000">abk_sq_circle.png</texture>
                     </control>
                     <control type="image">
-                        <left>12</left><top>12</top><width>536</width><height>258</height>
+                        <left>0</left><top>0</top><width>52</width><height>52</height>
+                        <texture colordiffuse="FF2FD07A">abk_sq_circle.png</texture>
+                    </control>
+                    <control type="image">
+                        <left>11</left><top>11</top><width>30</width><height>30</height>
+                        <texture colordiffuse="FFFFFFFF">abk_fs_check.png</texture>
+                    </control>
+                </control>
+            </itemlayout>
+            <focusedlayout width="576" height="470">
+                <control type="group">
+                    <animation effect="zoom" start="100" end="104" center="288,240" time="180" tween="cubic" easing="out" reversible="false">Focus</animation>
+                    <control type="image">
+                        <left>2</left><top>4</top><width>572</width><height>472</height>
+                        <texture border="40" colordiffuse="4DFFFFFF">abk_grid_glow.png</texture>
+                        <visible>Control.HasFocus(100)</visible>
+                    </control>
+                    <control type="image">
+                        <left>20</left><top>22</top><width>536</width><height>436</height>
+                        <texture border="22" colordiffuse="FF242733">abk_sq_round.png</texture>
+                    </control>
+                    <control type="image">
+                        <left>20</left><top>22</top><width>536</width><height>302</height>
                         <aspectratio>scale</aspectratio>
                         <texture>$INFO[ListItem.Art(thumb)]</texture>
                         <visible>!String.IsEqual(ListItem.Property(fit),keep)</visible>
                     </control>
                     <control type="image">
-                        <left>40</left><top>30</top><width>480</width><height>222</height>
+                        <left>56</left><top>46</top><width>464</width><height>254</height>
                         <aspectratio>keep</aspectratio>
                         <texture>$INFO[ListItem.Art(thumb)]</texture>
                         <visible>String.IsEqual(ListItem.Property(fit),keep)</visible>
                     </control>
                     <control type="image">
-                        <left>8</left><top>8</top><width>544</width><height>404</height>
-                        <texture border="22" colordiffuse="F2FFFFFF">abk_sq_outline.png</texture>
-                        <visible>Control.HasFocus(100)</visible>
+                        <left>20</left><top>323</top><width>536</width><height>1</height>
+                        <texture colordiffuse="14FFFFFF">white.png</texture>
                     </control>
                     <control type="label">
-                        <left>24</left><top>276</top><width>512</width><height>124</height>
+                        <left>44</left><top>338</top><width>488</width><height>44</height>
                         <font>abk_set_m</font><align>center</align><aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
+                        <label>[B]$INFO[ListItem.Label][/B]</label>
+                        <visible>!String.IsEmpty(ListItem.Label2)</visible>
+                    </control>
+                    <control type="textbox">
+                        <left>44</left><top>384</top><width>488</width><height>62</height>
+                        <font>abk_set_s</font><align>center</align>
+                        <textcolor>B3FFFFFF</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                        <visible>!String.IsEmpty(ListItem.Label2)</visible>
+                    </control>
+                    <control type="label">
+                        <left>44</left><top>336</top><width>488</width><height>110</height>
+                        <font>abk_set_m</font><align>center</align><aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[ListItem.Label][/B]</label>
+                        <visible>String.IsEmpty(ListItem.Label2)</visible>
+                    </control>
+                    <control type="group">
+                        <left>486</left><top>38</top>
+                        <visible>String.IsEqual(ListItem.Property(current),true)</visible>
+                        <control type="image">
+                            <left>-4</left><top>-4</top><width>60</width><height>60</height>
+                            <texture colordiffuse="66000000">abk_sq_circle.png</texture>
+                        </control>
+                        <control type="image">
+                            <left>0</left><top>0</top><width>52</width><height>52</height>
+                            <texture colordiffuse="FF2FD07A">abk_sq_circle.png</texture>
+                        </control>
+                        <control type="image">
+                            <left>11</left><top>11</top><width>30</width><height>30</height>
+                            <texture colordiffuse="FFFFFFFF">abk_fs_check.png</texture>
+                        </control>
                     </control>
                     <control type="image">
-                        <left>484</left><top>318</top><width>40</width><height>40</height>
-                        <texture colordiffuse="FF2FD07A">abk_fs_check.png</texture>
-                        <visible>String.IsEqual(ListItem.Property(current),true)</visible>
+                        <left>16</left><top>18</top><width>544</width><height>444</height>
+                        <texture border="22" colordiffuse="F2FFFFFF">abk_sq_outline.png</texture>
+                        <visible>Control.HasFocus(100)</visible>
                     </control>
                 </control>
             </focusedlayout>

@@ -1,3 +1,17 @@
+v4.12.12  (2026-11-21)
+- "AF3: OSD Flags Style" picker redesigned: an opaque backdrop (the menu no
+  longer shows through), taller 16:9 previews, each style's description on
+  its own card instead of only the focused one in the header, a green check
+  on the style in use, and a soft glow under the focused card. The shared
+  picture grid (abk_grid.xml) also gives the skin switcher and the node-icon
+  picker the same look.
+- New previews from the 1.0.16 badges (tools/frbadges/make_previews.py):
+  1072x604, three even rows of Lucent Player pills on a cinematic backdrop
+  with a player bar; nothing is cut at the card edges any more.
+- Needs resource.images.af3.frbadges 1.0.16: every FR-Badges style rebuilt
+  from the latest FR-Badges set with Lucent spacing, new language flags,
+  Lucent-size player pills in every style.
+
 v4.12.11  (2026-11-21)
 - The player's sync button (AF3 OSD button 6010 and the "Auto sync" row of
   the subtitle window) now runs Najd's sync while Najd is the subtitle
