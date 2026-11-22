@@ -4184,6 +4184,38 @@ PATCHES = [
             "        for result in results:\n",
      'already_patched_check': '# ABK: search without a playing file returns None',
      'description': 'a4kSubtitles service.py - empty search no longer kills the auto-download service'},
+    # 4.12.21: a4kSubtitles hash read on a slow stream (kodi.log 2026-11-22 17:28:46).
+    # get_meta() hashes the first and last 64k of the playing file (OpenSubtitles
+    # hash). On a usenet/debrid link the seek to the end can time out in Kodi's curl;
+    # readBytes() then returns fewer than 8 bytes and struct.unpack raises
+    # "unpack requires a buffer of 8 bytes" - caught by get_meta, but it prints a
+    # full traceback to kodi.log every time. A short read now ends the hash cleanly
+    # (no hash, as for a small file) and logs one line instead.
+    {'addon_id': 'service.subtitles.a4ksubtitles', 'not_found_ok': True,
+     'rel_path': os.path.join('a4kSubtitles', 'lib', 'video.py'),
+     'old': "        except: chunk = file.read(__byte_size)\n"
+            "        (value,) = struct.unpack(__longlong_format_char, chunk)\n",
+     'new': "        except: chunk = file.read(__byte_size)\n"
+            "        if len(chunk) < __byte_size:  # ABK: short read on a slow stream\n"
+            "            raise EOFError('short read (%d bytes)' % len(chunk))\n"
+            "        (value,) = struct.unpack(__longlong_format_char, chunk)\n",
+     'already_patched_check': '# ABK: short read on a slow stream',
+     'description': 'a4kSubtitles video.py - short read while hashing a stream ends the hash cleanly'},
+    {'addon_id': 'service.subtitles.a4ksubtitles', 'not_found_ok': True,
+     'rel_path': os.path.join('a4kSubtitles', 'lib', 'video.py'),
+     'old': "            __set_size_and_hash(core, meta, filepath)\n"
+            "        except:\n"
+            "            import traceback\n"
+            "            traceback.print_exc()\n",
+     'new': "            __set_size_and_hash(core, meta, filepath)\n"
+            "        except EOFError as _abk_e:  # ABK: stream too slow to hash\n"
+            "            meta.filehash = ''\n"
+            "            logger.info('file hash skipped: %s' % _abk_e)\n"
+            "        except:\n"
+            "            import traceback\n"
+            "            traceback.print_exc()\n",
+     'already_patched_check': '# ABK: stream too slow to hash',
+     'description': 'a4kSubtitles video.py - a stream too slow to hash logs one line, not a traceback'},
 ]
 
 

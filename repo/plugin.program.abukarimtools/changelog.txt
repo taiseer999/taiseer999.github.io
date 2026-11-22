@@ -1,3 +1,18 @@
+v4.12.21  (2026-11-22)
+- Najd 2.9.7.8 (bundled, from 2.9.7.6): timing from another cut of the film is
+  never used. The English reference for "Memoir of a Murderer" (Theatrical Cut)
+  was a Director's Cut release, so the AI line matching moved the Arabic by up
+  to +372 s. Now: English references of another cut are skipped and Arabic ones
+  rank lower; a reference that does not line up (low_quality) is not used to
+  re-time lines; the AI line matching keeps only its text fixes when the gap
+  between the two subtitles keeps changing (another cut). A slow embedded
+  subtitle read ("The read operation timed out") is no longer kept for 60 days
+  as "no subtitles inside". Audio reads ask like Kodi (no Icy-MetaData header,
+  Kodi's user agent, no ':443') - easynews answered 400 Bad Request.
+- a4kSubtitles video.py (always on): a short read while hashing a slow stream
+  ends the hash cleanly with one log line instead of the
+  "struct.error: unpack requires a buffer of 8 bytes" traceback.
+
 v4.12.20  (2026-11-22)
 - Lucent Player: AF3 button row 12 px lower (OSD and its popups), focused button name font_tiny -> font_mini and 6 px lower.
 
