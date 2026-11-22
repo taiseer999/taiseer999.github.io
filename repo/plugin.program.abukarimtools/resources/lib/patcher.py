@@ -4948,6 +4948,33 @@ PATCHES += [
         'already_patched_check': 'ABK_LP_VideoOSD',
         'description': 'AF3 Lucent Player - OSD',
     },
+    # 4.12.20: AF3's button row a little lower with the Lucent Player on
+    # (ABK_LP_OSDRowLower, a conditional slide), in the OSD and in the popups
+    # that redraw the row, so it does not jump when one opens.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'count': 0,
+        'already_patched_check': 'ABK_LP_OSDRowLower',
+        'fallback_pattern': r'(<control type="grouplist" id="609[12]">\s*<centerbottom>80</centerbottom>)',
+        'fallback_repl': r'\1\n                        <include>ABK_LP_OSDRowLower</include>',
+        'description': 'AF3 Lucent Player - OSD button row a little lower',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'count': 0,
+        'already_patched_check': 'ABK_LP_OSDRowLower',
+        'fallback_pattern': r'(<height>120</height>\s*<(?:left|right)>-20</(?:left|right)>\s*<centerbottom>80</centerbottom>)',
+        'fallback_repl': r'\1\n                <include>ABK_LP_OSDRowLower</include>',
+        'description': 'AF3 Lucent Player - OSD popups: button row a little lower',
+    },
     {
         # Statistics button (the Lucent PPI) in the AF3 OSD, before the PPI button.
         'addon_id': 'skin.arctic.fuse.3',

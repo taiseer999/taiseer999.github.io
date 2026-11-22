@@ -1,3 +1,6 @@
+v4.12.20  (2026-11-22)
+- Lucent Player: AF3 button row 12 px lower (OSD and its popups), focused button name font_tiny -> font_mini and 6 px lower.
+
 v4.12.19  (2026-11-22)
 - AF3 3.5.7+ Lucent Look: Info_Line_Pill_Text now takes $PARAM[texture] /
   $PARAM[border] and Info_Line_Pill_Box moved its width out, so the "glass

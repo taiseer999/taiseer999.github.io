@@ -187,9 +187,23 @@
             <align>center</align>
             <aligny>center</aligny>
             <label>$VAR[ABK_OSD_ButtonName]</label>
+            <visible>!Skin.HasSetting(abk.lucentplayer) | Pvr.IsPlayingTV</visible>
             <!-- 4.8.66: no Lucent Player condition - its own buttons have other
                  ids, so the name is empty there; with it on, AF3's row was
                  left without names (log 2026-11-14 11:59) -->
+        </control>
+        <!-- 4.12.20: Lucent Player - row 12 px lower (ABK_LP_OSDRowLower), name a size up -->
+        <control type="label">
+            <centerleft>50%</centerleft>
+            <width>1200</width>
+            <top>1036</top>
+            <height>40</height>
+            <font>font_mini</font>
+            <textcolor>CCFFFFFF</textcolor>
+            <align>center</align>
+            <aligny>center</aligny>
+            <label>$VAR[ABK_OSD_ButtonName]</label>
+            <visible>Skin.HasSetting(abk.lucentplayer) + !Pvr.IsPlayingTV</visible>
         </control>
     </include>
 </includes>

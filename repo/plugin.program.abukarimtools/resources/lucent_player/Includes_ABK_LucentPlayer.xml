@@ -1412,4 +1412,9 @@
             </control>
         </definition>
     </include>
+    <!-- 4.12.20: AF3's button row (VideoOSD 6091 / 6092 and the popups'
+         OSD_CustomDialog_GroupList) sits a little lower with the Lucent Player on. -->
+    <include name="ABK_LP_OSDRowLower">
+        <animation effect="slide" start="0,0" end="0,12" time="0" condition="Skin.HasSetting(abk.lucentplayer) + !Pvr.IsPlayingTV">Conditional</animation>
+    </include>
 </includes>
