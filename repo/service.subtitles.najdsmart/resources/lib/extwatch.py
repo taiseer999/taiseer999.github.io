@@ -29,7 +29,9 @@ from .common import PROFILE, log, notify, set_status, setting_bool
 SUB_EXTS = ('.srt', '.ass', '.ssa', '.vtt')
 MAX_BYTES = 8 * 1024 * 1024
 _SPLIT = re.compile(r'[\s.\-_\[\]()]+')
-_FLAGS = {'external', 'forced', 'default', 'none', 'sdh', 'cc', 'hi'}
+_FLAGS = {'external', 'forced', 'default', 'none', 'sdh', 'cc', 'hi',
+          # Kodi in Arabic writes the flags in Arabic: «(خارجي)»
+          'خارجي', 'خارجية', 'افتراضي', 'افتراضية', 'إجباري', 'اجباري', 'قسري', 'مفروض'}
 _SUB_DIRS = ('subs', 'subtitles', 'sub', 'subtitle')
 _ADDON_DIRS = ('plugin.video.dexhub/subtitle_cache', 'service.subtitles.dexworld',
                'service.subtitles.a4ksubtitles', 'service.subtitles.opensubtitles-com',
@@ -182,6 +184,35 @@ def find_file(st, video_path, since):
     return ''
 
 
+def najd_own(st, video_path):
+    """Is the playing «external» subtitle one of Najd's own files (a part of a translation
+    in progress, a synced or AI version...)? Kodi lists a file picked from Najd's list as an
+    external stream too; Najd must never treat its own work as someone else's."""
+    vname = os.path.splitext((video_path or '').split('|', 1)[0].rsplit('/', 1)[-1])[0].lower()
+    vname = vname.split('?', 1)[0]
+    langs = _lang_words(st['lang'])
+    want = [t for t in _tokens(st['name']) if t not in _FLAGS and t not in langs]
+    if vname:
+        vt = set(_tokens(vname))
+        want = [t for t in want if t not in vt] or want
+    if not want:
+        return False
+    since = time.time() - 3 * 86400
+    for root, _dirs, files in os.walk(PROFILE):
+        for f in files:
+            if not f.lower().endswith(SUB_EXTS):
+                continue
+            try:
+                if os.path.getmtime(os.path.join(root, f)) < since:
+                    continue
+            except OSError:
+                continue
+            toks = set(_tokens(os.path.splitext(f)[0].lower()))
+            if all(w in toks for w in want):
+                return True
+    return False
+
+
 def _digest(path):
     try:
         if os.path.isfile(path):
@@ -232,6 +263,9 @@ def watch(player, video_path, started):
         added = st['count'] > base and st['index'] == st['count'] - 1
         if st['external'] is False or (st['external'] is None and not added
                                        and 'external' not in st['name'].lower()):
+            continue
+        if najd_own(st, video_path):
+            stable = 9          # Najd's own subtitle: nothing to do
             continue
         path = find_file(st, video_path, started - 5)
         if not path:

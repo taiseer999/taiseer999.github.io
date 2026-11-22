@@ -6,6 +6,7 @@ import io
 import json
 import os
 import re
+import shutil
 import time
 import urllib.parse
 import zipfile
@@ -150,6 +151,17 @@ def _video_key(video):
         k += '|%s|%s|%s|%d' % (video.get('tvshow') or '', video.get('title') or '', video.get('year') or '',
                                int(float(video.get('duration') or 0)) // 10)
     return hashlib.sha1(k.encode('utf-8')).hexdigest()[:16]
+
+
+def najd_sub_path(video, lang='ar', tag=''):
+    """Where a subtitle made for this video is written. A short file name in a folder of
+    its own: Kodi lists an outside subtitle under its file name, so a long release name
+    ('The Odyssey 2026 iNTERNAL BluRay 2160p UHD MULTi REMUX...') filled the subtitle
+    list and the skin's title. Now Kodi shows «Najd» (or «Najd 30» while a translation
+    is at 30 %), and every video still has its own file."""
+    d = os.path.join(TEMP_DIR, _video_key(video))
+    os.makedirs(d, exist_ok=True)
+    return os.path.join(d, 'Najd%s.%s.srt' % (('.' + tag) if tag else '', lang or 'ar'))
 
 
 def _sim(a, b):
@@ -424,8 +436,7 @@ def process(item, video, progress=None):
     cues = subtitle.fix_timing(cues)
 
     step(85, 'حفظ الملف...')
-    base = re.sub(r'[\\/:*?"<>|]+', '_', os.path.splitext(video.get('filename') or 'subtitle')[0])[:80]
-    path = os.path.join(TEMP_DIR, '%s.%s.srt' % (base or 'subtitle', item.get('lang', 'ar')))
+    path = najd_sub_path(video, item.get('lang', 'ar'))
     with open(path, 'w', encoding='utf-8-sig') as f:
         f.write(subtitle.to_srt(cues))
 
@@ -769,7 +780,7 @@ def _emb_write(video, state):
     cues = subtitle.fix_timing(cues)
     base = re.sub(r'[\\/:*?"<>|]+', '_', os.path.splitext(video.get('filename') or 'subtitle')[0])[:80]
     pct = len(state['done']) * 100 // EMB_SLICES
-    path = os.path.join(TEMP_DIR, '%s.ar%s.srt' % (base or 'subtitle', '' if pct >= 100 else '.%d' % pct))
+    path = najd_sub_path(video, 'ar', '' if pct >= 100 else str(pct))
     with open(path, 'w', encoding='utf-8-sig') as f:
         f.write(subtitle.to_srt(cues))
     if pct >= 100:
@@ -811,10 +822,13 @@ def embedded_resume(video):
             base = re.sub(r'[\\/:*?"<>|]+', '_', os.path.splitext(video.get('filename') or 'subtitle')[0])[:80]
             kept = os.path.join(PROFILE, 'translated', '%s.ar.srt' % (base or 'subtitle'))
             if video.get('filename') and not is_generic_name(video.get('filename')) and os.path.exists(kept):
-                remember_last(kept, video, {'provider': 'embedded', 'id': 'kept', 'lang': 'ar',
-                                            'release': 'embedded', 'hash_match': True})
+                # shown under the short name, like every subtitle Najd makes
+                shown = najd_sub_path(video, 'ar')
+                shutil.copyfile(kept, shown)
+                remember_last(shown, video, {'provider': 'embedded', 'id': 'kept', 'lang': 'ar',
+                                             'release': 'embedded', 'hash_match': True})
                 log('embedded: using the finished translation kept in translated/')
-                return kept, 100
+                return shown, 100
         except OSError:
             pass
         return None
@@ -1775,9 +1789,7 @@ def sync_external(src, video, progress=None):
             return None
     apply_offset(cues, user_offset(video))
     cues = subtitle.fix_timing(cues)
-    base = re.sub(r'[\\/:*?"<>|]+', '_', os.path.splitext(os.path.basename(src))[0])[:80]
-    base = re.sub(r'(\.(ext|synced|ai|v2))+$', '', base)
-    path = os.path.join(TEMP_DIR, '%s.ext.srt' % (base or 'subtitle'))
+    path = najd_sub_path(video, 'ar', 'ext')
     with open(path, 'w', encoding='utf-8-sig') as f:
         f.write(subtitle.to_srt(cues))
     remember_last(path, video, item)

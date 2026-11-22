@@ -42,7 +42,8 @@ def os_hash(path):
         return None, 0
 
 
-_SE_RE = re.compile(r'[Ss](\d{1,2})[ ._-]?[Ee](\d{1,3})|(\d{1,2})x(\d{2,3})')
+# '(?<!\d)…(?!\d)': a resolution like 1920x1080 is not season 20 episode 108
+_SE_RE = re.compile(r'[Ss](\d{1,2})[ ._-]?[Ee](\d{1,3})|(?<![\dA-Za-z])(\d{1,2})x(\d{2,3})(?![\dpP])')
 _YEAR_RE = re.compile(r'[\.\s\(\[_-]((?:19|20)\d{2})[\.\s\)\]_-]')
 
 
@@ -220,6 +221,26 @@ def current():
                 v[k] = clean
     # fill gaps from the file name
     g = guess_from_name(v['filename'])
+    fname_ok = bool(g['title']) and not re.match(
+        r'^(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|[0-9a-f]{16,})$',
+        os.path.splitext(v['filename'])[0], re.I)
+    # a film the player calls an episode ('Lupin III - The Mystery of Mamo (1978).mkv' sent
+    # as season 20 episode 108): the file name has a year and no episode number, and Kodi's
+    # episode title is the show's own name
+    if fname_ok and v['episode'] and not g['season'] and g['year'] and (
+            v['title'] and v['title'] == v['tvshow']):
+        log('the player calls this an episode (S%sE%s) but the file is a film: searching as a film'
+            % (v['season'], v['episode']))
+        v['title'] = v['title'] or v['tvshow']
+        v['tvshow'] = v['season'] = v['episode'] = v['show_imdb'] = v['show_tmdb'] = ''
+    # a title with no Latin letters (Japanese, or a library in Arabic) is never found by name
+    # on the subtitle sites: search with the English name in the file name
+    latin = g['title'] if fname_ok and re.search(r'[A-Za-z]{3}', g['title'] or '') else ''
+    for k in ('title', 'tvshow'):
+        if latin and v[k] and not re.search(r'[A-Za-z]{3}', v[k]):     # 'ルパンVS複製人間' too
+            v[k + '_orig'] = v[k]
+            v[k] = latin
+            log('%s "%s" has no Latin letters: searching as "%s"' % (k, v[k + '_orig'], latin))
     if not v['title'] and not v['tvshow']:
         if g['season']:
             v['tvshow'] = g['title']

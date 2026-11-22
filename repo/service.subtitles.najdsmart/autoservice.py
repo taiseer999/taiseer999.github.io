@@ -369,6 +369,11 @@ if __name__ == '__main__':
     MONITOR[0] = monitor
     player = Player()
     log('service started')
+    try:
+        from resources.lib import health
+        health.start(monitor)
+    except Exception as e:
+        log('health record: %s' % e)
     set_status('')
     try:
         from resources.lib.badge import Badge
@@ -453,4 +458,8 @@ if __name__ == '__main__':
             threading.Thread(target=worker, daemon=True).start()
         if monitor.waitForAbort(2):
             break
+    try:
+        health.stop()
+    except Exception:
+        pass
     log('service stopped')

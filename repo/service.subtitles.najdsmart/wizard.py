@@ -174,10 +174,12 @@ def _subtitle_files_summary():
     try:
         from resources.lib.common import TEMP_DIR
         from resources.lib import subtitle, arabic
-        names = sorted((n for n in os.listdir(TEMP_DIR) if n.endswith('.srt')),
-                       key=lambda n: os.path.getmtime(os.path.join(TEMP_DIR, n)))[-8:]
-        for n in names:
-            with open(os.path.join(TEMP_DIR, n), 'rb') as f:
+        found = [os.path.join(r, n) for r, _d, fs in os.walk(TEMP_DIR) for n in fs if n.endswith('.srt')]
+        names = sorted(found, key=os.path.getmtime)[-8:]
+        for full in names:
+            # the folder is the video's own: show its name with the file's
+            n = os.path.relpath(full, TEMP_DIR)
+            with open(full, 'rb') as f:
                 cues = subtitle.parse(arabic.decode(f.read()))
             gaps = ['%d:%02d+%ds' % (cues[i].end // 60000, cues[i].end // 1000 % 60,
                                      (cues[i + 1].start - cues[i].end) // 1000)
@@ -198,6 +200,28 @@ def report():
     from resources.lib.common import redact
     logdir = xbmcvfs.translatePath('special://logpath')
     lines = []
+    # the last two days from Najd's own log, up to where kodi.old.log begins (that part
+    # follows below with Kodi's own errors around it)
+    first = ''
+    for name in ('kodi.old.log', 'kodi.log'):
+        p = os.path.join(logdir, name)
+        try:
+            with open(p, encoding='utf-8', errors='replace') as f:
+                head_line = f.readline()
+            if re.match(r'\d{4}-\d\d-\d\d \d\d:\d\d:\d\d', head_line):
+                first = head_line[:19]
+                break
+        except OSError:
+            continue
+    try:
+        from resources.lib.common import history_lines, history_events
+        older = [l for l in history_lines(before=first)
+                 if not l.startswith('    | ') and l[19:22] != ' ★ '][-3000:]
+        events = history_events()[-2500:]
+    except Exception:
+        older, events = [], []
+    if older:
+        lines += older + ['---- end of earlier days (Najd log) ----']
     for name in ('kodi.old.log', 'kodi.log'):
         p = os.path.join(logdir, name)
         if not os.path.exists(p):
@@ -226,6 +250,10 @@ def report():
                                       'groq', 'mistral') if a.getSetting(p + '_key')) or 'none',
                 a.getSetting('ai_order') or 'default'), '']
     head += _subtitle_files_summary()
+    if events:
+        crashes = sum(1 for l in events if 'DID NOT CLOSE NORMALLY' in l)
+        head += ['==== سجل الجهاز: تشغيل كودي وإطفاؤه، ونبض كل 5 دقائق (آخر 3 أيام) ====',
+                 'انقفال غير طبيعي: %d' % crashes] + events + ['']
     tail = []
     try:
         from resources.lib import trace
@@ -237,7 +265,7 @@ def report():
             tail = ['', '==== sync data (for replay) ====', b, '==== end sync data ====']
     except Exception as e:
         head.append('trace failed: %s' % e)
-    text = '\n'.join(head + lines[-1500:] + tail)
+    text = '\n'.join(head + lines[-4500:] + tail)
     desk = os.path.join(os.environ.get('USERPROFILE', os.path.expanduser('~')), 'Desktop')
     if not os.path.isdir(desk):
         desk = xbmcvfs.translatePath('special://profile')   # CoreELEC/LibreELEC: \\<box>\Userdata

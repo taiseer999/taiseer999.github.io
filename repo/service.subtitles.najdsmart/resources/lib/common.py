@@ -2,6 +2,7 @@
 """Shared helpers: settings, logging, paths, HTTP."""
 import json
 import os
+import threading
 import ssl
 import time
 import urllib.error
@@ -104,8 +105,92 @@ def redact(text):
     return text
 
 
+HISTORY = os.path.join(PROFILE, 'history.log')
+HISTORY_HOURS = 72
+_HIST = {'n': 0, 'lock': threading.Lock()}
+
+
+def _history_add(text, level):
+    """Najd's own log of the last two days: kodi.log starts over at every restart, so
+    one report can cover every film watched since yesterday, not just the last one."""
+    try:
+        tag = 'error' if level >= xbmc.LOGERROR else 'warning' if level >= xbmc.LOGWARNING else 'info'
+        line = '%s %s: %s\n' % (time.strftime('%Y-%m-%d %H:%M:%S'), tag, text.replace('\n', ' / '))
+        with _HIST['lock']:
+            with open(HISTORY, 'a', encoding='utf-8') as f:
+                f.write(line)
+            _HIST['n'] += 1
+            if _HIST['n'] % 400 == 1:
+                prune_history()
+    except Exception:
+        pass
+
+
+def prune_history():
+    """Keep only the last HISTORY_HOURS hours (and at most ~4 MB)."""
+    try:
+        if not os.path.exists(HISTORY):
+            return
+        cut = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() - HISTORY_HOURS * 3600))
+        with open(HISTORY, encoding='utf-8', errors='replace') as f:
+            lines, keep = [], False
+            for l in f:
+                if l[:2] == '20':
+                    keep = l[:19] >= cut
+                if keep:
+                    lines.append(l)
+        lines = lines[-20000:]
+        tmp = HISTORY + '.tmp'
+        with open(tmp, 'w', encoding='utf-8') as f:
+            f.writelines(lines)
+        os.replace(tmp, HISTORY)
+    except Exception:
+        pass
+
+
+def history_note(text):
+    """A line of Najd's own health record (start, power-off, pulse...) — history only,
+    never kodi.log, so the pulses every few minutes do not fill Kodi's log."""
+    try:
+        with _HIST['lock']:
+            with open(HISTORY, 'a', encoding='utf-8') as f:
+                f.write('%s ★ %s\n' % (time.strftime('%Y-%m-%d %H:%M:%S'), text))
+    except Exception:
+        pass
+
+
+def history_block(title, lines):
+    try:
+        with _HIST['lock']:
+            with open(HISTORY, 'a', encoding='utf-8') as f:
+                f.write('%s ★ ---- %s ----\n' % (time.strftime('%Y-%m-%d %H:%M:%S'), title))
+                for l in lines:
+                    f.write('    | %s\n' % redact(l.rstrip('\n')))
+                f.write('%s ★ ---- end: %s ----\n' % (time.strftime('%Y-%m-%d %H:%M:%S'), title))
+    except Exception:
+        pass
+
+
+def history_lines(before=''):
+    """The kept lines (older than `before`, 'YYYY-MM-DD HH:MM:SS', when given)."""
+    try:
+        prune_history()
+        with open(HISTORY, encoding='utf-8', errors='replace') as f:
+            out, older = [], True
+            for l in f:
+                if l[:2] == '20':
+                    older = not before or l[:19] < before
+                if older:
+                    out.append(l.rstrip('\n'))
+            return out
+    except Exception:
+        return []
+
+
 def log(msg, level=xbmc.LOGINFO):
-    xbmc.log('[%s] %s' % (ADDON_ID, redact(msg)), level)
+    text = redact(msg)
+    xbmc.log('[%s] %s' % (ADDON_ID, text), level)
+    _history_add(text, level)
 
 
 def notify(msg, seconds=4, icon=None):
@@ -223,13 +308,19 @@ def clean_temp(keep_hours=12):
     versions made for it) are never pulled away and can be checked in a problem report."""
     now = time.time()
     ensure_dirs()
-    for name in os.listdir(TEMP_DIR):
-        try:
-            p = os.path.join(TEMP_DIR, name)
-            if os.path.isfile(p) and (name.startswith('archive') or now - os.path.getmtime(p) > keep_hours * 3600):
-                os.remove(p)
-        except OSError:
-            pass
+    for root, dirs, files in os.walk(TEMP_DIR, topdown=False):     # one folder per video too
+        for name in files:
+            try:
+                p = os.path.join(root, name)
+                if name.startswith('archive') or now - os.path.getmtime(p) > keep_hours * 3600:
+                    os.remove(p)
+            except OSError:
+                pass
+        if root != TEMP_DIR:
+            try:
+                os.rmdir(root)          # only when empty
+            except OSError:
+                pass
 
 
 # long-lived cache files: AI translations and reference info are kept far longer
@@ -271,3 +362,18 @@ def set_status(text, state='busy'):
 def get_status():
     w = xbmcgui.Window(10000)
     return w.getProperty(STATUS_PROP), w.getProperty(STATE_PROP)
+
+
+def history_events():
+    """Only Najd's health record (★ lines and their blocks), all three days."""
+    try:
+        prune_history()
+        out = []
+        with open(HISTORY, encoding='utf-8', errors='replace') as f:
+            for l in f:
+                star = l[:2] == '20' and l[19:22] == ' ★ '
+                if star or (l.startswith('    | ')):
+                    out.append(l.rstrip('\n'))
+        return out
+    except Exception:
+        return []

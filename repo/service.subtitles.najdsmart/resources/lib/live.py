@@ -48,9 +48,13 @@ class LiveChecker(object):
             try:
                 self.check_once(win, stream)
             except Exception as e:
+                set_status('')          # never leave «checking the next part...» on screen
                 if 'aborted' in str(e):
                     return
                 log('live check: %s' % e)
+                if 'timed out' in str(e) or 'refused' in str(e).lower():
+                    log('live check: the box is too busy for this file - no more checks')
+                    return
             for _ in range(int(every)):
                 if self._abort() or self.monitor.waitForAbort(1):
                     return
@@ -63,6 +67,8 @@ class LiveChecker(object):
         last = pipeline.last_for(video)
         if not last or not os.path.exists(last['path']):
             return
+        if (last.get('item') or {}).get('provider') == 'embedded':
+            return          # made from the video's own subtitle: its timing is the video's
         eng = pipeline.ffmpeg_path()
         if not eng:
             return
