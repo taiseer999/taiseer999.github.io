@@ -2,6 +2,15 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
+   "v": "4.12.19",
+   "en": [
+    "AF3 Lucent Look: the info pills (the \"i\" box, 4K, HDR...) are see-through glass again with the newer skin - the white \"i\" no longer disappears on a white box."
+   ],
+   "ar": [
+    "مظهر Lucent في AF3: عادت أقراص المعلومات (مربع «i» و4K وHDR...) زجاجية شفافة مع الواجهة الأحدث، فلم تعد علامة «i» البيضاء تختفي فوق مربع أبيض."
+   ]
+  },
+  {
    "v": "4.12.18",
    "from": "4.12.18",
    "en": [

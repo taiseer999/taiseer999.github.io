@@ -1969,6 +1969,28 @@ PATCHES = [
         'already_patched_check': '<!-- ABUKARIM: Lucent glass pill glyph -->',
         'description': 'AF3 Lucent Look - glass info pills (white icon)',
     },
+    # AF3 3.5.7+: the pill textures became $PARAM[texture] / $PARAM[border] and
+    # Info_Line_Pill_Box moved its width out, so the two anchors above stopped
+    # matching while the white-glyph patch still applied - a white "i" on the
+    # solid white pill. Twins for the new markup (same markers, one applies).
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'not_found_ok': True,
+        'old': '                <width min="$PARAM[min_width]">$PARAM[width]</width>\n                <texturefocus colordiffuse="$PARAM[colordiffuse]_$PARAM[fill]" border="$PARAM[border]">$PARAM[texture]</texturefocus>',
+        'new': '                <width min="$PARAM[min_width]">$PARAM[width]</width>\n                <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_GlassPill</include>  <!-- ABUKARIM: Lucent glass pill text -->\n                <texturefocus colordiffuse="$PARAM[colordiffuse]_$PARAM[fill]" border="$PARAM[border]">$PARAM[texture]</texturefocus>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent glass pill text -->',
+        'description': 'AF3 Lucent Look - glass info pills (text, 3.5.7)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'not_found_ok': True,
+        'old': '                <include>Dimension_Info_Line_Pillbox</include>\n                <control type="image">\n                    <texture colordiffuse="$PARAM[colordiffuse]_90" border="4">flags/blank.png</texture>',
+        'new': '                <include>Dimension_Info_Line_Pillbox</include>\n                <control type="image">\n                    <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_GlassPillBg</include>  <!-- ABUKARIM: Lucent glass pill icon -->\n                    <texture colordiffuse="$PARAM[colordiffuse]_90" border="4">flags/blank.png</texture>',
+        'already_patched_check': '<!-- ABUKARIM: Lucent glass pill icon -->',
+        'description': 'AF3 Lucent Look - glass info pills (icon plate, 3.5.7)',
+    },
     {
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('1080i', 'Includes_Hubs.xml'),

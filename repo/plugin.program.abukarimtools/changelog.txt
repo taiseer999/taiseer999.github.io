@@ -1,3 +1,10 @@
+v4.12.19  (2026-11-22)
+- AF3 3.5.7+ Lucent Look: Info_Line_Pill_Text now takes $PARAM[texture] /
+  $PARAM[border] and Info_Line_Pill_Box moved its width out, so the "glass
+  info pills (text)" and "(icon plate)" anchors stopped matching while
+  "(white icon)" still applied - a white "i" on the solid white pill.
+  Added 3.5.7 twins of both (same markers, only one applies).
+
 v4.12.18  (2026-11-22)
 - AF3: GUI freeze while scrolling fast through hub widgets (crashlogs
   10:57 / 11:47: main thread in CDirectoryProvider::IsUpdating, a JobWorker in
