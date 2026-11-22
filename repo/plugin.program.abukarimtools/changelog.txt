@@ -1,3 +1,20 @@
+v4.12.17  (2026-11-22)
+- AF3: Najd's notifications use a smaller header. AF3 draws the toast header
+  (the add-on name, Control 401) in font_main_bold (28). Two always-on
+  patches: Includes_Furniture.xml gets the variable ABK_NajdToast_Header
+  (empty when the header contains «نجد»), DialogNotification.xml passes it
+  as Furniture_Busy_Main's mainlabel and adds a font_tiny_bold (21) label
+  shown only for Najd. Every other notification is unchanged.
+
+v4.12.16  (2026-11-22)
+- Najd 2.9.7.6 (bundled): the subtitle status is shown with the skin's
+  standard notification (xbmcgui.Dialog().notification) instead of the box
+  Najd drew on the fullscreen video window. A toast appears only while a
+  video plays and only when the status changes (no idle «ready» message);
+  progress of the same step at most once per 15 s; skipped when Najd's own
+  notify() just showed the same news. The «show_badge» setting now turns
+  these status notifications on or off.
+
 v4.12.15  (2026-11-21)
 - Najd 2.9.7.5 (bundled) = the author's 2.9.7.4 + the Piers parts it did not
   have (it was built on 2.9.7.2): osdsync.py and the "osdsync" script entry

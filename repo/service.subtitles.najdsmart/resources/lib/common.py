@@ -113,6 +113,10 @@ def notify(msg, seconds=4, icon=None):
         xbmcgui.Dialog().notification(ADDON_NAME, msg,
                                       icon or ADDON.getAddonInfo('icon'),
                                       seconds * 1000, False)
+        try:
+            xbmcgui.Window(10000).setProperty('NajdSubs.NotifyTime', str(time.time()))
+        except Exception:
+            pass
 
 
 class HttpError(Exception):
@@ -253,7 +257,7 @@ STATE_PROP = 'NajdSubs.State'      # busy | ok | err | ''
 
 
 def set_status(text, state='busy'):
-    """Shared status (any process) — shown by the on-screen badge and usable by skins:
+    """Shared status (any process) — shown as a skin notification and usable by skins:
     $INFO[Window(Home).Property(NajdSubs.Status)]"""
     try:
         w = xbmcgui.Window(10000)

@@ -2,6 +2,16 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
+   "v": "4.12.17",
+   "from": "4.12.16",
+   "en": [
+    "Najd shows its subtitle status with the skin's standard notification instead of its own box on the video; in Arctic Fuse 3 its text is smaller."
+   ],
+   "ar": [
+    "تعرض نجد حالة الترجمة بإشعار الواجهة المعتاد بدلاً من مربعها الخاص فوق الفيديو، وبخط أصغر في Arctic Fuse 3."
+   ]
+  },
+  {
    "v": "4.12.15",
    "from": "4.12.14",
    "en": [

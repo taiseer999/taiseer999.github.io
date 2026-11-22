@@ -5703,6 +5703,54 @@ def _apply_patch(patch):
 
 import json
 
+# 4.12.16: Najd shows its subtitle status with the standard notification
+# (DialogNotification). AF3 draws the toast header (Control 401 = the add-on
+# name) in font_main_bold (28) - large for a status line over the video. For
+# Najd's toasts only, the header comes from a smaller label (font_tiny_bold);
+# every other notification is unchanged. The message line (402) stays as is.
+PATCHES += [
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Furniture.xml'),
+        'not_found_ok': True,
+        'old': '    <include name="Furniture_Busy_Main">\n',
+        'new': ('    <!-- ABK_NAJD_TOAST: Najd notification header is drawn smaller in DialogNotification.xml -->\n'
+                '    <variable name="ABK_NajdToast_Header">\n'
+                '        <value condition="String.Contains(Control.GetLabel(401),نجد)"></value>\n'
+                '        <value>$INFO[Control.GetLabel(401)]</value>\n'
+                '    </variable>\n'
+                '\n'
+                '    <include name="Furniture_Busy_Main">\n'),
+        'already_patched_check': 'ABK_NajdToast_Header',
+        'description': 'AF3 notifications - Najd header variable',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'DialogNotification.xml'),
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': '<!-- ABK_NAJD_TOAST -->',
+        'fallback_pattern': (r'(\n([ \t]*)<include content="Furniture_Busy_Main">\n[\s\S]*?)'
+                             r'<param name="mainlabel">\$INFO\[Control\.GetLabel\(401\)\]</param>'
+                             r'([\s\S]*?\n\2</include>\n)'),
+        'fallback_repl': ('\\1<param name="mainlabel">$VAR[ABK_NajdToast_Header]</param>\\3'
+                          '\n\\2<!-- ABK_NAJD_TOAST -->\n'
+                          '\\2<control type="label">\n'
+                          '\\2    <visible>String.Contains(Control.GetLabel(401),نجد)</visible>\n'
+                          '\\2    <right>100</right>\n'
+                          '\\2    <height>40</height>\n'
+                          '\\2    <centertop>25</centertop>\n'
+                          '\\2    <font>font_tiny_bold</font>\n'
+                          '\\2    <textcolor>main_fg_90</textcolor>\n'
+                          '\\2    <shadowcolor>main_bg_30</shadowcolor>\n'
+                          '\\2    <label>$INFO[Control.GetLabel(401)]</label>\n'
+                          '\\2    <align>right</align>\n'
+                          '\\2</control>\n'),
+        'description': 'AF3 notifications - smaller header for Najd subtitle status',
+    },
+]
+
 # 4.8.67: NewPipe search / Trending / Live / Trailers came back empty with
 # pagination off. routes._build_paged passes limit=None ("show all") and
 # yt._video_results compares len(results) >= None -> TypeError, swallowed by
