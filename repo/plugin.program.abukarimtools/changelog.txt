@@ -1,3 +1,15 @@
+v4.12.18  (2026-11-22)
+- AF3: GUI freeze while scrolling fast through hub widgets (crashlogs
+  10:57 / 11:47: main thread in CDirectoryProvider::IsUpdating, a JobWorker in
+  OnJobComplete -> StartDirectoryJob -> target GetLabel -> GetWindow - an
+  AB-BA deadlock in Kodi core). The trigger is the "Stacked" widgets' target
+  $INFO[Window.Property(WidgetMeta.<id>.Target)]: evaluating it from the job
+  worker needs the GUI lock. Two always-on regex patches make it the static
+  "videos" - in the generated script-skinvariables-generator-includes-.xml
+  (the file the skin loads) and in the generator rule
+  shortcuts/generator/data/setup/widgets_row.xml (so a menu rebuild keeps
+  it). No Kodi rebuild needed.
+
 v4.12.17  (2026-11-22)
 - AF3: Najd's notifications use a smaller header. AF3 draws the toast header
   (the add-on name, Control 401) in font_main_bold (28). Two always-on

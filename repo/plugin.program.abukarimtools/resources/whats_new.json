@@ -2,6 +2,16 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
+   "v": "4.12.18",
+   "from": "4.12.18",
+   "en": [
+    "Arctic Fuse 3 no longer freezes when you scroll fast through the stacked widgets in the hubs."
+   ],
+   "ar": [
+    "لم تعد واجهة Arctic Fuse 3 تتجمّد عند التمرير السريع بين الصفوف المتتابعة في الأقسام."
+   ]
+  },
+  {
    "v": "4.12.17",
    "from": "4.12.16",
    "en": [

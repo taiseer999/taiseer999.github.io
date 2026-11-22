@@ -5769,6 +5769,47 @@ PATCHES += [
     },
 ]
 
+# 4.12.18: AF3 "Stacked" widgets froze the GUI (Kodi core AB-BA deadlock,
+# crashlogs 2026-11-22 10:57 / 11:47). Their <content target> was
+# $INFO[Window.Property(WidgetMeta.<id>.Target)]. When a widget refresh was
+# queued while one was running (fast scrolling: the stacked row's path follows
+# the focused item of the row above), Kodi's job worker started the next job
+# from CDirectoryProvider::OnJobComplete() while holding the provider lock and
+# evaluated that target -> needs the GUI window lock. The render thread holds
+# the GUI lock and waits for the provider lock in Update()/IsUpdating() -> hang.
+# A static target is never evaluated through the GUI, so the worker never
+# blocks. Value: the skin sets WidgetMeta.*.Target to "videos" for everything
+# except music artist/album/song items; Piers is a video build.
+# Always-on (no toggle): this is a freeze fix, not a look.
+_ABK_STATIC_TARGET_RE = r'\$INFO\[Window\.Property\(WidgetMeta\.[^)\]]*\.Target\)\]'
+PATCHES += [
+    {
+        # The generated widgets file the skin actually loads. It is rebuilt
+        # by skinvariables when the menu changes; the next sweep re-applies.
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'script-skinvariables-generator-includes-.xml'),
+        'not_found_ok': True,
+        'old': '', 'new': '',
+        'already_patched_check': None,
+        'fallback_pattern': _ABK_STATIC_TARGET_RE,
+        'fallback_repl': 'videos',
+        'count': 0,
+        'description': 'AF3 - static target for Stacked widgets (GUI freeze fix, generated includes)',
+    },
+    {
+        # The generator rule, so a menu rebuild writes the static target.
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('shortcuts', 'generator', 'data', 'setup', 'widgets_row.xml'),
+        'not_found_ok': True,
+        'old': '', 'new': '',
+        'already_patched_check': None,
+        'fallback_pattern': _ABK_STATIC_TARGET_RE,
+        'fallback_repl': 'videos',
+        'count': 0,
+        'description': 'AF3 - static target for Stacked widgets (GUI freeze fix, generator rule)',
+    },
+]
+
 # Ordered list of (toggle_id, display label). Order = order shown in the dialog.
 TOGGLE_GROUPS = [
     ('tmdbh_trakt_auth', 'TMDbHelper Trakt Auth QR'),
