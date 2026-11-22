@@ -293,7 +293,31 @@ def semantic_sync(cues, en, title='', position=None, progress=None, abort=None,
             if es and 0 <= i < len(orig):
                 deltas.append(min(en[e].start for e in es) - orig[i].start)
     info['diff'] = _diff_summary(deltas)
+    # Piers edition: the English is another cut of the film (the gap between the two
+    # subtitles keeps changing by tens of seconds) and only a minority of lines matched —
+    # its timing would put many Arabic lines in the wrong place. Keep the text fixes only.
+    if out is not None and not info.get('text_only') and _other_cut(deltas, info):
+        log('semantic: the English looks like another cut (%s) — text fixed, timing kept' % info['diff'])
+        fixed = [Cue(c.start, c.end, c.text) for c in base]
+        for i, (_es, t) in results.items():
+            if 0 <= i < len(fixed) and t:
+                t = t.strip()
+                from .ai import _sane
+                if t != texts[i] and _sane(texts[i], t):
+                    fixed[i].text = '\n'.join(p.strip() for p in t.split('|'))
+        out = fixed
+        info['text_only'] = True
+        info['reason'] = 'other_cut'
     return out, info
+
+
+def _other_cut(deltas, info):
+    if len(deltas) < 20:
+        return False
+    d = sorted(deltas)
+    spread = d[len(d) * 9 // 10] - d[len(d) // 10]
+    lines = max(1, info.get('lines', 0))
+    return spread > 15000 and info.get('kept', 0) < 0.6 * lines
 
 
 def _build(base, en, texts, results, max_dev=None):
@@ -328,6 +352,11 @@ def _diff_summary(deltas):
 
 
 def describe(info):
+    if info.get('reason') == 'other_cut':
+        msg = 'الترجمة الإنجليزية لنسخة أخرى من الفيلم، فبقي التوقيت كما هو'
+        if info.get('corrected'):
+            msg += '، وصُحّح %d سطراً' % info['corrected']
+        return msg
     msg = 'طابق %d من %d سطراً مع الإنجليزية' % (info.get('kept', 0), info.get('lines', 0))
     if info.get('diff'):
         msg = info['diff'] + ' | ' + msg

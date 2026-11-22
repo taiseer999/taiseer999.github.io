@@ -16,7 +16,7 @@ import xbmcvfs
 from .common import (TEMP_DIR, JOBS_DIR, CACHE_DIR, ensure_dirs, log, setting, setting_bool,
                      cache_get, cache_put, cache_del, cache_json, write_atomic)
 from . import arabic, subtitle, sync, providers, trace
-from .media import release_tokens, release_family, is_arabic_code
+from .media import release_tokens, release_family, is_arabic_code, release_edition
 
 def llm_key(pid):
     """The add-on's own key, else the one shared from Dex Hub (Piers edition)."""
@@ -222,11 +222,19 @@ def get_reference(video, chosen, ar_cues=None):
     ar_rel = chosen.get('release') or ''
     v_fam = release_family(video.get('filename'))
     tiers = []
+    v_ed = release_edition(video.get('filename'))
+    other_cut = 0
     for x in cands:
         rels = x.get('releases') or [x.get('release', '')]
         # a subtitle package lists many releases: judge it by the one closest to the video
         best_rel = max(rels, key=lambda r: _sim(r, video.get('filename'))) if rels else ''
         fam = release_family(best_rel)
+        if not x.get('hash_match') and rels and \
+                all(release_edition(r) != v_ed for r in rels if r):
+            # Piers edition: another cut (Director's Cut vs Theatrical...) has another
+            # timeline — it would move the Arabic to the wrong places
+            other_cut += 1
+            continue
         if x.get('hash_match'):
             tiers.append((0, -1.0, x, 'hash'))
         elif x.get('match', 0) >= 0.5:
@@ -237,6 +245,8 @@ def get_reference(video, chosen, ar_cues=None):
         else:
             sim = max([_sim(r, ar_rel) for r in rels] + [0])
             tiers.append((3, -sim, x, 'arabic-release'))
+    if other_cut:
+        log('reference: %d candidate(s) skipped — another cut than this video (%s)' % (other_cut, v_ed))
     tiers.sort(key=lambda t: (t[0], t[1]))
     tried = 0
     bad = set(_bad_refs(video))
@@ -391,6 +401,15 @@ def process(item, video, progress=None):
                 before = [subtitle.Cue(c.start, c.end, c.text) for c in cues]
                 cues, line = reference_sync_msg(cues, video, item, ref=ref, how=how)
                 info = _LAST_REF_INFO.get('info') or {}
+                if not info and how not in ('hash', 'cache'):
+                    # Piers edition: the English file did not line up with the Arabic
+                    # (low quality): it is not trusted to re-time every line either
+                    log('reference did not line up (%s) — not used for line matching' % how)
+                    _mark_ref_bad(video)
+                    ref_used = False
+                    ref = None
+                    line = ''
+            if ref:
                 big = abs(info.get('offset', 0)) > 3000 or abs(info.get('ratio', 1) - 1) > 1e-3
                 if _needs_verify(video, how) and big and cues is not before:
                     # a big jump that only rests on the English file — check it on the sound
@@ -472,7 +491,12 @@ def embedded_reference(video):
     if c:
         try:
             d = json.loads(c.decode('utf-8'))
-            return [subtitle.Cue(a, b, '') for a, b in d['iv']] if d.get('iv') else None
+            if d.get('iv'):
+                return [subtitle.Cue(a, b, '') for a, b in d['iv']]
+            if d.get('v', 1) >= 2:
+                return None
+            # Piers edition: before 2.9.7.8 a timed-out read was kept as "nothing inside";
+            # such an answer is read again once
         except (ValueError, KeyError):
             pass
     path = video.get('path') or ''
@@ -484,17 +508,24 @@ def embedded_reference(video):
     try:
         src, _args, remote = audiosync.media_source(path)
         t0 = time.time()
+        # Piers edition: debrid / usenet links answer a far seek slowly (easynews ~10-20 s)
         track, iv, idx = mkvcues.timeline(path if remote else src,
-                                          timeout=12.0 if remote else 6.0)
+                                          timeout=30.0 if remote else 6.0)
         log('embedded subtitles: %s in %.1fs (%s) — track %s, %d lines' % (
             'found' if iv else 'none usable', time.time() - t0, idx.get('stats'),
             track and '%s %s %s' % (track['num'], track['codec'], track['lang']), len(iv)))
     except Exception as e:
         log('embedded subtitles: not read (%s)' % e)
-        if 'timeout' in str(e) or 'URLError' in type(e).__name__:
-            return None                      # network hiccup: try again next time
+        import socket
+        import urllib.error
+        msg = str(e).lower()
+        if isinstance(e, (socket.timeout, TimeoutError, ConnectionError, urllib.error.URLError)) or \
+                'timeout' in msg or 'timed out' in msg:
+            # network hiccup ('The read operation timed out'): NOT "no subtitles inside" —
+            # that answer would be kept for 60 days and the film's own timing never used
+            return None
         iv, track = [], None
-    cache_put(key, json.dumps({'iv': iv, 'track': track and track.get('lang')}))
+    cache_put(key, json.dumps({'iv': iv, 'track': track and track.get('lang'), 'v': 2}))
     return [subtitle.Cue(a, b, '') for a, b in iv] if iv else None
 
 
@@ -1963,7 +1994,9 @@ def run_job(job, progress=None, abort=None, on_update=None, position=None):
                                                   abort=abort, on_partial=sem_partial)
                 log('semantic: %s' % info)
                 if new is not None:
-                    cues, changed, rebuilt = new, True, True
+                    # text-only result on the job's own timing: your offset is already in it
+                    retimed = not (info.get('text_only') and not info.get('pre'))
+                    cues, changed, rebuilt = new, True, (rebuilt or retimed)
                     out.append(semsync.describe(info))
             except Exception as e:
                 if 'aborted' in str(e):

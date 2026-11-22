@@ -80,6 +80,18 @@ def score(item, video):
         if vt and st:
             best = max(best, len(vt & st) / float(len(vt | st)))
     s += best * 50
+    # Piers edition: a subtitle made for another cut (Director's Cut vs Theatrical...) has
+    # another timeline; prefer the same cut as the video, and never call it a release match
+    try:
+        from ..media import release_edition
+        v_ed = release_edition(video.get('filename'))
+        rels = [r for r in (item.get('releases') or [item.get('release', '')]) if r]
+        if not item.get('hash_match') and rels and all(release_edition(r) != v_ed for r in rels):
+            s -= 30
+            best = min(best, 0.49)
+            item['other_cut'] = True
+    except Exception:
+        pass
     item['match'] = best
     fit = item.get('fit') or ''
     if fit == 'match':

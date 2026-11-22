@@ -69,7 +69,7 @@ class FileReader(object):
 class HttpReader(object):
     """Range requests. Kodi URLs may carry headers after '|' (User-Agent=...&Referer=...)."""
 
-    def __init__(self, path, budget, timeout=12):
+    def __init__(self, path, budget, timeout=20):   # Piers edition: slow far seeks (usenet)
         url, _, hdrs = path.partition('|')
         self.url = url
         self.headers = {'User-Agent': 'Mozilla/5.0', 'Accept': '*/*'}

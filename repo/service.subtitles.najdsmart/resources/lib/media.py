@@ -88,6 +88,41 @@ def release_family(name):
     return ''
 
 
+# Piers edition: which cut a release is. Different cuts have different timelines, so a
+# Director's Cut subtitle must never time a Theatrical Cut video (and the other way round).
+_EDITIONS = [
+    ('directors', r"director'?s?[ ._-]*cut|\bdirectors\b|\bdir[ ._-]?cut\b"),
+    ('extended', r'\bextended\b|\bext[ ._-]?cut\b|\bextended[ ._-]?edition\b'),
+    ('unrated', r'\bunrated\b|\buncut\b|\buncensored\b'),
+    ('final', r'\bfinal[ ._-]?cut\b'),
+    ('ultimate', r'\bultimate[ ._-]?(?:cut|edition)\b'),
+    ('special', r'\bspecial[ ._-]?edition\b'),
+    ('theatrical', r'\btheatrical\b|\btheatrical[ ._-]?cut\b'),
+]
+
+
+def release_edition(name):
+    """'directors' / 'extended' / 'unrated' / ... / 'theatrical'. A name that says nothing
+    is the ordinary (theatrical) cut, which is what almost every release is."""
+    base = os.path.basename(urllib.parse.unquote(name or '')).lower()
+    base = re.sub(r'\.(mkv|mp4|avi|m4v|ts|m2ts|webm|mov|wmv|srt|ass|ssa|sub|vtt|zip|rar)$', '', base)
+    base = re.sub(r'[._]', ' ', base)
+    # 'DC' alone is a cut only after the year ('Memoir of a Murderer 2017 DC'), not in a
+    # title ('The DC Story') or a group name ('-DCX')
+    y = re.search(r'\b(?:19|20)\d{2}\b', base)
+    if y and re.search(r'\bdc\b', base[y.end():]):
+        return 'directors'
+    for ed, pat in _EDITIONS:
+        if re.search(pat, base):
+            return ed
+    return 'theatrical'
+
+
+def editions_conflict(a, b):
+    """True when two release names are clearly different cuts of the film."""
+    return release_edition(a) != release_edition(b)
+
+
 def release_tokens(name):
     base = os.path.splitext(os.path.basename(urllib.parse.unquote(name or '')))[0].lower()
     return set(t for t in re.split(r'[^a-z0-9]+', base) if t)

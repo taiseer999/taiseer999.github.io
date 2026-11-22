@@ -126,20 +126,42 @@ def media_source(path):
         raise AudioSyncError('unsupported_path')
     if path.startswith(('http://', 'https://')):
         url, _, hdrs = path.partition('|')
-        args = []
-        if hdrs:
-            h = dict(urllib.parse.parse_qsl(hdrs))
-            ua = h.pop('User-Agent', None)
-            if ua:
-                args += ['-user_agent', ua]
-            if h:
-                args += ['-headers', ''.join('%s: %s\r\n' % kv for kv in h.items())]
+        url = _plain_port(url)
+        # Piers edition: ffmpeg's own "Icy-MetaData: 1" header and "Lavf" user agent are
+        # refused by some file hosts (easynews answered 400 Bad Request) while Kodi, which
+        # sends neither, plays the same link. Ask like Kodi does.
+        args = ['-icy', '0']
+        h = dict(urllib.parse.parse_qsl(hdrs)) if hdrs else {}
+        ua = h.pop('User-Agent', None) or _kodi_ua()
+        if ua:
+            args += ['-user_agent', ua]
+        if h:
+            args += ['-headers', ''.join('%s: %s\r\n' % kv for kv in h.items())]
         return url, args, True
     if path.startswith('smb://') and sys.platform.startswith('win'):
         return '\\\\' + urllib.parse.unquote(path[6:]).replace('/', '\\'), [], False
     if path.startswith(('smb://', 'nfs://', 'ftp://', 'sftp://', 'dav')):
         raise AudioSyncError('unsupported_path')
     return path, [], False
+
+
+def _plain_port(url):
+    """'https://host:443/x' → 'https://host/x' (some hosts reject 'Host: host:443')."""
+    try:
+        p = urllib.parse.urlsplit(url)
+        if (p.scheme, p.port) in (('https', 443), ('http', 80)):
+            return urllib.parse.urlunsplit((p.scheme, p.netloc.rsplit(':', 1)[0], p.path, p.query, p.fragment))
+    except ValueError:
+        pass
+    return url
+
+
+def _kodi_ua():
+    try:
+        import xbmc
+        return xbmc.getUserAgent()
+    except Exception:
+        return ''
 
 
 STATS = {'layout': '', 'short': 0, 'refused': 0}
@@ -214,6 +236,9 @@ def _run_ffmpeg(ffmpeg, src, args, start=None, dur=None, track=None, timeout=900
     except AudioSyncError as e:
         if re.search(r'Server returned 4\d\d|HTTP error 4\d\d', str(e)):
             _REFUSED[src] = (n + 1, _t.time())
+            if n == 0:
+                from .common import log
+                log('audio: server refused the link: %s' % str(e)[-200:])
             m = re.search(r'(?:Server returned|HTTP error) (4\d\d[^\n.]*)', str(e))
             raise AudioSyncError('the video server refused the link (%s)' % (m.group(1)[:40] if m else '4xx'))
         raise
