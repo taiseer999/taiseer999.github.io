@@ -1740,7 +1740,10 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             if not ok:
                 continue
             count = sum(1 for r in self.rows if any(k == key for k, _i in r['refs']))
-            chips.append(('addon', key, name, count, key, st[key]['state'] == 'searching'))
+            searching = st[key]['state'] == 'searching'
+            if not count and not searching and key != self.f_addon:
+                continue                    # 4.12.29: no empty add-on tabs once it has answered
+            chips.append(('addon', key, name, count, key, searching))
         for q in _QUALITIES:
             count = sum(1 for r in self.rows if r['group'] == q)
             if count:
@@ -1811,8 +1814,38 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                                    item.get('name') or item.get('display_name') or '') if th else []
             except Exception:
                 found = []
+            if not found and th:
+                found = self._name_badges(row, th)
             self._badge_cache[id(item)] = found
         return found
+
+    def _name_badges(self, row, th):
+        """4.12.29: streams with no info string (EasyNews, AIOStreams, Dex Hub,
+        Usenet ...) had no badge row in their own tab - the All tab showed the
+        badges of a merged twin from another add-on. Read them from the release
+        name, as the detail tiles do."""
+        item = row['item']
+        try:
+            sp = _stream_specs(item, row['q'], None, _provider(item), 1)
+        except Exception:
+            return []
+        names = []
+        for key, table in _SP_BADGE.items():
+            if key == 'res':
+                continue
+            name = table.get(sp.get('abs.sp_%s' % key) or '')
+            if name:
+                names.append(name)
+        extra = _SP_BADGE['hdr'].get((sp.get('abs.sp_hdr_sub') or '').strip())
+        if extra and extra not in names:
+            names.append(extra)                 # Dolby Vision + its HDR10 / HDR10+ layer
+        if 'ATMOS' in (sp.get('abs.sp_audio_sub') or '').upper() and 'ATMOS' not in names:
+            names.append('ATMOS')
+        try:
+            return th.badges(' | '.join(names), row['q'], item.get('name') or item.get('display_name') or '') \
+                if names else []
+        except Exception:
+            return []
 
     def _mbps(self, row):
         """Average bitrate estimate in Mbit/s: size x 8 / running time. None for
@@ -2064,14 +2097,17 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 if kind == 'filter':
                     return self._menu(self._filter_menu)
                 with self.ui_lock:
-                    if kind == 'all':
-                        self.f_addon = self.f_quality = self.f_service = None
-                    elif kind == 'addon':
-                        self.f_addon = None if self.f_addon == value else value
-                    elif kind == 'service':
-                        self.f_service = None if self.f_service == value else value
-                    else:
-                        self.f_quality = None if self.f_quality == value else value
+                    # 4.12.29: one tab at a time - an add-on tab picked earlier
+                    # (My folders, 0 streams) stayed on under 4K / SD / PM and
+                    # every later tab showed "no sources"
+                    was = {'addon': self.f_addon, 'quality': self.f_quality, 'service': self.f_service}.get(kind)
+                    self.f_addon = self.f_quality = self.f_service = None
+                    if kind == 'addon' and was != value:
+                        self.f_addon = value
+                    elif kind == 'service' and was != value:
+                        self.f_service = value
+                    elif kind == 'quality' and was != value:
+                        self.f_quality = value
                     self.focused_key = None
                     self._chips()
                     self._rows()

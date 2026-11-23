@@ -1,4 +1,12 @@
-v4.12.28  (2026-11-23)
+v4.12.29  (2026-11-23)
+- Search All: the filter tabs are one at a time - an add-on, quality or
+  service tab replaces the one picked before (they stacked: an add-on tab
+  picked earlier, e.g. My folders with 0 streams, stayed on under 4K / SD /
+  PM, so every later tab showed "no sources"). An add-on with no streams gets
+  no tab once it has answered.
+- Search All: streams with no info string (EasyNews, AIOStreams, Dex Hub,
+  Usenet ...) get their badge row from the release name, like the detail
+  tiles - in their own tab they had none (the All tab showed a merged twin's).
 - Search All: every add-on has its icon - in the add-on list under the plot
   (one add-on per line: 34 px icon, the add-on name, the stream count at the
   right edge of the column; no line background - the old 46 px chip pill
