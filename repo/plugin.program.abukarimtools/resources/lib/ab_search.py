@@ -1204,7 +1204,18 @@ def _spec_icons(props, th, provider):
                     path = ''
         out['abs.sp_%s_icon' % key] = path
     out['abs.sp_svc_icon'] = _service_icon(_service_code(provider)) if props.get('abs.sp_svc') else ''
+    if not out['abs.sp_svc_icon']:
+        out['abs.sp_svc_icon'] = _own_icon(props.get('abs.sp_svc'))
     return out
+
+
+# 4.12.28: services that are one of our own sources show that source's icon
+_OWN_ICON = {'USENET': 'nn', 'MYFOLDERS': 'loc', 'FOLDERS': 'loc'}
+
+
+def _own_icon(name):
+    key = _OWN_ICON.get((name or '').upper().replace(' ', ''))
+    return (MEDIA + 'lucent/addons/%s.png' % key) if key else ''
 
 
 _SERVICE_ICON = {'RD': 'realdebrid', 'AD': 'alldebrid', 'PM': 'premiumize', 'TB': 'torbox',
@@ -2011,7 +2022,8 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
                 # artwork, lucent/providers) under the quality pill
                 icon = th._provider_icon(provider, site)
                 # 4.11.2: the colour service logos (lucent/providers; B&W providers_bw since 4.8.58)
-                props['abs.svcicon'] = (MEDIA + icon.replace('/providers_bw/', '/providers/')) if icon else ''
+                props['abs.svcicon'] = (MEDIA + icon.replace('/providers_bw/', '/providers/')) if icon else \
+                    _own_icon(provider)                      # 4.12.28: Usenet / My folders
                 found = self._badges(row)
             except Exception:
                 found = []

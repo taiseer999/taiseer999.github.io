@@ -282,11 +282,11 @@
                 <!-- 4.10.6: source grid (Fen Light+ style) - one chip per add-on,
                      then one per scraper / site with the streams it found -->
                 <control type="panel" id="2500">
-                    <width>350</width>
+                    <width>700</width>
                     <height>378</height>
                     <orientation>vertical</orientation>
                     <scrolltime>0</scrolltime>
-                    <itemlayout width="350" height="42">
+                    <itemlayout width="700" height="42">
                 <control type="group">
                     <animation effect="fade" start="100" end="40" time="0" condition="String.IsEqual(ListItem.Property(abs.state),off)">Conditional</animation>
 
@@ -402,7 +402,7 @@
                     <!-- name and count in separate labels (Arabic UI re-orders one mixed label) -->
                     <control type="label">
                         <left>36</left>
-                        <width>246</width>
+                        <width>560</width>
                         <height>36</height>
                         <font>abk_srch_s</font>
                         <aligny>center</aligny>
@@ -410,9 +410,20 @@
                         <label>[B]$INFO[ListItem.Label][/B]</label>
                         <visible>![String.IsEqual(ListItem.Property(abs.key),rl) | String.IsEqual(ListItem.Property(abs.key),fl) | String.IsEqual(ListItem.Property(abs.key),umb) | String.IsEqual(ListItem.Property(abs.key),pov) | String.IsEqual(ListItem.Property(abs.key),aio) | String.IsEqual(ListItem.Property(abs.key),dex) | String.IsEqual(ListItem.Property(abs.key),en) | String.IsEqual(ListItem.Property(abs.key),nn) | String.IsEqual(ListItem.Property(abs.key),loc)]</visible>
                     </control>
+                    <!-- 4.12.28: the add-on name next to its icon -->
                     <control type="label">
-                        <left>280</left>
-                        <width>44</width>
+                        <left>48</left>
+                        <width>536</width>
+                        <height>36</height>
+                        <font>abk_srch_s</font>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[ListItem.Label][/B]</label>
+                        <visible>[String.IsEqual(ListItem.Property(abs.key),rl) | String.IsEqual(ListItem.Property(abs.key),fl) | String.IsEqual(ListItem.Property(abs.key),umb) | String.IsEqual(ListItem.Property(abs.key),pov) | String.IsEqual(ListItem.Property(abs.key),aio) | String.IsEqual(ListItem.Property(abs.key),dex) | String.IsEqual(ListItem.Property(abs.key),en) | String.IsEqual(ListItem.Property(abs.key),nn) | String.IsEqual(ListItem.Property(abs.key),loc)]</visible>
+                    </control>
+                    <control type="label">
+                        <left>594</left>
+                        <width>80</width>
                         <height>36</height>
                         <font>abk_srch_s</font>
                         <align>right</align>
@@ -421,10 +432,10 @@
                         <label>[B]$INFO[ListItem.Label2][/B]</label>
                         <visible>!String.IsEqual(ListItem.Property(abs.state),failed) + ![String.IsEqual(ListItem.Property(abs.key),rl) | String.IsEqual(ListItem.Property(abs.key),fl) | String.IsEqual(ListItem.Property(abs.key),umb) | String.IsEqual(ListItem.Property(abs.key),pov) | String.IsEqual(ListItem.Property(abs.key),aio) | String.IsEqual(ListItem.Property(abs.key),dex) | String.IsEqual(ListItem.Property(abs.key),en) | String.IsEqual(ListItem.Property(abs.key),nn) | String.IsEqual(ListItem.Property(abs.key),loc)]</visible>
                     </control>
-                    <!-- 4.12.24: add-on with an icon - the count gets the name's room -->
+                    <!-- 4.12.24: add-on with an icon - count at the right edge -->
                     <control type="label">
-                        <left>44</left>
-                        <width>294</width>
+                        <left>594</left>
+                        <width>80</width>
                         <height>36</height>
                         <font>abk_srch_s</font>
                         <align>right</align>
@@ -434,8 +445,8 @@
                         <visible>!String.IsEqual(ListItem.Property(abs.state),failed) + [String.IsEqual(ListItem.Property(abs.key),rl) | String.IsEqual(ListItem.Property(abs.key),fl) | String.IsEqual(ListItem.Property(abs.key),umb) | String.IsEqual(ListItem.Property(abs.key),pov) | String.IsEqual(ListItem.Property(abs.key),aio) | String.IsEqual(ListItem.Property(abs.key),dex) | String.IsEqual(ListItem.Property(abs.key),en) | String.IsEqual(ListItem.Property(abs.key),nn) | String.IsEqual(ListItem.Property(abs.key),loc)]</visible>
                     </control>
                     <control type="label">
-                        <left>280</left>
-                        <width>44</width>
+                        <left>594</left>
+                        <width>80</width>
                         <height>36</height>
                         <font>abk_srch_s</font>
                         <align>right</align>
@@ -446,7 +457,7 @@
                     </control>
                 </control>
                     </itemlayout>
-                    <focusedlayout width="350" height="42">
+                    <focusedlayout width="700" height="42">
                 <control type="group">
                     <animation effect="fade" start="100" end="40" time="0" condition="String.IsEqual(ListItem.Property(abs.state),off)">Conditional</animation>
 
@@ -562,7 +573,7 @@
                     <!-- name and count in separate labels (Arabic UI re-orders one mixed label) -->
                     <control type="label">
                         <left>36</left>
-                        <width>246</width>
+                        <width>560</width>
                         <height>36</height>
                         <font>abk_srch_s</font>
                         <aligny>center</aligny>
@@ -570,9 +581,20 @@
                         <label>[B]$INFO[ListItem.Label][/B]</label>
                         <visible>![String.IsEqual(ListItem.Property(abs.key),rl) | String.IsEqual(ListItem.Property(abs.key),fl) | String.IsEqual(ListItem.Property(abs.key),umb) | String.IsEqual(ListItem.Property(abs.key),pov) | String.IsEqual(ListItem.Property(abs.key),aio) | String.IsEqual(ListItem.Property(abs.key),dex) | String.IsEqual(ListItem.Property(abs.key),en) | String.IsEqual(ListItem.Property(abs.key),nn) | String.IsEqual(ListItem.Property(abs.key),loc)]</visible>
                     </control>
+                    <!-- 4.12.28: the add-on name next to its icon -->
                     <control type="label">
-                        <left>280</left>
-                        <width>44</width>
+                        <left>48</left>
+                        <width>536</width>
+                        <height>36</height>
+                        <font>abk_srch_s</font>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[ListItem.Label][/B]</label>
+                        <visible>[String.IsEqual(ListItem.Property(abs.key),rl) | String.IsEqual(ListItem.Property(abs.key),fl) | String.IsEqual(ListItem.Property(abs.key),umb) | String.IsEqual(ListItem.Property(abs.key),pov) | String.IsEqual(ListItem.Property(abs.key),aio) | String.IsEqual(ListItem.Property(abs.key),dex) | String.IsEqual(ListItem.Property(abs.key),en) | String.IsEqual(ListItem.Property(abs.key),nn) | String.IsEqual(ListItem.Property(abs.key),loc)]</visible>
+                    </control>
+                    <control type="label">
+                        <left>594</left>
+                        <width>80</width>
                         <height>36</height>
                         <font>abk_srch_s</font>
                         <align>right</align>
@@ -581,10 +603,10 @@
                         <label>[B]$INFO[ListItem.Label2][/B]</label>
                         <visible>!String.IsEqual(ListItem.Property(abs.state),failed) + ![String.IsEqual(ListItem.Property(abs.key),rl) | String.IsEqual(ListItem.Property(abs.key),fl) | String.IsEqual(ListItem.Property(abs.key),umb) | String.IsEqual(ListItem.Property(abs.key),pov) | String.IsEqual(ListItem.Property(abs.key),aio) | String.IsEqual(ListItem.Property(abs.key),dex) | String.IsEqual(ListItem.Property(abs.key),en) | String.IsEqual(ListItem.Property(abs.key),nn) | String.IsEqual(ListItem.Property(abs.key),loc)]</visible>
                     </control>
-                    <!-- 4.12.24: add-on with an icon - the count gets the name's room -->
+                    <!-- 4.12.24: add-on with an icon - count at the right edge -->
                     <control type="label">
-                        <left>44</left>
-                        <width>294</width>
+                        <left>594</left>
+                        <width>80</width>
                         <height>36</height>
                         <font>abk_srch_s</font>
                         <align>right</align>
@@ -594,8 +616,8 @@
                         <visible>!String.IsEqual(ListItem.Property(abs.state),failed) + [String.IsEqual(ListItem.Property(abs.key),rl) | String.IsEqual(ListItem.Property(abs.key),fl) | String.IsEqual(ListItem.Property(abs.key),umb) | String.IsEqual(ListItem.Property(abs.key),pov) | String.IsEqual(ListItem.Property(abs.key),aio) | String.IsEqual(ListItem.Property(abs.key),dex) | String.IsEqual(ListItem.Property(abs.key),en) | String.IsEqual(ListItem.Property(abs.key),nn) | String.IsEqual(ListItem.Property(abs.key),loc)]</visible>
                     </control>
                     <control type="label">
-                        <left>280</left>
-                        <width>44</width>
+                        <left>594</left>
+                        <width>80</width>
                         <height>36</height>
                         <font>abk_srch_s</font>
                         <align>right</align>

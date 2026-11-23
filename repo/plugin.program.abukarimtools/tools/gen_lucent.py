@@ -1815,10 +1815,10 @@ AB_SRC_ID = 2500
 # 566 + 56 + 378 = 1000; the panel scrolls if there are ever more
 AB_SRC_COLS, AB_SRC_ROWS = 1, 9
 AB_SRC_PITCH = 42
-AB_SRC_PANEL_W = 350                  # 4.12.26: half the column (was 700)
+AB_SRC_PANEL_W = 700                  # 4.12.28: full column again - icon + name, count at the right edge
 AB_SRC_W = AB_SRC_PANEL_W // AB_SRC_COLS - 12    # 338
 AB_SRC_H = 36
-AB_SRC_CNT = 44                       # count column
+AB_SRC_CNT = 80                       # count column (4.12.28: 80, 4-digit counts)
 # 4.7.40: left column all the way up (logo / title from y 48, was 96 + a
 # 220 px logo box), the plot right under the pills and the add-on list under
 # the plot (was y 736).
@@ -2271,6 +2271,17 @@ def ab_source_chip():
                         <label>[B]$INFO[ListItem.Label][/B]</label>
                         <visible>!%(hasicon)s</visible>
                     </control>
+                    <!-- 4.12.28: the add-on name next to its icon -->
+                    <control type="label">
+                        <left>48</left>
+                        <width>%(inw)d</width>
+                        <height>%(h)d</height>
+                        <font>font12</font>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[ListItem.Label][/B]</label>
+                        <visible>%(hasicon)s</visible>
+                    </control>
                     <control type="label">
                         <left>%(cl)d</left>
                         <width>%(cw)d</width>
@@ -2282,10 +2293,10 @@ def ab_source_chip():
                         <label>[B]$INFO[ListItem.Label2][/B]</label>
                         <visible>!String.IsEqual(ListItem.Property(abs.state),failed) + !%(hasicon)s</visible>
                     </control>
-                    <!-- 4.12.24: add-on with an icon - the count gets the name's room -->
+                    <!-- 4.12.24: add-on with an icon - count at the right edge -->
                     <control type="label">
-                        <left>44</left>
-                        <width>%(icw)d</width>
+                        <left>%(cl)d</left>
+                        <width>%(cw)d</width>
                         <height>%(h)d</height>
                         <font>font12</font>
                         <align>right</align>
@@ -2308,7 +2319,7 @@ def ab_source_chip():
                 </control>''' % {'w': AB_SRC_W, 'h': AB_SRC_H, 'dots': dots, 't': (AB_SRC_H - 14) // 2,
                                'nw': AB_SRC_W - 36 - AB_SRC_CNT - 12, 'cl': AB_SRC_W - AB_SRC_CNT - 14,
                                'cw': AB_SRC_CNT, 'hasicon': _ab_has_icon('abs.key'),
-                               'icw': AB_SRC_W - 44}
+                               'inw': AB_SRC_W - 48 - AB_SRC_CNT - 24}
 
 
 def ab_search_window():
