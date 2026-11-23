@@ -561,7 +561,17 @@ def sp_panel(list_ids, fade_cond=None):
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
                         <label>[B]%(v)s[/B]</label>
-                        <visible>!%(e)s</visible>
+                        <visible>!%(e)s + %(ie)s</visible>
+                    </control>
+                    <!-- AB Tools 4.12.27: the badge / service logo in place of the text -->
+                    <control type="image">
+                        <left>12</left>
+                        <top>31</top>
+                        <width>%(iw)d</width>
+                        <height>38</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture>%(icon)s</texture>
+                        <visible>!%(ie)s</visible>
                     </control>
                     <control type="label">
                         <left>12</left>
@@ -588,7 +598,8 @@ def sp_panel(list_ids, fade_cond=None):
                     </control>
                 </control>''' % {'l': col * (AB_SPEC_W + AB_SPEC_GAP), 't': row * (SP_TILE_H + SP_GAP),
                                  'w': AB_SPEC_W, 'h': SP_TILE_H, 'iw': AB_SPEC_W - 24, 'k': key,
-                                 'v': val(key), 'e': '[%s]' % empty(key), 'sub': val(key + '_sub')})
+                                 'v': val(key), 'e': '[%s]' % empty(key), 'sub': val(key + '_sub'),
+                                 'icon': val(key + '_icon'), 'ie': '[%s]' % empty(key + '_icon')})
     hide = ''
     if fade_cond:
         hide = '\n            <animation effect="fade" end="0" time="200" condition="%s">Conditional</animation>' % fade_cond
@@ -1800,10 +1811,13 @@ AB_ADDONS = (('rl', 'FFE5484D'), ('fl', 'FF3E9BFF'), ('umb', 'FF9B6BFF'), ('pov'
 # chips under the plot - the add-ons first, then every scraper / site.
 # AB_SRC_* must match ab_search.SRC_GRID / _SRC_SLOTS.
 AB_SRC_ID = 2500
-AB_SRC_COLS, AB_SRC_ROWS = 3, 7
-AB_SRC_PITCH = 54                     # 7 rows end at 566 + 56 + 378 = 1000
-AB_SRC_W = 700 // AB_SRC_COLS - 12    # 221: chip, 12 px gap
-AB_SRC_H = 46
+# 4.12.25: one add-on per line (was 3 x 7 chips): 9 lines of 42 end at
+# 566 + 56 + 378 = 1000; the panel scrolls if there are ever more
+AB_SRC_COLS, AB_SRC_ROWS = 1, 9
+AB_SRC_PITCH = 42
+AB_SRC_PANEL_W = 350                  # 4.12.26: half the column (was 700)
+AB_SRC_W = AB_SRC_PANEL_W // AB_SRC_COLS - 12    # 338
+AB_SRC_H = 36
 AB_SRC_CNT = 44                       # count column
 # 4.7.40: left column all the way up (logo / title from y 48, was 96 + a
 # 220 px logo box), the plot right under the pills and the add-on list under
@@ -1826,6 +1840,31 @@ AB_SPEC_W = (700 - (AB_SPEC_COLS - 1) * AB_SPEC_GAP) // AB_SPEC_COLS     # 224
 AB_SPEC_H = 112
 AB_TAGS = 4
 AB_TAG_W = 64
+# 4.12.23: add-on icons in place of the names (lucent/addons/<key>.png);
+# Usenet and My folders have no icon and keep their text
+AB_ICON_KEYS = ('rl', 'fl', 'umb', 'pov', 'aio', 'dex', 'en', 'nn', 'loc')   # 4.12.26: + Usenet, My folders
+_AB_HAS_ICON = ' | '.join('String.IsEqual(ListItem.Property(%%s),%s)' % k for k in AB_ICON_KEYS)
+
+
+def _ab_has_icon(prop):
+    return '[%s]' % (_AB_HAS_ICON % ((prop,) * len(AB_ICON_KEYS)))
+
+
+def _ab_icons(prop, left, top, size, diffuse='FFFFFFFF', pulse=''):
+    """One image per add-on key, shown when ListItem.Property(prop) is that key."""
+    anim = ('\n                        <animation effect="fade" start="100" end="25" time="500" pulse="true" '
+            'condition="%s">Conditional</animation>' % pulse) if pulse else ''
+    return ''.join('''
+                        <control type="image">
+                            <left>%d</left>
+                            <top>%d</top>
+                            <width>%d</width>
+                            <height>%d</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>lucent/addons/%s.png</texture>
+                            <colordiffuse>%s</colordiffuse>%s
+                            <visible>String.IsEqual(ListItem.Property(%s),%s)</visible>
+                        </control>''' % (left, top, size, size, k, diffuse, anim, prop, k) for k in AB_ICON_KEYS)
 
 
 def _ab_tags(active):
@@ -1834,7 +1873,11 @@ def _ab_tags(active):
     out = []
     for n in range(1, AB_TAGS + 1):
         left = 904 - 20 - n * (AB_TAG_W + 6) + 6
+        out.append(_ab_icons('abs.tag_%d' % n, left + (AB_TAG_W - 34) // 2, 46, 34,
+                             'FFFFFFFF' if active else 'A6FFFFFF'))
         for key, color in AB_ADDONS:
+            if key in AB_ICON_KEYS:
+                continue
             out.append('''
                         <control type="image">
                             <left>%d</left>
@@ -1856,7 +1899,8 @@ def _ab_tags(active):
                             <aligny>center</aligny>
                             <textcolor>FFFFFFFF</textcolor>
                             <label>[B]$INFO[ListItem.Property(abs.tagtxt_%d)][/B]</label>
-                        </control>''' % (left, AB_TAG_W, n))
+                            <visible>!%s</visible>
+                        </control>''' % (left, AB_TAG_W, n, _ab_has_icon('abs.tag_%d' % n)))
     return ''.join(out)
 
 
@@ -1970,7 +2014,8 @@ def ab_chip(focused):
                         <texture>lucent/dot.png</texture>
                         <colordiffuse>%s</colordiffuse>
                         <visible>String.IsEqual(ListItem.Property(abs.key),%s) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
-                    </control>''' % (color, key) for key, color in AB_ADDONS)
+                    </control>''' % (color, key) for key, color in AB_ADDONS if key not in AB_ICON_KEYS)
+    dots += _ab_icons('abs.key', 12, 10, 32, pulse='!String.IsEmpty(ListItem.Property(abs.loading))')   # 4.12.26: 32 px
     # 4.6.1: service chips carry the service icon in place of the dot
     dots += '''
                     <control type="image">
@@ -1992,7 +2037,7 @@ def ab_chip(focused):
                         <texture>lucent/dot.png</texture>
                         <colordiffuse>%(cc)s</colordiffuse>
                         <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="true">Conditional</animation>
-                        <visible>!String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.loading)) + !%(hasicon)s</visible>
                     </control>
                     <!-- name and count in separate labels: one mixed label was
                          re-ordered and cut from the start with Kodi in Arabic -->
@@ -2005,6 +2050,7 @@ def ab_chip(focused):
                         <aligny>center</aligny>
                         <textcolor>%(tc)s</textcolor>
                         <label>[B]$INFO[ListItem.Label][/B]</label>
+                        <visible>!%(hasicon)s</visible>
                     </control>
                     <control type="label">
                         <left>186</left>
@@ -2015,7 +2061,7 @@ def ab_chip(focused):
                         <aligny>center</aligny>
                         <textcolor>%(tc)s</textcolor>
                         <label>$INFO[ListItem.Label2]</label>
-                    </control>''' % {'bg': bg, 'dots': dots, 'tc': tc, 'cc': cc}
+                    </control>''' % {'bg': bg, 'dots': dots, 'tc': tc, 'cc': cc, 'hasicon': _ab_has_icon('abs.key')}
 
 
 def ab_panel(expanded, visible, W):
@@ -2196,16 +2242,14 @@ def ab_source_chip():
                         <colordiffuse>%(c)s</colordiffuse>
                         <animation effect="fade" start="100" end="15" time="500" pulse="true" condition="String.IsEqual(ListItem.Property(abs.state),searching)">Conditional</animation>
                         <visible>String.IsEqual(ListItem.Property(abs.key),%(k)s)</visible>
-                    </control>''' % {'t': (AB_SRC_H - 14) // 2, 'c': color, 'k': key} for key, color in AB_ADDONS)
+                    </control>''' % {'t': (AB_SRC_H - 14) // 2, 'c': color, 'k': key} for key, color in AB_ADDONS
+                   if key not in AB_ICON_KEYS)
+    dots += _ab_icons('abs.key', 0, (AB_SRC_H - 34) // 2, 34,
+                      pulse='String.IsEqual(ListItem.Property(abs.state),searching)')
     return '''
                 <control type="group">
                     <animation effect="fade" start="100" end="40" time="0" condition="String.IsEqual(ListItem.Property(abs.state),off)">Conditional</animation>
-                    <control type="image">
-                        <width>%(w)d</width>
-                        <height>%(h)d</height>
-                        <texture border="23">lucent/pill48.png</texture>
-                        <colordiffuse>1AFFFFFF</colordiffuse>
-                    </control>%(dots)s
+%(dots)s
                     <control type="image">
                         <left>14</left>
                         <top>%(t)d</top>
@@ -2225,6 +2269,7 @@ def ab_source_chip():
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
                         <label>[B]$INFO[ListItem.Label][/B]</label>
+                        <visible>!%(hasicon)s</visible>
                     </control>
                     <control type="label">
                         <left>%(cl)d</left>
@@ -2235,7 +2280,19 @@ def ab_source_chip():
                         <aligny>center</aligny>
                         <textcolor>FFBDC8D1</textcolor>
                         <label>[B]$INFO[ListItem.Label2][/B]</label>
-                        <visible>!String.IsEqual(ListItem.Property(abs.state),failed)</visible>
+                        <visible>!String.IsEqual(ListItem.Property(abs.state),failed) + !%(hasicon)s</visible>
+                    </control>
+                    <!-- 4.12.24: add-on with an icon - the count gets the name's room -->
+                    <control type="label">
+                        <left>44</left>
+                        <width>%(icw)d</width>
+                        <height>%(h)d</height>
+                        <font>font12</font>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>[B]$INFO[ListItem.Label2][/B]</label>
+                        <visible>!String.IsEqual(ListItem.Property(abs.state),failed) + %(hasicon)s</visible>
                     </control>
                     <control type="label">
                         <left>%(cl)d</left>
@@ -2250,7 +2307,8 @@ def ab_source_chip():
                     </control>
                 </control>''' % {'w': AB_SRC_W, 'h': AB_SRC_H, 'dots': dots, 't': (AB_SRC_H - 14) // 2,
                                'nw': AB_SRC_W - 36 - AB_SRC_CNT - 12, 'cl': AB_SRC_W - AB_SRC_CNT - 14,
-                               'cw': AB_SRC_CNT}
+                               'cw': AB_SRC_CNT, 'hasicon': _ab_has_icon('abs.key'),
+                               'icw': AB_SRC_W - 44}
 
 
 def ab_search_window():
@@ -2260,7 +2318,7 @@ def ab_search_window():
                 <!-- 4.10.6: source grid (Fen Light+ style) - one chip per add-on,
                      then one per scraper / site with the streams it found -->
                 <control type="panel" id="%(id)d">
-                    <width>700</width>
+                    <width>%(pw)d</width>
                     <height>%(gh)d</height>
                     <orientation>vertical</orientation>
                     <scrolltime>0</scrolltime>
@@ -2268,7 +2326,7 @@ def ab_search_window():
                     </itemlayout>
                     <focusedlayout width="%(cw)d" height="%(ch)d">%(chip)s
                     </focusedlayout>
-                </control>''' % {'id': AB_SRC_ID, 'gh': AB_SRC_ROWS * AB_SRC_PITCH, 'cw': 700 // AB_SRC_COLS,
+                </control>''' % {'id': AB_SRC_ID, 'gh': AB_SRC_ROWS * AB_SRC_PITCH, 'cw': AB_SRC_PANEL_W // AB_SRC_COLS, 'pw': AB_SRC_PANEL_W,
                                   'ch': AB_SRC_PITCH, 'chip': chip}]
     status = '''
         <!-- ============ Left: one line per add-on (searching / N streams) ============ -->
@@ -2347,7 +2405,17 @@ def ab_search_window():
                         <aligny>center</aligny>
                         <textcolor>FFFFFFFF</textcolor>
                         <label>[B]$INFO[%(v)s][/B]</label>
-                        <visible>!String.IsEmpty(%(v)s)</visible>
+                        <visible>!String.IsEmpty(%(v)s) + String.IsEmpty(%(icon)s)</visible>
+                    </control>
+                    <!-- 4.12.24: the badge (or service logo) in place of the text -->
+                    <control type="image">
+                        <left>12</left>
+                        <top>36</top>
+                        <width>%(iw)d</width>
+                        <height>42</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture>$INFO[%(icon)s]</texture>
+                        <visible>!String.IsEmpty(%(icon)s)</visible>
                     </control>
                     <control type="label">
                         <left>12</left>
@@ -2374,7 +2442,7 @@ def ab_search_window():
                     </control>
                 </control>''' % {'l': col * (AB_SPEC_W + AB_SPEC_GAP), 't': row * (AB_SPEC_H + AB_SPEC_GAP),
                                  'w': AB_SPEC_W, 'h': AB_SPEC_H, 'iw': AB_SPEC_W - 24, 'k': key,
-                                 'v': sp % key, 'sub': sp % (key + '_sub')})
+                                 'v': sp % key, 'sub': sp % (key + '_sub'), 'icon': sp % (key + '_icon')})
     specs = '''
         <!-- ============ Left, search done: details of the focused stream (4.8.25) ============ -->
         <control type="group">

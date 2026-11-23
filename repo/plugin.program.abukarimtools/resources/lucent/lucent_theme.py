@@ -449,7 +449,47 @@ def stream_specs(name, info, quality, provider, size_label, site=''):
 		code = _SP_LANG.get(tok.strip('-+'))
 		if code and code not in langs: langs.append(code)
 	out['lang'] = '  ·  '.join(langs[:5])
+	# AB Tools 4.12.27: the tiles show the badge / colour service logo in place
+	# of the text (as Search All); the text stays when there is no badge
+	for key, table in _SP_BADGE.items():
+		out[key + '_icon'] = _sp_badge(table.get(out.get(key) or ''))
+	icon = _provider_icon(provider, site) if out.get('svc') else ''
+	out['svc_icon'] = icon.replace('/providers_bw/', '/providers/') if icon else ''
 	return dict(('lucent.sp_%s' % k, v) for k, v in out.items())
+
+
+# AB Tools 4.12.27: tile value -> badge file name (lucent/flags has them all)
+_SP_BADGE = {
+	'res': {'4K': '4K', '8K': '8K', '1080p': '1080P', '720p': '720P', 'SD': 'SD', 'CAM': 'CAM',
+			'SCR': 'SCR', 'HC': 'HC'},
+	'video': {'HEVC': 'HEVC', 'AV1': 'AV1', 'AVC': 'AVC', 'VP9': 'VP9', 'XviD': 'XVID', 'MPEG-2': 'MPEG'},
+	'hdr': {'Dolby Vision': 'DV', 'Dolby Vision 2': 'DV2', 'HDR10+': 'HDR10+', 'HDR10': 'HDR10',
+			'HDR': 'HDR', 'HLG': 'HLG', 'SDR': 'SDR'},
+	'audio': {'TrueHD': 'TRUEHD', 'DTS:X': 'DTS-X', 'DTS-HD MA': 'DTS-HDMA', 'DTS-HD': 'DTS-HD',
+			'DTS': 'DTS', 'DD+': 'DD+', 'DD': 'DD', 'FLAC': 'FLAC', 'PCM': 'PCM', 'AAC': 'AAC',
+			'Opus': 'OPUS', 'MP3': 'MP3', 'Dolby Atmos': 'ATMOS'},
+	'ch': {'7.1': '7.1', '6.1': '6.1', '5.1': '5.1', '2.0': '2.0', '1.0': '1.0'},
+	'rel': {'Remux': 'REMUX', 'Blu-ray': 'BLURAY', 'WEB-DL': 'WEB', 'WEBRip': 'WEB', 'WEB': 'WEB',
+			'HDTV': 'HDTV', 'DVD': 'DVDRIP', 'HDRip': 'HD-RIP'}}
+_SP_BADGE_OK = {}
+
+
+def _sp_badge(name):
+	"""Badge texture for a tile: the chosen style's file when it has one, else the Lucent pill."""
+	if not name: return ''
+	folder = _badge_dir()
+	if folder:
+		path = folder + name + '.png'
+		ok = _SP_BADGE_OK.get(path)
+		if ok is None:
+			try:
+				import xbmcvfs
+				ok = bool(xbmcvfs.exists(path))
+			except Exception:
+				ok = False
+			_SP_BADGE_OK[path] = ok
+		if ok: return path
+	return 'lucent/flags/%s.png' % name
 
 
 def lucent_item(listitem, profile):

@@ -1165,6 +1165,48 @@ def _stream_specs(item, q, rate, provider, n_addons, pack=False):
     return out
 
 
+# 4.12.24: the left-column tiles show the badge (same art as the card's badge
+# row, in the chosen flags style) instead of the text; text stays when no
+# badge exists for the value. Tile value -> badge name in lucent/flags.
+_SP_BADGE = {
+    'res': {'4K': '4K', '8K': '8K', '1080p': '1080P', '720p': '720P', 'SD': 'SD', 'CAM': 'CAM',
+            'SCR': 'SCR', 'HC': 'HC'},
+    'video': {'HEVC': 'HEVC', 'AV1': 'AV1', 'AVC': 'AVC', 'VP9': 'VP9', 'XviD': 'XVID', 'MPEG-2': 'MPEG'},
+    'hdr': {'Dolby Vision': 'DV', 'Dolby Vision 2': 'DV2', 'HDR10+': 'HDR10+', 'HDR10': 'HDR10',
+            'HDR': 'HDR', 'HLG': 'HLG', 'SDR': 'SDR'},
+    'audio': {'TrueHD': 'TRUEHD', 'DTS:X': 'DTS-X', 'DTS-HD MA': 'DTS-HDMA', 'DTS-HD': 'DTS-HD',
+              'DTS': 'DTS', 'DD+': 'DD+', 'DD': 'DD', 'FLAC': 'FLAC', 'PCM': 'PCM', 'AAC': 'AAC',
+              'Opus': 'OPUS', 'MP3': 'MP3', 'Dolby Atmos': 'ATMOS'},
+    'ch': {'7.1': '7.1', '6.1': '6.1', '5.1': '5.1', '2.0': '2.0', '1.0': '1.0'},
+    'rel': {'Remux': 'REMUX', 'Blu-ray': 'BLURAY', 'WEB-DL': 'WEB', 'WEBRip': 'WEB', 'WEB': 'WEB',
+            'HDTV': 'HDTV', 'DVD': 'DVDRIP', 'HDRip': 'HD-RIP'}}
+_ICON_OK = {}
+
+
+def _icon_exists(path):
+    ok = _ICON_OK.get(path)
+    if ok is None:
+        ok = _ICON_OK[path] = bool(xbmcvfs.exists(path))
+    return ok
+
+
+def _spec_icons(props, th, provider):
+    out = {}
+    for key, table in _SP_BADGE.items():
+        name = table.get(props.get('abs.sp_%s' % key) or '')
+        path = ''
+        if name:
+            if th is not None and hasattr(th, 'badge_path'):
+                path = th.badge_path(name, MEDIA + 'lucent/flags/')
+            if not path or not _icon_exists(path):
+                path = MEDIA + 'lucent/flags/%s.png' % name
+                if not _icon_exists(path):
+                    path = ''
+        out['abs.sp_%s_icon' % key] = path
+    out['abs.sp_svc_icon'] = _service_icon(_service_code(provider)) if props.get('abs.sp_svc') else ''
+    return out
+
+
 _SERVICE_ICON = {'RD': 'realdebrid', 'AD': 'alldebrid', 'PM': 'premiumize', 'TB': 'torbox',
                  'OC': 'offcloud', 'EN': 'easynews', 'ED': 'easydebrid'}
 
@@ -1562,17 +1604,30 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
             self._focus_all()
 
     def _focus_all(self):
-        """Dialog thread, once: every add-on has finished - highlight and focus the All tab.
-        A tab or filter you picked yourself while it was searching is kept."""
-        if self.f_addon or self.f_quality or self.f_service or self.filters:
-            _log('search done - kept the tab / filter you picked')
-            return
+        """Dialog thread, once: every add-on has finished - the All tab, and the
+        focus on the best stream (row 1). 4.12.24: was the All chip, with the
+        list left wherever it had been scrolled to while results came in."""
+        with self.ui_lock:
+            self.f_addon = self.f_quality = self.f_service = None
+            self.filters = []
+            self.focused_key = None
+            self._status()
+            self._chips()
+            self._rows()
         try:
             self.getControl(self._cid()).selectItem(0)      # chip 0 = All
         except Exception:
             pass
-        self._focus(self._cid())
-        _log('search done - focus on the All tab')
+        if self.shown:
+            try:
+                self.getControl(self._lid()).selectItem(0)
+            except Exception:
+                pass
+            self._focus(self._lid())
+            _log('search done - All tab, focus on the best stream')
+        else:
+            self._focus(self._cid())
+            _log('search done - no streams, focus on the All tab')
 
     def _status(self):
         st = self.session.state
@@ -1967,6 +2022,7 @@ class SearchWindow(xbmcgui.WindowXMLDialog):
         try:
             props.update(_stream_specs(item, q, self._mbps(row), provider, len(row['refs']),
                                        pack=bool(item.get('package') or item.get('pack'))))
+            props.update(_spec_icons(props, th, provider))
         except Exception as e:
             _log('stream details: %s' % e, xbmc.LOGDEBUG)
         for n in range(7):

@@ -2,6 +2,42 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
+   "v": "4.12.27",
+   "from": "4.12.22",
+   "en": [
+    "Search All shows every add-on as its icon instead of its name: a slim list on the left, one add-on per line with its stream count, the icons on the filter tabs and on each stream card. Usenet and My folders have icons too.",
+    "When the search ends, Search All goes to the All tab with the best stream (the top one) selected.",
+    "The stream details on the left (resolution, video, HDR / Dolby Vision, audio, channels, release, service) show badges and the service logo instead of text - in Search All and in the Fen Light, Red Light, POV and Umbrella source windows.",
+    "Arctic Fuse 3 no longer freezes because of stacked widgets - also with a skin user profile and after the home menus are rebuilt."
+   ],
+   "ar": [
+    "يعرض Search All كل إضافة بأيقونتها بدل اسمها: قائمة نحيفة على اليسار، كل إضافة في سطر مع عدد روابطها، والأيقونات على أزرار التصفية وعلى بطاقة كل رابط. ولـ Usenet ومجلداتي أيقونتان أيضًا.",
+    "عند انتهاء البحث ينتقل Search All إلى «الكل» ويحدّد أفضل رابط، وهو الأول في القائمة.",
+    "تفاصيل الرابط على اليسار (الدقة، والفيديو، وHDR وDolby Vision، والصوت، والقنوات، والإصدار، والخدمة) تظهر شاراتٍ وشعارَ الخدمة بدل النص، في Search All وفي نوافذ المصادر في Fen Light وRed Light وPOV وUmbrella.",
+    "لم تعد واجهة Arctic Fuse 3 تتجمّد بسبب الصفوف المتتابعة، حتى مع ملف مستخدم للواجهة وبعد إعادة بناء القوائم الرئيسية."
+   ]
+  },
+  {
+   "v": "4.12.21",
+   "en": [
+    "Najd never takes subtitle timing from another cut of the film (Director's Cut vs Theatrical), keeps the video's own subtitle timing after a slow read, and opens easynews links reliably.",
+    "a4kSubtitles no longer logs an error when a stream is too slow to hash."
+   ],
+   "ar": [
+    "لا تأخذ نجد توقيت الترجمة من نسخة أخرى للفيلم (نسخة المخرج مقابل النسخة السينمائية)، وتحتفظ بتوقيت ترجمة الفيديو نفسه بعد قراءة بطيئة، وتفتح روابط easynews بثبات.",
+    "لم تعد a4kSubtitles تسجّل خطأً عندما يكون البث أبطأ من أن يُحسب بصمته."
+   ]
+  },
+  {
+   "v": "4.12.20",
+   "en": [
+    "Lucent Player: the button row sits a little lower and the focused button's name is a little larger."
+   ],
+   "ar": [
+    "مشغّل Lucent: صفّ الأزرار أخفض قليلًا، واسم الزر المحدد أكبر قليلًا."
+   ]
+  },
+  {
    "v": "4.12.19",
    "en": [
     "AF3 Lucent Look: the info pills (the \"i\" box, 4K, HDR...) are see-through glass again with the newer skin - the white \"i\" no longer disappears on a white box."
