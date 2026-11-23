@@ -295,6 +295,15 @@ def watch(monitor):
         if first_run_active():
             continue
 
+        # 4.12.22: a menu rebuild rewrites the AF3 generated includes mid-
+        # session; put the static widget targets back before they can hang Kodi.
+        try:
+            from resources.lib import af3_static_targets
+            if af3_static_targets.poll() and patcher._is_active_skin('skin.arctic.fuse.3'):
+                patcher._mark_skin_reload()
+        except Exception as e:
+            _log('static-target poll failed (ignored): %s' % e, xbmc.LOGWARNING)
+
         # Retry a skin reload that was deferred (playback / modal dialog).
         patcher.reload_skin_if_pending()
 

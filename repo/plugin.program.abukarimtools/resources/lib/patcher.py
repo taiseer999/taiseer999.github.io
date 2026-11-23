@@ -7041,6 +7041,25 @@ def apply_set(group=None, addon_ids=None):
             failed += 1
 
 
+    # 4.12.22: AF3 static widget targets in EVERY generated include file
+    # (skin users, any GUI-window info) - see af3_static_targets.py.
+    if not addon_ids or 'skin.arctic.fuse.3' in _scope:
+        try:
+            from resources.lib import af3_static_targets
+            ok, msg, wrote = af3_static_targets.apply()
+        except Exception as e:
+            ok, msg, wrote = False, '[skin.arctic.fuse.3] static targets crashed: %s' % e, False
+        _log(msg)
+        results.append((ok, msg))
+        if ok:
+            succeeded += 1
+            if wrote:
+                changed += 1
+                if _is_active_skin('skin.arctic.fuse.3'):
+                    _mark_skin_reload()
+        else:
+            failed += 1
+
     # 4.8.10: forced TMDbHelper playback settings - in Kodi's memory too.
     # The settings.xml entries above fix the files, but Kodi already holds
     # TMDbHelper's settings in memory (its service starts before the boot

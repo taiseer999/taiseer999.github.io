@@ -1,3 +1,14 @@
+v4.12.22  (2026-11-23)
+- AF3 GUI freeze, follow-up to 4.12.18 (crashlog 2026-11-22 20:28 on 4.12.21:
+  same AB-BA deadlock, JobWorker in StartDirectoryJob -> GUIINFO::GetWindow,
+  though the boot sweep reported "0 written"). New af3_static_targets.py runs
+  in every patch pass and from the watchdog loop: it makes every <content
+  target> / categorytarget / target param in ALL generated
+  script-skinvariables-generator-includes-*.xml files (skin users too) a
+  static "videos" when it holds GUI-window info (Window.Property, Container,
+  Control), logs each one it finds, and re-fixes a file that a menu rebuild
+  rewrote mid-session, before it can hang Kodi.
+
 v4.12.21  (2026-11-22)
 - Najd 2.9.7.8 (bundled, from 2.9.7.6): timing from another cut of the film is
   never used. The English reference for "Memoir of a Murderer" (Theatrical Cut)
