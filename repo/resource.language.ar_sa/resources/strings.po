@@ -4141,7 +4141,7 @@ msgstr "حدد هذا الخيار إذا كنت تريد تحويل تنسيق�
 
 msgctxt "#10000"
 msgid "Home"
-msgstr "الصفحة الرئيسية"
+msgstr "الرئيسية"
 
 msgctxt "#10001"
 msgid "Programs"
