@@ -390,6 +390,15 @@
                             <visible>String.IsEqual(ListItem.Property(abs.key),loc)</visible>
                         </control>
                     <control type="image">
+                        <left>646</left>
+                        <top>4</top>
+                        <width>28</width>
+                        <height>28</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/spinner.png</texture>
+                        <animation effect="rotate" end="-360" center="auto" time="900" loop="true" reversible="false" condition="true">Conditional</animation>
+                        <visible>String.IsEqual(ListItem.Property(abs.state),searching)</visible>
+                    </control>
+                    <control type="image">
                         <left>14</left>
                         <top>11</top>
                         <width>14</width>
@@ -560,6 +569,15 @@
                         <animation effect="fade" start="100" end="25" time="500" pulse="true" condition="String.IsEqual(ListItem.Property(abs.state),searching)">Conditional</animation>
                             <visible>String.IsEqual(ListItem.Property(abs.key),loc)</visible>
                         </control>
+                    <control type="image">
+                        <left>646</left>
+                        <top>4</top>
+                        <width>28</width>
+                        <height>28</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/spinner.png</texture>
+                        <animation effect="rotate" end="-360" center="auto" time="900" loop="true" reversible="false" condition="true">Conditional</animation>
+                        <visible>String.IsEqual(ListItem.Property(abs.state),searching)</visible>
+                    </control>
                     <control type="image">
                         <left>14</left>
                         <top>11</top>
@@ -1523,6 +1541,15 @@
                             <visible>String.IsEqual(ListItem.Property(abs.key),loc)</visible>
                         </control>
                     <control type="image">
+                        <left>208</left>
+                        <top>12</top>
+                        <width>28</width>
+                        <height>28</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/spinner.png</texture>
+                        <animation effect="rotate" end="-360" center="auto" time="900" loop="true" reversible="false" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
                         <left>10</left>
                         <top>12</top>
                         <width>28</width>
@@ -1690,6 +1717,15 @@
                             <visible>String.IsEqual(ListItem.Property(abs.key),loc)</visible>
                         </control>
                     <control type="image">
+                        <left>208</left>
+                        <top>12</top>
+                        <width>28</width>
+                        <height>28</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/spinner.png</texture>
+                        <animation effect="rotate" end="-360" center="auto" time="900" loop="true" reversible="false" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
                         <left>10</left>
                         <top>12</top>
                         <width>28</width>
@@ -1839,6 +1875,15 @@
                         <animation effect="fade" start="100" end="25" time="500" pulse="true" condition="!String.IsEmpty(ListItem.Property(abs.loading))">Conditional</animation>
                             <visible>String.IsEqual(ListItem.Property(abs.key),loc)</visible>
                         </control>
+                    <control type="image">
+                        <left>208</left>
+                        <top>12</top>
+                        <width>28</width>
+                        <height>28</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/spinner.png</texture>
+                        <animation effect="rotate" end="-360" center="auto" time="900" loop="true" reversible="false" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
                     <control type="image">
                         <left>10</left>
                         <top>12</top>
@@ -3960,6 +4005,15 @@
                             <visible>String.IsEqual(ListItem.Property(abs.key),loc)</visible>
                         </control>
                     <control type="image">
+                        <left>208</left>
+                        <top>12</top>
+                        <width>28</width>
+                        <height>28</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/spinner.png</texture>
+                        <animation effect="rotate" end="-360" center="auto" time="900" loop="true" reversible="false" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
                         <left>10</left>
                         <top>12</top>
                         <width>28</width>
@@ -4127,6 +4181,15 @@
                             <visible>String.IsEqual(ListItem.Property(abs.key),loc)</visible>
                         </control>
                     <control type="image">
+                        <left>208</left>
+                        <top>12</top>
+                        <width>28</width>
+                        <height>28</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/spinner.png</texture>
+                        <animation effect="rotate" end="-360" center="auto" time="900" loop="true" reversible="false" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
+                    <control type="image">
                         <left>10</left>
                         <top>12</top>
                         <width>28</width>
@@ -4276,6 +4339,15 @@
                         <animation effect="fade" start="100" end="25" time="500" pulse="true" condition="!String.IsEmpty(ListItem.Property(abs.loading))">Conditional</animation>
                             <visible>String.IsEqual(ListItem.Property(abs.key),loc)</visible>
                         </control>
+                    <control type="image">
+                        <left>208</left>
+                        <top>12</top>
+                        <width>28</width>
+                        <height>28</height>
+                        <texture>special://home/addons/plugin.program.abukarimtools/resources/lucent/media/lucent/spinner.png</texture>
+                        <animation effect="rotate" end="-360" center="auto" time="900" loop="true" reversible="false" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(abs.loading))</visible>
+                    </control>
                     <control type="image">
                         <left>10</left>
                         <top>12</top>

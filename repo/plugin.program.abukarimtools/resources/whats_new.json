@@ -2,17 +2,17 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
-   "v": "4.12.29",
+   "v": "4.12.30",
    "from": "4.12.22",
    "en": [
-    "Search All shows every add-on with its icon: on the left one add-on per line with its icon, name and stream count; icons on the filter tabs and on each stream card. Usenet and My folders have icons too, also as the service of their streams.",
+    "Search All shows every add-on with its icon: on the left one add-on per line with its icon, name and stream count (a turning busy ring while it searches); icons on the filter tabs and on each stream card. Usenet and My folders have icons too, also as the service of their streams.",
     "When the search ends, Search All goes to the All tab with the best stream (the top one) selected.",
     "The filter tabs work one at a time (an add-on, a quality or a service), every stream shows its badges in every tab, and an add-on with no streams no longer gets a tab.",
     "The stream details on the left (resolution, video, HDR / Dolby Vision, audio, channels, release, service) show badges and the service logo instead of text - in Search All and in the Fen Light, Red Light, POV and Umbrella source windows.",
     "Arctic Fuse 3 no longer freezes because of stacked widgets - also with a skin user profile and after the home menus are rebuilt."
    ],
    "ar": [
-    "يعرض Search All كل إضافة بأيقونتها: على اليسار كل إضافة في سطر بأيقونتها واسمها وعدد روابطها، والأيقونات على أزرار التصفية وعلى بطاقة كل رابط. ولـ Usenet ومجلداتي أيقونتان أيضًا، وتظهران كذلك خدمةً لروابطهما.",
+    "يعرض Search All كل إضافة بأيقونتها: على اليسار كل إضافة في سطر بأيقونتها واسمها وعدد روابطها (وحلقة انتظار دوّارة أثناء بحثها)، والأيقونات على أزرار التصفية وعلى بطاقة كل رابط. ولـ Usenet ومجلداتي أيقونتان أيضًا، وتظهران كذلك خدمةً لروابطهما.",
     "عند انتهاء البحث ينتقل Search All إلى «الكل» ويحدّد أفضل رابط، وهو الأول في القائمة.",
     "تعمل أزرار التصفية واحدًا في كل مرة (إضافة أو دقة أو خدمة)، وتظهر شارات كل رابط في كل تبويب، ولم تعد الإضافة التي لا روابط لها تحصل على زر.",
     "تفاصيل الرابط على اليسار (الدقة، والفيديو، وHDR وDolby Vision، والصوت، والقنوات، والإصدار، والخدمة) تظهر شاراتٍ وشعارَ الخدمة بدل النص، في Search All وفي نوافذ المصادر في Fen Light وRed Light وPOV وUmbrella.",

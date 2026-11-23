@@ -1,4 +1,7 @@
-v4.12.29  (2026-11-23)
+v4.12.30  (2026-11-23)
+- Search All: a turning busy ring (lucent/spinner.png, rotate animation) in
+  the count's place while an add-on searches - in the add-on list on the
+  left and on its filter tab; the count takes its place when it answers.
 - Search All: the filter tabs are one at a time - an add-on, quality or
   service tab replaces the one picked before (they stacked: an add-on tab
   picked earlier, e.g. My folders with 0 streams, stayed on under 4K / SD /

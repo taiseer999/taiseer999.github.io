@@ -263,6 +263,20 @@ def native_progress(cid, top, left=40, width=760):
             </control>''' % {'id': cid, 't': top, 'l': left, 'w': width}
 
 
+def ring_spinner(visible, left, top, size=28):
+    """4.12.30: a turning ring (lucent/spinner.png) - the busy sign while an add-on searches."""
+    return '''
+                    <control type="image">
+                        <left>%d</left>
+                        <top>%d</top>
+                        <width>%d</width>
+                        <height>%d</height>
+                        <texture>lucent/spinner.png</texture>
+                        <animation effect="rotate" end="-360" center="auto" time="900" loop="true" reversible="false" condition="true">Conditional</animation>
+                        <visible>%s</visible>
+                    </control>''' % (left, top, size, size, visible)
+
+
 def spinner(visible, left, top):
     return '''
             <control type="image">
@@ -2016,6 +2030,7 @@ def ab_chip(focused):
                         <visible>String.IsEqual(ListItem.Property(abs.key),%s) + String.IsEmpty(ListItem.Property(abs.loading))</visible>
                     </control>''' % (color, key) for key, color in AB_ADDONS if key not in AB_ICON_KEYS)
     dots += _ab_icons('abs.key', 12, 10, 32, pulse='!String.IsEmpty(ListItem.Property(abs.loading))')   # 4.12.26: 32 px
+    dots += ring_spinner('!String.IsEmpty(ListItem.Property(abs.loading))', 236 - 28, 12)       # 4.12.30: busy, in the count's place
     # 4.6.1: service chips carry the service icon in place of the dot
     dots += '''
                     <control type="image">
@@ -2246,6 +2261,8 @@ def ab_source_chip():
                    if key not in AB_ICON_KEYS)
     dots += _ab_icons('abs.key', 0, (AB_SRC_H - 34) // 2, 34,
                       pulse='String.IsEqual(ListItem.Property(abs.state),searching)')
+    dots += ring_spinner('String.IsEqual(ListItem.Property(abs.state),searching)',
+                         AB_SRC_W - 14 - 28, (AB_SRC_H - 28) // 2)            # 4.12.30: busy, in the count's place
     return '''
                 <control type="group">
                     <animation effect="fade" start="100" end="40" time="0" condition="String.IsEqual(ListItem.Property(abs.state),off)">Conditional</animation>
