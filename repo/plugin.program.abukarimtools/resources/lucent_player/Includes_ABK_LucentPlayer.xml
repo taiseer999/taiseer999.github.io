@@ -783,6 +783,49 @@
         </control>
         
         </control>
+        <include>ABK_LP_HintText</include>
+    </include>
+    <!-- 4.12.38: the AF3 "Press down: <what Down opens>" hint. The Lucent
+         Player hides AF3's whole seek bar group, and this hint with it; the
+         row's Down (Action_OSD_Main_OnDown) still opens the same window, so
+         show the same text. One label (not AF3's two side by side) so Arabic
+         reads in order: "اضغط للأسفل: قائمة التشغيل". -->
+    <include name="ABK_LP_HintText">
+        <control type="group">
+            <left>96</left>
+            <centerbottom>20</centerbottom>
+            <width>1100</width>
+            <height>40</height>
+            <visible>Skin.HasSetting(abk.lucentplayer) + !Pvr.IsPlayingTV + !Window.IsVisible(1152)</visible>
+            <visible>[Window.IsActive(videoosd) | Window.IsVisible(1140) | Window.IsVisible(1141) | Window.IsVisible(videobookmarks)] + [!Window.IsVisible(1141) | Skin.String(VideoOSD.PersonCredits.CastCrew,cast)]</visible>
+            <animation effect="fade" start="0" end="100" time="300" reversible="true">Visible</animation>
+            <animation effect="fade" start="100" end="0" time="200" reversible="true">Hidden</animation>
+            <control type="grouplist">
+                <left>0</left>
+                <top>0</top>
+                <width>1100</width>
+                <height>40</height>
+                <orientation>horizontal</orientation>
+                <itemgap>8</itemgap>
+                <usecontrolcoords>true</usecontrolcoords>
+                <control type="image">
+                    <top>8</top>
+                    <width>24</width>
+                    <height>24</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture colordiffuse="80FFFFFF">special://skin/extras/icons/arrow-down.png</texture>
+                </control>
+                <control type="label">
+                    <width>auto</width>
+                    <height>40</height>
+                    <font>abk_lp_font10</font>
+                    <textcolor>80FFFFFF</textcolor>
+                    <shadowcolor>00FFFFFF</shadowcolor>
+                    <aligny>center</aligny>
+                    <label>[B]$LOCALIZE[31594]:[/B]  $VAR[Label_OSD_HintText]</label>
+                </control>
+            </control>
+        </control>
     </include>
     <include name="ABK_LP_FullScreen">
         <control type="group">

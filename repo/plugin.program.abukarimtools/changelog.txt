@@ -1,3 +1,11 @@
+v4.12.38  (2026-11-24)
+- Lucent Player: the AF3 hint "Press down: <playlist / bookmarks / cast>"
+  is back at the bottom left of the OSD (it went with AF3's seek bar group,
+  which the Lucent Player hides). Same text and same visibility as AF3
+  (Label_OSD_HintText, string 31594), Lucent fonts, one label so the Arabic
+  reads in order. New include ABK_LP_HintText in Includes_ABK_LucentPlayer.xml
+  (called from ABK_LP_SeekBar) - no new patch entry.
+
 v4.12.37  (2026-11-24)
 - Boot: the patch sweep no longer runs twice at once. Opening AB Tools while
   the service was booting started a second full sweep (434 entries) beside
