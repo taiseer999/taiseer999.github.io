@@ -220,9 +220,6 @@ def switch_state(mode):
         if mode == 'af3_defaultosd':
             from resources.lib import af3_defaultosd_toggle
             return af3_defaultosd_toggle.default_osd_on()
-        if mode == 'af3_percent':
-            from resources.lib import af3_percent_toggle
-            return af3_percent_toggle.percent_on()
         if mode == 'seek_preview':
             from resources.lib.seek_preview import engine as _sp
             return bool(_sp.load_config()['enabled'])
@@ -260,6 +257,9 @@ def mode_label2(mode):
         if mode == 'af3_plotsize':
             from resources.lib import af3_plotsize
             return af3_plotsize.mode_label()
+        if mode == 'af3_percent':
+            from resources.lib import af3_percent_toggle
+            return af3_percent_toggle.mode_label()
         if mode == 'af3_flagstyle':
             from resources.lib import af3_flagstyle
             return af3_flagstyle.mode_label()

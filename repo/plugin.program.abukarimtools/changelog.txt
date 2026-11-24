@@ -1,3 +1,10 @@
+v4.12.35  (2026-11-24)
+- "AF3: Watched percentage" is now a three-way choice (select dialog, value
+  shown on the entry): Focused item only (default, both bools off) / All
+  items (abk.percentall) / Hidden (abk.hidepercent). Needs AF3 50.12.9, where
+  the number sits in a capsule joined to the progress circle instead of a
+  black box above it. Strings 32371-32372 reworded, 32374-32376 new.
+
 v4.12.34  (2026-11-24)
 - TMDbHelper Arabic (strings.po): Kodi reads an add-on's strings only at
   start-up, so when the patch actually writes the file a notification (10 s,

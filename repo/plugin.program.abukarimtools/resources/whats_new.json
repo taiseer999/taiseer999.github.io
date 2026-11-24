@@ -2,6 +2,15 @@
   "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
   "entries": [
     {
+      "v": "4.12.35",
+      "en": [
+        "AF3: the watched percentage now sits in a capsule joined to the progress circle, and \"AF3: Watched percentage\" offers three choices: focused item only (default), all items, or hidden (needs AF3 50.12.9)."
+      ],
+      "ar": [
+        "AF3: صارت نسبة المشاهدة في كبسولة ملاصقة لدائرة التقدّم، ويقدّم «AF3: نسبة المشاهدة» ثلاثة خيارات: للعنصر المحدد فقط (الافتراضي)، أو لكل العناصر، أو مخفية (يتطلّب AF3 50.12.9)."
+      ]
+    },
+    {
       "v": "4.12.34",
       "en": [
         "TMDbHelper in Arabic: when the translation is installed or restored, a note says to restart Kodi so it shows."

@@ -1174,12 +1174,15 @@ STRINGS = {
     32366: ('FFmpeg tools are installed', 'ثُبّتت أدوات FFmpeg'),
     32367: ('FFmpeg tools could not be installed', 'تعذّر تثبيت أدوات FFmpeg'),
     32217: ('AB Tools in glass: white icons with no background and a see-through window.', 'أدوات AB بمظهر زجاجي: أيقونات بيضاء بلا خلفية ونافذة شفافة.'),
-    # ---- 4.12.31: AF3 Watched percentage (32368-32372); 4.12.34: TMDbHelper restart note (32373) ----
+    # ---- 4.12.31: AF3 Watched percentage (32368-32372); 4.12.34: TMDbHelper restart note (32373); 4.12.35: modes (32374-32376) ----
     32368: ('AF3: Watched percentage', 'AF3: نسبة المشاهدة'),
     32369: ('Watched percentage shown', 'ظهرت نسبة المشاهدة'),
     32370: ('Watched percentage hidden', 'أُخفيت نسبة المشاهدة'),
-    32371: ('This needs Arctic Fuse 3 50.12.7 or newer. Update the skin, then try again.', 'يتطلّب هذا الخيار Arctic Fuse 3 بالإصدار 50.12.7 أو أحدث. حدِّث الواجهة ثم حاول مرة أخرى.'),
+    32371: ('This needs Arctic Fuse 3 50.12.9 or newer. Update the skin, then try again.', 'يتطلّب هذا الخيار Arctic Fuse 3 بالإصدار 50.12.9 أو أحدث. حدِّث الواجهة ثم أعد المحاولة.'),
     32373: ('TMDbHelper Arabic translation installed - restart Kodi to see it.',
             'ثُبِّتت الترجمة العربية لـ TMDbHelper، أعد تشغيل Kodi لتظهر.'),
-    32372: ('Shows how much of a movie or an episode you have watched, or how many episodes of a show, as a number (e.g. 45%) above the progress circle on posters and thumbnails.', 'تعرض مقدار ما شاهدته من الفيلم أو الحلقة، أو نسبة الحلقات المشاهدة من المسلسل، رقمًا (مثل 45%) فوق دائرة التقدّم على الملصقات والصور المصغّرة.'),
+    32372: ('Shows the watched percentage (e.g. 45%) in a capsule joined to the progress circle: on the focused item only, on every item, or hidden.', 'تعرض نسبة المشاهدة (مثل 45%) في كبسولة ملاصقة لدائرة التقدّم: للعنصر المحدد فقط، أو لكل العناصر، أو مخفية.'),
+    32374: ('Focused item only', 'العنصر المحدد فقط'),
+    32375: ('All items', 'كل العناصر'),
+    32376: ('Hidden', 'مخفية'),
 }

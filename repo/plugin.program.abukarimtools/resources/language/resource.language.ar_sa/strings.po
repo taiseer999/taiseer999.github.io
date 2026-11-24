@@ -3609,14 +3609,26 @@ msgid "Watched percentage hidden"
 msgstr "أُخفيت نسبة المشاهدة"
 
 msgctxt "#32371"
-msgid "This needs Arctic Fuse 3 50.12.7 or newer. Update the skin, then try again."
-msgstr "يتطلّب هذا الخيار Arctic Fuse 3 بالإصدار 50.12.7 أو أحدث. حدِّث الواجهة ثم حاول مرة أخرى."
+msgid "This needs Arctic Fuse 3 50.12.9 or newer. Update the skin, then try again."
+msgstr "يتطلّب هذا الخيار Arctic Fuse 3 بالإصدار 50.12.9 أو أحدث. حدِّث الواجهة ثم أعد المحاولة."
 
 msgctxt "#32372"
-msgid "Shows how much of a movie or an episode you have watched, or how many episodes of a show, as a number (e.g. 45%) above the progress circle on posters and thumbnails."
-msgstr "تعرض مقدار ما شاهدته من الفيلم أو الحلقة، أو نسبة الحلقات المشاهدة من المسلسل، رقمًا (مثل 45%) فوق دائرة التقدّم على الملصقات والصور المصغّرة."
+msgid "Shows the watched percentage (e.g. 45%) in a capsule joined to the progress circle: on the focused item only, on every item, or hidden."
+msgstr "تعرض نسبة المشاهدة (مثل 45%) في كبسولة ملاصقة لدائرة التقدّم: للعنصر المحدد فقط، أو لكل العناصر، أو مخفية."
 
 msgctxt "#32373"
 msgid "TMDbHelper Arabic translation installed - restart Kodi to see it."
 msgstr "ثُبِّتت الترجمة العربية لـ TMDbHelper، أعد تشغيل Kodi لتظهر."
+
+msgctxt "#32374"
+msgid "Focused item only"
+msgstr "العنصر المحدد فقط"
+
+msgctxt "#32375"
+msgid "All items"
+msgstr "كل العناصر"
+
+msgctxt "#32376"
+msgid "Hidden"
+msgstr "مخفية"
 
