@@ -130,11 +130,148 @@ def labels(stream):
     desc = clean(stream.get('description') or stream.get('title') or '')
     sd = stream.get('streamData') or {}
     filename = sd.get('filename') or (stream.get('behaviorHints') or {}).get('filename') or ''
-    if kodi.setting_int('label_style', 0) == 1:
+    plot = '\n'.join(x for x in (name, desc) if x)
+    style = kodi.setting_int('label_style', 0)
+    if style == 2:
+        info = classify(stream)
+        return dv_label(info), filename or desc.replace('\n', ' | '), plot
+    if style == 1:
         compact = compact_label(stream)
         if compact:
-            return compact, filename or desc.replace('\n', ' | '), '\n'.join(x for x in (name, desc) if x)
-    return name.replace('\n', ' '), desc.replace('\n', ' | '), '\n'.join(x for x in (name, desc) if x)
+            return compact, filename or desc.replace('\n', ' | '), plot
+    return name.replace('\n', ' '), desc.replace('\n', ' | '), plot
+
+
+# --------------------------------------------------------------------------
+# Dolby Vision FEL / MEL classification (merged from FEL Cinema)
+# --------------------------------------------------------------------------
+
+# Release groups known for Profile 7 FEL UHD remuxes
+TOP_FEL_GROUPS = {'wildcat', 'bluranium', 'cinephiles', 'framestor', 'epsilon',
+                  'btm', '3l', 'bizkit', 'pmp', 'zq'}
+
+COLOR_FEL = 'FFFFA500'   # orange
+COLOR_MEL = 'FFFF69B4'   # pink
+COLOR_71 = 'FF4DA6FF'    # blue
+COLOR_51 = 'FFFF5555'    # red
+COLOR_STD = 'FFEDEDED'
+
+_FEL_RE = re.compile(r'\b(FEL|P7|PROFILE[ .]?7|DUAL[ .]?LAYER)\b')
+_MEL_RE = re.compile(r'\b(MEL|P8|P8\.1|PROFILE[ .]?8|HYBRID)\b')
+_DV_RE = re.compile(r'\b(DV|DOVI|DOLBY[ .]?VISION)\b')
+_CH71_RE = re.compile(r'(?<![0-9])7[.\s]1(?![0-9])|\b[78]CH\b')
+_CH51_RE = re.compile(r'(?<![0-9])5[.\s]1(?![0-9])|\b6CH\b')
+_CH20_RE = re.compile(r'(?<![0-9])2[.\s]0(?![0-9])|\b2CH\b')
+
+
+def _size_of(stream):
+    sd = stream.get('streamData') or {}
+    try:
+        return int(sd.get('size') or (stream.get('behaviorHints') or {}).get('videoSize') or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def classify(stream):
+    """Tag a stream as FEL / MEL / 7.1 / 5.1 using AIOStreams' parsedFile and
+    the filename. Works without streamData too (falls back to name/description).
+    Returns a dict; tier 0 is best (FEL) and 4 is plain."""
+    sd = stream.get('streamData') or {}
+    pf = sd.get('parsedFile') or {}
+    filename = sd.get('filename') or (stream.get('behaviorHints') or {}).get('filename') or ''
+    vis = [str(v) for v in pf.get('visualTags') or [] if v]
+    aud = [str(v) for v in pf.get('audioTags') or [] if v]
+    chs = [str(v) for v in pf.get('audioChannels') or [] if v]
+    res = str(pf.get('resolution') or '')
+    qual = str(pf.get('quality') or '')
+    grp = str(pf.get('releaseGroup') or '')
+    hay = ' '.join([filename, qual, ' '.join(vis), ' '.join(aud), ' '.join(chs)])
+    if not sd:  # no streamData: fall back to the formatter text
+        hay += ' ' + (stream.get('name') or '') + ' ' + (stream.get('description') or stream.get('title') or '')
+    hay = _EMOJI_RE.sub(' ', hay).upper()
+
+    has_dv = any(v.upper() in ('DV', 'HDR+DV', 'DV+HDR') for v in vis) or bool(_DV_RE.search(hay))
+    remux = 'REMUX' in hay
+    is_4k = res.lower() in ('2160p', '4k') or '2160P' in hay or bool(re.search(r'\b4K\b', hay))
+    is_mel = bool(_MEL_RE.search(hay))
+    is_fel = bool(_FEL_RE.search(hay))
+
+    ch_str = ' '.join(chs)
+    if '7.1' in ch_str or _CH71_RE.search(hay):
+        ch = '7.1'
+    elif '5.1' in ch_str or _CH51_RE.search(hay):
+        ch = '5.1'
+    elif '2.0' in ch_str or _CH20_RE.search(hay):
+        ch = '2.0'
+    else:
+        ch = ''
+
+    # A 4K DV remux that isn't marked MEL is almost always a P7 FEL disc rip.
+    if is_fel or (has_dv and remux and is_4k and not is_mel):
+        kind, color, tier = 'FEL', COLOR_FEL, 0
+    elif is_mel and has_dv:
+        kind, color, tier = 'MEL', COLOR_MEL, 1
+    elif ch == '7.1':
+        kind, color, tier = '', COLOR_71, 2
+    elif ch == '5.1':
+        kind, color, tier = '', COLOR_51, 3
+    else:
+        kind, color, tier = '', COLOR_STD, 4
+    badge = ' · '.join(x for x in (kind, ch) if x) or 'STD'
+
+    svc = sd.get('service') or {}
+    svc_id = svc.get('id') or ''
+    debrid = SERVICE_SHORT.get(svc_id, svc_id.upper()) if svc_id else ('P2P' if sd.get('type') == 'p2p' else '')
+    if debrid and svc.get('cached'):
+        debrid += '+'
+
+    return {
+        'filename': filename or clean(stream.get('description') or stream.get('title') or '').split('\n')[0],
+        'resolution': '4K' if is_4k else (res or ''),
+        'is_4k': is_4k,
+        'quality': qual,
+        'group': grp,
+        'visual': ' '.join(vis),
+        'audio': ' '.join(aud),
+        'channels': ch,
+        'dv_type': kind,
+        'badge': badge,
+        'color': color,
+        'tier': tier,
+        'remux': remux,
+        'top_group': grp.lower() in TOP_FEL_GROUPS,
+        'size': _size_of(stream),
+        'size_label': _human_size(_size_of(stream)) or '',
+        'debrid': debrid,
+        'cached': bool(svc.get('cached')),
+        'addon': sd.get('addon') or '',
+    }
+
+
+def dv_label(info):
+    """One-line label coloured by FEL/MEL/7.1/5.1 tier."""
+    parts = ['[B]%s[/B]' % info['badge']]
+    for key in ('resolution', 'quality', 'group', 'visual', 'audio', 'size_label'):
+        if info.get(key):
+            parts.append(info[key])
+    out = '[COLOR %s]%s[/COLOR]' % (info['color'], '  |  '.join(parts))
+    if info['debrid']:
+        out += '  [COLOR %s]%s[/COLOR]' % ('lime' if info['cached'] else 'orange', info['debrid'])
+    if info['addon']:
+        out += '  [I]%s[/I]' % info['addon']
+    return out
+
+
+def sort_fel_first(playable):
+    """Stable re-sort: 4K first, then FEL > MEL > 7.1 > 5.1, remux, top FEL
+    group, larger file. Returns a new list."""
+    keyed = []
+    for i, stream in enumerate(playable):
+        c = classify(stream)
+        keyed.append(((0 if c['is_4k'] else 1, c['tier'], 0 if c['remux'] else 1,
+                       0 if c['top_group'] else 1, -c['size'], i), stream))
+    keyed.sort(key=lambda x: x[0])
+    return [s for _, s in keyed]
 
 
 def _headers_suffix(stream):

@@ -8,7 +8,7 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 
-from . import kodi, items, streams as st
+from . import fel, kodi, items, streams as st
 from .api import AIOMetadata, AIOStreams, ApiError, cache_clear, normalise_manifest_url
 
 HISTORY_FILE = os.path.join(kodi.PROFILE, 'search_history.json')
@@ -181,6 +181,10 @@ def root(params):
         for t in types_seen:
             _add(kodi.build_url(action='type', type=t, src=src), items.folder_item(items.type_label(t), icon=items.type_icon(t)))
 
+    if kodi.setting_bool('show_fel'):
+        _add(kodi.build_url(action='fel'), items.folder_item(
+            '[COLOR %s][B]%s[/B][/COLOR]' % (st.COLOR_FEL, kodi.s(30090)), icon=items.icon('fel'),
+            plot=kodi.s(30099)))
     _add(kodi.build_url(action='play_id'), items.folder_item(kodi.s(30022), icon=items.icon('play_id')), folder=True)
     _add(kodi.build_url(action='tools'), items.folder_item(kodi.s(30023), icon=items.icon('tools')))
     xbmcplugin.setPluginCategory(kodi.HANDLE, manifest.get('name') or kodi.ADDON_NAME)
@@ -361,10 +365,19 @@ def _episodes(client, meta, type_, vids, season, src='a'):
 # streams / playback
 # --------------------------------------------------------------------------
 
+def _fel_sort_wanted(type_, vid):
+    if kodi.setting_bool('fel_first'):
+        return True
+    # titles from the curated FEL catalog always get FEL-first ordering
+    return type_ == 'movie' and fel.is_fel_title(vid)
+
+
 def _fetch_streams(client, type_, vid):
     with kodi.Busy():
         raw = client.streams(type_, vid)
     playable, notices = st.filter_streams(raw)
+    if playable and _fel_sort_wanted(type_, vid):
+        playable = st.sort_fel_first(playable)
     return playable, notices
 
 
@@ -406,7 +419,16 @@ def streams_dir(params):
     _end('videos', cache=False)
 
 
-def _choose(playable, notices, title, auto):
+def _picker_header(title, type_, vid):
+    from . import picker
+    header = picker.header_from_listitem(title)
+    entry = fel.find(vid) if type_ == 'movie' else None
+    if entry:  # catalog art beats whatever the launching list had
+        header.update({k: v for k, v in fel.header(entry).items() if v})
+    return header
+
+
+def _choose(playable, notices, title, auto, type_=None, vid=None):
     if not playable:
         msg = kodi.s(30105)
         if notices:
@@ -415,6 +437,12 @@ def _choose(playable, notices, title, auto):
         return None
     if auto or kodi.setting_int('stream_select', 0) == 2:
         return 0
+    if kodi.setting_int('picker_style', 0) == 1:
+        try:
+            from . import picker
+            return picker.pick(playable, _picker_header(title, type_, vid))
+        except Exception as e:  # skin/window problem: use the plain dialog
+            kodi.log('stream picker window failed, using select dialog: %s' % e, xbmc.LOGWARNING)
     lis = []
     for stream in playable:
         label, label2, _ = st.labels(stream)
@@ -435,7 +463,7 @@ def play(params):
         playable, notices = _fetch_streams(client, type_, vid)
     except ApiError as e:
         return _resolve_fail(e)
-    idx = _choose(playable, notices, title, params.get('auto') == '1')
+    idx = _choose(playable, notices, title, params.get('auto') == '1', type_, vid)
     if idx is None:
         return _resolve_fail(None)
     _resolve(client, playable[idx], type_, vid, title, direct=params.get('direct') == '1')
@@ -562,6 +590,76 @@ def play_id_input(params):
 
 
 # --------------------------------------------------------------------------
+# Dolby Vision FEL catalog (merged from FEL Cinema)
+# --------------------------------------------------------------------------
+
+def fel_menu(params):
+    total = len(fel.load())
+    entries = [
+        ('[COLOR %s][B]%s[/B][/COLOR]' % (st.COLOR_FEL, kodi.s(30091)), dict(action='fel_list', mode='newest'), 'fel'),
+        ('[COLOR %s][B]%s[/B][/COLOR]' % (st.COLOR_FEL, kodi.s(30092)), dict(action='fel_list', mode='top_rated'), 'fel'),
+        (kodi.s(30093) % total, dict(action='fel_list', mode='az'), 'fel'),
+        (kodi.s(30094), dict(action='fel_decades'), 'season'),
+        (kodi.s(30095), dict(action='fel_genres'), 'genres'),
+        ('[COLOR %s][B]%s[/B][/COLOR]' % (st.COLOR_71, kodi.s(30096)), dict(action='fel_search'), 'search'),
+    ]
+    for label, kw, ic in entries:
+        url = kodi.build_url(**kw)
+        li = items.folder_item(label, icon=items.icon(ic), plot=kodi.s(30099))
+        if kw['action'] == 'fel_list':
+            li.addContextMenuItems([(kodi.s(30082), 'RunPlugin(%s)' % kodi.build_url(action='widget_path', path=url))])
+        _add(url, li)
+    xbmcplugin.setPluginCategory(kodi.HANDLE, kodi.s(30090))
+    _end(cache=False)
+
+
+def fel_decades(params):
+    cat = fel.load()
+    for key in fel.DECADES:
+        cnt = sum(1 for m in cat if fel.in_decade(m, key))
+        if not cnt:
+            continue
+        label = kodi.s(30097) if key == 'classic' else kodi.s(30098) % key
+        _add(kodi.build_url(action='fel_list', mode='decade', value=key),
+             items.folder_item('%s  [COLOR grey](%d)[/COLOR]' % (label, cnt), icon=items.icon('season')))
+    xbmcplugin.setPluginCategory(kodi.HANDLE, kodi.s(30094))
+    _end()
+
+
+def fel_genres(params):
+    for g, cnt in fel.genre_counts():
+        _add(kodi.build_url(action='fel_list', mode='genre', value=g),
+             items.folder_item('%s  [COLOR grey](%d)[/COLOR]' % (g, cnt), icon=items.icon('genres')))
+    xbmcplugin.setPluginCategory(kodi.HANDLE, kodi.s(30095))
+    _end()
+
+
+def fel_search(params):
+    q = xbmcgui.Dialog().input(kodi.s(30096))
+    if not q:
+        return _end(cache=False)
+    fel_list({'mode': 'search', 'value': q})
+
+
+def fel_list(params):
+    mode, value = params.get('mode') or 'newest', params.get('value') or ''
+    badge = '[COLOR %s][B]%s[/B][/COLOR]' % (st.COLOR_FEL, kodi.s(30099))
+    action = _movie_action()
+    for m in fel.movies(mode, value):
+        meta = fel.to_meta(m)
+        mid, name = meta['id'], meta['name']
+        if not mid:
+            continue
+        meta['description'] = '%s\n\n%s' % (badge, meta['description'])
+        url = kodi.build_url(action=action, type='movie', id=mid, title=name)
+        li = items.meta_item(meta, 'movie', playable=action == 'play', path=url)
+        li.addContextMenuItems(_context_for_meta('movie', mid, name))
+        _add(url, li, folder=action != 'play')
+    xbmcplugin.setPluginCategory(kodi.HANDLE, value if mode in ('genre', 'search') else kodi.s(30090))
+    _end('movies', cache=mode != 'search', sort=True)
+
+
+# --------------------------------------------------------------------------
 # tools
 # --------------------------------------------------------------------------
 
@@ -660,6 +758,8 @@ ROUTES = {
     'set_manifest': set_manifest, 'test': test, 'clear_cache': clear_cache_action,
     'install_tmdbh': install_tmdbh, 'settings': settings, 'noop': noop,
     'set_meta': set_meta, 'test_meta': test_meta, 'widget_path': widget_path,
+    'fel': fel_menu, 'fel_list': fel_list, 'fel_decades': fel_decades,
+    'fel_genres': fel_genres, 'fel_search': fel_search,
 }
 
 

@@ -358,3 +358,79 @@ msgstr "يُستخدم فقط عند تعيين رابط AIOMetadata."
 msgctxt "#30259"
 msgid "AIOMetadata may list movies by TMDB/TVDB id. When on, the IMDb id from its metadata is sent to AIOStreams, which most stream add-ons expect."
 msgstr "قد يعرض AIOMetadata الأفلام بمعرّفات TMDB أو TVDB. عند التفعيل يُرسَل معرّف IMDb من بياناته إلى AIOStreams، وهو ما تتوقعه معظم إضافات المصادر."
+
+msgctxt "#30090"
+msgid "4K Dolby Vision FEL"
+msgstr "أفلام 4K بتقنية Dolby Vision FEL"
+
+msgctxt "#30091"
+msgid "Newest"
+msgstr "الأحدث"
+
+msgctxt "#30092"
+msgid "Top rated"
+msgstr "الأعلى تقييمًا"
+
+msgctxt "#30093"
+msgid "All %d titles (A–Z)"
+msgstr "جميع العناوين (%d) أبجديًا"
+
+msgctxt "#30094"
+msgid "By decade"
+msgstr "حسب العقد"
+
+msgctxt "#30095"
+msgid "By genre"
+msgstr "حسب النوع"
+
+msgctxt "#30096"
+msgid "Search FEL titles"
+msgstr "البحث في عناوين FEL"
+
+msgctxt "#30097"
+msgid "Classics (before 1980)"
+msgstr "الكلاسيكيات (قبل 1980)"
+
+msgctxt "#30098"
+msgid "%ss"
+msgstr "عقد %s"
+
+msgctxt "#30099"
+msgid "★ Confirmed Dolby Vision Profile 7 FEL"
+msgstr "★ مؤكَّد: Dolby Vision بالملف التعريفي 7 FEL"
+
+msgctxt "#30260"
+msgid "Dolby Vision"
+msgstr "Dolby Vision"
+
+msgctxt "#30261"
+msgid "Sort FEL / MEL streams first"
+msgstr "ترتيب مصادر FEL و MEL أولًا"
+
+msgctxt "#30262"
+msgid "Orders streams by 4K, then Dolby Vision Profile 7 FEL, MEL, 7.1 and 5.1 audio, remuxes, known FEL release groups and file size. Titles from the FEL catalog are always sorted this way."
+msgstr "يرتّب المصادر بحسب دقة 4K أولًا، ثم Dolby Vision بالملف التعريفي 7 FEL، ثم MEL، ثم الصوت 7.1 و5.1، ثم نسخ Remux ومجموعات الإصدار المعروفة بـ FEL، ثم حجم الملف. تُرتَّب عناوين فهرس FEL بهذه الطريقة دائمًا."
+
+msgctxt "#30263"
+msgid "Stream picker"
+msgstr "نافذة اختيار المصدر"
+
+msgctxt "#30264"
+msgid "Kodi list"
+msgstr "قائمة Kodi"
+
+msgctxt "#30265"
+msgid "Full screen (artwork and colour tiers)"
+msgstr "ملء الشاشة (الصور وألوان الفئات)"
+
+msgctxt "#30266"
+msgid "Show FEL catalog in main menu"
+msgstr "إظهار فهرس FEL في القائمة الرئيسية"
+
+msgctxt "#30267"
+msgid "Dolby Vision tiers (FEL/MEL colours)"
+msgstr "فئات Dolby Vision (ألوان FEL/MEL)"
+
+msgctxt "#30268"
+msgid "Full screen shows fanart, poster and plot, with streams coloured orange (FEL), pink (MEL), blue (7.1) and red (5.1)."
+msgstr "يعرض وضع ملء الشاشة الخلفية والملصق والقصة، مع تلوين المصادر بالبرتقالي (FEL) والوردي (MEL) والأزرق (7.1) والأحمر (5.1)."

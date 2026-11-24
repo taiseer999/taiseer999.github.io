@@ -358,3 +358,79 @@ msgstr ""
 msgctxt "#30259"
 msgid "AIOMetadata may list movies by TMDB/TVDB id. When on, the IMDb id from its metadata is sent to AIOStreams, which most stream add-ons expect."
 msgstr ""
+
+msgctxt "#30090"
+msgid "4K Dolby Vision FEL"
+msgstr ""
+
+msgctxt "#30091"
+msgid "Newest"
+msgstr ""
+
+msgctxt "#30092"
+msgid "Top rated"
+msgstr ""
+
+msgctxt "#30093"
+msgid "All %d titles (A–Z)"
+msgstr ""
+
+msgctxt "#30094"
+msgid "By decade"
+msgstr ""
+
+msgctxt "#30095"
+msgid "By genre"
+msgstr ""
+
+msgctxt "#30096"
+msgid "Search FEL titles"
+msgstr ""
+
+msgctxt "#30097"
+msgid "Classics (before 1980)"
+msgstr ""
+
+msgctxt "#30098"
+msgid "%ss"
+msgstr ""
+
+msgctxt "#30099"
+msgid "★ Confirmed Dolby Vision Profile 7 FEL"
+msgstr ""
+
+msgctxt "#30260"
+msgid "Dolby Vision"
+msgstr ""
+
+msgctxt "#30261"
+msgid "Sort FEL / MEL streams first"
+msgstr ""
+
+msgctxt "#30262"
+msgid "Orders streams by 4K, then Dolby Vision Profile 7 FEL, MEL, 7.1 and 5.1 audio, remuxes, known FEL release groups and file size. Titles from the FEL catalog are always sorted this way."
+msgstr ""
+
+msgctxt "#30263"
+msgid "Stream picker"
+msgstr ""
+
+msgctxt "#30264"
+msgid "Kodi list"
+msgstr ""
+
+msgctxt "#30265"
+msgid "Full screen (artwork and colour tiers)"
+msgstr ""
+
+msgctxt "#30266"
+msgid "Show FEL catalog in main menu"
+msgstr ""
+
+msgctxt "#30267"
+msgid "Dolby Vision tiers (FEL/MEL colours)"
+msgstr ""
+
+msgctxt "#30268"
+msgid "Full screen shows fanart, poster and plot, with streams coloured orange (FEL), pink (MEL), blue (7.1) and red (5.1)."
+msgstr ""

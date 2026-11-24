@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+    <onload>SetProperty(AIOStreamsPicker,1,home)</onload>
+    <onunload>ClearProperty(AIOStreamsPicker,home)</onunload>
+    <defaultcontrol always="true">30002</defaultcontrol>
+    <controls>
+        <!-- Deep cinema dark backdrop + movie fanart -->
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <texture colordiffuse="FF080A0F">white.png</texture>
+        </control>
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <aspectratio>scale</aspectratio>
+            <texture colordiffuse="33FFFFFF">$INFO[Window.Property(fanart)]</texture>
+        </control>
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <texture colordiffuse="CC080A0F">white.png</texture>
+        </control>
+
+        <!-- Header -->
+        <control type="label">
+            <left>64</left>
+            <top>36</top>
+            <width>1250</width>
+            <height>58</height>
+            <font>font45</font>
+            <textcolor>FFFFFFFF</textcolor>
+            <label>[B]$INFO[Window.Property(title)][/B]</label>
+        </control>
+        <control type="label">
+            <left>64</left>
+            <top>98</top>
+            <width>1250</width>
+            <height>34</height>
+            <font>font13</font>
+            <textcolor>B3EDEDED</textcolor>
+            <label>$INFO[Window.Property(subtitle)]</label>
+        </control>
+        <control type="label">
+            <left>64</left>
+            <top>144</top>
+            <width>1250</width>
+            <height>34</height>
+            <font>font12</font>
+            <textcolor>FFEDEDED</textcolor>
+            <label>$INFO[Window.Property(counts)]</label>
+        </control>
+        <control type="image">
+            <left>64</left>
+            <top>188</top>
+            <width>1250</width>
+            <height>2</height>
+            <texture colordiffuse="33FFFFFF">white.png</texture>
+        </control>
+
+        <!-- Stream list (left column) -->
+        <control type="list" id="30002">
+            <left>64</left>
+            <top>204</top>
+            <width>1250</width>
+            <height>830</height>
+            <orientation>vertical</orientation>
+            <itemlayout height="114">
+                <control type="image">
+                    <left>0</left>
+                    <top>4</top>
+                    <width>1250</width>
+                    <height>104</height>
+                    <texture colordiffuse="66141821">white.png</texture>
+                </control>
+                <!-- Resolution pill -->
+                <control type="image">
+                    <left>16</left>
+                    <top>26</top>
+                    <width>96</width>
+                    <height>58</height>
+                    <texture colordiffuse="AA0B0E14">white.png</texture>
+                </control>
+                <control type="label">
+                    <left>16</left>
+                    <top>26</top>
+                    <width>96</width>
+                    <height>58</height>
+                    <font>font13</font>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <label>$INFO[ListItem.Property(res)]</label>
+                </control>
+                <!-- Line 1: Flags (FEL/MEL + 7.1 + Quality + Group + DV + Audio) -->
+                <control type="label">
+                    <left>130</left>
+                    <top>16</top>
+                    <width>880</width>
+                    <height>38</height>
+                    <font>font13</font>
+                    <aligny>center</aligny>
+                    <label>$INFO[ListItem.Property(flags)]</label>
+                </control>
+                <!-- Line 2: Filename -->
+                <control type="label">
+                    <left>130</left>
+                    <top>58</top>
+                    <width>880</width>
+                    <height>34</height>
+                    <font>font10</font>
+                    <aligny>center</aligny>
+                    <label>$INFO[ListItem.Property(filename)]</label>
+                </control>
+                <!-- Right column: Size + Debrid -->
+                <control type="label">
+                    <left>1020</left>
+                    <top>16</top>
+                    <width>210</width>
+                    <height>38</height>
+                    <font>font13</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <label>$INFO[ListItem.Property(size)]</label>
+                </control>
+                <control type="label">
+                    <left>1020</left>
+                    <top>58</top>
+                    <width>210</width>
+                    <height>34</height>
+                    <font>font12</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <label>$INFO[ListItem.Property(debrid)]  ·  $INFO[ListItem.Property(addon)]</label>
+                </control>
+            </itemlayout>
+            <focusedlayout height="114">
+                <control type="image">
+                    <left>0</left>
+                    <top>4</top>
+                    <width>1250</width>
+                    <height>104</height>
+                    <texture colordiffuse="E6222A3A">white.png</texture>
+                </control>
+                <control type="image">
+                    <left>0</left>
+                    <top>4</top>
+                    <width>6</width>
+                    <height>104</height>
+                    <texture colordiffuse="$INFO[ListItem.Property(accent)]">white.png</texture>
+                </control>
+                <control type="image">
+                    <left>16</left>
+                    <top>26</top>
+                    <width>96</width>
+                    <height>58</height>
+                    <texture colordiffuse="FF080A0F">white.png</texture>
+                </control>
+                <control type="label">
+                    <left>16</left>
+                    <top>26</top>
+                    <width>96</width>
+                    <height>58</height>
+                    <font>font13</font>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <label>$INFO[ListItem.Property(res)]</label>
+                </control>
+                <control type="label">
+                    <left>130</left>
+                    <top>16</top>
+                    <width>880</width>
+                    <height>38</height>
+                    <font>font13</font>
+                    <aligny>center</aligny>
+                    <scroll>true</scroll>
+                    <label>[B]$INFO[ListItem.Property(flags)][/B]</label>
+                </control>
+                <control type="label">
+                    <left>130</left>
+                    <top>58</top>
+                    <width>880</width>
+                    <height>34</height>
+                    <font>font10</font>
+                    <aligny>center</aligny>
+                    <scroll>true</scroll>
+                    <label>$INFO[ListItem.Property(filename)]</label>
+                </control>
+                <control type="label">
+                    <left>1020</left>
+                    <top>16</top>
+                    <width>210</width>
+                    <height>38</height>
+                    <font>font13</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <label>$INFO[ListItem.Property(size)]</label>
+                </control>
+                <control type="label">
+                    <left>1020</left>
+                    <top>58</top>
+                    <width>210</width>
+                    <height>34</height>
+                    <font>font12</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <label>$INFO[ListItem.Property(debrid)]  ·  $INFO[ListItem.Property(addon)]</label>
+                </control>
+            </focusedlayout>
+        </control>
+
+        <!-- Right column: Movie Poster + Plot -->
+        <control type="image">
+            <left>1364</left>
+            <top>54</top>
+            <width>492</width>
+            <height>720</height>
+            <aspectratio align="center" aligny="top">keep</aspectratio>
+            <texture>$INFO[Window.Property(poster)]</texture>
+        </control>
+        <control type="textbox">
+            <left>1364</left>
+            <top>790</top>
+            <width>492</width>
+            <height>244</height>
+            <font>font10</font>
+            <textcolor>CCEDEDED</textcolor>
+            <label>$INFO[Window.Property(plot)]</label>
+        </control>
+    </controls>
+</window>
