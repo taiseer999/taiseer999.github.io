@@ -447,6 +447,7 @@
                 <texturebg border="3" colordiffuse="00FFFFFF">abk_lp/pill6.png</texturebg>
                 <midtexture border="3" colordiffuse="FFFFFFFF">abk_lp/pill6.png</midtexture>
             <lefttexture/><righttexture/><overlaytexture/></control>
+            <include>ABK_LP_Markers</include>
             <control type="progress">
                 <left>0</left>
                 <top>-3</top>
@@ -549,6 +550,7 @@
                 <texturebg border="3" colordiffuse="00FFFFFF">abk_lp/pill6.png</texturebg>
                 <midtexture border="3" colordiffuse="FFFFFFFF">abk_lp/pill6.png</midtexture>
             <lefttexture/><righttexture/><overlaytexture/></control>
+            <include>ABK_LP_Markers</include>
             <control type="slider" id="401">
                 <left>0</left>
                 <top>-10</top>
@@ -792,6 +794,43 @@
          row's Down (Action_OSD_Main_OnDown) still opens the same window, so
          show the same text. One label (not AF3's two side by side) so Arabic
          reads in order: "اضغط للأسفل: قائمة التشغيل". -->
+    <!-- 4.12.40: chapter, EDL cut and scene markers on the Lucent bars, as AF3
+         draws them on its own seek bar since jurialmunkey/skin.arctic.fuse.3
+         a514e2a ("Add EDL markers to the OSD seekbar"). Chapters: AF3's tick
+         (progress/marker.png, in every AF3); cuts / scene markers: Lucent's
+         own white dot, so an older AF3 without marker-dot.png shows them too. -->
+    <include name="ABK_LP_Markers">
+        <control type="group">
+            <left>0</left>
+            <top>-3</top>
+            <width>1728</width>
+            <height>12</height>
+            <control type="ranges">
+                <width>1728</width>
+                <height>12</height>
+                <texturebg colordiffuse="00FFFFFF">abk_lp/white.png</texturebg>
+                <righttexture colordiffuse="99FFFFFF">progress/marker.png</righttexture>
+                <info>Player.Chapters</info>
+            </control>
+            <control type="group">
+                <visible>Player.HasVideo + !Pvr.IsPlayingTv</visible>
+                <control type="ranges">
+                    <width>1728</width>
+                    <height>12</height>
+                    <texturebg colordiffuse="00FFFFFF">abk_lp/white.png</texturebg>
+                    <righttexture colordiffuse="FFFFFFFF">abk_lp/pinfo/dot.png</righttexture>
+                    <info>Player.Cuts</info>
+                </control>
+                <control type="ranges">
+                    <width>1728</width>
+                    <height>12</height>
+                    <texturebg colordiffuse="00FFFFFF">abk_lp/white.png</texturebg>
+                    <righttexture colordiffuse="FFFFFFFF">abk_lp/pinfo/dot.png</righttexture>
+                    <info>Player.SceneMarkers</info>
+                </control>
+            </control>
+        </control>
+    </include>
     <!-- 4.12.39: drawn by the window on top. In DialogSeekBar it sat under
          VideoOSD's bottom gradient (F2000000) and came out nearly black, so
          VideoOSD draws it while the OSD is open, DialogSeekBar only for the
@@ -1167,6 +1206,7 @@
                 <texturebg border="3" colordiffuse="00FFFFFF">abk_lp/pill6.png</texturebg>
                 <midtexture border="3" colordiffuse="FFFFFFFF">abk_lp/pill6.png</midtexture>
             <lefttexture/><righttexture/><overlaytexture/></control>
+            <include>ABK_LP_Markers</include>
         </control>
         </control>
 

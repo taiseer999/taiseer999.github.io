@@ -1,3 +1,12 @@
+v4.12.41  (2026-11-24)
+- Lucent Player: chapter, EDL cut and scene markers on its progress bars
+  (OSD, seek bar, and the third bar), like AF3's own seek bar since
+  jurialmunkey/skin.arctic.fuse.3 a514e2a. New include ABK_LP_Markers in
+  Includes_ABK_LucentPlayer.xml: chapters with AF3's tick
+  (progress/marker.png), Player.Cuts / Player.SceneMarkers (video, not live
+  TV) with Lucent's white dot (abk_lp/pinfo/dot.png), so an AF3 older than
+  the commit shows them too.
+
 v4.12.40  (2026-11-24)
 - Najd: you can say no to it. Mods > Najd Smart Subtitles has
   "Remove Najd (and do not install it again)" when it is installed and
