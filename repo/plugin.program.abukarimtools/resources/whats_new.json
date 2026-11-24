@@ -2,6 +2,15 @@
  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
  "entries": [
   {
+   "v": "4.12.31",
+   "en": [
+    "AF3: new switch \"AF3: Watched percentage\" - the watched percentage as a number (e.g. 45%) above the progress circle on posters and thumbnails (needs AF3 50.12.7)."
+   ],
+   "ar": [
+    "AF3: مفتاح جديد «AF3: نسبة المشاهدة» يعرض نسبة المشاهدة رقمًا (مثل 45%) فوق دائرة التقدّم على الملصقات والصور المصغّرة (يتطلّب AF3 50.12.7)."
+   ]
+  },
+  {
    "v": "4.12.30",
    "from": "4.12.22",
    "en": [

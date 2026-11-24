@@ -3616,3 +3616,23 @@ msgctxt "#32367"
 msgid "FFmpeg tools could not be installed"
 msgstr "تعذّر تثبيت أدوات FFmpeg"
 
+msgctxt "#32368"
+msgid "AF3: Watched percentage"
+msgstr "AF3: نسبة المشاهدة"
+
+msgctxt "#32369"
+msgid "Watched percentage shown"
+msgstr "ظهرت نسبة المشاهدة"
+
+msgctxt "#32370"
+msgid "Watched percentage hidden"
+msgstr "أُخفيت نسبة المشاهدة"
+
+msgctxt "#32371"
+msgid "This needs Arctic Fuse 3 50.12.7 or newer. Update the skin, then try again."
+msgstr "يتطلّب هذا الخيار Arctic Fuse 3 بالإصدار 50.12.7 أو أحدث. حدِّث الواجهة ثم حاول مرة أخرى."
+
+msgctxt "#32372"
+msgid "Shows how much of a movie or an episode you have watched, or how many episodes of a show, as a number (e.g. 45%) above the progress circle on posters and thumbnails."
+msgstr "تعرض مقدار ما شاهدته من الفيلم أو الحلقة، أو نسبة الحلقات المشاهدة من المسلسل، رقمًا (مثل 45%) فوق دائرة التقدّم على الملصقات والصور المصغّرة."
+

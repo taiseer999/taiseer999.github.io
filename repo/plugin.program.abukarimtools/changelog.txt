@@ -1,3 +1,9 @@
+v4.12.31  (2026-11-24)
+- New AF3 switch "AF3: Watched percentage" (af3_percent_toggle.py, in the AF3
+  group): AF3 50.12.7+ shows the watched percentage as a number in a small
+  pill above the progress circle; the switch flips the skin bool
+  abk.hidepercent (on by default, read live - no skin reload).
+
 v4.12.30  (2026-11-23)
 - Search All: a turning busy ring (lucent/spinner.png, rotate animation) in
   the count's place while an add-on searches - in the add-on list on the
