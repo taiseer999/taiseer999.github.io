@@ -183,11 +183,31 @@ _TMDBH_GENRE_LIST_LANG_BLOCK_V3 = (
              "                    connection.execute(\"DELETE FROM expiry WHERE id='genres'\")\n")
 )
 
+# v4 (4.12.45): same code as v3, NEW stamp keys, so every box flushes once more.
+# 2026-11-24 AM9 kodi.log + screenshot: plot/title Arabic but genres English
+# ("Thriller / Mystery / Comedy"). Item genre names are mapped from the global
+# genre list (ItemQueries.db) at fetch time. On boxes where the v1/v2 list
+# refresh hung on its own lock (4.8.43), the item refresh had already stamped
+# ar-SA and refilled its genre rows from the still-English list; v3 then fixed
+# the list but kept the old stamps, so those English rows were never flushed.
+_TMDBH_GENRE_LANG_BLOCK_V4 = (
+    _TMDBH_GENRE_LANG_BLOCK_V3
+    .replace('genre language refresh v3 (by', 'genre language refresh v4 (by')
+    .replace("'genre_language_v2'", "'genre_language_v3'")
+    .replace('ABK.GenreLanguage6.Checked', 'ABK.GenreLanguage6v4.Checked')
+)
+_TMDBH_GENRE_LIST_LANG_BLOCK_V4 = (
+    _TMDBH_GENRE_LIST_LANG_BLOCK_V3
+    .replace('genre list language refresh v3 (by', 'genre list language refresh v4 (by')
+    .replace("'genre_list_language'", "'genre_list_language_v2'")
+    .replace('ABK.GenreListLanguage6.Checked', 'ABK.GenreListLanguage6v4.Checked')
+)
+
 # Stock file, or one carrying any earlier ABK block (v1 / v2): the class line
 # plus the old block, up to its success log line, is replaced by v3.
 _TMDBH_GENRE_V3_PATTERN = (
     r"(    cache_filename = [\"']__DB__\.db[\"'][ \t]*\r?\n)"
-    r"(?:\r?\n    # -- TMDbHelper __TITLE__(?: v2)? \(by ABUKARIM TOOLS\) --\r?\n"
+    r"(?:\r?\n    # -- TMDbHelper __TITLE__(?: v[23])? \(by ABUKARIM TOOLS\) --\r?\n"
     r"[\s\S]*?ABK __TITLE__ -> [^\n]*\n)?"
 )
 
@@ -3144,11 +3164,11 @@ PATCHES = [
         # through the regex below instead.
         # 4.8.43: v3 - stock, v1 and v2 files all go through the regex.
         'old': '',
-        'new': "    cache_filename = 'ItemDetails.db'\n" + _TMDBH_GENRE_LANG_BLOCK_V3,
-        'already_patched_check': '# -- TMDbHelper genre language refresh v3 (by ABUKARIM TOOLS) --',
+        'new': "    cache_filename = 'ItemDetails.db'\n" + _TMDBH_GENRE_LANG_BLOCK_V4,
+        'already_patched_check': '# -- TMDbHelper genre language refresh v4 (by ABUKARIM TOOLS) --',
         'fallback_pattern': (_TMDBH_GENRE_V3_PATTERN.replace('__DB__', 'ItemDetails')
                              .replace('__TITLE__', 'genre language refresh')),
-        'fallback_repl': lambda _m: _m.group(1) + _TMDBH_GENRE_LANG_BLOCK_V3,
+        'fallback_repl': lambda _m: _m.group(1) + _TMDBH_GENRE_LANG_BLOCK_V4,
         'description': 'TMDbHelper database.py – refresh cached genres when the language changes',
         'max_version': '6.99.99',          # 7.x: see the v7 entry below
     },
@@ -3159,11 +3179,11 @@ PATCHES = [
         # 4.8.43: v3 - commits TMDbHelper's init connection, 2 s timeout,
         # once per session (v1 locked ItemQueries.db for 60 s per widget).
         'old': '',
-        'new': "    cache_filename = 'ItemQueries.db'\n" + _TMDBH_GENRE_LIST_LANG_BLOCK_V3,
-        'already_patched_check': '# -- TMDbHelper genre list language refresh v3 (by ABUKARIM TOOLS) --',
+        'new': "    cache_filename = 'ItemQueries.db'\n" + _TMDBH_GENRE_LIST_LANG_BLOCK_V4,
+        'already_patched_check': '# -- TMDbHelper genre list language refresh v4 (by ABUKARIM TOOLS) --',
         'fallback_pattern': (_TMDBH_GENRE_V3_PATTERN.replace('__DB__', 'ItemQueries')
                              .replace('__TITLE__', 'genre list language refresh')),
-        'fallback_repl': lambda _m: _m.group(1) + _TMDBH_GENRE_LIST_LANG_BLOCK_V3,
+        'fallback_repl': lambda _m: _m.group(1) + _TMDBH_GENRE_LIST_LANG_BLOCK_V4,
         'description': 'TMDbHelper query database.py \u2013 refresh the global genre list when the language changes',
         'max_version': '6.99.99',          # 7.x: see the v7 entry below
     },

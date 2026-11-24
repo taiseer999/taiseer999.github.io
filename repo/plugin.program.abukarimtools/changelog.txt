@@ -1,3 +1,15 @@
+v4.12.45  (2026-11-24)
+- TMDbHelper 6.x: genres stayed English ("Thriller / Mystery / Comedy")
+  under ar-SA while the title and plot were Arabic (AM9, kodi.log
+  2026-11-24). Item genre names are mapped from the global genre list
+  (ItemQueries.db) when the item is fetched. On boxes where the old list
+  refresh hung on its own lock (fixed in 4.8.43), the item refresh had
+  already stamped ar-SA and refilled its genre rows from the still-English
+  list. v3 fixed the list but kept the old stamps, so those rows were never
+  flushed again. "Genres Follow Language" is now v4: same code, new stamp
+  keys, so both caches are flushed once more and refetched in Arabic.
+  Applied by the next patch sweep; stock and v1-v3 files are upgraded.
+
 v4.12.42  (2026-11-24)
 - Lucent Player: a notification (Najd's subtitle status) covered the
   "-time left / duration" row. AF3 lifts notifications 70 / 80 px for its
