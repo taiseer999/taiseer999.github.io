@@ -1932,22 +1932,6 @@ msgctxt "#30889"
 msgid "none in the video"
 msgstr "لا توجد في الفيديو"
 
-msgctxt "#30890"
-msgid "AF3: Plot on the Right"
-msgstr "AF3: القصة على اليمين"
-
-msgctxt "#30891"
-msgid "The plot now shows on the right"
-msgstr "أصبحت القصة تظهر على اليمين"
-
-msgctxt "#30892"
-msgid "The plot is back on the left"
-msgstr "عادت القصة إلى اليسار"
-
-msgctxt "#30893"
-msgid "Plot on the right: Arctic Fuse 3 could not be patched. Run Apply Patches and try again."
-msgstr "القصة على اليمين: تعذّر ترقيع واجهة Arctic Fuse 3. شغّل تطبيق الترقيعات ثم أعد المحاولة."
-
 msgctxt "#30900"
 msgid "Fix Add-on Settings Version"
 msgstr "إصلاح إصدار إعدادات الإضافات"
@@ -2896,10 +2880,6 @@ msgctxt "#32181"
 msgid "Build the side menu and widgets of the Lucent skin from your Arctic Fuse 3 menu."
 msgstr "بناء القائمة الجانبية وودجات واجهة لوسنت من قائمة Arctic Fuse 3 لديك."
 
-msgctxt "#32182"
-msgid "Show the plot complete in a glass box on the right side of the Arctic Fuse 3 Home page."
-msgstr "عرض القصة كاملةً في صندوق زجاجي على الجانب الأيمن من الصفحة الرئيسية لـ Arctic Fuse 3."
-
 msgctxt "#32183"
 msgid "Size of the plot text in Arctic Fuse 3: large or small."
 msgstr "حجم نص القصة في Arctic Fuse 3: كبير أو صغير."
@@ -3635,4 +3615,8 @@ msgstr "يتطلّب هذا الخيار Arctic Fuse 3 بالإصدار 50.12.7 
 msgctxt "#32372"
 msgid "Shows how much of a movie or an episode you have watched, or how many episodes of a show, as a number (e.g. 45%) above the progress circle on posters and thumbnails."
 msgstr "تعرض مقدار ما شاهدته من الفيلم أو الحلقة، أو نسبة الحلقات المشاهدة من المسلسل، رقمًا (مثل 45%) فوق دائرة التقدّم على الملصقات والصور المصغّرة."
+
+msgctxt "#32373"
+msgid "TMDbHelper Arabic translation installed - restart Kodi to see it."
+msgstr "ثُبِّتت الترجمة العربية لـ TMDbHelper، أعد تشغيل Kodi لتظهر."
 

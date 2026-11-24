@@ -96,13 +96,12 @@ def rows(answers):
         _log('Glass Theme rows left out: %s' % e, xbmc.LOGWARNING)
     if af3:
         from resources.lib.af3_trailers import config as tcfg
-        from resources.lib import af3_waves_toggle, af3_lucent_toggle, af3_plotright_toggle
+        from resources.lib import af3_waves_toggle, af3_lucent_toggle
         out.append(('trailers', T(30430), bool(tcfg.load()['enabled']), None))
         out.append(('waves', T(30603), bool(af3_waves_toggle.waves_on()), None))
         out.append(('af3_lucent', T(30850), af3_lucent_toggle.get_mode(),
                     [(m, T(30857) if m == 'off' else T(l))
                      for m, _c, l in af3_lucent_toggle.MODES]))
-        out.append(('plotright', T(30890), bool(af3_plotright_toggle.plot_right_on()), None))
         from resources.lib import af3_lucentplayer_toggle
         out.append(('lucentplayer', T(32080), af3_lucentplayer_toggle.player_on(), None))
     from resources.lib import font_scale
@@ -236,22 +235,6 @@ def _set_waves(on):
     return 'waves %s' % ('on' if on else 'off')
 
 
-def _set_plotright(on):
-    from resources.lib import af3_plotright_toggle as ap
-    if on:
-        xbmc.executebuiltin('Skin.SetBool(%s)' % ap.SETTING)
-        if not ap._tworow_on():
-            xbmc.executebuiltin('Skin.SetBool(%s)' % ap.TWOROW)
-            ap._save(dict(ap._load(), tworow_set=True))
-    else:
-        xbmc.executebuiltin('Skin.Reset(%s)' % ap.SETTING)
-        state = ap._load()
-        if state.pop('tworow_set', False) and ap._tworow_on():
-            xbmc.executebuiltin('Skin.Reset(%s)' % ap.TWOROW)
-        ap._save(state)
-    return 'plot right %s' % ('on' if on else 'off')
-
-
 def _set_af3_lucent(mode):
     from resources.lib import af3_lucent_toggle as al
     if mode != 'off' and not al._files_present():
@@ -282,7 +265,7 @@ def apply(changes):
     """Returns (status, detail, changed). Each row is fenced on its own."""
     if not changes:
         return 'skipped', 'no changes', False
-    af3_keys = ('dplex', 'korean', 'trailers', 'waves', 'af3_lucent', 'plotright', 'lucentplayer')
+    af3_keys = ('dplex', 'korean', 'trailers', 'waves', 'af3_lucent', 'lucentplayer')
     if any(k in changes for k in af3_keys) and not _af3_active():
         _log('Arctic Fuse 3 is not the active skin - its rows wait', xbmc.LOGWARNING)
     else:
@@ -303,7 +286,7 @@ def apply(changes):
     if lucent_sub:
         jobs.append(('glass', lambda: _set_lucent(lucent_sub)))
     for key, fn in (('trailers', _set_trailers), ('waves', _set_waves),
-                    ('plotright', _set_plotright), ('af3_lucent', _set_af3_lucent),
+                    ('af3_lucent', _set_af3_lucent),
                     ('lucentplayer', _set_lucentplayer),
                     ('font_scale', _set_font)):
         if key in changes:

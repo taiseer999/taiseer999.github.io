@@ -17,7 +17,7 @@ the Pill style shows straight away; the skin setting can still pick Plain text.
 
 4.10.10: upstream draws the details on ONE row (the "i" pill, the stars, the
 date and the duration side by side). AF3's "Two-line information bar"
-(InfoBar.TwoRow - also switched on by AF3: Plot on the Right) splits them and
+(InfoBar.TwoRow) splits them and
 keeps the plain labels on the second row, so turning Default OSD on also turns
 TwoRow off; turning it off again restores TwoRow only when this switch cleared it.
 """

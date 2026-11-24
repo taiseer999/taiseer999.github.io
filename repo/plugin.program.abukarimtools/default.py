@@ -40,8 +40,6 @@ ACTION_MODES = {'skin_switch', 'settings_view', 'first_run', 'abukarimwizard',
                 # 3.1.19: an action, not a folder - as a folder its URL became
                 # the container path, so the skin reload re-ran it in a loop
                 'af3_trailers', 'af3_waves',
-                # 4.6.15: AF3 Plot on the Right (on/off switch)
-                'af3_plotright',
                 # 4.7.41: AF3 Plot Text Size (Normal / Small)
                 'af3_plotsize',
                 # 4.7.36: AF3 Disc Menu for ISO Streams (on/off switch)
@@ -575,9 +573,6 @@ def router():
     elif mode == 'af3_lucent':
         from resources.lib import af3_lucent_toggle
         af3_lucent_toggle.run()
-    elif mode == 'af3_plotright':
-        from resources.lib import af3_plotright_toggle
-        af3_plotright_toggle.run()
     elif mode == 'af3_plotsize':
         from resources.lib import af3_plotsize
         af3_plotsize.run()

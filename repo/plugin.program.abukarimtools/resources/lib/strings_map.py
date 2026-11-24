@@ -37,7 +37,6 @@ ID ranges:
   30850-30859  AF3 Lucent Look (Toggles)
   30860-30874  AF3 Streaming Services (Setup)
   30880-30889  AF3 subtitle list (OSD, Lucent Look)
-  30890-30893  AF3 Plot on the Right (Toggles)
   30900-30909  Maintenance - Fix Add-on Settings Version
   30910-30969  Installation Wizard 4.7 - checks, summary, resume, report, progress pill
   30970-30989  Installation Wizard 4.7.9 - Toggles page, TMDb Helper accounts
@@ -713,12 +712,6 @@ STRINGS = {
     30887: ('hearing impaired', 'لضعاف السمع'),
     30888: ('Subtitle look...', 'مظهر الترجمة...'),
     30889: ('none in the video', 'لا توجد في الفيديو'),
-    # ---- 4.6.15: AF3 Plot on the Right (30890-30893) ----
-    30890: ('AF3: Plot on the Right', 'AF3: القصة على اليمين'),
-    30891: ('The plot now shows on the right', 'أصبحت القصة تظهر على اليمين'),
-    30892: ('The plot is back on the left', 'عادت القصة إلى اليسار'),
-    30893: ('Plot on the right: Arctic Fuse 3 could not be patched. Run Apply Patches and try again.',
-            'القصة على اليمين: تعذّر ترقيع واجهة Arctic Fuse 3. شغّل تطبيق الترقيعات ثم أعد المحاولة.'),
     # ---- 4.6.31: Fix Add-on Settings Version (30900-30909) ----
     30900: ('Fix Add-on Settings Version', 'إصلاح إصدار إعدادات الإضافات'),
     30901: ('%d add-on(s) have settings saved by a newer Kodi (version %d). This Kodi reads version %d only, so these add-ons run as if they were never set up:[CR][CR]%s[CR][CR]Convert them now? A backup of each file is kept and Kodi restarts afterwards.',
@@ -1041,7 +1034,6 @@ STRINGS = {
     32179: ('Navy glass colours for Arctic Fuse 3: off, Lucent Glass, or Lucent Glass on true black.', 'ألوان زجاجية كحلية لـ Arctic Fuse 3: إيقاف، أو زجاج لوسنت، أو زجاج لوسنت على أسود تام.'),
     32180: ('The Lucent player screen in Arctic Fuse 3: controls, seek bar, pause card and statistics.', 'شاشة مشغّل لوسنت في Arctic Fuse 3: أزرار التحكم وشريط التقديم وبطاقة الإيقاف المؤقت والإحصاءات.'),
     32181: ('Build the side menu and widgets of the Lucent skin from your Arctic Fuse 3 menu.', 'بناء القائمة الجانبية وودجات واجهة لوسنت من قائمة Arctic Fuse 3 لديك.'),
-    32182: ('Show the plot complete in a glass box on the right side of the Arctic Fuse 3 Home page.', 'عرض القصة كاملةً في صندوق زجاجي على الجانب الأيمن من الصفحة الرئيسية لـ Arctic Fuse 3.'),
     32183: ('Size of the plot text in Arctic Fuse 3: large or small.', 'حجم نص القصة في Arctic Fuse 3: كبير أو صغير.'),
     32184: ('Disc Menu and Normal Player buttons while a Blu-ray ISO plays from a stream; disc links that would not play open as discs.', 'زرّا قائمة القرص والمشغّل العادي أثناء تشغيل ملف Blu-ray ISO مبثوث، وتُفتح روابط الأقراص التي يتعذّر تشغيلها كأقراص.'),
     32185: ('The colour codec, HDR, audio and source badges in the Arctic Fuse 3 player.', 'الشارات الملوّنة للترميز وHDR والصوت والمصدر في مشغّل Arctic Fuse 3.'),
@@ -1182,10 +1174,12 @@ STRINGS = {
     32366: ('FFmpeg tools are installed', 'ثُبّتت أدوات FFmpeg'),
     32367: ('FFmpeg tools could not be installed', 'تعذّر تثبيت أدوات FFmpeg'),
     32217: ('AB Tools in glass: white icons with no background and a see-through window.', 'أدوات AB بمظهر زجاجي: أيقونات بيضاء بلا خلفية ونافذة شفافة.'),
-    # ---- 4.12.31: AF3 Watched percentage (32368-32372) ----
+    # ---- 4.12.31: AF3 Watched percentage (32368-32372); 4.12.34: TMDbHelper restart note (32373) ----
     32368: ('AF3: Watched percentage', 'AF3: نسبة المشاهدة'),
     32369: ('Watched percentage shown', 'ظهرت نسبة المشاهدة'),
     32370: ('Watched percentage hidden', 'أُخفيت نسبة المشاهدة'),
     32371: ('This needs Arctic Fuse 3 50.12.7 or newer. Update the skin, then try again.', 'يتطلّب هذا الخيار Arctic Fuse 3 بالإصدار 50.12.7 أو أحدث. حدِّث الواجهة ثم حاول مرة أخرى.'),
+    32373: ('TMDbHelper Arabic translation installed - restart Kodi to see it.',
+            'ثُبِّتت الترجمة العربية لـ TMDbHelper، أعد تشغيل Kodi لتظهر.'),
     32372: ('Shows how much of a movie or an episode you have watched, or how many episodes of a show, as a number (e.g. 45%) above the progress circle on posters and thumbnails.', 'تعرض مقدار ما شاهدته من الفيلم أو الحلقة، أو نسبة الحلقات المشاهدة من المسلسل، رقمًا (مثل 45%) فوق دائرة التقدّم على الملصقات والصور المصغّرة.'),
 }

@@ -1,378 +1,396 @@
 {
- "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
- "entries": [
-  {
-   "v": "4.12.32",
-   "en": [
-    "TMDbHelper in Arabic: a full Arabic translation (every string of TMDbHelper 6.22) is installed into TMDbHelper and restored after its updates."
-   ],
-   "ar": [
-    "TMDbHelper بالعربية: تُثبَّت ترجمة عربية كاملة (كل نصوص TMDbHelper 6.22) داخل TMDbHelper، وتُعاد بعد تحديثاته."
-   ]
-  },
-  {
-   "v": "4.12.31",
-   "en": [
-    "AF3: new switch \"AF3: Watched percentage\" - the watched percentage as a number (e.g. 45%) above the progress circle on posters and thumbnails (needs AF3 50.12.7)."
-   ],
-   "ar": [
-    "AF3: مفتاح جديد «AF3: نسبة المشاهدة» يعرض نسبة المشاهدة رقمًا (مثل 45%) فوق دائرة التقدّم على الملصقات والصور المصغّرة (يتطلّب AF3 50.12.7)."
-   ]
-  },
-  {
-   "v": "4.12.30",
-   "from": "4.12.22",
-   "en": [
-    "Search All shows every add-on with its icon: on the left one add-on per line with its icon, name and stream count (a turning busy ring while it searches); icons on the filter tabs and on each stream card. Usenet and My folders have icons too, also as the service of their streams.",
-    "When the search ends, Search All goes to the All tab with the best stream (the top one) selected.",
-    "The filter tabs work one at a time (an add-on, a quality or a service), every stream shows its badges in every tab, and an add-on with no streams no longer gets a tab.",
-    "The stream details on the left (resolution, video, HDR / Dolby Vision, audio, channels, release, service) show badges and the service logo instead of text - in Search All and in the Fen Light, Red Light, POV and Umbrella source windows.",
-    "Arctic Fuse 3 no longer freezes because of stacked widgets - also with a skin user profile and after the home menus are rebuilt."
-   ],
-   "ar": [
-    "يعرض Search All كل إضافة بأيقونتها: على اليسار كل إضافة في سطر بأيقونتها واسمها وعدد روابطها (وحلقة انتظار دوّارة أثناء بحثها)، والأيقونات على أزرار التصفية وعلى بطاقة كل رابط. ولـ Usenet ومجلداتي أيقونتان أيضًا، وتظهران كذلك خدمةً لروابطهما.",
-    "عند انتهاء البحث ينتقل Search All إلى «الكل» ويحدّد أفضل رابط، وهو الأول في القائمة.",
-    "تعمل أزرار التصفية واحدًا في كل مرة (إضافة أو دقة أو خدمة)، وتظهر شارات كل رابط في كل تبويب، ولم تعد الإضافة التي لا روابط لها تحصل على زر.",
-    "تفاصيل الرابط على اليسار (الدقة، والفيديو، وHDR وDolby Vision، والصوت، والقنوات، والإصدار، والخدمة) تظهر شاراتٍ وشعارَ الخدمة بدل النص، في Search All وفي نوافذ المصادر في Fen Light وRed Light وPOV وUmbrella.",
-    "لم تعد واجهة Arctic Fuse 3 تتجمّد بسبب الصفوف المتتابعة، حتى مع ملف مستخدم للواجهة وبعد إعادة بناء القوائم الرئيسية."
-   ]
-  },
-  {
-   "v": "4.12.21",
-   "en": [
-    "Najd never takes subtitle timing from another cut of the film (Director's Cut vs Theatrical), keeps the video's own subtitle timing after a slow read, and opens easynews links reliably.",
-    "a4kSubtitles no longer logs an error when a stream is too slow to hash."
-   ],
-   "ar": [
-    "لا تأخذ نجد توقيت الترجمة من نسخة أخرى للفيلم (نسخة المخرج مقابل النسخة السينمائية)، وتحتفظ بتوقيت ترجمة الفيديو نفسه بعد قراءة بطيئة، وتفتح روابط easynews بثبات.",
-    "لم تعد a4kSubtitles تسجّل خطأً عندما يكون البث أبطأ من أن يُحسب بصمته."
-   ]
-  },
-  {
-   "v": "4.12.20",
-   "en": [
-    "Lucent Player: the button row sits a little lower and the focused button's name is a little larger."
-   ],
-   "ar": [
-    "مشغّل Lucent: صفّ الأزرار أخفض قليلًا، واسم الزر المحدد أكبر قليلًا."
-   ]
-  },
-  {
-   "v": "4.12.19",
-   "en": [
-    "AF3 Lucent Look: the info pills (the \"i\" box, 4K, HDR...) are see-through glass again with the newer skin - the white \"i\" no longer disappears on a white box."
-   ],
-   "ar": [
-    "مظهر Lucent في AF3: عادت أقراص المعلومات (مربع «i» و4K وHDR...) زجاجية شفافة مع الواجهة الأحدث، فلم تعد علامة «i» البيضاء تختفي فوق مربع أبيض."
-   ]
-  },
-  {
-   "v": "4.12.18",
-   "from": "4.12.18",
-   "en": [
-    "Arctic Fuse 3 no longer freezes when you scroll fast through the stacked widgets in the hubs."
-   ],
-   "ar": [
-    "لم تعد واجهة Arctic Fuse 3 تتجمّد عند التمرير السريع بين الصفوف المتتابعة في الأقسام."
-   ]
-  },
-  {
-   "v": "4.12.17",
-   "from": "4.12.16",
-   "en": [
-    "Najd shows its subtitle status with the skin's standard notification instead of its own box on the video; in Arctic Fuse 3 its text is smaller."
-   ],
-   "ar": [
-    "تعرض نجد حالة الترجمة بإشعار الواجهة المعتاد بدلاً من مربعها الخاص فوق الفيديو، وبخط أصغر في Arctic Fuse 3."
-   ]
-  },
-  {
-   "v": "4.12.15",
-   "from": "4.12.14",
-   "en": [
-    "Najd updated with its author's latest fixes: no subtitle of a look-alike series, cleaner names before searching, SubSource when SubDL's daily limit runs out, and «re-time» on the subtitle inside the video part by part.",
-    "The player's sync button makes the same choice as Najd's «re-time»."
-   ],
-   "ar": [
-    "حُدّثت نجد بآخر إصلاحات صاحبها: لا ترجمة لمسلسل يشبه اسمه، وتنظيف الأسماء قبل البحث، والانتقال إلى SubSource عند نفاد حد SubDL، و«أعد الضبط» على الترجمة المدمجة جزءاً جزءاً.",
-    "زر المزامنة في المشغّل يختار الطريقة نفسها التي يختارها «أعد الضبط» في نجد."
-   ]
-  },
-  {
-   "v": "4.12.14",
-   "en": [
-    "AF3 3.5.7 (skin 50.11.98): the Lucent Look bold play time and dimmed duration in the player apply again after the skin's colour clean-up."
-   ],
-   "ar": [
-    "AF3 3.5.7 (الواجهة 50.11.98): يعود في مظهر Lucent خط وقت التشغيل العريض وتعتيم المدة في المشغّل بعد تنظيف ألوان الواجهة."
-   ]
-  },
-  {
-   "v": "4.12.13",
-   "en": [
-    "Boxes without a clock battery (such as the AM9 Pro) now have the right time from the first seconds after a boot, so add-ons connect at once instead of failing for a minute or two."
-   ],
-   "ar": [
-    "أصبحت الأجهزة التي لا تحوي بطارية ساعة (مثل AM9 Pro) تعرف الوقت الصحيح منذ الثواني الأولى بعد التشغيل، فتتصل الإضافات فورًا بدل أن تتعثر دقيقة أو دقيقتين."
-   ]
-  },
-  {
-   "v": "4.12.12",
-   "en": [
-    "The \"AF3: OSD Flags Style\" picker is redesigned: larger previews, each style's description on its own card, and a check mark on the style in use.",
-    "All FR-Badges styles are rebuilt from the latest set, with new language flags and Lucent-size player pills."
-   ],
-   "ar": [
-    "أُعيد تصميم نافذة اختيار \"AF3: نمط شارات OSD\": معاينات أكبر، ووصف كل نمط على بطاقته، وعلامة على النمط المستخدم.",
-    "أُعيد بناء كل أنماط شارات FR-Badges من أحدث مجموعة، مع أعلام لغات جديدة وشارات مشغّل بحجم Lucent."
-   ]
-  },
-  {
-   "v": "4.12.11",
-   "en": [
-    "Najd is updated to its author's latest release: it can time a subtitle on the film's own speech (Whisper), syncs more carefully, and reads the subtitle inside more links.",
-    "Najd uses the AI key saved in Dex Hub only if you allow it: it asks you once, since it spends that key's tokens.",
-    "All of Najd's text and its picture guide are now in Modern Standard Arabic.",
-    "The player's sync button now times the subtitle on screen with Najd, whatever its source."
-   ],
-   "ar": [
-    "حُدِّثت نجد إلى أحدث إصدار من صاحبها: تستطيع ضبط الترجمة على كلام الفيلم نفسه (Whisper)، وتزامن بحذر أكبر، وتقرأ الترجمة المدمجة في روابط أكثر.",
-    "لا تستعمل نجد مفتاح الذكاء الاصطناعي المحفوظ في Dex Hub إلا بإذنك: تسألك مرة واحدة، لأنه يُستهلك من رصيد ذلك المفتاح.",
-    "أصبحت كل نصوص نجد وصور الشرح فيها بالعربية الفصحى.",
-    "أصبح زر المزامنة في المشغّل يضبط الترجمة المعروضة بنجد، أيًّا كان مصدرها."
-   ],
-   "from": "4.12.9"
-  },
-  {
-   "v": "4.12.8",
-   "en": [
-    "Usenet results in Search All now show the same stream badges as the other results (Blu-ray, Dolby Vision, HDR, HEVC, Atmos, TrueHD, 7.1 ...)."
-   ],
-   "ar": [
-    "أصبحت نتائج Usenet في «كل المصادر» تعرض شارات البث نفسها التي تعرضها النتائج الأخرى (Blu-ray وDolby Vision وHDR وHEVC وAtmos وTrueHD و7.1 وغيرها)."
-   ]
-  },
-  {
-   "v": "4.12.7",
-   "en": [
-    "Najd now times any subtitle that plays in Kodi, whatever add-on or file it comes from: on the subtitle inside the video, or on the sound when there is none. Najd > Settings > Time subtitles from other sources.",
-    "While Najd does this, the AutoSync of DexSubtitles and Dex Hub rests, so a subtitle is not timed twice."
-   ],
-   "ar": [
-    "أصبحت نجد تضبط توقيت أي ترجمة تعمل في كودي، أيًّا كانت الإضافة أو الملف الذي جاءت منه: على الترجمة المدمجة في الفيديو، أو على الصوت إن لم توجد. نجد > الإعدادات > اضبط الترجمات من المصادر الأخرى.",
-    "وما دامت نجد تقوم بذلك يتوقف الضبط التلقائي في DexSubtitles وDex Hub، حتى لا تُضبط الترجمة مرتين."
-   ]
-  },
-  {
-   "v": "4.12.6",
-   "en": [
-    "Najd Smart Subtitles is now your Arabic subtitle service: Arabic subtitles from three sites, fixed, timed to the audio and proofread by AI, or the video's own subtitle translated when none exists. Mods > Najd Smart Subtitles.",
-    "On Dex Hub videos Najd lets Dex Hub's own subtitle go first, and it uses the AI key you already gave Dex Hub.",
-    "When the video already carries an Arabic subtitle, Najd turns it on for you.",
-    "Najd tells you when it needs a subtitle-site key (SubDL, SubSource or OpenSubtitles) to search by itself.",
-    "Dolby Vision FEL / MEL films show a 12-BIT badge, matching the playback info."
-   ],
-   "ar": [
-    "أصبحت ترجمة نجد الذكية خدمة الترجمة العربية لديك: ترجمات عربية من ثلاثة مواقع، مصحّحة ومضبوطة على الصوت ومدقّقة بالذكاء الاصطناعي، أو تُترجَم الترجمة المدمجة في الفيديو إن لم توجد ترجمة. التخصيصات > ترجمة نجد الذكية.",
-    "في فيديوهات Dex Hub تترك نجد الأولوية لترجمة Dex Hub نفسها، وتستخدم مفتاح الذكاء الاصطناعي الذي أدخلته في Dex Hub.",
-    "إذا كان الفيديو يحتوي على ترجمة عربية، تفعّلها نجد تلقائيًّا.",
-    "تنبّهك نجد إذا احتاجت مفتاح موقع ترجمة (SubDL أو SubSource أو OpenSubtitles) لتبحث وحدها.",
-    "تظهر شارة 12-BIT لأفلام Dolby Vision من نوع FEL أو MEL، مطابقةً لمعلومات التشغيل."
-   ],
-   "from": "4.12.1"
-  },
-  {
-   "v": "4.12.0",
-   "en": [
-    "New licence: AB Tools stays free for your own use; sharing it elsewhere, in whole or in part, now needs permission (LICENSE.txt).",
-    "Seek Preview, the CPU Benchmark and the Lucent Player Statistics window were rewritten; they work as before."
-   ],
-   "ar": [
-    "ترخيص جديد: يبقى AB Tools مجانيًّا لاستخدامك الشخصي، أما نشره في مكان آخر كليًّا أو جزئيًّا فيحتاج الآن إلى إذن (LICENSE.txt).",
-    "أُعيدت كتابة معاينة التقديم واختبار أداء المعالج ونافذة الإحصاءات في Lucent Player، وهي تعمل كما كانت."
-   ]
-  },
-  {
-   "v": "4.11.9",
-   "en": [
-    "The AB Tools service starts with Kodi again, so patches are checked at boot instead of the first time you open Search All or the menu."
-   ],
-   "ar": [
-    "أصبحت خدمة AB Tools تبدأ مع تشغيل Kodi من جديد، فتُفحص الترقيعات عند الإقلاع بدلًا من أول مرة تفتح فيها البحث الشامل أو القائمة."
-   ]
-  },
-  {
-   "v": "4.11.8",
-   "en": [
-    "Search (AF3 search page): a long press or the context-menu key on a result opens a menu again: Information, Play/Open, and TMDbHelper's Play with, Browse lists, Sync options, Refresh details and Add to library.",
-    "Kodi 22 no longer crashes when you back out of TMDbHelper's player list (for example after choosing a movie on the search page).",
-    "AF3: Default OSD also turns the two-line information bar off while it is on, so the upstream one-row info line shows."
-   ],
-   "ar": [
-    "البحث (صفحة البحث في AF3): الضغط المطوّل أو زر القائمة السياقية على أي نتيجة يفتح قائمة من جديد: المعلومات، والتشغيل أو الفتح، وخيارات TMDbHelper: التشغيل باستخدام، وتصفّح القوائم، وخيارات المزامنة، وتحديث التفاصيل، والإضافة إلى المكتبة.",
-    "لم يعد Kodi 22 ينهار عند الرجوع من قائمة مشغّلات TMDbHelper (مثلًا بعد اختيار فيلم من صفحة البحث).",
-    "AF3: يعطّل خيار «الواجهة الافتراضية للمشغّل» أيضًا شريط المعلومات ذا السطرين ما دام مفعّلًا، ليظهر سطر المعلومات الأصلي في صف واحد."
-   ]
-  },
-  {
-   "v": "4.11.6",
-   "from": "4.11.0",
-   "en": [
-    "Search All: Usenet (Mods) streams releases straight from your own news server - no debrid and no download. Add a news server (or your EasyNews account) and a Newznab indexer, and a Usenet source joins Search All.",
-    "AIOStreams Usenet results (NZB streams) now show in Search All and play through the same engine. Seeking works; season packs play the right episode; compressed or password-protected releases are refused with a message.",
-    "Premiumize results show in Search All again when a release is also cached on another debrid service: one row per service, and the PM filter chip is back.",
-    "The debrid service logos in Search All (RD, AD, PM, TB, EN ...) are in colour.",
-    "Search All stays fast with thousands of streams, and the source grid shows the add-ons only (no scraper chips).",
-    "Usenet needs both a news server and a Newznab indexer in Mods > Search All: Usenet; it now also works when Kodi skipped the AB Tools service at boot.",
-    "Fixed: Kodi could hang when a Usenet stream started.",
-    "Usenet streams no longer stop after a few seconds: the Usenet server now runs as its own process."
-   ],
-   "ar": [
-    "يبثّ خيار «البحث الشامل: يوزنت» (التخصيصات) الإصدارات مباشرةً من خادم الأخبار الخاص بك دون خدمة Debrid ودون تنزيل. أضف خادم أخبار (أو حسابك في EasyNews) ومفهرس Newznab، فينضمّ مصدر يوزنت إلى البحث الشامل.",
-    "تظهر الآن نتائج يوزنت من AIOStreams (بثّ NZB) في البحث الشامل وتُشغَّل بالمحرّك نفسه. يعمل التقديم والترجيع، وتُشغَّل الحلقة الصحيحة من حزم المواسم، وتُرفض الإصدارات المضغوطة أو المحمية بكلمة مرور مع رسالة توضّح السبب.",
-    "تظهر نتائج Premiumize في البحث الشامل مجددًا عندما يكون الإصدار مخزّنًا أيضًا في خدمة Debrid أخرى: صفّ لكل خدمة، وعاد زرّ التصفية PM.",
-    "صارت شعارات خدمات Debrid في البحث الشامل (RD وAD وPM وTB وEN وغيرها) ملوّنة.",
-    "يبقى البحث الشامل سريعًا مع آلاف المصادر، وتعرض شبكة المصادر الإضافات فقط دون أزرار أدوات الكشط.",
-    "يتطلّب يوزنت خادم أخبار ومفهرس Newznab معًا في التخصيصات > البحث الشامل: يوزنت، وصار يعمل أيضًا إذا لم يشغّل Kodi خدمة AB Tools عند الإقلاع.",
-    "أُصلح تعليق Kodi الذي قد يحدث عند بدء بثّ من يوزنت.",
-    "لم يعد بثّ يوزنت يتوقف بعد ثوانٍ: صار خادم يوزنت يعمل في عملية مستقلة."
-   ]
-  },
-  {
-   "v": "4.10.9",
-   "from": "4.10.8",
-   "en": [
-    "AF3: Default OSD (Mods > AF3 changes) brings back upstream Arctic Fuse 3's info line: the item details as outlined tags and the star rating on a solid pill, with the Plain text / Pill choice in Skin settings > Information. Needs AF3 50.11.87 or newer.",
-    "POV plays full Blu-ray disc releases (BDMV with .m2ts files) from debrid: the movie's main feature plays, and the Disc Menu button can reopen it as a disc."
-   ],
-   "ar": [
-    "يعيد خيار «AF3: الواجهة الافتراضية للمشغّل» (التخصيصات > تغييرات AF3) سطر المعلومات كما في Arctic Fuse 3 الأصلي: تفاصيل العنصر وسومًا محدّدة الإطار، والتقييم بالنجوم على قرص مصمت، مع خيار «نص عادي / أقراص» في إعدادات الواجهة > المعلومات. يتطلّب AF3 بالإصدار 50.11.87 أو أحدث.",
-    "يشغّل POV إصدارات أقراص Blu-ray الكاملة (BDMV بملفات .m2ts) من خدمات الديبريد: يُشغَّل الفيلم الرئيسي، ويمكن إعادة فتحه كقرص من زر قائمة القرص."
-   ]
-  },
-  {
-   "v": "4.10.7",
-   "from": "4.8.94",
-   "en": [
-    "Search All searches your own folders too: on this device or on the network (SMB, NFS). Add, rename, re-point or remove them in Mods > Search All: my folders.",
-    "Search All shows every source while it searches, like Fen Light+: a chip per add-on, then a chip per scraper or site (Torrentio, Comet, Easynews...) with the streams it found, and the running time beside them.",
-    "Red Light and POV in Lucent show every provider while they search, like Fen Light+: a chip per scraper with the streams it found, and the time left of the search timeout.",
-    "Toggles is now Mods, with related mods grouped (AF3 changes, Lucent, Tabs, Fonts and waves); pickers with pictures are grids and Done sits at the top of switch lists.",
-    "AF3 OSD Flags Style: new styles from FR-Badges, and the Lucent Player badge row adds bit depth, DTS core, container and MULTI AUDIO.",
-    "The Lucent look follows the skin's focus colour by default, in menus and in the player.",
-    "Disc Menu with AllDebrid: clear messages when the account is full or a disc is not cached, and an offer to clear stalled transfers.",
-    "The Lucent Player Statistics screen also opens in Arctic Zephyr Rounded, which now has the Lucent Player too (Skin settings > Video), and its badges follow AF3: OSD Flags Style there as well."
-   ],
-   "ar": [
-    "أصبح البحث الشامل يبحث في مجلداتك أيضًا، على هذا الجهاز أو على الشبكة (SMB أو NFS). أضفها أو أعد تسميتها أو غيّر مسارها أو أزلها من «التخصيصات» ثم «البحث الشامل: مجلداتي».",
-    "يعرض البحث الشامل كل المصادر أثناء البحث كما في Fen Light+: شريحة لكل إضافة، ثم شريحة لكل مزوّد أو موقع (Torrentio وComet وEasynews...) مع عدد المصادر التي وجدها، والوقت المنقضي بجانبها.",
-    "تعرض Red Light وPOV بمظهر Lucent كل المزوّدين أثناء البحث كما في Fen Light+: شريحة لكل مزوّد مع عدد المصادر التي وجدها، والوقت المنقضي من مهلة البحث.",
-    "أصبح قسم التبديلات باسم «التخصيصات»، وجُمعت التعديلات المتشابهة في مجموعات (تغييرات AF3، لوسنت، التبويبات، الخطوط والأمواج)، وصارت قوائم الصور شبكات، وزر «تم» في أعلى قوائم التبديل.",
-    "نمط شارات AF3: أنماط جديدة من FR-Badges، وأضيف إلى صف شارات مشغّل لوسنت عمق الألوان ونواة DTS والحاوية وتعدد الصوت.",
-    "أصبح مظهر لوسنت يتبع لون تركيز الواجهة افتراضيًا، في القوائم وفي المشغّل.",
-    "قائمة القرص مع AllDebrid: رسائل واضحة عند امتلاء الحساب أو عدم توفر القرص مخزَّنًا، مع عرض لحذف عمليات التنزيل المتوقفة.",
-    "تُفتح شاشة إحصاءات مشغّل Lucent في سمة Arctic Zephyr Rounded أيضًا، إذ أصبح مشغّل Lucent جزءًا منها (إعدادات السمة ثم الفيديو)، وتتبع شاراته فيها كذلك إعداد «AF3: نمط شارات التشغيل»."
-   ]
-  },
-  {
-   "v": "4.8.94",
-   "from": "4.8.68",
-   "en": [
-    "Whole Blu-ray discs (.iso) from Debrid, TorBox or Usenet play as discs, with their menus, chapters, languages and subtitles, without downloading the disc first (Toggles > AF3: Disc Menu for ISO Streams).",
-    "A disc link that would not play opens again as a disc by itself. Java (BD-J) disc menus open on CoreELEC and LibreELEC; elsewhere those discs start on the main movie.",
-    "A whole Blu-ray disc in a torrent from AllDebrid, TorBox or Premiumize: while its main movie plays, the Disc Menu button in the player opens the disc with its menus.",
-    "An ISO badge marks disc images in Search All and in the stream windows.",
-    "New IMAX and Dolby Vision 2 badges in every badge style, in Search All, the stream windows and the AF3 Lucent Player.",
-    "Badges in the player and in Search All are now evenly spaced: every pill badge has the same width.",
-    "The AF3 Lucent Player shows the source badge (ISO, REMUX, Blu-ray, WEB...) again - for Search All picks even when the link has no release name.",
-    "New Toggles entry AF3: OSD Flags Style - pick the look of the codec, HDR, audio and source badges (FR-Badges sets, Lucent, Black & White, or Off). One choice changes the badges in the AF3 player, the Lucent Player, Search All and the stream windows.",
-    "NewPipe for AF3 Auto Trailers installs by itself from repository.twilight0.",
-    "Fixed: Kodi could close right after picking an option in Toggles.",
-    "AB Tools is now free software under the GNU GPL 3.0 (LICENSE.txt), with the licence of every part by others in THIRD-PARTY-NOTICES.txt.",
-    "The badge row in the AF3 Lucent Player is smaller and takes 20% less width.",
-    "Stream windows open straight on the full list: the \"Choose what to show\" screen no longer appears by itself (RIGHT still filters)."
-   ],
-   "ar": [
-    "تُشغَّل أقراص Blu-ray الكاملة (ملفات ISO) من Debrid أو TorBox أو Usenet كأقراص حقيقية بقوائمها وفصولها ولغاتها وترجماتها، دون تنزيل القرص أولًا (المفاتيح > AF3: قائمة القرص لملفات ISO المبثوثة).",
-    "رابط القرص الذي يتعذّر تشغيله يُعاد فتحه كقرص تلقائيًا. تُفتح قوائم الأقراص المكتوبة بلغة Java (BD-J) على CoreELEC وLibreELEC، وفي غيرهما تبدأ هذه الأقراص بالفيلم الرئيسي.",
-    "قرص Blu-ray كامل في تورنت من AllDebrid أو TorBox أو Premiumize: أثناء عرض فيلمه الرئيسي يفتح زر «قائمة القرص» في المشغّل القرصَ بقوائمه.",
-    "شارة ISO تميّز صور الأقراص في «بحث الكل» وفي نوافذ المصادر.",
-    "شارتا IMAX وDolby Vision 2 جديدتان في كل أنماط الشارات، في «بحث الكل» ونوافذ المصادر ومشغّل Lucent في AF3.",
-    "صارت المسافات بين الشارات متساوية في المشغّل وفي «بحث الكل»، فكل شارة بطاقية بالعرض نفسه.",
-    "يعرض مشغّل Lucent في AF3 شارة المصدر (ISO وREMUX وBlu-ray وWEB...) مجددًا، حتى لمصادر «بحث الكل» التي لا يحمل رابطها اسم الإصدار.",
-    "مفتاح جديد: AF3: نمط شارات الشاشة، لاختيار شكل شارات الترميز وHDR والصوت والمصدر (مجموعات FR-Badges، أو Lucent، أو الأبيض والأسود، أو إيقافها). اختيار واحد يغيّر الشارات في مشغّل AF3 ومشغّل Lucent وبحث الكل ونوافذ المصادر.",
-    "يُثبَّت NewPipe لإعلانات AF3 التلقائية من مستودع repository.twilight0 تلقائيًا.",
-    "إصلاح: كان Kodi قد يُغلَق مباشرةً بعد اختيار أحد الخيارات في المفاتيح.",
-    "أصبحت AB Tools برنامجًا حرًّا برخصة GNU GPL 3.0 ‏(LICENSE.txt)، مع ترخيص كل جزء من أعمال الآخرين في THIRD-PARTY-NOTICES.txt.",
-    "صار صف الشارات في مشغّل AF3 Lucent أصغر حجمًا، ويشغل عرضًا أقل بنسبة 20%.",
-    "تُفتح نوافذ المصادر على القائمة كاملة مباشرة: لم تعد شاشة «اختر ما تريد عرضه» تظهر من تلقاء نفسها، ويبقى زر اليمين للتصفية."
-   ]
-  },
-  {
-   "v": "4.8.67",
-   "from": "4.8.56",
-   "en": [
-    "NewPipe: search, Trending, Live and Trailers show results again when pagination is off.",
-    "AF3 player: the name of the focused button shows under the buttons (Play, Pause, Next chapter, Audio, Subtitles...), as in the Lucent Player.",
-    "Lucent Look: white menu icons (Fen Light, Red Light, AB Tools nodes, AB Last Played) turn dark on the focused tile; add-on tiles keep their colours.",
-    "Lucent Look: no background behind the Home system stats.",
-    "New switch in Toggles: AB Tools Glass Look (test) - white glass icons with no background and a see-through window, for AB Tools and AB Wizard.",
-    "Black and white service logos (RD, AD, PM, TB, OC, EN, ED) in Search All and in the Fen Light, Red Light, POV and Umbrella stream windows.",
-    "Fen Light, Red Light, POV and Umbrella: the Selected Stream details use the smaller text of Search All.",
-    "What's New: after an update, the first time AB Tools is opened it shows what changed in the last 10 versions."
-   ],
-   "ar": [
-    "NewPipe: يعود البحث والرائج والبث المباشر والإعلانات إلى عرض النتائج عند إيقاف تقسيم الصفحات.",
-    "مشغّل AF3: يظهر اسم الزر المحدد تحت الأزرار (تشغيل، إيقاف مؤقت، الفصل التالي، الصوت، الترجمة...) كما في مشغّل Lucent.",
-    "مظهر Lucent: أيقونات القوائم البيضاء (Fen Light وRed Light وعُقد أدوات AB وAB Last Played) تصبح داكنة على البطاقة المحددة، وتحتفظ بطاقات الإضافات بألوانها.",
-    "مظهر Lucent: لا خلفية خلف إحصاءات النظام في الرئيسية.",
-    "مفتاح جديد في المفاتيح: المظهر الزجاجي لأدوات AB (تجريبي) - أيقونات زجاجية بيضاء بلا خلفية ونافذة شفافة، لأدوات AB ومعالج AB.",
-    "شعارات خدمات بالأبيض والأسود (RD وAD وPM وTB وOC وEN وED) في البحث الشامل وفي نوافذ المصادر لـ Fen Light وRed Light وPOV وUmbrella.",
-    "Fen Light وRed Light وPOV وUmbrella: تفاصيل المصدر المحدد بالنص الأصغر نفسه في البحث الشامل.",
-    "ما الجديد: بعد كل تحديث، تعرض أدوات AB عند فتحها أول مرة ما تغيّر في آخر عشرة إصدارات."
-   ]
-  },
-  {
-   "v": "4.8.55",
-   "from": "4.8.55",
-   "en": [
-    "Lucent Look: TinyPPI's panels (codec box, speaker layout, Player Process Info) are glass."
-   ],
-   "ar": [
-    "مظهر Lucent: لوحات TinyPPI (صندوق الترميز ومخطط السماعات ومعلومات المشغّل) أصبحت زجاجية."
-   ]
-  },
-  {
-   "v": "4.8.54",
-   "from": "4.8.54",
-   "en": [
-    "Lucent Look: the info pills (4K, Dolby Vision, 5.1...) and the Spotlight Play / More Information buttons are see-through glass with white text and icons."
-   ],
-   "ar": [
-    "مظهر Lucent: شارات المعلومات (4K وDolby Vision و5.1...) وزرّا التشغيل والمزيد من المعلومات في Spotlight أصبحت زجاجية شفافة بنص وأيقونات بيضاء."
-   ]
-  },
-  {
-   "v": "4.8.53",
-   "from": "4.8.52",
-   "en": [
-    "Lucent Look: dialogs and the Options panel are see-through glass. Toggles > AF3: Lucent Look > Glass transparency: 30%, 50%, 70% (default) or 90% solid."
-   ],
-   "ar": [
-    "مظهر Lucent: النوافذ الحوارية ولوحة الخيارات زجاجية شفافة. المفاتيح > AF3: مظهر Lucent > شفافية الزجاج: 30٪ أو 50٪ أو 70٪ (الافتراضي) أو 90٪ معتم."
-   ]
-  },
-  {
-   "v": "4.8.51",
-   "from": "4.8.51",
-   "en": [
-    "Fen Light, Red Light, POV and Umbrella: the stream window shows the Selected Stream details under the plot - resolution, size, bitrate, video, HDR, audio, channels, release, service and languages.",
-    "Lucent Look: the menu is Off / Lucent Glass / Lucent Glass AMOLED with the focus-colour switch; the extra colour schemes are gone."
-   ],
-   "ar": [
-    "Fen Light وRed Light وPOV وUmbrella: نافذة المصادر تعرض تفاصيل المصدر المحدد تحت القصة - الدقة والحجم ومعدل البت والفيديو وHDR والصوت والقنوات والإصدار والخدمة واللغات.",
-    "مظهر Lucent: القائمة إيقاف / Lucent Glass / Lucent Glass AMOLED مع مفتاح لون التحديد، وأُزيلت أنظمة الألوان الإضافية."
-   ]
-  }
- ]
+  "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
+  "entries": [
+    {
+      "v": "4.12.34",
+      "en": [
+        "TMDbHelper in Arabic: when the translation is installed or restored, a note says to restart Kodi so it shows."
+      ],
+      "ar": [
+        "TMDbHelper بالعربية: عند تثبيت الترجمة أو استعادتها تظهر ملاحظة بضرورة إعادة تشغيل Kodi لتظهر الترجمة."
+      ]
+    },
+    {
+      "v": "4.12.33",
+      "en": [
+        "AF3: \"Plot on the Right\" is removed - the plot stays in its normal place (update AF3 to 50.12.8)."
+      ],
+      "ar": [
+        "AF3: أُزيلت ميزة «القصة على اليمين»، فتبقى القصة في مكانها المعتاد (حدِّث AF3 إلى 50.12.8)."
+      ]
+    },
+    {
+      "v": "4.12.32",
+      "en": [
+        "TMDbHelper in Arabic: a full Arabic translation (every string of TMDbHelper 6.22) is installed into TMDbHelper and restored after its updates."
+      ],
+      "ar": [
+        "TMDbHelper بالعربية: تُثبَّت ترجمة عربية كاملة (كل نصوص TMDbHelper 6.22) داخل TMDbHelper، وتُعاد بعد تحديثاته."
+      ]
+    },
+    {
+      "v": "4.12.31",
+      "en": [
+        "AF3: new switch \"AF3: Watched percentage\" - the watched percentage as a number (e.g. 45%) above the progress circle on posters and thumbnails (needs AF3 50.12.7)."
+      ],
+      "ar": [
+        "AF3: مفتاح جديد «AF3: نسبة المشاهدة» يعرض نسبة المشاهدة رقمًا (مثل 45%) فوق دائرة التقدّم على الملصقات والصور المصغّرة (يتطلّب AF3 50.12.7)."
+      ]
+    },
+    {
+      "v": "4.12.30",
+      "from": "4.12.22",
+      "en": [
+        "Search All shows every add-on with its icon: on the left one add-on per line with its icon, name and stream count (a turning busy ring while it searches); icons on the filter tabs and on each stream card. Usenet and My folders have icons too, also as the service of their streams.",
+        "When the search ends, Search All goes to the All tab with the best stream (the top one) selected.",
+        "The filter tabs work one at a time (an add-on, a quality or a service), every stream shows its badges in every tab, and an add-on with no streams no longer gets a tab.",
+        "The stream details on the left (resolution, video, HDR / Dolby Vision, audio, channels, release, service) show badges and the service logo instead of text - in Search All and in the Fen Light, Red Light, POV and Umbrella source windows.",
+        "Arctic Fuse 3 no longer freezes because of stacked widgets - also with a skin user profile and after the home menus are rebuilt."
+      ],
+      "ar": [
+        "يعرض Search All كل إضافة بأيقونتها: على اليسار كل إضافة في سطر بأيقونتها واسمها وعدد روابطها (وحلقة انتظار دوّارة أثناء بحثها)، والأيقونات على أزرار التصفية وعلى بطاقة كل رابط. ولـ Usenet ومجلداتي أيقونتان أيضًا، وتظهران كذلك خدمةً لروابطهما.",
+        "عند انتهاء البحث ينتقل Search All إلى «الكل» ويحدّد أفضل رابط، وهو الأول في القائمة.",
+        "تعمل أزرار التصفية واحدًا في كل مرة (إضافة أو دقة أو خدمة)، وتظهر شارات كل رابط في كل تبويب، ولم تعد الإضافة التي لا روابط لها تحصل على زر.",
+        "تفاصيل الرابط على اليسار (الدقة، والفيديو، وHDR وDolby Vision، والصوت، والقنوات، والإصدار، والخدمة) تظهر شاراتٍ وشعارَ الخدمة بدل النص، في Search All وفي نوافذ المصادر في Fen Light وRed Light وPOV وUmbrella.",
+        "لم تعد واجهة Arctic Fuse 3 تتجمّد بسبب الصفوف المتتابعة، حتى مع ملف مستخدم للواجهة وبعد إعادة بناء القوائم الرئيسية."
+      ]
+    },
+    {
+      "v": "4.12.21",
+      "en": [
+        "Najd never takes subtitle timing from another cut of the film (Director's Cut vs Theatrical), keeps the video's own subtitle timing after a slow read, and opens easynews links reliably.",
+        "a4kSubtitles no longer logs an error when a stream is too slow to hash."
+      ],
+      "ar": [
+        "لا تأخذ نجد توقيت الترجمة من نسخة أخرى للفيلم (نسخة المخرج مقابل النسخة السينمائية)، وتحتفظ بتوقيت ترجمة الفيديو نفسه بعد قراءة بطيئة، وتفتح روابط easynews بثبات.",
+        "لم تعد a4kSubtitles تسجّل خطأً عندما يكون البث أبطأ من أن يُحسب بصمته."
+      ]
+    },
+    {
+      "v": "4.12.20",
+      "en": [
+        "Lucent Player: the button row sits a little lower and the focused button's name is a little larger."
+      ],
+      "ar": [
+        "مشغّل Lucent: صفّ الأزرار أخفض قليلًا، واسم الزر المحدد أكبر قليلًا."
+      ]
+    },
+    {
+      "v": "4.12.19",
+      "en": [
+        "AF3 Lucent Look: the info pills (the \"i\" box, 4K, HDR...) are see-through glass again with the newer skin - the white \"i\" no longer disappears on a white box."
+      ],
+      "ar": [
+        "مظهر Lucent في AF3: عادت أقراص المعلومات (مربع «i» و4K وHDR...) زجاجية شفافة مع الواجهة الأحدث، فلم تعد علامة «i» البيضاء تختفي فوق مربع أبيض."
+      ]
+    },
+    {
+      "v": "4.12.18",
+      "from": "4.12.18",
+      "en": [
+        "Arctic Fuse 3 no longer freezes when you scroll fast through the stacked widgets in the hubs."
+      ],
+      "ar": [
+        "لم تعد واجهة Arctic Fuse 3 تتجمّد عند التمرير السريع بين الصفوف المتتابعة في الأقسام."
+      ]
+    },
+    {
+      "v": "4.12.17",
+      "from": "4.12.16",
+      "en": [
+        "Najd shows its subtitle status with the skin's standard notification instead of its own box on the video; in Arctic Fuse 3 its text is smaller."
+      ],
+      "ar": [
+        "تعرض نجد حالة الترجمة بإشعار الواجهة المعتاد بدلاً من مربعها الخاص فوق الفيديو، وبخط أصغر في Arctic Fuse 3."
+      ]
+    },
+    {
+      "v": "4.12.15",
+      "from": "4.12.14",
+      "en": [
+        "Najd updated with its author's latest fixes: no subtitle of a look-alike series, cleaner names before searching, SubSource when SubDL's daily limit runs out, and «re-time» on the subtitle inside the video part by part.",
+        "The player's sync button makes the same choice as Najd's «re-time»."
+      ],
+      "ar": [
+        "حُدّثت نجد بآخر إصلاحات صاحبها: لا ترجمة لمسلسل يشبه اسمه، وتنظيف الأسماء قبل البحث، والانتقال إلى SubSource عند نفاد حد SubDL، و«أعد الضبط» على الترجمة المدمجة جزءاً جزءاً.",
+        "زر المزامنة في المشغّل يختار الطريقة نفسها التي يختارها «أعد الضبط» في نجد."
+      ]
+    },
+    {
+      "v": "4.12.14",
+      "en": [
+        "AF3 3.5.7 (skin 50.11.98): the Lucent Look bold play time and dimmed duration in the player apply again after the skin's colour clean-up."
+      ],
+      "ar": [
+        "AF3 3.5.7 (الواجهة 50.11.98): يعود في مظهر Lucent خط وقت التشغيل العريض وتعتيم المدة في المشغّل بعد تنظيف ألوان الواجهة."
+      ]
+    },
+    {
+      "v": "4.12.13",
+      "en": [
+        "Boxes without a clock battery (such as the AM9 Pro) now have the right time from the first seconds after a boot, so add-ons connect at once instead of failing for a minute or two."
+      ],
+      "ar": [
+        "أصبحت الأجهزة التي لا تحوي بطارية ساعة (مثل AM9 Pro) تعرف الوقت الصحيح منذ الثواني الأولى بعد التشغيل، فتتصل الإضافات فورًا بدل أن تتعثر دقيقة أو دقيقتين."
+      ]
+    },
+    {
+      "v": "4.12.12",
+      "en": [
+        "The \"AF3: OSD Flags Style\" picker is redesigned: larger previews, each style's description on its own card, and a check mark on the style in use.",
+        "All FR-Badges styles are rebuilt from the latest set, with new language flags and Lucent-size player pills."
+      ],
+      "ar": [
+        "أُعيد تصميم نافذة اختيار \"AF3: نمط شارات OSD\": معاينات أكبر، ووصف كل نمط على بطاقته، وعلامة على النمط المستخدم.",
+        "أُعيد بناء كل أنماط شارات FR-Badges من أحدث مجموعة، مع أعلام لغات جديدة وشارات مشغّل بحجم Lucent."
+      ]
+    },
+    {
+      "v": "4.12.11",
+      "en": [
+        "Najd is updated to its author's latest release: it can time a subtitle on the film's own speech (Whisper), syncs more carefully, and reads the subtitle inside more links.",
+        "Najd uses the AI key saved in Dex Hub only if you allow it: it asks you once, since it spends that key's tokens.",
+        "All of Najd's text and its picture guide are now in Modern Standard Arabic.",
+        "The player's sync button now times the subtitle on screen with Najd, whatever its source."
+      ],
+      "ar": [
+        "حُدِّثت نجد إلى أحدث إصدار من صاحبها: تستطيع ضبط الترجمة على كلام الفيلم نفسه (Whisper)، وتزامن بحذر أكبر، وتقرأ الترجمة المدمجة في روابط أكثر.",
+        "لا تستعمل نجد مفتاح الذكاء الاصطناعي المحفوظ في Dex Hub إلا بإذنك: تسألك مرة واحدة، لأنه يُستهلك من رصيد ذلك المفتاح.",
+        "أصبحت كل نصوص نجد وصور الشرح فيها بالعربية الفصحى.",
+        "أصبح زر المزامنة في المشغّل يضبط الترجمة المعروضة بنجد، أيًّا كان مصدرها."
+      ],
+      "from": "4.12.9"
+    },
+    {
+      "v": "4.12.8",
+      "en": [
+        "Usenet results in Search All now show the same stream badges as the other results (Blu-ray, Dolby Vision, HDR, HEVC, Atmos, TrueHD, 7.1 ...)."
+      ],
+      "ar": [
+        "أصبحت نتائج Usenet في «كل المصادر» تعرض شارات البث نفسها التي تعرضها النتائج الأخرى (Blu-ray وDolby Vision وHDR وHEVC وAtmos وTrueHD و7.1 وغيرها)."
+      ]
+    },
+    {
+      "v": "4.12.7",
+      "en": [
+        "Najd now times any subtitle that plays in Kodi, whatever add-on or file it comes from: on the subtitle inside the video, or on the sound when there is none. Najd > Settings > Time subtitles from other sources.",
+        "While Najd does this, the AutoSync of DexSubtitles and Dex Hub rests, so a subtitle is not timed twice."
+      ],
+      "ar": [
+        "أصبحت نجد تضبط توقيت أي ترجمة تعمل في كودي، أيًّا كانت الإضافة أو الملف الذي جاءت منه: على الترجمة المدمجة في الفيديو، أو على الصوت إن لم توجد. نجد > الإعدادات > اضبط الترجمات من المصادر الأخرى.",
+        "وما دامت نجد تقوم بذلك يتوقف الضبط التلقائي في DexSubtitles وDex Hub، حتى لا تُضبط الترجمة مرتين."
+      ]
+    },
+    {
+      "v": "4.12.6",
+      "en": [
+        "Najd Smart Subtitles is now your Arabic subtitle service: Arabic subtitles from three sites, fixed, timed to the audio and proofread by AI, or the video's own subtitle translated when none exists. Mods > Najd Smart Subtitles.",
+        "On Dex Hub videos Najd lets Dex Hub's own subtitle go first, and it uses the AI key you already gave Dex Hub.",
+        "When the video already carries an Arabic subtitle, Najd turns it on for you.",
+        "Najd tells you when it needs a subtitle-site key (SubDL, SubSource or OpenSubtitles) to search by itself.",
+        "Dolby Vision FEL / MEL films show a 12-BIT badge, matching the playback info."
+      ],
+      "ar": [
+        "أصبحت ترجمة نجد الذكية خدمة الترجمة العربية لديك: ترجمات عربية من ثلاثة مواقع، مصحّحة ومضبوطة على الصوت ومدقّقة بالذكاء الاصطناعي، أو تُترجَم الترجمة المدمجة في الفيديو إن لم توجد ترجمة. التخصيصات > ترجمة نجد الذكية.",
+        "في فيديوهات Dex Hub تترك نجد الأولوية لترجمة Dex Hub نفسها، وتستخدم مفتاح الذكاء الاصطناعي الذي أدخلته في Dex Hub.",
+        "إذا كان الفيديو يحتوي على ترجمة عربية، تفعّلها نجد تلقائيًّا.",
+        "تنبّهك نجد إذا احتاجت مفتاح موقع ترجمة (SubDL أو SubSource أو OpenSubtitles) لتبحث وحدها.",
+        "تظهر شارة 12-BIT لأفلام Dolby Vision من نوع FEL أو MEL، مطابقةً لمعلومات التشغيل."
+      ],
+      "from": "4.12.1"
+    },
+    {
+      "v": "4.12.0",
+      "en": [
+        "New licence: AB Tools stays free for your own use; sharing it elsewhere, in whole or in part, now needs permission (LICENSE.txt).",
+        "Seek Preview, the CPU Benchmark and the Lucent Player Statistics window were rewritten; they work as before."
+      ],
+      "ar": [
+        "ترخيص جديد: يبقى AB Tools مجانيًّا لاستخدامك الشخصي، أما نشره في مكان آخر كليًّا أو جزئيًّا فيحتاج الآن إلى إذن (LICENSE.txt).",
+        "أُعيدت كتابة معاينة التقديم واختبار أداء المعالج ونافذة الإحصاءات في Lucent Player، وهي تعمل كما كانت."
+      ]
+    },
+    {
+      "v": "4.11.9",
+      "en": [
+        "The AB Tools service starts with Kodi again, so patches are checked at boot instead of the first time you open Search All or the menu."
+      ],
+      "ar": [
+        "أصبحت خدمة AB Tools تبدأ مع تشغيل Kodi من جديد، فتُفحص الترقيعات عند الإقلاع بدلًا من أول مرة تفتح فيها البحث الشامل أو القائمة."
+      ]
+    },
+    {
+      "v": "4.11.8",
+      "en": [
+        "Search (AF3 search page): a long press or the context-menu key on a result opens a menu again: Information, Play/Open, and TMDbHelper's Play with, Browse lists, Sync options, Refresh details and Add to library.",
+        "Kodi 22 no longer crashes when you back out of TMDbHelper's player list (for example after choosing a movie on the search page).",
+        "AF3: Default OSD also turns the two-line information bar off while it is on, so the upstream one-row info line shows."
+      ],
+      "ar": [
+        "البحث (صفحة البحث في AF3): الضغط المطوّل أو زر القائمة السياقية على أي نتيجة يفتح قائمة من جديد: المعلومات، والتشغيل أو الفتح، وخيارات TMDbHelper: التشغيل باستخدام، وتصفّح القوائم، وخيارات المزامنة، وتحديث التفاصيل، والإضافة إلى المكتبة.",
+        "لم يعد Kodi 22 ينهار عند الرجوع من قائمة مشغّلات TMDbHelper (مثلًا بعد اختيار فيلم من صفحة البحث).",
+        "AF3: يعطّل خيار «الواجهة الافتراضية للمشغّل» أيضًا شريط المعلومات ذا السطرين ما دام مفعّلًا، ليظهر سطر المعلومات الأصلي في صف واحد."
+      ]
+    },
+    {
+      "v": "4.11.6",
+      "from": "4.11.0",
+      "en": [
+        "Search All: Usenet (Mods) streams releases straight from your own news server - no debrid and no download. Add a news server (or your EasyNews account) and a Newznab indexer, and a Usenet source joins Search All.",
+        "AIOStreams Usenet results (NZB streams) now show in Search All and play through the same engine. Seeking works; season packs play the right episode; compressed or password-protected releases are refused with a message.",
+        "Premiumize results show in Search All again when a release is also cached on another debrid service: one row per service, and the PM filter chip is back.",
+        "The debrid service logos in Search All (RD, AD, PM, TB, EN ...) are in colour.",
+        "Search All stays fast with thousands of streams, and the source grid shows the add-ons only (no scraper chips).",
+        "Usenet needs both a news server and a Newznab indexer in Mods > Search All: Usenet; it now also works when Kodi skipped the AB Tools service at boot.",
+        "Fixed: Kodi could hang when a Usenet stream started.",
+        "Usenet streams no longer stop after a few seconds: the Usenet server now runs as its own process."
+      ],
+      "ar": [
+        "يبثّ خيار «البحث الشامل: يوزنت» (التخصيصات) الإصدارات مباشرةً من خادم الأخبار الخاص بك دون خدمة Debrid ودون تنزيل. أضف خادم أخبار (أو حسابك في EasyNews) ومفهرس Newznab، فينضمّ مصدر يوزنت إلى البحث الشامل.",
+        "تظهر الآن نتائج يوزنت من AIOStreams (بثّ NZB) في البحث الشامل وتُشغَّل بالمحرّك نفسه. يعمل التقديم والترجيع، وتُشغَّل الحلقة الصحيحة من حزم المواسم، وتُرفض الإصدارات المضغوطة أو المحمية بكلمة مرور مع رسالة توضّح السبب.",
+        "تظهر نتائج Premiumize في البحث الشامل مجددًا عندما يكون الإصدار مخزّنًا أيضًا في خدمة Debrid أخرى: صفّ لكل خدمة، وعاد زرّ التصفية PM.",
+        "صارت شعارات خدمات Debrid في البحث الشامل (RD وAD وPM وTB وEN وغيرها) ملوّنة.",
+        "يبقى البحث الشامل سريعًا مع آلاف المصادر، وتعرض شبكة المصادر الإضافات فقط دون أزرار أدوات الكشط.",
+        "يتطلّب يوزنت خادم أخبار ومفهرس Newznab معًا في التخصيصات > البحث الشامل: يوزنت، وصار يعمل أيضًا إذا لم يشغّل Kodi خدمة AB Tools عند الإقلاع.",
+        "أُصلح تعليق Kodi الذي قد يحدث عند بدء بثّ من يوزنت.",
+        "لم يعد بثّ يوزنت يتوقف بعد ثوانٍ: صار خادم يوزنت يعمل في عملية مستقلة."
+      ]
+    },
+    {
+      "v": "4.10.9",
+      "from": "4.10.8",
+      "en": [
+        "AF3: Default OSD (Mods > AF3 changes) brings back upstream Arctic Fuse 3's info line: the item details as outlined tags and the star rating on a solid pill, with the Plain text / Pill choice in Skin settings > Information. Needs AF3 50.11.87 or newer.",
+        "POV plays full Blu-ray disc releases (BDMV with .m2ts files) from debrid: the movie's main feature plays, and the Disc Menu button can reopen it as a disc."
+      ],
+      "ar": [
+        "يعيد خيار «AF3: الواجهة الافتراضية للمشغّل» (التخصيصات > تغييرات AF3) سطر المعلومات كما في Arctic Fuse 3 الأصلي: تفاصيل العنصر وسومًا محدّدة الإطار، والتقييم بالنجوم على قرص مصمت، مع خيار «نص عادي / أقراص» في إعدادات الواجهة > المعلومات. يتطلّب AF3 بالإصدار 50.11.87 أو أحدث.",
+        "يشغّل POV إصدارات أقراص Blu-ray الكاملة (BDMV بملفات .m2ts) من خدمات الديبريد: يُشغَّل الفيلم الرئيسي، ويمكن إعادة فتحه كقرص من زر قائمة القرص."
+      ]
+    },
+    {
+      "v": "4.10.7",
+      "from": "4.8.94",
+      "en": [
+        "Search All searches your own folders too: on this device or on the network (SMB, NFS). Add, rename, re-point or remove them in Mods > Search All: my folders.",
+        "Search All shows every source while it searches, like Fen Light+: a chip per add-on, then a chip per scraper or site (Torrentio, Comet, Easynews...) with the streams it found, and the running time beside them.",
+        "Red Light and POV in Lucent show every provider while they search, like Fen Light+: a chip per scraper with the streams it found, and the time left of the search timeout.",
+        "Toggles is now Mods, with related mods grouped (AF3 changes, Lucent, Tabs, Fonts and waves); pickers with pictures are grids and Done sits at the top of switch lists.",
+        "AF3 OSD Flags Style: new styles from FR-Badges, and the Lucent Player badge row adds bit depth, DTS core, container and MULTI AUDIO.",
+        "The Lucent look follows the skin's focus colour by default, in menus and in the player.",
+        "Disc Menu with AllDebrid: clear messages when the account is full or a disc is not cached, and an offer to clear stalled transfers.",
+        "The Lucent Player Statistics screen also opens in Arctic Zephyr Rounded, which now has the Lucent Player too (Skin settings > Video), and its badges follow AF3: OSD Flags Style there as well."
+      ],
+      "ar": [
+        "أصبح البحث الشامل يبحث في مجلداتك أيضًا، على هذا الجهاز أو على الشبكة (SMB أو NFS). أضفها أو أعد تسميتها أو غيّر مسارها أو أزلها من «التخصيصات» ثم «البحث الشامل: مجلداتي».",
+        "يعرض البحث الشامل كل المصادر أثناء البحث كما في Fen Light+: شريحة لكل إضافة، ثم شريحة لكل مزوّد أو موقع (Torrentio وComet وEasynews...) مع عدد المصادر التي وجدها، والوقت المنقضي بجانبها.",
+        "تعرض Red Light وPOV بمظهر Lucent كل المزوّدين أثناء البحث كما في Fen Light+: شريحة لكل مزوّد مع عدد المصادر التي وجدها، والوقت المنقضي من مهلة البحث.",
+        "أصبح قسم التبديلات باسم «التخصيصات»، وجُمعت التعديلات المتشابهة في مجموعات (تغييرات AF3، لوسنت، التبويبات، الخطوط والأمواج)، وصارت قوائم الصور شبكات، وزر «تم» في أعلى قوائم التبديل.",
+        "نمط شارات AF3: أنماط جديدة من FR-Badges، وأضيف إلى صف شارات مشغّل لوسنت عمق الألوان ونواة DTS والحاوية وتعدد الصوت.",
+        "أصبح مظهر لوسنت يتبع لون تركيز الواجهة افتراضيًا، في القوائم وفي المشغّل.",
+        "قائمة القرص مع AllDebrid: رسائل واضحة عند امتلاء الحساب أو عدم توفر القرص مخزَّنًا، مع عرض لحذف عمليات التنزيل المتوقفة.",
+        "تُفتح شاشة إحصاءات مشغّل Lucent في سمة Arctic Zephyr Rounded أيضًا، إذ أصبح مشغّل Lucent جزءًا منها (إعدادات السمة ثم الفيديو)، وتتبع شاراته فيها كذلك إعداد «AF3: نمط شارات التشغيل»."
+      ]
+    },
+    {
+      "v": "4.8.94",
+      "from": "4.8.68",
+      "en": [
+        "Whole Blu-ray discs (.iso) from Debrid, TorBox or Usenet play as discs, with their menus, chapters, languages and subtitles, without downloading the disc first (Toggles > AF3: Disc Menu for ISO Streams).",
+        "A disc link that would not play opens again as a disc by itself. Java (BD-J) disc menus open on CoreELEC and LibreELEC; elsewhere those discs start on the main movie.",
+        "A whole Blu-ray disc in a torrent from AllDebrid, TorBox or Premiumize: while its main movie plays, the Disc Menu button in the player opens the disc with its menus.",
+        "An ISO badge marks disc images in Search All and in the stream windows.",
+        "New IMAX and Dolby Vision 2 badges in every badge style, in Search All, the stream windows and the AF3 Lucent Player.",
+        "Badges in the player and in Search All are now evenly spaced: every pill badge has the same width.",
+        "The AF3 Lucent Player shows the source badge (ISO, REMUX, Blu-ray, WEB...) again - for Search All picks even when the link has no release name.",
+        "New Toggles entry AF3: OSD Flags Style - pick the look of the codec, HDR, audio and source badges (FR-Badges sets, Lucent, Black & White, or Off). One choice changes the badges in the AF3 player, the Lucent Player, Search All and the stream windows.",
+        "NewPipe for AF3 Auto Trailers installs by itself from repository.twilight0.",
+        "Fixed: Kodi could close right after picking an option in Toggles.",
+        "AB Tools is now free software under the GNU GPL 3.0 (LICENSE.txt), with the licence of every part by others in THIRD-PARTY-NOTICES.txt.",
+        "The badge row in the AF3 Lucent Player is smaller and takes 20% less width.",
+        "Stream windows open straight on the full list: the \"Choose what to show\" screen no longer appears by itself (RIGHT still filters)."
+      ],
+      "ar": [
+        "تُشغَّل أقراص Blu-ray الكاملة (ملفات ISO) من Debrid أو TorBox أو Usenet كأقراص حقيقية بقوائمها وفصولها ولغاتها وترجماتها، دون تنزيل القرص أولًا (المفاتيح > AF3: قائمة القرص لملفات ISO المبثوثة).",
+        "رابط القرص الذي يتعذّر تشغيله يُعاد فتحه كقرص تلقائيًا. تُفتح قوائم الأقراص المكتوبة بلغة Java (BD-J) على CoreELEC وLibreELEC، وفي غيرهما تبدأ هذه الأقراص بالفيلم الرئيسي.",
+        "قرص Blu-ray كامل في تورنت من AllDebrid أو TorBox أو Premiumize: أثناء عرض فيلمه الرئيسي يفتح زر «قائمة القرص» في المشغّل القرصَ بقوائمه.",
+        "شارة ISO تميّز صور الأقراص في «بحث الكل» وفي نوافذ المصادر.",
+        "شارتا IMAX وDolby Vision 2 جديدتان في كل أنماط الشارات، في «بحث الكل» ونوافذ المصادر ومشغّل Lucent في AF3.",
+        "صارت المسافات بين الشارات متساوية في المشغّل وفي «بحث الكل»، فكل شارة بطاقية بالعرض نفسه.",
+        "يعرض مشغّل Lucent في AF3 شارة المصدر (ISO وREMUX وBlu-ray وWEB...) مجددًا، حتى لمصادر «بحث الكل» التي لا يحمل رابطها اسم الإصدار.",
+        "مفتاح جديد: AF3: نمط شارات الشاشة، لاختيار شكل شارات الترميز وHDR والصوت والمصدر (مجموعات FR-Badges، أو Lucent، أو الأبيض والأسود، أو إيقافها). اختيار واحد يغيّر الشارات في مشغّل AF3 ومشغّل Lucent وبحث الكل ونوافذ المصادر.",
+        "يُثبَّت NewPipe لإعلانات AF3 التلقائية من مستودع repository.twilight0 تلقائيًا.",
+        "إصلاح: كان Kodi قد يُغلَق مباشرةً بعد اختيار أحد الخيارات في المفاتيح.",
+        "أصبحت AB Tools برنامجًا حرًّا برخصة GNU GPL 3.0 ‏(LICENSE.txt)، مع ترخيص كل جزء من أعمال الآخرين في THIRD-PARTY-NOTICES.txt.",
+        "صار صف الشارات في مشغّل AF3 Lucent أصغر حجمًا، ويشغل عرضًا أقل بنسبة 20%.",
+        "تُفتح نوافذ المصادر على القائمة كاملة مباشرة: لم تعد شاشة «اختر ما تريد عرضه» تظهر من تلقاء نفسها، ويبقى زر اليمين للتصفية."
+      ]
+    },
+    {
+      "v": "4.8.67",
+      "from": "4.8.56",
+      "en": [
+        "NewPipe: search, Trending, Live and Trailers show results again when pagination is off.",
+        "AF3 player: the name of the focused button shows under the buttons (Play, Pause, Next chapter, Audio, Subtitles...), as in the Lucent Player.",
+        "Lucent Look: white menu icons (Fen Light, Red Light, AB Tools nodes, AB Last Played) turn dark on the focused tile; add-on tiles keep their colours.",
+        "Lucent Look: no background behind the Home system stats.",
+        "New switch in Toggles: AB Tools Glass Look (test) - white glass icons with no background and a see-through window, for AB Tools and AB Wizard.",
+        "Black and white service logos (RD, AD, PM, TB, OC, EN, ED) in Search All and in the Fen Light, Red Light, POV and Umbrella stream windows.",
+        "Fen Light, Red Light, POV and Umbrella: the Selected Stream details use the smaller text of Search All.",
+        "What's New: after an update, the first time AB Tools is opened it shows what changed in the last 10 versions."
+      ],
+      "ar": [
+        "NewPipe: يعود البحث والرائج والبث المباشر والإعلانات إلى عرض النتائج عند إيقاف تقسيم الصفحات.",
+        "مشغّل AF3: يظهر اسم الزر المحدد تحت الأزرار (تشغيل، إيقاف مؤقت، الفصل التالي، الصوت، الترجمة...) كما في مشغّل Lucent.",
+        "مظهر Lucent: أيقونات القوائم البيضاء (Fen Light وRed Light وعُقد أدوات AB وAB Last Played) تصبح داكنة على البطاقة المحددة، وتحتفظ بطاقات الإضافات بألوانها.",
+        "مظهر Lucent: لا خلفية خلف إحصاءات النظام في الرئيسية.",
+        "مفتاح جديد في المفاتيح: المظهر الزجاجي لأدوات AB (تجريبي) - أيقونات زجاجية بيضاء بلا خلفية ونافذة شفافة، لأدوات AB ومعالج AB.",
+        "شعارات خدمات بالأبيض والأسود (RD وAD وPM وTB وOC وEN وED) في البحث الشامل وفي نوافذ المصادر لـ Fen Light وRed Light وPOV وUmbrella.",
+        "Fen Light وRed Light وPOV وUmbrella: تفاصيل المصدر المحدد بالنص الأصغر نفسه في البحث الشامل.",
+        "ما الجديد: بعد كل تحديث، تعرض أدوات AB عند فتحها أول مرة ما تغيّر في آخر عشرة إصدارات."
+      ]
+    },
+    {
+      "v": "4.8.55",
+      "from": "4.8.55",
+      "en": [
+        "Lucent Look: TinyPPI's panels (codec box, speaker layout, Player Process Info) are glass."
+      ],
+      "ar": [
+        "مظهر Lucent: لوحات TinyPPI (صندوق الترميز ومخطط السماعات ومعلومات المشغّل) أصبحت زجاجية."
+      ]
+    },
+    {
+      "v": "4.8.54",
+      "from": "4.8.54",
+      "en": [
+        "Lucent Look: the info pills (4K, Dolby Vision, 5.1...) and the Spotlight Play / More Information buttons are see-through glass with white text and icons."
+      ],
+      "ar": [
+        "مظهر Lucent: شارات المعلومات (4K وDolby Vision و5.1...) وزرّا التشغيل والمزيد من المعلومات في Spotlight أصبحت زجاجية شفافة بنص وأيقونات بيضاء."
+      ]
+    },
+    {
+      "v": "4.8.53",
+      "from": "4.8.52",
+      "en": [
+        "Lucent Look: dialogs and the Options panel are see-through glass. Toggles > AF3: Lucent Look > Glass transparency: 30%, 50%, 70% (default) or 90% solid."
+      ],
+      "ar": [
+        "مظهر Lucent: النوافذ الحوارية ولوحة الخيارات زجاجية شفافة. المفاتيح > AF3: مظهر Lucent > شفافية الزجاج: 30٪ أو 50٪ أو 70٪ (الافتراضي) أو 90٪ معتم."
+      ]
+    },
+    {
+      "v": "4.8.51",
+      "from": "4.8.51",
+      "en": [
+        "Fen Light, Red Light, POV and Umbrella: the stream window shows the Selected Stream details under the plot - resolution, size, bitrate, video, HDR, audio, channels, release, service and languages.",
+        "Lucent Look: the menu is Off / Lucent Glass / Lucent Glass AMOLED with the focus-colour switch; the extra colour schemes are gone."
+      ],
+      "ar": [
+        "Fen Light وRed Light وPOV وUmbrella: نافذة المصادر تعرض تفاصيل المصدر المحدد تحت القصة - الدقة والحجم ومعدل البت والفيديو وHDR والصوت والقنوات والإصدار والخدمة واللغات.",
+        "مظهر Lucent: القائمة إيقاف / Lucent Glass / Lucent Glass AMOLED مع مفتاح لون التحديد، وأُزيلت أنظمة الألوان الإضافية."
+      ]
+    }
+  ]
 }

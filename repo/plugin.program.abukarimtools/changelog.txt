@@ -1,3 +1,18 @@
+v4.12.34  (2026-11-24)
+- TMDbHelper Arabic (strings.po): Kodi reads an add-on's strings only at
+  start-up, so when the patch actually writes the file a notification (10 s,
+  TMDbHelper icon) says to restart Kodi (string 32373); the patch result line
+  says it too. New patch key 'restart_note' (binary inject branch).
+
+v4.12.33  (2026-11-24)
+- Removed "AF3: Plot on the Right": the toggle (af3_plotright_toggle.py,
+  menu entry, Toggles row, icons, strings 30890-30893 / 32182), both patcher
+  blocks (4.6.15 Home boxes and 4.8.20 views/combined/search include
+  ABK_PlotRight_Box, resources/af3_plotright/) and the af3_plotsize box-font
+  pass. The unrelated info-line fixes of the 4.6.x block (whole hours, no
+  "0 minutes", star divider, no leading dot) stay. Pairs with AF3 50.12.8,
+  which drops the ratings_visible hook.
+
 v4.12.32  (2026-11-24)
 - TMDbHelper Arabic: new patch replaces plugin.video.themoviedb.helper
   resources/language/resource.language.ar_sa/strings.po with Taiseer's

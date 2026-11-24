@@ -74,7 +74,7 @@ CATEGORIES = [
 # 4.9.3: groups inside a category - key: (label id, description id, entries)
 GROUPS = {
     'grp_tabs':   (32277, 32281, [('dplex_toggle', 30010), ('korean_toggle', 30011)]),
-    'grp_af3':    (32278, 32282, [('af3_flagstyle', 32230), ('af3_plotright', 30890),
+    'grp_af3':    (32278, 32282, [('af3_flagstyle', 32230),
                                   ('af3_plotsize', 32113), ('af3_discmenu', 32102),
                                   ('af3_defaultosd', 32309), ('af3_percent', 32368),
                                   ('af3_trailers', 30430)]),
@@ -110,7 +110,6 @@ ICON_FILES = {
     'af3_lucent':     'resources/icons/af3_lucent.png',
     'af3_lucentplayer': 'resources/icons/af3_lucentplayer.png',
     'lucent_from_af3': 'resources/icons/lucent_from_af3.png',
-    'af3_plotright':  'resources/icons/af3_plotright.png',
     'af3_plotsize':   'resources/icons/af3_plotsize.png',
     'af3_discmenu':   'resources/icons/af3_discmenu.png',
     'af3_defaultosd': 'resources/icons/af3_lucentplayer.png',
@@ -173,7 +172,7 @@ DESC = {
     'dplex_toggle': 32173, 'korean_toggle': 32174, 'icons_toggle': 32175,
     'lucent_theme': 32176, 'af3_trailers': 32177, 'af3_waves': 32178,
     'af3_lucent': 32179, 'af3_lucentplayer': 32180, 'lucent_from_af3': 32181,
-    'af3_plotright': 32182, 'af3_plotsize': 32183, 'af3_discmenu': 32184,
+    'af3_plotsize': 32183, 'af3_discmenu': 32184,
     'seek_preview': 32186, 'font_scale': 32187, 'search_folders': 32294,
     'search_usenet': 32315, 'najd_subs': 32349,
     'profile_export': 32188, 'profile_restore': 32189,
@@ -215,9 +214,6 @@ def switch_state(mode):
         if mode == 'af3_waves':
             from resources.lib import af3_waves_toggle
             return bool(af3_waves_toggle.waves_on())
-        if mode == 'af3_plotright':
-            from resources.lib import af3_plotright_toggle
-            return af3_plotright_toggle.plot_right_on()
         if mode == 'af3_discmenu':
             from resources.lib import af3_discmenu_toggle
             return af3_discmenu_toggle.disc_menu_on()
