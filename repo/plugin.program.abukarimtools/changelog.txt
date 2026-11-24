@@ -1,10 +1,31 @@
 v4.12.39  (2026-11-24)
-- Najd 2.9.7.11 bundled (from 2.9.7.8): when the built-in subtitle fails
-  (PGS or none) it downloads a matching subtitle in any language and
-  translates it with AI; translation in parts (watch after ~10 min); finished
-  subtitles saved and reused; file names by title; a real OpenSubtitles login
-  check; share the report by WhatsApp / Telegram / mail; no "What's new"
-  window at start. Installed by the boot check like before (newer zip wins).
+- Najd 2.9.7.11 bundled (from 2.9.7.8), installed by the boot check like
+  before (newer zip wins). What's new in Najd 2.9.7.11:
+  1) Fallback subtitle when the built-in one fails: a picture subtitle (PGS),
+     none, or a non-MKV video no longer ends in an error. Najd asks whether to
+     download a matching subtitle and translate it to Arabic with AI (Ignore /
+     Yes). Yes searches SubDL, OpenSubtitles and SubSource for the release
+     (Blu-ray, WEB...), languages in this order: English, Korean, Japanese,
+     Russian, Spanish, French, Portuguese, German, Turkish, Italian, Chinese;
+     timed to the video itself (even when its own subtitle is a picture one),
+     translated and played at once. Ignore closes quietly.
+  2) Fewer downloads: at most 4 per request, stops at the first match; a site
+     or add-on out of downloads is skipped for the others; the OpenSubtitles
+     window shows only the first time; fixed OpenSubtitles results without a
+     release name being left out.
+  3) Translation in parts: 10 minutes from the current position, then the
+     film starts; the rest in the background ahead of playback; done parts
+     are kept and resumed without a new download or translation.
+  4) Finished subtitles (corrected, timed or translated) are saved and play
+     by themselves next time, also listed as "Saved subtitle for this title";
+     picking another subtitle or re-timing leaves the saved one alone.
+  5) Saved file names: film title + year; show + season/episode (e.g.
+     Prisoner 951 S01E02); built-in subtitles no longer overwrite each other.
+  6) Key checks: the OpenSubtitles check really signs in and shows today's
+     downloads left; user name + password without an API key gets a note.
+  7) Problem report: WhatsApp, Telegram, e-mail, copy or save as a file.
+  8) The "What's new" window no longer opens at start / after an update; it
+     is in the add-on's settings.
 - Search All: a stream whose service is AIOStreams itself (no debrid named)
   shows the AIOStreams logo under the quality pill and on the service tile
   (_OWN_ICON 'AIOSTREAMS' -> lucent/addons/aio.png).

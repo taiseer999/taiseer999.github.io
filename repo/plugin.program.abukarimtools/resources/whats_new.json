@@ -2,6 +2,38 @@
   "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
   "entries": [
     {
+      "v": "4.12.39",
+      "from": "4.12.37",
+      "en": [
+        "Faster boot: AB Tools runs one patch check at a time, and opening AB Tools no longer starts a second full check while the box is starting.",
+        "Lucent Player: the AF3 \"Press down\" hint (playlist / bookmarks / cast) is shown under the buttons.",
+        "Search All: streams that come from AIOStreams itself show the AIOStreams logo.",
+        "[B]What's new in Najd Smart Subtitles 2.9.7.11[/B]",
+        "[B]1) A fallback subtitle when the built-in one fails[/B]\n      - If the built-in subtitle is a picture subtitle (PGS), missing, or the video is not MKV, Najd no longer stops with an error.\n      - It asks: \"Download a matching subtitle and translate it to Arabic with AI?\" - Ignore or Yes.\n      - On Yes it searches SubDL, OpenSubtitles and SubSource for a subtitle that matches the release (Blu-ray, WEB...).\n      - Language order: English, Korean, Japanese, Russian, Spanish, French, Portuguese, German, Turkish, Italian, Chinese.\n      - It is timed to the video itself, even when the video's own subtitle is a picture one.\n      - Then it is translated and plays right away.\n      - On Ignore the message closes quietly and nothing happens.",
+        "[B]2) Fewer downloads, sites at their limit are skipped[/B]\n      - At most 4 downloads per request; it stops at the first matching subtitle.\n      - When a site or add-on is out of downloads, the other sources are used.\n      - The OpenSubtitles window no longer repeats after the first time.\n      - Fixed: OpenSubtitles results without a release name were all left out.",
+        "[B]3) Translation in parts[/B]\n      - The 10 minutes from where you are are translated, then the film starts.\n      - The rest is translated in the background ahead of where you watch.\n      - What is translated is kept; back in the film it carries on where it stopped, with no new download or translation.",
+        "[B]4) Finished subtitles are saved and play by themselves[/B]\n      - After correcting, timing or translating, the result is saved.\n      - Playing the title again uses it right away - no download, no AI work again.\n      - It is also in the subtitle list as \"Saved subtitle for this title\".\n      - If you pick another subtitle or re-time it, the saved one stays out of your way.",
+        "[B]5) Saved file names[/B]\n      - A film by its full title and year.\n      - An episode by the show name with season and episode, e.g. Prisoner 951 S01E02.\n      - Built-in subtitles were saved under one name and overwrote each other - no more.",
+        "[B]6) Key checks[/B]\n      - The OpenSubtitles check is real now: it signs in and shows today's downloads left.\n      - A user name and password without an API key gets a note that signing in needs the key.",
+        "[B]7) Problem report[/B]\n      - Send it by WhatsApp, Telegram or e-mail, or copy it or save it as a file.",
+        "[B]8) Other[/B]\n      - The \"What's new\" window no longer opens at start or after an update; it is in the add-on's settings."
+      ],
+      "ar": [
+        "إقلاع أسرع: يشغّل AB Tools فحص الباتشات مرة واحدة في كل وقت، ولم يعد فتح AB Tools أثناء الإقلاع يبدأ فحصاً كاملاً ثانياً.",
+        "مشغّل Lucent: تظهر عبارة AF3 «اضغط للأسفل» (قائمة التشغيل أو العلامات أو طاقم العمل) تحت الأزرار.",
+        "كل المصادر: تظهر شعار AIOStreams على المصادر القادمة من AIOStreams نفسها.",
+        "[B]ما الجديد في إضافة ترجمة نجد 2.9.7.11[/B]",
+        "[B]١) ترجمة بديلة عند فشل الترجمة المدمجة[/B]\n      - إذا كانت الترجمة المدمجة صورية (PGS)، أو غير موجودة، أو الفيديو ليس MKV، لا تتوقف الإضافة برسالة خطأ.\n      - يظهر سؤال: «هل تريد تنزيل ترجمة مطابقة وترجمتها إلى العربية بالذكاء الاصطناعي؟» والخياران: تجاهل أو نعم.\n      - عند «نعم» تبحث في SubDL وOpenSubtitles وSubSource عن ترجمة تطابق نسخة الفيلم (Blu-ray أو WEB…).\n      - ترتيب اللغات: الإنجليزية، الكورية، اليابانية، الروسية، الإسبانية، الفرنسية، البرتغالية، الألمانية، التركية، الإيطالية، الصينية.\n      - يُضبط توقيتها على توقيت الفيديو نفسه، حتى لو كانت ترجمته صورية.\n      - ثم تُترجم وتُشغَّل مباشرة.\n      - عند «تجاهل» تُغلق الرسالة بهدوء ولا يحدث شيء.",
+        "[B]٢) توفير التنزيلات وتجاوز المواقع التي نفد حدّها[/B]\n      - سقف 4 تنزيلات للطلب كله، وتتوقف عند أول ترجمة مطابقة.\n      - إذا نفد حدّ موقع أو إضافة تنتقل الإضافة إلى بقية المصادر.\n      - لا تتكرر نافذة OpenSubtitles بعد المرة الأولى.\n      - إصلاح خطأ كان يستبعد كل نتائج OpenSubtitles التي ليس لها اسم نسخة.",
+        "[B]٣) ترجمة على أجزاء[/B]\n      - تُترجم 10 دقائق من الموضع الذي أنت عنده، ثم يبدأ الفيلم.\n      - الباقي يُترجم في الخلفية أمام موضع مشاهدتك.\n      - ما تُرجم يُحفظ، وإذا رجعت للفيلم يكمل من حيث توقف دون تنزيل أو ترجمة من جديد.",
+        "[B]٤) حفظ الترجمة المنتهية وتشغيلها تلقائياً[/B]\n      - بعد انتهاء التصحيح أو الضبط أو الترجمة تُحفظ النتيجة.\n      - عند إعادة تشغيل العمل تُشغَّل تلقائياً دون تنزيل أو إعادة عمل الذكاء الاصطناعي.\n      - تظهر أيضاً في قائمة الترجمة كسطر «الترجمة المحفوظة لهذا العمل».\n      - إذا اخترت ترجمة أخرى أو أعدت ضبط التوقيت تُترك المحفوظة ولا تتعارض معك.",
+        "[B]٥) أسماء الملفات المحفوظة[/B]\n      - الفيلم باسمه الكامل مع السنة.\n      - المسلسل باسمه مع الموسم والحلقة، مثل: Prisoner 951 S01E02.\n      - كانت الترجمات المدمجة تُحفظ باسم واحد وتكتب فوق بعضها، وهذا انتهى.",
+        "[B]٦) فحص المفاتيح[/B]\n      - فحص OpenSubtitles صار حقيقياً: يسجّل الدخول فعلاً ويعرض المتبقي من التنزيلات اليوم.\n      - إذا أدخلت اسم المستخدم وكلمة المرور بلا مفتاح API يُنبّهك بأن تسجيل الدخول لا يعمل بدون المفتاح.",
+        "[B]٧) تقرير المشكلة[/B]\n      - يمكن إرساله بالواتساب أو تيليجرام أو البريد الإلكتروني، أو نسخه أو تنزيله كملف.",
+        "[B]٨) أخرى[/B]\n      - لم تعد نافذة «ما الجديد» تظهر عند التشغيل أو التحديث، وتجدها في إعدادات الإضافة."
+      ]
+    },
+    {
       "v": "4.12.36",
       "en": [
         "AF3: Watched percentage has a new mode - a thin progress bar on every poster (like Netflix) with the number on the focused item. Shows and seasons show watched episodes (e.g. 3/10) instead of a percentage (needs AF3 50.12.11)."
