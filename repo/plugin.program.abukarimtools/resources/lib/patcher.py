@@ -4425,6 +4425,24 @@ def _skinvars_ar_entry(sid, ar):
 
 PATCHES += [_skinvars_ar_entry(_sid, _ar) for _sid, _ar in _SKINVARS_AR_FIX]
 
+# ── TMDbHelper: Taiseer's Arabic translation (4.12.32) ──
+# resources/tmdbhelper_ar/strings.po (Fusha, 723 entries - every string of
+# TMDbHelper 6.22.x) replaces plugin.video.themoviedb.helper's ar_sa
+# strings.po. Byte-compared, so a settled box rewrites nothing; a TMDbHelper
+# update that ships its own ar_sa file gets ours back on the next sweep.
+PATCHES += [
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'language', 'resource.language.ar_sa', 'strings.po'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'inject_source': os.path.join('resources', 'tmdbhelper_ar', 'strings.po'),
+        'description': 'TMDbHelper - Arabic strings.po (ar_sa, Fusha)',
+    },
+]
+
+
 # ── TMDbHelper: crash after backing out of the player list (4.10.12) ──
 # Kodi 22 RC2 crashed (SIGSEGV in CGUIListItem::FreeMemory on the
 # LanguageInvoker thread, from PyGC_Collect at script exit) when the player

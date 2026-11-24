@@ -1,3 +1,9 @@
+v4.12.32  (2026-11-24)
+- TMDbHelper Arabic: new patch replaces plugin.video.themoviedb.helper
+  resources/language/resource.language.ar_sa/strings.po with Taiseer's
+  translation (resources/tmdbhelper_ar/strings.po, 723 entries - all 721
+  strings of 6.22.x). Byte-compared binary inject, re-applied after updates.
+
 v4.12.31  (2026-11-24)
 - New AF3 switch "AF3: Watched percentage" (af3_percent_toggle.py, in the AF3
   group): AF3 50.12.7+ shows the watched percentage as a number in a small
