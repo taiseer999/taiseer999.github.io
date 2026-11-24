@@ -210,6 +210,20 @@ def _menu_sweep():
         from resources.lib import patch_watchdog, patcher
         if patch_watchdog.first_run_active():
             return                      # never sweep under first-run dialogs
+        # 4.12.37: the self-heal is for a session WITHOUT a watchdog. With
+        # one alive it already sweeps at boot, after every update and every
+        # 30 min - a second full pass here only doubled the boot load (two
+        # 434-entry runs side by side while Home loaded its widgets).
+        if patch_watchdog.watchdog_alive():
+            xbmc.log('[AbukarimTools MenuSweep] watchdog is running - skipped', xbmc.LOGDEBUG)
+            return
+        if patcher.patch_run_active():
+            xbmc.log('[AbukarimTools MenuSweep] a patch run is in progress - skipped', xbmc.LOGDEBUG)
+            return
+        age = patcher.last_run_age()
+        if age is not None and age < 600:
+            xbmc.log('[AbukarimTools MenuSweep] last run %ds ago - skipped' % age, xbmc.LOGDEBUG)
+            return
         ids = [a for a in patcher.target_addon_ids() if patch_watchdog._addon_path(a)]
         if ids:
             patcher.apply_set(addon_ids=ids)

@@ -6555,7 +6555,93 @@ def _force_tmdbh_settings():
             yield False, '[%s] Setting %s: %s' % (aid, sid, e), False
 
 
+# 4.12.37: one patch run at a time across every AB Tools process. The boot
+# sweep (service) and the menu self-heal (its own RunPlugin interpreter) ran
+# side by side at boot - two 434-entry passes over the same files while Home
+# was still loading its widgets (log 2026-11-24 07:28:42). Home-window
+# properties are shared by all Python interpreters in this Kodi, so they serve
+# as the lock; a holder older than _RUN_LOCK_STALE is a crashed run.
+_RUN_LOCK_PROP  = 'abukarimtools.patch.running'
+_RUN_LAST_PROP  = 'abukarimtools.patch.last'
+_RUN_LOCK_STALE = 300
+_RUN_LOCK_WAIT  = 180
+_RUN_HELD       = [False]
+
+
+def _run_lock_holder():
+    try:
+        raw = xbmcgui.Window(10000).getProperty(_RUN_LOCK_PROP)
+        token, ts = raw.rsplit('@', 1)
+        if time.time() - float(ts) < _RUN_LOCK_STALE:
+            return token
+    except Exception:
+        pass
+    return ''
+
+
+def patch_run_active():
+    """True while another process is in the middle of a patch run."""
+    return bool(_run_lock_holder())
+
+
+def last_run_age():
+    """Seconds since the last patch run finished (any process), or None."""
+    try:
+        return time.time() - float(xbmcgui.Window(10000).getProperty(_RUN_LAST_PROP))
+    except Exception:
+        return None
+
+
+def _acquire_run_lock():
+    token = 'run-%d-%d' % (int(time.time() * 1000), id(object()))
+    mon = xbmc.Monitor()
+    waited = 0.0
+    while waited < _RUN_LOCK_WAIT:
+        if not _run_lock_holder():
+            home = xbmcgui.Window(10000)
+            home.setProperty(_RUN_LOCK_PROP, '%s@%f' % (token, time.time()))
+            # get/set are not atomic across interpreters: re-read after a
+            # moment and back off if another process wrote over us
+            if mon.waitForAbort(0.05):
+                return None
+            if _run_lock_holder() == token:
+                return token
+        if waited == 0.0:
+            _log('Another patch run is in progress - waiting for it.')
+        if mon.waitForAbort(0.5):
+            return None
+        waited += 0.5
+    _log('Patch run lock still held after %ds - running anyway.' % _RUN_LOCK_WAIT,
+         xbmc.LOGWARNING)
+    return token
+
+
+def _release_run_lock(token):
+    try:
+        home = xbmcgui.Window(10000)
+        if _run_lock_holder() in (token, ''):
+            home.clearProperty(_RUN_LOCK_PROP)
+        home.setProperty(_RUN_LAST_PROP, '%f' % time.time())
+    except Exception:
+        pass
+
+
 def apply_set(group=None, addon_ids=None):
+    """Serialised entry point for _apply_set (see _RUN_LOCK_PROP)."""
+    if _RUN_HELD[0]:                        # re-entered from inside a run
+        return _apply_set(group=group, addon_ids=addon_ids)
+    token = _acquire_run_lock()
+    if token is None:                       # Kodi is shutting down
+        return 0, 0, 0, []
+    _RUN_HELD[0] = True
+    try:
+        return _apply_set(group=group, addon_ids=addon_ids)
+    finally:
+        _RUN_HELD[0] = False
+        _release_run_lock(token)
+
+
+def _apply_set(group=None, addon_ids=None):
     """Silent patch core — no dialogs, safe to call from the service thread.
 
     Returns (succeeded, failed, changed, results) where `changed` counts only

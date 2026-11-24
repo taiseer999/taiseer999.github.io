@@ -56,6 +56,7 @@ ADDONS_DIR  = os.path.join(xbmcvfs.translatePath('special://home/'), 'addons')
 POLL_SECONDS        = 15      # signature check — stat() only
 SETTLE_SECONDS      = 5       # gap between stability probes after a change
 SETTLE_MAX_SECONDS  = 120     # give up waiting for a folder to go quiet
+WATCHDOG_PROP       = 'abukarimtools.watchdog.alive'
 FULL_VERIFY_SECONDS = 1800    # 30 min belt-and-braces sweep
 BOOT_DELAY_SECONDS  = 20      # let Kodi's own startup add-on updates finish
 
@@ -257,6 +258,34 @@ def watch(monitor):
     _log('Watchdog started. Watching %d add-on(s): %s. Boot delay %ds before '
          'first sweep.' % (len(targets), ', '.join(targets), BOOT_DELAY_SECONDS))
 
+    # 4.12.37: tell the menu self-heal that a live watchdog owns patching
+    # this session (the menu then skips its own full sweep at boot).
+    # (one PID for every interpreter in kodi.bin, so a per-copy token: an
+    # older copy stopping after an update must not clear the new copy's flag)
+    token = 'wd-%d' % int(time.time() * 1000)
+    try:
+        xbmcgui.Window(10000).setProperty(WATCHDOG_PROP, token)
+    except Exception:
+        pass
+    try:
+        _watch(monitor, targets)
+    finally:
+        try:
+            if xbmcgui.Window(10000).getProperty(WATCHDOG_PROP) == token:
+                xbmcgui.Window(10000).clearProperty(WATCHDOG_PROP)
+        except Exception:
+            pass
+
+
+def watchdog_alive():
+    """True while a watchdog loop is running in this Kodi session."""
+    try:
+        return bool(xbmcgui.Window(10000).getProperty(WATCHDOG_PROP))
+    except Exception:
+        return False
+
+
+def _watch(monitor, targets):
     if monitor.waitForAbort(BOOT_DELAY_SECONDS):
         return
 
@@ -273,9 +302,16 @@ def watch(monitor):
     # Boot sweep: catches updates that happened while Kodi was closed, and
     # any patch that went missing for a reason we never saw. Always runs —
     # auto-patching has no kill switch (it is a fix, not a user option).
-    changed, failed = _run_pass(reason='boot sweep')
-    if not changed and not failed:
-        _log('Boot sweep: all patches already in place (nothing to do).')
+    # 4.12.37: a full run that finished moments ago (menu opened during the
+    # boot delay) already did this pass - do not repeat it.
+    _age = patcher.last_run_age()
+    if _age is not None and _age < 120:
+        _log('Boot sweep: a patch run finished %ds ago - skipped.' % _age)
+        changed = failed = 0
+    else:
+        changed, failed = _run_pass(reason='boot sweep')
+        if not changed and not failed:
+            _log('Boot sweep: all patches already in place (nothing to do).')
     state = _signatures(targets)
     _save_state(state)
     last_verify = time.time()

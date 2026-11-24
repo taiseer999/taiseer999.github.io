@@ -1,3 +1,15 @@
+v4.12.37  (2026-11-24)
+- Boot: the patch sweep no longer runs twice at once. Opening AB Tools while
+  the service was booting started a second full sweep (434 entries) beside
+  the watchdog's boot sweep, both while Home was loading its widgets
+  (log 2026-11-24 07:28:42). Now:
+  * patcher.apply_set holds a cross-process lock (Home property
+    abukarimtools.patch.running); a second caller waits for the first.
+  * the menu self-heal sweep is skipped while the watchdog is alive
+    (new Home property abukarimtools.watchdog.alive), while a run is in
+    progress, or when a run finished in the last 10 minutes.
+  * the watchdog skips its boot sweep when a run finished < 2 min ago.
+
 v4.12.36  (2026-11-24)
 - "AF3: Watched percentage": new mode "Progress bar + number on the focused
   item" (skin bool abk.percentbar, AF3 50.12.11+; offered only when the
