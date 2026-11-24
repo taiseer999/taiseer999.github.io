@@ -3636,3 +3636,31 @@ msgctxt "#32377"
 msgid "Progress bar + number on the focused item"
 msgstr ""
 
+msgctxt "#32378"
+msgid "Remove Najd (and do not install it again)"
+msgstr ""
+
+msgctxt "#32379"
+msgid "Do not install Najd"
+msgstr ""
+
+msgctxt "#32380"
+msgid "Remove Najd Smart Subtitles?[CR]Your previous subtitle service comes back, and AB Tools will not install Najd again until you choose \\"Install / update Najd\\" here. Najd's settings and keys are kept."
+msgstr ""
+
+msgctxt "#32381"
+msgid "Najd removed - your previous subtitle service is back"
+msgstr ""
+
+msgctxt "#32382"
+msgid "Najd could not be removed"
+msgstr ""
+
+msgctxt "#32383"
+msgid "Not installed (your choice)"
+msgstr ""
+
+msgctxt "#32384"
+msgid "AB Tools will not install Najd"
+msgstr ""
+

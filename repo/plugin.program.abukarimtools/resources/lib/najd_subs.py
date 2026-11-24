@@ -20,6 +20,10 @@ updates it itself:
     once, so Najd can listen to the audio to time the lines.
   * Mods > Najd Smart Subtitles: default on / off, Najd's setup wizard, its
     settings, the connection test, reinstall from AB Tools, FFmpeg tools.
+  * 4.12.40: the user can say no to Najd - "Do not install Najd" (before
+    the boot check got to it) or "Remove Najd" (uninstall). Either sets
+    'declined' in najd_state.json and the boot check then never installs or
+    updates it; "Install / update Najd" from the same menu clears it.
 
 Dex Hub keeps its own subtitle flow (DexSubtitles, AutoSync, Translate
 subtitle): the Piers edition of Najd waits for it on Dex Hub videos.
@@ -317,9 +321,63 @@ def install_ffmpeg():
     return _ffmpeg_present()
 
 
+def declined():
+    """4.12.40: the user chose not to have Najd (menu)."""
+    return bool(_load().get('declined'))
+
+
+def _set_declined(on):
+    st = _load()
+    if bool(st.get('declined')) != bool(on):
+        if on:
+            st['declined'] = True
+        else:
+            st.pop('declined', None)
+        _save(st)
+        _log('declined -> %s' % bool(on))
+
+
+def remove():
+    """4.12.40: uninstall Najd and keep it out. The previous subtitle services
+    come back first; Najd's own settings (addon_data: keys, saved subtitles)
+    stay, so a later install picks them up. True when Najd is gone."""
+    _set_declined(True)
+    if not installed_version():
+        return True
+    if not _LOCK.acquire(False):
+        return False
+    try:
+        if is_default():
+            set_default(False)
+        if enabled():
+            # stop its service before its files go
+            _rpc('Addons.SetAddonEnabled', {'addonid': NAJD_ID, 'enabled': False})
+            xbmc.sleep(2000)
+        import shutil
+        shutil.rmtree(os.path.join(_ADDONS, NAJD_ID), ignore_errors=True)
+        # Kodi drops an add-on whose folder is gone from its database on the
+        # next local scan (CAddonDatabase::SyncInstalled)
+        xbmc.executebuiltin('UpdateLocalAddons')
+        xbmc.sleep(1500)
+        gone = not installed_version()
+        _log('removed %s: %s' % (NAJD_ID, gone))
+        return gone
+    except Exception as e:
+        _log('remove failed: %s' % e, xbmc.LOGWARNING)
+        return False
+    finally:
+        _LOCK.release()
+        try:
+            sync_owner()                       # Dex Hub AutoSync back on
+        except Exception:
+            pass
+
+
 def ensure():
     """Boot chore: Najd installed and up to date; the default service the
     first time; FFmpeg tools on CoreELEC once."""
+    if declined():
+        return False
     ok = install_bundled()
     st = _load()
     if ok and not st.get('default_set'):
@@ -340,6 +398,13 @@ def start_boot_ensure(monitor, delay=45):
     """Background thread: waits out first-run setup and playback."""
     zpath, zver = bundle()
     if not zpath:
+        return
+    if declined():
+        _log('not installed - the user chose not to have Najd')
+        try:
+            sync_owner()
+        except Exception:
+            pass
         return
     try:
         sync_owner()
@@ -376,7 +441,7 @@ def start_boot_ensure(monitor, delay=45):
 # ------------------------------------------------------------------ menu
 def summary():
     if not installed_version():
-        return T(32352)
+        return T(32383) if declined() else T(32352)
     if enabled() and is_default():
         return T(32350)
     return T(32351)
@@ -399,8 +464,13 @@ def run():
             rows.append(('test', T(32358)))
         if zpath:
             rows.append(('install', '%s (%s)' % (T(32359), zver)))
-        if _is_coreelec() and not _ffmpeg_present():
+        if _is_coreelec() and not _ffmpeg_present() and have:
             rows.append(('ffmpeg', T(32365)))
+        # 4.12.40: say no to Najd
+        if have:
+            rows.append(('remove', T(32378)))
+        elif not declined():
+            rows.append(('decline', T(32379)))
         head = '%s  -  %s' % (T(32348), T(32353) % service_name())
         idx = dlg.select(head, [r[1] for r in rows])
         if idx < 0:
@@ -418,7 +488,22 @@ def run():
         elif act == 'test':
             xbmc.executebuiltin('RunScript(%s,test)' % NAJD_ID)
             return
+        elif act == 'remove':
+            if not dlg.yesno(T(32348), T(32380)):
+                continue
+            pd = xbmcgui.DialogProgress()
+            pd.create(T(32348), T(32378))
+            ok = remove()
+            pd.close()
+            _notify(T(32381) if ok else T(32382), warn=not ok)
+            if ok:
+                return
+        elif act == 'decline':
+            _set_declined(True)
+            _notify(T(32384))
+            return
         elif act == 'install':
+            _set_declined(False)
             pd = xbmcgui.DialogProgress()
             pd.create(T(32348), T(32359))
             ok = install_bundled(force=True)

@@ -1,3 +1,14 @@
+v4.12.40  (2026-11-24)
+- Najd: you can say no to it. Mods > Najd Smart Subtitles has
+  "Remove Najd (and do not install it again)" when it is installed and
+  "Do not install Najd" when it is not there yet. Remove: your previous
+  subtitle services come back (Dex Hub AutoSync too), its service is
+  stopped and its folder deleted; Najd's own settings and keys (addon_data)
+  are kept. Either choice is kept in najd_state.json ('declined') and the
+  boot check then never installs or updates Najd; "Install / update Najd"
+  in the same menu undoes it. Status in the menu: "Not installed (your
+  choice)".
+
 v4.12.39  (2026-11-24)
 - Najd 2.9.7.11 bundled (from 2.9.7.8), installed by the boot check like
   before (newer zip wins). What's new in Najd 2.9.7.11:

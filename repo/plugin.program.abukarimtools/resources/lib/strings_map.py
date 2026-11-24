@@ -1186,4 +1186,12 @@ STRINGS = {
     32375: ('All items', 'كل العناصر'),
     32376: ('Hidden', 'مخفية'),
     32377: ('Progress bar + number on the focused item', 'شريط تقدّم + الرقم للعنصر المحدد'),
+    # ---- 4.12.40: say no to Najd (najd_subs.py) ----
+    32378: ('Remove Najd (and do not install it again)', 'إزالة نجد (وعدم تثبيتها مجدداً)'),
+    32379: ('Do not install Najd', 'عدم تثبيت نجد'),
+    32380: ('Remove Najd Smart Subtitles?[CR]Your previous subtitle service comes back, and AB Tools will not install Najd again until you choose "Install / update Najd" here. Najd\'s settings and keys are kept.', 'هل تريد إزالة ترجمة نجد الذكية؟[CR]تعود خدمة الترجمة السابقة، ولن يثبّت AB Tools نجد مجدداً حتى تختار «تثبيت نجد أو تحديثها» من هنا. تبقى إعدادات نجد ومفاتيحها محفوظة.'),
+    32381: ('Najd removed - your previous subtitle service is back', 'أُزيلت نجد، وعادت خدمة الترجمة السابقة'),
+    32382: ('Najd could not be removed', 'تعذّرت إزالة نجد'),
+    32383: ('Not installed (your choice)', 'غير مثبّتة (باختيارك)'),
+    32384: ('AB Tools will not install Najd', 'لن يثبّت AB Tools نجد'),
 }

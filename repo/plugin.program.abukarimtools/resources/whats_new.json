@@ -2,6 +2,15 @@
   "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
   "entries": [
     {
+      "v": "4.12.40",
+      "en": [
+        "Najd Smart Subtitles is your choice: in Mods > Najd Smart Subtitles you can remove it (your previous subtitle service comes back) or tell AB Tools not to install it. AB Tools then leaves it out until you choose \"Install / update Najd\" there. Najd's settings and keys are kept."
+      ],
+      "ar": [
+        "ترجمة نجد الذكية باختيارك: من التخصيصات ← ترجمة نجد الذكية يمكنك إزالتها (فتعود خدمة الترجمة السابقة) أو طلب عدم تثبيتها، ولن يثبّتها AB Tools بعد ذلك حتى تختار «تثبيت نجد أو تحديثها» من هناك. تبقى إعدادات نجد ومفاتيحها محفوظة."
+      ]
+    },
+    {
       "v": "4.12.39",
       "from": "4.12.37",
       "en": [
