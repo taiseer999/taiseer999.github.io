@@ -171,7 +171,8 @@ class Player(xbmc.Player):
             if self.getTotalTime() < 600:          # skip trailers / clips
                 return
             try:
-                r = pipeline.embedded_resume(media.current())
+                cur = media.current()
+                r = pipeline.final_resume(cur) or pipeline.embedded_resume(cur) or pipeline.reference_resume(cur)
             except Exception as e:
                 log('embedded resume failed: %s' % e)
                 r = None
@@ -183,7 +184,8 @@ class Player(xbmc.Player):
                     set_status('الترجمة جاهزة بنسبة %d٪، ويكتمل الباقي في الخلفية...' % pct, 'busy')
                     notify('عدت إلى الفيلم: الترجمة جاهزة بنسبة %d٪ ويكتمل الباقي تلقائياً' % pct, seconds=5)
                 else:
-                    set_status('الترجمة تعمل ✓', 'ok')
+                    set_status('الترجمة المحفوظة تعمل ✓', 'ok')
+                    notify('شُغّلت الترجمة المحفوظة لهذا العمل (دون إعادة تنزيل أو تعديل)', seconds=4)
                 return
             if not setting_bool('auto_download', True):
                 return
@@ -278,6 +280,7 @@ def process_jobs(player, monitor):
             continue
         bar = xbmcgui.DialogProgressBG()
         bar.create(ADDON_NAME, 'جارٍ الاستماع إلى الفيلم...' if 'audio' in job['steps']
+                   else 'جارٍ ترجمة باقي الفيلم...' if 'reference_more' in job['steps']
                    else 'جارٍ استخراج باقي الترجمة وترجمته...' if 'embedded_more' in job['steps']
                    else 'جارٍ التصحيح بالذكاء الاصطناعي...')
         current = [job['path']]
@@ -285,7 +288,7 @@ def process_jobs(player, monitor):
         def replaced():
             """The viewer picked another subtitle meanwhile (a new job is waiting, or the
             subtitle on screen is not one of this job's versions): stop, free the queue."""
-            if 'embedded_more' not in job['steps']:
+            if 'embedded_more' not in job['steps'] and 'reference_more' not in job['steps']:
                 return False
             try:
                 if any(n.endswith('.json') for n in os.listdir(JOBS_DIR)):
@@ -293,7 +296,7 @@ def process_jobs(player, monitor):
                 last = pipeline.last_for(job.get('video') or {})
                 return bool(last) and last.get('path') != current[0] and \
                     (last.get('lineage') or last.get('path')) not in (job['path'], current[0]) and \
-                    (last.get('item') or {}).get('provider') != 'embedded'
+                    (last.get('item') or {}).get('provider') not in ('embedded', 'reference')
             except Exception:
                 return False
 
@@ -352,10 +355,18 @@ def process_jobs(player, monitor):
                 set_status(bad[0].split(':')[0][:45], 'err')
             else:
                 set_status('الترجمة تعمل ✓', 'ok')
+        if new_path or (lines and not any(x in ' '.join(lines) for x in
+                                          ('نفد', 'تعذر', 'لم ', 'توقف', 'غير', 'لا يطابق', 'مشغول', 'خطأ'))):
+            # finished (not stopped halfway by an error or a used-up AI allowance): keep it,
+            # so the next time this film plays nothing is redone
+            try:
+                pipeline.keep_final(job.get('video') or {}, new_path or current[0], job.get('item') or {})
+            except Exception as e:
+                log('keep_final: %s' % e)
         if new_path:
             if swap(new_path, lines):
                 set_status('الترجمة مضبوطة ✓' if 'audio' in job['steps'] or 'understand' in job['steps']
-                           else 'الترجمة كاملة ✓' if 'embedded_more' in job['steps']
+                           else 'الترجمة كاملة ✓' if ('embedded_more' in job['steps'] or 'reference_more' in job['steps'])
                            else 'صُحّح النص ✓', 'ok')
             else:
                 log('a newer subtitle was chosen meanwhile (or playback ended); not swapping')

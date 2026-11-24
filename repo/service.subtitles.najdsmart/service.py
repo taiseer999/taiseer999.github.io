@@ -47,6 +47,13 @@ def search(manual=None):
                           'episode': g['episode'], 'is_episode': True})
         elif g['year']:
             video.update({'title': g['title'], 'year': g['year']})
+    if not manual and pipeline.has_final(video):
+        li = xbmcgui.ListItem(label='Arabic',
+                              label2='[COLOR gold]▶ الترجمة المحفوظة لهذا العمل (جاهزة ومُعدّلة)[/COLOR]')
+        li.setArt({'icon': '5', 'thumb': 'ar'})
+        li.setProperty('sync', 'true')
+        xbmcplugin.addDirectoryItem(HANDLE, 'plugin://%s/?action=final' % ADDON.getAddonInfo('id'),
+                                    li, isFolder=False)
     last = pipeline.last_for(video)
     if last and not manual:
         aid = ADDON.getAddonInfo('id')
@@ -55,7 +62,8 @@ def search(manual=None):
             li = xbmcgui.ListItem(label='Arabic', label2='[COLOR gold]%s[/COLOR]' % label)
             li.setArt({'icon': '5', 'thumb': 'ar'})
             xbmcplugin.addDirectoryItem(HANDLE, url, li, isFolder=False)
-    if not manual and setting('embedded_ai', 'true') != 'false' and pipeline.embedded_text_possible(video):
+    if not manual and setting('embedded_ai', 'true') != 'false' \
+            and pipeline.embedded_text_possible(video, allow_image=True):
         li = xbmcgui.ListItem(label='Arabic',
                               label2='[COLOR gold]ترجم الترجمة المدمجة في الفيديو بالذكاء الاصطناعي[/COLOR]')
         li.setArt({'icon': '5', 'thumb': 'ar'})
@@ -120,27 +128,41 @@ def download():
     xbmcplugin.addDirectoryItem(HANDLE, path, li, isFolder=False)
 
 
-def embedded_ai():
-    clean_temp()
-    video = media.current()
-    set_status('جارٍ استخراج الترجمة المدمجة وترجمتها...')
+PGS_ASK = ('الترجمة المرفقة داخل الفيلم صورية (PGS) ولا يمكن ترجمتها مباشرة.\n'
+           'هل تريد مني تنزيل ترجمة مطابقة لنسخة الفيلم (إنجليزية، وإن لم توجد فبلغة أخرى) وترجمتها إلى العربية بالذكاء الاصطناعي؟')
+NONE_ASK = ('لم أجد ترجمة مرفقة داخل الفيلم.\n'
+            'هل تريد مني تنزيل ترجمة مطابقة لنسخة الفيلم (إنجليزية، وإن لم توجد فبلغة أخرى) وترجمتها إلى العربية بالذكاء الاصطناعي؟')
+
+
+def _ask_pgs(kind='pgs'):
+    try:
+        return xbmcgui.Dialog().yesno(ADDON_NAME, PGS_ASK if kind == 'pgs' else NONE_ASK,
+                                      nolabel='تجاهل', yeslabel='نعم، نزّل وترجم')
+    except Exception as e:
+        log('pgs dialog failed: %s' % e, xbmc.LOGERROR)
+        return False
+
+
+def _run_translation(video, work, status_start, status_fail):
+    """Shared by the built-in-subtitle path and the English-reference fallback."""
+    set_status(status_start)
     dlg = xbmcgui.DialogProgress()
     dlg.create(ADDON_NAME, 'جارٍ التحضير...')
     try:
-        def pos():
-            try:
-                return xbmc.Player().getTime() * 1000
-            except Exception:
-                return 0
-        path, summary = pipeline.embedded_translate(video, progress=lambda p, m: dlg.update(p, m),
-                                                    abort=dlg.iscanceled, position=pos)
+        return work(dlg), dlg
+    except pipeline.ImageSubtitleError as e:
+        dlg.close()
+        return e, None
     except Exception as e:
         dlg.close()
-        log('embedded_ai failed: %s' % e, xbmc.LOGERROR)
-        set_status('فشل استخراج الترجمة المدمجة', 'err')
+        log('%s: %s' % (status_fail, e), xbmc.LOGERROR)
+        set_status(status_fail, 'err')
         if 'aborted' not in str(e):
             xbmcgui.Dialog().ok(ADDON_NAME, str(e))
-        return
+        return None, None
+
+
+def _show(path, summary, dlg):
     dlg.close()
     set_status('الترجمة تعمل ✓', 'ok')
     notify(' | '.join(summary), seconds=7)
@@ -148,8 +170,57 @@ def embedded_ai():
     xbmcplugin.addDirectoryItem(HANDLE, path, li, isFolder=False)
 
 
+def reference_ai(video):
+    """Fallback: English subtitle of the same release → Arabic with the AI."""
+    def pos():
+        try:
+            return xbmc.Player().getTime() * 1000
+        except Exception:
+            return 0
+    res, dlg = _run_translation(
+        video, lambda d: pipeline.reference_translate(video, progress=lambda p, m: d.update(p, m),
+                                                      abort=d.iscanceled, position=pos),
+        'جارٍ تنزيل ترجمة مطابقة وترجمتها...', 'فشل تنزيل الترجمة وترجمتها')
+    if res and dlg:
+        _show(res[0], res[1], dlg)
+
+
+def embedded_ai():
+    clean_temp()
+    video = media.current()
+
+    def pos():
+        try:
+            return xbmc.Player().getTime() * 1000
+        except Exception:
+            return 0
+    res, dlg = _run_translation(
+        video, lambda d: pipeline.embedded_translate(video, progress=lambda p, m: d.update(p, m),
+                                                     abort=d.iscanceled, position=pos),
+        'جارٍ استخراج الترجمة المدمجة وترجمتها...', 'فشل استخراج الترجمة المدمجة')
+    if isinstance(res, pipeline.ImageSubtitleError):
+        # picture subtitles (PGS) or nothing inside: instead of stopping, offer the fallback
+        if _ask_pgs(res.kind):
+            reference_ai(video)
+        else:
+            set_status('')
+        return
+    if res and dlg:
+        _show(res[0], res[1], dlg)
+
+
+def use_final():
+    r = pipeline.final_resume(media.current())
+    if not r:
+        notify('لا توجد ترجمة محفوظة لهذا العمل')
+        return
+    set_status('الترجمة المحفوظة تعمل ✓', 'ok')
+    xbmcplugin.addDirectoryItem(HANDLE, r[0], xbmcgui.ListItem(label=r[0]), isFolder=False)
+
+
 def resync():
     video = media.current()
+    pipeline.drop_final(video)       # the timing is about to change: the kept copy is stale
     last = pipeline.last_for(video)
     if not last:
         return
@@ -205,6 +276,8 @@ try:
         xbmc.executebuiltin('RunScript(%s,guide)' % ADDON.getAddonInfo('id'))
     elif action == 'embedded_ai':
         embedded_ai()
+    elif action == 'final':
+        use_final()
     elif action == 'resync':
         resync()
 finally:

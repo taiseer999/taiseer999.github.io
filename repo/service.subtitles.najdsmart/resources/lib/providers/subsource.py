@@ -3,7 +3,9 @@
 from ..common import http, setting
 
 BASE = 'https://api.subsource.net/api/v1'
-LANG = {'ar': 'arabic', 'en': 'english'}
+LANG = {'ar': 'arabic', 'en': 'english', 'fr': 'french', 'es': 'spanish', 'de': 'german', 'it': 'italian',
+        'pt': 'portuguese', 'tr': 'turkish', 'ru': 'russian', 'ja': 'japanese', 'ko': 'korean',
+        'zh': 'chinese'}
 REV = {v: k for k, v in LANG.items()}
 
 

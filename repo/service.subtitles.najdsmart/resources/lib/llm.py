@@ -98,6 +98,13 @@ def available():
     return out
 
 
+def batch_for(gemini_size, other_size):
+    """Lines per request. Gemini takes big requests (fewer of them = less of the daily
+    allowance); the small free keys of other services (Groq: 8000 tokens a minute) need small ones."""
+    av = available()
+    return gemini_size if av and av[0] == 'gemini' else other_size
+
+
 def any_available():
     return bool(available())
 

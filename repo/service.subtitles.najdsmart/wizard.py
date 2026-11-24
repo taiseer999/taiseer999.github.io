@@ -106,6 +106,10 @@ def test_all(show=True):
     if a.getSetting('os_key'):
         tests.append(('OpenSubtitles', lambda: checks.check_opensubtitles(
             a.getSetting('os_key'), a.getSetting('os_user'), a.getSetting('os_pass'))))
+    if not a.getSetting('os_key') and (a.getSetting('os_user') or a.getSetting('os_pass')):
+        # a login alone does nothing: OpenSubtitles needs its API key to be used at all
+        rows.append('[COLOR red]●[/COLOR]  OpenSubtitles: أدخلت اسم المستخدم/كلمة المرور لكن بلا مفتاح API، فلا يعمل '
+                    'ولا يُسجَّل الدخول. أضف المفتاح (مجاني من opensubtitles.com ← API consumers) في الإعدادات.')
     from resources.lib import llm
     for pid in llm.configured():
         tests.append((llm.name(pid), (lambda p: (lambda: llm.check(p)))(pid)))
@@ -116,6 +120,9 @@ def test_all(show=True):
         names = []
     if names and a.getSetting('use_kodi_addons') != 'false':
         rows.append('[COLOR lime]●[/COLOR]  إضافات ترجمة مثبتة تُستخدم بلا مفاتيح: %s' % '، '.join(names))
+        if any('opensubtitles' in n.lower() for n in names):
+            rows.append('[COLOR yellow]●[/COLOR]  إضافة OpenSubtitles.com المثبتة في كودي لها تسجيل دخول مستقل في '
+                        'إعداداتها (غير إعدادات نجد)؛ إن ظهرت منها رسالة «download limit» فسجّل دخولك فيها.')
     tests.append(('قراءة الصوت', lambda: checks.check_audio(a.getSetting('ffmpeg_path'))))
     for n, (name, fn) in enumerate(tests):
         prog.update(int(n * 100 / len(tests)), 'فحص %s...' % name)

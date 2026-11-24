@@ -61,7 +61,7 @@ color:#fff;font-size:17px;padding:12px;font-family:inherit}
 #note{height:140px}
 button,a.b{display:block;width:100%%;box-sizing:border-box;padding:14px;border:0;border-radius:12px;
 font-size:18px;font-weight:bold;margin-top:10px;text-align:center;text-decoration:none;font-family:inherit}
-.g{background:#ecbe5c;color:#111}.w{background:#25d366;color:#08210f}.s{background:#24324d;color:#eef}
+.g{background:#ecbe5c;color:#111}.t{background:#2aabee;color:#06202e}.m{background:#c9d4ea;color:#14203a}.w{background:#25d366;color:#08210f}.s{background:#24324d;color:#eef}
 .ok{background:#173d27;padding:10px;border-radius:10px;display:none;margin-top:10px}
 details{margin-top:14px;color:#9aa6bd}pre{white-space:pre-wrap;font-size:11px;direction:ltr;text-align:left;
 background:#0a111c;padding:10px;border-radius:10px;max-height:300px;overflow:auto}
@@ -71,6 +71,8 @@ background:#0a111c;padding:10px;border-radius:10px;max-height:300px;overflow:aut
 <textarea id="note" placeholder="مثال: ضغطت «ترجم الترجمة المدمجة» فتوقف عند ٥٠٪ وظهر خطأ..."></textarea>
 <button class="g" onclick="copyAll()">نسخ التقرير كامل</button>
 <a class="b w" id="wa" href="#" onclick="return wa()">إرسال بالواتساب</a>
+<a class="b t" href="#" onclick="return tg()">إرسال بتيليجرام</a>
+<a class="b m" href="#" onclick="return ml()">إرسال بالبريد الإلكتروني</a>
 <button class="s" onclick="dl()">تنزيل ملف التقرير</button>
 <div class="ok" id="ok"></div>
 <details><summary>اعرض التقرير (%(n)d سطر)</summary><pre id="rep"></pre></details>
@@ -88,6 +90,9 @@ function copyAll(){sendNote();var t=document.getElementById('tmp');t.value=full(
  ok(done?'✓ نُسخ — الصقه في المحادثة':'تعذر النسخ تلقائياً: افتح «اعرض التقرير» وانسخه يدوياً');}
 function wa(){sendNote();var t=full();if(t.length>6000)t=t.slice(0,1200)+'\\n...\\n'+t.slice(-4600);
  location.href='https://wa.me/?text='+encodeURIComponent(t);return false;}
+function short(n){var t=full();if(t.length>n)t=t.slice(0,Math.floor(n*0.2))+'\\n...\\n'+t.slice(-Math.floor(n*0.78));return t;}
+function tg(){sendNote();location.href='https://t.me/share/url?url=%%20&text='+encodeURIComponent(short(3500));return false;}
+function ml(){sendNote();location.href='mailto:?subject='+encodeURIComponent('تقرير ترجمة نجد')+'&body='+encodeURIComponent(short(3000)+'\\n\\n(للتقرير الكامل: اضغط «تنزيل ملف التقرير» وأرفق الملف najd-report.txt)');return false;}
 function dl(){sendNote();var b=new Blob([full()],{type:'text/plain;charset=utf-8'});
  var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='najd-report.txt';
  document.body.appendChild(a);a.click();ok('✓ نُزّل الملف — ستجده في التنزيلات، فأرسله في المحادثة');}

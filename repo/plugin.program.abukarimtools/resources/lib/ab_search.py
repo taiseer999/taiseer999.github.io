@@ -1210,7 +1210,8 @@ def _spec_icons(props, th, provider):
 
 
 # 4.12.28: services that are one of our own sources show that source's icon
-_OWN_ICON = {'USENET': 'nn', 'MYFOLDERS': 'loc', 'FOLDERS': 'loc'}
+# 4.12.39: AIOStreams as the service (its own streams, no debrid named) - its logo
+_OWN_ICON = {'USENET': 'nn', 'MYFOLDERS': 'loc', 'FOLDERS': 'loc', 'AIOSTREAMS': 'aio', 'AIOSTREAM': 'aio'}
 
 
 def _own_icon(name):

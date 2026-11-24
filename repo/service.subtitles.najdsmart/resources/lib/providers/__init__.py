@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import concurrent.futures
 import re
 
@@ -196,6 +197,29 @@ def limited(provider):
         return False
 
 
+def source_limited(item):
+    """A Kodi add-on (OpenSubtitles.com ...) that stopped giving files is skipped for a few
+    hours, so its pop-up (e.g. «download limit») does not come back for every try."""
+    if item.get('provider') == 'kodi':
+        return limited('kodi_' + re.sub(r'\W+', '_', item.get('source', '')))
+    return limited(item.get('provider', ''))
+
+
+def limited_names():
+    """Names of the sites / add-ons that are resting now (for the message to the viewer)."""
+    import time
+    out = []
+    try:
+        from ..common import CACHE_DIR
+        for n in os.listdir(CACHE_DIR):
+            if n.startswith('limit_') and n.endswith('.json') and limited(n[6:-5]):
+                k = n[6:-5]
+                out.append(k[5:].replace('_', ' ').strip() if k.startswith('kodi_') else NAMES.get(k, k))
+    except Exception:
+        pass
+    return out
+
+
 def _note_limit(provider, err):
     import time
     m = re.search(r'retryAfterSeconds"?\s*:\s*(\d+)', err)
@@ -213,6 +237,9 @@ def download(item):
         return PROVIDERS[prov].download(item)
     except Exception as e:
         t = str(e)
+        if prov == 'kodi' and 'ملف ترجمة' in t:
+            # the add-on gave no file (usually its own download limit): rest it, once
+            _note_limit('kodi_' + re.sub(r'\W+', '_', item.get('source', '')), '')
         if '429' in t and ('limit' in t.lower() or 'quota' in t.lower()):
             _note_limit(prov, t)
             raise DailyLimit('%s: نفد حد التنزيل المجاني اليوم' % NAMES.get(prov, prov))

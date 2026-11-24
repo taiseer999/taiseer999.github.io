@@ -198,11 +198,13 @@ def plan_chunks(starts, now, chunk=120, first_ms=300000, first_cap=60):
 
 
 def semantic_sync(cues, en, title='', position=None, progress=None, abort=None,
-                  on_partial=None, chunk=90, workers=2, asker=None):
+                  on_partial=None, chunk=None, workers=2, asker=None):
     """Returns (new_cues or None, info). Also corrects the Arabic text."""
     from . import llm
     if asker is None and not llm.any_available():
         raise SemSyncError('no_key')
+    if chunk is None:
+        chunk = 90                           # as before: matching lines to the English is kept exactly as it was
     api_key, model = '', 'multi'
     ask = asker or _ask
 

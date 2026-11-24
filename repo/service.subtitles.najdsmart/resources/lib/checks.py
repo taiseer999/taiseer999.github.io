@@ -39,21 +39,40 @@ def check_subsource(key):
 
 
 def check_opensubtitles(key, user='', pwd=''):
+    """A real test: the key is tried on a search, then the login is made for real and the
+    account's remaining downloads are read back (so «logged in» is proven, not assumed)."""
     try:
         http('https://api.opensubtitles.com/api/v1/subtitles',
              params=[('imdb_id', '1375666'), ('languages', 'ar')],
              headers={'Api-Key': key, 'Accept': 'application/json'}, timeout=20)
     except Exception as e:
         return False, _err(e)
-    if user and pwd:
-        try:
-            http('https://api.opensubtitles.com/api/v1/login',
+    if not (user and pwd):
+        return True, 'المفتاح يعمل ✓ — بدون تسجيل دخول (حدّ التنزيل اليومي أقل؛ أضف اسم المستخدم وكلمة المرور)'
+    try:
+        r = http('https://api.opensubtitles.com/api/v1/login',
                  json_body={'username': user, 'password': pwd},
                  headers={'Api-Key': key, 'Accept': 'application/json'}, timeout=20)
-        except Exception as e:
-            return False, 'المفتاح صحيح لكن اسم المستخدم أو كلمة المرور خطأ' \
-                if isinstance(e, HttpError) and e.code in (400, 401) else _err(e)
-    return True, 'يعمل ✓'
+    except Exception as e:
+        return False, 'المفتاح صحيح لكن تسجيل الدخول فشل: اسم المستخدم أو كلمة المرور خطأ' \
+            if isinstance(e, HttpError) and e.code in (400, 401) else 'تسجيل الدخول فشل: %s' % _err(e)
+    tok = (r or {}).get('token')
+    if not tok:
+        return False, 'تسجيل الدخول لم يُرجع رمز دخول — تأكد من البيانات'
+    msg = 'مسجّل الدخول فعلاً ✓ باسم %s' % user
+    try:
+        base = (r.get('base_url') or 'api.opensubtitles.com').replace('https://', '').strip('/')
+        info = (http('https://%s/api/v1/infos/user' % base,
+                     headers={'Api-Key': key, 'Authorization': 'Bearer ' + tok, 'Accept': 'application/json'},
+                     timeout=20) or {}).get('data') or {}
+        rem, allowed = info.get('remaining_downloads'), info.get('allowed_downloads')
+        if rem is not None and allowed:
+            msg += ' — المتبقي اليوم %s من %s تنزيل' % (rem, allowed)
+        elif allowed:
+            msg += ' — الحدّ اليومي %s تنزيل' % allowed
+    except Exception:
+        pass
+    return True, msg
 
 
 def check_gemini(key, model):

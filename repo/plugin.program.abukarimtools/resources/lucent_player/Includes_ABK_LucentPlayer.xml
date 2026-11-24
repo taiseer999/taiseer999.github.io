@@ -482,7 +482,9 @@
 <!-- TV player: the mini guide (example 3) -->
 <!-- sport: the bar of the player menu (P1) -->
 <!-- sport bar end -->
-        
+        <include content="ABK_LP_HintText">
+            <param name="where">Window.IsVisible(videoosd)</param>
+        </include>
         </control>
     </include>
     <include name="ABK_LP_SeekBar">
@@ -790,14 +792,21 @@
          row's Down (Action_OSD_Main_OnDown) still opens the same window, so
          show the same text. One label (not AF3's two side by side) so Arabic
          reads in order: "اضغط للأسفل: قائمة التشغيل". -->
+    <!-- 4.12.39: drawn by the window on top. In DialogSeekBar it sat under
+         VideoOSD's bottom gradient (F2000000) and came out nearly black, so
+         VideoOSD draws it while the OSD is open, DialogSeekBar only for the
+         playlist / cast / bookmarks windows. -->
     <include name="ABK_LP_HintText">
+        <param name="where">[Window.IsVisible(1140) | Window.IsVisible(1141) | Window.IsVisible(videobookmarks)] + !Window.IsVisible(videoosd)</param>
+        <definition>
         <control type="group">
             <left>96</left>
             <centerbottom>20</centerbottom>
             <width>1100</width>
             <height>40</height>
             <visible>Skin.HasSetting(abk.lucentplayer) + !Pvr.IsPlayingTV + !Window.IsVisible(1152)</visible>
-            <visible>[Window.IsActive(videoosd) | Window.IsVisible(1140) | Window.IsVisible(1141) | Window.IsVisible(videobookmarks)] + [!Window.IsVisible(1141) | Skin.String(VideoOSD.PersonCredits.CastCrew,cast)]</visible>
+            <visible>$PARAM[where]</visible>
+            <visible>!Window.IsVisible(1141) | Skin.String(VideoOSD.PersonCredits.CastCrew,cast)</visible>
             <animation effect="fade" start="0" end="100" time="300" reversible="true">Visible</animation>
             <animation effect="fade" start="100" end="0" time="200" reversible="true">Hidden</animation>
             <control type="grouplist">
@@ -813,19 +822,20 @@
                     <width>24</width>
                     <height>24</height>
                     <aspectratio>keep</aspectratio>
-                    <texture colordiffuse="80FFFFFF">special://skin/extras/icons/arrow-down.png</texture>
+                    <texture colordiffuse="A6FFFFFF">special://skin/extras/icons/arrow-down.png</texture>
                 </control>
                 <control type="label">
                     <width>auto</width>
                     <height>40</height>
                     <font>abk_lp_font10</font>
-                    <textcolor>80FFFFFF</textcolor>
+                    <textcolor>A6FFFFFF</textcolor>
                     <shadowcolor>00FFFFFF</shadowcolor>
                     <aligny>center</aligny>
                     <label>[B]$LOCALIZE[31594]:[/B]  $VAR[Label_OSD_HintText]</label>
                 </control>
             </control>
         </control>
+        </definition>
     </include>
     <include name="ABK_LP_FullScreen">
         <control type="group">

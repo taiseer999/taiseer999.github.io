@@ -44,7 +44,10 @@ def _imdb_num(x):
 
 
 def search(video, langs):
-    params = [('languages', ','.join(sorted(langs)))]
+    q = []
+    for l in langs:                      # OpenSubtitles wants zh-CN / pt-PT, pt-BR
+        q += {'zh': ['zh-CN', 'zh-TW'], 'pt': ['pt-PT', 'pt-BR']}.get(l, [l])
+    params = [('languages', ','.join(sorted(q)))]
     if video.get('hash'):
         params.append(('moviehash', video['hash']))
     if video['is_episode']:

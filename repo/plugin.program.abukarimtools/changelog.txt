@@ -1,3 +1,19 @@
+v4.12.39  (2026-11-24)
+- Najd 2.9.7.11 bundled (from 2.9.7.8): when the built-in subtitle fails
+  (PGS or none) it downloads a matching subtitle in any language and
+  translates it with AI; translation in parts (watch after ~10 min); finished
+  subtitles saved and reused; file names by title; a real OpenSubtitles login
+  check; share the report by WhatsApp / Telegram / mail; no "What's new"
+  window at start. Installed by the boot check like before (newer zip wins).
+- Search All: a stream whose service is AIOStreams itself (no debrid named)
+  shows the AIOStreams logo under the quality pill and on the service tile
+  (_OWN_ICON 'AIOSTREAMS' -> lucent/addons/aio.png).
+- Lucent Player "Press down" hint (4.12.38) was drawn in DialogSeekBar,
+  under VideoOSD's bottom gradient (F2000000), so it came out nearly black.
+  VideoOSD now draws it while the OSD is open (ABK_LP_VideoOSD);
+  DialogSeekBar only for the playlist / cast / bookmarks windows. A little
+  brighter (A6FFFFFF).
+
 v4.12.38  (2026-11-24)
 - Lucent Player: the AF3 hint "Press down: <playlist / bookmarks / cast>"
   is back at the bottom left of the OSD (it went with AF3's seek bar group,

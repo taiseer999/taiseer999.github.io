@@ -18,6 +18,15 @@ from .common import (TEMP_DIR, JOBS_DIR, CACHE_DIR, ensure_dirs, log, setting, s
 from . import arabic, subtitle, sync, providers, trace
 from .media import release_tokens, release_family, is_arabic_code, release_edition
 
+
+class ImageSubtitleError(Exception):
+    """No readable text subtitle inside the video: kind='pgs' (picture subtitles) or
+    kind='none' (nothing inside / not an MKV). The caller offers the fallback:
+    an English subtitle of the same release from the sites → Arabic with the AI."""
+    def __init__(self, msg='', kind='pgs'):
+        Exception.__init__(self, msg)
+        self.kind = kind
+
 def llm_key(pid):
     """The add-on's own key, else the one shared from Dex Hub (Piers edition)."""
     from . import llm
@@ -182,26 +191,49 @@ def _looks_english(cues, sample=400):
     return total > 200 and latin >= 0.75 * total
 
 
-def get_reference(video, chosen, ar_cues=None):
+_SCRIPTS = {'ru': ((0x400, 0x52F),), 'ja': ((0x3040, 0x30FF), (0x4E00, 0x9FFF)),
+            'ko': ((0xAC00, 0xD7AF), (0x1100, 0x11FF)), 'zh': ((0x4E00, 0x9FFF),)}
+
+
+def _looks_lang(cues, lang, sample=400):
+    """Is the text really in that language's script? (sites mislabel uploads)"""
+    if lang == 'en':
+        return _looks_english(cues, sample)
+    target = total = 0
+    for c in cues[:sample]:
+        for ch in getattr(c, 'text', '') or '':
+            if not ch.isalpha():
+                continue
+            total += 1
+            o = ord(ch)
+            if lang in _SCRIPTS:
+                if any(a <= o <= b for a, b in _SCRIPTS[lang]):
+                    target += 1
+            elif o < 0x250:
+                target += 1
+    return total > (100 if lang in ('ja', 'ko', 'zh') else 200) and target >= 0.75 * total
+
+
+def get_reference(video, chosen, ar_cues=None, lang='en', timing=None, budget=None):
     """Find an English subtitle that is in sync with this video.
     Tiers: same file (hash) → same release as the video → same release as the chosen
     Arabic subtitle (checked by timing). Uses the site keys AND the subtitle add-ons
     installed in Kodi (a4kSubtitles...), so no keys are required."""
     if chosen.get('hash_match'):
         return None, 'hash'
-    key = 'ref_%s.srt' % _video_key(video)
+    key = 'ref_%s.srt' % _video_key(video) if lang == 'en' else 'ref_%s_%s.srt' % (_video_key(video), lang)
     c = cache_get(key, 30 * 86400)
     if c:
         cached = subtitle.parse(c.decode('utf-8', 'replace'))
-        if _looks_english(cached):
+        if _looks_lang(cached, lang):
             return cached, 'cache'
         log('cached reference is not English text — searching again')
     try:
-        cands = providers.search_all(dict(video, interactive=setting_bool('ref_from_addons', True)), ['en'])
+        cands = providers.search_all(dict(video, interactive=setting_bool('ref_from_addons', True)), [lang])
     except Exception as e:
         log('reference search failed: %s' % e)
         return None, None
-    cands = [x for x in cands if x.get('lang') == 'en']
+    cands = [x for x in cands if x.get('lang') == lang]
     if video.get('is_episode') and video.get('episode'):
         se, ep = int(video.get('season') or 0), int(video['episode'])
 
@@ -218,7 +250,7 @@ def get_reference(video, chosen, ar_cues=None):
                     return False
             return True
         cands = [x for x in cands if same_episode(x)]
-    log('reference: %d English candidates' % len(cands))
+    log('reference: %d candidates (%s)' % (len(cands), lang))
     ar_rel = chosen.get('release') or ''
     v_fam = release_family(video.get('filename'))
     tiers = []
@@ -229,8 +261,9 @@ def get_reference(video, chosen, ar_cues=None):
         # a subtitle package lists many releases: judge it by the one closest to the video
         best_rel = max(rels, key=lambda r: _sim(r, video.get('filename'))) if rels else ''
         fam = release_family(best_rel)
-        if not x.get('hash_match') and rels and \
-                all(release_edition(r) != v_ed for r in rels if r):
+        named = [r for r in rels if r]      # Kodi add-ons often give no release name at all
+        if not x.get('hash_match') and named and \
+                all(release_edition(r) != v_ed for r in named):
             # Piers edition: another cut (Director's Cut vs Theatrical...) has another
             # timeline — it would move the Arabic to the wrong places
             other_cut += 1
@@ -250,8 +283,9 @@ def get_reference(video, chosen, ar_cues=None):
     tiers.sort(key=lambda t: (t[0], t[1]))
     tried = 0
     bad = set(_bad_refs(video))
-    none_key = 'refnone_%s_%s' % (_video_key(video), hashlib.sha1(
-        (chosen.get('release') or str(chosen.get('id') or '')).encode('utf-8')).hexdigest()[:8])
+    none_key = 'refnone_%s_%s%s' % (_video_key(video), hashlib.sha1(
+        (chosen.get('release') or str(chosen.get('id') or '')).encode('utf-8')).hexdigest()[:8],
+        '' if lang == 'en' else '_' + lang)
     if cache_get(none_key, 3 * 86400):
         log('reference: none fitted this video last time; not downloading again')
         return None, None
@@ -259,12 +293,18 @@ def get_reference(video, chosen, ar_cues=None):
     for tier, _score, cand, how in tiers:
         if tried >= 3:                      # each try is a download from the site's daily allowance
             break
-        if providers.limited(cand.get('provider', '')):
+        if budget is not None and budget['left'] <= 0:
+            break                           # the whole request may only spend a few downloads
+        if providers.source_limited(cand):
             continue
+        if tier == 3 and not ar_cues and not timing:
+            continue                        # nothing to prove it fits: do not spend a download
         if (cand.get('release') or '') in bad:
             log('reference skipped (audio showed it is another cut): %s' % cand.get('release'))
             continue
         tried += 1
+        if budget is not None:
+            budget['left'] -= 1
         try:
             raw, _n = extract(providers.download(cand), video)
             if not raw:
@@ -272,8 +312,8 @@ def get_reference(video, chosen, ar_cues=None):
             cues = subtitle.parse(arabic.decode(raw), video.get('fps') or 23.976)
             if len(cues) <= 20:
                 continue
-            if not _looks_english(cues):
-                log('reference candidate rejected (labelled English but the text is not): %s' % cand.get('release'))
+            if not _looks_lang(cues, lang):
+                log('reference candidate rejected (labelled %s but the text is not): %s' % (lang, cand.get('release')))
                 continue
             if tier == 2 and ar_cues:
                 # same kind of release as the VIDEO: this is what we want to follow, even if
@@ -288,27 +328,39 @@ def get_reference(video, chosen, ar_cues=None):
             if tier == 3:
                 # not proven to match the video: accept only if it follows the same
                 # timeline as the Arabic subtitle (same cut, at most a small shift)
-                if not ar_cues:
-                    continue
-                _new, info = sync.align(ar_cues, cues, local=False, min_lift=1.6, min_quality=0.5)
-                if _new is None or abs(info.get('ratio', 1) - 1) > 1e-3 or abs(info.get('offset', 0)) > 1500:
-                    log('reference candidate rejected (different timeline): %s' % info)
-                    continue
+                if ar_cues:
+                    _new, info = sync.align(ar_cues, cues, local=False, min_lift=1.6, min_quality=0.5)
+                    if _new is None or abs(info.get('ratio', 1) - 1) > 1e-3 or abs(info.get('offset', 0)) > 1500:
+                        log('reference candidate rejected (different timeline): %s' % info)
+                        continue
+                else:
+                    # the video's own (picture) subtitle timing proves it: same film, same cut
+                    _new, info = sync.align(timing, cues, local=False, min_lift=1.6, min_quality=0.5)
+                    if _new is None or not any(abs(info.get('ratio', 1) - r) < 2e-3 for r in sync.FPS_RATIOS):
+                        log('reference candidate rejected (not this video\'s timeline): %s' % info)
+                        continue
             cache_put(key, subtitle.to_srt(cues))
             rels = cand.get('releases') or [cand.get('release', '')]
             cache_put('refmeta_%s.json' % _video_key(video), json.dumps(
-                {'how': how, 'family': release_family(max(rels, key=lambda r: _sim(r, video.get('filename'))))
+                {'how': how, 'lang': lang, 'family': release_family(max(rels, key=lambda r: _sim(r, video.get('filename'))))
                  if rels else '', 'release': cand.get('release') or ''}))
             log('reference chosen (%s): %s' % (how, cand.get('release')))
             trace.event(video, 'english reference found (%s): %s' % (how, cand.get('release')))
             return cues, how
         except providers.DailyLimit as e:
-            log('reference: %s — stopped trying' % e)
+            # that site is used up for today: go on with the other sites / add-ons
+            log('reference: %s — trying the other sources' % e)
             net_trouble = True
-            break
+            tried -= 1
+            if budget is not None:
+                budget['left'] += 1          # nothing was downloaded: no allowance spent
         except Exception as e:
             log('reference download failed: %s' % e)
             net_trouble = True
+            if 'ملف ترجمة' in str(e):        # add-on gave no file (its limit): not a spent download
+                tried -= 1
+                if budget is not None:
+                    budget['left'] += 1
     if tried and not net_trouble:
         cache_put(none_key, '1')     # do not spend downloads on it again (for this subtitle)
     return None, None
@@ -476,6 +528,8 @@ def process(item, video, progress=None):
     remember_last(path, video, item)
     if steps:
         queue_job(path, video, item, steps, orig=verify_orig if 'verify' in steps else None)
+    else:
+        keep_final(video, path, item)
     step(100, 'تم')
     return path, summary
 
@@ -542,8 +596,12 @@ def _other_container(video):
         re.search(r'\.(mp4|m4v|avi|ts|m3u8|mpd|mov|wmv|flv|mpg|mpeg)($|[?])', path + ' ' + name))
 
 
-def embedded_text_possible(video):
-    """Worth offering «translate the built-in subtitle»? (cheap: no network)"""
+def embedded_text_possible(video, allow_image=False):
+    if allow_image:
+        return True           # the fallback (English subtitle from the sites) works for any video
+    """Worth offering «translate the built-in subtitle»? (cheap: no network)
+    allow_image: a video whose built-in subtitle is a picture (PGS) still gets the option,
+    because that case now has a fallback (English subtitle of the same release)."""
     path = (video.get('path') or '').split('|')[0].lower()
     name = (video.get('filename') or '').lower()
     if not _is_mkv(video) and re.search(r'\.(mp4|m4v|avi|ts|m3u8|mpd|mov|wmv)($|[?])', path + ' ' + name):
@@ -552,7 +610,7 @@ def embedded_text_possible(video):
     if c:
         try:
             d = json.loads(c.decode('utf-8'))
-            if d.get('text') is False:
+            if d.get('text') is False and not (allow_image and d.get('image')):
                 return False
         except ValueError:
             pass
@@ -616,8 +674,8 @@ def embedded_translate(video, progress=None, abort=None, position=None):
     def step(pct, msg):
         if progress:
             progress(pct, msg)
-    if not embedded_text_possible(video):
-        raise Exception('هذه الميزة لملفات MKV فقط')
+    if _other_container(video):
+        raise ImageSubtitleError('هذا الفيديو ليس MKV', 'none')
     step(5, 'قراءة قائمة الترجمات داخل الفيديو...')
     try:
         src, _a, remote = audiosync.media_source(video.get('path'))
@@ -637,7 +695,7 @@ def embedded_translate(video, progress=None, abort=None, position=None):
     if idx is None:
         e = err
         if 'not_mkv' in str(e):
-            raise Exception('هذا الفيديو ليس MKV، فلا توجد فيه ترجمة مدمجة يمكن استخراجها')
+            raise ImageSubtitleError('هذا الفيديو ليس MKV، فلا توجد فيه ترجمة مدمجة يمكن استخراجها', 'none')
         raise Exception(_net_msg(e, 'تعذرت قراءة فهرس الفيديو'))
     tracks = mkvcues.text_tracks(idx)
     if not tracks:
@@ -648,9 +706,11 @@ def embedded_translate(video, progress=None, abort=None, position=None):
         except ValueError:
             d = {}
         d['text'] = False
+        d['image'] = bool(imgs)
         cache_put(key, json.dumps(d))
-        raise Exception('الترجمة المدمجة في هذا الفيديو صور (PGS) وليست نصاً، فلا يمكن قراءتها'
-                        if imgs else 'لا توجد ترجمة مدمجة داخل هذا الفيديو')
+        if imgs:
+            raise ImageSubtitleError('الترجمة المدمجة في هذا الفيديو صور (PGS) وليست نصاً، فلا يمكن قراءتها', 'pgs')
+        raise ImageSubtitleError('لا توجد ترجمة مدمجة داخل هذا الفيديو', 'none')
 
     def rank(t):
         lang = (t.get('lang') or '').lower()
@@ -694,6 +754,313 @@ def embedded_translate(video, progress=None, abort=None, position=None):
         summary.append('الترجمة المدمجة جاهزة كاملة ✓ (%d سطراً)' % len(state['lines']))
     step(100, 'تم')
     return path, summary
+
+
+def _write_translated(video, cues, tag=''):
+    """Write the Arabic subtitle (+ a permanent copy when it is complete). → path"""
+    if setting_bool('fix_arabic', True):
+        cues, _st = arabic.fix_cues(cues, rtl_mode=setting('rtl_mode', 'rle'),
+                                    remove_ads=setting_bool('remove_ads', True),
+                                    remove_hi=setting_bool('remove_hi', False))
+    apply_offset(cues, user_offset(video))
+    cues = subtitle.fix_timing(cues)
+    path = najd_sub_path(video, 'ar', tag)
+    with open(path, 'w', encoding='utf-8-sig') as f:
+        f.write(subtitle.to_srt(cues))
+    try:
+        if tag:
+            return path
+        with open(kept_path(video), 'w', encoding='utf-8-sig') as f:
+            f.write(subtitle.to_srt(cues))
+    except OSError as e:
+        log('could not keep a copy: %s' % e)
+    return path
+
+
+REF_MAX_DOWNLOADS = 4      # all languages together, per request
+REF_LANGS = ('en', 'ko', 'ja', 'ru', 'es', 'fr', 'pt', 'de', 'tr', 'it', 'zh')   # order of preference
+
+
+def _reference_find(video, step, stop, summary):
+    """Search the sites (English first, then other languages) for a subtitle of the SAME release
+    and put it on the video's own timeline. → (cues, lang, how, synced, meta)"""
+    step(5, 'قراءة توقيت الفيديو من داخل الملف...')
+    emb = embedded_reference(video)          # timing of the picture subtitles (no text needed)
+    stop()
+    ref = how = None
+    synced = False
+    ref_lang = 'en'
+    budget = {'left': REF_MAX_DOWNLOADS}     # the free daily allowance is small: few downloads
+    for lang in REF_LANGS:
+        stop()
+        if budget['left'] <= 0:
+            break
+        if all(providers.limited(n) for n in providers.PROVIDERS):
+            break                            # every site's daily downloads are used up
+        step(12, 'البحث عن ترجمة %s مطابقة لنسخة الفيلم...' % LANG_AR.get(lang, lang))
+        # an explicit request from the viewer: search again even if a search failed before
+        cache_del('refnone_%s_%s%s' % (_video_key(video), hashlib.sha1(b'').hexdigest()[:8],
+                                       '' if lang == 'en' else '_' + lang))
+        for _attempt in range(3):
+            stop()
+            cand, how = get_reference(video, {}, ar_cues=None, lang=lang, timing=emb, budget=budget)
+            if not cand:
+                break
+            if emb and how != 'hash':
+                fitted, info = sync.align(cand, emb, local=setting_bool('local_sync', True), min_lift=1.4)
+                log('reference (%s) vs the video timing: %s' % (lang, info))
+                if fitted is None:
+                    # same name, but another timeline: it would show at the wrong moments
+                    log('reference does not fit this video; trying another')
+                    _mark_ref_bad(video)
+                    continue
+                cand, synced = fitted, True
+                ckey = 'ref_%s.srt' % _video_key(video) if lang == 'en' \
+                    else 'ref_%s_%s.srt' % (_video_key(video), lang)
+                cache_put(ckey, subtitle.to_srt(cand))
+                meta = _ref_meta(video)
+                meta['verified'] = True
+                cache_put('refmeta_%s.json' % _video_key(video), json.dumps(meta))
+                summary.append('ضُبط توقيت الترجمة على توقيت الفيديو نفسه ✓')
+            ref, ref_lang = cand, lang
+            break
+        if ref:
+            break
+    if not ref:
+        rest = providers.limited_names()
+        msg = ('لم أجد ترجمة مطابقة لنسخة هذا الفيلم (Blu-ray / WEB ...) بأي لغة في SubDL أو '
+               'OpenSubtitles أو SubSource.')
+        if rest:
+            msg += ('\nتنبيه: %s وصل حد التنزيل المجاني فلم أستطع التنزيل منه. سجّل دخولاً فيه '
+                    '(أو أدخل مفتاحه في إعدادات نجد) أو جرّب لاحقاً.' % '، '.join(rest))
+        raise Exception(msg + '\nجرّب ترجمة عربية جاهزة من القائمة.')
+    meta = _ref_meta(video)
+    summary.insert(0, 'ترجمة %s مطابقة للنسخة: %s' % (LANG_AR.get(ref_lang, ref_lang),
+                                                       meta.get('release') or 'عُثر عليها'))
+    trace.event(video, 'PGS fallback: reference %s (%s) %s' % (ref_lang, how, meta.get('release') or ''))
+    return ref, ref_lang, how, synced, meta
+
+
+REF_SLICE_MS = 10 * 60 * 1000       # the film is translated in 10-minute parts
+
+
+def _ref_key(video):
+    return 'reftr_%s.json' % _video_key(video)
+
+
+def _ref_load(video):
+    c = cache_get(_ref_key(video), 120 * 86400)
+    try:
+        d = json.loads(c.decode('utf-8')) if c else None
+    except ValueError:
+        d = None
+    if not d or not d.get('src'):
+        return None
+    d.setdefault('lines', [])
+    d.setdefault('done', [])
+    d.setdefault('tries', {})
+    return d
+
+
+def _ref_save(video, state):
+    cache_put(_ref_key(video), json.dumps({k: state.get(k) for k in
+                                           ('lang', 'release', 'src', 'lines', 'done', 'tries')},
+                                          ensure_ascii=False))
+
+
+def _ref_count(state):
+    return max(1, -(-int(max(x[1] for x in state['src'])) // REF_SLICE_MS))
+
+
+def _ref_pct(state):
+    return min(100, len(state['done']) * 100 // _ref_count(state))
+
+
+def _ref_next(state, now, first=False):
+    """Which part next: the one you are watching, then ahead of you, then behind."""
+    n = _ref_count(state)
+    left = [k for k in range(n) if k not in state['done']]
+    if not left:
+        return []
+    cur = min(n - 1, max(0, int(now // REF_SLICE_MS)))
+    ahead = [k for k in left if k >= cur]
+    behind = sorted([k for k in left if k < cur], reverse=True)
+    pick = (ahead + behind)[:1]
+    if first and pick and pick[0] == cur and cur + 1 in left and (cur + 1) * REF_SLICE_MS - now < 3 * 60000:
+        pick.append(cur + 1)             # almost through this part: take the next one too
+    return pick
+
+
+def _ref_do_slice(state, k, video, abort, step):
+    """Translate one 10-minute part. Lines already translated are kept, even if the part is
+    not complete (the next try asks only for the missing ones). → True when the part is done"""
+    from . import ai
+    a, b = k * REF_SLICE_MS, (k + 1) * REF_SLICE_MS
+    cues = [subtitle.Cue(s0, e0, t0) for s0, e0, t0 in state['src'] if a <= s0 < b]
+    if not cues:
+        state['done'] = sorted(set(state['done']) | {k})
+        _ref_save(video, state)
+        return True
+    originals = [c.text for c in cues]
+    title = video.get('tvshow') or video.get('title') or ''
+    n = 0
+    for _attempt in range(2):
+        for c, t in zip(cues, originals):
+            c.text = t
+        n = ai.translate(cues, title=title, abort=abort, progress=step)
+        if n >= len(cues) * 0.9:
+            break
+    got = [[c.start, c.end, c.text] for c in cues if arabic.ARABIC_RE.search(c.text)]
+    state['lines'] = sorted([l for l in state['lines'] if not (a <= l[0] < b)] + got)
+    tries = state['tries']
+    tries[str(k)] = tries.get(str(k), 0) + 1
+    complete = n >= len(cues) * 0.9 or (n >= len(cues) * 0.5 and tries[str(k)] >= 3)
+    if complete:
+        state['done'] = sorted(set(state['done']) | {k})
+    _ref_save(video, state)
+    log('reference: part %d/%d: %d of %d lines%s' % (k + 1, _ref_count(state), n, len(cues),
+                                                    '' if complete else ' — will finish it later'))
+    return complete
+
+
+def _ref_write(video, state):
+    cues = [subtitle.Cue(s0, e0, t0) for s0, e0, t0 in state['lines']]
+    pct = _ref_pct(state)
+    return _write_translated(video, cues, '' if pct >= 100 else str(pct))
+
+
+def _ref_item(state, how=''):
+    return {'provider': 'reference', 'id': 'english', 'lang': 'ar',
+            'release': state.get('release') or 'reference', 'hash_match': how in ('hash', 'verified')}
+
+
+def reference_translate(video, progress=None, abort=None, position=None):
+    """Fallback for a video whose built-in subtitle is a picture (PGS) or missing: find a subtitle
+    of the SAME release (English first, then other languages), put it on the video's own timeline,
+    translate the part you are at (10 minutes) with the AI, show it, and finish the rest in the
+    background. What is translated is kept: coming back continues where it stopped.
+    → (path, summary)"""
+    from . import llm
+    def step(pct, msg):
+        if progress:
+            progress(pct, msg)
+
+    def stop():
+        if abort and abort():
+            raise Exception('aborted')
+
+    if not llm.any_available():
+        raise Exception('يلزم مفتاح ذكاء اصطناعي (Gemini أو غيره) في الإعدادات للترجمة')
+    summary = []
+    state = _ref_load(video)
+    how = ''
+    if state:
+        log('reference: continuing a saved translation (%d%%)' % _ref_pct(state))
+        summary.append('تابعتُ الترجمة المحفوظة (%d٪ جاهزة) دون تنزيل جديد' % _ref_pct(state))
+    else:
+        ref, ref_lang, how, synced, meta = _reference_find(video, step, stop, summary)
+        state = {'lang': ref_lang, 'release': meta.get('release') or '', 'lines': [], 'done': [],
+                 'tries': {}, 'src': [[c.start, c.end, c.text] for c in ref]}
+        if synced:
+            how = 'verified'
+        _ref_save(video, state)
+    now = 0
+    try:
+        now = int(position()) if position else 0
+    except Exception:
+        now = 0
+    ks = _ref_next(state, now, first=True)
+    for j, k in enumerate(ks):
+        stop()
+        base = 30 + 60 * j // len(ks)
+        step(base, 'ترجمة الجزء %d من %d بالذكاء الاصطناعي...' % (k + 1, _ref_count(state)))
+        _ref_do_slice(state, k, video, abort,
+                      lambda d, t: step(base + int(60 // len(ks) * d / max(1, t)),
+                                        'ترجمة الجزء %d من %d (%d/%d)...' % (k + 1, _ref_count(state), d, t)))
+    if not state['lines']:
+        raise Exception('لم تنجح ترجمة هذا الجزء (الذكاء الاصطناعي مشغول أو انتهت حصته) — حاول بعد قليل، '
+                        'والترجمة الإنجليزية محفوظة فلن تُنزَّل من جديد')
+    step(92, 'حفظ الملف...')
+    path = _ref_write(video, state)
+    item = _ref_item(state, how)
+    remember_last(path, video, item)
+    if _ref_pct(state) < 100:
+        queue_job(path, video, item, ['reference_more'])
+        summary.append('الجزء الذي أنت عنده جاهز (%d٪)، ويكتمل الباقي في الخلفية أثناء المشاهدة' % _ref_pct(state))
+    else:
+        if how not in ('hash', 'verified') and finetune_possible(video):
+            queue_job(path, video, item, ['finetune'])
+            summary.append('ضبط دقيق على الصوت في الخلفية...')
+        summary.append('اكتملت الترجمة العربية ✓ (%d سطراً)' % len(state['lines']))
+    step(100, 'تم')
+    return path, summary
+
+
+def reference_resume(video):
+    """The film started again and its translation (from a downloaded subtitle) was only partly
+    done: load what is ready and carry on in the background. → (path, pct) or None"""
+    state = _ref_load(video)
+    if not state or not state['lines']:
+        return None
+    last = last_for(video)
+    if last and (last.get('item') or {}).get('provider') not in ('reference', None):
+        return None                          # you chose another subtitle since
+    path = _ref_write(video, state)
+    item = _ref_item(state)
+    remember_last(path, video, item)
+    pct = _ref_pct(state)
+    if pct < 100:
+        queue_job(path, video, item, ['reference_more'])
+    log('reference: resumed at %d%%' % pct)
+    return path, pct
+
+
+def reference_more(job, progress=None, abort=None, on_update=None, position=None):
+    """Background: keep translating the next 10 minutes, always ahead of where you are."""
+    video = job['video']
+    state = _ref_load(video)
+    if not state:
+        return None, []
+    path = job['path']
+    rounds = 0
+    while True:
+        if abort and abort():
+            return None, []
+        try:
+            now = int(position()) if position else 0
+        except Exception:
+            now = 0
+        ks = _ref_next(state, now)
+        if not ks:
+            break
+        wait = 0
+        try:
+            ok = _ref_do_slice(state, ks[0], video, abort,
+                               lambda d, t: progress and progress(_ref_pct(state), 'ترجمة الجزء %d (%d/%d)...'
+                                                                  % (ks[0] + 1, d, t)))
+            if ok:
+                rounds = 0
+            else:
+                rounds += 1
+                wait = 40                    # a free key's per-minute limit: let it rest
+        except Exception as e:
+            if 'aborted' in str(e):
+                return None, []
+            rounds += 1
+            wait = 65 if ('quota' in str(e).lower() or '429' in str(e)) else 20
+            log('reference_more: part %d failed: %r' % (ks[0] + 1, e))
+        if rounds >= 8:
+            return None, ['توقفت الترجمة عند %d٪ — وتكتمل تلقائياً في المرة القادمة التي تشغّل فيها الفيلم'
+                          % _ref_pct(state)]
+        for _ in range(wait):
+            if abort and abort():
+                return None, []
+            time.sleep(1)
+        path = _ref_write(video, state)
+        if on_update and _ref_pct(state) < 100:
+            on_update(path, ['جاهز %d٪ من الترجمة' % _ref_pct(state)])
+    path = _ref_write(video, state)
+    return path, ['الترجمة جاهزة كاملة ✓ (%d سطراً)' % len(state['lines'])]
 
 
 EMB_SLICES = 10
@@ -817,10 +1184,7 @@ def _emb_write(video, state):
     if pct >= 100:
         # a permanent copy (the temp folder is cleaned after 12 hours)
         try:
-            from .common import PROFILE
-            keep = os.path.join(PROFILE, 'translated')
-            os.makedirs(keep, exist_ok=True)
-            with open(os.path.join(keep, os.path.basename(path)), 'w', encoding='utf-8-sig') as f:
+            with open(kept_path(video), 'w', encoding='utf-8-sig') as f:
                 f.write(subtitle.to_srt(cues))
         except OSError as e:
             log('could not keep a copy: %s' % e)
@@ -850,9 +1214,8 @@ def embedded_resume(video):
         # the cached state may be gone: a finished translation kept in translated/ still counts
         try:
             from .common import PROFILE
-            base = re.sub(r'[\\/:*?"<>|]+', '_', os.path.splitext(video.get('filename') or 'subtitle')[0])[:80]
-            kept = os.path.join(PROFILE, 'translated', '%s.ar.srt' % (base or 'subtitle'))
-            if video.get('filename') and not is_generic_name(video.get('filename')) and os.path.exists(kept):
+            kept = kept_path(video)
+            if os.path.exists(kept):
                 # shown under the short name, like every subtitle Najd makes
                 shown = najd_sub_path(video, 'ar')
                 shutil.copyfile(kept, shown)
@@ -993,7 +1356,8 @@ def _mark_ref_bad(video):
     if rel and rel not in bad:
         bad.append(rel)
     cache_put('refbad_%s.json' % key, json.dumps(bad))
-    for name in ('ref_%s.srt' % key, 'refmeta_%s.json' % key):
+    names = ['refmeta_%s.json' % key] + [n for n in os.listdir(CACHE_DIR) if n.startswith('ref_%s' % key)]
+    for name in names:
         try:
             os.remove(os.path.join(CACHE_DIR, name))
         except OSError:
@@ -1868,6 +2232,114 @@ def has_reference(video):
     return bool(cache_get('ref_%s.srt' % _video_key(video), 30 * 86400))
 
 
+def _clean_name(t):
+    return re.sub(r'\s+', ' ', re.sub(r'[\\/:*?"<>|\r\n\t]+', ' ', t or '')).strip(' .')[:110]
+
+
+def kept_name(video):
+    """The name a kept translation gets: a film → its full name (+ year); a series →
+    «Show S01E02»."""
+    show = (video.get('tvshow') or '').strip()
+    try:
+        se, ep = int(video.get('season') or 0), int(video.get('episode') or 0)
+    except (TypeError, ValueError):
+        se = ep = 0
+    if show and ep:
+        return _clean_name('%s S%02dE%02d' % (show, se, ep) if se else '%s E%02d' % (show, ep))
+    title = (video.get('title') or '').strip()
+    year = str(video.get('year') or '').strip()
+    if title:
+        return _clean_name('%s (%s)' % (title, year) if year and year != '0' else title)
+    return _clean_name(os.path.splitext(video.get('filename') or '')[0]) or 'subtitle'
+
+
+def kept_path(video):
+    from .common import PROFILE
+    keep = os.path.join(PROFILE, 'translated')
+    os.makedirs(keep, exist_ok=True)
+    return os.path.join(keep, kept_name(video) + '.ar.srt')
+
+
+def _finals_file():
+    from .common import PROFILE
+    return os.path.join(PROFILE, 'finals.json')
+
+
+def _finals():
+    try:
+        with open(_finals_file(), encoding='utf-8') as f:
+            d = json.load(f)
+        return d if isinstance(d, dict) else {}
+    except (OSError, ValueError):
+        return {}
+
+
+def _finals_save(d):
+    try:
+        tmp = _finals_file() + '.tmp'
+        with open(tmp, 'w', encoding='utf-8') as f:
+            json.dump(d, f, ensure_ascii=False)
+        os.replace(tmp, _finals_file())
+    except OSError as e:
+        log('finals not saved: %s' % e)
+
+
+def keep_final(video, path, item):
+    """The subtitle is finished (synced / corrected / translated): keep it under the film's name
+    and remember it, so the next time this film plays it is loaded as it is — no new download,
+    no new AI work."""
+    try:
+        if not video or not path or not os.path.exists(path):
+            return
+        dst = kept_path(video)
+        if os.path.abspath(dst) != os.path.abspath(path):
+            shutil.copyfile(path, dst)
+        d = _finals()
+        d[_video_key(video)] = {'file': dst, 'item': {k: item.get(k) for k in ('provider', 'id', 'lang', 'release',
+                                                                                'hash_match')},
+                                'name': kept_name(video), 'time': int(time.time())}
+        if len(d) > 400:                                  # keep the list short
+            for k in sorted(d, key=lambda x: d[x].get('time', 0))[:len(d) - 400]:
+                d.pop(k, None)
+        _finals_save(d)
+        log('kept the finished subtitle: %s' % dst)
+    except Exception as e:
+        log('keep_final failed: %s' % e)
+
+
+def has_final(video):
+    try:
+        d = _finals().get(_video_key(video))
+        return bool(d and os.path.exists(d.get('file', '')))
+    except Exception:
+        return False
+
+
+def drop_final(video):
+    try:
+        d = _finals()
+        if d.pop(_video_key(video), None) is not None:
+            _finals_save(d)
+    except Exception:
+        pass
+
+
+def final_resume(video):
+    """This film already has a finished subtitle: load it. → (path, 100) or None"""
+    try:
+        d = _finals().get(_video_key(video))
+        if not d or not os.path.exists(d.get('file', '')):
+            return None
+        shown = najd_sub_path(video, 'ar')
+        shutil.copyfile(d['file'], shown)
+        remember_last(shown, video, d.get('item') or {})
+        log('using the kept subtitle: %s' % d['file'])
+        return shown, 100
+    except Exception as e:
+        log('final_resume failed: %s' % e)
+        return None
+
+
 def remember_last(path, video, item, lineage=None):
     """The subtitle now on screen. `lineage` = the file it was made from by the add-on
     itself (a background step or the live check), so a later step can tell its own newer
@@ -1875,6 +2347,14 @@ def remember_last(path, video, item, lineage=None):
     try:
         cache_put('last.json', json.dumps({'path': path, 'video': video.get('path', ''),
                                            'item': item, 'lineage': lineage or path}, ensure_ascii=False))
+    except Exception:
+        pass
+    try:
+        if video and video.get('path'):
+            d = _finals().get(_video_key(video))
+            if d and ((d.get('item') or {}).get('provider'), (d.get('item') or {}).get('id')) != \
+                    (item.get('provider'), item.get('id')):
+                drop_final(video)          # another subtitle was chosen: the kept one is not current
     except Exception:
         pass
 
@@ -1944,6 +2424,8 @@ def run_job(job, progress=None, abort=None, on_update=None, position=None):
     Text correction runs FIRST (small, quick) and is swapped in right away through
     on_update(path, lines); listening to the audio comes after.
     Returns (new_path or None, list of summary lines)."""
+    if 'reference_more' in job['steps']:
+        return reference_more(job, progress=progress, abort=abort, on_update=on_update, position=position)
     if 'embedded_more' in job['steps']:
         return embedded_more(job, progress=progress, abort=abort, on_update=on_update, position=position)
     from . import audiosync

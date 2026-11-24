@@ -85,6 +85,8 @@ def proofread(cues, title='', progress=None, batch=150, workers=2, abort=None,
     if not llm.any_available():
         raise AIError('no_key')
     api_key, model = '', 'multi'
+    if batch is None:
+        batch = llm.batch_for(250, 150)      # fewer, bigger requests on Gemini
 
     texts = [arabic.plain(c.text).replace('\n', ' | ') for c in cues]
     digest = hashlib.sha1(('\n'.join(texts) + model).encode('utf-8')).hexdigest()
@@ -194,6 +196,8 @@ def translate(cues, title='', progress=None, batch=100, workers=3, abort=None):
     from . import llm
     if not llm.any_available():
         raise AIError('no_key')
+    if batch is None:
+        batch = llm.batch_for(170, 70)       # one 10-minute part = one request on Gemini
     texts = [arabic.plain(c.text).replace('\n', ' | ') for c in cues]
     digest = hashlib.sha1(('tr\n' + '\n'.join(texts)).encode('utf-8')).hexdigest()
     cached = cache_get('tr_%s.json' % digest, 120 * 86400)

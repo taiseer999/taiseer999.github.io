@@ -5,7 +5,8 @@ from ..common import http, setting
 
 API = 'https://api.subdl.com/api/v1/subtitles'
 DL = 'https://dl.subdl.com'
-LANG = {'ar': 'AR', 'en': 'EN'}
+LANG = {'ar': 'AR', 'en': 'EN', 'fr': 'FR', 'es': 'ES', 'de': 'DE', 'it': 'IT', 'pt': 'PT',
+        'tr': 'TR', 'ru': 'RU', 'ja': 'JA', 'ko': 'KO', 'zh': 'ZH'}
 
 
 def available():
@@ -49,7 +50,8 @@ def search(video, langs):
     out = []
     for s in data.get('subtitles') or []:
         lang = (s.get('lang') or s.get('language') or '').lower()
-        lang = 'ar' if is_arabic_code(lang) else 'en' if lang.startswith('en') else lang
+        lang = 'ar' if is_arabic_code(lang) else 'en' if lang.startswith('en') else \
+            'pt' if lang in ('br_pt', 'pt-br', 'pt_br') else lang
         if lang not in langs:
             continue
         url = s.get('url') or ''

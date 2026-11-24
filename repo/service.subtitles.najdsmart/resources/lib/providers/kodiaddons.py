@@ -14,7 +14,9 @@ import xbmcvfs
 
 from ..common import ADDON_ID, log, setting
 
-LANG_NAMES = {'ar': 'Arabic', 'en': 'English'}
+LANG_NAMES = {'ar': 'Arabic', 'en': 'English', 'fr': 'French', 'es': 'Spanish', 'de': 'German',
+              'it': 'Italian', 'pt': 'Portuguese', 'tr': 'Turkish', 'ru': 'Russian', 'ja': 'Japanese',
+              'ko': 'Korean', 'zh': 'Chinese'}
 SKIP = {ADDON_ID}
 
 
