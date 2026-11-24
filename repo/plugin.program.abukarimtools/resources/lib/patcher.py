@@ -5424,6 +5424,20 @@ PATCHES += [
                           '\\2</control>\n'),
         'description': 'AF3 notifications - smaller header for Najd subtitle status',
     },
+    # 4.12.42: AF3 lifts its notifications 70 / 80 px over its own seek bar
+    # and OSD; the Lucent Player's time row sits higher, so a notification
+    # (Najd's subtitle status) covered "-time left / duration". One more
+    # 80 px while the Lucent seek bar is up (the OSD keeps AF3's own lift on
+    # top of it).
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Furniture.xml'),
+        'not_found_ok': True,
+        'old': '    <include name="Furniture_Reposition">\n',
+        'new': '    <include name="Furniture_Reposition">\n' + '        <!-- ABK_LP_TOAST_LIFT -->\n        <animation effect="slide" start="0" end="0,-80" time="300" tween="sine" easing="inout" condition="Skin.HasSetting(abk.lucentplayer) + !Pvr.IsPlayingTV + Window.IsActive(DialogSeekBar.xml) + Window.IsActive(VideoFullScreen.xml) + ![Window.IsVisible(DialogSubtitles.xml) | Window.IsVisible(DialogSettings.xml) | Window.IsVisible(DialogSelect.xml) | Window.IsVisible(DialogPlayerProcessInfo.xml) | Window.IsVisible(FileBrowser.xml) | Window.IsVisible(DialogContextMenu.xml) | Window.IsVisible(DialogSlider.xml) | Window.IsVisible(1149) | Window.IsVisible(1193)]">Conditional</animation>\n',
+        'already_patched_check': 'ABK_LP_TOAST_LIFT',
+        'description': 'AF3 Lucent Player - notifications above the Lucent time row',
+    },
 ]
 
 # 4.8.67: NewPipe search / Trending / Live / Trailers came back empty with

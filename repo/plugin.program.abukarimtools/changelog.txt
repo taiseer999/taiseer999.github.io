@@ -1,3 +1,16 @@
+v4.12.42  (2026-11-24)
+- Lucent Player: a notification (Najd's subtitle status) covered the
+  "-time left / duration" row. AF3 lifts notifications 70 / 80 px for its
+  own seek bar / OSD; the Lucent time row sits higher. New patch
+  (Includes_Furniture.xml, Furniture_Reposition, ABK_LP_TOAST_LIFT): one
+  more 80 px while the Lucent seek bar is up.
+- Search All -> AIOStreams: last_streams.json now carries 'meta' - the
+  film's TMDb plot, title / show / episode name, year, mpaa, genre, art and
+  IMDb / TMDb ids (from abk.search.meta of this search). AIOStreams 1.4.2
+  puts it on the played item, so the OSD shows the film's plot instead of
+  the release card (whose emoji and fancy letters were boxes). Older
+  AIOStreams ignore the key.
+
 v4.12.41  (2026-11-24)
 - Lucent Player: chapter, EDL cut and scene markers on its progress bars
   (OSD, seek bar, and the third bar), like AF3's own seek bar since

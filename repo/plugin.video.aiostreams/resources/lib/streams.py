@@ -124,6 +124,27 @@ def compact_label(stream):
     return '  '.join(tags)
 
 
+# 1.4.2: characters Kodi's skin fonts have no glyph for, beyond emoji: the
+# "fancy" letters some AIOStreams formatters use (mathematical alphanumerics,
+# small capitals, super- / subscripts) and anything outside the BMP. They
+# came out as boxes in the player's info.
+_NO_GLYPH_RE = re.compile('[\U00010000-\U0010FFFF\u1D00-\u1DBF\u2070-\u209F\uA700-\uA71F]')
+
+
+def plain(text):
+    """Text for the player: emoji and glyph-less letters out, whatever the
+    strip-emoji setting says (that one is about the lists)."""
+    if not text:
+        return ''
+    import unicodedata
+    text = _EMOJI_RE.sub('', text)
+    # fancy letters back to plain ones (bold-sans M -> M, superscript b -> b)
+    text = unicodedata.normalize('NFKC', text)
+    text = _EMPTY_BRACKETS_RE.sub('', _NO_GLYPH_RE.sub('', text))
+    lines = [_SPACES_RE.sub(' ', ln).strip(' \t·|-') for ln in text.splitlines()]
+    return '\n'.join(ln for ln in lines if ln)
+
+
 def labels(stream):
     """(label, label2, plot) for list items / select dialog."""
     name = clean(stream.get('name') or '')

@@ -812,6 +812,24 @@ def _aio_play(session, index):
         hints = st.get('behaviorHints') or {}
         title = (st.get('streamData') or {}).get('filename') or hints.get('filename') or ''
         return usenet_stream.play_nzb(st['nzbUrl'], session.media, title, st.get('servers'))
+    # 4.12.42: the film's own metadata (TMDb plot, title, art, ids) for the
+    # played item - without it AIOStreams used the release card (with emoji,
+    # boxes in Kodi's fonts) as the plot the OSD shows. AIOStreams 1.4.2+
+    # reads 'meta'; older versions ignore it.
+    data = dict(data)
+    try:
+        pub = json.loads(xbmcgui.Window(10000).getProperty('abk.search.meta') or '{}')
+        if pub.get('rid') == getattr(session, 'rid', None):
+            meta = {k: v for k, v in pub.items() if k not in ('rid', 'runtime') and v}
+            media = getattr(session, 'media', None) or {}
+            for k in ('tmdb_id', 'imdb', 'tvdb', 'media_type', 'season', 'episode'):
+                if media.get(k) and k not in meta:
+                    meta[k] = media[k]
+            if pub.get('runtime'):
+                meta['runtime'] = pub['runtime']
+            data['meta'] = meta
+    except Exception as e:
+        _log('AIOStreams: meta not passed: %s' % e)
     path = os.path.join(_DATA, _AIO_ID, 'last_streams.json')
     try:
         os.makedirs(os.path.dirname(path), exist_ok=True)

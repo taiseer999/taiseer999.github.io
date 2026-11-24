@@ -475,7 +475,8 @@ def play_index(params):
         stream = data['streams'][int(params['idx'])]
     except (KeyError, IndexError, ValueError):
         return _resolve_fail(kodi.s(30106))
-    _resolve(_client(), stream, data.get('type'), data.get('id'), data.get('title') or '')
+    _resolve(_client(), stream, data.get('type'), data.get('id'), data.get('title') or '',
+             meta=data.get('meta'))
 
 
 def _resolve_fail(err):
@@ -486,7 +487,57 @@ def _resolve_fail(err):
         xbmcplugin.setResolvedUrl(kodi.HANDLE, False, xbmcgui.ListItem(offscreen=True))
 
 
-def _resolve(client, stream, type_, vid, title, direct=False):
+def _apply_meta(li, tag, meta):
+    """1.4.2: the film / episode itself on the played item (from AB Search
+    All): its plot, names, art and ids instead of the release card."""
+    def _int(v):
+        try:
+            return int(v)
+        except (TypeError, ValueError):
+            return 0
+    episode = meta.get('media_type') == 'episode' or bool(meta.get('ep_name'))
+    if episode:
+        tag.setMediaType('episode')
+        if meta.get('ep_name'):
+            tag.setTitle(meta['ep_name'])
+        if meta.get('tvshowtitle') or meta.get('title'):
+            tag.setTvShowTitle(meta.get('tvshowtitle') or meta.get('title'))
+        if _int(meta.get('season')):
+            tag.setSeason(_int(meta['season']))
+        if _int(meta.get('episode')):
+            tag.setEpisode(_int(meta['episode']))
+    else:
+        tag.setMediaType('movie')
+        if meta.get('title'):
+            tag.setTitle(meta['title'])
+    if meta.get('plot'):
+        tag.setPlot(meta['plot'])
+    if _int(meta.get('year')):
+        tag.setYear(_int(meta['year']))
+    if meta.get('mpaa'):
+        tag.setMpaa(meta['mpaa'])
+    if meta.get('genre'):
+        g = meta['genre']
+        tag.setGenres([x.strip() for x in (g if isinstance(g, list) else str(g).split('/')) if x.strip()])
+    if _int(meta.get('runtime')):
+        tag.setDuration(_int(meta['runtime']))
+    ids = {}
+    if meta.get('imdb'):
+        ids['imdb'] = str(meta['imdb'])
+    if meta.get('tmdb_id'):
+        ids['tmdb'] = str(meta['tmdb_id'])
+    if meta.get('tvdb'):
+        ids['tvdb'] = str(meta['tvdb'])
+    if ids:
+        tag.setUniqueIDs(ids, 'imdb' if 'imdb' in ids else 'tmdb')
+        if 'imdb' in ids:
+            tag.setIMDBNumber(ids['imdb'])
+    art = {k: meta[k] for k in ('fanart', 'clearlogo', 'poster', 'thumb') if meta.get(k)}
+    if art:
+        li.setArt(art)
+
+
+def _resolve(client, stream, type_, vid, title, direct=False, meta=None):
     path = st.play_path(stream)
     if not path:
         return _resolve_fail(kodi.s(30107))
@@ -494,7 +545,17 @@ def _resolve(client, stream, type_, vid, title, direct=False):
     li = xbmcgui.ListItem(title or label, path=path, offscreen=True)
     tag = li.getVideoInfoTag()
     tag.setTitle(title or label)
-    tag.setPlot(plot)
+    # 1.4.2: the player shows this plot (OSD, info). The release card went
+    # there with its emoji and fancy letters - boxes in Kodi's fonts. The
+    # film's own metadata when AB Search All passes it; else the card made
+    # plain text.
+    tag.setPlot(st.plain(plot))
+    li.setProperty('aiostreams.release', st.plain(plot))
+    if meta:
+        try:
+            _apply_meta(li, tag, meta)
+        except Exception as e:
+            kodi.log('meta not applied: %s' % e, xbmc.LOGWARNING)
     hints = stream.get('behaviorHints') or {}
     sd = stream.get('streamData') or {}
     filename = hints.get('filename') or sd.get('filename')
