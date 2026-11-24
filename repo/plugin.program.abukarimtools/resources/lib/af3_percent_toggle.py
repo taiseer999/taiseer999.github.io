@@ -2,16 +2,19 @@
 # SPDX-License-Identifier: LicenseRef-ABTools
 # Copyright (C) 2025-2026 Taiseer (Abukarim) - AB Tools. All rights reserved, see LICENSE.txt
 """
-af3_percent_toggle.py - ABUKARIM TOOLS (4.12.31, 4.12.35)
+af3_percent_toggle.py - ABUKARIM TOOLS (4.12.31, 4.12.35, 4.12.36)
 
 Toggles entry "AF3: Watched percentage". Taiseer's AF3 shows the watched
 percentage as a number (e.g. 45%) in a capsule joined to the progress circle
 on posters and thumbnails (50.12.9+; 50.12.7 had a pill above the circle).
 
-Three modes (two AF3 skin bools, read live - no skin reload):
-    focused  focused item only (default)  - both bools off
+Modes (AF3 skin bools, read live - no skin reload):
+    focused  focused item only (default)  - all bools off
+    bar      thin bar on every item + the number on the focused one
+                                          - abk.percentbar (AF3 50.12.11+)
     all      every item                   - abk.percentall
     off      hidden                       - abk.hidepercent
+Shows and seasons show watched / all episodes (3/10) instead of a percentage.
 """
 import os
 
@@ -24,9 +27,11 @@ from resources.lib.i18n import T
 SKIN_ID = 'skin.arctic.fuse.3'
 SETTING = 'abk.hidepercent'
 ALL = 'abk.percentall'
+BAR = 'abk.percentbar'
+BAR_MARK = 'Skin.HasSetting(abk.percentbar)'
 TITLE = 'ABUKARIM TOOLS'
 MARK = 'Skin.HasSetting(abk.percentall)'
-MODES = (('focused', 32374), ('all', 32375), ('off', 32376))
+MODES = (('focused', 32374), ('bar', 32377), ('all', 32375), ('off', 32376))
 
 
 def _log(msg, level=xbmc.LOGINFO):
@@ -40,6 +45,8 @@ def _has(name):
 def get_mode():
     if _has(SETTING):
         return 'off'
+    if _has(BAR):
+        return 'bar'
     return 'all' if _has(ALL) else 'focused'
 
 
@@ -51,20 +58,30 @@ def mode_label(mode=None):
     return T(dict(MODES)[mode or get_mode()])
 
 
-def skin_supports():
-    """True when the installed AF3 has the percentage capsule (50.12.9+)."""
+def _objects():
     try:
         path = os.path.join(xbmcvfs.translatePath('special://home/addons/%s/' % SKIN_ID),
                             '1080i', 'Includes_Objects.xml')
         with open(path, 'r', encoding='utf-8') as f:
-            return MARK in f.read()
+            return f.read()
     except Exception:
-        return False
+        return ''
+
+
+def skin_supports():
+    """True when the installed AF3 has the percentage capsule (50.12.9+)."""
+    return MARK in _objects()
+
+
+def bar_supported():
+    """True when the installed AF3 has the progress bar (50.12.11+)."""
+    return BAR_MARK in _objects()
 
 
 def set_mode(mode):
     xbmc.executebuiltin(('Skin.SetBool(%s)' if mode == 'off' else 'Skin.Reset(%s)') % SETTING)
     xbmc.executebuiltin(('Skin.SetBool(%s)' if mode == 'all' else 'Skin.Reset(%s)') % ALL)
+    xbmc.executebuiltin(('Skin.SetBool(%s)' if mode == 'bar' else 'Skin.Reset(%s)') % BAR)
     _log('watched percentage: %s' % mode)
     return 'watched percentage %s' % mode
 
@@ -84,9 +101,11 @@ def run():
     if not skin_supports():
         xbmcgui.Dialog().ok(TITLE, T(32371))          # needs AF3 50.12.9 or newer
         return
-    keys = [k for k, _l in MODES]
+    modes = [(k, l) for k, l in MODES if k != 'bar' or bar_supported()]
+    keys = [k for k, _l in modes]
     cur = get_mode()
-    pick = xbmcgui.Dialog().select(T(32368), [T(l) for _k, l in MODES], preselect=keys.index(cur))
+    pick = xbmcgui.Dialog().select(T(32368), [T(l) for _k, l in modes],
+                                   preselect=keys.index(cur) if cur in keys else 0)
     if pick < 0 or keys[pick] == cur:
         return
     set_mode(keys[pick])

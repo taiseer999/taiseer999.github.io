@@ -2,6 +2,15 @@
   "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
   "entries": [
     {
+      "v": "4.12.36",
+      "en": [
+        "AF3: Watched percentage has a new mode - a thin progress bar on every poster (like Netflix) with the number on the focused item. Shows and seasons show watched episodes (e.g. 3/10) instead of a percentage (needs AF3 50.12.11)."
+      ],
+      "ar": [
+        "AF3: نسبة المشاهدة: وضع جديد - شريط تقدّم رفيع على كل ملصق (كما في Netflix) مع الرقم للعنصر المحدد. وتعرض المسلسلات والمواسم عدد الحلقات المشاهَدة (مثل 3/10) بدل النسبة (يتطلّب AF3 50.12.11)."
+      ]
+    },
+    {
       "v": "4.12.35",
       "en": [
         "AF3: the watched percentage now sits in a capsule joined to the progress circle, and \"AF3: Watched percentage\" offers three choices: focused item only (default), all items, or hidden (needs AF3 50.12.9)."

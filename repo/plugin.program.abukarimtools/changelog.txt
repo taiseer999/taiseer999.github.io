@@ -1,3 +1,13 @@
+v4.12.36  (2026-11-24)
+- "AF3: Watched percentage": new mode "Progress bar + number on the focused
+  item" (skin bool abk.percentbar, AF3 50.12.11+; offered only when the
+  installed AF3 has it): a thin Netflix-style bar on the bottom edge of every
+  poster, leading into the progress circle; the capsule stays on the focused
+  item. Shows / seasons show watched / all episodes (3/10) in the capsule
+  (skin side). String 32377 new, 32372 reworded.
+- A "time left" mode is not possible: Kodi has no remaining-time infolabel
+  (only ListItem.EndTimeResume, the clock time, already in the info area).
+
 v4.12.35  (2026-11-24)
 - "AF3: Watched percentage" is now a three-way choice (select dialog, value
   shown on the entry): Focused item only (default, both bools off) / All

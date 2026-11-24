@@ -3613,7 +3613,7 @@ msgid "This needs Arctic Fuse 3 50.12.9 or newer. Update the skin, then try agai
 msgstr ""
 
 msgctxt "#32372"
-msgid "Shows the watched percentage (e.g. 45%) in a capsule joined to the progress circle: on the focused item only, on every item, or hidden."
+msgid "Shows the watched percentage (e.g. 45%) in a capsule joined to the progress circle - shows and seasons show watched episodes (e.g. 3/10): on the focused item only, as a thin progress bar on every item with the number on the focused one, on every item, or hidden."
 msgstr ""
 
 msgctxt "#32373"
@@ -3630,5 +3630,9 @@ msgstr ""
 
 msgctxt "#32376"
 msgid "Hidden"
+msgstr ""
+
+msgctxt "#32377"
+msgid "Progress bar + number on the focused item"
 msgstr ""
 
