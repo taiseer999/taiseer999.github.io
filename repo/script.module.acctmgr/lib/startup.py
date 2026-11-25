@@ -295,6 +295,13 @@ def SyncManager():  # Auto-sync credentials with recently installed/supported ad
 			easynews_sync.Auth().easynews_auth()
 	except Exception:
 		log_utils.error("Startup Easynews Startup Sync FAILED")
+
+	try:
+		if control.setting('sync.aio.service')=='true' and control.setting('aiostreams.uuid') and control.setting('aiostreams.password'):
+			from acctmgr.modules.sync import aiostreams_sync
+			aiostreams_sync.Auth().aiostreams_auth()
+	except Exception:
+		log_utils.error("Startup AIOStreams Startup Sync FAILED")
 		
 def compute_file_hash(path): # Compute a simple hash of a file's contents to detect changes
 	if not os.path.exists(path):

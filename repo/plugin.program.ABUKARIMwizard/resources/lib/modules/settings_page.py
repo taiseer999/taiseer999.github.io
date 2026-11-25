@@ -366,7 +366,7 @@ def _account_actions(key):
         rows.append((S(30412), au._run('%sReSync' % key)))
         if key == 'trakt':
             rows.append((S(30418), au._run('traktEditSyncList')))
-        if au._has(au.AM_VIEWER_ID):
+        if au._has(au.AM_VIEWER_ID) or key == 'aiostreams':   # AIOStreams viewer is built into AM
             rows.append((S(30414), au._run('%sViewer' % key)))
         rows.append((S(30416), au._run('%sRevoke' % key)))
     else:

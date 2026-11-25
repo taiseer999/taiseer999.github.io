@@ -63,6 +63,15 @@
 		<setting id="easynews.username" type="text" label="32318" enable="false" default="" visible="!eq(-2,)" />
 		<setting id="easynews.password" type="text" label="32344" enable="false" default="" visible="!eq(-2,)" />
 		<setting type="action" label="32319" option="close" action="RunScript(script.module.acctmgr, action=easynewsAuth)" visible="eq(-4,) | eq(-3,)" />
+
+		<setting type="lsep" label="AIOStreams" />
+		<setting id="aiostreams.uuid" type="text" visible="false" label="" default="" />
+		<setting id="aiostreams.url" type="text" label="Server" enable="false" default="" visible="!eq(-1,)" />
+		<setting id="aiostreams.uuid" type="text" label="UUID" enable="false" default="" visible="!eq(-2,)" />
+		<setting type="action" label="32319" option="close" action="RunScript(script.module.acctmgr, action=aiostreamsAuth)" visible="eq(-3,)" />
+		<setting id="aiostreams.password" type="text" visible="false" label="" default="" />
+		<setting id="aiostreams.encrypted" type="text" visible="false" label="" default="" />
+		<setting id="aiostreams.manifest" type="text" visible="false" label="" default="" />
 	</category>
 	<category label="Manage">
 		<setting type="lsep" label="40087" />
@@ -116,6 +125,12 @@
 		<setting type="action" label="View Authorizations" option="close" action="RunScript(script.module.acctmgr, action=easynewsViewer)" visible="!eq(-1,)" />
 		<setting type="action" label="Sync Add-ons" option="close" action="RunScript(script.module.acctmgr, action=easynewsReSync)"  visible="!eq(-2,)" />
 		<setting type="action" label="Revoke" option="close" action="RunScript(script.module.acctmgr, action=easynewsRevoke)"  visible="!eq(-3,)" />
+
+		<setting type="lsep" label="AIOStreams" />
+		<setting id="aiostreams.uuid" label="" type="text" default="" visible="false" enable="false" />
+		<setting type="action" label="View Authorizations" option="close" action="RunScript(script.module.acctmgr, action=aiostreamsViewer)" visible="!eq(-1,)" />
+		<setting type="action" label="Sync Add-ons" option="close" action="RunScript(script.module.acctmgr, action=aiostreamsReSync)"  visible="!eq(-2,)" />
+		<setting type="action" label="Revoke" option="close" action="RunScript(script.module.acctmgr, action=aiostreamsRevoke)"  visible="!eq(-3,)" />
 	</category>
 	<category label="Tools">
 		<!-- Set Max Resolution -->
@@ -149,6 +164,7 @@
       		<setting id="sync.tb.service"  type="bool" label="TorBox" visible="true" default="false"/>
 		<setting id="sync.oc.service"  type="bool" label="OffCloud" visible="true" default="false"/>
       		<setting id="sync.en.service"  type="bool" label="Easynews" visible="true" default="false"/>
+      		<setting id="sync.aio.service"  type="bool" label="AIOStreams" visible="true" default="false"/>
 	</category>
 	<category label="Logs">
 		<setting type="lsep" label="Error Logging" />
@@ -160,13 +176,14 @@
 		<setting type="action" label="Upload Log" option="close" action="RunScript(script.module.acctmgr, action=uploadLogFile)" visible="eq(-5,true)" />
 	</category>
 	<category label="Info">
-		<setting type="lsep" label="View Supported Add-ons & Scrapers" />
+		<setting type="lsep" label="View Supported Add-ons &amp; Scrapers" />
 		<setting label="40098" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Trakt)" />
 		<setting label="40104" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_MDBList)" />
 		<setting label="40099" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Debrid)" />
 		<setting label="40196" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Torbox)" />
 		<setting label="40100" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Offcloud)" />
 		<setting label="40101" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Easynews)" />
+		<setting label="40210" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_AIOStreams)" />
 		<setting label="40102" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_MaxQL)" />
 		<setting label="40103" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Autoplay)" />
 		<setting type="lsep" label="View Changelog" />

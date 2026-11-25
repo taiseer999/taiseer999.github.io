@@ -136,3 +136,14 @@ def get_supported_autoplay():
 	windows = TextViewerXML('textviewer.xml', acctmgr_path, heading=heading, text=text)
 	windows.run()
 	del windows
+
+def get_supported_aiostreams():
+	acctmgr_path = addonPath()
+	changelogfile = joinPath(supported_path, 'supported_aiostreams.txt')
+	r = open(changelogfile, 'r', encoding='utf-8', errors='ignore')
+	text = r.read()
+	r.close()
+	heading = '[B]AM Lite - Supported Add-ons[/B]'
+	windows = TextViewerXML('textviewer.xml', acctmgr_path, heading=heading, text=text)
+	windows.run()
+	del windows

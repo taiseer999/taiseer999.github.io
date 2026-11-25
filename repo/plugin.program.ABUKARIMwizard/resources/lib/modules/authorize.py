@@ -42,6 +42,7 @@ SERVICES = [
     ('easydebrid', 'Easy Debrid', ('easydebrid.token',),                       False, 'Easydebrid'),
     ('offcloud',   'OffCloud',    ('offcloud.userid', 'offcloud.token'),       False, 'Offcloud'),
     ('easynews',   'Easynews',    ('easynews.username',),                      False, 'Easynews'),
+    ('aiostreams', 'AIOStreams',  ('aiostreams.url', 'aiostreams.uuid'),       False, 'AIOStreams'),
     ('trakt',      'Trakt',       ('trakt.username', 'trakt.token'),           True,  'Trakt'),
     ('simkl',      'Simkl',       ('simkl.username', 'simkl.token'),           True,  'Simkl'),
     ('mdblist',    'MDBList',     ('mdblist.username', 'mdblist.apikey'),      False, 'MDBList'),
@@ -69,7 +70,7 @@ def _am_icon(key):
 
 
 # Services added to AM after its first release: shown only when the installed AM ships them.
-_NEEDS_MODULE = {'simkl': 'simkl.py'}
+_NEEDS_MODULE = {'simkl': 'simkl.py', 'aiostreams': 'aiostreams.py'}
 
 
 def _am_supports(key):
@@ -92,6 +93,9 @@ def _status(am, key):
         except Exception:
             val = ''
         if val:
+            if key == 'aiostreams':                     # show the server host, not the long URL/UUID
+                from urllib.parse import urlsplit
+                return urlsplit(val).netloc or val
             if key in _TOKEN_ONLY or sid.endswith(('.token', '.apikey')):
                 return local_string(30405)              # Authorized
             return val
@@ -159,7 +163,7 @@ def authorize_submenu(name, icon=None):
         if key == 'trakt':
             add_dir(COLOR2(local_string(30418)), _run('traktEditSyncList'), 25, icon, addon_fanart,
                     COLOR2(local_string(30419)), isFolder=False)                  # Edit Trakt sync list
-        if _has(AM_VIEWER_ID):
+        if _has(AM_VIEWER_ID) or key == 'aiostreams':          # AIOStreams viewer is built into AM
             add_dir(COLOR2(local_string(30414)), _run(f'{key}Viewer'), 25, icon, addon_fanart,
                     COLOR2(local_string(30415)), isFolder=False)                  # View authorized add-ons
         add_dir(COLOR3(local_string(30416)), _run(f'{key}Revoke'), 25, icon, addon_fanart,

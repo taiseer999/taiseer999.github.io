@@ -29,6 +29,7 @@ torbox_icon	 = joinPath(control.iconsPath(), 'torbox.png')
 easyd_icon	 = joinPath(control.iconsPath(), 'easydebrid.png')
 offcloud_icon    = joinPath(control.iconsPath(), 'offcloud.png')
 easynews_icon    = joinPath(control.iconsPath(), 'easynews.png')
+aio_icon         = joinPath(control.iconsPath(), 'aiostreams.png')
 uhd_icon         = joinPath(control.iconsPath(), '4k.png')
 fullhd_icon      = joinPath(control.iconsPath(), '1080p.png')
 hd_icon          = joinPath(control.iconsPath(), '720p.png')
@@ -809,6 +810,59 @@ elif action == 'easynewsViewer':
         xbmc.sleep(300)
         execute('ActivateWindow(10001,"plugin://script.module.acctvwr/?mode=easynews",return)')
              
+#AIOSTREAMS SERVER
+elif action == 'aiostreamsAuth':
+        from acctmgr.modules.auth import aiostreams
+        ok = aiostreams.AIOStreams().auth()
+        if not ok:
+            control.openSettings()
+            raise SystemExit
+        xbmc.sleep(1500)
+        control.notification('AIOStreams', 'Sync in progress, please wait!', icon=aio_icon)
+
+        from acctmgr.modules.sync import aiostreams_sync
+        aiostreams_sync.Auth().aiostreams_auth()
+        xbmc.sleep(200)
+        control.setSetting('sync.aio.service', 'true')
+        control.notification('AIOStreams', 'Sync Complete!', icon=aio_icon)
+        xbmc.sleep(3000)
+        control.openSettings()
+
+elif action == 'aiostreamsReSync':
+        control.notification('AIOStreams', 'Sync in progress, please wait!', icon=aio_icon)
+        xbmc.sleep(3000)
+        from acctmgr.modules.sync import aiostreams_sync
+        control.function_monitor(aiostreams_sync.Auth().aiostreams_auth)
+        xbmc.sleep(200)
+        control.notification('AIOStreams', 'Sync Complete!', icon=aio_icon)
+        xbmc.sleep(3000)
+        control.openSettings()
+
+elif action == 'aiostreamsRevoke':
+        control.closeAll()
+        xbmc.sleep(300)
+        yes = dialog.yesno('AM Lite', 'Are you sure?', 'No', 'Yes')
+        if yes:
+                from acctmgr.modules.sync import aiostreams_sync
+                from acctmgr.modules.auth import aiostreams
+                aiostreams_sync.Auth().aiostreams_revoke()
+                aiostreams.AIOStreams().revoke_am()
+                control.setSetting('sync.aio.service', 'false')
+                dialog.notification('AIOStreams', 'All Add-ons Revoked!', aio_icon, 3000)
+                xbmc.sleep(3000)
+        control.openSettings()
+
+elif action == 'aiostreamsViewer':
+        control.closeAll()
+        xbmc.sleep(300)
+        from acctmgr.modules.sync import aiostreams_sync
+        from acctmgr.windows.textviewer import TextViewerXML
+        windows = TextViewerXML('textviewer.xml', control.addonPath(),
+                                heading='[B]AM Lite - AIOStreams Authorizations[/B]',
+                                text=aiostreams_sync.Auth().status_lines())
+        windows.run()
+        del windows
+
 #REVOKE ALL SERVICES
 elif action == 'allRevoke':
         token_keys = (
@@ -822,7 +876,8 @@ elif action == 'allRevoke':
                 'easydebrid.token',
                 'offcloud.token',
                 'easynews.username',
-                'easynews.password'
+                'easynews.password',
+                'aiostreams.uuid'
         )
 
         has_any_auth = any((control.setting(k) or '') != '' for k in token_keys)
@@ -913,6 +968,16 @@ elif action == 'allRevoke':
                 if exists(chk):
                         revoke_all_for_addon(settings_db, addon_name)
                         xbmc.sleep(200)
+
+        if control.setting('aiostreams.uuid'):
+                try:
+                        from acctmgr.modules.sync import aiostreams_sync
+                        from acctmgr.modules.auth import aiostreams
+                        aiostreams_sync.Auth().aiostreams_revoke()
+                        aiostreams.AIOStreams().revoke_am()
+                        control.setSetting('sync.aio.service', 'false')
+                except Exception as e:
+                        log_utils.error(f"AIOStreams revoke all failed: {e}")
 
         control.revoke_dexhub_trakt() # Dex Hub keeps its Trakt token in JSON
         if control.setting('trakt.token'):
@@ -1278,6 +1343,10 @@ elif action == 'ShowSupported_Torbox':
 elif action == 'ShowSupported_Offcloud':
 	from acctmgr.modules import changelog
 	changelog.get_supported_offcloud()
+
+elif action == 'ShowSupported_AIOStreams':
+	from acctmgr.modules import changelog
+	changelog.get_supported_aiostreams()
 
 elif action == 'ShowSupported_Easynews':
 	from acctmgr.modules import changelog

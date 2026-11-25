@@ -1,3 +1,19 @@
+v4.2.5
+- Accounts > AIOStreams: with Account Manager 1.2.1d the server is also
+  pushed to AB Scrapers (its AIOStreams scraper and AIOStreams player).
+- Save Trakt & Debrid Data now also keeps AB Scrapers (script.module.abscrapers)
+  settings.xml - provider choices, AIOStreams and MediaFusion logins (the
+  Telegram session file is not included; re-link Telegram after a fresh build).
+
+v4.2.4
+- Accounts: new AIOStreams row (needs Account Manager 1.2.1c). Authorize the
+  AIOStreams server once (URL or pasted manifest URL, UUID, password) and AM
+  pushes it to AIOStreams, POV and Red Light; the row shows the server host.
+  Re-sync, View authorized add-ons, Revoke and Supported add-ons as for the
+  other services.
+- Save Trakt & Debrid Data now also keeps EasyNewsX (plugin.video.easynewsx)
+  and AIOStreams (plugin.video.aiostreams) settings across build installs.
+
 v4.2.2
 - Glass Look (test), shared with ABUKARIM TOOLS 4.8.57: when AB Tools'
   Toggles > AB Tools: Glass Look is on, the wizard follows it - every icon

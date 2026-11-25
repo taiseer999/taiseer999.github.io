@@ -59,6 +59,21 @@
         "setting": "savedata",
         "path": "data_path"
     },
+    "plugin.video.easynewsx": {
+        "name": "EasyNewsX",
+        "setting": "savedata",
+        "path": "data_path"
+    },
+    "plugin.video.aiostreams": {
+        "name": "AIOStreams",
+        "setting": "savedata",
+        "path": "data_path"
+    },
+    "script.module.abscrapers": {
+        "name": "AB Scrapers",
+        "setting": "savedata",
+        "path": "data_path"
+    },
     "plugin.video.shadow": {
         "name": "Shadow",
         "setting": "savedata",
@@ -89,8 +104,6 @@
         "setting": "savedata",
         "path": "data_path"
     },
-
-
     "script.trakt": {
         "name": "Trakt",
         "setting": "savedata",
@@ -101,8 +114,6 @@
         "setting": "savedata",
         "path": "data_path"
     },
-
-
     "plugin.video.imdb.trailers": {
         "name": "IMDb Trailers",
         "setting": "savedata",

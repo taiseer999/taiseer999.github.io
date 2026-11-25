@@ -1,0 +1,9 @@
+
+AIOStreams server (instance URL + UUID + password) is pushed to:
+
+1.  AIOStreams (Kodi client)  - manifest URL
+2.  POV                       - AIOStreams provider
+3.  Red Light                 - AIOStreams provider
+4.  AB Scrapers               - AIOStreams scraper + AIOStreams player
+
+Fen Light, Fen Light+ and Umbrella have no AIOStreams provider, so there is nothing to authorize in them.
