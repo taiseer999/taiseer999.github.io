@@ -43,6 +43,7 @@ SERVICES = [
     ('offcloud',   'OffCloud',    ('offcloud.userid', 'offcloud.token'),       False, 'Offcloud'),
     ('easynews',   'Easynews',    ('easynews.username',),                      False, 'Easynews'),
     ('aiostreams', 'AIOStreams',  ('aiostreams.url', 'aiostreams.uuid'),       False, 'AIOStreams'),
+    ('subtitles',  'Subtitles',   ('subs.subdl_key', 'subs.subsource_key'),    False, 'Subtitles'),
     ('trakt',      'Trakt',       ('trakt.username', 'trakt.token'),           True,  'Trakt'),
     ('simkl',      'Simkl',       ('simkl.username', 'simkl.token'),           True,  'Simkl'),
     ('mdblist',    'MDBList',     ('mdblist.username', 'mdblist.apikey'),      False, 'MDBList'),
@@ -70,7 +71,11 @@ def _am_icon(key):
 
 
 # Services added to AM after its first release: shown only when the installed AM ships them.
-_NEEDS_MODULE = {'simkl': 'simkl.py', 'aiostreams': 'aiostreams.py'}
+_NEEDS_MODULE = {'simkl': 'simkl.py', 'aiostreams': 'aiostreams.py', 'subtitles': 'subtitles.py'}
+# Services whose viewer is built into AM itself (no Account Viewer needed).
+_AM_VIEWER = ('aiostreams', 'subtitles')
+# Services where "Authorize" stays offered after the first account (several accounts in one).
+_MULTI = ('subtitles',)
 
 
 def _am_supports(key):
@@ -93,6 +98,8 @@ def _status(am, key):
         except Exception:
             val = ''
         if val:
+            if key == 'subtitles':                      # never show an API key
+                return local_string(30405)
             if key == 'aiostreams':                     # show the server host, not the long URL/UUID
                 from urllib.parse import urlsplit
                 return urlsplit(val).netloc or val
@@ -163,11 +170,14 @@ def authorize_submenu(name, icon=None):
         if key == 'trakt':
             add_dir(COLOR2(local_string(30418)), _run('traktEditSyncList'), 25, icon, addon_fanart,
                     COLOR2(local_string(30419)), isFolder=False)                  # Edit Trakt sync list
-        if _has(AM_VIEWER_ID) or key == 'aiostreams':          # AIOStreams viewer is built into AM
+        if _has(AM_VIEWER_ID) or key in _AM_VIEWER:            # these viewers are built into AM
             add_dir(COLOR2(local_string(30414)), _run(f'{key}Viewer'), 25, icon, addon_fanart,
                     COLOR2(local_string(30415)), isFolder=False)                  # View authorized add-ons
         add_dir(COLOR3(local_string(30416)), _run(f'{key}Revoke'), 25, icon, addon_fanart,
                 COLOR2(local_string(30417)), isFolder=False)                       # Revoke
+        if key in _MULTI:
+            add_dir(COLOR2(local_string(30424).format(label)), _run(f'{key}Auth'), 25, icon, addon_fanart,
+                    COLOR2(local_string(30409)), isFolder=False)                  # Add / edit accounts
     else:
         add_dir(COLOR4(f'[B]{label}[/B]   [{local_string(30407)}]'), '', '', icon, addon_fanart,
                 COLOR2(local_string(30408).format(label)), isFolder=False)

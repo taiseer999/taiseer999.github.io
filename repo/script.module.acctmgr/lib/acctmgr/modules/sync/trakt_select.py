@@ -104,7 +104,7 @@ class tk_list():
 		locked = [] # List of previously added items
 		if xbmcvfs.exists(var.tk_sync_list):
 			try:
-				with open(var.tk_sync_list, 'r') as f:
+				with open(var.tk_sync_list, 'r', encoding="utf-8") as f:
 					locked = json.load(f).get('addon_list', [])
 			except Exception as e:
 				log_utils.error(f"Failed to load Trakt sync list: {e}")
@@ -198,7 +198,7 @@ class tk_list():
 			return False
 
 		try:
-			with open(var.tk_sync_list, 'w') as synclist: # Save list
+			with open(var.tk_sync_list, 'w', encoding="utf-8") as synclist: # Save list
 				json.dump({'addon_list': addon_list}, synclist, indent=4)
 		except Exception as e:
 			log_utils.error(f"Failed to save Trakt sync list: {e}")

@@ -1,3 +1,16 @@
+v4.2.7
+- Accounts > Subtitles: OpenSubtitles removed (Account Manager 1.2.1h). The
+  row now covers the SubDL and SubSource API keys only, synced to
+  a4kSubtitles, Najd Smart Subtitles and SubDL.com.
+
+v4.2.6
+- Accounts: new Subtitles row (needs Account Manager 1.2.1f). Add your
+  OpenSubtitles.com login and SubDL / SubSource API keys once; AM checks each
+  on its server and pushes them to a4kSubtitles, Najd Smart Subtitles,
+  OpenSubtitles.com and SubDL.com. "Authorize" stays in the menu so another
+  service can be added later; API keys are never shown, only "Authorized".
+- Save Trakt & Debrid Data now also keeps the four subtitle add-ons' settings.
+
 v4.2.5
 - Accounts > AIOStreams: with Account Manager 1.2.1d the server is also
   pushed to AB Scrapers (its AIOStreams scraper and AIOStreams player).

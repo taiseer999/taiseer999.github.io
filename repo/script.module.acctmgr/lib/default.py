@@ -30,6 +30,7 @@ easyd_icon	 = joinPath(control.iconsPath(), 'easydebrid.png')
 offcloud_icon    = joinPath(control.iconsPath(), 'offcloud.png')
 easynews_icon    = joinPath(control.iconsPath(), 'easynews.png')
 aio_icon         = joinPath(control.iconsPath(), 'aiostreams.png')
+subs_icon        = joinPath(control.iconsPath(), 'subtitles.png')
 uhd_icon         = joinPath(control.iconsPath(), '4k.png')
 fullhd_icon      = joinPath(control.iconsPath(), '1080p.png')
 hd_icon          = joinPath(control.iconsPath(), '720p.png')
@@ -810,6 +811,57 @@ elif action == 'easynewsViewer':
         xbmc.sleep(300)
         execute('ActivateWindow(10001,"plugin://script.module.acctvwr/?mode=easynews",return)')
              
+#SUBTITLE ACCOUNTS
+elif action == 'subtitlesAuth':
+        from acctmgr.modules.auth import subtitles
+        ok = subtitles.Subtitles().auth()
+        if not ok:
+            control.openSettings()
+            raise SystemExit
+        control.notification('Subtitles', 'Sync in progress, please wait!', icon=subs_icon)
+        from acctmgr.modules.sync import subtitles_sync
+        subtitles_sync.Auth().subtitles_auth()
+        xbmc.sleep(200)
+        control.setSetting('sync.subs.service', 'true')
+        control.notification('Subtitles', 'Sync Complete!', icon=subs_icon)
+        xbmc.sleep(3000)
+        control.openSettings()
+
+elif action == 'subtitlesReSync':
+        control.notification('Subtitles', 'Sync in progress, please wait!', icon=subs_icon)
+        xbmc.sleep(1000)
+        from acctmgr.modules.sync import subtitles_sync
+        control.function_monitor(subtitles_sync.Auth().subtitles_auth)
+        xbmc.sleep(200)
+        control.notification('Subtitles', 'Sync Complete!', icon=subs_icon)
+        xbmc.sleep(3000)
+        control.openSettings()
+
+elif action == 'subtitlesRevoke':
+        control.closeAll()
+        xbmc.sleep(300)
+        yes = dialog.yesno('AM Lite', 'Remove the subtitle accounts from AM and from every subtitle add-on?', 'No', 'Yes')
+        if yes:
+                from acctmgr.modules.sync import subtitles_sync
+                from acctmgr.modules.auth import subtitles
+                subtitles_sync.Auth().subtitles_revoke()
+                subtitles.Subtitles().revoke_am()
+                control.setSetting('sync.subs.service', 'false')
+                dialog.notification('Subtitles', 'All Add-ons Revoked!', subs_icon, 3000)
+                xbmc.sleep(3000)
+        control.openSettings()
+
+elif action == 'subtitlesViewer':
+        control.closeAll()
+        xbmc.sleep(300)
+        from acctmgr.modules.sync import subtitles_sync
+        from acctmgr.windows.textviewer import TextViewerXML
+        windows = TextViewerXML('textviewer.xml', control.addonPath(),
+                                heading='[B]AM Lite - Subtitle Authorizations[/B]',
+                                text=subtitles_sync.Auth().status_lines())
+        windows.run()
+        del windows
+
 #AIOSTREAMS SERVER
 elif action == 'aiostreamsAuth':
         from acctmgr.modules.auth import aiostreams
@@ -880,7 +932,8 @@ elif action == 'allRevoke':
                 'offcloud.token',
                 'easynews.username',
                 'easynews.password',
-                'aiostreams.uuid'
+                'aiostreams.uuid',
+                'subs.subdl_key', 'subs.subsource_key'
         )
 
         has_any_auth = any((control.setting(k) or '') != '' for k in token_keys)
@@ -981,6 +1034,16 @@ elif action == 'allRevoke':
                         control.setSetting('sync.aio.service', 'false')
                 except Exception as e:
                         log_utils.error(f"AIOStreams revoke all failed: {e}")
+
+        try:
+                from acctmgr.modules.sync import subtitles_sync
+                if subtitles_sync.authorized():
+                        from acctmgr.modules.auth import subtitles
+                        subtitles_sync.Auth().subtitles_revoke()
+                        subtitles.Subtitles().revoke_am()
+                        control.setSetting('sync.subs.service', 'false')
+        except Exception as e:
+                log_utils.error(f"Subtitles revoke all failed: {e}")
 
         control.revoke_dexhub_trakt() # Dex Hub keeps its Trakt token in JSON
         if control.setting('trakt.token'):
@@ -1346,6 +1409,10 @@ elif action == 'ShowSupported_Torbox':
 elif action == 'ShowSupported_Offcloud':
 	from acctmgr.modules import changelog
 	changelog.get_supported_offcloud()
+
+elif action == 'ShowSupported_Subtitles':
+	from acctmgr.modules import changelog
+	changelog.get_supported_subtitles()
 
 elif action == 'ShowSupported_AIOStreams':
 	from acctmgr.modules import changelog

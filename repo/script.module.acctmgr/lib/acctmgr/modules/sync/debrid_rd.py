@@ -320,7 +320,7 @@ class Auth:
                 if not exists(var.chkset_realx_json):
                     xbmcvfs.copy(joinPath(var.realx_json), joinPath(var.chkset_realx_json))
                 if exists(var.chkset_realx) and exists(var.chkset_realx_json):
-                    with open(var.chkset_realx_json) as r:
+                    with open(var.chkset_realx_json, encoding="utf-8") as r:
                         data = json.load(r)
                         chk_auth = data.get('token')
                     if chk_auth != rd_master_token:
@@ -331,7 +331,7 @@ class Auth:
                             'refresh_token': acctmgr.getSetting('realdebrid.refresh'),
                             'added': '202312010243'
                         }
-                        with open(var.chkset_realx_json, 'w') as w:
+                        with open(var.chkset_realx_json, 'w', encoding="utf-8") as w:
                             json.dump(rdauth, w)
         except Exception as e:
             log_utils.error(f"Realizer Real-Debrid Failed: {e}")

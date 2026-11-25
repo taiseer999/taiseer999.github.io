@@ -74,6 +74,26 @@
         "setting": "savedata",
         "path": "data_path"
     },
+    "service.subtitles.a4ksubtitles": {
+        "name": "a4kSubtitles",
+        "setting": "savedata",
+        "path": "data_path"
+    },
+    "service.subtitles.najdsmart": {
+        "name": "Najd Smart Subtitles",
+        "setting": "savedata",
+        "path": "data_path"
+    },
+    "service.subtitles.opensubtitles-com": {
+        "name": "OpenSubtitles.com",
+        "setting": "savedata",
+        "path": "data_path"
+    },
+    "service.subtitles.subdl-com": {
+        "name": "SubDL.com",
+        "setting": "savedata",
+        "path": "data_path"
+    },
     "plugin.video.shadow": {
         "name": "Shadow",
         "setting": "savedata",

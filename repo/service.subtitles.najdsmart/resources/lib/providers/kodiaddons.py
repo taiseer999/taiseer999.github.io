@@ -41,6 +41,13 @@ def installed():
     return out
 
 
+def _playing():
+    try:
+        return xbmc.Player().isPlayingVideo()
+    except Exception:
+        return False
+
+
 def available():
     return setting('use_kodi_addons', 'true') == 'true' and bool(installed())
 
@@ -86,6 +93,9 @@ def search(video, langs):
     import threading
     if not video.get('interactive'):
         return []          # never call other add-ons from the background (playback start)
+    if not _playing():
+        log('kodi add-ons skipped: playback has stopped')
+        return []          # they read the playing file - with nothing playing they crash
     results = []
     lock = threading.Lock()
 
@@ -99,6 +109,8 @@ def search(video, langs):
             log('kodi add-on %s failed: %s' % (name, e))
     threads = []
     for aid, name in installed():
+        if not _playing():
+            break
         t = threading.Thread(target=one, args=(aid, name), daemon=True)
         t.start()
         threads.append(t)

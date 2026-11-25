@@ -72,6 +72,16 @@
 		<setting id="aiostreams.password" type="text" visible="false" label="" default="" />
 		<setting id="aiostreams.encrypted" type="text" visible="false" label="" default="" />
 		<setting id="aiostreams.manifest" type="text" visible="false" label="" default="" />
+
+		<setting type="lsep" label="Subtitles (SubDL / SubSource)" />
+		<setting id="subs.subdl_key" type="text" visible="false" label="" default="" />
+		<setting id="subs.subdl_key" type="text" label="SubDL API key" enable="false" default="" visible="!eq(-1,)" option="hidden" />
+		<setting id="subs.subsource_key" type="text" visible="false" label="" default="" />
+		<setting id="subs.subsource_key" type="text" label="SubSource API key" enable="false" default="" visible="!eq(-1,)" option="hidden" />
+		<setting type="action" label="Authorize / Edit Accounts" option="close" action="RunScript(script.module.acctmgr, action=subtitlesAuth)" />
+		<setting id="subs.os_user" type="text" visible="false" label="" default="" />
+		<setting id="subs.os_pass" type="text" visible="false" label="" default="" />
+		<setting id="subs.os_key" type="text" visible="false" label="" default="" />
 	</category>
 	<category label="Manage">
 		<setting type="lsep" label="40087" />
@@ -131,6 +141,11 @@
 		<setting type="action" label="View Authorizations" option="close" action="RunScript(script.module.acctmgr, action=aiostreamsViewer)" visible="!eq(-1,)" />
 		<setting type="action" label="Sync Add-ons" option="close" action="RunScript(script.module.acctmgr, action=aiostreamsReSync)"  visible="!eq(-2,)" />
 		<setting type="action" label="Revoke" option="close" action="RunScript(script.module.acctmgr, action=aiostreamsRevoke)"  visible="!eq(-3,)" />
+
+		<setting type="lsep" label="Subtitles" />
+		<setting type="action" label="View Authorizations" option="close" action="RunScript(script.module.acctmgr, action=subtitlesViewer)" />
+		<setting type="action" label="Sync Add-ons" option="close" action="RunScript(script.module.acctmgr, action=subtitlesReSync)" />
+		<setting type="action" label="Revoke" option="close" action="RunScript(script.module.acctmgr, action=subtitlesRevoke)" />
 	</category>
 	<category label="Tools">
 		<!-- Set Max Resolution -->
@@ -165,6 +180,7 @@
 		<setting id="sync.oc.service"  type="bool" label="OffCloud" visible="true" default="false"/>
       		<setting id="sync.en.service"  type="bool" label="Easynews" visible="true" default="false"/>
       		<setting id="sync.aio.service"  type="bool" label="AIOStreams" visible="true" default="false"/>
+      		<setting id="sync.subs.service"  type="bool" label="Subtitles" visible="true" default="false"/>
 	</category>
 	<category label="Logs">
 		<setting type="lsep" label="Error Logging" />
@@ -184,6 +200,7 @@
 		<setting label="40100" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Offcloud)" />
 		<setting label="40101" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Easynews)" />
 		<setting label="40210" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_AIOStreams)" />
+		<setting label="40211" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Subtitles)" />
 		<setting label="40102" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_MaxQL)" />
 		<setting label="40103" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Autoplay)" />
 		<setting type="lsep" label="View Changelog" />

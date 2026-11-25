@@ -28,6 +28,13 @@ def _token(force=False):
         c = cache_get('os_token.json', 12 * 3600)
         if c:
             return json.loads(c.decode('utf-8'))
+    # OpenSubtitles locks an account after repeated failed logins: once a username/password
+    # pair is rejected, do not send it again for 24 h (a new password is tried at once).
+    import hashlib
+    sig = hashlib.sha256(('%s\n%s' % (user, pwd)).encode('utf-8')).hexdigest()
+    bad = cache_get('os_login_failed.txt', 24 * 3600)
+    if bad and bad.decode('utf-8', 'ignore') == sig:
+        return None
     try:
         r = http(BASE + '/login', json_body={'username': user, 'password': pwd},
                  headers={'Api-Key': setting('os_key'), 'Accept': 'application/json'})
@@ -36,6 +43,9 @@ def _token(force=False):
         return tok
     except Exception as e:
         log('opensubtitles login failed: %s' % e)
+        if isinstance(e, HttpError) and getattr(e, 'code', 0) in (400, 401):
+            cache_put('os_login_failed.txt', sig)
+            log('opensubtitles: this username/password will not be retried for 24 h - fix it in settings')
         return None
 
 

@@ -1,3 +1,9 @@
+1.2.1h - Subtitles: OpenSubtitles removed - AM now handles only the SubDL and SubSource API keys (a4kSubtitles, Najd Smart Subtitles, SubDL.com) and never reads or writes any OpenSubtitles setting. An OpenSubtitles login saved by 1.2.1f is cleared from AM; the add-ons' own OpenSubtitles settings are left as they are.
+
+1.2.1g - Fixed Umbrella Trakt/API sync failing on every run with "'ascii' codec can't decode byte 0xe2" (Kodi on macOS reads files as ASCII by default): every text file AM reads or writes now uses UTF-8. This kept Trakt startup NOT READY and retried every 2 minutes.
+
+1.2.1f - Added subtitle accounts: OpenSubtitles.com (username/password, optional API key), SubDL and SubSource API keys - entered once (keys can be pasted from the phone), checked live, then synced to a4kSubtitles, Najd Smart Subtitles, OpenSubtitles.com and SubDL.com. View Authorizations, Sync, Revoke, Revoke All and startup sync included.
+
 1.2.1e - Requires Account Viewer 1.1.6b. AIOStreams > View Authorizations opens the Account Viewer list (AIOStreams, POV, Red Light, AB Scrapers - authorized / not authorized, open settings), like the other services; the built-in text view stays as the fallback.
 
 1.2.1d - AIOStreams: AB Scrapers (script.module.abscrapers) added to the supported add-ons - the server is written to both its AIOStreams scraper login and its AIOStreams player login, and the AIOStreams provider is switched on.

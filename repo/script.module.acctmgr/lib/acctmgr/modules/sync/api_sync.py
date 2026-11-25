@@ -15,7 +15,7 @@ def get_trakt_sync_list():
     if not exists(var.tk_sync_list):
         return []
     try:
-        with open(var.tk_sync_list, "r") as f:
+        with open(var.tk_sync_list, "r", encoding="utf-8") as f:
             return json.load(f).get("addon_list", [])
     except Exception as e:
         log_utils.error(f"Error reading trakt sync list: {e}")
@@ -40,7 +40,7 @@ def check_api():
     if "Umbrella" in current and exists(var.chk_umb):
         try:
             patched, msg = control.startup_patch(var.path_umb_service, addon_name="Umbrella")
-            with open(var.path_umb, 'r') as f:
+            with open(var.path_umb, 'r', encoding="utf-8") as f:
                 data = f.read()
             new_data = None
             if var.client_am in data:
@@ -48,7 +48,7 @@ def check_api():
             else:
                 new_data = data.replace(var.umb_client, var.client_am).replace(var.umb_secret, var.secret_am)
             if new_data is not None:
-                with open(var.path_umb, 'w') as f:
+                with open(var.path_umb, 'w', encoding="utf-8") as f:
                     f.write(new_data)
         except Exception as e:
             log_utils.error(f"Umbrella API Failed: {e}")
@@ -84,7 +84,7 @@ def check_api():
     # ================= Shadow =================
     if "Shadow" in current and exists(var.chk_shadow):
         try:
-            with open(var.path_shadow, 'r') as f:
+            with open(var.path_shadow, 'r', encoding="utf-8") as f:
                 data = f.read()
             new_data = None
             if var.client_am in data:
@@ -92,7 +92,7 @@ def check_api():
             else:
                 new_data = data.replace(var.shadow_client, var.client_am).replace(var.shadow_secret, var.secret_am)
             if new_data is not None:
-                with open(var.path_shadow, 'w') as f:
+                with open(var.path_shadow, 'w', encoding="utf-8") as f:
                     f.write(new_data)
         except Exception as e:
             log_utils.error(f"Shadow API Failed: {e}")
@@ -100,7 +100,7 @@ def check_api():
     # ================= Ghost =================
     if "Ghost" in current and exists(var.chk_ghost):
         try:
-            with open(var.path_ghost, 'r') as f:
+            with open(var.path_ghost, 'r', encoding="utf-8") as f:
                 data = f.read()
             new_data = None
             if var.client_am in data:
@@ -108,7 +108,7 @@ def check_api():
             else:
                 new_data = data.replace(var.ghost_client, var.client_am).replace(var.ghost_secret, var.secret_am)
             if new_data is not None:
-                with open(var.path_ghost, 'w') as f:
+                with open(var.path_ghost, 'w', encoding="utf-8") as f:
                     f.write(new_data)
         except Exception as e:
             log_utils.error(f"Ghost API Failed: {e}")
@@ -116,7 +116,7 @@ def check_api():
     # ================= The Chains =================
     if "The Chains" in current and exists(var.chk_chains):
         try:
-            with open(var.path_chains, 'r') as f:
+            with open(var.path_chains, 'r', encoding="utf-8") as f:
                 data = f.read()
             new_data = None
             if var.client_am in data:
@@ -124,7 +124,7 @@ def check_api():
             else:
                 new_data = data.replace(var.thechains_client, var.client_am).replace(var.thechains_secret, var.secret_am)
             if new_data is not None:
-                with open(var.path_chains, 'w') as f:
+                with open(var.path_chains, 'w', encoding="utf-8") as f:
                     f.write(new_data)
         except Exception as e:
             log_utils.error(f"The Chains API Failed: {e}")
@@ -144,7 +144,7 @@ def check_api():
     if "The Crew" in current and exists(var.chk_crew):
         try:
             patched, msg = control.startup_patch(var.path_crew_service, addon_name="The Crew")
-            with open(var.path_crew, 'r') as f:
+            with open(var.path_crew, 'r', encoding="utf-8") as f:
                 data = f.read()
             new_data = None
             if var.client_am in data:
@@ -152,7 +152,7 @@ def check_api():
             else:
                 new_data = data.replace(var.crew_client, var.client_am_x).replace(var.crew_secret, var.secret_am_x)
             if new_data is not None:
-                with open(var.path_crew, 'w') as f:
+                with open(var.path_crew, 'w', encoding="utf-8") as f:
                     f.write(new_data)
         except Exception as e:
             log_utils.error(f"The Crew API Failed: {e}")
@@ -161,7 +161,7 @@ def check_api():
     if "SALTS" in current and exists(var.chk_salts):
         try:
             patched, msg = control.startup_patch(var.path_salts_service, addon_name="SALTS")
-            with open(var.path_salts, 'r') as f:
+            with open(var.path_salts, 'r', encoding="utf-8") as f:
                 data = f.read()
             new_data = None
             if var.client_am in data:
@@ -169,7 +169,7 @@ def check_api():
             else:
                 new_data = data.replace(var.salts_client, var.client_am).replace(var.salts_secret, var.secret_am)
             if new_data is not None:
-                with open(var.path_salts, 'w') as f:
+                with open(var.path_salts, 'w', encoding="utf-8") as f:
                     f.write(new_data)
         except Exception as e:
             log_utils.error(f"SALTS API Failed: {e}")
@@ -178,7 +178,7 @@ def check_api():
     if "Scrubs V2" in current and exists(var.chk_scrubs):
         try:
             patched, msg = control.startup_patch(var.path_scrubs_service, addon_name="Scrubs V2")
-            with open(var.path_scrubs, 'r') as f:
+            with open(var.path_scrubs, 'r', encoding="utf-8") as f:
                 data = f.read()
             new_data = None
             if var.client_am in data:
@@ -186,7 +186,7 @@ def check_api():
             else:
                 new_data = data.replace(var.scrubs_client, var.client_am).replace(var.scrubs_secret, var.secret_am)
             if new_data is not None:
-                with open(var.path_scrubs, 'w') as f:
+                with open(var.path_scrubs, 'w', encoding="utf-8") as f:
                     f.write(new_data)
         except Exception as e:
             log_utils.error(f"Scrubs V2 API Failed: {e}")
@@ -195,7 +195,7 @@ def check_api():
     if "Gratis Red" in current and exists(var.chk_redg):
         try:
             patched, msg = control.startup_patch(var.path_redg_service, addon_name="Gratis Red")
-            with open(var.path_redg, 'r') as f:
+            with open(var.path_redg, 'r', encoding="utf-8") as f:
                 data = f.read()
             new_data = None
             if var.client_am in data:
@@ -203,7 +203,7 @@ def check_api():
             else:
                 new_data = data.replace(var.redg_client, var.client_am).replace(var.redg_secret, var.secret_am)
             if new_data is not None:
-                with open(var.path_redg, 'w') as f:
+                with open(var.path_redg, 'w', encoding="utf-8") as f:
                     f.write(new_data)
         except Exception as e:
             log_utils.error(f"Gratis Red API Failed: {e}")
@@ -213,7 +213,7 @@ def check_api():
     if "Trakt Addon" in current and exists(var.chk_trakt):
         try:
             patched, msg = control.startup_patch(var.path_trakt_service, addon_name="Trakt Add-on")
-            with open(var.path_trakt, 'r') as f:
+            with open(var.path_trakt, 'r', encoding="utf-8") as f:
                 data = f.read()
             new_data = None
             if var.client_am in data:
@@ -221,7 +221,7 @@ def check_api():
             else:
                 new_data = data.replace(var.trakt_client_obs_str, var.client_am_obs_str).replace(var.trakt_secret_obs_str, var.secret_am_obs_str)
             if new_data is not None:
-                with open(var.path_trakt, 'w') as f:
+                with open(var.path_trakt, 'w', encoding="utf-8") as f:
                     f.write(new_data)
         except Exception as e:
             log_utils.error(f"Trakt Add-on API Failed: {e}")

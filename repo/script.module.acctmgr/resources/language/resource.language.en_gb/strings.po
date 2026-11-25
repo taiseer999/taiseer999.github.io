@@ -459,3 +459,7 @@ msgstr ""
 msgctxt "#40210"
 msgid "[COLOR FF00D4FF]-- AIOStreams --[/COLOR]"
 msgstr ""
+
+msgctxt "#40211"
+msgid "[COLOR FFF5C518]-- Subtitles --[/COLOR]"
+msgstr ""

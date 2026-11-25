@@ -1,0 +1,9 @@
+
+Subtitle API keys are pushed to:
+
+1.  a4kSubtitles            - SubDL key, SubSource key
+2.  Najd Smart Subtitles    - SubDL key, SubSource key
+3.  SubDL.com               - SubDL key
+
+OpenSubtitles is not handled by AM - set it in each add-on if you use it.
+Each key is checked on its server before it is saved.

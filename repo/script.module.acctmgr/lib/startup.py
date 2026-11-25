@@ -302,6 +302,14 @@ def SyncManager():  # Auto-sync credentials with recently installed/supported ad
 			aiostreams_sync.Auth().aiostreams_auth()
 	except Exception:
 		log_utils.error("Startup AIOStreams Startup Sync FAILED")
+
+	try:
+		if control.setting('sync.subs.service')=='true':
+			from acctmgr.modules.sync import subtitles_sync
+			if subtitles_sync.authorized():
+				subtitles_sync.Auth().subtitles_auth()
+	except Exception:
+		log_utils.error("Startup Subtitles Startup Sync FAILED")
 		
 def compute_file_hash(path): # Compute a simple hash of a file's contents to detect changes
 	if not os.path.exists(path):

@@ -147,7 +147,7 @@ def clear_logFile():
             f.close()
             return True
 
-        with open(log_file, 'r+') as f:
+        with open(log_file, 'r+', encoding="utf-8") as f:
             f.truncate(0)
         return True
 
