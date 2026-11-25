@@ -19,6 +19,7 @@ coco_plugin_id = 'script.module.cocoscrapers'
 gears_plugin_id = 'script.module.gearsscrapers'
 mag_plugin_id = 'script.module.magneto'
 viper_plugin_id = 'script.module.viperscrapers'
+abs_plugin_id = 'script.module.abscrapers'
 
 # Helpers
 def get_active_skin():
@@ -356,6 +357,8 @@ def ext_menu():
 
                 if not auser:
                     directory.add_file('{0} - [COLOR red]No Scraper Synced[/COLOR]'.format(name), {'name': ext}, icon=icon, description='Your External Provider Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
+                elif 'abscrapers' in str(auser).lower():
+                    directory.add_file('{0} - [COLOR springgreen]AB Scrapers Synced[/COLOR]'.format(name), {'name': ext}, icon=icon, description='Your External Provider Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
                 elif 'coco' in str(auser).lower():
                     if name == 'Fen':
                         directory.add_file('{0} - [COLOR springgreen]Coco Scrapers Synced[/COLOR]'.format(name), {'name': ext}, icon=icon, description='Your External Provider Authorizations\n\nGears Scrapers - Not Supported\nMagento Scrapers - Not Supported', fanart=fanart, themeit=CONFIG.THEME2)
@@ -371,36 +374,98 @@ def ext_menu():
                     else:
                         directory.add_file('{0} - [COLOR springgreen]Viper Scrapers Synced[/COLOR]'.format(name), {'name': ext}, icon=icon, description='Your External Provider Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
                 if name == 'Fen Light':
-                    if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (coco_plugin_id, gears_plugin_id, mag_plugin_id, viper_plugin_id)):
+                    if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (abs_plugin_id, coco_plugin_id, gears_plugin_id, mag_plugin_id, viper_plugin_id)):
                         directory.add_file('[COLOR goldenrod]Change [COLOR gold]Scraper[/COLOR] Package[/COLOR]', {'mode': 'fenlt_scrapers', 'name': ext}, icon=icon, description='Change External Scraper Package', fanart=fanart, menu=menu)
                         directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
                     else:
                         directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
                 elif name == 'The Gears':
-                    if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (coco_plugin_id, gears_plugin_id, mag_plugin_id, viper_plugin_id)):
+                    if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (abs_plugin_id, coco_plugin_id, gears_plugin_id, mag_plugin_id, viper_plugin_id)):
                         directory.add_file('[COLOR goldenrod]Change [COLOR gold]Scraper[/COLOR] Package[/COLOR]', {'mode': 'gears_scrapers', 'name': ext}, icon=icon, description='Change External Scraper Package', fanart=fanart, menu=menu)
                         directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'Gears'}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
                     else:
                         directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'Gears'}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
                 elif name == 'Red Light':
-                    if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (coco_plugin_id, gears_plugin_id, mag_plugin_id, viper_plugin_id)):
+                    if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (abs_plugin_id, coco_plugin_id, gears_plugin_id, mag_plugin_id, viper_plugin_id)):
                         directory.add_file('[COLOR goldenrod]Change [COLOR gold]Scraper[/COLOR] Package[/COLOR]', {'mode': 'red_scrapers', 'name': ext}, icon=icon, description='Change External Scraper Package', fanart=fanart, menu=menu)
                         directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_red', 'name': 'Red Light'}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
                     else:
                         directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_red', 'name': 'Red Light'}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
                 #elif name == 'Fen':
-                    #if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (coco_plugin_id, gears_plugin_id, mag_plugin_id, viper_plugin_id)):
+                    #if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (abs_plugin_id, coco_plugin_id, gears_plugin_id, mag_plugin_id, viper_plugin_id)):
                         #directory.add_file('[COLOR goldenrod]Change [COLOR gold]Scraper[/COLOR] Package[/COLOR]', {'mode': 'fen_scrapers', 'name': ext}, icon=icon, description='Change External Scraper Package', fanart=fanart, menu=menu)
                         #directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_ext', 'name': ext}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
                     #else:
                         #directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_ext', 'name': ext}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
                 elif name == 'Umbrella':
-                    if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (coco_plugin_id, gears_plugin_id, mag_plugin_id, viper_plugin_id)):
+                    if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (abs_plugin_id, coco_plugin_id, gears_plugin_id, mag_plugin_id, viper_plugin_id)):
                         directory.add_file('[COLOR goldenrod]Change [COLOR gold]Scraper[/COLOR] Package[/COLOR]', {'mode': 'umb_scrapers', 'name': ext}, icon=icon, description='Change External Scraper Package', fanart=fanart, menu=menu)
                         directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_ext', 'name': ext}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
                     else:
                         directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_ext', 'name': ext}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
                 directory.add_separator()
+
+# AIOStreams server (AM Lite 1.2.1c+): AIOStreams client, POV, Red Light, AB Scrapers
+AIO_TARGETS = (
+    ('AIOStreams', 'plugin.video.aiostreams'),
+    ('POV', 'plugin.video.pov'),
+    ('Red Light', 'plugin.video.redlight'),
+    ('AB Scrapers', abs_plugin_id),
+)
+
+def _aio_synced(plugin, am):
+    uuid = am.getSetting('aiostreams.uuid')
+    if not uuid:
+        return False
+    try:
+        if plugin == 'plugin.video.aiostreams':
+            manifest = am.getSetting('aiostreams.manifest')
+            return bool(manifest) and xbmcaddon.Addon(plugin).getSetting('manifest_url') == manifest
+        if plugin == 'plugin.video.pov':
+            a = xbmcaddon.Addon(plugin)
+            return a.getSetting('aio.username') == uuid and a.getSetting('provider.aiostreams') == 'true'
+        if plugin == abs_plugin_id:
+            a = xbmcaddon.Addon(plugin)
+            return a.getSetting('aiostreams.username') == uuid and a.getSetting('aio.username') == uuid
+        if plugin == 'plugin.video.redlight':
+            import sqlite3
+            db = translatePath('special://profile/addon_data/plugin.video.redlight/databases/settings.db')
+            if not os.path.exists(db):
+                return False
+            conn = sqlite3.connect(db, timeout=3)
+            try:
+                rows = dict(conn.execute("SELECT setting_id, setting_value FROM settings WHERE setting_id IN ('aiostreams.username', 'provider.aiostreams')").fetchall())
+            finally:
+                conn.close()
+            return rows.get('aiostreams.username') == uuid and rows.get('provider.aiostreams') == 'true'
+    except Exception as e:
+        xbmc.log('AM Lite: AIOStreams status check failed [{0}] - {1}'.format(plugin, e), xbmc.LOGERROR)
+    return False
+
+def aiostreams_menu():
+    am = xbmcaddon.Addon(addon_id)
+    server = am.getSetting('aiostreams.url')
+    if server:
+        directory.add_file('[COLOR dodgerblue]AIOStreams server:[/COLOR] {0}'.format(server), {'mode': 'aiostreams'}, icon=CONFIG.ICON, description='Your AIOStreams Authorizations', fanart=CONFIG.ADDON_FANART, themeit=CONFIG.THEME2)
+        directory.add_separator()
+    for name, plugin in AIO_TARGETS:
+        if not xbmc.getCondVisibility('System.HasAddon({0})'.format(plugin)):
+            continue
+        path = os.path.join(addons, plugin)
+        icon = os.path.join(path, 'icon.png')
+        icon = icon if os.path.exists(icon) else CONFIG.ICON
+        fanart = os.path.join(path, 'fanart.jpg')
+        fanart = fanart if os.path.exists(fanart) else CONFIG.ADDON_FANART
+        menu = create_addon_data_menu('AIOStreams', plugin)
+        if _aio_synced(plugin, am):
+            directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': plugin}, icon=icon, description='Your AIOStreams Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
+        else:
+            directory.add_file('{0} - [COLOR red]Not Authorized[/COLOR]'.format(name), {'name': plugin}, icon=icon, description='Your AIOStreams Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
+        if plugin == 'plugin.video.redlight':
+            directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_red', 'name': 'Red Light'}, icon=icon, fanart=fanart, menu=menu)
+        else:
+            directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_aio', 'name': plugin}, icon=icon, fanart=fanart, menu=menu)
+        directory.add_separator()
 
 def create_addon_data_menu(add='', name=''):
     menu_items = []

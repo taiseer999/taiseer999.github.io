@@ -1,3 +1,5 @@
+1.2.1e - Requires Account Viewer 1.1.6b. AIOStreams > View Authorizations opens the Account Viewer list (AIOStreams, POV, Red Light, AB Scrapers - authorized / not authorized, open settings), like the other services; the built-in text view stays as the fallback.
+
 1.2.1d - AIOStreams: AB Scrapers (script.module.abscrapers) added to the supported add-ons - the server is written to both its AIOStreams scraper login and its AIOStreams player login, and the AIOStreams provider is switched on.
 
 1.2.1c - Added AIOStreams server authorization: enter the server URL (or paste the manifest URL from your phone), UUID and password once; AM checks them on the server and syncs them to AIOStreams (Kodi client, manifest URL), POV and Red Light. Re-sync, View Authorizations, Revoke, Revoke All and startup sync included. EasyNews Video by Tetsuo (EasyNewsX) named in the Easynews supported list.

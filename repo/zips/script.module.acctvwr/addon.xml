@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.module.acctvwr" name="[COLOR dodgerblue][B]Account[/B][/COLOR] [COLOR white][B]Viewer[/B][/COLOR]" version="1.1.6a" provider-name="Zaxxon709">
+<addon id="script.module.acctvwr" name="[COLOR dodgerblue][B]Account[/B][/COLOR] [COLOR white][B]Viewer[/B][/COLOR]" version="1.1.6b" provider-name="Zaxxon709">
     <extension point="xbmc.python.pluginsource" library="default.py">
     </extension>
     <extension point="xbmc.python.module" library="resources" />
@@ -7,6 +7,7 @@
         <summary lang="en">Account Viewer - AM Lite Dependency</summary>
         <description lang="en">A centralized viewer for your authorized accounts. Easily check debrid, Trakt and other connected services across supported add-ons.</description>
         <platform>all</platform>
+        <news>1.1.6b - AIOStreams authorizations view (AIOStreams, POV, Red Light, AB Scrapers) for AM Lite 1.2.1e. AB Scrapers added to External Providers: shown as synced and offered first in Change Scraper Package for Fen Light, The Gears, Red Light and Umbrella. Fixed a crash in the external-provider database error path.</news>
         <reuselanguageinvoker>false</reuselanguageinvoker>
         <source>https://</source>
 	<assets>

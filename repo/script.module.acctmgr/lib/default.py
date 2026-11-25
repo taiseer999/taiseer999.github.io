@@ -855,6 +855,9 @@ elif action == 'aiostreamsRevoke':
 elif action == 'aiostreamsViewer':
         control.closeAll()
         xbmc.sleep(300)
+        if xbmc.getCondVisibility('System.HasAddon(script.module.acctvwr)'):
+            execute('ActivateWindow(10001,"plugin://script.module.acctvwr/?mode=aiostreams",return)')
+            raise SystemExit
         from acctmgr.modules.sync import aiostreams_sync
         from acctmgr.windows.textviewer import TextViewerXML
         windows = TextViewerXML('textviewer.xml', control.addonPath(),

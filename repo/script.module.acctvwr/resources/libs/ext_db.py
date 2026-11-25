@@ -7,7 +7,7 @@ def create_conn(db_file):
     try:
         return sqlite3.connect(db_file)
     except Exception:
-        log_utils.error("Ext_db Connect Failed")
+        xbmc.log("AM Lite: Ext_db Connect Failed", xbmc.LOGERROR)
 
 ###################### Update Settings ###########################
 SQL_UPDATE = "UPDATE settings SET setting_value = ? WHERE setting_id = ?"
@@ -20,7 +20,7 @@ def update_settings(conn, pairs):
         conn.commit()
         cur.close()
     except Exception:
-        log_utils.error("Ext_db Update Failed")
+        xbmc.log("AM Lite: Ext_db Update Failed", xbmc.LOGERROR)
 
 ###################### Connect to Database & Update #####################
 def connect_db(actions, settings_db):
@@ -29,7 +29,7 @@ def connect_db(actions, settings_db):
         with conn:
             update_settings(conn, actions)
     except Exception:
-        log_utils.error("Ext_db Action Failed")
+        xbmc.log("AM Lite: Ext_db Action Failed", xbmc.LOGERROR)
 
 ######################## External Providers ####################
 def auth_ext(name, module, settings_db):

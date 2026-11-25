@@ -24,18 +24,21 @@ coco_plugin_id = 'script.module.cocoscrapers'
 gears_plugin_id = 'script.module.gearsscrapers'
 mag_plugin_id = 'script.module.magneto'
 viper_plugin_id = 'script.module.viperscrapers'
+abs_plugin_id = 'script.module.abscrapers'
 
 #External Scraper Names (Fen Light/Fen & Forks)
 coco_sc_name = 'CocoScrapers Module'
 gears_sc_name = 'Gears Scrapers'
 mag_sc_name = 'Magneto Module'
 viper_sc_name = 'Viper Scrapers'
+abs_sc_name = 'AB Scrapers'
 
 #External Scraper Names (Umbrella & Forks)
 coco_umb_name = 'cocoScrapers'
 gears_umb_name = 'gearsscrapers'
 mag_umb_name = 'magneto'
 viper_umb_name = 'viperscrapers'
+abs_umb_name = 'abscrapers'
 
 #Remake Settings & Trakt Cache Variables
 fenlt_name = 'Fen Light'
@@ -84,7 +87,9 @@ ACCTMGR_AM = [
     # OffCloud
     'offcloud.token', 'offcloud.userid', 'offcloud.enabled',
     # Easynews
-    'easynews.password', 'easynews.username', 'easynews.enabled',]
+    'easynews.password', 'easynews.username', 'easynews.enabled',
+    # AIOStreams server
+    'aiostreams.url', 'aiostreams.uuid', 'aiostreams.password', 'aiostreams.encrypted', 'aiostreams.manifest',]
 
 #AM Lite Individual Service Settings
 ACCTMGR_TK = [
@@ -240,6 +245,16 @@ class Router:
             menu.easynews_menu()
             self._finish(handle)
 
+        elif mode == 'aiostreams':
+            menu.aiostreams_menu()
+            self._finish(handle)
+
+        elif mode == 'opensettings_aio':
+            try:
+                xbmcaddon.Addon(name).openSettings()
+            except Exception as e:
+                xbmc.log(f'{amgr}: open settings failed [{name}] - {e}', xbmc.LOGERROR)
+
         elif mode == 'extscrapers':
             menu.ext_menu()
             self._finish(handle)
@@ -373,6 +388,7 @@ class Router:
             fenlt_path = addon_data + translatePath('plugin.video.fenlight/databases/')
             settings_db = fenlt_path + translatePath('settings.db')
             scrapers = [
+                ('AB Scrapers', abs_plugin_id, abs_sc_name, abs_plugin_id),
                 ('Coco Scrapers', coco_plugin_id, coco_sc_name, coco_plugin_id),
                 ('Gears Scrapers', gears_plugin_id, gears_sc_name, gears_plugin_id),
                 ('Magneto Scrapers', mag_plugin_id, mag_sc_name, mag_plugin_id),
@@ -405,6 +421,7 @@ class Router:
             gears_path = addon_data + translatePath('plugin.video.gears/databases/')
             settings_db = gears_path + translatePath('settings.db')
             scrapers = [
+                ('AB Scrapers', abs_plugin_id, abs_sc_name, abs_plugin_id),
                 ('Coco Scrapers', coco_plugin_id, coco_sc_name, coco_plugin_id),
                 ('Gears Scrapers', gears_plugin_id, gears_sc_name, gears_plugin_id),
                 ('Magneto Scrapers', mag_plugin_id, mag_sc_name, mag_plugin_id),
@@ -437,6 +454,7 @@ class Router:
             red_path = addon_data + translatePath('plugin.video.redlight/databases/')
             settings_db = red_path + translatePath('settings.db')
             scrapers = [
+                ('AB Scrapers', abs_plugin_id, abs_sc_name, abs_plugin_id),
                 ('Coco Scrapers', coco_plugin_id, coco_sc_name, coco_plugin_id),
                 ('Gears Scrapers', gears_plugin_id, gears_sc_name, gears_plugin_id),
                 ('Magneto Scrapers', mag_plugin_id, mag_sc_name, mag_plugin_id),
@@ -501,6 +519,7 @@ class Router:
 
         elif mode == 'umb_scrapers':    # Umbrella
             scrapers = [
+                ('AB Scrapers', abs_plugin_id, abs_umb_name, abs_plugin_id),
                 ('Coco Scrapers', coco_plugin_id, coco_umb_name, coco_plugin_id),
                 ('Gears Scrapers', gears_plugin_id, gears_umb_name, gears_plugin_id),
                 ('Magneto Scrapers', mag_plugin_id, mag_umb_name, mag_plugin_id),
