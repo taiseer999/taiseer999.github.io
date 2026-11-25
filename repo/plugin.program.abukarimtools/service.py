@@ -1498,6 +1498,14 @@ def main():
         _log('Lucent focus default failed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
+    # 4.12.47: AF3 pills became opt-in upstream - keep Pill for Default OSD users (once).
+    try:
+        from resources.lib import af3_defaultosd_toggle
+        af3_defaultosd_toggle.pills_migrate()
+    except Exception:
+        _log('Default OSD pills migration failed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
     # 4.8.68: AF3 OSD Flags Style - reinstall resource.images.af3.frbadges
     # when an FR-Badges style is chosen and the add-on is missing. Fenced.
     try:

@@ -2,6 +2,15 @@
   "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
   "entries": [
     {
+      "v": "4.12.47",
+      "en": [
+        "AF3 50.12.14: the Default OSD keeps its pill-style tags after the skin made pills optional."
+      ],
+      "ar": [
+        "AF3 50.12.14: تحتفظ الواجهة الافتراضية للتشغيل بالوسوم على شكل كبسولات بعد أن جعلها السكن اختيارية."
+      ]
+    },
+    {
       "v": "4.12.42",
       "en": [
         "Lucent Player: notifications (like Najd's subtitle status) no longer cover the time row.",

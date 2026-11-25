@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="AB Tools"
-       version="4.12.46"
+       version="4.12.47"
        provider-name="Abukarim">
 
   <requires>
@@ -42,7 +42,7 @@
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، ووصولاً سريعاً إلى معالج أبوكريم وأدوات الصيانة فيه (التنظيف الشامل وحذف الصور المصغّرة القديمة). كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة واختبار أداء المعالج وإعادة بناء قاعدة بيانات الإضافات.</description>
     <license>LicenseRef-ABTools (personal use only, no redistribution - see LICENSE.txt)</license>
-    <news>v4.12.42: Notifications (Najd) no longer cover the Lucent time row; Search All gives AIOStreams the film's own plot and art for the player. v4.12.41: Lucent Player bars show chapter, cut (EDL) and scene markers. v4.12.40: Najd Smart Subtitles can be removed, or left uninstalled, from AB Tools (Mods > Najd). v4.12.39: Najd 2.9.7.11 (fallback AI subtitle when the built-in one fails, translation in parts, saved finished subtitles); AIOStreams logo on its Search All streams; the Lucent Player "Press down" hint is readable. v4.12.38: Lucent Player shows the AF3 "Press down" hint under the buttons. v4.12.37: Faster boot: one patch run at a time, no second full sweep when you open AB Tools. v4.12.36: AF3 Watched percentage: progress bar mode, episodes 3/10. v4.12.35: AF3 Watched percentage: capsule on the progress circle, 3 modes. v4.12.34: TMDbHelper Arabic: restart note. v4.12.33: AF3 Plot on the Right removed. v4.12.32: Full Arabic translation for TMDbHelper. v4.12.31: AF3: Watched percentage switch.</news>
+    <news>v4.12.47: AF3 50.12.14: Default OSD keeps the Pill style (pills now opt-in upstream). v4.12.42: Notifications (Najd) no longer cover the Lucent time row; Search All gives AIOStreams the film's own plot and art for the player. v4.12.41: Lucent Player bars show chapter, cut (EDL) and scene markers. v4.12.40: Najd Smart Subtitles can be removed, or left uninstalled, from AB Tools (Mods > Najd). v4.12.39: Najd 2.9.7.11 (fallback AI subtitle when the built-in one fails, translation in parts, saved finished subtitles); AIOStreams logo on its Search All streams; the Lucent Player "Press down" hint is readable. v4.12.38: Lucent Player shows the AF3 "Press down" hint under the buttons. v4.12.37: Faster boot: one patch run at a time, no second full sweep when you open AB Tools. v4.12.36: AF3 Watched percentage: progress bar mode, episodes 3/10. v4.12.35: AF3 Watched percentage: capsule on the progress circle, 3 modes. v4.12.34: TMDbHelper Arabic: restart note. v4.12.33: AF3 Plot on the Right removed. v4.12.32: Full Arabic translation for TMDbHelper. v4.12.31: AF3: Watched percentage switch.</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>

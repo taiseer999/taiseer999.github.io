@@ -1,3 +1,11 @@
+v4.12.47  (2026-11-25)
+- AF3 50.12.14 (upstream 3.5.11) made the info-tag pills opt-in
+  (InfoTags.EnablePills instead of InfoTags.DisableTags), and the skin's
+  Exp_ABK_DefaultOSD_Tags now follows it. Default OSD: turning it on also
+  sets InfoTags.EnablePills; a one-time service migration sets it for boxes
+  that already had the Default OSD on with the Pill style (waits for AF3
+  50.12.14 to be the running skin; Plain text stays plain).
+
 v4.12.46  (2026-11-25)
 - TMDbHelper 6.22.x: "Genres Follow Language" never ran - genres stayed
   English under ar-SA (Mac, kodi.log 2026-11-25, v4 already in place).

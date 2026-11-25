@@ -12,8 +12,9 @@ choice in Skin settings > Information. This switch brings those back.
 
 The skin does the drawing; this flips the AF3 skin bool abk.defaultosd. The
 info line picks the tags at skin load (include conditions), so the skin is
-reloaded after the switch. Turning it on also clears InfoTags.DisableTags so
-the Pill style shows straight away; the skin setting can still pick Plain text.
+reloaded after the switch. Turning it on also clears InfoTags.DisableTags and
+(4.12.47, AF3 50.12.14+) sets InfoTags.EnablePills so the Pill style shows
+straight away; the skin setting can still pick Plain text.
 
 4.10.10: upstream draws the details on ONE row (the "i" pill, the stars, the
 date and the duration side by side). AF3's "Two-line information bar"
@@ -33,6 +34,7 @@ from resources.lib.i18n import T
 SKIN_ID = 'skin.arctic.fuse.3'
 SETTING = 'abk.defaultosd'
 PLAIN = 'InfoTags.DisableTags'
+PILLS = 'InfoTags.EnablePills'      # 4.12.47: AF3 50.12.14 / upstream 3.5.11 - pills are opt-in
 TITLE = 'ABUKARIM TOOLS'
 MARK = 'name="Exp_ABK_DefaultOSD_Tags"'
 TWOROW = 'InfoBar.TwoRow'
@@ -81,11 +83,40 @@ def skin_supports():
         return False
 
 
+def _pills_skin():
+    """True when the installed AF3 reads InfoTags.EnablePills (50.12.14+)."""
+    try:
+        path = os.path.join(xbmcvfs.translatePath('special://home/addons/%s/' % SKIN_ID),
+                            '1080i', 'Includes_Expressions.xml')
+        with open(path, 'r', encoding='utf-8') as f:
+            return 'Skin.HasSetting(InfoTags.EnablePills)' in f.read()
+    except Exception:
+        return False
+
+
+def pills_migrate():
+    """4.12.47 (once): upstream turned "Pill" from opt-out (InfoTags.DisableTags)
+    into opt-in (InfoTags.EnablePills). A box that had the Default OSD on with
+    the Pill style keeps it: set EnablePills. Waits for AF3 50.12.14 to be the
+    running skin; Plain text (DisableTags) stays plain."""
+    state = _load()
+    if state.get('pills_migrated') or xbmc.getSkinDir() != SKIN_ID or not _pills_skin():
+        return
+    if (xbmc.getCondVisibility('Skin.HasSetting(%s)' % SETTING)
+            and not xbmc.getCondVisibility('Skin.HasSetting(%s)' % PLAIN)
+            and not xbmc.getCondVisibility('Skin.HasSetting(%s)' % PILLS)):
+        xbmc.executebuiltin('Skin.SetBool(%s)' % PILLS)
+        _log('Pill style kept: InfoTags.EnablePills set (upstream made pills opt-in)')
+    state['pills_migrated'] = True
+    _save(state)
+
+
 def set_on(on):
     state = _load()
     if on:
         xbmc.executebuiltin('Skin.SetBool(%s)' % SETTING)
         xbmc.executebuiltin('Skin.Reset(%s)' % PLAIN)
+        xbmc.executebuiltin('Skin.SetBool(%s)' % PILLS)
         if _tworow_on():                       # one row, like upstream
             xbmc.executebuiltin('Skin.Reset(%s)' % TWOROW)
             state['tworow_cleared'] = True
