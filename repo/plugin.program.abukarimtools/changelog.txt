@@ -1,3 +1,15 @@
+v4.12.46  (2026-11-25)
+- TMDbHelper 6.22.x: "Genres Follow Language" never ran - genres stayed
+  English under ar-SA (Mac, kodi.log 2026-11-25, v4 already in place).
+  In 6.22 Database.create_database() closes its own connection and returns
+  None; the v3/v4 refresh stopped at "if connection is None: return" every
+  time, so nothing was ever flushed. Now v5: it no longer uses the return
+  value and opens its own connection (2 s lock timeout) after TMDbHelper's
+  init, once per Kodi session and language. The v4 stamps were never
+  written, so every box flushes ItemDetails.db genres and the
+  ItemQueries.db genre list exactly once, and they are refetched in the
+  current language. Stock and v1-v4 files are upgraded by the next sweep.
+
 v4.12.45  (2026-11-24)
 - TMDbHelper 6.x: genres stayed English ("Thriller / Mystery / Comedy")
   under ar-SA while the title and plot were Arabic (AM9, kodi.log
