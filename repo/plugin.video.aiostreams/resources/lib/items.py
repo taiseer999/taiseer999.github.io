@@ -179,12 +179,42 @@ TYPE_ICONS = {'movie': 'movie', 'series': 'series', 'anime': 'anime', 'channel':
 
 def icon(name):
     """Menu icon from resources/media (BoxIcons, as in the AIOStreams web UI)."""
+    if name == 'genres':
+        return os.path.join(kodi.ADDON_PATH, 'resources', 'media', 'genres', 'Drama.png')
     path = os.path.join(kodi.ADDON_PATH, 'resources', 'media', name + '.png')
     return path if os.path.exists(path) else kodi.ICON
 
 
 def type_icon(type_):
     return icon(TYPE_ICONS.get(type_, 'catalog'))
+
+
+def genre_icon(genre):
+    """Find a bundled image for a genre, including punctuation and naming aliases."""
+    folder = os.path.join(kodi.ADDON_PATH, 'resources', 'media', 'genres')
+    key = str(genre or '').strip().casefold()
+    key = {'sci-fi': 'science fiction', 'scifi': 'science fiction'}.get(key, key)
+    normal = lambda value: ''.join(ch for ch in value.casefold() if ch.isalnum())
+    wanted = normal(key)
+    if os.path.isdir(folder):
+        for filename in os.listdir(folder):
+            stem = os.path.splitext(filename)[0]
+            if filename.lower().endswith('.png') and normal(stem) == wanted:
+                return os.path.join(folder, filename)
+    return icon('genres')
+
+def genre_item(label, genre=None):
+    """Genre folder with artwork exposed through fields commonly used by skins."""
+    art = genre_icon(genre if genre is not None else label)
+    li = folder_item(label, icon=art)
+    li.setArt({'icon': art, 'thumb': art, 'poster': art, 'fanart': kodi.FANART})
+    return li
+
+def decade_icon(key):
+    """Return custom decade artwork or the default season icon."""
+    folder = os.path.join(kodi.ADDON_PATH, 'resources', 'media', 'decades')
+    path = os.path.join(folder, str(key) + '.png')
+    return path if os.path.isfile(path) else icon('season')
 
 
 # Catalog logos (resources/media/logos): streaming services and sources as

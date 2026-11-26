@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.aiostreams" name="AIOStreams" version="1.4.3" provider-name="Taiseer">
+<addon id="plugin.video.aiostreams" name="AIOStreams" version="1.4.8" provider-name="Taiseer">
     <requires>
         <import addon="xbmc.python" version="3.0.1"/>
     </requires>

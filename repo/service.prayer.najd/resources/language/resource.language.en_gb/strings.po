@@ -1,0 +1,180 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: en_GB\n"
+
+msgctxt "#32001"
+msgid "Location & calculation"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Minute adjustments"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Adhan & alerts"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Display"
+msgstr ""
+
+msgctxt "#32005"
+msgid "City name"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Latitude"
+msgstr ""
+
+msgctxt "#32007"
+msgid "Longitude"
+msgstr ""
+
+msgctxt "#32008"
+msgid "UTC offset (hours)"
+msgstr ""
+
+msgctxt "#32009"
+msgid "Calculation method"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Asr method"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Isha minutes after Maghrib"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Umm al-Qura"
+msgstr ""
+
+msgctxt "#32013"
+msgid "MWL"
+msgstr ""
+
+msgctxt "#32014"
+msgid "Egyptian"
+msgstr ""
+
+msgctxt "#32015"
+msgid "Karachi"
+msgstr ""
+
+msgctxt "#32016"
+msgid "ISNA"
+msgstr ""
+
+msgctxt "#32017"
+msgid "Standard (shadow 1)"
+msgstr ""
+
+msgctxt "#32018"
+msgid "Hanafi (shadow 2)"
+msgstr ""
+
+msgctxt "#32019"
+msgid "Fajr"
+msgstr ""
+
+msgctxt "#32020"
+msgid "Sunrise"
+msgstr ""
+
+msgctxt "#32021"
+msgid "Dhuhr"
+msgstr ""
+
+msgctxt "#32022"
+msgid "Asr"
+msgstr ""
+
+msgctxt "#32023"
+msgid "Maghrib"
+msgstr ""
+
+msgctxt "#32024"
+msgid "Isha"
+msgstr ""
+
+msgctxt "#32025"
+msgid "Enable prayer alerts"
+msgstr ""
+
+msgctxt "#32026"
+msgid "Pre-prayer reminder (minutes, 0=off)"
+msgstr ""
+
+msgctxt "#32027"
+msgid "Alert mode"
+msgstr ""
+
+msgctxt "#32028"
+msgid "Full adhan"
+msgstr ""
+
+msgctxt "#32029"
+msgid "Notification only"
+msgstr ""
+
+msgctxt "#32030"
+msgid "As configured"
+msgstr ""
+
+msgctxt "#32031"
+msgid "Adhan file path (optional)"
+msgstr ""
+
+msgctxt "#32032"
+msgid "Fajr adhan file"
+msgstr ""
+
+msgctxt "#32033"
+msgid "Dhuhr adhan file"
+msgstr ""
+
+msgctxt "#32034"
+msgid "Asr adhan file"
+msgstr ""
+
+msgctxt "#32035"
+msgid "Maghrib adhan file"
+msgstr ""
+
+msgctxt "#32036"
+msgid "Isha adhan file"
+msgstr ""
+
+msgctxt "#32037"
+msgid "Allow adhan during video"
+msgstr ""
+
+msgctxt "#32038"
+msgid "Pause video at adhan time"
+msgstr ""
+
+msgctxt "#32039"
+msgid "Show next prayer by Kodi clock (skin permitting)"
+msgstr ""
+
+msgctxt "#32040"
+msgid "Show on-screen prayer notification during video"
+msgstr ""
+
+msgctxt "#32041"
+msgid "City"
+msgstr ""
+
+msgctxt "#32042"
+msgid "Hijri date adjust (± days)"
+msgstr ""
+
+msgctxt "#32043"
+msgid "Show alert popup at adhan"
+msgstr ""
+
+msgctxt "#32044"
+msgid "Alert popup duration (seconds)"
+msgstr ""

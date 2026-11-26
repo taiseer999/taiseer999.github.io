@@ -222,8 +222,8 @@ def genres(params):
     ex = _extra(cat or {}, 'genre') or {}
     for g in ex.get('options') or []:
         _add(kodi.build_url(action='catalog', type=params['type'], cid=params['cid'], genre=g, src=src),
-             items.folder_item(g, icon=items.icon('genres')))
-    _end()
+             items.genre_item(g))
+    _end(cache=False)
 
 
 def catalog(params):
@@ -729,15 +729,15 @@ def fel_decades(params):
             continue
         label = kodi.s(30097) if key == 'classic' else kodi.s(30098) % key
         _add(kodi.build_url(action='fel_list', mode='decade', value=key),
-             items.folder_item('%s  [COLOR grey](%d)[/COLOR]' % (label, cnt), icon=items.icon('season')))
+             items.folder_item('%s  [COLOR grey](%d)[/COLOR]' % (label, cnt), icon=items.decade_icon(key)))
     xbmcplugin.setPluginCategory(kodi.HANDLE, kodi.s(30094))
-    _end()
+    _end(cache=False)
 
 
 def fel_genres(params):
     for g, cnt in fel.genre_counts():
         _add(kodi.build_url(action='fel_list', mode='genre', value=g),
-             items.folder_item('%s  [COLOR grey](%d)[/COLOR]' % (g, cnt), icon=items.icon('genres')))
+             items.genre_item('%s  [COLOR grey](%d)[/COLOR]' % (g, cnt), genre=g))
     xbmcplugin.setPluginCategory(kodi.HANDLE, kodi.s(30095))
     _end()
 

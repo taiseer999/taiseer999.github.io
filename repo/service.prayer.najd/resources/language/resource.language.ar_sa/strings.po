@@ -1,0 +1,180 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ar_SA\n"
+
+msgctxt "#32001"
+msgid "الموقع والحساب"
+msgstr ""
+
+msgctxt "#32002"
+msgid "تعديلات الدقائق"
+msgstr ""
+
+msgctxt "#32003"
+msgid "الأذان والتنبيهات"
+msgstr ""
+
+msgctxt "#32004"
+msgid "العرض"
+msgstr ""
+
+msgctxt "#32005"
+msgid "اسم المدينة"
+msgstr ""
+
+msgctxt "#32006"
+msgid "خط العرض"
+msgstr ""
+
+msgctxt "#32007"
+msgid "خط الطول"
+msgstr ""
+
+msgctxt "#32008"
+msgid "فرق التوقيت عن UTC بالساعات"
+msgstr ""
+
+msgctxt "#32009"
+msgid "طريقة الحساب"
+msgstr ""
+
+msgctxt "#32010"
+msgid "حساب العصر"
+msgstr ""
+
+msgctxt "#32011"
+msgid "دقائق العشاء بعد المغرب (أم القرى؛ 120 في رمضان)"
+msgstr ""
+
+msgctxt "#32012"
+msgid "أم القرى"
+msgstr ""
+
+msgctxt "#32013"
+msgid "رابطة العالم الإسلامي"
+msgstr ""
+
+msgctxt "#32014"
+msgid "المصرية"
+msgstr ""
+
+msgctxt "#32015"
+msgid "كراتشي"
+msgstr ""
+
+msgctxt "#32016"
+msgid "ISNA"
+msgstr ""
+
+msgctxt "#32017"
+msgid "الشائع (ظل 1)"
+msgstr ""
+
+msgctxt "#32018"
+msgid "الحنفي (ظل 2)"
+msgstr ""
+
+msgctxt "#32019"
+msgid "الفجر"
+msgstr ""
+
+msgctxt "#32020"
+msgid "الشروق"
+msgstr ""
+
+msgctxt "#32021"
+msgid "الظهر"
+msgstr ""
+
+msgctxt "#32022"
+msgid "العصر"
+msgstr ""
+
+msgctxt "#32023"
+msgid "المغرب"
+msgstr ""
+
+msgctxt "#32024"
+msgid "العشاء"
+msgstr ""
+
+msgctxt "#32025"
+msgid "تفعيل تنبيهات الصلاة"
+msgstr ""
+
+msgctxt "#32026"
+msgid "تنبيه قبل الصلاة بالدقائق (0 للإيقاف)"
+msgstr ""
+
+msgctxt "#32027"
+msgid "نمط التنبيه"
+msgstr ""
+
+msgctxt "#32028"
+msgid "أذان كامل"
+msgstr ""
+
+msgctxt "#32029"
+msgid "تنبيه فقط"
+msgstr ""
+
+msgctxt "#32030"
+msgid "حسب الإعدادات"
+msgstr ""
+
+msgctxt "#32031"
+msgid "مسار ملف الأذان (اختياري)"
+msgstr ""
+
+msgctxt "#32032"
+msgid "ملف أذان الفجر (اختياري)"
+msgstr ""
+
+msgctxt "#32033"
+msgid "ملف أذان الظهر (اختياري)"
+msgstr ""
+
+msgctxt "#32034"
+msgid "ملف أذان العصر (اختياري)"
+msgstr ""
+
+msgctxt "#32035"
+msgid "ملف أذان المغرب (اختياري)"
+msgstr ""
+
+msgctxt "#32036"
+msgid "ملف أذان العشاء (اختياري)"
+msgstr ""
+
+msgctxt "#32037"
+msgid "السماح بتشغيل الأذان أثناء الفيديو"
+msgstr ""
+
+msgctxt "#32038"
+msgid "إيقاف الفيديو مؤقتاً عند دخول وقت الصلاة"
+msgstr ""
+
+msgctxt "#32039"
+msgid "عرض الصلاة القادمة بجانب ساعة كودي (إن دعمها السكن)"
+msgstr ""
+
+msgctxt "#32040"
+msgid "إظهار إشعار الصلاة أسفل الشاشة أثناء الفيديو"
+msgstr ""
+
+msgctxt "#32041"
+msgid "المدينة"
+msgstr ""
+
+msgctxt "#32042"
+msgid "تعديل التاريخ الهجري (± أيام)"
+msgstr ""
+
+msgctxt "#32043"
+msgid "إظهار نافذة تنبيه عند الأذان"
+msgstr ""
+
+msgctxt "#32044"
+msgid "مدة نافذة التنبيه (ثانية)"
+msgstr ""

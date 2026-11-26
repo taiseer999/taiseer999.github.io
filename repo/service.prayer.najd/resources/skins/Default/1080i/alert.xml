@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window type="dialog">
+  <defaultcontrol always="true">8001</defaultcontrol>
+  <coordinates>
+    <system>1</system><posx>0</posx><posy>0</posy>
+  </coordinates>
+  <controls>
+    <!-- dim full-screen backdrop (also over video) -->
+    <control type="image">
+      <left>0</left><top>0</top><width>1920</width><height>1080</height>
+      <texture>white.png</texture>
+      <colordiffuse>CC04101F</colordiffuse>
+    </control>
+
+    <!-- centre card -->
+    <control type="group">
+      <left>460</left><top>300</top>
+      <control type="image">
+        <left>0</left><top>0</top><width>1000</width><height>480</height>
+        <texture border="30">white.png</texture>
+        <colordiffuse>F20E2650</colordiffuse>
+      </control>
+      <control type="image">
+        <left>0</left><top>0</top><width>1000</width><height>8</height>
+        <texture>white.png</texture>
+        <colordiffuse>FF30AAE2</colordiffuse>
+      </control>
+
+      <!-- logo -->
+      <control type="image">
+        <left>430</left><top>40</top><width>140</width><height>140</height>
+        <texture>logo.png</texture>
+      </control>
+
+      <!-- lead line -->
+      <control type="label" id="101">
+        <left>60</left><top>196</top><width>880</width><height>46</height>
+        <font>font30</font><align>center</align>
+        <textcolor>FF30AAE2</textcolor>
+        <label></label>
+      </control>
+      <!-- prayer name (big) -->
+      <control type="label" id="102">
+        <left>60</left><top>240</top><width>880</width><height>120</height>
+        <font>font60</font><align>center</align>
+        <textcolor>FFFFFFFF</textcolor>
+        <label></label>
+      </control>
+      <!-- time + city -->
+      <control type="label" id="103">
+        <left>60</left><top>360</top><width>880</width><height>48</height>
+        <font>font35</font><align>center</align>
+        <textcolor>FFE8C877</textcolor>
+        <label></label>
+      </control>
+
+      <!-- OK button -->
+      <control type="button" id="8001">
+        <left>375</left><top>416</top><width>250</width><height>52</height>
+        <texturefocus border="6" colordiffuse="FF30AAE2">white.png</texturefocus>
+        <texturenofocus border="6" colordiffuse="FF173E6E">white.png</texturenofocus>
+        <font>font20</font><align>center</align>
+        <textcolor>FFFFFFFF</textcolor><focusedcolor>FF07152C</focusedcolor>
+        <label>حسناً</label>
+      </control>
+    </control>
+  </controls>
+</window>

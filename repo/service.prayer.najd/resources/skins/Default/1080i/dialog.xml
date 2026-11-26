@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window type="dialog">
+  <defaultcontrol always="true">9001</defaultcontrol>
+  <coordinates>
+    <system>1</system>
+    <posx>0</posx>
+    <posy>0</posy>
+  </coordinates>
+  <controls>
+    <!-- full-screen board background -->
+    <control type="image">
+      <left>0</left><top>0</top><width>1920</width><height>1080</height>
+      <texture>board_bg.png</texture>
+    </control>
+
+    <!-- ================= TOP BAR ================= -->
+    <!-- logo on the far right -->
+    <control type="image">
+      <left>1700</left><top>36</top><width>150</width><height>150</height>
+      <texture>logo.png</texture>
+    </control>
+
+    <!-- city / mosque name (right, beside logo) -->
+    <control type="label">
+      <left>1180</left><top>60</top><width>490</width><height>60</height>
+      <font>font35</font><align>right</align>
+      <textcolor>FFFFFFFF</textcolor>
+      <label>$INFO[Window.Property(NajdPrayer.City)]</label>
+    </control>
+    <control type="label">
+      <left>1180</left><top>124</top><width>490</width><height>36</height>
+      <font>font16</font><align>right</align>
+      <textcolor>FF9FC2E8</textcolor>
+      <label>مواقيت نجد للصلاة</label>
+    </control>
+
+    <!-- dates (centred under the clock, see middle) -->
+
+    <!-- sunrise / sunset on the far left -->
+    <control type="label">
+      <left>70</left><top>52</top><width>360</width><height>34</height>
+      <font>font16</font><align>left</align>
+      <textcolor>FF9FC2E8</textcolor>
+      <label>الشروق  $INFO[Window.Property(NajdPrayer.Sunrise)]</label>
+    </control>
+    <control type="label">
+      <left>70</left><top>92</top><width>360</width><height>34</height>
+      <font>font16</font><align>left</align>
+      <textcolor>FF9FC2E8</textcolor>
+      <label>الغروب  $INFO[Window.Property(NajdPrayer.Sunset)]</label>
+    </control>
+
+    <!-- ================= MIDDLE ================= -->
+    <!-- centred Hijri + Gregorian date -->
+    <control type="label">
+      <left>560</left><top>60</top><width>800</width><height>44</height>
+      <font>font25</font><align>center</align>
+      <textcolor>FF30AAE2</textcolor>
+      <label>$INFO[Window.Property(NajdPrayer.HijriDate)]</label>
+    </control>
+    <control type="label">
+      <left>560</left><top>106</top><width>800</width><height>32</height>
+      <font>font14</font><align>center</align>
+      <textcolor>FF86A6CC</textcolor>
+      <label>$INFO[Window.Property(NajdPrayer.GregDate)]</label>
+    </control>
+
+    <!-- big live wall clock (Kodi's own system time) -->
+    <control type="label">
+      <left>560</left><top>168</top><width>800</width><height>170</height>
+      <font>font60</font><align>center</align>
+      <textcolor>FFFFFFFF</textcolor>
+      <label>$INFO[System.Time(hh:mm)]</label>
+    </control>
+    <control type="label">
+      <left>560</left><top>330</top><width>800</width><height>40</height>
+      <font>font20</font><align>center</align>
+      <textcolor>FF9FC2E8</textcolor>
+      <label>$INFO[System.Time(xx)]</label>
+    </control>
+
+    <!-- countdown ring on the far left -->
+    <control type="image">
+      <left>120</left><top>170</top><width>300</width><height>300</height>
+      <texture>ring.png</texture>
+    </control>
+    <control type="label">
+      <left>120</left><top>258</top><width>300</width><height>80</height>
+      <font>font45</font><align>center</align>
+      <textcolor>FFFFFFFF</textcolor>
+      <label>$INFO[Window.Property(NajdPrayer.Countdown)]</label>
+    </control>
+    <control type="label">
+      <left>120</left><top>344</top><width>300</width><height>34</height>
+      <font>font14</font><align>center</align>
+      <textcolor>FF30AAE2</textcolor>
+      <label>$INFO[Window.Property(NajdPrayer.NextLabel)]</label>
+    </control>
+
+    <!-- ================= VERSE BAND ================= -->
+    <control type="image">
+      <left>260</left><top>512</top><width>1400</width><height>4</height>
+      <texture>white.png</texture>
+      <colordiffuse>3330AAE2</colordiffuse>
+    </control>
+    <control type="label">
+      <left>260</left><top>536</top><width>1400</width><height>66</height>
+      <font>font35</font><align>center</align>
+      <textcolor>FFE8C877</textcolor>
+      <label>$INFO[Window.Property(NajdPrayer.Verse)]</label>
+    </control>
+    <control type="image">
+      <left>260</left><top>614</top><width>1400</width><height>4</height>
+      <texture>white.png</texture>
+      <colordiffuse>3330AAE2</colordiffuse>
+    </control>
+
+    <!-- ================= PRAYER ROW (RTL: fajr on the right) ================= -->
+    <!-- fajr -->
+    <control type="group"><left>1480</left><top>660</top>
+      <control type="image"><left>0</left><top>0</top><width>320</width><height>190</height><texture>cell.png</texture></control>
+      <control type="image"><left>0</left><top>0</top><width>320</width><height>190</height><texture>cell_active.png</texture>
+        <visible>String.IsEqual(Window.Property(NajdPrayer.active_fajr),true)</visible></control>
+      <control type="label"><left>0</left><top>22</top><width>320</width><height>40</height><font>font25</font><align>center</align><textcolor>FF30AAE2</textcolor><label>الفجر</label></control>
+      <control type="label"><left>0</left><top>78</top><width>320</width><height>80</height><font>font45</font><align>center</align><textcolor>FFFFFFFF</textcolor><label>$INFO[Window.Property(NajdPrayer.fajr_time)]</label></control>
+    </control>
+    <!-- dhuhr -->
+    <control type="group"><left>1140</left><top>660</top>
+      <control type="image"><left>0</left><top>0</top><width>320</width><height>190</height><texture>cell.png</texture></control>
+      <control type="image"><left>0</left><top>0</top><width>320</width><height>190</height><texture>cell_active.png</texture>
+        <visible>String.IsEqual(Window.Property(NajdPrayer.active_dhuhr),true)</visible></control>
+      <control type="label"><left>0</left><top>22</top><width>320</width><height>40</height><font>font25</font><align>center</align><textcolor>FF30AAE2</textcolor><label>الظهر</label></control>
+      <control type="label"><left>0</left><top>78</top><width>320</width><height>80</height><font>font45</font><align>center</align><textcolor>FFFFFFFF</textcolor><label>$INFO[Window.Property(NajdPrayer.dhuhr_time)]</label></control>
+    </control>
+    <!-- asr -->
+    <control type="group"><left>800</left><top>660</top>
+      <control type="image"><left>0</left><top>0</top><width>320</width><height>190</height><texture>cell.png</texture></control>
+      <control type="image"><left>0</left><top>0</top><width>320</width><height>190</height><texture>cell_active.png</texture>
+        <visible>String.IsEqual(Window.Property(NajdPrayer.active_asr),true)</visible></control>
+      <control type="label"><left>0</left><top>22</top><width>320</width><height>40</height><font>font25</font><align>center</align><textcolor>FF30AAE2</textcolor><label>العصر</label></control>
+      <control type="label"><left>0</left><top>78</top><width>320</width><height>80</height><font>font45</font><align>center</align><textcolor>FFFFFFFF</textcolor><label>$INFO[Window.Property(NajdPrayer.asr_time)]</label></control>
+    </control>
+    <!-- maghrib -->
+    <control type="group"><left>460</left><top>660</top>
+      <control type="image"><left>0</left><top>0</top><width>320</width><height>190</height><texture>cell.png</texture></control>
+      <control type="image"><left>0</left><top>0</top><width>320</width><height>190</height><texture>cell_active.png</texture>
+        <visible>String.IsEqual(Window.Property(NajdPrayer.active_maghrib),true)</visible></control>
+      <control type="label"><left>0</left><top>22</top><width>320</width><height>40</height><font>font25</font><align>center</align><textcolor>FF30AAE2</textcolor><label>المغرب</label></control>
+      <control type="label"><left>0</left><top>78</top><width>320</width><height>80</height><font>font45</font><align>center</align><textcolor>FFFFFFFF</textcolor><label>$INFO[Window.Property(NajdPrayer.maghrib_time)]</label></control>
+    </control>
+    <!-- isha -->
+    <control type="group"><left>120</left><top>660</top>
+      <control type="image"><left>0</left><top>0</top><width>320</width><height>190</height><texture>cell.png</texture></control>
+      <control type="image"><left>0</left><top>0</top><width>320</width><height>190</height><texture>cell_active.png</texture>
+        <visible>String.IsEqual(Window.Property(NajdPrayer.active_isha),true)</visible></control>
+      <control type="label"><left>0</left><top>22</top><width>320</width><height>40</height><font>font25</font><align>center</align><textcolor>FF30AAE2</textcolor><label>العشاء</label></control>
+      <control type="label"><left>0</left><top>78</top><width>320</width><height>80</height><font>font45</font><align>center</align><textcolor>FFFFFFFF</textcolor><label>$INFO[Window.Property(NajdPrayer.isha_time)]</label></control>
+    </control>
+
+    <!-- ================= BOTTOM BUTTONS ================= -->
+    <control type="grouplist" id="9000">
+      <left>560</left><top>900</top><width>800</width><height>60</height>
+      <orientation>horizontal</orientation><itemgap>14</itemgap><align>center</align>
+      <control type="button" id="9001">
+        <width>250</width><height>56</height>
+        <texturefocus border="6" colordiffuse="FF30AAE2">white.png</texturefocus>
+        <texturenofocus border="6" colordiffuse="FF173E6E">white.png</texturenofocus>
+        <font>font16</font><align>center</align>
+        <textcolor>FFFFFFFF</textcolor><focusedcolor>FF07152C</focusedcolor>
+        <label>الإعدادات</label>
+      </control>
+      <control type="button" id="9002">
+        <width>250</width><height>56</height>
+        <texturefocus border="6" colordiffuse="FF30AAE2">white.png</texturefocus>
+        <texturenofocus border="6" colordiffuse="FF173E6E">white.png</texturenofocus>
+        <font>font16</font><align>center</align>
+        <textcolor>FFFFFFFF</textcolor><focusedcolor>FF07152C</focusedcolor>
+        <label>مواقيت الأسبوع</label>
+      </control>
+      <control type="button" id="9003">
+        <width>250</width><height>56</height>
+        <texturefocus border="6" colordiffuse="FF30AAE2">white.png</texturefocus>
+        <texturenofocus border="6" colordiffuse="FF173E6E">white.png</texturenofocus>
+        <font>font16</font><align>center</align>
+        <textcolor>FFFFFFFF</textcolor><focusedcolor>FF07152C</focusedcolor>
+        <label>إغلاق</label>
+      </control>
+    </control>
+  </controls>
+</window>
