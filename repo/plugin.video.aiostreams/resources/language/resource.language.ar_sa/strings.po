@@ -434,3 +434,7 @@ msgstr "فئات Dolby Vision (ألوان FEL/MEL)"
 msgctxt "#30268"
 msgid "Full screen shows fanart, poster and plot, with streams coloured orange (FEL), pink (MEL), blue (7.1) and red (5.1)."
 msgstr "يعرض وضع ملء الشاشة الخلفية والملصق والقصة، مع تلوين المصادر بالبرتقالي (FEL) والوردي (MEL) والأزرق (7.1) والأحمر (5.1)."
+
+msgctxt "#30269"
+msgid "AB Search All (every add-on)"
+msgstr "البحث في كل المصادر (AB Search All)"

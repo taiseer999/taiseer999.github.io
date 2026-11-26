@@ -1,3 +1,11 @@
+v4.12.48  (2026-11-26)
+- Search All accepts an IMDb id with no TMDb id (mode=ab_search&imdb=tt...):
+  the TMDb id is looked up with TMDb /find (show id for an episode; an
+  episode's own IMDb id gives show, season and episode). Used by AIOStreams
+  1.4.3 "Stream selection: AB Search All", so its FEL widgets / catalogs
+  open Search All instead of the AIOStreams picker. The launching AIOStreams
+  item's logo, fanart and plot are used (matched by IMDb id).
+
 v4.12.47  (2026-11-25)
 - AF3 50.12.14 (upstream 3.5.11) made the info-tag pills opt-in
   (InfoTags.EnablePills instead of InfoTags.DisableTags), and the skin's

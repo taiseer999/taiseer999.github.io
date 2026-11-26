@@ -434,3 +434,7 @@ msgstr ""
 msgctxt "#30268"
 msgid "Full screen shows fanart, poster and plot, with streams coloured orange (FEL), pink (MEL), blue (7.1) and red (5.1)."
 msgstr ""
+
+msgctxt "#30269"
+msgid "AB Search All (every add-on)"
+msgstr ""

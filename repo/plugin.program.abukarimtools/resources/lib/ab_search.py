@@ -2292,12 +2292,45 @@ def _wait_playback():
         del mon
 
 
-def _focused_meta(tmdb_id):
-    """Logo / fanart / plot of the item TMDbHelper was started from."""
+def _tmdb_from_imdb(params, media_type):
+    """4.12.48: callers that only know the IMDb id (AIOStreams' FEL catalog and
+    catalogs, its "Stream selection: AB Search All") - ask TMDb /find for the
+    TMDb id. For an episode the IMDb id is the show's. Fills a missing
+    title / year in params from the same answer."""
+    imdb = str(params.get('imdb') or '').strip()
+    try:
+        d = _tmdb('find/%s?external_source=imdb_id' % imdb)
+    except Exception as e:
+        _log('TMDb find %s failed: %s' % (imdb, e), xbmc.LOGWARNING)
+        return ''
+    if media_type == 'movie':
+        res = d.get('movie_results') or []
+        if res:
+            params.setdefault('title', res[0].get('title') or '')
+            params.setdefault('year', (res[0].get('release_date') or '')[:4])
+    else:
+        res = d.get('tv_results') or []
+        if not res and d.get('tv_episode_results'):        # an episode's own IMDb id
+            ep = d['tv_episode_results'][0]
+            params.setdefault('season', str(ep.get('season_number') or ''))
+            params.setdefault('episode', str(ep.get('episode_number') or ''))
+            params.pop('imdb', None)
+            return str(ep.get('show_id') or '')
+        if res:
+            params.setdefault('showname', res[0].get('name') or '')
+    tid = str(res[0].get('id') or '') if res else ''
+    _log('IMDb %s -> TMDb %s (%s)' % (imdb, tid or 'not found', media_type))
+    return tid
+
+
+def _focused_meta(tmdb_id, imdb=''):
+    """Logo / fanart / plot of the item TMDbHelper was started from (4.12.48:
+    or an AIOStreams item, matched by its IMDb id - it carries no TMDb id)."""
     info = xbmc.getInfoLabel
     ids = {info(i).strip() for i in ('ListItem.UniqueID(tmdb)', 'ListItem.Property(tmdb_id)',
                                      'ListItem.UniqueID(tvshow.tmdb)', 'ListItem.Property(tvshow.tmdb_id)')}
-    if not tmdb_id or tmdb_id not in ids:
+    imdbs = {info(i).strip() for i in ('ListItem.UniqueID(imdb)', 'ListItem.IMDBNumber')} if imdb else set()
+    if not ((tmdb_id and tmdb_id in ids) or (imdb and imdb in imdbs)):
         return {}
     return {'clearlogo': info('ListItem.Art(clearlogo)') or info('ListItem.Art(tvshow.clearlogo)'),
             'fanart': info('ListItem.Art(fanart)') or info('ListItem.Art(tvshow.fanart)'),
@@ -2357,6 +2390,8 @@ def run(params):
     params = {k: v for k, v in params.items() if str(v).strip() not in ('_', 'None')}
     media_type = 'episode' if params.get('media_type') in ('episode', 'tv', 'tvshow') else 'movie'
     tmdb_id = str(params.get('tmdb_id') or params.get('tmdb') or '').strip()
+    if not tmdb_id and str(params.get('imdb') or '').startswith('tt'):
+        tmdb_id = _tmdb_from_imdb(params, media_type)
     if not tmdb_id:
         _log('no tmdb_id in %s' % params, xbmc.LOGWARNING)
         return
@@ -2377,7 +2412,7 @@ def run(params):
     if not any(ok for *_x, ok in addons):
         xbmcgui.Dialog().ok('ABUKARIM TOOLS', T(30827))
         return
-    focused = _focused_meta(tmdb_id)
+    focused = _focused_meta(tmdb_id, str(params.get('imdb') or '') if media_type == 'movie' else '')
     meta = {k: v for k, v in params.items() if v and k in ('title', 'tvshowtitle', 'year', 'plot', 'fanart', 'clearlogo', 'ep_name')}
     if params.get('showname') and not meta.get('tvshowtitle'):
         meta['tvshowtitle'] = params['showname']

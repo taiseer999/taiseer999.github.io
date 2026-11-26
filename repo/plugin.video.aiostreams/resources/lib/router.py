@@ -454,8 +454,55 @@ def _choose(playable, notices, title, auto, type_=None, vid=None):
     return idx if idx >= 0 else None
 
 
+AB_TOOLS = 'plugin.program.abukarimtools'
+
+
+def _ab_search_url(params):
+    """1.4.3: plugin:// URL that opens AB Search All for this movie/episode, or
+    None when that is not possible (AB Tools missing, id not IMDb/TMDb)."""
+    if kodi.setting_int('stream_select', 0) != 3:
+        return None
+    if not xbmc.getCondVisibility('System.HasAddon(%s) + System.AddonIsEnabled(%s)' % (AB_TOOLS, AB_TOOLS)):
+        kodi.log('stream_select=AB Search All but %s is not installed/enabled - normal play' % AB_TOOLS,
+                 xbmc.LOGWARNING)
+        return None
+    type_, vid = params.get('type') or 'movie', str(params.get('id') or '')
+    parts = vid.split(':')
+    q = {'mode': 'ab_search', 'title': params.get('title') or ''}
+    if parts[0].startswith('tt'):
+        q['imdb'] = parts[0]
+    elif parts[0] == 'tmdb' and len(parts) > 1:
+        q['tmdb_id'] = parts[1]
+        parts = parts[1:]
+    else:
+        return None                     # kitsu / mal / anilist ... - AB Search All works by IMDb/TMDb
+    if type_ == 'movie':
+        q['media_type'] = 'movie'
+        entry = fel.find(vid)
+        if entry and entry.get('year'):
+            q['year'] = str(entry['year'])
+    else:
+        if len(parts) < 3:
+            return None
+        q.update({'media_type': 'episode', 'season': parts[1], 'episode': parts[2]})
+        if q['title']:
+            q['showname'] = q['title']
+    from urllib.parse import urlencode
+    return 'plugin://%s/?%s' % (AB_TOOLS, urlencode({k: v for k, v in q.items() if v}))
+
+
 def play(params):
     """Resolve a movie/episode id: fetch streams, choose, resolve."""
+    ab_url = _ab_search_url(params)
+    if ab_url:
+        # Hand over to AB Search All: it scrapes every add-on (this one included)
+        # and plays the pick through that add-on. Cancel this resolve first so
+        # Kodi is not left waiting on it.
+        if kodi.HANDLE >= 0:
+            xbmcplugin.setResolvedUrl(kodi.HANDLE, False, xbmcgui.ListItem(offscreen=True))
+        kodi.log('handing %s %s to AB Search All' % (params.get('type'), params.get('id')))
+        xbmc.executebuiltin('RunPlugin(%s)' % ab_url)
+        return
     client = _client()
     type_, vid = params['type'], _stream_id(params)
     title = params.get('title') or ''
