@@ -1,180 +1,204 @@
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: en_GB\n"
+"Language: ar_SA\n"
 
 msgctxt "#32001"
-msgid "Location & calculation"
+msgid "الموقع والحساب"
 msgstr ""
 
 msgctxt "#32002"
-msgid "Minute adjustments"
+msgid "تعديلات الدقائق"
 msgstr ""
 
 msgctxt "#32003"
-msgid "Adhan & alerts"
+msgid "الأذان والتنبيهات"
 msgstr ""
 
 msgctxt "#32004"
-msgid "Display"
+msgid "العرض"
 msgstr ""
 
 msgctxt "#32005"
-msgid "City name"
+msgid "اسم المدينة"
 msgstr ""
 
 msgctxt "#32006"
-msgid "Latitude"
+msgid "خط العرض"
 msgstr ""
 
 msgctxt "#32007"
-msgid "Longitude"
+msgid "خط الطول"
 msgstr ""
 
 msgctxt "#32008"
-msgid "UTC offset (hours)"
+msgid "فرق التوقيت عن UTC بالساعات"
 msgstr ""
 
 msgctxt "#32009"
-msgid "Calculation method"
+msgid "طريقة الحساب"
 msgstr ""
 
 msgctxt "#32010"
-msgid "Asr method"
+msgid "حساب العصر"
 msgstr ""
 
 msgctxt "#32011"
-msgid "Isha minutes after Maghrib"
+msgid "دقائق العشاء بعد المغرب (أم القرى؛ 120 في رمضان)"
 msgstr ""
 
 msgctxt "#32012"
-msgid "Umm al-Qura"
+msgid "أم القرى"
 msgstr ""
 
 msgctxt "#32013"
-msgid "MWL"
+msgid "رابطة العالم الإسلامي"
 msgstr ""
 
 msgctxt "#32014"
-msgid "Egyptian"
+msgid "المصرية"
 msgstr ""
 
 msgctxt "#32015"
-msgid "Karachi"
+msgid "كراتشي"
 msgstr ""
 
 msgctxt "#32016"
-msgid "ISNA"
+msgid "أمريكا الشمالية (ISNA)"
 msgstr ""
 
 msgctxt "#32017"
-msgid "Standard (shadow 1)"
+msgid "الشائع (ظل 1)"
 msgstr ""
 
 msgctxt "#32018"
-msgid "Hanafi (shadow 2)"
+msgid "الحنفي (ظل 2)"
 msgstr ""
 
 msgctxt "#32019"
-msgid "Fajr"
+msgid "الفجر"
 msgstr ""
 
 msgctxt "#32020"
-msgid "Sunrise"
+msgid "الشروق"
 msgstr ""
 
 msgctxt "#32021"
-msgid "Dhuhr"
+msgid "الظهر"
 msgstr ""
 
 msgctxt "#32022"
-msgid "Asr"
+msgid "العصر"
 msgstr ""
 
 msgctxt "#32023"
-msgid "Maghrib"
+msgid "المغرب"
 msgstr ""
 
 msgctxt "#32024"
-msgid "Isha"
+msgid "العشاء"
 msgstr ""
 
 msgctxt "#32025"
-msgid "Enable prayer alerts"
+msgid "تفعيل تنبيهات الصلاة"
 msgstr ""
 
 msgctxt "#32026"
-msgid "Pre-prayer reminder (minutes, 0=off)"
+msgid "تنبيه قبل الصلاة بالدقائق (0 للإيقاف)"
 msgstr ""
 
 msgctxt "#32027"
-msgid "Alert mode"
+msgid "نمط التنبيه"
 msgstr ""
 
 msgctxt "#32028"
-msgid "Full adhan"
+msgid "أذان كامل"
 msgstr ""
 
 msgctxt "#32029"
-msgid "Notification only"
+msgid "تنبيه فقط"
 msgstr ""
 
 msgctxt "#32030"
-msgid "As configured"
+msgid "حسب الإعدادات"
 msgstr ""
 
 msgctxt "#32031"
-msgid "Adhan file path (optional)"
+msgid "ملف أذان مخصص (اختياري — الافتراضي أذان مدمج ٢٠ ثانية)"
 msgstr ""
 
 msgctxt "#32032"
-msgid "Fajr adhan file"
+msgid "ملف أذان الفجر (اختياري)"
 msgstr ""
 
 msgctxt "#32033"
-msgid "Dhuhr adhan file"
+msgid "ملف أذان الظهر (اختياري)"
 msgstr ""
 
 msgctxt "#32034"
-msgid "Asr adhan file"
+msgid "ملف أذان العصر (اختياري)"
 msgstr ""
 
 msgctxt "#32035"
-msgid "Maghrib adhan file"
+msgid "ملف أذان المغرب (اختياري)"
 msgstr ""
 
 msgctxt "#32036"
-msgid "Isha adhan file"
+msgid "ملف أذان العشاء (اختياري)"
 msgstr ""
 
 msgctxt "#32037"
-msgid "Allow adhan during video"
+msgid "السماح بتشغيل الأذان أثناء الفيديو"
 msgstr ""
 
 msgctxt "#32038"
-msgid "Pause video at adhan time"
+msgid "إيقاف الفيديو مؤقتاً عند دخول وقت الصلاة"
 msgstr ""
 
 msgctxt "#32039"
-msgid "Show next prayer by Kodi clock (skin permitting)"
+msgid "عرض الصلاة القادمة بجانب ساعة كودي (إن دعمها السكن)"
 msgstr ""
 
 msgctxt "#32040"
-msgid "Show on-screen prayer notification during video"
+msgid "إظهار إشعار الصلاة أسفل الشاشة أثناء الفيديو"
 msgstr ""
 
 msgctxt "#32041"
-msgid "City"
+msgid "المدينة"
 msgstr ""
 
 msgctxt "#32042"
-msgid "Hijri date adjust (± days)"
+msgid "تعديل التاريخ الهجري (± أيام)"
 msgstr ""
 
 msgctxt "#32043"
-msgid "Show alert popup at adhan"
+msgid "إظهار نافذة تنبيه عند الأذان"
 msgstr ""
 
 msgctxt "#32044"
-msgid "Alert popup duration (seconds)"
+msgid "مدة نافذة التنبيه (ثانية)"
+msgstr ""
+
+msgctxt "#32045"
+msgid "عند دخول وقت الأذان أثناء تشغيل فيلم"
+msgstr ""
+
+msgctxt "#32046"
+msgid "تنبيه فقط (يستمر الفيلم)"
+msgstr ""
+
+msgctxt "#32047"
+msgid "إيقاف الفيلم مؤقتاً فقط"
+msgstr ""
+
+msgctxt "#32048"
+msgid "إيقاف الفيلم وتشغيل الأذان ثم إكماله"
+msgstr ""
+
+msgctxt "#32049"
+msgid "اسألني كل مرة"
+msgstr ""
+
+msgctxt "#32050"
+msgid "عرض عدّاد الصلاة القادمة فوق الفيلم مع شريط التشغيل"
 msgstr ""

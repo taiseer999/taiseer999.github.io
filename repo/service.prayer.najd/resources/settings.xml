@@ -110,43 +110,50 @@
         <constraints><options><option label="32028">0</option><option label="32029">1</option><option label="32030">2</option></options></constraints>
         <control type="list" format="integer"><heading>32027</heading></control>
       </setting>
-      <setting id="adhan_file" type="string" label="32031">
+      <setting id="video_adhan_action" type="integer" label="32045">
+        <level>0</level><default>3</default>
+        <constraints><options><option label="32046">0</option><option label="32047">1</option><option label="32048">2</option><option label="32049">3</option></options></constraints>
+        <control type="list" format="integer"><heading>32045</heading></control>
+      </setting>
+      <setting id="adhan_file" type="path" label="32031">
         <level>0</level><default></default>
-        <control type="edit" format="string"><heading>32031</heading></control>
+        <constraints><allowempty>true</allowempty><writable>false</writable><masking>.mp3|.m4a|.aac|.wav|.ogg|.flac|.wma</masking></constraints>
+        <control type="button" format="file"><heading>32031</heading></control>
       </setting>
-      <setting id="adhan_fajr" type="string" label="32032">
+      <setting id="adhan_fajr" type="path" label="32032">
         <level>0</level><default></default>
-        <control type="edit" format="string"><heading>32032</heading></control>
+        <constraints><allowempty>true</allowempty><writable>false</writable><masking>.mp3|.m4a|.aac|.wav|.ogg|.flac|.wma</masking></constraints>
+        <control type="button" format="file"><heading>32032</heading></control>
       </setting>
-      <setting id="adhan_dhuhr" type="string" label="32033">
+      <setting id="adhan_dhuhr" type="path" label="32033">
         <level>0</level><default></default>
-        <control type="edit" format="string"><heading>32033</heading></control>
+        <constraints><allowempty>true</allowempty><writable>false</writable><masking>.mp3|.m4a|.aac|.wav|.ogg|.flac|.wma</masking></constraints>
+        <control type="button" format="file"><heading>32033</heading></control>
       </setting>
-      <setting id="adhan_asr" type="string" label="32034">
+      <setting id="adhan_asr" type="path" label="32034">
         <level>0</level><default></default>
-        <control type="edit" format="string"><heading>32034</heading></control>
+        <constraints><allowempty>true</allowempty><writable>false</writable><masking>.mp3|.m4a|.aac|.wav|.ogg|.flac|.wma</masking></constraints>
+        <control type="button" format="file"><heading>32034</heading></control>
       </setting>
-      <setting id="adhan_maghrib" type="string" label="32035">
+      <setting id="adhan_maghrib" type="path" label="32035">
         <level>0</level><default></default>
-        <control type="edit" format="string"><heading>32035</heading></control>
+        <constraints><allowempty>true</allowempty><writable>false</writable><masking>.mp3|.m4a|.aac|.wav|.ogg|.flac|.wma</masking></constraints>
+        <control type="button" format="file"><heading>32035</heading></control>
       </setting>
-      <setting id="adhan_isha" type="string" label="32036">
+      <setting id="adhan_isha" type="path" label="32036">
         <level>0</level><default></default>
-        <control type="edit" format="string"><heading>32036</heading></control>
-      </setting>
-      <setting id="adhan_during_video" type="boolean" label="32037">
-        <level>0</level><default>false</default>
-        <control type="toggle"/>
-      </setting>
-      <setting id="pause_video_at_adhan" type="boolean" label="32038">
-        <level>0</level><default>false</default>
-        <control type="toggle"/>
+        <constraints><allowempty>true</allowempty><writable>false</writable><masking>.mp3|.m4a|.aac|.wav|.ogg|.flac|.wma</masking></constraints>
+        <control type="button" format="file"><heading>32036</heading></control>
       </setting>
       </group>
     </category>
     <category id="display" label="32004">
       <group id="1">
       <setting id="show_clock_widget" type="boolean" label="32039">
+        <level>0</level><default>true</default>
+        <control type="toggle"/>
+      </setting>
+      <setting id="osd_countdown" type="boolean" label="32050">
         <level>0</level><default>true</default>
         <control type="toggle"/>
       </setting>

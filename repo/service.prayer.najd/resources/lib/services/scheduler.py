@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
+import threading
 from datetime import datetime, timedelta
 from resources.lib.core.prayer_engine import calculate, NAMES, as_datetime
 from resources.lib.core import cities
@@ -39,6 +41,15 @@ class Scheduler(object):
             tomorrow=now.date()+timedelta(days=1); td=self._times(tomorrow)
             upcoming=next(((k,as_datetime(tomorrow,td[k])) for k in ('fajr','sunrise','dhuhr','asr','maghrib','isha') if td.get(k)),None)
         return data,upcoming
+    def next_salah(self, now=None):
+        """Next of the five prayers (sunrise excluded) as (key, datetime)."""
+        now=now or datetime.now()
+        for day in (now.date(), now.date()+timedelta(days=1)):
+            data=self._times(day)
+            for k in ('fajr','dhuhr','asr','maghrib','isha'):
+                dt=as_datetime(day,data.get(k))
+                if dt and dt>now: return k,dt
+        return None
     def tick(self):
         now=datetime.now(); data=self._times(now.date())
         if self._last_day != now.date(): self._last_day=now.date(); self._today=data
@@ -86,33 +97,129 @@ class Scheduler(object):
             return self._times(datetime.now().date()).get(key) or ''
         except Exception:
             return ''
+    # ---- what to do at adhan while a video plays (setting video_adhan_action) ----
+    NOTIFY_ONLY, PAUSE_ONLY, ADHAN_RESUME, ASK = 0, 1, 2, 3
+
+    def _adhan_path(self, key):
+        """Per-prayer file > general file > bundled 20-second adhan."""
+        custom=self._s('adhan_'+key,'') or self._s('adhan_file','')
+        if custom: return custom
+        if self.addon_path:
+            bundled=os.path.join(self.addon_path,'resources','media','adhan.mp3')
+            if os.path.exists(bundled): return bundled
+        return ''
+    def _paused(self):
+        try: return bool(self.xbmc.getCondVisibility('Player.Paused'))
+        except Exception: return False
+    def _pause_video(self):
+        try:
+            if not self._paused(): self.xbmc.Player().pause()
+        except Exception as exc:
+            self.xbmc.log('[NajdPrayer] pause error: %s' % exc,self.xbmc.LOGERROR)
+    def _unpause_video(self):
+        try:
+            if self._paused(): self.xbmc.Player().pause()
+        except Exception as exc:
+            self.xbmc.log('[NajdPrayer] resume error: %s' % exc,self.xbmc.LOGERROR)
+    def _play_adhan(self, path):
+        try: self.xbmc.Player().play(path)
+        except Exception as exc: self.xbmc.log('[NajdPrayer] audio error: %s' % exc,self.xbmc.LOGERROR)
+
+    def _play_adhan_then_resume(self, path):
+        """Remember the film + position, play the adhan, then resume the film
+        from the same spot once the adhan ends (or the user stops it)."""
+        player=self.xbmc.Player()
+        try:
+            saved=player.getPlayingFile(); pos=player.getTime()
+        except Exception:
+            saved=None; pos=0
+        self._play_adhan(path)
+        if not saved:
+            return
+        t=threading.Thread(target=self._resume_after_adhan, args=(saved, pos))
+        t.daemon=True; t.start()
+
+    def _resume_after_adhan(self, saved, pos):
+        mon=self.xbmc.Monitor(); player=self.xbmc.Player()
+        # wait for the adhan to start (up to ~15 s)
+        for _ in range(30):
+            if player.isPlayingAudio(): break
+            if mon.waitForAbort(0.5): return
+        else:
+            return
+        # wait for the adhan to finish (max ~15 min); bail out if the user starts a video
+        for _ in range(1800):
+            if not player.isPlaying(): break
+            if player.isPlayingVideo(): return
+            if mon.waitForAbort(0.5): return
+        if mon.waitForAbort(1.0) or player.isPlaying():
+            return  # user started something else meanwhile
+        start=max(0.0, pos-3.0)
+        li=self.xbmcgui.ListItem(path=saved)
+        li.setProperty('StartOffset', '%.1f' % start)
+        player.play(saved, li)
+        # fallback: some sources ignore StartOffset — seek manually once playing
+        for _ in range(40):
+            if player.isPlayingVideo(): break
+            if mon.waitForAbort(0.5): return
+        try:
+            if player.isPlayingVideo() and player.getTime() < start-15:
+                player.seekTime(start)
+        except Exception:
+            pass
+
+    def _ask_at_adhan(self, title):
+        """Video is already paused. Returns 'adhan', 'resume' or 'stay'."""
+        try:
+            args=('حان الآن وقت صلاة %s' % title,
+                  'تم إيقاف الفيلم مؤقتاً.\nهل تريد تشغيل الأذان ثم إكمال الفيلم من نفس المكان؟',
+                  'إبقاء الفيلم متوقفاً', 'متابعة الفيلم', 'تشغيل الأذان', 600000)
+            yes_btn=getattr(self.xbmcgui,'DLG_YESNO_YES_BTN',None)
+            try:
+                r=self.xbmcgui.Dialog().yesnocustom(*args, defaultbutton=yes_btn) if yes_btn is not None \
+                    else self.xbmcgui.Dialog().yesnocustom(*args)
+            except TypeError:  # older Kodi without defaultbutton
+                r=self.xbmcgui.Dialog().yesnocustom(*args)
+        except Exception as exc:
+            self.xbmc.log('[NajdPrayer] ask dialog error: %s' % exc,self.xbmc.LOGERROR)
+            return 'stay'
+        # 1=yes (adhan), 0=no (resume), 2=custom (stay), -1=timeout/cancel (stay: user may be praying)
+        return {1:'adhan', 0:'resume'}.get(r,'stay')
+
     def _dispatch(self, key, pre=False):
         title=NAMES[key]; mode={'0':'full','1':'notify','2':'configurable'}.get(self._s('alert_mode','2'),'configurable')
         playing=self.xbmc.Player().isPlayingVideo()
+        path=self._adhan_path(key)
+        can_play=mode in ('full','configurable') and bool(path)
+        try: action=int(self._s('video_adhan_action','3') or 3)
+        except ValueError: action=self.ASK
+        if playing and action in (self.ADHAN_RESUME, self.ASK) and not can_play:
+            action=self.PAUSE_ONLY  # nothing to play -> just pause
+        asking=playing and not pre and action==self.ASK
         message=('باقي %s دقيقة على صلاة %s' % (self._s('reminder_minutes','0'),title)) if pre else ('حان الآن وقت '+title)
-        # On-screen notification (bottom of the screen, also over video) unless disabled.
-        if self._s('notify_on_screen','true') == 'true' or not playing:
-            self.xbmcgui.Dialog().notification('مواقيت نجد للصلاة', message, self.xbmcgui.NOTIFICATION_INFO, 7000)
-        # Rich popup alert window (non-blocking), unless disabled or suppressed over video.
-        if self._s('popup_alert','true') == 'true' and self.addon_path and (not playing or self._s('notify_on_screen','true') == 'true'):
-            try:
-                from resources.lib.gui.alert import show_alert
-                lead=('تذكير — بعد %s دقيقة' % self._s('reminder_minutes','0')) if pre else 'حان الآن وقت صلاة'
-                secs=int(self._s('popup_seconds','20') or 20)
-                show_alert(self.addon_path, lead, title, self._adhan_time_str(key), self._city_name(), secs)
-            except Exception as exc:
-                self.xbmc.log('[NajdPrayer] popup error: %s' % exc,self.xbmc.LOGERROR)
+        # The ask dialog replaces the notification + popup (no clutter over the film).
+        if not asking:
+            if self._s('notify_on_screen','true') == 'true' or not playing:
+                self.xbmcgui.Dialog().notification('مواقيت نجد للصلاة', message, self.xbmcgui.NOTIFICATION_INFO, 7000)
+            if self._s('popup_alert','true') == 'true' and self.addon_path and (not playing or self._s('notify_on_screen','true') == 'true'):
+                try:
+                    from resources.lib.gui.alert import show_alert
+                    lead=('تذكير — بعد %s دقيقة' % self._s('reminder_minutes','0')) if pre else 'حان الآن وقت صلاة'
+                    secs=int(self._s('popup_seconds','20') or 20)
+                    show_alert(self.addon_path, lead, title, self._adhan_time_str(key), self._city_name(), secs)
+                except Exception as exc:
+                    self.xbmc.log('[NajdPrayer] popup error: %s' % exc,self.xbmc.LOGERROR)
         if pre: return
-        # Optionally pause the running video at adhan time so the user doesn't miss it.
-        if playing and self._s('pause_video_at_adhan','false') == 'true':
-            try:
-                if not self.xbmc.getCondVisibility('Player.Paused'):
-                    self.xbmc.Player().pause()
-            except Exception as exc:
-                self.xbmc.log('[NajdPrayer] pause error: %s' % exc,self.xbmc.LOGERROR)
-        # Respect video playback unless user explicitly selected full adhan during video.
-        allow_video=self._s('adhan_during_video','false') == 'true'
-        path=self._s('adhan_'+key,'') or self._s('adhan_file','')
-        if mode in ('full','configurable') and path and (not playing or allow_video):
-            try: self.xbmc.Player().play(path)
-            except Exception as exc: self.xbmc.log('[NajdPrayer] audio error: %s' % exc,self.xbmc.LOGERROR)
+        if not playing:
+            if can_play: self._play_adhan(path)
+            return
+        if action==self.NOTIFY_ONLY:
+            return
+        self._pause_video()
+        if action==self.PAUSE_ONLY:
+            return
+        if action==self.ASK:
+            choice=self._ask_at_adhan(title)
+            if choice=='resume': self._unpause_video(); return
+            if choice=='stay': return
+        self._play_adhan_then_resume(path)

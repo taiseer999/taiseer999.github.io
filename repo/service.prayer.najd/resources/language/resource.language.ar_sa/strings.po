@@ -64,7 +64,7 @@ msgid "كراتشي"
 msgstr ""
 
 msgctxt "#32016"
-msgid "ISNA"
+msgid "أمريكا الشمالية (ISNA)"
 msgstr ""
 
 msgctxt "#32017"
@@ -124,7 +124,7 @@ msgid "حسب الإعدادات"
 msgstr ""
 
 msgctxt "#32031"
-msgid "مسار ملف الأذان (اختياري)"
+msgid "ملف أذان مخصص (اختياري — الافتراضي أذان مدمج ٢٠ ثانية)"
 msgstr ""
 
 msgctxt "#32032"
@@ -177,4 +177,28 @@ msgstr ""
 
 msgctxt "#32044"
 msgid "مدة نافذة التنبيه (ثانية)"
+msgstr ""
+
+msgctxt "#32045"
+msgid "عند دخول وقت الأذان أثناء تشغيل فيلم"
+msgstr ""
+
+msgctxt "#32046"
+msgid "تنبيه فقط (يستمر الفيلم)"
+msgstr ""
+
+msgctxt "#32047"
+msgid "إيقاف الفيلم مؤقتاً فقط"
+msgstr ""
+
+msgctxt "#32048"
+msgid "إيقاف الفيلم وتشغيل الأذان ثم إكماله"
+msgstr ""
+
+msgctxt "#32049"
+msgid "اسألني كل مرة"
+msgstr ""
+
+msgctxt "#32050"
+msgid "عرض عدّاد الصلاة القادمة فوق الفيلم مع شريط التشغيل"
 msgstr ""
