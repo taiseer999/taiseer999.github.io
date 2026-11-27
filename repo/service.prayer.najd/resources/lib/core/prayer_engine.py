@@ -13,6 +13,17 @@ METHODS = {
 }
 NAMES = {'fajr':'الفجر','sunrise':'الشروق','dhuhr':'الظهر','asr':'العصر','maghrib':'المغرب','isha':'العشاء'}
 
+
+def name_of(key, when=None):
+    """Prayer name for display: on Friday the Dhuhr prayer is «الجمعة».
+    when: the prayer's date or datetime (default: today)."""
+    if key == 'dhuhr':
+        import datetime as _dt
+        day = when or _dt.date.today()
+        if day.weekday() == 4:
+            return 'الجمعة'
+    return NAMES.get(key, key)
+
 def _julian_day(y, m, d):
     if m <= 2: y -= 1; m += 12
     a = y // 100

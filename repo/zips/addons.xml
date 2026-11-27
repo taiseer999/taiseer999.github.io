@@ -6071,7 +6071,7 @@ Second Test Release:
 			<icon>resources/icon.png</icon>
 		</assets>
 	</extension>
-</addon><addon id="service.prayer.najd" name="مواقيت نجد للصلاة" version="1.2.3" provider-name="Najd Prayer">
+</addon><addon id="service.prayer.najd" name="مواقيت نجد للصلاة" version="1.3.1" provider-name="Najd Prayer">
   <requires><import addon="xbmc.python" version="3.0.1" /></requires>
   <extension point="xbmc.service" library="service.py" />
   <extension point="xbmc.python.script" library="default.py"><provides>executable</provides></extension>

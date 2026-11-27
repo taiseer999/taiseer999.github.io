@@ -9,6 +9,7 @@ closes it after `seconds`; any key / the OK button dismiss it immediately.
 References are kept in a module-level list so the window is not garbage collected
 while on screen.
 """
+import os
 import threading
 
 import xbmc
@@ -59,7 +60,7 @@ def dismiss(win):
         pass
 
 
-def show_alert(addon_path, lead, prayer, time_str, city, seconds=20):
+def show_alert(addon_path, lead, prayer, time_str, city, seconds=20, image_key=None):
     subtitle = time_str if not city else ('%s  •  %s' % (time_str, city))
     lines = {101: lead, 102: prayer, 103: subtitle}
     try:
@@ -70,6 +71,14 @@ def show_alert(addon_path, lead, prayer, time_str, city, seconds=20):
     _LIVE.append(win)
     win.show()
     _apply_labels(win, lines)
+    if image_key:
+        img = os.path.join(addon_path, 'resources', 'skins', 'Default', 'media', 'modern', 'nm_%s.png' % image_key)
+        if os.path.exists(img):
+            try:
+                win.getControl(104).setImage(img)
+                win.getControl(102).setLabel('')     # the drawn name replaces the plain text
+            except Exception:
+                pass
     timer = threading.Timer(max(3, seconds), dismiss, args=(win,))
     timer.daemon = True
     timer.start()

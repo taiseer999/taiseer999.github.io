@@ -2,7 +2,7 @@
 import os
 import threading
 from datetime import datetime, timedelta
-from resources.lib.core.prayer_engine import calculate, NAMES, as_datetime
+from resources.lib.core.prayer_engine import calculate, NAMES, as_datetime, name_of
 from resources.lib.core import cities
 from resources.lib.storage.database import Database
 
@@ -87,8 +87,8 @@ class Scheduler(object):
                 if dt: upcoming=(k,dt); break
         if upcoming:
             key,dt=upcoming; mins=max(0,int((dt-now).total_seconds()//60))
-            win.setProperty('NajdPrayer.Next','%s %s'%(NAMES[key],dt.strftime('%H:%M')))
-            win.setProperty('NajdPrayer.NextName',NAMES[key])
+            win.setProperty('NajdPrayer.Next','%s %s'%(name_of(key,dt),dt.strftime('%H:%M')))
+            win.setProperty('NajdPrayer.NextName',name_of(key,dt))
             win.setProperty('NajdPrayer.NextTime',dt.strftime('%H:%M'))
             win.setProperty('NajdPrayer.Remaining','%02d:%02d'%(mins//60,mins%60))
 
@@ -133,13 +133,19 @@ class Scheduler(object):
             saved=player.getPlayingFile(); pos=player.getTime()
         except Exception:
             saved=None; pos=0
+        # Keep the film's full item (title, year, IMDb/TMDb, art...). Replaying the
+        # bare URL loses it, and then subtitle add-ons cannot find the subtitle.
+        try:
+            item=player.getPlayingItem()
+        except Exception:
+            item=None
         self._play_adhan(path)
         if not saved:
             return
-        t=threading.Thread(target=self._resume_after_adhan, args=(saved, pos))
+        t=threading.Thread(target=self._resume_after_adhan, args=(saved, pos, item))
         t.daemon=True; t.start()
 
-    def _resume_after_adhan(self, saved, pos):
+    def _resume_after_adhan(self, saved, pos, item=None):
         mon=self.xbmc.Monitor(); player=self.xbmc.Player()
         # wait for the adhan to start (up to ~15 s)
         for _ in range(30):
@@ -155,7 +161,14 @@ class Scheduler(object):
         if mon.waitForAbort(1.0) or player.isPlaying():
             return  # user started something else meanwhile
         start=max(0.0, pos-3.0)
-        li=self.xbmcgui.ListItem(path=saved)
+        li=None
+        if item is not None:
+            try:
+                item.setPath(saved); li=item
+            except Exception:
+                li=None
+        if li is None:
+            li=self.xbmcgui.ListItem(path=saved)
         li.setProperty('StartOffset', '%.1f' % start)
         player.play(saved, li)
         # fallback: some sources ignore StartOffset — seek manually once playing
@@ -187,7 +200,7 @@ class Scheduler(object):
         return {1:'adhan', 0:'resume'}.get(r,'stay')
 
     def _dispatch(self, key, pre=False):
-        title=NAMES[key]; mode={'0':'full','1':'notify','2':'configurable'}.get(self._s('alert_mode','2'),'configurable')
+        title=name_of(key); mode={'0':'full','1':'notify','2':'configurable'}.get(self._s('alert_mode','2'),'configurable')
         playing=self.xbmc.Player().isPlayingVideo()
         path=self._adhan_path(key)
         can_play=mode in ('full','configurable') and bool(path)
@@ -206,7 +219,8 @@ class Scheduler(object):
                     from resources.lib.gui.alert import show_alert
                     lead=('تذكير — بعد %s دقيقة' % self._s('reminder_minutes','0')) if pre else 'حان الآن وقت صلاة'
                     secs=int(self._s('popup_seconds','20') or 20)
-                    show_alert(self.addon_path, lead, title, self._adhan_time_str(key), self._city_name(), secs)
+                    show_alert(self.addon_path, lead, title, self._adhan_time_str(key), self._city_name(), secs,
+                               'jumuah' if title == 'الجمعة' else key)
                 except Exception as exc:
                     self.xbmc.log('[NajdPrayer] popup error: %s' % exc,self.xbmc.LOGERROR)
         if pre: return

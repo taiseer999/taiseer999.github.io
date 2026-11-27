@@ -153,9 +153,19 @@
         <level>0</level><default>true</default>
         <control type="toggle"/>
       </setting>
+      <setting id="home_badge" type="boolean" label="32051">
+        <level>0</level><default>true</default>
+        <control type="toggle"/>
+      </setting>
       <setting id="osd_countdown" type="boolean" label="32050">
         <level>0</level><default>true</default>
         <control type="toggle"/>
+      </setting>
+      <setting id="osd_style" type="integer" label="32052">
+        <level>0</level><default>0</default>
+        <constraints><options><option label="32053">0</option><option label="32054">1</option><option label="32055">2</option><option label="32056">3</option><option label="32057">4</option></options></constraints>
+        <dependencies><dependency type="enable" setting="osd_countdown">true</dependency></dependencies>
+        <control type="list" format="integer"><heading>32052</heading></control>
       </setting>
       <setting id="notify_on_screen" type="boolean" label="32040">
         <level>0</level><default>true</default>

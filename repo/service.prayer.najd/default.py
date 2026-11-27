@@ -9,7 +9,7 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
-from resources.lib.core.prayer_engine import NAMES
+from resources.lib.core.prayer_engine import NAMES, name_of
 from resources.lib.gui.window import day_times, next_prayer, ORDER
 
 ADDON = xbmcaddon.Addon()
@@ -38,10 +38,10 @@ def _text_dashboard():
     key, dt, _d = next_prayer(ADDON, now)
     if key and dt:
         mins = max(0, int((dt - now).total_seconds() // 60))
-        nextline = 'الصلاة القادمة: %s  —  متبقٍ %02d:%02d' % (NAMES[key], mins // 60, mins % 60)
+        nextline = 'الصلاة القادمة: %s  —  متبقٍ %02d:%02d' % (name_of(key, dt), mins // 60, mins % 60)
     else:
         nextline = 'تعذّر تحديد الصلاة القادمة؛ راجع الإعدادات.'
-    body = nextline + '\n\n' + '  |  '.join('%s %s' % (NAMES[k], data.get(k) or '--:--') for k in ORDER)
+    body = nextline + '\n\n' + '  |  '.join('%s %s' % (name_of(k, now), data.get(k) or '--:--') for k in ORDER)
     xbmcgui.Dialog().textviewer('مواقيت نجد للصلاة  |  %s' % _s('city_name', 'الرياض'), body)
 
 
@@ -52,13 +52,13 @@ def plugin_widget():
     key, dt, _d = next_prayer(ADDON, now)
     if key and dt:
         mins = max(0, int((dt - now).total_seconds() // 60))
-        li = xbmcgui.ListItem(label='القادمة: %s  |  %02d:%02d' % (NAMES[key], mins // 60, mins % 60))
-        li.setProperty('prayer_name', NAMES[key])
+        li = xbmcgui.ListItem(label='القادمة: %s  |  %02d:%02d' % (name_of(key, dt), mins // 60, mins % 60))
+        li.setProperty('prayer_name', name_of(key, dt))
         li.setArt({'icon': ADDON_PATH + '/icon.png'})
         items.append((sys.argv[0] + '?action=open', li, False))
     for k in ORDER:
-        li = xbmcgui.ListItem(label='%s  —  %s' % (NAMES[k], data.get(k) or '--:--'))
-        li.setProperty('prayer_name', NAMES[k])
+        li = xbmcgui.ListItem(label='%s  —  %s' % (name_of(k, now), data.get(k) or '--:--'))
+        li.setProperty('prayer_name', name_of(k, now))
         li.setProperty('prayer_time', data.get(k) or '')
         items.append((sys.argv[0] + '?action=open', li, False))
     xbmcplugin.addDirectoryItems(HANDLE, items, len(items))
