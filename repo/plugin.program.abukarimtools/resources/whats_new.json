@@ -2,6 +2,27 @@
   "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
   "entries": [
     {
+      "v": "4.12.51",
+      "en": [
+        "AF3 Lucent Look: the star rating pill change of 4.12.50 is removed - the info pills look as AF3 draws them."
+      ],
+      "ar": [
+        "مظهر Lucent في AF3: أُزيل تعديل كبسولة النجوم من 4.12.50، فتظهر كبسولات المعلومات كما يرسمها AF3."
+      ]
+    },
+    {
+      "v": "4.12.49",
+      "from": "4.12.48",
+      "en": [
+        "Dex Hub opens in the skin you use (AF3 or any other): it no longer switches Kodi to the Dex Hub skin or installs it.",
+        "Search All also opens from an IMDb id alone, so AIOStreams 1.4.3 widgets can use AB Search All as their stream picker."
+      ],
+      "ar": [
+        "يفتح Dex Hub داخل السكن الذي تستخدمه (AF3 أو غيره)، ولم يعد يبدّل كودي إلى سكن Dex Hub أو يثبّته.",
+        "تفتح «كل المصادر» الآن برقم IMDb وحده، فتستطيع ودجات AIOStreams 1.4.3 استخدامها لاختيار الروابط."
+      ]
+    },
+    {
       "v": "4.12.47",
       "en": [
         "AF3 50.12.14: the Default OSD keeps its pill-style tags after the skin made pills optional."

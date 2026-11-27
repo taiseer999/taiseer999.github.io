@@ -4484,6 +4484,88 @@ PATCHES += [
 ]
 
 
+# ── DexHub: Without Skin (4.12.49, toggle 'dexhub_noskin') ──
+# Dex Hub 5.10.6xx opens its add-on icon as a "temporary skin session":
+# temporary_skin.enter() switches Kodi to skin.dexhub (installing it from
+# DexWorld first when missing, v5.10.610) and switches back on exit. Its
+# initialize_defaults() also forces temporary_skin_on_launch=true once.
+# Wanted: Dex Hub installed and used inside the skin in use (AF3 ...), never
+# installing or switching to skin.dexhub. Four entries:
+#   1. enter() returns False at once -> the normal launch runs: Dex Hub's own
+#      Home UI window (resources/skins/Default) over the current skin.
+#   2. initialize_defaults() writes 'false' instead of 'true'.
+#   3. settings.xml default false, 4. a saved userdata 'true' -> 'false',
+#      so Dex Hub's own option shows Off (it no longer does anything).
+# The skin_use button / "Use Dex Hub skin" stay: a switch the user asks for.
+# Toggle off -> 1-3 are reverted (the saved value stays false).
+_DEXHUB_NOSKIN = 'ABK dexhub-noskin'
+_DEXHUB_ENTER_STOCK = ('def enter(handle=-1, params=None):\n'
+                       '    """Handle a foreground root launch only. False leaves normal launch alone."""\n')
+_DEXHUB_ENTER_LINE = ('    return False  # %s (AB Tools): Dex Hub opens in the skin in use, '
+                      'skin.dexhub is never installed or switched to\n' % _DEXHUB_NOSKIN)
+_DEXHUB_INIT_STOCK = "addon.setSetting('temporary_skin_on_launch','true')"
+_DEXHUB_INIT_OFF = "addon.setSetting('temporary_skin_on_launch','false')  # %s-init" % _DEXHUB_NOSKIN
+_DEXHUB_SET_STOCK = '<setting id="temporary_skin_on_launch" type="bool" label="33903" default="true" />'
+_DEXHUB_SET_OFF = ('<setting id="temporary_skin_on_launch" type="bool" label="33903" default="false" />'
+                   '<!-- %s-default -->' % _DEXHUB_NOSKIN)
+
+PATCHES += [
+    {
+        'addon_id': 'plugin.video.dexhub',
+        'rel_path': os.path.join('resources', 'lib', 'temporary_skin.py'),
+        'toggle': 'dexhub_noskin',
+        'old': _DEXHUB_ENTER_STOCK,
+        'new': _DEXHUB_ENTER_STOCK + _DEXHUB_ENTER_LINE,
+        'already_patched_check': '# %s (AB Tools)' % _DEXHUB_NOSKIN,
+        # docstring reworded upstream: insert after the def line (+ a one-line docstring)
+        'fallback_pattern': (r'(def enter\(handle=-?\d*,\s*params=None\):[ \t]*\r?\n'
+                             r'(?:[ \t]*(?:"""|\'\'\')[^\r\n]*(?:"""|\'\'\')[ \t]*\r?\n)?)'),
+        'fallback_repl': lambda m: m.group(1) + _DEXHUB_ENTER_LINE,
+        'revert_regex': [(r'[ \t]*return False  # ABK dexhub-noskin \(AB Tools\)[^\n]*\n', '')],
+        'not_found_ok': True,
+        'description': 'DexHub temporary_skin.py - no skin.dexhub session on launch (opens in the skin in use)',
+    },
+    {
+        'addon_id': 'plugin.video.dexhub',
+        'rel_path': os.path.join('resources', 'lib', 'temporary_skin.py'),
+        'toggle': 'dexhub_noskin',
+        'old': _DEXHUB_INIT_STOCK,
+        'new': _DEXHUB_INIT_OFF,
+        'already_patched_check': '# %s-init' % _DEXHUB_NOSKIN,
+        'revert_when_off': (_DEXHUB_INIT_OFF, _DEXHUB_INIT_STOCK),
+        'not_found_ok': True,
+        'description': 'DexHub temporary_skin.py - one-time defaults keep "open in Dex Hub skin" off',
+    },
+    {
+        'addon_id': 'plugin.video.dexhub',
+        'rel_path': os.path.join('resources', 'settings.xml'),
+        'toggle': 'dexhub_noskin',
+        'old': _DEXHUB_SET_STOCK,
+        'new': _DEXHUB_SET_OFF,
+        'already_patched_check': '<!-- %s-default -->' % _DEXHUB_NOSKIN,
+        'fallback_pattern': r'(<setting id="temporary_skin_on_launch"[^>]*?default=")true("[^>]*/>)',
+        'fallback_repl': r'\g<1>false\g<2><!-- ABK dexhub-noskin-default -->',
+        'revert_when_off': (_DEXHUB_SET_OFF, _DEXHUB_SET_STOCK),
+        'not_found_ok': True,
+        'description': 'DexHub settings.xml - "open in Dex Hub skin" default off',
+    },
+    {
+        'addon_id': 'plugin.video.dexhub',
+        'base': 'addon_data',
+        'rel_path': 'settings.xml',
+        'toggle': 'dexhub_noskin',
+        'old': '',
+        'new': '',
+        'already_patched_check': '<setting id="temporary_skin_on_launch">false</setting>',
+        'fallback_pattern': (r'<setting id="temporary_skin_on_launch"(?: default="true")?\s*'
+                             r'(?:/>|>[^<]*</setting>)'),
+        'fallback_repl': '<setting id="temporary_skin_on_launch">false</setting>',
+        'not_found_ok': True,
+        'description': 'DexHub userdata settings.xml - temporary_skin_on_launch = false',
+    },
+]
+
+
 def _restart_note(patch):
     """4.12.34: a file Kodi only reads at start-up (an add-on's strings.po)
     was written - tell the user a Kodi restart is needed. Only on a real
@@ -5607,6 +5689,7 @@ TOGGLE_GROUPS = [
     ('af3_subtools',     'AF3: Subtitle Buttons (DexSubtitles Sync & Cycler)'),
     ('af3_substyle',     'AF3: Subtitle Look Button (Dex Hub look: font, size, colour, delay, sync...)'),
     ('dexhub_entry',     'DexHub: Plugin Entry Fix (Kodi 22)'),
+    ('dexhub_noskin',    'DexHub: Without Skin (opens in the skin in use, no skin.dexhub)'),
     # 4.8.17: no patch entries - the state of the Toggles menu switch
     # "AF3: Classic OSD Flags" (af3_classicflags_toggle.py); listed so the
     # phone setup / presets keep it as a known id. 4.8.77: the switch is gone

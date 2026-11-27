@@ -1,3 +1,24 @@
+v4.12.51  (2026-11-27)
+- Removed the 4.12.50 Lucent Look star rating pill patch: the info line pills
+  stay as AF3 draws them (AF3 55.12.20 also went back to its default pills).
+
+v4.12.50  (2026-11-27)
+- AF3 Lucent Look: the star rating pill of the Pillbox info line kept AF3's
+  grey outline beside the glass "i" / 4K / HDR pills. It now gets the same
+  glass plate (Includes_u3k.xml Info_StarRating_Pillbox_U3k, conditional
+  ABK_Lucent_GlassPillBg in front of the outline texture). Obsolete on AF3
+  55.12.19+, which draws the plate itself (also for the Default OSD pills).
+
+v4.12.49  (2026-11-27)
+- Dex Hub without its skin: new patch toggle "DexHub: Without Skin"
+  (dexhub_noskin, on). Dex Hub 5.10.6xx switched Kodi to skin.dexhub every
+  time its icon was opened (installing the skin from DexWorld first when
+  missing) and back on exit. Now it opens in the skin in use: its own Home
+  window over AF3 or any other skin, and skin.dexhub is never installed or
+  switched to. Its "open in Dex Hub skin" option is set Off. "Use Dex Hub
+  skin" in its menu still works when picked on purpose. Applied right after
+  the Add-on Portal installs Dex Hub, and again after every Dex Hub update.
+
 v4.12.48  (2026-11-26)
 - Search All accepts an IMDb id with no TMDb id (mode=ab_search&imdb=tt...):
   the TMDb id is looked up with TMDb /find (show id for an episode; an
