@@ -3133,8 +3133,8 @@ msgid "Solid"
 msgstr "مصمت"
 
 msgctxt "#32252"
-msgid "Vivid gradient fills"
-msgstr "تعبئة بتدرّجات زاهية"
+msgid "Flat single-colour pills"
+msgstr "أقراص مسطّحة بلون واحد"
 
 msgctxt "#32253"
 msgid "Frost"
@@ -3664,3 +3664,34 @@ msgctxt "#32384"
 msgid "AB Tools will not install Najd"
 msgstr "لن يثبّت AB Tools نجد"
 
+msgctxt "#32385"
+msgid "Glass Vibrant"
+msgstr "زجاجي زاهٍ"
+
+msgctxt "#32386"
+msgid "Glossy pills in vivid candy colours"
+msgstr "أقراص لامعة بألوان حلوى زاهية"
+
+msgctxt "#32387"
+msgid "Pastel"
+msgstr "باستيل"
+
+msgctxt "#32388"
+msgid "A soft colour for each kind, dark text"
+msgstr "لون هادئ لكل نوع، بنص داكن"
+
+msgctxt "#32389"
+msgid "Glow Bar"
+msgstr "الشريط المتوهّج"
+
+msgctxt "#32390"
+msgid "Bold text over a glowing colour line"
+msgstr "نص عريض فوق خطٍّ ملوّن متوهّج"
+
+msgctxt "#32391"
+msgid "Pixel"
+msgstr "بكسل"
+
+msgctxt "#32392"
+msgid "Retro pixel-art blocks"
+msgstr "مكعبات بكسل بطابع الألعاب القديمة"

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="resource.images.af3.frbadges" name="AF3 OSD Flags Styles (FR-Badges)" version="1.0.17" provider-name="ABUKARIM">
+<addon id="resource.images.af3.frbadges" name="AF3 OSD Flags Styles (FR-Badges)" version="1.0.18" provider-name="ABUKARIM">
     <requires>
         <import addon="kodi.resource" version="1.0.0" />
     </requires>
     <extension point="kodi.resource.images" compile="false" type="flags" />
     <extension point="xbmc.addon.metadata">
-        <news>1.0.16: Neon Icon refreshed from FR-Badges HEAD (new language flags). 1.0.15: Rebuilt all FR-Badges styles from the latest FR-Badges set (larger text, Lucent-matched 0.22h side padding); updated every language flag; lucent_player pills now fill the Lucent 176x68 box in every style; added Lucent and text-style Hebrew/Filipino and 4.0/4.1 badges.</news>
-        <summary lang="en_GB">Lucent plus 13 FR-Badges styles of media-flag badges for Arctic Fuse 3 (Piers)</summary>
-        <summary lang="ar_SA">شارات الوسائط بنمط لوسنت و13 نمطاً من FR-Badges لواجهة Arctic Fuse 3 (Piers)</summary>
-        <description lang="en_GB">Fourteen looks for the codec, HDR, audio, channel, source, aspect-ratio and language badges in the Arctic Fuse 3 Piers player OSD and footer, laid out like resource.images.af3.classicflags/colorful. Chosen in AB Tools (Toggles &gt; AF3: OSD Flags Style). Badge artwork: FR-Badges by farizmohd70 (MIT licence, github.com/farizmohd70/FR-Badges); aspect-ratio badges drawn to match. Each style also carries a lucent_player/ copy named like the AF3 Lucent Player pills; lucent/lucent_player holds the Lucent pills themselves (from the Lucent skin by djdirty60, GPL-2.0-or-later).</description>
-        <description lang="ar_SA">أربعة عشر نمطاً لشارات الترميز وHDR والصوت والقنوات والمصدر ونسبة العرض واللغة في شاشة التشغيل وأسفل الشاشة في نسخة Piers من Arctic Fuse 3، بنفس ترتيب مجلدات الشارات الكلاسيكية. يُختار النمط من AB Tools (التبديلات &gt; AF3: نمط شارات التشغيل). رسوم الشارات: FR-Badges من farizmohd70 (رخصة MIT).</description>
+        <news>1.0.18: Four new FR-Badges looks - Glass Vibrant (the glossy candy pills), Pastel, Glow Bar and Pixel. Solid follows FR-Badges to flat single-colour pills. New DD+ / Atmos DD+ artwork. IMAX player pill and the 1.00 / 1.19 / 1.43 / 1.50 / 1.90 aspect-ratio badges are back in every style; Neon Icon's Dolby Vision 2 pill redrawn. 1.0.16: Neon Icon refreshed from FR-Badges HEAD (new language flags).</news>
+        <summary lang="en_GB">Lucent plus 17 FR-Badges styles of media-flag badges for Arctic Fuse 3 (Piers)</summary>
+        <summary lang="ar_SA">شارات الوسائط بنمط لوسنت و17 نمطاً من FR-Badges لواجهة Arctic Fuse 3 (Piers)</summary>
+        <description lang="en_GB">Eighteen looks for the codec, HDR, audio, channel, source, aspect-ratio and language badges in the Arctic Fuse 3 Piers player OSD and footer, laid out like resource.images.af3.classicflags/colorful. Chosen in AB Tools (Toggles &gt; AF3: OSD Flags Style). Badge artwork: FR-Badges by farizmohd70 (MIT licence, github.com/farizmohd70/FR-Badges); aspect-ratio badges drawn to match. Each style also carries a lucent_player/ copy named like the AF3 Lucent Player pills; lucent/lucent_player holds the Lucent pills themselves (from the Lucent skin by djdirty60, GPL-2.0-or-later).</description>
+        <description lang="ar_SA">ثمانية عشر نمطاً لشارات الترميز وHDR والصوت والقنوات والمصدر ونسبة العرض واللغة في شاشة التشغيل وأسفل الشاشة في نسخة Piers من Arctic Fuse 3، بنفس ترتيب مجلدات الشارات الكلاسيكية. يُختار النمط من AB Tools (التبديلات &gt; AF3: نمط شارات التشغيل). رسوم الشارات: FR-Badges من farizmohd70 (رخصة MIT).</description>
         <platform>all</platform>
         <license>MIT</license>
         <source>https://github.com/farizmohd70/FR-Badges</source>

@@ -4,7 +4,7 @@
 shown at 536x302 in abk_grid.xml), rounded top corners, a soft cinematic
 backdrop with a player progress bar, and three rows of that style's Lucent
 Player pills at one even size and spacing.
-Usage: make_previews.py FRBADGES_RESOURCES OUT"""
+Usage: make_previews.py FRBADGES_RESOURCES OUT [style ...]"""
 import os, sys
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
@@ -110,8 +110,10 @@ def card(style):
 
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
-    for st in ('auto', 'colorful', 'lucent', 'glass', 'solid', 'frost', 'whiteblack', 'blackwhite', 'minimal', 'light',
-               'icondark', 'iconlight', 'split', 'neonicon', 'textwhite', 'textblack', 'off'):
+    ONLY = sys.argv[3:]                            # 1.0.18: optional style names (just the new / changed cards)
+    for st in ONLY or ('auto', 'colorful', 'lucent', 'glass', 'glassvibrant', 'solid', 'frost', 'whiteblack', 'blackwhite',
+                       'minimal', 'pastel', 'light', 'icondark', 'iconlight', 'split', 'neonicon', 'textwhite',
+                       'textblack', 'glowbar', 'pixel', 'off'):
         card(st).quantize(256, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.FLOYDSTEINBERG).save(
             os.path.join(OUT, st + '.png'), optimize=True)
     print('ok')

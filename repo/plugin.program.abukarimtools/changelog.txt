@@ -1,3 +1,29 @@
+v4.12.54  (2026-11-27)
+- "AF3: OSD Flags Style": four new looks from FR-Badges (farizmohd70, MIT) -
+  Glass Vibrant (glossy candy pills), Pastel (a soft colour per kind, dark
+  text), Glow Bar (bold text over a glowing colour line) and Pixel (retro
+  pixel-art blocks), each with its preview card (tools/frbadges/
+  make_previews.py). 21 choices now.
+- Solid follows FR-Badges: flat single-colour pills. Its old glossy look
+  lives on as Glass Vibrant.
+- Needs resource.images.af3.frbadges 1.0.18 (tools/frbadges/make_118.py):
+  - the new styles in the full skin layout (audio / channels / source /
+    resolution / other / language / aspectratio) and lucent_player/; the
+    single-line looks (Pastel, Glow Bar, Pixel) shorten wide badges to fit
+    the 176x68 player box by keeping their own words ("7.1 SURROUND" -> 7.1,
+    "DOLBY ATMOS" -> ATMOS) or writing the short label on the badge's own
+    background (DV, DD+, ISO, IMAX; tools/frbadges/single_line.py).
+  - FR-Badges' new DD+ / Atmos DD+ artwork (Glass, Black & White, White &
+    Black, Light, Lucent).
+  - IMAX.png back in every style's lucent_player/ (the 1.0.15 rebuild had
+    dropped it, so IMAX releases showed an empty slot; make_imax_fill.py).
+  - aspect-ratio badges 1.00 / 1.19 / 1.43 / 1.50 / 1.90 back in every style
+    (same 1.0.15 loss - the 4.8.94 empty-slot fix, make_aspect.py).
+  - Neon Icon's Dolby Vision 2 pill reads DOLBY / VISION 2 again (was a
+    giant "DV").
+- The animated FR-Badges looks (Midnight Teal, Shimmer: GIF only) are not
+  included.
+
 v4.12.53  (2026-11-27)
 - AF3 platform start-up logo (CoreELEC "NO" / KODI / Kodi 21) moved to AF3
   upstream's position (centertop 350 -> 420, label height 32, soft shadow),

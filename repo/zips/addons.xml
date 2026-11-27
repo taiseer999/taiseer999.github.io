@@ -621,7 +621,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.12.53" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="AB Tools" version="4.12.54" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -641,7 +641,7 @@ updated YouTube addon URL
     <import addon="script.module.parsers" version="1.0.0" />
     <import addon="script.module.python.twitch" version="3.0.2" />
     
-    <import addon="resource.images.af3.frbadges" version="1.0.16" />
+    <import addon="resource.images.af3.frbadges" version="1.0.18" />
     
     <import addon="resource.images.af3.classicflags" version="1.0.0" />
   </requires>
@@ -658,7 +658,7 @@ updated YouTube addon URL
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، ووصولاً سريعاً إلى معالج أبوكريم وأدوات الصيانة فيه (التنظيف الشامل وحذف الصور المصغّرة القديمة). كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة واختبار أداء المعالج وإعادة بناء قاعدة بيانات الإضافات.</description>
     <license>LicenseRef-ABTools (personal use only, no redistribution - see LICENSE.txt)</license>
-    <news>v4.12.53: AF3 start-up logo (CoreELEC / Kodi / LibreELEC) lowered to the skin's own position. v4.12.52: fixes an endless AF3 skin reload loop after a skin update. v4.12.51: Lucent Look: star pill patch removed (AF3 default pills). v4.12.48: Search All opens from AIOStreams (FEL widgets and catalogs) - IMDb-only items are looked up on TMDb. v4.12.47: AF3 50.12.14: Default OSD keeps the Pill style (pills now opt-in upstream). v4.12.42: Notifications (Najd) no longer cover the Lucent time row; Search All gives AIOStreams the film's own plot and art for the player. v4.12.41: Lucent Player bars show chapter, cut (EDL) and scene markers. v4.12.40: Najd Smart Subtitles can be removed, or left uninstalled, from AB Tools (Mods &gt; Najd). v4.12.39: Najd 2.9.7.11 (fallback AI subtitle when the built-in one fails, translation in parts, saved finished subtitles); AIOStreams logo on its Search All streams; the Lucent Player "Press down" hint is readable. v4.12.38: Lucent Player shows the AF3 "Press down" hint under the buttons. v4.12.37: Faster boot: one patch run at a time, no second full sweep when you open AB Tools. v4.12.36: AF3 Watched percentage: progress bar mode, episodes 3/10. v4.12.35: AF3 Watched percentage: capsule on the progress circle, 3 modes. v4.12.34: TMDbHelper Arabic: restart note. v4.12.33: AF3 Plot on the Right removed. v4.12.32: Full Arabic translation for TMDbHelper. v4.12.31: AF3: Watched percentage switch.</news>
+    <news>v4.12.54: AF3 OSD Flags Style: four new looks - Glass Vibrant, Pastel, Glow Bar, Pixel; Solid is now flat (FR-Badges); IMAX pill and five aspect-ratio badges back in every style. v4.12.53: AF3 start-up logo (CoreELEC / Kodi / LibreELEC) lowered to the skin's own position. v4.12.52: fixes an endless AF3 skin reload loop after a skin update. v4.12.51: Lucent Look: star pill patch removed (AF3 default pills). v4.12.48: Search All opens from AIOStreams (FEL widgets and catalogs) - IMDb-only items are looked up on TMDb. v4.12.47: AF3 50.12.14: Default OSD keeps the Pill style (pills now opt-in upstream). v4.12.42: Notifications (Najd) no longer cover the Lucent time row; Search All gives AIOStreams the film's own plot and art for the player. v4.12.41: Lucent Player bars show chapter, cut (EDL) and scene markers. v4.12.40: Najd Smart Subtitles can be removed, or left uninstalled, from AB Tools (Mods &gt; Najd). v4.12.39: Najd 2.9.7.11 (fallback AI subtitle when the built-in one fails, translation in parts, saved finished subtitles); AIOStreams logo on its Search All streams; the Lucent Player "Press down" hint is readable. v4.12.38: Lucent Player shows the AF3 "Press down" hint under the buttons. v4.12.37: Faster boot: one patch run at a time, no second full sweep when you open AB Tools. v4.12.36: AF3 Watched percentage: progress bar mode, episodes 3/10. v4.12.35: AF3 Watched percentage: capsule on the progress circle, 3 modes. v4.12.34: TMDbHelper Arabic: restart note. v4.12.33: AF3 Plot on the Right removed. v4.12.32: Full Arabic translation for TMDbHelper. v4.12.31: AF3: Watched percentage switch.</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>
@@ -2371,17 +2371,17 @@ By using or contributing to this repository, you agree that the developer is not
             <icon>icon.png</icon>
         </assets>
     </extension>
-</addon><addon id="resource.images.af3.frbadges" name="AF3 OSD Flags Styles (FR-Badges)" version="1.0.17" provider-name="ABUKARIM">
+</addon><addon id="resource.images.af3.frbadges" name="AF3 OSD Flags Styles (FR-Badges)" version="1.0.18" provider-name="ABUKARIM">
     <requires>
         <import addon="kodi.resource" version="1.0.0" />
     </requires>
     <extension point="kodi.resource.images" compile="false" type="flags" />
     <extension point="xbmc.addon.metadata">
-        <news>1.0.16: Neon Icon refreshed from FR-Badges HEAD (new language flags). 1.0.15: Rebuilt all FR-Badges styles from the latest FR-Badges set (larger text, Lucent-matched 0.22h side padding); updated every language flag; lucent_player pills now fill the Lucent 176x68 box in every style; added Lucent and text-style Hebrew/Filipino and 4.0/4.1 badges.</news>
-        <summary lang="en_GB">Lucent plus 13 FR-Badges styles of media-flag badges for Arctic Fuse 3 (Piers)</summary>
-        <summary lang="ar_SA">شارات الوسائط بنمط لوسنت و13 نمطاً من FR-Badges لواجهة Arctic Fuse 3 (Piers)</summary>
-        <description lang="en_GB">Fourteen looks for the codec, HDR, audio, channel, source, aspect-ratio and language badges in the Arctic Fuse 3 Piers player OSD and footer, laid out like resource.images.af3.classicflags/colorful. Chosen in AB Tools (Toggles &gt; AF3: OSD Flags Style). Badge artwork: FR-Badges by farizmohd70 (MIT licence, github.com/farizmohd70/FR-Badges); aspect-ratio badges drawn to match. Each style also carries a lucent_player/ copy named like the AF3 Lucent Player pills; lucent/lucent_player holds the Lucent pills themselves (from the Lucent skin by djdirty60, GPL-2.0-or-later).</description>
-        <description lang="ar_SA">أربعة عشر نمطاً لشارات الترميز وHDR والصوت والقنوات والمصدر ونسبة العرض واللغة في شاشة التشغيل وأسفل الشاشة في نسخة Piers من Arctic Fuse 3، بنفس ترتيب مجلدات الشارات الكلاسيكية. يُختار النمط من AB Tools (التبديلات &gt; AF3: نمط شارات التشغيل). رسوم الشارات: FR-Badges من farizmohd70 (رخصة MIT).</description>
+        <news>1.0.18: Four new FR-Badges looks - Glass Vibrant (the glossy candy pills), Pastel, Glow Bar and Pixel. Solid follows FR-Badges to flat single-colour pills. New DD+ / Atmos DD+ artwork. IMAX player pill and the 1.00 / 1.19 / 1.43 / 1.50 / 1.90 aspect-ratio badges are back in every style; Neon Icon's Dolby Vision 2 pill redrawn. 1.0.16: Neon Icon refreshed from FR-Badges HEAD (new language flags).</news>
+        <summary lang="en_GB">Lucent plus 17 FR-Badges styles of media-flag badges for Arctic Fuse 3 (Piers)</summary>
+        <summary lang="ar_SA">شارات الوسائط بنمط لوسنت و17 نمطاً من FR-Badges لواجهة Arctic Fuse 3 (Piers)</summary>
+        <description lang="en_GB">Eighteen looks for the codec, HDR, audio, channel, source, aspect-ratio and language badges in the Arctic Fuse 3 Piers player OSD and footer, laid out like resource.images.af3.classicflags/colorful. Chosen in AB Tools (Toggles &gt; AF3: OSD Flags Style). Badge artwork: FR-Badges by farizmohd70 (MIT licence, github.com/farizmohd70/FR-Badges); aspect-ratio badges drawn to match. Each style also carries a lucent_player/ copy named like the AF3 Lucent Player pills; lucent/lucent_player holds the Lucent pills themselves (from the Lucent skin by djdirty60, GPL-2.0-or-later).</description>
+        <description lang="ar_SA">ثمانية عشر نمطاً لشارات الترميز وHDR والصوت والقنوات والمصدر ونسبة العرض واللغة في شاشة التشغيل وأسفل الشاشة في نسخة Piers من Arctic Fuse 3، بنفس ترتيب مجلدات الشارات الكلاسيكية. يُختار النمط من AB Tools (التبديلات &gt; AF3: نمط شارات التشغيل). رسوم الشارات: FR-Badges من farizmohd70 (رخصة MIT).</description>
         <platform>all</platform>
         <license>MIT</license>
         <source>https://github.com/farizmohd70/FR-Badges</source>

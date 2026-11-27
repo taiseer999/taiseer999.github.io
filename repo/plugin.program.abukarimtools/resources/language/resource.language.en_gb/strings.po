@@ -3133,7 +3133,7 @@ msgid "Solid"
 msgstr ""
 
 msgctxt "#32252"
-msgid "Vivid gradient fills"
+msgid "Flat single-colour pills"
 msgstr ""
 
 msgctxt "#32253"
@@ -3664,3 +3664,34 @@ msgctxt "#32384"
 msgid "AB Tools will not install Najd"
 msgstr ""
 
+msgctxt "#32385"
+msgid "Glass Vibrant"
+msgstr ""
+
+msgctxt "#32386"
+msgid "Glossy pills in vivid candy colours"
+msgstr ""
+
+msgctxt "#32387"
+msgid "Pastel"
+msgstr ""
+
+msgctxt "#32388"
+msgid "A soft colour for each kind, dark text"
+msgstr ""
+
+msgctxt "#32389"
+msgid "Glow Bar"
+msgstr ""
+
+msgctxt "#32390"
+msgid "Bold text over a glowing colour line"
+msgstr ""
+
+msgctxt "#32391"
+msgid "Pixel"
+msgstr ""
+
+msgctxt "#32392"
+msgid "Retro pixel-art blocks"
+msgstr ""

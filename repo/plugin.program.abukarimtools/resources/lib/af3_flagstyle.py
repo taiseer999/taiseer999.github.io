@@ -67,12 +67,14 @@ TITLE = 'ABUKARIM TOOLS'
 DEFAULT = 'auto'
 CLASSIC = 'colorful'
 # (style, label id, description id shown under the label in the picker)
+# 4.12.54: Glass Vibrant, Pastel, Glow Bar, Pixel (resource.images.af3.frbadges 1.0.18)
 STYLES = (('auto', 32242, 32243), ('colorful', 32231, 32244), ('lucent', 32241, 32245),
-          ('glass', 32232, 32246), ('solid', 32251, 32252), ('frost', 32253, 32254),
-          ('whiteblack', 32234, 32248), ('blackwhite', 32233, 32247),
-          ('minimal', 32235, 32249), ('light', 32236, 32250),
+          ('glass', 32232, 32246), ('glassvibrant', 32385, 32386), ('solid', 32251, 32252),
+          ('frost', 32253, 32254), ('whiteblack', 32234, 32248), ('blackwhite', 32233, 32247),
+          ('minimal', 32235, 32249), ('pastel', 32387, 32388), ('light', 32236, 32250),
           ('icondark', 32255, 32256), ('iconlight', 32257, 32258), ('split', 32259, 32260),
           ('neonicon', 32261, 32262), ('textwhite', 32263, 32264), ('textblack', 32265, 32266),
+          ('glowbar', 32389, 32390), ('pixel', 32391, 32392),
           ('off', 32267, 32268))
 OFF = 'off'
 _GATE_RE = re.compile(r'(<expression name="Exp_ABK_ClassicFlags">)(.*?)(</expression>)', re.S)
