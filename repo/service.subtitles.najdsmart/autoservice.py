@@ -212,7 +212,7 @@ class Player(xbmc.Player):
                 return
             # the same list the search below really uses: only sites with a key (the subtitle
             # add-ons installed in Kodi are never called in the background)
-            enabled = tuple(n for n in ('subdl', 'subsource', 'opensubtitles') if providers.PROVIDERS[n].available())
+            enabled = tuple(n for n in ('najdindex', 'subdl', 'subsource', 'opensubtitles') if providers.PROVIDERS[n].available())
             if not enabled:
                 if not self._offer_embedded(media.current(), path):
                     msg = 'التنزيل التلقائي يحتاج إلى مفتاح موقع ترجمة؛ افتح قائمة الترجمة واختر بنفسك'
@@ -226,6 +226,8 @@ class Player(xbmc.Player):
             if not results:
                 msg = 'تعذر الاتصال بمواقع الترجمة' if providers.all_failed() \
                     else 'لم يُعثر على ترجمة عربية لهذا العمل'
+                if enabled == ('najdindex',):       # no site keys: the old advice still holds
+                    msg = 'التنزيل التلقائي يحتاج إلى مفتاح موقع ترجمة؛ افتح قائمة الترجمة واختر بنفسك'
                 set_status(msg, 'err')
                 if not self._offer_embedded(video, path):
                     notify(msg)

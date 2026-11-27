@@ -13,6 +13,10 @@
       </group>
     </category>
     <category id="c1" label="30013" help="">
+      <group id="0" label="30204">
+        <setting id="use_index" type="boolean" label="30205" help="30206"><level>0</level><default>true</default><control type="toggle"/></setting>
+        <setting id="share_index" type="boolean" label="30207" help="30208"><level>0</level><default>true</default><dependencies><dependency type="enable" setting="use_index">true</dependency></dependencies><control type="toggle"/></setting>
+      </group>
       <group id="1" label="30014">
         <setting id="use_kodi_addons" type="boolean" label="30015" help="30016"><level>0</level><default>true</default><control type="toggle"/></setting>
       </group>

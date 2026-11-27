@@ -758,6 +758,8 @@ def embedded_translate(video, progress=None, abort=None, position=None):
 
 def _write_translated(video, cues, tag=''):
     """Write the Arabic subtitle (+ a permanent copy when it is complete). → path"""
+    if not tag:
+        _share_index(video, cues)
     if setting_bool('fix_arabic', True):
         cues, _st = arabic.fix_cues(cues, rtl_mode=setting('rtl_mode', 'rle'),
                                     remove_ads=setting_bool('remove_ads', True),
@@ -775,6 +777,14 @@ def _write_translated(video, cues, tag=''):
     except OSError as e:
         log('could not keep a copy: %s' % e)
     return path
+
+
+def _share_index(video, cues):
+    """A whole AI translation is ready: share it with فهرس نجد (when the viewer allows it)."""
+    try:
+        providers.najdindex.share(video, cues)
+    except Exception as e:
+        log('index share: %s' % e)
 
 
 REF_MAX_DOWNLOADS = 4      # all languages together, per request
@@ -795,7 +805,7 @@ def _reference_find(video, step, stop, summary):
         stop()
         if budget['left'] <= 0:
             break
-        if all(providers.limited(n) for n in providers.PROVIDERS):
+        if all(providers.limited(n) for n in providers.PROVIDERS if n != 'najdindex'):
             break                            # every site's daily downloads are used up
         step(12, 'البحث عن ترجمة %s مطابقة لنسخة الفيلم...' % LANG_AR.get(lang, lang))
         # an explicit request from the viewer: search again even if a search failed before
@@ -1170,6 +1180,8 @@ def _emb_run_slices(state, ks, video, where, track, idx, remote, dur, is_ar, abo
 
 def _emb_write(video, state):
     cues = [subtitle.Cue(s, e, t) for s, e, t in state['lines']]
+    if len(state['done']) >= EMB_SLICES:
+        _share_index(video, cues)
     if setting_bool('fix_arabic', True):
         cues, _st = arabic.fix_cues(cues, rtl_mode=setting('rtl_mode', 'rle'),
                                     remove_ads=setting_bool('remove_ads', True),

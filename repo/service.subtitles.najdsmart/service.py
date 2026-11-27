@@ -29,7 +29,7 @@ def wanted_langs():
 
 
 def no_keys():
-    return not any(m.available() for m in providers.PROVIDERS.values())
+    return not any(m.available() for n, m in providers.PROVIDERS.items() if n != 'najdindex')
 
 
 def search(manual=None):

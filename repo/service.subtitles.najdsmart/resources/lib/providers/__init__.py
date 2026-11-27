@@ -5,13 +5,14 @@ import re
 
 from ..common import log, cache_get, cache_put
 from ..media import release_tokens
-from . import subdl, opensubtitles, subsource, kodiaddons
+from . import subdl, opensubtitles, subsource, kodiaddons, najdindex
 
 PROVIDERS = {
     'subdl': subdl,
     'opensubtitles': opensubtitles,
     'subsource': subsource,
     'kodi': kodiaddons,
+    'najdindex': najdindex,
 }
 
 
@@ -102,6 +103,7 @@ def score(item, video):
     if item.get('hi'):
         s -= 2
     s += min(item.get('downloads', 0), 10000) / 2000.0
+    s += item.get('bonus', 0)      # فهرس نجد: same length as this video = made for it
     return s
 
 
@@ -180,7 +182,7 @@ def names_have(it, words):
     return False
 
 
-NAMES = {'subdl': 'SubDL', 'subsource': 'SubSource', 'opensubtitles': 'OpenSubtitles'}
+NAMES = {'najdindex': 'فهرس نجد', 'subdl': 'SubDL', 'subsource': 'SubSource', 'opensubtitles': 'OpenSubtitles'}
 
 
 class DailyLimit(Exception):
