@@ -2,6 +2,15 @@
   "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
   "entries": [
     {
+      "v": "4.12.53",
+      "en": [
+        "Arctic Fuse 3 start-up logo moved down to the skin's original position."
+      ],
+      "ar": [
+        "نُقل شعار بدء التشغيل في Arctic Fuse 3 إلى الأسفل، إلى موضعه الأصلي في الواجهة."
+      ]
+    },
+    {
       "v": "4.12.52",
       "en": [
         "Fixed: after an Arctic Fuse 3 update the skin could keep reloading by itself (widget menu rebuilt again and again)."

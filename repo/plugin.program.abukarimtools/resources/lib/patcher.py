@@ -4003,7 +4003,7 @@ _AF3_LE_LOGO = (
     '        <!-- ABK LibreELEC logo -->\n'
     '        <control type="grouplist">\n'
     '            <height>260</height>\n'
-    '            <centertop>265</centertop>\n'
+    '            <centertop>350</centertop>\n'   # 4.12.53: lower, ends where AF3's own logo ends (was 265)
     '            <orientation>vertical</orientation>\n'
     '            <align>center</align>\n'
     '            <control type="image">\n'
@@ -4081,7 +4081,7 @@ def _af3_logo_block(tag, icon, label):
         '        <!-- ABK %s logo -->\n'
         '        <control type="grouplist">\n'
         '            <height>128</height>\n'
-        '            <centertop>350</centertop>\n'
+        '            <centertop>420</centertop>\n'   # 4.12.53: AF3 upstream position (was 350)
         '            <orientation>vertical</orientation>\n'
         '            <align>center</align>\n'
         '            <control type="image">\n'
@@ -4092,8 +4092,9 @@ def _af3_logo_block(tag, icon, label):
         '                <texture>special://skin/extras/icons/%s</texture>\n'
         '            </control>\n'
         '            <control type="label">\n'
-        '                <height>30</height>\n'
+        '                <height>32</height>\n'
         '                <textcolor>main_fg_100</textcolor>\n'
+        '                <shadowcolor>main_bg_30</shadowcolor>\n'
         '                <label>%s</label>\n'
         '                <font>font_logo_large</font>\n'
         '                <align>center</align>\n'

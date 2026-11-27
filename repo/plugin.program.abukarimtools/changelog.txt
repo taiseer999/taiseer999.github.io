@@ -1,3 +1,8 @@
+v4.12.53  (2026-11-27)
+- AF3 platform start-up logo (CoreELEC "NO" / KODI / Kodi 21) moved to AF3
+  upstream's position (centertop 350 -> 420, label height 32, soft shadow),
+  matching AF3 55.12.25+; the LibreELEC logo lowered too (265 -> 350).
+
 v4.12.52  (2026-11-27)
 - Fixed an endless AF3 skin reload loop after a skin update (CoreELEC log
   2026-11-27 14:42-14:47, script.skinvariables update_xml 60-70 s each, five
