@@ -728,16 +728,24 @@ def fel_decades(params):
         if not cnt:
             continue
         label = kodi.s(30097) if key == 'classic' else kodi.s(30098) % key
-        _add(kodi.build_url(action='fel_list', mode='decade', value=key),
-             items.folder_item('%s  [COLOR grey](%d)[/COLOR]' % (label, cnt), icon=items.icon('season')))
+        tile = fel.decade_tile(key)
+        li = items.folder_item('%s  [COLOR grey](%d)[/COLOR]' % (label, cnt), icon=tile or items.icon('season'))
+        if tile:
+            li.setArt({'icon': tile, 'thumb': tile, 'poster': tile, 'square': tile, 'landscape': tile})
+        _add(kodi.build_url(action='fel_list', mode='decade', value=key), li)
     xbmcplugin.setPluginCategory(kodi.HANDLE, kodi.s(30094))
     _end()
 
 
 def fel_genres(params):
+    arabic = (xbmc.getLanguage(xbmc.ISO_639_1) or '').lower().startswith('ar')
     for g, cnt in fel.genre_counts():
-        _add(kodi.build_url(action='fel_list', mode='genre', value=g),
-             items.folder_item('%s  [COLOR grey](%d)[/COLOR]' % (g, cnt), icon=items.icon('genres')))
+        tile = fel.genre_tile(g)
+        name = fel.GENRES_AR.get(g, g) if arabic else g
+        li = items.folder_item('%s  [COLOR grey](%d)[/COLOR]' % (name, cnt), icon=tile or items.icon('genres'))
+        if tile:
+            li.setArt({'icon': tile, 'thumb': tile, 'poster': tile, 'square': tile, 'landscape': tile})
+        _add(kodi.build_url(action='fel_list', mode='genre', value=g), li)
     xbmcplugin.setPluginCategory(kodi.HANDLE, kodi.s(30095))
     _end()
 

@@ -59,6 +59,33 @@ def in_decade(m, key):
     return start <= y < start + 10
 
 
+GENRES_DIR = os.path.join(kodi.ADDON_PATH, 'resources', 'media', 'genres')
+
+# Arabic (Fusha) names for the catalog's genres - labels only, filtering stays on the English name.
+GENRES_AR = {
+    'Action': 'حركة', 'Adventure': 'مغامرة', 'Animation': 'رسوم متحركة', 'Biography': 'سيرة ذاتية',
+    'Comedy': 'كوميديا', 'Crime': 'جريمة', 'Documentary': 'وثائقي', 'Drama': 'دراما', 'Family': 'عائلي',
+    'Fantasy': 'خيال', 'Film-Noir': 'فيلم نوار', 'History': 'تاريخ', 'Horror': 'رعب', 'Music': 'موسيقى',
+    'Musical': 'استعراض موسيقي', 'Mystery': 'غموض', 'Romance': 'رومانسي', 'Sci-Fi': 'خيال علمي',
+    'Sport': 'رياضة', 'Thriller': 'إثارة', 'War': 'حرب', 'Western': 'غربي',
+}
+
+
+def genre_tile(name):
+    """Square tile for a genre (resources/media/genres/<Name>.jpg), '' if none."""
+    path = os.path.join(GENRES_DIR, '%s.jpg' % name)
+    return path if os.path.isfile(path) else ''
+
+
+DECADES_DIR = os.path.join(kodi.ADDON_PATH, 'resources', 'media', 'decades')
+
+
+def decade_tile(key):
+    """Square tile for a decade key (2020 ... 1980, classic), '' if none."""
+    path = os.path.join(DECADES_DIR, '%s.jpg' % key)
+    return path if os.path.isfile(path) else ''
+
+
 def genre_counts():
     counts = {}
     for m in load():
