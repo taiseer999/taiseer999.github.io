@@ -140,6 +140,11 @@
                     <default>true</default>
                     <control type="toggle"/>
                 </setting>
+                <setting id="fel_tmdb_meta" type="boolean" label="30270" help="30271">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
             </group>
             <group id="2" label="30230">
                 <setting id="subtitles" type="boolean" label="30231">

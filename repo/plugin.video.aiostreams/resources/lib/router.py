@@ -222,8 +222,8 @@ def genres(params):
     ex = _extra(cat or {}, 'genre') or {}
     for g in ex.get('options') or []:
         _add(kodi.build_url(action='catalog', type=params['type'], cid=params['cid'], genre=g, src=src),
-             items.genre_item(g))
-    _end(cache=False)
+             items.folder_item(g, icon=items.icon('genres')))
+    _end()
 
 
 def catalog(params):
@@ -729,15 +729,15 @@ def fel_decades(params):
             continue
         label = kodi.s(30097) if key == 'classic' else kodi.s(30098) % key
         _add(kodi.build_url(action='fel_list', mode='decade', value=key),
-             items.folder_item('%s  [COLOR grey](%d)[/COLOR]' % (label, cnt), icon=items.decade_icon(key)))
+             items.folder_item('%s  [COLOR grey](%d)[/COLOR]' % (label, cnt), icon=items.icon('season')))
     xbmcplugin.setPluginCategory(kodi.HANDLE, kodi.s(30094))
-    _end(cache=False)
+    _end()
 
 
 def fel_genres(params):
     for g, cnt in fel.genre_counts():
         _add(kodi.build_url(action='fel_list', mode='genre', value=g),
-             items.genre_item('%s  [COLOR grey](%d)[/COLOR]' % (g, cnt), genre=g))
+             items.folder_item('%s  [COLOR grey](%d)[/COLOR]' % (g, cnt), icon=items.icon('genres')))
     xbmcplugin.setPluginCategory(kodi.HANDLE, kodi.s(30095))
     _end()
 
@@ -753,11 +753,18 @@ def fel_list(params):
     mode, value = params.get('mode') or 'newest', params.get('value') or ''
     badge = '[COLOR %s][B]%s[/B][/COLOR]' % (st.COLOR_FEL, kodi.s(30099))
     action = _movie_action()
-    for m in fel.movies(mode, value):
+    titles = fel.movies(mode, value)
+    extra = {}
+    if kodi.setting_bool('fel_tmdb_meta'):
+        from . import tmdb_meta
+        extra = tmdb_meta.lookup([m.get('imdb_id') for m in titles])
+    for m in titles:
         meta = fel.to_meta(m)
-        mid, name = meta['id'], meta['name']
+        mid, name = meta['id'], meta['name']      # name stays the English title for scraping
         if not mid:
             continue
+        if extra.get(mid):
+            tmdb_meta.apply(meta, extra[mid])
         meta['description'] = '%s\n\n%s' % (badge, meta['description'])
         url = kodi.build_url(action=action, type='movie', id=mid, title=name)
         li = items.meta_item(meta, 'movie', playable=action == 'play', path=url)

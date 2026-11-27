@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.aiostreams" name="AIOStreams" version="1.4.8" provider-name="Taiseer">
+<addon id="plugin.video.aiostreams" name="AIOStreams" version="1.4.4" provider-name="Taiseer">
     <requires>
         <import addon="xbmc.python" version="3.0.1"/>
     </requires>
@@ -15,7 +15,8 @@
         <license>GPL-3.0-only</license>
         <source>https://github.com/Viren070/AIOStreams</source>
         <website>https://buymeacoffee.com/taiseer999</website>
-        <news>v1.4.3 - New "Stream selection" choice: AB Search All. Movies and episodes (FEL widgets included) open AB Tools Search All instead of the AIOStreams picker, so one list shows every add-on's streams; falls back to the normal picker when AB Tools is not installed.
+        <news>v1.4.4 - FEL titles get their details from TMDb in Kodi's language: age rating (MPAA, US when the country has none), release date, title, plot, genres, studio and TMDb id, so the skin info bar is complete (cached; setting under FEL).
+v1.4.3 - New "Stream selection" choice: AB Search All. Movies and episodes (FEL widgets included) open AB Tools Search All instead of the AIOStreams picker, so one list shows every add-on's streams; falls back to the normal picker when AB Tools is not installed.
 v1.4.2 - The player shows the film itself (plot, title, art, IMDb/TMDb ids) when the pick comes from AB Search All, not the release card; the release card shown in the player is plain text (no emoji or fancy letters, which came out as boxes).
 v1.4.1 - Dolby Vision FEL7 icon for the FEL section.
 v1.4.0 - Merged from FEL Cinema: curated 4K Dolby Vision Profile 7 FEL catalog (627 titles: newest, top rated, A-Z, decade, genre, search) streamed through your AIOStreams instance; FEL/MEL/7.1/5.1 stream classification with colour tiers (orange/pink/blue/red); optional FEL-first sorting (always on for FEL catalog titles); new "Dolby Vision tiers" label style; optional full-screen stream picker with fanart, poster and plot.

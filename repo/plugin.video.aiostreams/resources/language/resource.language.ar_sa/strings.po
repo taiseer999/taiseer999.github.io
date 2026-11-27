@@ -438,3 +438,11 @@ msgstr "يعرض وضع ملء الشاشة الخلفية والملصق وال
 msgctxt "#30269"
 msgid "AB Search All (every add-on)"
 msgstr "البحث في كل المصادر (AB Search All)"
+
+msgctxt "#30270"
+msgid "TMDb details for FEL titles"
+msgstr "تفاصيل TMDb لعناوين FEL"
+
+msgctxt "#30271"
+msgid "Fetch the age rating, release date, title, plot and genres in Kodi's language from TMDb for the FEL titles (cached)."
+msgstr "جلب التصنيف العمري وتاريخ الإصدار والعنوان والقصة والأنواع بلغة Kodi من TMDb لعناوين FEL، مع حفظها مؤقتًا."
