@@ -22,6 +22,13 @@ GUIINFO::GetWindow, so a dynamic target was still loaded. Gaps closed here:
   * any GUI-window info in a target, not only WidgetMeta.*.Target;
   * a menu rebuild after the sweep (skinvariables rewrites the file mid-
     session) is caught by poll() from the watchdog loop, not at next boot.
+4.12.52: the generator RULE (shortcuts/generator/data/setup/widgets_row.xml)
+is fixed here too, every time a generated file needed fixing. A skin update
+puts the dynamic rule back; when skinvariables rebuilt from it before the next
+sweep, poll() fixed the output, the reload made skinvariables rebuild (its
+output no longer matched), the rebuild was dynamic again - an endless reload
+loop (CoreELEC box, 70 s per rebuild, 2026-11-27). With the rule static the
+next rebuild is already static and the loop ends.
 Each dynamic target found is logged with its file and value, so the next
 log proves what was loaded. Value written: "videos" (Piers is a video build;
 the skin itself sets WidgetMeta.*.Target to videos for every non-music item).
@@ -46,7 +53,34 @@ _ATTR_RE = re.compile(r'(<content\b[^>]*?\btarget=")([^"]*' + _GUI_INFO + r'[^"]
 # <param name="categorytarget">...</param> / <param name="target">...</param>
 _PARAM_RE = re.compile(r'(<param name="(?:category)?target">)([^<]*' + _GUI_INFO + r'[^<]*)(</param>)')
 
+# the generator rule's own WidgetMeta target (as patcher.py _ABK_STATIC_TARGET_RE)
+_RULE_RE = re.compile(r'\$INFO\[Window\.Property\(WidgetMeta\.[^)\]]*\.Target\)\]')
+_RULES = (os.path.join('shortcuts', 'generator', 'data', 'setup', 'widgets_row.xml'),)
+
 _mtimes = {}
+_last_reload = [0.0]
+
+
+def _fix_rules(root):
+    """Make the generator rule write the static target. Returns the count."""
+    n = 0
+    for rel in _RULES:
+        path = os.path.join(root, rel)
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                src = f.read()
+        except (IOError, OSError, UnicodeDecodeError):
+            continue
+        new, k = _RULE_RE.subn(STATIC, src)
+        if not k:
+            continue
+        tmp = path + '.abk_tmp'
+        with open(tmp, 'w', encoding='utf-8') as f:
+            f.write(new)
+        os.replace(tmp, path)
+        _log('%s: generator rule target -> %s (%d)' % (rel, STATIC, k))
+        n += k
+    return n
 
 
 def _log(msg, level=xbmc.LOGINFO):
@@ -104,6 +138,7 @@ def apply():
         if not root:
             return True, '[%s] not installed - static targets skipped.' % SKIN_ID, False
         total = 0
+        _fix_rules(root)
         files = _generated_files(root)
         for path in files:
             total += _fix_file(path)
@@ -137,10 +172,20 @@ def poll():
                 continue
             if _fix_file(path):
                 wrote = True
+                _fix_rules(root)        # 4.12.52: or the rebuild loops
             try:
                 _mtimes[path] = os.path.getmtime(path)
             except OSError:
                 pass
+        if wrote:
+            # 4.12.52: at most one reload per 10 min, so a slow box never chains
+            # reload -> rebuild -> fix -> reload while skinvariables catches up
+            import time
+            now = time.time()
+            if now - _last_reload[0] < 600:
+                _log('generated files fixed; skin reload skipped (one ran %ds ago)' % int(now - _last_reload[0]))
+                return False
+            _last_reload[0] = now
         return wrote
     except Exception as e:
         _log('poll failed (ignored): %s' % e, xbmc.LOGWARNING)
