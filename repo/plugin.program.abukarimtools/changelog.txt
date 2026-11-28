@@ -1,3 +1,10 @@
+v4.12.64  (2026-11-28)
+- Subtitle Look panel: the screen dims behind it (60 % black, fades with the
+  panel) as behind AF3's OSD popups; text a step larger (rows 24 -> 30,
+  values and swatch labels 21 -> 24, title 21 -> 24 bold) with a solid black
+  text shadow. Made in tools/gen_subquick.py, which now also carries the
+  4.12.55 no-panel-background change.
+
 v4.12.63  (2026-11-28)
 - The YouTube add-on (plugin.video.youtube) is now a required add-on of AB
   Tools: Kodi installs it together with AB Tools, from repository.taiseer
