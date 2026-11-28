@@ -43,10 +43,11 @@
     <include name="View_Line_Divider">
         <param name="align">left</param>
         <param name="width">720</param>
+        <param name="centerbottom">10</param>
         <definition>
             <control type="image">
                 <height>1</height>
-                <centerbottom>10</centerbottom>
+                <centerbottom>$PARAM[centerbottom]</centerbottom>
                 <width>$PARAM[width]</width>
                 <include>View_Line_Divider_$PARAM[align]</include>
             </control>
@@ -138,25 +139,28 @@
                 <bordersize>-16</bordersize>
                 <texture colordiffuse="$PARAM[textcolor]">special://skin/extras/icons/update.png</texture>
                 <animation effect="rotate" start="0" end="-180" time="1200" delay="1200" loop="true" center="auto" tween="back" condition="$PARAM[visible]">Conditional</animation>
-                <animation effect="fade" start="0" end="100" delay="1600" time="1" reversible="true">Visible</animation>
-                <animation effect="fade" start="100" end="0" delay="400" time="1" reversible="true">Hidden</animation>
+                <include>Animation_Spinner_Delay</include>
                 <visible>$PARAM[visible]</visible>
             </control>
         </control>
     </include>
 
+    <!-- Delays showing and hiding the busy spinner. Also used by anything that reserves room for the spinner so it changes at the same time -->
+    <include name="Animation_Spinner_Delay">
+        <animation effect="fade" start="0" end="100" delay="1600" time="1" reversible="true">Visible</animation>
+        <animation effect="fade" start="100" end="0" delay="400" time="1" reversible="true">Hidden</animation>
+    </include>
+
     <!-- Expressions -->
-    <expression name="View_Mode_Rows_Expression">[$EXP[Exp_View_500] | $EXP[Exp_View_501] | $EXP[Exp_View_502] | $EXP[Exp_View_503] | $EXP[Exp_View_504] | $EXP[Exp_View_505] | $EXP[Exp_View_506] | $EXP[Exp_View_509]]</expression>
+    <expression name="View_Mode_Rows_Expression">[$EXP[Exp_View_500] | $EXP[Exp_View_501] | $EXP[Exp_View_502] | $EXP[Exp_View_503] | $EXP[Exp_View_504] | $EXP[Exp_View_505] | $EXP[Exp_View_506]]</expression>
 
     <expression name="View_Mode_Wall_Expression">[$EXP[View_Mode_Comb_Wall_Expression] | $EXP[Exp_View_510] | $EXP[Exp_View_511] | $EXP[Exp_View_512] | $EXP[Exp_View_513] | $EXP[Exp_View_514] | $EXP[Exp_View_516]]</expression>
 
-    <expression name="View_Mode_List_Expression">[$EXP[View_Mode_List_Full_Expression] | $EXP[View_Mode_List_Flix_Expression]]</expression>
     <expression name="View_Mode_List_Full_Expression">[$EXP[Exp_View_580] | $EXP[Exp_View_581] | $EXP[Exp_View_582] | $EXP[Exp_View_585]]</expression>
     <expression name="View_Mode_List_Flix_Expression">[$EXP[Exp_View_583] | $EXP[Exp_View_584]]</expression>
 
     <expression name="View_Mode_Comb_Wall_Expression">[$EXP[Exp_View_550] | $EXP[Exp_View_551] | $EXP[Exp_View_552] | $EXP[Exp_View_553] | $EXP[Exp_View_554] | $EXP[Exp_View_556]]</expression>
 
-    <expression name="View_Mode_Comb_Expression">[$EXP[View_Mode_Comb_Wall_Expression] | $EXP[View_Mode_Comb_Flix_Expression] | $EXP[View_Mode_Comb_Full_Expression]]</expression>
     <expression name="View_Mode_Comb_Flix_Expression">[$EXP[Exp_View_520] | $EXP[Exp_View_521] | $EXP[Exp_View_522] | $EXP[Exp_View_523] | $EXP[Exp_View_524] | $EXP[Exp_View_526]]</expression>
     <expression name="View_Mode_Comb_Full_Expression">[$EXP[Exp_View_527]]</expression>
 
@@ -164,7 +168,6 @@
 
     <expression name="View_Row_Info_Details_Expression">[$EXP[View_Mode_Rows_Expression] | $EXP[View_Mode_List_Flix_Expression] | $EXP[View_Mode_Comb_Flix_Expression]]</expression>
 
-    <expression name="View_Scrollbar_Horizontal_Expression">[$EXP[View_Mode_Rows_Expression] | $EXP[View_Mode_Comb_Flix_Expression]]</expression>
     <expression name="View_Scrollbar_Vertical_Flix_Expression">[$EXP[View_Mode_List_Flix_Expression]]</expression>
     <expression name="View_Scrollbar_Vertical_Full_Expression">[$EXP[View_Mode_List_Full_Expression] | $EXP[View_Mode_Comb_Full_Expression] | $EXP[View_Mode_Comb_Tall_Expression]]</expression>
     <expression name="View_Scrollbar_Vertical_Wall_Expression">[$EXP[View_Mode_Wall_Expression]]</expression>
@@ -236,7 +239,7 @@
     </include>
 
     <include name="View_MediaWindows_ID">
-        <views>500,501,502,503,504,505,506,509,510,511,512,513,514,516,520,521,522,523,524,526,527,528,550,551,552,553,554,556,580,581,582,583,584,585</views>
+        <views>500,501,502,503,504,505,506,510,511,512,513,514,516,520,521,522,523,524,526,527,528,550,551,552,553,554,556,580,581,582,583,584,585</views>
     </include>
 
     <include name="View_Row_Items">
@@ -251,7 +254,6 @@
                 <include condition="$EXP[Exp_View_504_Include]">View_504_Board_Row</include>
                 <include condition="$EXP[Exp_View_505_Include]">View_505_Card_Row</include>
                 <include condition="$EXP[Exp_View_506_Include]">View_506_Flyer_Row</include>
-                <include condition="$EXP[Exp_View_509_Include]">View_509_Placard_Row</include>
 
                 <!-- Wall Views -->
                 <include condition="$EXP[Exp_View_510_Include]">View_510_Square_Wall</include>
@@ -323,7 +325,6 @@
         <value condition="Control.IsVisible(504)">504</value>
         <value condition="Control.IsVisible(505)">505</value>
         <value condition="Control.IsVisible(506)">506</value>
-        <value condition="Control.IsVisible(509)">509</value>
 
         <value condition="Control.IsVisible(510)">510</value>
         <value condition="Control.IsVisible(511)">511</value>

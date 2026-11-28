@@ -153,7 +153,12 @@
             <font>
                 <name>font_logo_large</name>
                 <filename>Questrial-Regular.ttf</filename>
-                <size>55</size>
+                <size>44</size>  <!-- ABUKARIM: upstream size (was 55) -->
+            </font>
+            <font>  <!-- ABUKARIM: start-up logo version number, upstream size in every fontset -->
+                <name>abk_splash_version</name>
+                <filename>$PARAM[font_bold]</filename>
+                <size>38</size>
             </font>
 
             <font>
@@ -201,6 +206,10 @@
         <param name="font_black">MOHANDbold.ttf</param>
             <param name="font_bold">MOHANDbold.ttf</param>
             <param name="font_regular">MOHAND-Regular.ttf</param>
+            <!-- ABUKARIM: outlined tag fonts - line twins built from MOHANDbold itself (same advances, same
+                 Arabic shaping, same vertical metrics), so every outline fits its text, Arabic and digits included -->
+            <param name="font_bold_lines">MOHAND-Bold-Lines.ttf</param>
+            <param name="font_bold_lines_tiny">MOHAND-Bold-Lines-Tiny.ttf</param>
             <param name="style_light">light</param>
             <param name="size_hint">17</param>
             <param name="size_hint">15</param>
@@ -287,8 +296,46 @@
                 <size>$PARAM[size_tiny]</size>
             </font>
             <font>
+                <name>font_tiny_bold_lines</name>
+                <filename>$PARAM[font_bold_lines_tiny]</filename>
+                <size>$PARAM[size_tiny]</size>
+            </font>
+            <!-- ABUKARIM: Default OSD tags - MOHANDbold and its own line twin, so the outlines fit the text -->
+            <font>
+                <name>font_tiny_tag</name>
+                <filename>MOHANDbold.ttf</filename>
+                <size>21</size>
+                <style>uppercase</style>
+            </font>
+            <font>
+                <name>font_tiny_tag_lines</name>
+                <filename>MOHAND-Bold-Lines-Tiny.ttf</filename>
+                <size>21</size>
+                <style>uppercase</style>
+            </font>
+            <!-- ABUKARIM: OSD stream-card tags (codec / HDR / aspect / fps under the resolution) at upstream's
+                 hint size 15 - at the fork's 17 the row ran past the 400px card -->
+            <font>
+                <name>font_card_tag</name>
+                <filename>MOHANDbold.ttf</filename>
+                <size>15</size>
+                <style>uppercase</style>
+            </font>
+            <font>
+                <name>font_card_tag_lines</name>
+                <filename>MOHAND-Bold-Lines.ttf</filename>
+                <size>15</size>
+                <style>uppercase</style>
+            </font>
+            <font>
                 <name>font_hint_bold</name>
                 <filename>$PARAM[font_bold]</filename>
+                <style>uppercase</style>
+                <size>$PARAM[size_hint]</size>
+            </font>
+            <font>
+                <name>font_hint_bold_lines</name>
+                <filename>$PARAM[font_bold_lines]</filename>
                 <style>uppercase</style>
                 <size>$PARAM[size_hint]</size>
             </font>

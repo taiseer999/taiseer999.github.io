@@ -3,13 +3,11 @@
 
 
     <constant name="-constant_group_small_slide">-160</constant>
-    <constant name="constant_group_small_slide">160</constant>
     <constant name="-constant_group_small_w">-320</constant>
     <constant name="constant_group_small_w">320</constant>
-    <constant name="-constant_group_medium_w">-480</constant>
     <constant name="constant_group_medium_w">480</constant>
-    <constant name="-constant_group_large_w">-560</constant>
     <constant name="constant_group_large_w">560</constant>
+    <constant name="constant_group_grid_w">340</constant>
     <constant name="constant_grouplist_pad">20</constant>
     <constant name="constant_dialog_header_right">120</constant>
     <constant name="constant_dialog_pad">40</constant>
@@ -39,8 +37,12 @@
         <left>constant_group_large_w</left>
     </include>
 
-    <include name="Size_RightGroup_Flipped_Large">
-        <right>constant_group_large_w</right>
+    <include name="Size_LeftGroup_Grid">
+        <width>constant_group_grid_w</width>
+    </include>
+
+    <include name="Size_RightGroup_Grid">
+        <left>constant_group_grid_w</left>
     </include>
 
     <include name="Size_LeftGroup_Medium">
@@ -49,10 +51,6 @@
 
     <include name="Size_RightGroup_Medium">
         <left>constant_group_medium_w</left>
-    </include>
-
-    <include name="Size_RightGroup_Flipped_Medium">
-        <right>constant_group_medium_w</right>
     </include>
 
     <include name="Size_Group_AddonSettings_Left">

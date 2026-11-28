@@ -10,11 +10,19 @@
     <animation effect="fade" start="0" end="100" time="300" condition="!Window.IsVisible(videoosd)">WindowOpen</animation>
     <animation effect="fade" end="0" start="100" time="300">WindowClose</animation>
     <controls>
+        <include content="Info_Meta_Ratings_Counters">
+            <param name="ratings_id">731</param>
+            <param name="source_prefix">TMDbHelper.Player.</param>
+            <param name="infolabels">VideoPlayer</param>
+        </include>
 
 
         <control type="group">
             <include content="Animation_ConditionalFade">
                 <param name="condition">![Window.IsActive(VideoFullScreen.xml) | Window.IsActive(MusicVisualisation.xml)]</param>
+            </include>
+            <include content="ABK_OSD_DimLeft">
+                <param name="top">-200</param>
             </include>
             <include content="OSD_Progress_Details_Extended">
                 <param name="align">bottom</param>

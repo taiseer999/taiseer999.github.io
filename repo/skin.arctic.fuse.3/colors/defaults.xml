@@ -9,6 +9,16 @@
     <color name="main_fg_12">1fededed</color>
     <color name="main_fg_06">0fededed</color>
 
+    <!-- ABUKARIM: brighter foreground for the playback info over video (plot, ratings, end time).
+         Dolby Vision / HDR output dims the GUI, so main_fg_70 text read as grey there. -->
+    <color name="osd_fg_100">ffffffff</color>
+    <color name="osd_fg_90">ffffffff</color>
+    <color name="osd_fg_70">f2ffffff</color>
+    <color name="osd_fg_50">d9ffffff</color>
+    <color name="osd_fg_30">a6ffffff</color>
+    <color name="osd_fg_12">1fffffff</color>
+    <color name="osd_fg_06">0fffffff</color>
+
     <color name="main_bg_100">ff000000</color>
     <color name="main_bg_90">e7000000</color>
     <color name="main_bg_70">b3000000</color>
@@ -22,7 +32,6 @@
     <color name="main_logo">ffb3b3b3</color>
 
     <!-- Dialogs -->
-    <color name="dialog_nib">ff2a3643</color>
     <color name="dialog_overlay">b3000008</color>
 
     <color name="dialog_fg_100">ffededed</color>
@@ -40,7 +49,8 @@
     <color name="dialog_bg_30">4d000000</color>
     <color name="dialog_bg_12">1f000000</color>
 
-    <!-- Panels -->
+    <!-- ABUKARIM: panel_* and dialog_nib kept (removed upstream in 3.5.7) - AB Tools patches, Plot on the Right and the PPI windows still use them -->
+    <color name="dialog_nib">ff2a3643</color>
     <color name="panel_bg_90">e7000000</color>
     <color name="panel_bg_70">b3000000</color>
     <color name="panel_bg_50">80000000</color>
@@ -61,7 +71,7 @@
     <color name="shadow_soft">1a000000</color>
     <color name="shadow_hard">80000000</color>
     <color name="shadow_full">c0000000</color>
-    <color name="shadow_back">80000000</color>
+    <color name="shadow_back">e7000000</color>
 
     <!-- Misc -->
     <color name="yellow_star">d7ffcd3c</color>

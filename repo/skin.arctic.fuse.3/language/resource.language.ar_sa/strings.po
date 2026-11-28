@@ -171,11 +171,6 @@ msgctxt "#31030"
 msgid "Critics"
 msgstr "النقّاد"
 
-#: /1080i/Includes_SkinSettings.xml
-msgctxt "#31031"
-msgid "HDR type"
-msgstr "نوع HDR"
-
 #: /1080i/DialogPVRChannelManager.xml
 msgctxt "#31032"
 msgid "Apply"
@@ -336,11 +331,6 @@ msgctxt "#31065"
 msgid "Creator"
 msgstr "المُنشئ"
 
-#: /1080i/Includes_Search.xml
-msgctxt "#31066"
-msgid "Discover"
-msgstr "اكتشاف"
-
 #: /1080i/Includes_Labels.xml
 msgctxt "#31067"
 msgid "Cinematography"
@@ -391,11 +381,6 @@ msgstr "بطولة"
 msgctxt "#31077"
 msgid "More Information"
 msgstr "مزيد من المعلومات"
-
-#: /1080i/Includes_SkinSettings.xml
-msgctxt "#31078"
-msgid "Static textboxes"
-msgstr "مربعات نص ثابتة"
 
 #: /1080i/Dialog_DialogCustom.xml
 msgctxt "#31080"
@@ -557,11 +542,6 @@ msgstr "المراكز"
 msgctxt "#31115"
 msgid "Australian summer"
 msgstr "الصيف الأسترالي"
-
-#: /1080i/SkinSettings.xml
-msgctxt "#31116"
-msgid "Winter frost"
-msgstr "صقيع الشتاء"
 
 #: /1080i/DialogPlayerProcessInfo.xml
 msgctxt "#31117"
@@ -748,11 +728,6 @@ msgctxt "#31158"
 msgid "Layout"
 msgstr "التخطيط"
 
-#: /1080i/Custom_1120_VideoInfo_Details.xml
-msgctxt "#31159"
-msgid "Version"
-msgstr "الإصدار"
-
 msgctxt "#31160"
 msgid "REC"
 msgstr "تسجيل"
@@ -791,11 +766,6 @@ msgstr "إجراء الرجوع"
 msgctxt "#31167"
 msgid "Logo"
 msgstr "شعار"
-
-#: /1080i/Includes_Views_List.xml
-msgctxt "#31168"
-msgid "List Square"
-msgstr "قائمة مربّعة"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31169"
@@ -870,11 +840,6 @@ msgstr "مهلة الإغلاق"
 msgctxt "#31194"
 msgid "Album duration"
 msgstr "مدة الألبوم"
-
-#: /1080i/Includes_Labels.xml
-msgctxt "#31195"
-msgid "Light"
-msgstr "فاتح"
 
 msgctxt "#31196"
 msgid "Up Next"
@@ -1205,11 +1170,6 @@ msgctxt "#31271"
 msgid "Image folder"
 msgstr "مجلد الصور"
 
-#: /1080i/Includes_Search_View.xml
-msgctxt "#31272"
-msgid "Searching"
-msgstr "جارٍ البحث"
-
 msgctxt "#31273"
 msgid "Label"
 msgstr "تسمية"
@@ -1293,14 +1253,6 @@ msgctxt "#31294"
 msgid "Bookmarks and chapters"
 msgstr "الإشارات المرجعية والفصول"
 
-msgctxt "#31295"
-msgid "Channels"
-msgstr "القنوات"
-
-msgctxt "#31296"
-msgid "Playlist"
-msgstr "قائمة التشغيل"
-
 #: /1080i/SkinSettings.xml
 msgctxt "#31297"
 msgid "Extra fanart"
@@ -1318,11 +1270,6 @@ msgstr "جارٍ تحميل المعلومات"
 msgctxt "#31300"
 msgid "Window"
 msgstr "النافذة"
-
-#: /1080i/Includes_Labels.xml
-msgctxt "#31301"
-msgid "Crew"
-msgstr "طاقم العمل"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31303"
@@ -1358,11 +1305,6 @@ msgstr "توسيع"
 msgctxt "#31311"
 msgid "Weekly"
 msgstr "أسبوعي"
-
-#: /1080i/Includes_MediaFilter.xml
-msgctxt "#31319"
-msgid "View"
-msgstr "عرض"
 
 #: /1080i/Includes_Views.xml
 msgctxt "#31320"
@@ -1620,7 +1562,7 @@ msgstr "سنة الإصدار"
 #: /1080i/Includes_Items.xml Shorter label for use in info dialog buttons
 msgctxt "#31393"
 msgid "Trailer"
-msgstr "مقطع دعائي"
+msgstr "الإعلان"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31394"
@@ -1956,11 +1898,6 @@ msgctxt "#31486"
 msgid "Dialog"
 msgstr "مربّع حوار"
 
-#: /1080i/SkinSettings.xml
-msgctxt "#31487"
-msgid "and"
-msgstr "و"
-
 #: /1080i/Includes_Labels.xml
 msgctxt "#31490"
 msgid "Cancelled"
@@ -2026,20 +1963,10 @@ msgctxt "#31502"
 msgid "More Options"
 msgstr "مزيد من الخيارات"
 
-#: /1080i/DialogVideoVersion.xml
-msgctxt "#31503"
-msgid "Extras"
-msgstr "إضافات"
-
 #: /1080i/Includes_Labels.xml
 msgctxt "#31504"
 msgid "Planned"
 msgstr "مخطّط له"
-
-#: /1080i/SkinSettings.xml
-msgctxt "#31505"
-msgid "Login screen"
-msgstr "شاشة الدخول"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31506"
@@ -2161,11 +2088,6 @@ msgctxt "#31537"
 msgid "Edit submenu items"
 msgstr "تحرير عناصر القائمة الفرعية"
 
-#: /1080i/Includes_SkinSettings.xml
-msgctxt "#31538"
-msgid "Customise viewtypes"
-msgstr "تخصيص أنواع العرض"
-
 #: /1080i/Includes_Items.xml
 msgctxt "#31539"
 msgid "Use online gallery"
@@ -2200,11 +2122,6 @@ msgstr "يُبثّ"
 msgctxt "#31545"
 msgid "Premiering"
 msgstr "يُعرض لأول مرة"
-
-#: /1080i/Includes_Labels.xml
-msgctxt "#31547"
-msgid "Yesterday"
-msgstr "أمس"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31554"
@@ -2473,11 +2390,6 @@ msgctxt "#31633"
 msgid "Fallback style"
 msgstr "النمط الاحتياطي"
 
-#: /1080i/Includes_Labels.xml
-msgctxt "#31634"
-msgid "Stylised"
-msgstr "مُصمم"
-
 #: /1080i/Includes_Views_List.xml
 msgctxt "#31635"
 msgid "List Poster"
@@ -2495,8 +2407,8 @@ msgstr "مزود الفيديو الدعائي "
 
 #: /1080i/Dialog_DialogShortcuts.xml
 msgctxt "#31638"
-msgid "Hub type"
-msgstr "نوع المركز"
+msgid "Type"
+msgstr "النوع"
 
 #: /1080i/Dialog_DialogShortcuts.xml
 msgctxt "#31639"
@@ -2799,11 +2711,6 @@ msgstr "اختر ما إذا كان الضغط على «رجوع» في نواف
 msgctxt "#31686"
 msgid "Select whether the scrollbar jumps by letter when content is sorted alphabetically, or by page."
 msgstr "اختر ما إذا كان شريط التمرير يقفز حسب الحرف عند الفرز الأبجدي، أو حسب الصفحة."
-
-#: /1080i/Includes_SkinSettings.xml
-msgctxt "#31687"
-msgid "Use labels in place of textboxes for long text. This improves performance on Omega but the text will not scroll."
-msgstr "استخدم التسميات بدلًا من مربعات النص للنصوص الطويلة. يحسّن ذلك الأداء على Omega لكن النص لن يتحرك."
 
 #: /1080i/Includes_SkinSettings.xml
 msgctxt "#31688"
@@ -3197,11 +3104,6 @@ msgid "Continue watching on home with only the add-ons hub"
 msgstr "متابعة المشاهدة في الشاشة الرئيسية مع محور الإضافات فقط"
 
 #: /1080i/Dialog_DialogSetupWizard.xml
-msgctxt "#31767"
-msgid "Colours"
-msgstr "الألوان"
-
-#: /1080i/Dialog_DialogSetupWizard.xml
 msgctxt "#31768"
 msgid "A colour scheme sets the highlight colour, window background and dialog background together. Adjust each one afterwards if you like."
 msgstr "يحدد نظام الألوان لون الإبراز وخلفية النوافذ وخلفية النوافذ الحوارية معًا. يمكنك ضبط كلٍّ منها بعد ذلك إن شئت."
@@ -3232,11 +3134,6 @@ msgid "Hide parent folder items"
 msgstr "إخفاء عناصر المجلد الأصل"
 
 #: /1080i/Dialog_DialogSetupWizard.xml
-msgctxt "#31774"
-msgid "Next"
-msgstr "التالي"
-
-#: /1080i/Dialog_DialogSetupWizard.xml
 msgctxt "#31775"
 msgid "Back"
 msgstr "السابق"
@@ -3250,11 +3147,6 @@ msgstr "الخروج من الإعداد"
 msgctxt "#31777"
 msgid "Step"
 msgstr "الخطوة"
-
-#: /1080i/Dialog_DialogSetupWizard.xml
-msgctxt "#31779"
-msgid "Welcome"
-msgstr "الترحيب"
 
 #: /1080i/Dialog_DialogSetupWizard.xml
 msgctxt "#31780"
@@ -3387,11 +3279,6 @@ msgid "A grid of items with a selector to switch widgets"
 msgstr "شبكة من العناصر مع مُحدِّد للتبديل بين الودجات"
 
 #: /1080i/Includes_SkinSettings.xml
-msgctxt "#31807"
-msgid "Home"
-msgstr "الرئيسية"
-
-#: /1080i/Includes_SkinSettings.xml
 msgctxt "#31808"
 msgid "Views"
 msgstr "أنماط العرض"
@@ -3407,12 +3294,6 @@ msgid "Tools"
 msgstr "الأدوات"
 
 #: /1080i/Includes_SkinSettings.xml
-msgctxt "#31811"
-msgid "Style"
-msgstr "النمط"
-
-
-#: /1080i/Includes_SkinSettings.xml
 msgctxt "#31813"
 msgid "Users"
 msgstr "المستخدمون"
@@ -3421,16 +3302,6 @@ msgstr "المستخدمون"
 msgctxt "#31814"
 msgid "Button action"
 msgstr "إجراء الزر"
-
-#: /1080i/Includes_SkinSettings.xml
-msgctxt "#31815"
-msgid "Services"
-msgstr "الخدمات"
-
-#: /1080i/Includes_SkinSettings.xml
-msgctxt "#31816"
-msgid "OSD"
-msgstr "قائمة التحكم"
 
 #: /1080i/Includes_SkinSettings.xml
 msgctxt "#31817"
@@ -3443,24 +3314,14 @@ msgid "Effects"
 msgstr "المؤثرات"
 
 #: /1080i/Includes_SkinSettings.xml
-msgctxt "#31819"
-msgid "Enabled"
-msgstr "مفعّل"
-
-#: /1080i/Includes_SkinSettings.xml
-msgctxt "#31820"
-msgid "Reset"
-msgstr "إعادة الضبط"
-
-#: /1080i/Includes_SkinSettings.xml
 msgctxt "#31821"
 msgid "Focus widgets"
 msgstr "ودجات التحديد"
 
 #: /1080i/Includes_SkinSettings.xml
 msgctxt "#31822"
-msgid "This category contains the add-ons the skin depends on, the debugging tools and the option to reset skin settings."
-msgstr "تحتوي هذه الفئة على الإضافات التي تعتمد عليها الواجهة، وأدوات التصحيح، وخيار إعادة ضبط إعدادات الواجهة."
+msgid "This category contains the seasonal themes and their effects, the add-ons the skin depends on, the debugging tools and the option to reset skin settings."
+msgstr "تحتوي هذه الفئة على السمات الموسمية وتأثيراتها، والإضافات التي تعتمد عليها الواجهة، وأدوات التصحيح، وخيار إعادة تعيين إعدادات الواجهة."
 
 #: /1080i/Includes_SkinSettings.xml
 msgctxt "#31823"
@@ -3566,3 +3427,368 @@ msgstr "النافذة والنوافذ الحوارية"
 msgctxt "#31848"
 msgid "This replaces your home screen hubs, menus, widgets and spotlights with this preset. Any changes you have made to them will be lost. Continue?"
 msgstr "سيستبدل هذا الإعداد الجاهز المحاور والقوائم والودجات والعروض المميزة في شاشتك الرئيسية، وستفقد أي تغييرات أجريتها عليها. هل تريد المتابعة؟"
+
+#: /1080i/Includes_Search.xml
+msgctxt "#31850"
+msgid "Results"
+msgstr "النتائج"
+
+#: /1080i/Includes_Search.xml
+msgctxt "#31851"
+msgid "Sources"
+msgstr "المصادر"
+
+#: /1080i/Includes_Search.xml
+msgctxt "#31852"
+msgid "Decade"
+msgstr "العقد"
+
+#: /1080i/Dialog_DialogSelect.xml
+msgctxt "#31853"
+msgid "Bauhaus"
+msgstr "باوهاوس"
+
+#: /1080i/Dialog_DialogSelect.xml
+msgctxt "#31854"
+msgid "Golden Age"
+msgstr "العصر الذهبي"
+
+#: /1080i/Dialog_DialogSelect.xml
+msgctxt "#31855"
+msgid "Expressionist"
+msgstr "تعبيري"
+
+#: /1080i/Dialog_DialogSelect.xml
+msgctxt "#31856"
+msgid "Faceted"
+msgstr "متعدّد الأوجه"
+
+#: /1080i/Dialog_DialogSelect.xml
+msgctxt "#31857"
+msgid "Mosaic"
+msgstr "فسيفساء"
+
+#: /1080i/Dialog_DialogShortcuts.xml
+msgctxt "#31858"
+msgid "Also search TMDb discover results for movies and tvshows alongside the search widgets."
+msgstr "ابحث أيضًا في نتائج الاستكشاف من TMDb عن الأفلام والمسلسلات إلى جانب عناصر البحث."
+
+#: /1080i/Dialog_DialogSelect.xml
+msgctxt "#31859"
+msgid "Japanese Watercolour"
+msgstr "ألوان مائية يابانية"
+
+#: /1080i/Dialog_DialogSelect.xml
+msgctxt "#31860"
+msgid "Surrealist"
+msgstr "سريالي"
+
+#: /1080i/Includes_Search.xml
+msgctxt "#31861"
+msgid "No results"
+msgstr "لا توجد نتائج"
+
+#: /1080i/Includes_Search.xml
+msgctxt "#31863"
+msgid "Search for"
+msgstr "ابحث عن"
+
+#: /1080i/Includes_Search.xml
+msgctxt "#31864"
+msgid "movies, TV shows, people and more"
+msgstr "الأفلام والمسلسلات والأشخاص وغيرها"
+
+#: /1080i/Includes_Search.xml
+msgctxt "#31865"
+msgid "Enter a search term to begin."
+msgstr "أدخل عبارة بحث للبدء."
+
+msgctxt "#31866"
+msgid "Selector"
+msgstr "المُحدِّد"
+
+msgctxt "#31867"
+msgid "Standard shows the results of each content type in its own row. Combined shows a single results row with a selector to choose all results or a content type or source."
+msgstr "يعرض الوضع القياسي نتائج كل نوع محتوى في صفّ مستقل. ويعرض الوضع المدمج صفًّا واحدًا للنتائج مع مُحدِّد لاختيار كل النتائج أو نوع محتوى أو مصدر."
+
+msgctxt "#31868"
+msgid "Choose whether the combined selector lists each content type or each source alongside all results."
+msgstr "اختر ما إذا كان المُحدِّد المدمج يعرض كل نوع محتوى أو كل مصدر إلى جانب كل النتائج."
+
+#: /1080i/Dialog_DialogSelect.xml
+msgctxt "#31869"
+msgid "Couture"
+msgstr "الأزياء الراقية"
+
+#: /1080i/Dialog_DialogSelect.xml
+msgctxt "#31870"
+msgid "Masquerade"
+msgstr "حفلة تنكرية"
+
+msgctxt "#31872"
+msgid "Logo position"
+msgstr "موضع الشعار"
+
+msgctxt "#31873"
+msgid "Move the logo, text and profile selector on the splash and login screens upwards."
+msgstr "حرّك الشعار والنص ومُحدِّد الملف الشخصي إلى الأعلى في شاشتي البدء وتسجيل الدخول."
+
+msgctxt "#31875"
+msgid "Show the splash screen with the current position. Press any button, click or move the mouse to close the preview."
+msgstr "اعرض شاشة البدء بالموضع الحالي. اضغط أي زر أو انقر أو حرّك الفأرة للإغلاق."
+
+msgctxt "#31849"
+msgid "Search all skin settings by name, section or description."
+msgstr "ابحث في جميع إعدادات الواجهة بالاسم أو القسم أو الوصف."
+
+msgctxt "#31876"
+msgid "Filter the skin settings by tag."
+msgstr "تصفية إعدادات الواجهة حسب الوسم."
+
+msgctxt "#31877"
+msgid "Choose the style of the search results of each content type. Content types set to Default and results without a content type use the Default style."
+msgstr "اختر نمط نتائج البحث لكل نوع من المحتوى. تستخدم أنواع المحتوى المضبوطة على الافتراضي والنتائج التي لا نوع لها النمطَ الافتراضي."
+
+msgctxt "#31878"
+msgid "Decoder"
+msgstr "وحدة فك الترميز"
+
+msgctxt "#31879"
+msgid "Output"
+msgstr "الإخراج"
+
+msgctxt "#31880"
+msgid "Adjust"
+msgstr "ضبط"
+
+msgctxt "#31881"
+msgid "Select whether the item details are shown as plain text or as pills."
+msgstr "اختر عرض تفاصيل العنصر نصًّا عاديًّا أو على هيئة أقراص."
+
+msgctxt "#31882"
+msgid "Pill"
+msgstr "أقراص"
+
+msgctxt "#31883"
+msgid "Choose which ratings are shown for episodes."
+msgstr "اختر التقييمات التي تظهر للحلقات."
+
+msgctxt "#31884"
+msgid "Anime"
+msgstr "أنمي"
+
+msgctxt "#31885"
+msgid "Change service"
+msgstr "تغيير الخدمة"
+
+msgctxt "#31887"
+msgid "Very high"
+msgstr "مرتفع جدًّا"
+
+msgctxt "#31888"
+msgid "Moderate"
+msgstr "معتدل"
+
+msgctxt "#31889"
+msgid "Extreme"
+msgstr "شديد للغاية"
+
+msgctxt "#31890"
+msgid "Icon style"
+msgstr "نمط الأيقونات"
+
+msgctxt "#31891"
+msgid "Orbit"
+msgstr "مدار"
+
+msgctxt "#31892"
+msgid "Filmstrip"
+msgstr "شريط فيلم"
+
+msgctxt "#31893"
+msgid "Reflection"
+msgstr "انعكاس"
+
+msgctxt "#31894"
+msgid "Select how genres, studios, countries and items without artwork are shown."
+msgstr "اختر طريقة عرض الأنواع والاستوديوهات والدول والعناصر التي لا صور لها."
+
+msgctxt "#31895"
+msgid "Aperture"
+msgstr "فتحة العدسة"
+
+msgctxt "#31896"
+msgid "Contour"
+msgstr "خطوط محيطية"
+
+msgctxt "#31897"
+msgid "Halftone"
+msgstr "نقطي"
+
+msgctxt "#31898"
+msgid "Blueprint"
+msgstr "مخطط هندسي"
+
+msgctxt "#31899"
+msgid "Sunburst"
+msgstr "أشعة الشمس"
+
+msgctxt "#31900"
+msgid "Corner Arc"
+msgstr "قوس الزاوية"
+
+msgctxt "#31901"
+msgid "Fan"
+msgstr "مروحة"
+
+msgctxt "#31902"
+msgid "Reveal"
+msgstr "كشف"
+
+msgctxt "#31903"
+msgid "Wallpaper"
+msgstr "خلفية"
+
+msgctxt "#31904"
+msgid "Fullscreen rows without an info panel"
+msgstr "صفوف بملء الشاشة دون لوحة معلومات"
+
+msgctxt "#31905"
+msgid "Show the next enabled rating in place of one that is unavailable, instead of only the first ratings in the list."
+msgstr "اعرض التقييم المفعّل التالي مكان التقييم غير المتاح، بدل الاكتفاء بالتقييمات الأولى في القائمة."
+
+msgctxt "#31906"
+msgid "Show the 3D tag in the item information for stereoscopic videos."
+msgstr "اعرض وسم 3D في معلومات العنصر للفيديوهات المجسّمة."
+
+msgctxt "#31907"
+msgid "Flixart Visibility"
+msgstr "ظهور FlixArt"
+
+msgctxt "#31908"
+msgid "One row of items below the details of the focused item."
+msgstr "صف واحد من العناصر أسفل تفاصيل العنصر المحدد."
+
+msgctxt "#31909"
+msgid "Rows of items that fill the screen below a section heading."
+msgstr "صفوف من العناصر تملأ الشاشة أسفل عنوان القسم."
+
+msgctxt "#31910"
+msgid "One row of items below the details of the focused item, with categories above the row."
+msgstr "صف واحد من العناصر أسفل تفاصيل العنصر المحدد، وفوقه الفئات."
+
+msgctxt "#31911"
+msgid "Rows of items that fill the screen, with categories above them."
+msgstr "صفوف من العناصر تملأ الشاشة، وفوقها الفئات."
+
+msgctxt "#31912"
+msgid "Items show square artwork with labels below."
+msgstr "تعرض العناصر صورًا مربعة وأسفلها التسميات."
+
+msgctxt "#31913"
+msgid "Items show landscape artwork with labels below."
+msgstr "تعرض العناصر صورًا أفقية وأسفلها التسميات."
+
+msgctxt "#31914"
+msgid "Items show poster artwork."
+msgstr "تعرض العناصر الملصقات."
+
+msgctxt "#31915"
+msgid "Items show round artwork."
+msgstr "تعرض العناصر صورًا دائرية."
+
+msgctxt "#31916"
+msgid "Items show wide board artwork."
+msgstr "تعرض العناصر لوحات عريضة."
+
+msgctxt "#31917"
+msgid "The focused item opens out into a wide card."
+msgstr "يتوسّع العنصر المحدد إلى بطاقة عريضة."
+
+msgctxt "#31918"
+msgid "Items show poster artwork with labels over the bottom edge."
+msgstr "تعرض العناصر الملصقات وعلى حافتها السفلية التسميات."
+
+msgctxt "#31919"
+msgid "A list of items beside a large panel with the focused item's artwork."
+msgstr "قائمة عناصر بجانب لوحة كبيرة فيها صور العنصر المحدد."
+
+msgctxt "#31920"
+msgid "A wide list of items beside the focused item's poster."
+msgstr "قائمة عناصر عريضة بجانب ملصق العنصر المحدد."
+
+msgctxt "#31921"
+msgid "A list of items with artwork and a short plot, beside the focused item's poster."
+msgstr "قائمة عناصر مع صورها وقصة مختصرة، بجانب ملصق العنصر المحدد."
+
+msgctxt "#31922"
+msgid "A short list of items below the details of the focused item, beside its landscape artwork."
+msgstr "قائمة قصيرة من العناصر أسفل تفاصيل العنصر المحدد، بجانب صورته الأفقية."
+
+msgctxt "#31923"
+msgid "A short list of items below the details of the focused item, beside its landscape and poster artwork."
+msgstr "قائمة قصيرة من العناصر أسفل تفاصيل العنصر المحدد، بجانب صورته الأفقية وملصقه."
+
+msgctxt "#31924"
+msgid "A list of items beside the focused item's square artwork."
+msgstr "قائمة عناصر بجانب الصورة المربعة للعنصر المحدد."
+
+msgctxt "#31925"
+msgid "A list of categories beside the items in the selected category, with artwork and a short plot."
+msgstr "قائمة فئات بجانب عناصر الفئة المختارة، مع صورها وقصة مختصرة."
+
+msgctxt "#31926"
+msgid "Items with artwork and a short plot, with categories above them, beside the focused item's poster."
+msgstr "عناصر مع صورها وقصة مختصرة، وفوقها الفئات، بجانب ملصق العنصر المحدد."
+
+msgctxt "#31927"
+msgid "Play action"
+msgstr "إجراء التشغيل"
+
+msgctxt "#31928"
+msgid "Context menu"
+msgstr "قائمة السياق"
+
+msgctxt "#31929"
+msgid "Browse action"
+msgstr "إجراء التصفح"
+
+msgctxt "#31930"
+msgid "Choose what happens when a playable library item in this hub's widgets is clicked."
+msgstr "اختر ما يحدث عند النقر على عنصر قابل للتشغيل من المكتبة في ودجات هذا المركز."
+
+msgctxt "#31931"
+msgid "Choose what happens when a library folder item, such as a show or album, in this hub's widgets is clicked."
+msgstr "اختر ما يحدث عند النقر على مجلد من المكتبة، كمسلسل أو ألبوم، في ودجات هذا المركز."
+
+msgctxt "#31932"
+msgid "Choose the shortcut, path, label, icon and submenu of this hub."
+msgstr "اختر اختصار هذا المركز ومساره وتسميته وأيقونته وقائمته الفرعية."
+
+msgctxt "#31933"
+msgid "Menu"
+msgstr "القائمة"
+
+msgctxt "#31934"
+msgid "This hub"
+msgstr "هذا المركز"
+
+msgctxt "#31935"
+msgid "All hubs"
+msgstr "كل المراكز"
+
+msgctxt "#31936"
+msgid "Use this action for this hub only or for all hubs?"
+msgstr "هل يُستخدم هذا الإجراء لهذا المركز فقط أم لكل المراكز؟"
+
+msgctxt "#31937"
+msgid "Department"
+msgstr "القسم"
+
+msgctxt "#31938"
+msgid "Information line"
+msgstr "سطر المعلومات"
+
+msgctxt "#31939"
+msgid "of 10 units used"
+msgstr "من 10 وحدات مستخدمة"
