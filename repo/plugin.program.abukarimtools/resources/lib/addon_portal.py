@@ -90,9 +90,9 @@ CATALOG = [
     ('plugin.video.umbrella',    'Umbrella',    'repository.umbrella',
      'https://raw.githubusercontent.com/umbrellaplug/umbrellaplug.github.io/'
      'master/nexus/zips/plugin.video.umbrella/icon.png'),
-    ('plugin.video.youtube',     'YouTube',     'repository.redwizard',
-     'https://repo.redwizard.xyz/redwizardrepo/main/plugin.video.youtube/'
-     'resources/media/icon.png'),
+    # 4.12.63: from repository.taiseer (hard import of AB Tools)
+    ('plugin.video.youtube',     'YouTube',     'repository.taiseer',
+     TAISEER_ZIPS + 'plugin.video.youtube/resources/media/icon.png'),
 ]
 
 # Optional one-line note shown after the repository name in the list

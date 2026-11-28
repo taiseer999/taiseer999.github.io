@@ -103,7 +103,7 @@ def _ensure_youtube():
             ap._enable(YOUTUBE_ID)
         else:
             entry = [(e[0], e[1], e[2]) for e in ap._catalog() if e[0] == YOUTUBE_ID]
-            entry = entry or [(YOUTUBE_ID, 'YouTube', 'repository.redwizard')]
+            entry = entry or [(YOUTUBE_ID, 'YouTube', 'repository.taiseer')]
             _log('%s missing - installing it from %s' % (YOUTUBE_ID, entry[0][2]))
             ap._install_selection(entry[:1])
     except Exception as exc:

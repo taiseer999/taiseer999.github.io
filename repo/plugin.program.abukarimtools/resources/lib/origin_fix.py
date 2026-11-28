@@ -93,6 +93,8 @@ PINNED_ORIGINS = {
     # way it was installed by hand on 2026-11-13 (kodi.log 09:28:58:
     # repository.twilight0 2.0.2, then plugin.video.newpipe 1.2.0 from it).
     'plugin.video.newpipe':           'repository.twilight0',
+    # 4.12.63: YouTube is a hard import of AB Tools and updates from repository.taiseer
+    'plugin.video.youtube':           'repository.taiseer',
 }
 # Pins whose repository wins even when it carries an OLDER version than the
 # one installed (the 4.7.5 "don't freeze a newer add-on" guard is skipped):

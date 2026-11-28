@@ -2,13 +2,15 @@
   "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
   "entries": [
     {
-      "v": "4.12.62",
+      "v": "4.12.63",
       "from": "4.12.61",
       "en": [
+        "The YouTube add-on now installs together with AB Tools, from repository.taiseer.",
         "Arctic Fuse 3 trailers now come from the YouTube add-on (NewPipe removed), or from IMDb: Toggles > AF3 Auto Trailers > Source.",
         "When YouTube refuses a trailer, the IMDb trailer of the same title plays instead - automatic trailers and the Trailer button alike."
       ],
       "ar": [
+        "صارت إضافة YouTube تُثبَّت مع أدوات AB من مستودع repository.taiseer.",
         "صارت تريلرات Arctic Fuse 3 تأتي من إضافة YouTube (أُزيلت NewPipe) أو من IMDb: التبديلات > التريلرات التلقائية (AF3) > المصدر.",
         "عندما يرفض YouTube تشغيل تريلر، يُشغَّل تريلر العنوان نفسه من IMDb بدلًا منه، في التريلرات التلقائية وزر التريلر على حدٍّ سواء."
       ]

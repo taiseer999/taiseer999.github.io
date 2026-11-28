@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="AB Tools"
-       version="4.12.62"
+       version="4.12.63"
        provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.requests" optional="true"/>
     <import addon="script.module.six" optional="true"/>
-    <!-- 4.12.62: AF3 Auto Trailers through the YouTube add-on (replaces NewPipe).
-         Optional: a box without it still installs AB Tools; trailers then come from IMDb. -->
-    <import addon="plugin.video.youtube" version="7.0.0" optional="true"/>
+    <!-- 4.12.63: AF3 Auto Trailers through the YouTube add-on - a MUST now: Kodi installs
+         it together with AB Tools (from repository.taiseer; origin_fix pins it there).
+         A box whose repositories carry no plugin.video.youtube cannot install AB Tools. -->
+    <import addon="plugin.video.youtube" version="7.0.0"/>
     <import addon="script.module.unicache" version="1.0.1"/>
     <import addon="script.module.urldispatcher" version="1.1.0"/>
     <import addon="script.module.scrapetube" version="2.8.2" optional="true"/>
@@ -39,7 +40,7 @@
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، ووصولاً سريعاً إلى معالج أبوكريم وأدوات الصيانة فيه (التنظيف الشامل وحذف الصور المصغّرة القديمة). كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة واختبار أداء المعالج وإعادة بناء قاعدة بيانات الإضافات.</description>
     <license>LicenseRef-ABTools (personal use only, no redistribution - see LICENSE.txt)</license>
-    <news>v4.12.62: AF3 trailers: NewPipe removed - YouTube add-on or IMDb; IMDb plays when YouTube refuses a video. v4.12.61: AF3 trailers can come from the YouTube add-on. v4.12.58: Subtitle Look opens at once on focus. v4.12.57: shorter Subtitle Look panel. v4.12.56: after a skin update the player OSD no longer opens half-patched. v4.12.55: AF3 Subtitle Look opens on hover and has no panel background. v4.12.54: AF3 OSD Flags Style: four new looks - Glass Vibrant, Pastel, Glow Bar, Pixel; Solid is now flat (FR-Badges); IMAX pill and five aspect-ratio badges back in every style. v4.12.53: AF3 start-up logo (CoreELEC / Kodi / LibreELEC) lowered to the skin's own position. v4.12.52: fixes an endless AF3 skin reload loop after a skin update. v4.12.51: Lucent Look: star pill patch removed (AF3 default pills). v4.12.48: Search All opens from AIOStreams (FEL widgets and catalogs) - IMDb-only items are looked up on TMDb. v4.12.47: AF3 50.12.14: Default OSD keeps the Pill style (pills now opt-in upstream). v4.12.42: Notifications (Najd) no longer cover the Lucent time row; Search All gives AIOStreams the film's own plot and art for the player. v4.12.41: Lucent Player bars show chapter, cut (EDL) and scene markers. v4.12.40: Najd Smart Subtitles can be removed, or left uninstalled, from AB Tools (Mods > Najd).</news>
+    <news>v4.12.63: the YouTube add-on installs with AB Tools (repository.taiseer). v4.12.62: AF3 trailers: NewPipe removed - YouTube add-on or IMDb; IMDb plays when YouTube refuses a video. v4.12.61: AF3 trailers can come from the YouTube add-on. v4.12.58: Subtitle Look opens at once on focus. v4.12.57: shorter Subtitle Look panel. v4.12.56: after a skin update the player OSD no longer opens half-patched. v4.12.55: AF3 Subtitle Look opens on hover and has no panel background. v4.12.54: AF3 OSD Flags Style: four new looks - Glass Vibrant, Pastel, Glow Bar, Pixel; Solid is now flat (FR-Badges); IMAX pill and five aspect-ratio badges back in every style. v4.12.53: AF3 start-up logo (CoreELEC / Kodi / LibreELEC) lowered to the skin's own position. v4.12.52: fixes an endless AF3 skin reload loop after a skin update. v4.12.51: Lucent Look: star pill patch removed (AF3 default pills). v4.12.48: Search All opens from AIOStreams (FEL widgets and catalogs) - IMDb-only items are looked up on TMDb. v4.12.47: AF3 50.12.14: Default OSD keeps the Pill style (pills now opt-in upstream). v4.12.42: Notifications (Najd) no longer cover the Lucent time row; Search All gives AIOStreams the film's own plot and art for the player. v4.12.41: Lucent Player bars show chapter, cut (EDL) and scene markers. v4.12.40: Najd Smart Subtitles can be removed, or left uninstalled, from AB Tools (Mods > Najd).</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>

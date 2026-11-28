@@ -1,3 +1,9 @@
+v4.12.63  (2026-11-28)
+- The YouTube add-on (plugin.video.youtube) is now a required add-on of AB
+  Tools: Kodi installs it together with AB Tools, from repository.taiseer
+  (pinned there by the origin fix; the Add-on Portal also takes it from
+  repository.taiseer now instead of repository.redwizard).
+
 v4.12.62  (2026-11-28)
 - AF3 Auto Trailers: NewPipe removed. Sources are now the YouTube add-on
   (default) or IMDb; a saved NewPipe choice moves to YouTube. addon.xml
