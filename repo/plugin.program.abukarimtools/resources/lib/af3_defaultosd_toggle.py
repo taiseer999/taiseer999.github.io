@@ -35,6 +35,7 @@ SKIN_ID = 'skin.arctic.fuse.3'
 SETTING = 'abk.defaultosd'
 PLAIN = 'InfoTags.DisableTags'
 PILLS = 'InfoTags.EnablePills'      # 4.12.47: AF3 50.12.14 / upstream 3.5.11 - pills are opt-in
+STYLE = 'InfoTags.Style'            # 4.12.66: AF3 55.12.29 / upstream 3.5.12 - Pill / Text / (empty) Flag
 TITLE = 'ABUKARIM TOOLS'
 MARK = 'name="Exp_ABK_DefaultOSD_Tags"'
 TWOROW = 'InfoBar.TwoRow'
@@ -111,12 +112,49 @@ def pills_migrate():
     _save(state)
 
 
+def _style_skin():
+    """True when the installed AF3 reads the InfoTags.Style string (55.12.29+)."""
+    try:
+        path = os.path.join(xbmcvfs.translatePath('special://home/addons/%s/' % SKIN_ID),
+                            '1080i', 'Includes_Expressions.xml')
+        with open(path, 'r', encoding='utf-8') as f:
+            return 'Skin.String(InfoTags.Style,Pill)' in f.read()
+    except Exception:
+        return False
+
+
+def style_migrate():
+    """4.12.66 (once): upstream 3.5.12 replaced the InfoTags.EnablePills bool
+    with the InfoTags.Style string, whose empty default is the new colour-flag
+    style. Keep each box's look: EnablePills on -> Pill, off -> Text (the pill
+    badges and plain labels it showed). Flag stays one click away in Skin
+    settings > Information. Waits for AF3 55.12.29 to be the running skin."""
+    state = _load()
+    if state.get('style_migrated') or xbmc.getSkinDir() != SKIN_ID or not _style_skin():
+        return
+    if not xbmc.getInfoLabel('Skin.String(%s)' % STYLE):
+        style = 'Pill' if xbmc.getCondVisibility('Skin.HasSetting(%s)' % PILLS) else 'Text'
+        xbmc.executebuiltin('Skin.SetString(%s,%s)' % (STYLE, style))
+        _log('info line style kept: %s = %s (upstream 3.5.12 setting)' % (STYLE, style))
+        state['style_reload'] = True
+    state['style_migrated'] = True
+    _save(state)
+    if state.pop('style_reload', False):
+        _save(state)
+        try:
+            from resources.lib.settings_engine import safe_reload_skin   # include conditions read at load
+            safe_reload_skin()
+        except Exception as e:
+            _log('reload after the style migration failed: %s' % e, xbmc.LOGWARNING)
+
+
 def set_on(on):
     state = _load()
     if on:
         xbmc.executebuiltin('Skin.SetBool(%s)' % SETTING)
         xbmc.executebuiltin('Skin.Reset(%s)' % PLAIN)
         xbmc.executebuiltin('Skin.SetBool(%s)' % PILLS)
+        xbmc.executebuiltin('Skin.SetString(%s,Pill)' % STYLE)    # 4.12.66: AF3 55.12.29+
         if _tworow_on():                       # one row, like upstream
             xbmc.executebuiltin('Skin.Reset(%s)' % TWOROW)
             state['tworow_cleared'] = True

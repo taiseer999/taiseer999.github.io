@@ -5075,9 +5075,14 @@ PATCHES += [
                 '            <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_OSDBtn_Width_Small</include>\n'
                 '            <include condition="!Skin.HasSetting(abk.lucent)">ABK_Lucent_OSDBtn_Width_Stock</include>'),
         'already_patched_check': '<!-- ABK_LUCENT_OSDBTN fake -->',
-        'fallback_pattern': (r'[ \t]*<include name="OSD_CustomDialog_FakeButton">\s*'
-                             r'<control type="button" id="600\$PARAM\[id\]">\s*<width>80</width>'),
-        'fallback_repl': None,          # = 'new' (set below the list)
+        # 4.12.66: AF3 3.5.12 gave the include params and a <definition>, kept by \1
+        'fallback_pattern': (r'([ \t]*<include name="OSD_CustomDialog_FakeButton">'
+                             r'(?:\s*<param name="\w+">[^<]*</param>)*(?:\s*<definition>)?'
+                             r'\s*<control type="button" id="600\$PARAM\[id\]">)\s*<width>80</width>'),
+        'fallback_repl': ('\\1\n'
+                          '            <!-- ABK_LUCENT_OSDBTN fake -->\n'
+                          '            <include condition="Skin.HasSetting(abk.lucent)">ABK_Lucent_OSDBtn_Width_Small</include>\n'
+                          '            <include condition="!Skin.HasSetting(abk.lucent)">ABK_Lucent_OSDBtn_Width_Stock</include>'),
         'description': 'AF3 Lucent Look - OSD pop-ups: placeholder buttons follow the size',
     },
     {   # the Lucent Player Statistics slot in the pop-ups follows too

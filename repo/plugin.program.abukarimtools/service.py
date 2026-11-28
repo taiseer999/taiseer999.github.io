@@ -1502,6 +1502,7 @@ def main():
     try:
         from resources.lib import af3_defaultosd_toggle
         af3_defaultosd_toggle.pills_migrate()
+        af3_defaultosd_toggle.style_migrate()
     except Exception:
         _log('Default OSD pills migration failed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
