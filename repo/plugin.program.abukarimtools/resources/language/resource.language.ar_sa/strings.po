@@ -740,10 +740,6 @@ msgctxt "#30449"
 msgid "Source: %s"
 msgstr "المصدر: %s"
 
-msgctxt "#30450"
-msgid "NewPipe (YouTube)"
-msgstr "NewPipe (يوتيوب)"
-
 msgctxt "#30451"
 msgid "IMDb"
 msgstr "IMDb"
@@ -752,13 +748,17 @@ msgctxt "#30452"
 msgid "Where trailers come from"
 msgstr "مصدر التريلرات"
 
-msgctxt "#30453"
-msgid "NewPipe (plugin.video.newpipe) is not installed or is disabled - trailers come from IMDb until it is."
-msgstr "إضافة NewPipe (plugin.video.newpipe) غير مثبّتة أو معطّلة - ستأتي التريلرات من IMDb إلى أن تُثبَّت."
-
 msgctxt "#30454"
 msgid "Inside the artwork (smooth)"
 msgstr "داخل صورة الخلفية (سلس)"
+
+msgctxt "#30455"
+msgid "YouTube (plugin.video.youtube)"
+msgstr "YouTube (إضافة يوتيوب)"
+
+msgctxt "#30456"
+msgid "The YouTube add-on (plugin.video.youtube) is not installed or is disabled - trailers come from IMDb until it is."
+msgstr "إضافة YouTube (plugin.video.youtube) غير مثبّتة أو معطّلة - ستأتي التريلرات من IMDb إلى أن تُثبَّت."
 
 msgctxt "#30530"
 msgid "Replace the current settings and menus of %s with the Piers profile?[CR](Your current files are backed up first.)"
@@ -3695,3 +3695,4 @@ msgstr "بكسل"
 msgctxt "#32392"
 msgid "Retro pixel-art blocks"
 msgstr "مكعبات بكسل بطابع الألعاب القديمة"
+

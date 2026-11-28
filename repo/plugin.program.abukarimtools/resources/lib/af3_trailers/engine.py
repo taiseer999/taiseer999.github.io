@@ -71,7 +71,7 @@ import xbmc
 import xbmcgui
 import xbmcvfs
 
-from resources.lib.af3_trailers import config, imdb, newpipe
+from resources.lib.af3_trailers import config, imdb, youtube
 
 HOME_ID = 10000
 PROP = 'abk.trailer'
@@ -89,7 +89,11 @@ TMDBH_ID = 'plugin.video.themoviedb.helper'
 MARKER = os.path.join(config.PROFILE, 'muted_by_trailer')
 
 START_TIMEOUT = 12.0
-START_TIMEOUT_NEWPIPE = 25.0   # NewPipe resolves the YouTube stream first
+START_TIMEOUT_PLUGIN = 25.0   # the YouTube add-on resolves the stream first
+# 4.12.62: a YouTube trailer that is not opening this long after the request,
+# with no busy spinner and nothing in the player, was refused by YouTube
+# (8.x bot check: no stream, setResolvedUrl(False)) - IMDb takes over
+PLUGIN_FAIL_GRACE = 6.0
 MISS_GRACE = 1.0        # seconds without our title (no dialog open) before stopping
 MISS_GRACE_MAX = 15.0   # ... and with a dialog/busy spinner open
 PREFETCH_AFTER = 0.3
@@ -305,7 +309,7 @@ class Engine(object):
         self.token = 0                 # bumped by every start/stop (busy guard)
         # 3.2.49: the file of the parked trailer a new one is replacing (only
         # while it opens). 3.2.48 remembered every recent trailer instead, and
-        # NewPipe resolves a title to the SAME local address each time, so a
+        # the plug-in resolved a title to the SAME local address each time, so a
         # title played earlier was taken for "an old trailer" and its own new
         # trailer was let go as real playback (never went full screen).
         self.replacing = ''
@@ -315,6 +319,8 @@ class Engine(object):
         self.orphan = None
         self.source = None
         self._label = ''
+        self._vid = ''
+        self.yt_failed = set()         # 4.12.62: keys YouTube gave no stream for
 
     # ------------------------------------------------------------- helpers
     def _resolver(self, quality):
@@ -337,13 +343,13 @@ class Engine(object):
             return False
         if current == self.url:
             return True
-        # a plugin trailer (NewPipe) plays under its RESOLVED path: the first
+        # a plugin trailer (YouTube) plays under its RESOLVED path: the first
         # file that shows up while ours is opening is ours (nothing else was
         # playing when it started - _start is only reached without media)
         if self.via_plugin and self.url.startswith('plugin://'):
             # never adopt the parked trailer this one is replacing
             if self.state == 'starting' and not self._stale(current):
-                _log('trailer resolved by NewPipe: %s' % current[:120])
+                _log('trailer resolved by its plug-in: %s' % current[:120])
                 self.url = current
                 return True
             return False
@@ -407,7 +413,7 @@ class Engine(object):
                   % (dbtype, label))
             return None
         trailer = _info('ListItem.Trailer')
-        if not newpipe.youtube_id(trailer):
+        if not youtube.youtube_id(trailer):
             tlabel = _info('Window(Home).Property(TMDbHelper.ListItem.Label)')
             if tlabel and tlabel == label:
                 trailer = _info('Window(Home).Property(TMDbHelper.ListItem.Trailer)')
@@ -436,26 +442,28 @@ class Engine(object):
 
         def work():
             try:
-                # 3.2.43~beta1 TEST: YouTube trailer through NewPipe first
-                if source == 'newpipe':
-                    if newpipe.installed():
-                        vid = newpipe.youtube_id(item.get('trailer'))
-                        how = 'trailer link'
-                        if not vid:
-                            vid = newpipe.tmdb_youtube_id(_tmdb_key(), item['tmdb'],
-                                                          item['dbtype'], item['imdb'], log=_log)
-                            how = 'TMDb'
+                # 4.12.61: YouTube trailer through the YouTube add-on first
+                # (4.12.62: NewPipe removed); 4.12.62: a title YouTube
+                # already refused this session goes straight to IMDb
+                if source == 'youtube' and key in self.yt_failed:
+                    _log('lookup "%s" (%s): YouTube refused it earlier - IMDb'
+                         % (item['label'], key))
+                elif source == 'youtube':
+                    if youtube.installed():
+                        vid, how = youtube.find_id(item.get('trailer'), _tmdb_key(), item['tmdb'],
+                                                   item['dbtype'], item['imdb'], log=_log)
                         if vid:
-                            job['stream'] = {'url': newpipe.plugin_url(vid, item['label']),
-                                             'source': 'newpipe', 'height': 'YouTube'}
-                            _log('lookup "%s" (%s): NewPipe trailer %s (from %s)'
-                                 % (item['label'], item['key'], vid, how))
+                            job['stream'] = {'url': youtube.plugin_url(vid, item['label']),
+                                             'source': youtube.ADDON_ID, 'height': 'YouTube',
+                                             'vid': vid}
+                            _log('lookup "%s" (%s): YouTube trailer %s (from %s)'
+                                 % (item['label'], key, vid, how))
                             return
                         _log('lookup "%s" (%s): no YouTube trailer - trying IMDb'
-                             % (item['label'], item['key']))
+                             % (item['label'], key))
                     else:
-                        _diag('newpipe-missing', 'trailer source is NewPipe but '
-                              'plugin.video.newpipe is not installed/enabled - using IMDb')
+                        _diag('yt-missing', 'trailer source is YouTube but '
+                              'plugin.video.youtube is not installed/enabled - using IMDb')
                 imdb_id = item['imdb'] or _imdb_for_tmdb(item['tmdb'], item['dbtype'])
                 if imdb_id:
                     job['stream'] = resolver.resolve(imdb_id, timeout=8.0)
@@ -521,7 +529,7 @@ class Engine(object):
         self.revealed = False
         self.shown_at = 0.0
         self.opening_until = 0.0
-        # the parked trailer's file, as Kodi plays it (a NewPipe trailer plays
+        # the parked trailer's file, as Kodi plays it (a YouTube trailer plays
         # under its resolved address, which self.url already holds)
         self.replacing = (self._playing_file() or self.url) if replacing else ''
         if self.art_mode:
@@ -534,7 +542,7 @@ class Engine(object):
         li = xbmcgui.ListItem(label=item['label'] or 'Trailer', path=url)
         self.via_plugin = url.startswith('plugin://')
         if self.via_plugin:
-            # NewPipe resolves it (setResolvedUrl); the playing file becomes the
+            # YouTube resolves it (setResolvedUrl); the playing file becomes the
             # resolved stream, which _ours() adopts on first sight
             li.setProperty('IsPlayable', 'true')
         else:
@@ -554,6 +562,7 @@ class Engine(object):
         self.url = url
         self.key = item['key']
         self._label = item['label'] or 'Trailer'
+        self._vid = stream.get('vid') or ''   # 4.12.61: YouTube add-on retitles its stream
         self.state = 'starting'
         self.started = time.monotonic()
         try:
@@ -582,10 +591,10 @@ class Engine(object):
         keeps it until the first frame: it swallows the remote and draws a
         spinner over the page. Close it as soon as it shows - only the
         spinner goes, the trailer keeps loading (Dex Hub does the same).
-        A NewPipe trailer is left alone while NewPipe still resolves it
+        A YouTube trailer is left alone while YouTube still resolves it
         (Back there would cancel the resolve)."""
         def guard():
-            deadline = time.monotonic() + (START_TIMEOUT_NEWPIPE if self.via_plugin else START_TIMEOUT)
+            deadline = time.monotonic() + (START_TIMEOUT_PLUGIN if self.via_plugin else START_TIMEOUT)
             while time.monotonic() < deadline and not self.monitor.abortRequested():
                 if token != self.token or self.state != 'starting':
                     return
@@ -678,6 +687,17 @@ class Engine(object):
         xbmc.executebuiltin('ActivateWindow(fullscreenvideo)')
         _log('trailer -> full screen: %s' % self.key)
 
+    def _youtube_failed(self, why):
+        """4.12.62: YouTube did not play this title's trailer - stop waiting
+        for it and let the next tick play the IMDb one (same title, no new
+        delay). The title is remembered for the session."""
+        key = self.key
+        _log('YouTube %s for %s - falling back to IMDb' % (why, key))
+        self.yt_failed.add(key)
+        self.lookups.pop(key, None)
+        self._stop()
+        self.done_key = ''
+
     def _release(self):
         """Forget the trailer without touching the player."""
         self.token += 1
@@ -707,9 +727,10 @@ class Engine(object):
                 time.sleep(0.05)
             current = self._playing_file()
             if self.via_plugin and self.state == 'starting' and (not current or self._stale(current)):
-                # NewPipe may still be resolving: if its stream opens later,
+                # YouTube may still be resolving: if its stream opens later,
                 # tick() stops it (matched by title + YouTube/local proxy URL)
-                self.orphan = (self._label, time.monotonic() + START_TIMEOUT_NEWPIPE)
+                self.orphan = (self._label, time.monotonic() + START_TIMEOUT_PLUGIN,
+                               self._vid)
             # 3.2.48: a parked trailer still in the player (the new one never
             # opened) is ours too
             if current and (self._ours(current) or self._stale(current)):
@@ -812,7 +833,12 @@ class Engine(object):
                         self._go_fullscreen()
                     if played > 0.3:
                         self._shown(now)
-                elif now - self.started > (START_TIMEOUT_NEWPIPE if self.via_plugin
+                elif (self.via_plugin and now - self.started > PLUGIN_FAIL_GRACE
+                      and not _cond(_BUSY + ' | Player.HasMedia')):
+                    self._youtube_failed('gave no stream')
+                elif self.via_plugin and now - self.started > START_TIMEOUT_PLUGIN:
+                    self._youtube_failed('did not open in time')
+                elif now - self.started > (START_TIMEOUT_PLUGIN if self.via_plugin
                                            else START_TIMEOUT):
                     _log('trailer did not open in time: %s' % self.key)
                     try:
@@ -973,11 +999,12 @@ class Engine(object):
         return None                 # still opening windowed: the normal checks apply
 
     def _kill_orphan(self, now):
-        """Stop a NewPipe trailer that opened after we had given up on it."""
+        """Stop a YouTube trailer that opened after we had given up on it."""
         orphan = getattr(self, 'orphan', None)
         if not orphan:
             return
-        label, deadline = orphan
+        label, deadline = orphan[0], orphan[1]
+        vid = orphan[2] if len(orphan) > 2 else ''
         if now > deadline:
             self.orphan = None
             return
@@ -988,10 +1015,13 @@ class Engine(object):
             return
         self.orphan = None
         low = current.lower()
+        # NewPipe keeps our title; the YouTube add-on (8.x) puts the video's
+        # own title on it but serves /mpd/<id>.mpd, so match the id there
         late = (('127.0.0.1' in low or 'localhost' in low or 'googlevideo' in low)
-                and _info('VideoPlayer.Title') == label)
+                and (_info('VideoPlayer.Title') == label
+                     or (vid and vid.lower() in low)))
         if late:
-            _log('late NewPipe trailer stopped: %s' % label)
+            _log('late YouTube trailer stopped: %s' % label)
             try:
                 self.player.stop()
             except Exception:

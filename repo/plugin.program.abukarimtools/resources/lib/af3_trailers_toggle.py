@@ -80,7 +80,35 @@ def _show_label(value):
 
 
 def _slabel(value):
-    return T(30450) if value == 'newpipe' else T(30451)
+    return T(30455) if value == 'youtube' else T(30451)
+
+
+YOUTUBE_ID = 'plugin.video.youtube'
+
+
+def _youtube_ready():
+    return bool(xbmc.getCondVisibility('System.HasAddon(%s) + System.AddonIsEnabled(%s)'
+                                       % (YOUTUBE_ID, YOUTUBE_ID)))
+
+
+def _ensure_youtube():
+    """4.12.61: YouTube picked as the trailer source - enable it, or install it
+    the way the Add-on Portal does (its pinned repository first)."""
+    if _youtube_ready():
+        return True
+    try:
+        from resources.lib import addon_portal as ap
+        if xbmc.getCondVisibility('System.HasAddon(%s)' % YOUTUBE_ID):
+            _log('%s present but disabled - enabling' % YOUTUBE_ID)
+            ap._enable(YOUTUBE_ID)
+        else:
+            entry = [(e[0], e[1], e[2]) for e in ap._catalog() if e[0] == YOUTUBE_ID]
+            entry = entry or [(YOUTUBE_ID, 'YouTube', 'repository.redwizard')]
+            _log('%s missing - installing it from %s' % (YOUTUBE_ID, entry[0][2]))
+            ap._install_selection(entry[:1])
+    except Exception as exc:
+        _log('YouTube install failed: %s' % exc)
+    return _youtube_ready()
 
 
 def _pick(heading, values, current, fmt):
@@ -155,8 +183,8 @@ def _run():
             # 3.2.48: in the artwork (default) / behind the page / full screen
             xbmcgui.ListItem(T(30445) % _show_label(cfg.get('show', 'artwork')),
                              offscreen=True),
-            # 3.2.43~beta1 TEST: where trailers come from
-            xbmcgui.ListItem(T(30449) % _slabel(cfg.get('source', 'newpipe')), offscreen=True),
+            # where trailers come from (4.12.62: YouTube or IMDb)
+            xbmcgui.ListItem(T(30449) % _slabel(cfg.get('source', 'youtube')), offscreen=True),
         ]
         ic = os.path.join(ADDON.getAddonInfo('path'), 'resources', 'icons', 'af3_trailers.png')
         for li in items[2:]:
@@ -202,21 +230,13 @@ def _run():
                   and xbmc.getCondVisibility('Skin.HasSetting(Background.DisableVideo)')):
                 DIALOG.ok(ADDON_NAME, T(30442))
         elif choice == 5:
-            cfg['source'] = _pick(T(30452), list(config.SOURCES), cfg.get('source', 'newpipe'),
+            cfg['source'] = _pick(T(30452), list(config.SOURCES), cfg.get('source', 'youtube'),
                                   _slabel)
             config.save(cfg)
             _log('trailers source: %s' % cfg['source'])
-            if cfg['source'] == 'newpipe':
-                # 4.8.78: install it now - repository.twilight0 first, then NewPipe
-                from resources.lib import newpipe_setup
-                if not newpipe_setup.ready():
-                    xbmc.executebuiltin('ActivateWindow(busydialognocancel)')
-                    try:
-                        newpipe_setup.ensure()
-                    finally:
-                        xbmc.executebuiltin('Dialog.Close(busydialognocancel,true)')
-                if not newpipe_setup.ready():
-                    DIALOG.ok(ADDON_NAME, T(30453))
+            if cfg['source'] == 'youtube':
+                if not _ensure_youtube():
+                    DIALOG.ok(ADDON_NAME, T(30456))
             if (cfg.get('show') == 'background' and xbmc.getSkinDir() == SKIN_ID
                     and xbmc.getCondVisibility('Skin.HasSetting(Background.DisableVideo)')):
                 DIALOG.ok(ADDON_NAME, T(30442))

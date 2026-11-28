@@ -19,7 +19,7 @@ CACHE_DIR = os.path.join(PROFILE, 'trailers')
 
 DELAYS = (1, 2, 3, 5, 8, 10)
 QUALITIES = (720, 1080, 2160)
-SOURCES = ('newpipe', 'imdb')   # 3.2.43~beta1 TEST: NewPipe (YouTube) or IMDb
+SOURCES = ('youtube', 'imdb')   # 4.12.62: the YouTube add-on (NewPipe removed) or IMDb
 # 3.2.48: how a trailer is shown. 'artwork' = Dex Hub's way (inside AF3's
 # artwork frame, faded in once it plays, parked between titles) - the default;
 # 'background' = behind the whole page (AF3's background video);
@@ -37,7 +37,7 @@ DEFAULTS = {
     'quality': 720,     # highest MP4 height picked from IMDb
     'show': 'artwork',  # 3.2.48 (see SHOWS)
     'fullscreen': False, # derived from 'show' (kept for older callers)
-    'source': 'newpipe', # 3.2.43~beta1 TEST: YouTube via NewPipe, IMDb as fallback
+    'source': 'youtube', # 4.12.62: YouTube add-on, IMDb as fallback
 }
 
 _cache = {'mtime': None, 'cfg': dict(DEFAULTS)}
@@ -61,6 +61,8 @@ def _clean(data):
         except Exception:
             pass
         source = data.get('source', cfg['source'])
+        if source == 'newpipe':     # 4.12.62: NewPipe removed - its users move to YouTube
+            source = 'youtube'
         cfg['source'] = source if source in SOURCES else DEFAULTS['source']
         try:
             quality = int(data.get('quality', cfg['quality']))

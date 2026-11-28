@@ -335,12 +335,13 @@ STRINGS = {
     30447: ("Behind the page", "خلف الصفحة"),
     30448: ("How trailers are shown", "طريقة عرض التريلر"),
     30449: ("Source: %s",                      "المصدر: %s"),
-    30450: ("NewPipe (YouTube)",               "NewPipe (يوتيوب)"),
     30451: ("IMDb",                            "IMDb"),
     30452: ("Where trailers come from",        "مصدر التريلرات"),
-    30453: ("NewPipe (plugin.video.newpipe) is not installed or is disabled - trailers come from IMDb until it is.",
-            "إضافة NewPipe (plugin.video.newpipe) غير مثبّتة أو معطّلة - ستأتي التريلرات من IMDb إلى أن تُثبَّت."),
     30454: ("Inside the artwork (smooth)",     "داخل صورة الخلفية (سلس)"),
+    # 4.12.61: YouTube add-on as a trailer source
+    30455: ("YouTube (plugin.video.youtube)",  "YouTube (إضافة يوتيوب)"),
+    30456: ("The YouTube add-on (plugin.video.youtube) is not installed or is disabled - trailers come from IMDb until it is.",
+            "إضافة YouTube (plugin.video.youtube) غير مثبّتة أو معطّلة - ستأتي التريلرات من IMDb إلى أن تُثبَّت."),
     # ---- 3.2: profiles / tuning / remote access / log share / bootstrap (30530-30599) ----
     30530: ("Replace the current settings and menus of %s with the Piers profile?[CR](Your current files are backed up first.)",
             "استبدال إعدادات وقوائم %s الحالية بملف بيرز الجاهز؟[CR](يتم حفظ نسخة احتياطية من ملفاتك أولاً.)"),

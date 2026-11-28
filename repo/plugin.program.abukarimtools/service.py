@@ -1515,16 +1515,8 @@ def main():
         _log('Flag style check failed to start (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
-    # 4.8.78: NewPipe (AF3 Auto Trailers) is no longer a hard import - install
-    # repository.twilight0 FIRST, then plugin.video.newpipe from it, when it
-    # is missing. Background thread, delayed, waits out first-run and
-    # playback. Fenced.
-    try:
-        from resources.lib import newpipe_setup
-        newpipe_setup.start_boot_ensure(monitor)
-    except Exception:
-        _log('NewPipe check failed to start (ignored):\n%s'
-             % traceback.format_exc(), xbmc.LOGERROR)
+    # 4.12.62: NewPipe removed (AF3 Auto Trailers use the YouTube add-on) -
+    # no more boot install of repository.twilight0 / plugin.video.newpipe.
 
     # 3.3.2: AF3 Subtitle Buttons - make sure script.subtitle.cycler is
     # installed (repository.taiseer) so its OSD button works. Background

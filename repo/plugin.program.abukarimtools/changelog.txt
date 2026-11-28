@@ -1,3 +1,22 @@
+v4.12.62  (2026-11-28)
+- AF3 Auto Trailers: NewPipe removed. Sources are now the YouTube add-on
+  (default) or IMDb; a saved NewPipe choice moves to YouTube. addon.xml
+  imports plugin.video.youtube (optional) instead of plugin.video.newpipe,
+  and AB Tools no longer installs repository.twilight0 / NewPipe at boot.
+- When YouTube refuses a trailer (YouTube 8 "Sign in to confirm you're not a
+  bot" - no stream), the IMDb trailer of the same title plays instead: in the
+  auto-trailers (after ~6 s with no stream; the title skips YouTube for the
+  rest of the session) and on the AF3 Trailer button, AF3's own YouTube link
+  included.
+
+v4.12.61  (2026-11-28)
+- AF3 Auto Trailers: new trailer source "YouTube (plugin.video.youtube)" next
+  to NewPipe and IMDb (Toggles > AF3 Auto Trailers > Source). The title's
+  YouTube trailer (item link, else TMDb) plays through the YouTube add-on;
+  works with 7.x and 8.x (TV layout). Picking it installs/enables the add-on
+  (Add-on Portal repo). If the chosen YouTube player is missing the other one
+  is used, then IMDb. The AF3 Trailer button follows the same order.
+
 v4.12.58  (2026-11-28)
 - AF3 Subtitle Look button: the panel opens at once when the button gets
   focus (no one-second wait); buttons patched by 4.12.55-57 are updated.

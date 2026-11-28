@@ -12,8 +12,10 @@ working YouTube add-on. The patcher points the dialog at this script instead,
 so the button plays the trailer the way the auto-trailers do:
 
   * the source set in Toggles > AF3 auto-trailers comes first
-    (NewPipe = the title's YouTube trailer through plugin.video.newpipe,
+    (YouTube = the title's YouTube trailer through plugin.video.youtube,
      IMDb = IMDb's own MP4 at the chosen quality), the other one second;
+  * 4.12.62: when YouTube refuses the video (8.x "confirm you're not a bot")
+    nothing opens - IMDb plays instead, AF3's own YouTube link included;
   * the original link is the last resort, exactly as before.
 
 The trailer plays windowed inside AF3's dialog, with sound, and carries no ids
@@ -32,7 +34,7 @@ ROOT = xbmcvfs.translatePath('special://home/addons/plugin.program.abukarimtools
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
-from resources.lib.af3_trailers import config, imdb, newpipe  # noqa: E402
+from resources.lib.af3_trailers import config, imdb, youtube  # noqa: E402
 
 HOME = xbmcgui.Window(10000)
 DIALOG_ID = 1123
@@ -95,7 +97,7 @@ def _still_wanted(token):
 def _play(url, title, mime=None):
     li = xbmcgui.ListItem(label=title or 'Trailer', path=url, offscreen=True)
     if url.startswith('plugin://'):
-        li.setProperty('IsPlayable', 'true')     # NewPipe answers with setResolvedUrl
+        li.setProperty('IsPlayable', 'true')     # YouTube answers with setResolvedUrl
     else:
         try:
             li.setMimeType(mime or 'video/mp4')
@@ -111,20 +113,82 @@ def _play(url, title, mime=None):
     xbmc.Player().play(url, li, windowed=True)
 
 
-def _from_newpipe(link, imdb_id, tmdb_id, dbtype, title):
-    if not newpipe.installed():
-        _log('NewPipe is not installed/enabled - skipped')
+def _from_youtube(link, imdb_id, tmdb_id, dbtype, title):
+    """The title's YouTube trailer through the YouTube add-on (4.12.61;
+    NewPipe removed in 4.12.62)."""
+    if not youtube.installed():
+        _log('the YouTube add-on is not installed/enabled - skipped')
         return None
-    vid = newpipe.youtube_id(link)
-    how = 'trailer link'
-    if not vid and (tmdb_id or imdb_id):
+    api_key = ''
+    if not youtube.youtube_id(link) and (tmdb_id or imdb_id):
         from resources.lib.af3_trailers import engine
-        vid = newpipe.tmdb_youtube_id(engine._tmdb_key(), tmdb_id, dbtype, imdb_id, log=_log)
-        how = 'TMDb'
+        api_key = engine._tmdb_key()
+    vid, how = youtube.find_id(link, api_key, tmdb_id, dbtype, imdb_id, log=_log)
     if not vid:
         return None
-    _log('"%s": NewPipe trailer %s (from %s)' % (title, vid, how))
-    return {'url': newpipe.plugin_url(vid, title), 'mime': None}
+    _log('"%s": YouTube trailer %s (from %s)' % (title, vid, how))
+    return {'url': youtube.plugin_url(vid, title), 'mime': None}
+
+
+FAIL_GRACE = 6.0      # no stream, no spinner, nothing playing: YouTube refused it
+OPEN_TIMEOUT = 25.0
+
+
+def _playing_video():
+    try:
+        player = xbmc.Player()
+        return player.getPlayingFile() if player.isPlayingVideo() else ''
+    except Exception:
+        return ''
+
+
+def _opened(token, before):
+    """4.12.62: after a YouTube play request - True once a new video plays,
+    False when YouTube gave no stream (8.x bot check), None when the dialog
+    closed or a newer press took over."""
+    monitor = xbmc.Monitor()
+    started = time.monotonic()
+    while not monitor.abortRequested():
+        current = _playing_video()
+        if current and current != before:
+            return True
+        if not _still_wanted(token):
+            return None
+        waited = time.monotonic() - started
+        if waited > OPEN_TIMEOUT:
+            return False
+        if (waited > FAIL_GRACE and not current
+                and not xbmc.getCondVisibility('Window.IsActive(busydialog) | '
+                                               'Window.IsActive(busydialognocancel) | '
+                                               'Player.HasMedia')):
+            return False
+        if monitor.waitForAbort(0.25):
+            return None
+    return None
+
+
+def _play_youtube(url, title, token, fallback, as_link=False):
+    """Play a YouTube trailer; when YouTube refuses it, ``fallback()`` gives
+    the IMDb one ({'url','mime'} or None), which plays instead. ``as_link``:
+    AF3's own trailer link, played with PlayMedia as AF3 does."""
+    before = _playing_video()
+    if as_link:
+        xbmc.executebuiltin('PlayMedia("%s",False,1)' % url.replace('"', '\\"'))
+    else:
+        _play(url, title)
+    result = _opened(token, before)
+    if result is not False:
+        return result
+    _log('"%s": YouTube gave no stream - trying IMDb' % title)
+    found = fallback()
+    if found and _still_wanted(token):
+        _play(found['url'], title, found.get('mime'))
+        return True
+    if _still_wanted(token):
+        from resources.lib.i18n import T
+        xbmcgui.Dialog().notification(title, T(30649), xbmcgui.NOTIFICATION_INFO, 3000)
+        xbmc.executebuiltin('Dialog.Close(%d)' % DIALOG_ID)
+    return False
 
 
 def _from_imdb(imdb_id, tmdb_id, dbtype, title, quality):
@@ -156,25 +220,45 @@ def run():
     token = '%.6f' % time.time()
     HOME.setProperty(TOKEN_PROP, token)
     cfg = config.load()
+    quality = cfg.get('quality', 720)
+    imdb_box = {}
+
+    def imdb_fallback():
+        if 'ids' not in imdb_box:
+            imdb_box['ids'] = _ids()
+        i_imdb, i_tmdb, i_type = imdb_box['ids']
+        try:
+            return _from_imdb(i_imdb, i_tmdb, i_type, title, quality)
+        except Exception as exc:
+            _log('imdb lookup failed: %s' % exc, xbmc.LOGWARNING)
+            return None
+
     # 3.2.52: only in the "Trailer button only" mode of AF3 Auto Trailers;
     # in the other modes (or with Auto Trailers off) the button plays AF3's
-    # own link exactly as before - and with no link at all (3.4.15) it
-    # falls through to the NewPipe/IMDb search below rather than doing nothing
+    # own link as before - and with no link at all (3.4.15) it falls through
+    # to the YouTube/IMDb search below rather than doing nothing.
+    # 4.12.62: AF3's link is YouTube's - when YouTube refuses it, IMDb plays.
     if not (cfg.get('enabled') and cfg.get('show') == 'buttons') and link:
+        if youtube.is_youtube_link(link) and youtube.installed():
+            _log('"%s": Trailer-button mode is off - AF3 link, IMDb if YouTube refuses it'
+                 % title)
+            _play_youtube(link, title, token, imdb_fallback, as_link=True)
+            return
         _log('"%s": Trailer-button mode is off - AF3 link as is' % title)
         xbmc.executebuiltin('PlayMedia("%s",False,1)' % link.replace('"', '\\"'))
         return
     imdb_id, tmdb_id, dbtype = _ids()
+    imdb_box['ids'] = (imdb_id, tmdb_id, dbtype)
     _log('button: "%s" link=%s imdb=%s tmdb=%s (%s) source=%s'
          % (title, link[:120], imdb_id or '-', tmdb_id or '-', dbtype, cfg.get('source')))
 
-    order = ('imdb', 'newpipe') if cfg.get('source') == 'imdb' else ('newpipe', 'imdb')
+    order = ('imdb', 'youtube') if cfg.get('source') == 'imdb' else ('youtube', 'imdb')
     for source in order:
         try:
-            if source == 'newpipe':
-                found = _from_newpipe(link, imdb_id, tmdb_id, dbtype, title)
+            if source == 'youtube':
+                found = _from_youtube(link, imdb_id, tmdb_id, dbtype, title)
             else:
-                found = _from_imdb(imdb_id, tmdb_id, dbtype, title, cfg.get('quality', 720))
+                found = _from_imdb(imdb_id, tmdb_id, dbtype, title, quality)
         except Exception as exc:
             _log('%s lookup failed: %s' % (source, exc), xbmc.LOGWARNING)
             found = None
@@ -182,14 +266,17 @@ def run():
             _log('dialog closed (or a newer press) - nothing played')
             return
         if found:
-            _play(found['url'], title, found.get('mime'))
+            if source == 'youtube':
+                fallback = imdb_fallback if 'imdb' not in order[:order.index(source)] \
+                    else (lambda: None)
+                _play_youtube(found['url'], title, token, fallback)
+            else:
+                _play(found['url'], title, found.get('mime'))
             return
 
-    youtube_dead = (link.startswith('plugin://plugin.video.youtube')
-                    and not xbmc.getCondVisibility('System.HasAddon(plugin.video.youtube) + '
-                                                   'System.AddonIsEnabled(plugin.video.youtube)'))
+    youtube_dead = youtube.is_youtube_link(link) and not youtube.installed()
     if link and not youtube_dead:
-        _log('no trailer from NewPipe/IMDb - playing the original link')
+        _log('no trailer from YouTube/IMDb - playing the original link')
         xbmc.executebuiltin('PlayMedia("%s",False,1)' % link.replace('"', '\\"'))
     else:
         from resources.lib.i18n import T

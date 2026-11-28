@@ -1792,7 +1792,7 @@ PATCHES = [
     # The info page's Trailer button, the context menu's Trailer entry and the
     # trailer lists all open AF3's trailer dialog (1123), which PlayMedia()'d
     # TMDbHelper's plugin.video.youtube link - dead without a working YouTube
-    # add-on. The dialog now runs trailer_play.py: NewPipe / IMDb in the order
+    # add-on. The dialog now runs trailer_play.py: YouTube / IMDb in the order
     # set in Toggles, the original link last. Always on (it does not depend on
     # the auto-trailers switch).
     {
@@ -1806,7 +1806,7 @@ PATCHES = [
         'fallback_pattern': r'">\s*PlayMedia\(\$ESCINFO\[Window\(Home\)\.Property\(PlayTrailer\)\][^<]*\)\s*</onload>',
         'fallback_repl': ('">RunPlugin(plugin://plugin.program.abukarimtools/?run=trailer_play)</onload>'
                           '  <!-- ABUKARIM: trailer button -->'),
-        'description': 'AF3 trailer dialog - play through NewPipe/IMDb (auto-trailer sources)',
+        'description': 'AF3 trailer dialog - play through YouTube/IMDb (auto-trailer sources)',
     },
     {   # the dialog's Repeat button replays the same way
         'addon_id': 'skin.arctic.fuse.3',
@@ -1819,7 +1819,7 @@ PATCHES = [
         'fallback_pattern': r'<onclick>\s*PlayMedia\(\$ESCINFO\[Window\(Home\)\.Property\(PlayTrailer\)\][^<]*\)\s*</onclick>',
         'fallback_repl': ('<onclick>RunPlugin(plugin://plugin.program.abukarimtools/?run=trailer_play)</onclick>'
                           '<!-- ABUKARIM: trailer button -->'),
-        'description': 'AF3 trailer dialog - Repeat plays through NewPipe/IMDb',
+        'description': 'AF3 trailer dialog - Repeat plays through YouTube/IMDb',
     },
     # ── AF3 50.11.x: Trailer button / context-menu Trailer were dead (3.4.15) ──
     # The info page's Trailer button (DialogInfo_VideoButtons_Trailer) and the
