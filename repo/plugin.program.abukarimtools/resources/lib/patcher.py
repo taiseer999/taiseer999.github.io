@@ -761,12 +761,31 @@ _TMDBH7_GENRE_BLOCK = (
 # One OSD button just before Video settings (6008): opens AB Tools' subtitle
 # panel (sub_quick.py) - 4.6.27: Dex Hub's whole subtitle look (rows, looks, swatches).
 _AF3_SUBSTYLE_ANCHOR = '                        <control type="button" id="6008">'
+# 4.12.55: the panel opens by itself when the button keeps focus for a second
+# (as AF3's audio / subtitle popups open on focus); passing over the button on
+# the way along the bar does not open it - the alarm is cancelled on unfocus.
+_AF3_SUBSTYLE_HOVER_V1 = (
+    '                            <!-- ABK subquick hover -->\n'
+    '                            <onfocus>AlarmClock(abk_subquick_hover,RunPlugin(plugin://plugin.program.abukarimtools/?mode=subtitle_style),00:01,silent)</onfocus>\n'
+    '                            <onunfocus>CancelAlarm(abk_subquick_hover,true)</onunfocus>\n'
+)
+# 4.12.58: opens at once on focus, like AF3's audio / subtitle popups
+_AF3_SUBSTYLE_HOVER = (
+    '                            <!-- ABK subquick hover v2 -->\n'
+    '                            <onfocus>RunPlugin(plugin://plugin.program.abukarimtools/?mode=subtitle_style)</onfocus>\n'
+)
+_AF3_SUBSTYLE_HOVER_OLD = (
+    '                            <onclick>RunPlugin(plugin://plugin.program.abukarimtools/?mode=subtitle_style)</onclick>\n'
+    '                        </control>\n'
+)
 _AF3_SUBSTYLE_XML = (
     '                        <!-- ABUKARIM: AF3 subtitle look button -->\n'
     '                        <control type="button" id="6012">\n'
     '                            <include>Defs_OSD_Button</include>\n'
     '                            <onclick>CancelAlarm(osd_timeout,true)</onclick>\n'
+    '                            <onclick>CancelAlarm(abk_subquick_hover,true)</onclick>\n'
     '                            <onclick>RunPlugin(plugin://plugin.program.abukarimtools/?mode=subtitle_style)</onclick>\n'
+    + _AF3_SUBSTYLE_HOVER +
     '                        </control>\n'
     '                        <include content="OSD_Button_Icon_Overlay">\n'
     '                            <param name="icon">$VAR[ABK_LucentIcon_substyle]</param>\n'
@@ -3657,6 +3676,30 @@ PATCHES = [
         'already_patched_check': '<!-- ABUKARIM: AF3 subtitle look button -->',
         'revert_when_off': (_AF3_SUBSTYLE_XML + _AF3_SUBSTYLE_ANCHOR, _AF3_SUBSTYLE_ANCHOR),
         'description': 'AF3 Subtitle Look - OSD button (height, size, font)',
+    },
+    {
+        # 4.12.55: a button patched by an older AB Tools gets the open-on-hover lines
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'toggle': 'af3_substyle',
+        'not_found_ok': True,
+        'old': _AF3_SUBSTYLE_HOVER_OLD,
+        'new': ('                            <onclick>CancelAlarm(abk_subquick_hover,true)</onclick>\n'
+                + _AF3_SUBSTYLE_HOVER_OLD.replace('                        </control>\n',
+                                                  _AF3_SUBSTYLE_HOVER + '                        </control>\n')),
+        'already_patched_check': 'ABK subquick hover',
+        'description': 'AF3 Subtitle Look - open the panel on hover',
+    },
+    {
+        # 4.12.58: the one-second wait of 4.12.55-57 goes
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'toggle': 'af3_substyle',
+        'not_found_ok': True,
+        'old': _AF3_SUBSTYLE_HOVER_V1,
+        'new': _AF3_SUBSTYLE_HOVER,
+        'already_patched_check': '<!-- ABK subquick hover v2 -->',
+        'description': 'AF3 Subtitle Look - open the panel at once on focus',
     },
     {
         'addon_id': 'skin.arctic.fuse.3',
@@ -6553,8 +6596,19 @@ def reload_skin_if_pending():
         if (os.path.exists(_FIRST_RUN_LOCK_FILE) and
                 time.time() - os.path.getmtime(_FIRST_RUN_LOCK_FILE) < 7200):
             return False                      # never under first-run dialogs
+        # 4.12.56: during playback only while the plain video shows (no OSD,
+        # seek bar or dialog). Before, the reload waited for playback to end,
+        # and an OSD opened in between was built from the patched XML with
+        # the skin's old includes - icons and AB Tools buttons missing,
+        # language labels doubled (AF3 update + playback right after, Mac
+        # 2026-11-28 11:46). Kodi keeps the video playing through ReloadSkin().
         if xbmc.getCondVisibility('Player.HasMedia'):
-            return False                      # don't disturb playback; retry later
+            if not xbmc.getCondVisibility(
+                    'Window.IsActive(fullscreenvideo) + !Window.IsActive(videoosd) + '
+                    '!Window.IsActive(seekbar) + !Player.Seeking + !Player.Caching + '
+                    '!System.HasActiveModalDialog + !Window.IsActive(busydialog) + '
+                    '!Window.IsActive(busydialognocancel)'):
+                return False                  # OSD / menu up: retry later
         if xbmc.getCondVisibility('System.HasActiveModalDialog | '
                                   'Window.IsActive(busydialog) | '
                                   'Window.IsActive(busydialognocancel)'):

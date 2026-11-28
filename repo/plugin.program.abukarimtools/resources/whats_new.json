@@ -2,6 +2,42 @@
   "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
   "entries": [
     {
+      "v": "4.12.58",
+      "en": [
+        "Subtitle look opens at once when its button is focused."
+      ],
+      "ar": [
+        "يُفتح مظهر الترجمة فورًا عند الوقوف على زرّه."
+      ]
+    },
+    {
+      "v": "4.12.57",
+      "en": [
+        "Subtitle look is shorter: show, delay, auto sync, height, font, size, colour and position."
+      ],
+      "ar": [
+        "صار مظهر الترجمة أقصر: الإظهار والتأخير والمزامنة التلقائية والارتفاع والخط والحجم واللون والموضع."
+      ]
+    },
+    {
+      "v": "4.12.56",
+      "en": [
+        "Fixed: right after an Arctic Fuse 3 update the player menu could open without its icons and buttons until playback ended."
+      ],
+      "ar": [
+        "إصلاح: بعد تحديث Arctic Fuse 3 مباشرة قد تُفتح قائمة المشغّل بلا أيقونات وأزرار حتى ينتهي التشغيل."
+      ]
+    },
+    {
+      "v": "4.12.55",
+      "en": [
+        "Subtitle look in the Arctic Fuse 3 player: opens by itself when you rest on its button, and has no background, like the other player menus."
+      ],
+      "ar": [
+        "مظهر الترجمة في مشغّل Arctic Fuse 3: يفتح تلقائيًا عند الوقوف على زرّه، وبلا خلفية مثل بقية قوائم المشغّل."
+      ]
+    },
+    {
       "v": "4.12.53",
       "en": [
         "Arctic Fuse 3 start-up logo moved down to the skin's original position."

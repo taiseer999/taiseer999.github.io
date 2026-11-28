@@ -1,3 +1,29 @@
+v4.12.58  (2026-11-28)
+- AF3 Subtitle Look button: the panel opens at once when the button gets
+  focus (no one-second wait); buttons patched by 4.12.55-57 are updated.
+
+v4.12.57  (2026-11-28)
+- Subtitle Look panel trimmed to Show, Delay, Auto sync, Height, Font, Size,
+  Colour and Position. Style, Shade, Opacity, Border, Border colour,
+  Background (box / shadow rows), Blur, Line spacing and the "Kodi subtitle
+  settings" row are gone; the settings keep their values.
+
+v4.12.56  (2026-11-28)
+- Pending skin reload now also runs during playback while only the video is
+  on screen (no OSD, seek bar, dialog or busy spinner). It used to wait for
+  playback to end: an AF3 update followed by playback opened VideoOSD from the
+  patched XML with the skin's old includes (Mac 2026-11-28 11:46: invalid
+  ABK_LP_VideoOSD / ABK_OSD_ButtonLabel / ABK_Lucent_OSDBtn_*, undefined
+  ABK_LucentIcon_* - no icons, no AB Tools buttons, doubled language labels).
+
+v4.12.55  (2026-11-28)
+- AF3 Subtitle Look button (6012): the panel now opens by itself when the
+  button keeps focus for a second (AlarmClock on focus, cancelled on unfocus),
+  like AF3's audio / subtitle popups; passing over it along the bar does not
+  open it. Buttons patched by an older AB Tools get the lines too.
+- Subtitle Look panel (abk_subquick.xml): no panel background, shadow and
+  outline any more, as AF3's other OSD popups; its labels carry a text shadow.
+
 v4.12.54  (2026-11-27)
 - "AF3: OSD Flags Style": four new looks from FR-Badges (farizmohd70, MIT) -
   Glass Vibrant (glossy candy pills), Pastel (a soft colour per kind, dark

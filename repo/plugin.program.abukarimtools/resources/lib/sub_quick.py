@@ -167,6 +167,15 @@ ROWS = (
                                                          (4, 'فوق الصورة', 'Above picture'),
                                                          (0, 'يدوي', 'Manual'))),
 )
+# 4.12.57: the panel keeps Show, Delay, Auto sync, Height, Font, Size, Colour
+# and Position; these rows (and Shade and Kodi's own dialog) are no longer shown.
+# ROWS stays whole - presets and the setting reads still use every key.
+_HIDDEN = frozenset((
+    'subtitles.style', 'subtitles.opacity', 'subtitles.bordersize', 'subtitles.bordercolorpick',
+    'subtitles.backgroundtype', 'subtitles.bgcolorpick', 'subtitles.bgopacity',
+    'subtitles.shadowcolor', 'subtitles.shadowopacity', 'subtitles.shadowsize',
+    'subtitles.blur', 'subtitles.linespacing',
+))
 _BOX, _SHADOW = (2, 3), (1, 2)
 _SHOWN_IF = {
     'subtitles.bgcolorpick': _BOX, 'subtitles.bgopacity': _BOX,
@@ -349,7 +358,7 @@ class SubLookWindow(xbmcgui.WindowXMLDialog):
         for row in ROWS:
             key, ar, en, kind, extra = row
             setting = settings.get(key)
-            if not setting:
+            if not setting or key in _HIDDEN:
                 continue
             if key in _SHOWN_IF and background not in _SHOWN_IF[key]:
                 continue
@@ -373,13 +382,6 @@ class SubLookWindow(xbmcgui.WindowXMLDialog):
                 except Exception:
                     entry['pct'] = 1
             rows.append(entry)
-            if key == 'subtitles.colorpick':
-                at = shade_index(value)
-                rows.append({'id': 'shade', 'label': _t('درجة اللون', 'Shade'), 'adjust': True,
-                             'value': _t(*SHADE_NAMES[at]) if at >= 0 else '',
-                             'swatches': shades(base_of(value)), 'sel': at})
-        rows.append({'id': 'kodi', 'label': _t('إعدادات Kodi للترجمة', 'Kodi subtitle settings'),
-                     'value': '', 'opens': True})
         return rows
 
     @staticmethod
