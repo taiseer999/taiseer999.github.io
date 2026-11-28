@@ -1,3 +1,8 @@
+v4.12.65  (2026-11-28)
+- AF3 Subtitle Look button: the panel opens after the button keeps focus for
+  two seconds (AlarmClock 00:02, cancelled on unfocus) instead of at once;
+  buttons patched by 4.12.55-64 are updated.
+
 v4.12.64  (2026-11-28)
 - Subtitle Look panel: the screen dims behind it (60 % black, fades with the
   panel) as behind AF3's OSD popups; text a step larger (rows 24 -> 30,

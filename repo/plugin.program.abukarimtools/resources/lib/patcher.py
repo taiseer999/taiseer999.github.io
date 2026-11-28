@@ -769,10 +769,16 @@ _AF3_SUBSTYLE_HOVER_V1 = (
     '                            <onfocus>AlarmClock(abk_subquick_hover,RunPlugin(plugin://plugin.program.abukarimtools/?mode=subtitle_style),00:01,silent)</onfocus>\n'
     '                            <onunfocus>CancelAlarm(abk_subquick_hover,true)</onunfocus>\n'
 )
-# 4.12.58: opens at once on focus, like AF3's audio / subtitle popups
-_AF3_SUBSTYLE_HOVER = (
+# 4.12.58: opened at once on focus
+_AF3_SUBSTYLE_HOVER_V2 = (
     '                            <!-- ABK subquick hover v2 -->\n'
     '                            <onfocus>RunPlugin(plugin://plugin.program.abukarimtools/?mode=subtitle_style)</onfocus>\n'
+)
+# 4.12.65: opens after the button keeps focus for two seconds
+_AF3_SUBSTYLE_HOVER = (
+    '                            <!-- ABK subquick hover v3 -->\n'
+    '                            <onfocus>AlarmClock(abk_subquick_hover,RunPlugin(plugin://plugin.program.abukarimtools/?mode=subtitle_style),00:02,silent)</onfocus>\n'
+    '                            <onunfocus>CancelAlarm(abk_subquick_hover,true)</onunfocus>\n'
 )
 _AF3_SUBSTYLE_HOVER_OLD = (
     '                            <onclick>RunPlugin(plugin://plugin.program.abukarimtools/?mode=subtitle_style)</onclick>\n'
@@ -3698,8 +3704,19 @@ PATCHES = [
         'not_found_ok': True,
         'old': _AF3_SUBSTYLE_HOVER_V1,
         'new': _AF3_SUBSTYLE_HOVER,
-        'already_patched_check': '<!-- ABK subquick hover v2 -->',
-        'description': 'AF3 Subtitle Look - open the panel at once on focus',
+        'already_patched_check': '<!-- ABK subquick hover v3 -->',
+        'description': 'AF3 Subtitle Look - open the panel on focus (2 s)',
+    },
+    {
+        # 4.12.65: the at-once opening of 4.12.58-64 waits two seconds again
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'VideoOSD.xml'),
+        'toggle': 'af3_substyle',
+        'not_found_ok': True,
+        'old': _AF3_SUBSTYLE_HOVER_V2,
+        'new': _AF3_SUBSTYLE_HOVER,
+        'already_patched_check': '<!-- ABK subquick hover v3 -->',
+        'description': 'AF3 Subtitle Look - open the panel after 2 s on focus',
     },
     {
         'addon_id': 'skin.arctic.fuse.3',

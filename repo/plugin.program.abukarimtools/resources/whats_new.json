@@ -2,6 +2,15 @@
   "_doc": "What's New screen (whats_new.py). Newest first. One entry per release, or per run of releases that made ONE result ('from' = first version of the run). Write the final result the user gets, never the in-between steps or fixes of the run. Every release must be covered (tools/selftest.py checks addon.xml's version).",
   "entries": [
     {
+      "v": "4.12.65",
+      "en": [
+        "Subtitle look opens after you rest two seconds on its button."
+      ],
+      "ar": [
+        "يُفتح مظهر الترجمة بعد الوقوف على زرّه ثانيتين."
+      ]
+    },
+    {
       "v": "4.12.64",
       "en": [
         "Subtitle look: the screen dims behind it, and its text is larger with a shadow."
